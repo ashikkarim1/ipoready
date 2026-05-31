@@ -1,0 +1,12 @@
+.vercel
+.env.local
+.env.local.example.backup
+node_modules/
+.next/
+out/
+dist/
+*.swp
+*.swo
+.DS_Store
+.idea/
+.vscode/local.json

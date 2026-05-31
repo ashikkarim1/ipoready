@@ -1,0 +1,128 @@
+import { sql } from '@/lib/db'
+
+const PHASE_WEIGHTS: Record<string, number> = {
+  pre_planning: 5,
+  corporate_restructuring: 20,
+  financial_audit: 18,
+  legal_documentation: 18,
+  regulatory_filing: 15,
+  marketing_roadshow: 10,
+  listing_application: 10,
+  post_listing: 4,
+}
+
+const EXCHANGE_FLOORS: Record<string, number> = {
+  tsxv: 180,
+  cse: 120,
+  tsx: 365,
+  nasdaq: 365,
+  nyse: 400,
+  otc: 90,
+  cboe: 300,
+}
+
+const PHASE_ORDER = [
+  'pre_planning',
+  'corporate_restructuring',
+  'financial_audit',
+  'legal_documentation',
+  'regulatory_filing',
+  'marketing_roadshow',
+  'listing_application',
+  'post_listing',
+]
+
+interface PhaseRow {
+  phase: string
+  total: string
+  completed: string
+}
+
+interface TaskStatsRow {
+  total_tasks: string
+  completed_tasks: string
+  remaining_days: string
+}
+
+export async function computeAndUpdateCompanyStats(companyId: string): Promise<{
+  paceScore: number
+  estimatedDaysToIpo: number
+  progressPercentage: number
+  currentPhase: string
+  targetExchange: string
+}> {
+  // Get target exchange for floor calculation
+  const companyRows = await sql`
+    SELECT target_exchange FROM companies WHERE id = ${companyId} LIMIT 1
+  `
+  const targetExchange: string = (companyRows[0] as { target_exchange: string })?.target_exchange ?? 'tsx'
+
+  // Phase breakdown for PACE score
+  const phaseRows = await sql`
+    SELECT
+      phase,
+      COUNT(*) AS total,
+      COUNT(*) FILTER (WHERE status = 'completed') AS completed
+    FROM tasks
+    WHERE company_id = ${companyId}
+    GROUP BY phase
+  ` as PhaseRow[]
+
+  // Task totals and remaining days
+  const statsRows = await sql`
+    SELECT
+      COUNT(*) AS total_tasks,
+      COUNT(*) FILTER (WHERE status = 'completed') AS completed_tasks,
+      COALESCE(SUM(estimated_days) FILTER (WHERE status != 'completed'), 0) AS remaining_days
+    FROM tasks
+    WHERE company_id = ${companyId}
+  ` as TaskStatsRow[]
+
+  const stats = statsRows[0]
+  const totalTasks = parseInt(stats?.total_tasks ?? '0', 10)
+  const completedTasks = parseInt(stats?.completed_tasks ?? '0', 10)
+  const remainingDays = parseInt(stats?.remaining_days ?? '0', 10)
+
+  // PACE score
+  let paceScore = 0
+  if (phaseRows.length > 0) {
+    let weightedSum = 0
+    for (const row of phaseRows) {
+      const weight = PHASE_WEIGHTS[row.phase] ?? 0
+      const total = parseInt(row.total, 10)
+      const completed = parseInt(row.completed, 10)
+      if (total > 0) {
+        weightedSum += weight * (completed / total)
+      }
+    }
+    paceScore = Math.round(weightedSum)
+  }
+
+  // Estimated days to listing
+  const exchangeFloor = EXCHANGE_FLOORS[targetExchange] ?? 180
+  const estimatedDaysToIpo = Math.max(remainingDays, exchangeFloor)
+
+  // Progress percentage
+  const progressPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
+
+  // Current phase: earliest phase with non-completed tasks
+  const incompletePhases = phaseRows
+    .filter(row => parseInt(row.total, 10) > parseInt(row.completed, 10))
+    .map(row => row.phase)
+    .sort((a, b) => PHASE_ORDER.indexOf(a) - PHASE_ORDER.indexOf(b))
+
+  const currentPhase = incompletePhases.length > 0 ? incompletePhases[0] : 'post_listing'
+
+  // Update company record
+  await sql`
+    UPDATE companies
+    SET
+      pace_score = ${paceScore},
+      estimated_days_to_ipo = ${estimatedDaysToIpo},
+      progress_percentage = ${progressPercentage},
+      current_phase = ${currentPhase}
+    WHERE id = ${companyId}
+  `
+
+  return { paceScore, estimatedDaysToIpo, progressPercentage, currentPhase, targetExchange }
+}

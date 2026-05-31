@@ -1,0 +1,391 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* ── Auditus colour system ─────────────────────────────────────────── */
+  --color-nav:          #1A1A1A;
+  --color-bg:           #F7F6F4;
+  --color-surface:      #FFFFFF;
+
+  --color-text:         #1A1A1A;
+  --color-text-muted:   #717171;
+  --color-text-light:   #9A9A9A;
+
+  --color-border:       #E5E4E0;
+  --color-border-dark:  #C8C7C2;
+
+  --color-accent:       #E8312A;
+  --color-accent-deep:  #C4261F;
+  --color-accent-soft:  #FDECEB;
+
+  --color-green:        #2D7A5F;
+  --color-green-soft:   #EAF5F0;
+
+  --color-amber:        #B45309;
+  --color-amber-soft:   #FEF3C7;
+
+  --color-blue:         #1D4ED8;
+  --color-blue-soft:    #EFF6FF;
+
+  --color-gold:         #D4A96A;
+
+  /* keep brand-* for any remnant references */
+  --color-brand-500:    #1D4ED8;
+  --color-brand-400:    #3B82F6;
+  --color-brand-300:    #93C5FD;
+
+  /* ── Typography ────────────────────────────────────────────────────── */
+  --font-sans:    "Hanken Grotesk", system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono:    "Inter", monospace;
+
+  /* ── Shadows ───────────────────────────────────────────────────────── */
+  --shadow-card:       0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+  --shadow-lg:         0 16px 48px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06);
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; padding: 0; margin: 0; }
+
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: "Hanken Grotesk", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: #F7F6F4;
+  color: #1A1A1A;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar             { width: 5px; height: 5px; }
+::-webkit-scrollbar-track       { background: #F7F6F4; }
+::-webkit-scrollbar-thumb       { background: #C8C7C2; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9A9A9A; }
+
+/* ─── Focus ring ─────────────────────────────────────────────────────────── */
+:where(
+  a, button, input, select, textarea,
+  [role="button"], [tabindex]:not([tabindex="-1"])
+):focus-visible {
+  outline: 2px solid #E8312A;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* ─── Typography helpers ─────────────────────────────────────────────────── */
+.serif {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ─── Card ───────────────────────────────────────────────────────────────── */
+.card {
+  background: #FFFFFF;
+  border: 1px solid #E5E4E0;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.card-hover {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.card-hover:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+  border-color: #C8C7C2;
+  transform: translateY(-1px);
+}
+
+/* Legacy alias used by some pages */
+.glass-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E4E0;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+}
+
+/* ─── Pill / Badge ───────────────────────────────────────────────────────── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
+
+/* Shared base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 11px 22px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-decoration: none;
+  border: 1px solid transparent;
+  font-family: inherit;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Primary — dark/black */
+.btn-primary {
+  background: #1A1A1A;
+  color: #FFFFFF;
+  border-color: #1A1A1A;
+}
+.btn-primary:hover { background: #2d2d2d; }
+
+/* Accent — red */
+.btn-accent {
+  background: #E8312A;
+  color: #FFFFFF;
+  border-color: #E8312A;
+}
+.btn-accent:hover { background: #C4261F; }
+
+/* Secondary — outlined */
+.btn-secondary {
+  background: #FFFFFF;
+  color: #1A1A1A;
+  border-color: #E5E4E0;
+}
+.btn-secondary:hover { border-color: #1A1A1A; }
+
+/* Ghost — muted */
+.btn-ghost {
+  background: transparent;
+  color: #717171;
+  border-color: transparent;
+  border-radius: 999px;
+}
+.btn-ghost:hover { color: #1A1A1A; background: #F7F6F4; }
+
+/* Legacy aliases */
+.btn-brand        { background: #1D4ED8; color: #FFFFFF; border-radius: 8px; padding: 11px 24px; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; cursor: pointer; transition: all 0.18s ease; border: none; }
+.btn-brand:hover  { background: #1e40af; }
+.btn-brand-outline { background: transparent; border: 1.5px solid #E5E4E0; color: #1A1A1A; border-radius: 8px; padding: 10px 24px; font-weight: 500; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; cursor: pointer; transition: all 0.18s ease; }
+.btn-brand-outline:hover { border-color: #1D4ED8; color: #1D4ED8; }
+
+/* ─── Sidebar Nav ────────────────────────────────────────────────────────── */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  color: #717171;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+.nav-item:hover {
+  background: #F7F6F4;
+  color: #1A1A1A;
+}
+.nav-item.active {
+  background: #1A1A1A;
+  color: #FFFFFF;
+}
+
+/* ─── Inputs ─────────────────────────────────────────────────────────────── */
+.input-dark {
+  background: #FFFFFF;
+  border: 1px solid #E5E4E0;
+  color: #1A1A1A;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  transition: all 0.18s ease;
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+}
+.input-dark:focus {
+  border-color: #1A1A1A;
+  box-shadow: 0 0 0 3px rgba(26,26,26,0.08);
+}
+.input-dark::placeholder { color: #9A9A9A; }
+
+/* ─── Progress bar ───────────────────────────────────────────────────────── */
+.progress-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: #E5E4E0;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #1A1A1A, #717171);
+  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ─── Skeleton ───────────────────────────────────────────────────────────── */
+@keyframes loading-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #F7F6F4 0%, #E5E4E0 50%, #F7F6F4 100%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s linear infinite;
+  border-radius: 8px;
+}
+
+/* ─── Miscellaneous ──────────────────────────────────────────────────────── */
+.pace-ring { transform: rotate(-90deg); transform-origin: center; }
+
+.xp-bar {
+  position: relative;
+  height: 8px;
+  border-radius: 4px;
+  background: #E5E4E0;
+  overflow: hidden;
+}
+.xp-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #E8312A, #f87171);
+  transition: width 1s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ─── Spacing safety-net ─────────────────────────────────────────────────────
+   Tailwind v4 + legacy v3 config = unreliable utility class generation.
+   These explicit declarations guarantee padding/gap/margin always work.
+─────────────────────────────────────────────────────────────────────────────*/
+
+/* Padding — all sides */
+.p-0  { padding: 0; }
+.p-1  { padding: 0.25rem; }
+.p-2  { padding: 0.5rem; }
+.p-3  { padding: 0.75rem; }
+.p-4  { padding: 1rem; }
+.p-5  { padding: 1.25rem; }
+.p-6  { padding: 1.5rem; }
+.p-7  { padding: 1.75rem; }
+.p-8  { padding: 2rem; }
+.p-9  { padding: 2.25rem; }
+.p-10 { padding: 2.5rem; }
+.p-12 { padding: 3rem; }
+.p-14 { padding: 3.5rem; }
+.p-16 { padding: 4rem; }
+
+/* Padding — horizontal */
+.px-1   { padding-left: 0.25rem;   padding-right: 0.25rem; }
+.px-2   { padding-left: 0.5rem;    padding-right: 0.5rem; }
+.px-3   { padding-left: 0.75rem;   padding-right: 0.75rem; }
+.px-4   { padding-left: 1rem;      padding-right: 1rem; }
+.px-5   { padding-left: 1.25rem;   padding-right: 1.25rem; }
+.px-6   { padding-left: 1.5rem;    padding-right: 1.5rem; }
+.px-7   { padding-left: 1.75rem;   padding-right: 1.75rem; }
+.px-8   { padding-left: 2rem;      padding-right: 2rem; }
+.px-10  { padding-left: 2.5rem;    padding-right: 2.5rem; }
+
+/* Padding — vertical */
+.py-0\.5 { padding-top: 0.125rem;  padding-bottom: 0.125rem; }
+.py-1    { padding-top: 0.25rem;   padding-bottom: 0.25rem; }
+.py-1\.5 { padding-top: 0.375rem;  padding-bottom: 0.375rem; }
+.py-2    { padding-top: 0.5rem;    padding-bottom: 0.5rem; }
+.py-2\.5 { padding-top: 0.625rem;  padding-bottom: 0.625rem; }
+.py-3    { padding-top: 0.75rem;   padding-bottom: 0.75rem; }
+.py-4    { padding-top: 1rem;      padding-bottom: 1rem; }
+.py-5    { padding-top: 1.25rem;   padding-bottom: 1.25rem; }
+.py-6    { padding-top: 1.5rem;    padding-bottom: 1.5rem; }
+.py-8    { padding-top: 2rem;      padding-bottom: 2rem; }
+
+/* Padding — individual sides */
+.pt-1  { padding-top: 0.25rem; }
+.pt-2  { padding-top: 0.5rem; }
+.pt-4  { padding-top: 1rem; }
+.pt-5  { padding-top: 1.25rem; }
+.pt-6  { padding-top: 1.5rem; }
+.pb-1  { padding-bottom: 0.25rem; }
+.pb-2  { padding-bottom: 0.5rem; }
+.pb-4  { padding-bottom: 1rem; }
+.pb-5  { padding-bottom: 1.25rem; }
+.pb-6  { padding-bottom: 1.5rem; }
+.pl-3  { padding-left: 0.75rem; }
+.pl-4  { padding-left: 1rem; }
+.pr-4  { padding-right: 1rem; }
+
+/* Margin */
+.m-0   { margin: 0; }
+.mt-0  { margin-top: 0; }
+.mt-0\.5 { margin-top: 0.125rem; }
+.mt-1  { margin-top: 0.25rem; }
+.mt-2  { margin-top: 0.5rem; }
+.mt-3  { margin-top: 0.75rem; }
+.mt-4  { margin-top: 1rem; }
+.mb-0  { margin-bottom: 0; }
+.mb-1  { margin-bottom: 0.25rem; }
+.mb-2  { margin-bottom: 0.5rem; }
+.mb-3  { margin-bottom: 0.75rem; }
+.mb-4  { margin-bottom: 1rem; }
+.mb-5  { margin-bottom: 1.25rem; }
+.mb-6  { margin-bottom: 1.5rem; }
+.mb-8  { margin-bottom: 2rem; }
+.ml-auto { margin-left: auto; }
+.mr-auto { margin-right: auto; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+
+/* Gap */
+.gap-1   { gap: 0.25rem; }
+.gap-1\.5 { gap: 0.375rem; }
+.gap-2   { gap: 0.5rem; }
+.gap-2\.5 { gap: 0.625rem; }
+.gap-3   { gap: 0.75rem; }
+.gap-3\.5 { gap: 0.875rem; }
+.gap-4   { gap: 1rem; }
+.gap-5   { gap: 1.25rem; }
+.gap-6   { gap: 1.5rem; }
+.gap-7   { gap: 1.75rem; }
+.gap-8   { gap: 2rem; }
+.gap-10  { gap: 2.5rem; }
+.gap-12  { gap: 3rem; }
+.gap-16  { gap: 4rem; }
+
+/* Space-y */
+.space-y-1   > * + * { margin-top: 0.25rem; }
+.space-y-2   > * + * { margin-top: 0.5rem; }
+.space-y-2\.5 > * + * { margin-top: 0.625rem; }
+.space-y-3   > * + * { margin-top: 0.75rem; }
+.space-y-4   > * + * { margin-top: 1rem; }
+.space-y-5   > * + * { margin-top: 1.25rem; }
+.space-y-6   > * + * { margin-top: 1.5rem; }
+.space-y-8   > * + * { margin-top: 2rem; }

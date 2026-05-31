@@ -1,0 +1,17 @@
+{
+  "sandbox": {
+    "network": {
+      "allowLocalBinding": true,
+      "allowedDomains": [
+        "localhost:4400",
+        "127.0.0.1:4400"
+      ]
+    }
+  },
+  "permissions": {
+    "allow": [
+      "WebFetch(http://localhost:4400/*)",
+      "WebFetch(http://127.0.0.1:4400/*)"
+    ]
+  }
+}

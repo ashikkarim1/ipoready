@@ -1,0 +1,31 @@
+# IPOReady.ai robots.txt
+# Defines which pages Google, Bing, and other search engines can crawl
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /account/
+Disallow: /dashboard/
+Disallow: /team/
+Disallow: /*.json$
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+Disallow: /_next/
+
+# Slow crawlers get limited access
+User-agent: AhrefsBot
+User-agent: SemrushBot
+User-agent: DotBot
+Crawl-delay: 10
+
+# Allow Google's crawlers full access
+User-agent: Googlebot
+Allow: /
+
+# Allow Bing
+User-agent: Bingbot
+Allow: /
+
+# Sitemap location
+Sitemap: https://ipoready.com/sitemap.xml

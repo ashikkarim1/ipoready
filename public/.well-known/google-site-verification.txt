@@ -1,0 +1,16 @@
+PLACEHOLDER: Replace this with your actual Google Search Console verification token.
+
+Instructions:
+1. Go to https://search.google.com/search-console
+2. Click "Add property" and enter: https://ipoready.com
+3. Select "URL prefix" property type
+4. Google will offer several verification methods
+5. Choose "HTML file" method
+6. Download the verification file
+7. Replace the contents of this file with the downloaded token
+8. Google will auto-verify within 24-48 hours
+
+Alternative verification methods:
+- HTML tag: Add meta tag to <head> in layout.tsx
+- DNS record: Add TXT record to your domain registrar
+- Google Analytics: If you have GA connected
