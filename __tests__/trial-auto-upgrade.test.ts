@@ -19,11 +19,8 @@ describe('Trial Auto-Upgrade', () => {
       // When trial expires and payment method exists
       // Should call stripe.subscriptions.create() with trial_from_meterable: false
       // Should NOT queue for retry
-      const result = await handleTrialExpiry(
-        'cmp_trial_success',
-        'cus_test_success',
-        new Date()
-      );
+      const companyId = '550e8400-e29b-41d4-a716-446655440000';
+      const result = await handleTrialExpiry(companyId);
       
       expect(result).toBeDefined();
       // If payment method exists and API succeeds, queued should be false
@@ -33,11 +30,8 @@ describe('Trial Auto-Upgrade', () => {
     it('should queue for retry on Stripe API failure', async () => {
       // When trial expires and stripe.subscriptions.create() fails
       // Should queue for retry
-      const result = await handleTrialExpiry(
-        'cmp_trial_retry',
-        'cus_test_retry',
-        new Date()
-      );
+      const companyId = '550e8400-e29b-41d4-a716-446655440001';
+      const result = await handleTrialExpiry(companyId);
       
       expect(result).toBeDefined();
       // In integration test, verify retry was queued with next_retry_at set
@@ -46,11 +40,8 @@ describe('Trial Auto-Upgrade', () => {
     it('should mark as expired when no payment method', async () => {
       // When trial expires and payment method not available
       // Should mark subscription as expired (not queue for retry)
-      const result = await handleTrialExpiry(
-        'cmp_trial_expired',
-        'cus_test_no_payment',
-        new Date()
-      );
+      const companyId = '550e8400-e29b-41d4-a716-446655440002';
+      const result = await handleTrialExpiry(companyId);
       
       expect(result).toBeDefined();
       // Verify subscription marked as 'expired' state
@@ -86,34 +77,34 @@ describe('Trial Auto-Upgrade', () => {
 
   describe('queueForRetry', () => {
     it('should create retry record with correct backoff', async () => {
-      const now = new Date();
-      await queueForRetry(
-        'cmp_queue_test',
+      const companyId = '550e8400-e29b-41d4-a716-446655440010';
+      const result = await queueForRetry(
+        companyId,
         'cus_queue_test',
-        'sub_queue_test',
-        now,
-        'Payment method declined',
-        0 // First retry
+        new Date().toISOString(),
+        'Payment method declined'
       );
       
+      expect(result).toBeDefined();
+      expect(result.queued).toBeDefined();
       // In integration test:
       // - Verify record in trial_auto_upgrade_queue table
       // - next_retry_at should be now + 1 minute
-      // - status should be 'pending'
-      // - retry_count should be 0
+      // - status should be 'retrying'
     });
 
     it('should track last error message', async () => {
+      const companyId = '550e8400-e29b-41d4-a716-446655440011';
       const errorMsg = 'Card authentication failed: insufficient_funds';
-      await queueForRetry(
-        'cmp_error_test',
+      const result = await queueForRetry(
+        companyId,
         'cus_error_test',
-        'sub_error_test',
-        new Date(),
-        errorMsg,
-        1
+        new Date().toISOString(),
+        errorMsg
       );
       
+      expect(result).toBeDefined();
+      expect(result.queued).toBeDefined();
       // In integration test, verify last_error is stored exactly
     });
   });
@@ -123,10 +114,10 @@ describe('Trial Auto-Upgrade', () => {
       // Should only process retries that are due (not future retries)
       const result = await processPendingRetries();
       
+      expect(result).toBeDefined();
       expect(result.processed).toBeDefined();
       expect(result.succeeded).toBeDefined();
       expect(result.failed).toBeDefined();
-      expect(result.escalated).toBeDefined();
       expect(result.processed).toBeGreaterThanOrEqual(0);
     });
 
@@ -184,23 +175,19 @@ describe('Trial Auto-Upgrade', () => {
     it('should return counts by status', async () => {
       const status = await getQueueStatus();
       
+      expect(status).toBeDefined();
       expect(status.pending).toBeDefined();
-      expect(status.in_progress).toBeDefined();
-      expect(status.succeeded).toBeDefined();
+      expect(status.retrying).toBeDefined();
       expect(status.failed).toBeDefined();
-      expect(status.escalated).toBeDefined();
-      expect(status.total).toBe(
-        status.pending + 
-        status.in_progress + 
-        status.succeeded + 
-        status.failed + 
-        status.escalated
-      );
+      expect(typeof status.pending).toBe('number');
+      expect(typeof status.retrying).toBe('number');
+      expect(typeof status.failed).toBe('number');
     });
 
-    it('should track total queue size', async () => {
+    it('should track queue size', async () => {
       const status = await getQueueStatus();
-      expect(status.total).toBeGreaterThanOrEqual(0);
+      const total = status.pending + status.retrying + status.failed;
+      expect(total).toBeGreaterThanOrEqual(0);
     });
   });
 

@@ -46,12 +46,15 @@ declare module 'next-auth/jwt' {
 }
 
 // ---------------------------------------------------------------------------
-// Demo accounts — hidden from UI, functional for internal testing
+// Demo accounts — DISABLED IN PRODUCTION, development-only
 // ---------------------------------------------------------------------------
-const DEMO_USERS: Record<string, { id: string; name: string; role: string; companyId: string | null }> = {
-  'admin@ipoready.com': { id: 'demo-admin', name: 'Admin User',    role: 'system_admin', companyId: null },
-  'ceo@techcorp.com':   { id: 'demo-ceo',   name: 'Sarah Johnson', role: 'ceo',          companyId: 'demo-company' },
-}
+const DEMO_USERS: Record<string, { id: string; name: string; role: string; companyId: string | null }> = 
+  process.env.NODE_ENV === 'development' 
+    ? {
+      'admin@ipoready.com': { id: 'demo-admin', name: 'Admin User',    role: 'system_admin', companyId: null },
+      'ceo@techcorp.com':   { id: 'demo-ceo',   name: 'Sarah Johnson', role: 'ceo',          companyId: 'demo-company' },
+    }
+    : {}
 
 // ---------------------------------------------------------------------------
 // Helper — upsert an OAuth user, return their DB row
@@ -207,8 +210,8 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) return null
         const email = credentials.email.toLowerCase().trim()
 
-        // Demo credentials — hidden from UI but functional for internal testing
-        if (credentials.password === 'demo123' && DEMO_USERS[email]) {
+        // Demo credentials — development-only for internal testing
+        if (process.env.NODE_ENV === 'development' && credentials.password === 'demo123' && DEMO_USERS[email]) {
           const d = DEMO_USERS[email]
           return { id: d.id, email, name: d.name, role: d.role, companyId: d.companyId, isApproved: true }
         }
@@ -321,7 +324,10 @@ export const authOptions: NextAuthOptions = {
 
   session: {
     strategy: 'jwt',
-    maxAge:   30 * 24 * 60 * 60, // 30 days
+    // Production: 1 hour (3600s), Development: 30 days for easier testing
+    maxAge:   process.env.NODE_ENV === 'production' 
+      ? 60 * 60  // 1 hour for production
+      : 30 * 24 * 60 * 60, // 30 days for development
   },
 
   secret: process.env.NEXTAUTH_SECRET,

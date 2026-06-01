@@ -204,13 +204,16 @@ export async function calculatePredictiveScore(companyId: string): Promise<Predi
   const marketConditionComponent = marketConditionScore * 0.1
   const investorSophisticationComponent = investorSophisticationScore * 0.1
 
-  const totalAdjustment = 
-    (cashRunwayComponent - (50 * 0.2)) + 
-    (teamReadinessComponent - (50 * 0.2)) + 
-    (marketConditionComponent - (50 * 0.1)) + 
-    (investorSophisticationComponent - (50 * 0.1))
+  // Direct weighted sum calculation (not delta-based)
+  const adjustedPaceScore = Math.floor(Math.max(0, Math.min(100, 
+    basePaceComponent + 
+    cashRunwayComponent + 
+    teamReadinessComponent + 
+    marketConditionComponent + 
+    investorSophisticationComponent
+  )))
 
-  const adjustedPaceScore = Math.round(Math.max(0, Math.min(100, baseScore + totalAdjustment)))
+  const totalAdjustment = adjustedPaceScore - baseScore
 
   // Determine confidence level based on data completeness
   // Need: base + cash + team (size/cfo/board/auditor) + investor = 6 data points

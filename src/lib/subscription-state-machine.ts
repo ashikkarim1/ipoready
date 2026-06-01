@@ -368,7 +368,7 @@ export async function getSubscriptionStateHistory(
  * Check if subscription is in a recoverable state
  */
 export function isRecoverable(state: SubscriptionState): boolean {
-  const unrecoverableStates: SubscriptionState[] = ['unrecoverable', 'expired']
+  const unrecoverableStates: SubscriptionState[] = ['unrecoverable', 'cancelled']
   return !unrecoverableStates.includes(state)
 }
 
@@ -376,6 +376,6 @@ export function isRecoverable(state: SubscriptionState): boolean {
  * Check if subscription is actively paying
  */
 export function isActivePayingSubscription(state: SubscriptionState): boolean {
-  const activeStates: SubscriptionState[] = ['active', 'trialing']
+  const activeStates: SubscriptionState[] = ['active']
   return activeStates.includes(state)
 }

@@ -319,6 +319,10 @@ describe('IPO Milestone Sequencing Validation', () => {
         const isBlocker = blockerConcepts.some((concept) =>
           rule.description.toLowerCase().includes(concept)
         )
+        if (!isBlocker) {
+          console.log(`❌ FAILED RULE: ${rule.id}`)
+          console.log(`   Description: ${rule.description.substring(0, 150)}`)
+        }
         expect(isBlocker).toBe(true)
       }
     })

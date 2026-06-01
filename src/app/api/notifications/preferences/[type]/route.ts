@@ -33,7 +33,7 @@ interface UpdateSinglePreferenceRequest {
  */
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { type: string } }
+  context: { params: Promise<{  type: string  }> }
 ): Promise<NextResponse> {
   const session = await getServerSession(authOptions)
   const user = session?.user as { id?: string } | undefined
@@ -42,6 +42,7 @@ export async function GET(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const params = await context.params
   // Validate notification type
   if (!Object.values(NotificationType).includes(params.type as NotificationType)) {
     return NextResponse.json(
@@ -77,7 +78,7 @@ export async function GET(
  */
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { type: string } }
+  context: { params: Promise<{  type: string  }> }
 ): Promise<NextResponse> {
   const session = await getServerSession(authOptions)
   const user = session?.user as { id?: string } | undefined
@@ -86,6 +87,7 @@ export async function PUT(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const params = await context.params
   // Validate notification type
   if (!Object.values(NotificationType).includes(params.type as NotificationType)) {
     return NextResponse.json(

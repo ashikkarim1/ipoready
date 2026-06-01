@@ -396,7 +396,7 @@ export async function processPendingRetries(): Promise<{
  * Get backoff time in milliseconds based on retry count
  * Retry schedule: 1min, 5min, 1hour, then give up
  */
-function getRetryBackoffMs(retryCount: number): number {
+export function getRetryBackoffMs(retryCount: number): number {
   const schedule = [
     60 * 1000,        // 1 minute
     5 * 60 * 1000,    // 5 minutes
@@ -404,7 +404,7 @@ function getRetryBackoffMs(retryCount: number): number {
     24 * 60 * 60 * 1000, // 1 day
   ]
 
-  return schedule[Math.min(retryCount - 1, schedule.length - 1)]
+  return schedule[Math.min(retryCount, schedule.length - 1)]
 }
 
 /**

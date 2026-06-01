@@ -1,0 +1,20 @@
+{
+  "baseUrl": "http://localhost:3002",
+  "database": "configured",
+  "k6": {
+    "installed": true,
+    "version": "0.47.0+"
+  },
+  "tests": {
+    "userLoad": "enabled",
+    "apiLoad": "enabled",
+    "dbLoad": "enabled",
+    "workflowLoad": "enabled"
+  },
+  "targetMetrics": {
+    "dashboardLoadTime": "<2000ms (p95)",
+    "apiLatency": "<500ms (p95)",
+    "errorRate": "<0.5%",
+    "databaseQueryTime": "<200ms (p95)"
+  }
+}

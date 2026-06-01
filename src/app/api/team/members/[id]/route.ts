@@ -29,7 +29,8 @@ export async function PATCH(
   }
 
   const companyId = sessionUser.companyId
-  const { id: memberId } = await params
+  const resolvedParams = await params
+  const { id: memberId } = resolvedParams
 
   let body: { accessLevel?: unknown; notificationFrequency?: unknown }
   try {
@@ -95,7 +96,8 @@ export async function DELETE(
 
   const companyId  = sessionUser.companyId
   const currentUserId = sessionUser.id
-  const { id: memberId } = await params
+  const resolvedParams = await params
+  const { id: memberId } = resolvedParams
 
   // Fetch the member row
   const rows = await sql`

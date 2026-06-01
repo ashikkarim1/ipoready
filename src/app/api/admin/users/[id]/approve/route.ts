@@ -7,8 +7,9 @@ export const dynamic = 'force-dynamic'
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const params = await context.params
   const session = await getServerSession(authOptions)
   if (!session?.user || (session.user as any).role !== 'system_admin') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })

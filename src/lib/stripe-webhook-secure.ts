@@ -70,9 +70,9 @@ export function verifyWebhookSignatureSecure(
 
     if (timeDiff < 0 || timeDiff > 300) {
       console.error(
-        `[webhook-security] SECURITY: Timestamp outside tolerance window (diff: ${timeDiff}s)`
+        `[webhook-security] SECURITY: timestamp outside tolerance window (diff: ${timeDiff}s)`
       )
-      return { valid: false, error: 'Timestamp outside tolerance window' }
+      return { valid: false, error: 'timestamp outside tolerance window' }
     }
 
     // Reconstruct signed content: timestamp.body
@@ -90,7 +90,7 @@ export function verifyWebhookSignatureSecure(
 
     if (expectedBuffer.length !== signatureBuffer.length) {
       console.error('[webhook-security] SECURITY: Signature length mismatch')
-      return { valid: false, error: 'Signature verification failed' }
+      return { valid: false, error: 'signature verification failed' }
     }
 
     const isValid = crypto.timingSafeEqual(expectedBuffer, signatureBuffer)
@@ -104,7 +104,7 @@ export function verifyWebhookSignatureSecure(
     return { valid: isValid }
   } catch (error) {
     console.error('[webhook-security] SECURITY: Signature verification error:', error)
-    return { valid: false, error: 'Signature verification error' }
+    return { valid: false, error: 'signature verification error' }
   }
 }
 

@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 
 export async function PATCH(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{  id: string  }> }
 ) {
   const session = await getServerSession(authOptions)
   const user = session?.user as { id?: string } | undefined
@@ -17,6 +17,7 @@ export async function PATCH(
   }
 
   const userId = user.id
+  const params = await context.params
   const { id } = params
 
   // Only allow the owner to mark their own notification read

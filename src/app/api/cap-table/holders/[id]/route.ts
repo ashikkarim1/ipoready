@@ -6,13 +6,14 @@ import { sql } from '@/lib/db'
 export const dynamic = 'force-dynamic'
 
 // PATCH /api/cap-table/holders/[id] — update shares, name, type, notes
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, context: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions)
   const userId = (session?.user as any)?.id
   const companyId = (session?.user as any)?.companyId
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   if (!companyId) return NextResponse.json({ error: 'No company linked' }, { status: 400 })
 
+  const params = await context.params
   const { name, type, shares, notes } = await req.json()
 
   // Verify ownership
@@ -37,13 +38,14 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
 }
 
 // DELETE /api/cap-table/holders/[id]
-export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_req: Request, context: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions)
   const userId = (session?.user as any)?.id
   const companyId = (session?.user as any)?.companyId
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   if (!companyId) return NextResponse.json({ error: 'No company linked' }, { status: 400 })
 
+  const params = await context.params
   const existing = await sql`
     SELECT id FROM cap_table_holders WHERE id = ${params.id} AND company_id = ${companyId} LIMIT 1
   `

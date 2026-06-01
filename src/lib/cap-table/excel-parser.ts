@@ -9,6 +9,7 @@ import {
   CapTableParser,
   ParserError,
   ParserWarning,
+  ParserResult,
   ParsedShareClass,
   ParsedShareholder,
   ParsedHolding,
@@ -33,11 +34,16 @@ interface SheetMapping {
 export class ExcelCapTableParser extends CapTableParser {
   private workbook: XLSX.WorkBook | null = null;
   private sheetMapping: SheetMapping = {};
-  private filePath: string;
+  private filePath?: string;
+  private fileBuffer?: Buffer;
 
-  constructor(filePath: string) {
+  constructor(filePathOrBuffer?: string | Buffer) {
     super();
-    this.filePath = filePath;
+    if (typeof filePathOrBuffer === 'string') {
+      this.filePath = filePathOrBuffer;
+    } else if (Buffer.isBuffer(filePathOrBuffer)) {
+      this.fileBuffer = filePathOrBuffer;
+    }
   }
 
   /**
@@ -45,7 +51,15 @@ export class ExcelCapTableParser extends CapTableParser {
    */
   async initialize(): Promise<void> {
     try {
-      const file = require('fs').readFileSync(this.filePath);
+      let file: Buffer;
+      if (this.fileBuffer) {
+        file = this.fileBuffer;
+      } else if (this.filePath) {
+        file = require('fs').readFileSync(this.filePath);
+      } else {
+        this.addError('initialize', 'No file provided to parser', 'critical');
+        return;
+      }
       this.workbook = XLSX.read(file, { cellDates: true });
       this.detectSheetMapping();
     } catch (error) {
@@ -435,5 +449,25 @@ export class ExcelCapTableParser extends CapTableParser {
     }
 
     return performanceShares;
+  }
+
+  /**
+   * Override parse to handle file buffer and return flattened result with success flag
+   */
+  async parse(fileBuffer?: Buffer): Promise<ParserResult & { success: boolean }> {
+    if (fileBuffer) {
+      this.fileBuffer = fileBuffer;
+    }
+
+    await this.initialize();
+
+    const result = await super.parse();
+
+    const success = result.errors.filter(e => e.severity === 'critical').length === 0;
+
+    return {
+      ...result,
+      success,
+    };
   }
 }

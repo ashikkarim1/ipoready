@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic'
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { messageId: string } }
+  context: { params: Promise<{  messageId: string  }> }
 ) {
   const session = await getServerSession(authOptions)
   const user = session?.user as { id?: string } | undefined
@@ -22,6 +22,7 @@ export async function GET(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const params = await context.params
   const messageId = params.messageId
 
   if (!messageId) {

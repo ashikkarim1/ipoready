@@ -12,7 +12,7 @@ import { sql } from '@/lib/db';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{  id: string  }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -23,6 +23,7 @@ export async function GET(
       );
     }
 
+    const params = await context.params;
     const userRole = (session.user as any).role;
     const prospectusId = params.id;
 

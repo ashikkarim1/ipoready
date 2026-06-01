@@ -7,6 +7,38 @@ import crypto from 'crypto'
 export const runtime = 'nodejs'
 export const maxDuration = 30
 
+// ─── File type validation ───────────────────────────────────────────────────
+const ALLOWED_MIME_TYPES = new Set([
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+])
+
+const ALLOWED_FILE_EXTENSIONS = new Set(['.pdf', '.doc', '.docx', '.xls', '.xlsx'])
+const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB
+
+function validateFileUpload(file: File, fileName?: string): { valid: boolean; error?: string } {
+  // Check file size
+  if (file.size > MAX_FILE_SIZE) {
+    return { valid: false, error: `File size exceeds ${MAX_FILE_SIZE / 1024 / 1024}MB limit` }
+  }
+
+  // Check MIME type
+  if (!ALLOWED_MIME_TYPES.has(file.type)) {
+    return { valid: false, error: `File type ${file.type} not allowed. Allowed types: PDF, DOC, DOCX, XLS, XLSX` }
+  }
+
+  // Check file extension
+  const ext = fileName ? fileName.substring(fileName.lastIndexOf('.')).toLowerCase() : file.name.substring(file.name.lastIndexOf('.')).toLowerCase()
+  if (!ALLOWED_FILE_EXTENSIONS.has(ext)) {
+    return { valid: false, error: `File extension ${ext} not allowed` }
+  }
+
+  return { valid: true }
+}
+
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
   if (!session?.user) {
@@ -22,6 +54,14 @@ export async function POST(req: NextRequest) {
 
     if (!documentId) return NextResponse.json({ error: 'documentId is required' }, { status: 400 })
     if (!file && !linkUrl) return NextResponse.json({ error: 'file or linkUrl required' }, { status: 400 })
+
+    // Validate file if provided
+    if (file) {
+      const validation = validateFileUpload(file)
+      if (!validation.valid) {
+        return NextResponse.json({ error: validation.error }, { status: 400 })
+      }
+    }
 
     const userId = (session.user as any).id as string | undefined
 

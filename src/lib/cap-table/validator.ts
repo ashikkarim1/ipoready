@@ -368,4 +368,12 @@ export class CapTableValidator {
 
     return lines.join('\n');
   }
+
+  /**
+   * Static helper: Validate cap table data
+   */
+  static async validateAll(data: CapTableData): Promise<ValidationReport> {
+    const validator = new CapTableValidator();
+    return validator.validate(data);
+  }
 }

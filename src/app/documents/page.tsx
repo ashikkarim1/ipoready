@@ -7,6 +7,7 @@ import {
   Download, Search, Cloud, X, ChevronDown,
   History, Shield, Lock, ExternalLink, Database, PackageOpen, Zap, Sparkles, AlertTriangle
 } from 'lucide-react'
+import ProspectusGeneratorModal from '@/components/ProspectusGeneratorModal'
 
 interface DocVersion {
   id: string
@@ -112,6 +113,8 @@ export default function DocumentsPage() {
   const [dataRoomProvider, setDataRoomProvider] = useState('ansarada')
   const [versionNotes, setVersionNotes] = useState('')
   const [exportToast, setExportToast] = useState(false)
+  const [showProspectusModal, setShowProspectusModal] = useState(false)
+  const [companyName, setCompanyName] = useState('Company') // Will be fetched from session/context
 
   // Fetch documents from API; if empty, seed first then re-fetch
   async function fetchDocs() {
@@ -246,6 +249,11 @@ export default function DocumentsPage() {
           </p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
+          <button onClick={() => setShowProspectusModal(true)}
+            className="flex items-center gap-2 rounded-xl border text-sm font-medium text-text-muted hover:text-nav transition-colors"
+            style={{ background: 'white', borderColor: '#E5E4E0', padding: '0.5rem 0.875rem' }}>
+            <Sparkles className="w-4 h-4" /> Generate Prospectus
+          </button>
           <button onClick={() => setShowDriveModal(true)}
             className="flex items-center gap-2 rounded-xl border text-sm font-medium text-text-muted hover:text-nav transition-colors"
             style={{ background: 'white', borderColor: '#E5E4E0', padding: '0.5rem 0.875rem' }}>
@@ -724,6 +732,20 @@ export default function DocumentsPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Prospectus Generator Modal */}
+      <ProspectusGeneratorModal
+        isOpen={showProspectusModal}
+        onClose={() => setShowProspectusModal(false)}
+        companyName={companyName}
+        onGenerateStart={() => {
+          // Optional callback when generation starts
+        }}
+        onGenerateComplete={(result) => {
+          // Optional callback when generation completes
+          console.log('Prospectus generated:', result)
+        }}
+      />
     </div>
   )
 }

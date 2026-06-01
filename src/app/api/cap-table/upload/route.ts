@@ -9,11 +9,51 @@ import { authOptions } from '@/lib/auth';
 import { sql } from '@/lib/db';
 import { ExcelCapTableParser } from '@/lib/cap-table/excel-parser';
 import { CapTableValidator, CapTableData } from '@/lib/cap-table/validator';
+import { ParserError, ParsedHolding, ParsedShareClass } from '@/lib/cap-table/parser';
 import { writeFileSync, unlinkSync, existsSync } from 'fs';
 import { randomUUID } from 'crypto';
 import { createHash } from 'crypto';
 import path from 'path';
 import { recordCapTableMetrics } from '@/lib/monitoring/cap-table-metrics';
+
+// Security: Define allowed file types for cap table uploads
+const ALLOWED_MIME_TYPES = [
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+];
+
+const ALLOWED_FILE_EXTENSIONS = ['.xls', '.xlsx'];
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+
+// Security: Validate file before processing
+function validateFileUpload(file: File): { valid: boolean; error?: string } {
+  // Check file size
+  if (file.size > MAX_FILE_SIZE) {
+    return {
+      valid: false,
+      error: `File size exceeds maximum allowed size of ${MAX_FILE_SIZE / 1024 / 1024}MB`,
+    };
+  }
+
+  // Check MIME type
+  if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+    return {
+      valid: false,
+      error: `Invalid file type. Only Excel files (.xls, .xlsx) are allowed. Received: ${file.type}`,
+    };
+  }
+
+  // Check file extension
+  const fileExtension = path.extname(file.name).toLowerCase();
+  if (!ALLOWED_FILE_EXTENSIONS.includes(fileExtension)) {
+    return {
+      valid: false,
+      error: `Invalid file extension. Only ${ALLOWED_FILE_EXTENSIONS.join(', ')} files are allowed.`,
+    };
+  }
+
+  return { valid: true };
+}
 
 export async function POST(request: NextRequest) {
   const uploadStart = Date.now();
@@ -30,6 +70,15 @@ export async function POST(request: NextRequest) {
     if (!file || !companyId) {
       return NextResponse.json(
         { error: 'Missing file or company ID' },
+        { status: 400 }
+      );
+    }
+
+    // Security: Validate file before processing
+    const fileValidation = validateFileUpload(file);
+    if (!fileValidation.valid) {
+      return NextResponse.json(
+        { error: 'Invalid file', details: fileValidation.error },
         { status: 400 }
       );
     }
@@ -56,7 +105,7 @@ export async function POST(request: NextRequest) {
       const parseLatencyMs = Date.now() - parseStart;
 
       const criticalErrors = parseResult.errors.filter(
-        (e) => e.severity === 'critical'
+        (e: ParserError) => e.severity === 'critical'
       );
       if (criticalErrors.length > 0) {
         // Record parse failure
@@ -69,7 +118,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             error: 'Failed to parse cap table',
-            details: criticalErrors.map((e) => e.message),
+            details: criticalErrors.map((e: ParserError) => e.message),
           },
           { status: 400 }
         );
@@ -87,13 +136,13 @@ export async function POST(request: NextRequest) {
       const validationStart = Date.now();
       const validationReport = await validator.validate({
         documentName: file.name,
-        holdings: parseResult.holdings.map((h) => ({
+        holdings: parseResult.holdings.map((h: ParsedHolding) => ({
           shareholder: h.shareholder_name,
           shareClass: h.share_class_name,
           quantity: h.quantity,
           quantityIssued: h.quantity_issued,
         })),
-        shareClasses: parseResult.shareClasses.map((sc) => ({
+        shareClasses: parseResult.shareClasses.map((sc: ParsedShareClass) => ({
           name: sc.class_name,
           preferenceOrder: sc.preference_order,
         })),

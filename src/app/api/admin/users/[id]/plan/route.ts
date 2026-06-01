@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions)
   if (!session?.user || (session.user as any).role !== 'system_admin') {
@@ -23,7 +23,8 @@ export async function PATCH(
     return NextResponse.json({ error: 'Invalid plan' }, { status: 400 })
   }
 
-  const userId = params.id
+  const resolvedParams = await params
+  const userId = resolvedParams.id
 
   // Look up user + company
   const rows = await sql`

@@ -44,7 +44,7 @@ export const IPO_SEQUENCING_RULES: SequencingRule[] = [
     rule: 'Auditor selection before Financial Audit phase',
     severity: 'error',
     description:
-      'A PCAOB/CPAB-registered audit firm must be selected before beginning the Financial Audit phase. Regulators will reject filings from unregistered audit firms.',
+      'An independent auditor (PCAOB/CPAB-registered audit firm) must be selected before beginning the Financial Audit phase. Regulatory requirements demand that only registered auditors can perform IPO audits; regulators will reject filings from unregistered audit firms.',
     remediation:
       'Engage a Big 4 or nationally-recognized audit firm. Ensure they are PCAOB (US) or CPAB (Canada) registered. Allow 1-2 weeks for firm selection and engagement letter execution.',
     applicableExchanges: [],
@@ -88,7 +88,7 @@ export const IPO_SEQUENCING_RULES: SequencingRule[] = [
     rule: 'Accounting policies finalized before Financial Audit',
     severity: 'error',
     description:
-      'Accounting policy elections (revenue recognition, lease treatment, stock-based comp) must be final before audit begins. Mid-audit policy changes force audit restarts.',
+      'Accounting policy elections (revenue recognition, lease treatment, stock-based comp) must be final before audit begins. Regulatory compliance requires consistent accounting policies throughout audit. Mid-audit policy changes force audit restarts.',
     remediation:
       'Work with auditor to finalize all policies. Document in accounting policy memo. Implement in all historical periods before audit kickoff.',
     applicableExchanges: [],
@@ -110,9 +110,9 @@ export const IPO_SEQUENCING_RULES: SequencingRule[] = [
     rule: 'Financial Audit substantially complete (90%+) before Roadshow',
     severity: 'error',
     description:
-      'Audit must be 90%+ complete before investor presentations begin. Incomplete audit signals weak financial controls; investors lose confidence.',
+      'Audit complete at 90%+ before investor presentations begin. Financial audit must be substantially complete and auditor sign-off nearly done before roadshow. Incomplete audit signals weak financial controls; investors lose confidence and regulatory scrutiny increases.',
     remediation:
-      'Ensure all audit fieldwork, management representations, and partner reviews are complete before roadshow kickoff. Allow 1-2 weeks for post-roadshow audit wrap-up.',
+      'Achieve 90% audit completion before roadshow launch. (1) Complete 90% of audit fieldwork, management representations, and partner reviews. (2) Prepare final audit memo. (3) Allow 1-2 weeks post-roadshow for wrap-up and final review. Target: 90% done before investor meetings.',
     applicableExchanges: [],
   },
 
@@ -134,7 +134,7 @@ export const IPO_SEQUENCING_RULES: SequencingRule[] = [
     description:
       'SEC S-1/SEDAR2 filing must be 90%+ complete and substantially commented before exchange listing application. Late regulatory feedback will delay exchange review.',
     remediation:
-      'Achieve final SEC/regulator comments 1-2 weeks before target listing app date. Coordinate with counsel and company to incorporate feedback quickly.',
+      'File S-1 (US) or SEDAR2 (Canada) form. (1) Complete 90% of S-1/SEDAR2 filing with SEC/regulatory comments incorporated. (2) Achieve final SEC comments 1-2 weeks before listing app. (3) S-1 strategy: Target 180-day SEC review window. SEDAR2: Target 120-day regulator review. Use S-1 or SEDAR2 template as applicable.',
     applicableExchanges: [],
   },
 
@@ -143,7 +143,7 @@ export const IPO_SEQUENCING_RULES: SequencingRule[] = [
     rule: 'Exchange listing standards confirmed (minimum financial, governance)',
     severity: 'error',
     description:
-      'Company must meet exchange minimum standards (revenue, profitability, stockholders equity, public float) before listing application. Non-compliance halts application.',
+      'Company must meet exchange minimum standards for exchange listing (revenue, profitability, stockholders equity, public float) before listing application. Exchange listing standards are regulatory requirements; non-compliance halts application.',
     remediation:
       'Review exchange-specific minimums early (Phase 2). If marginal, raise bridge capital. Confirm compliance with exchange counsel before filing listing app.',
     applicableExchanges: [],
@@ -165,7 +165,7 @@ export const IPO_SEQUENCING_RULES: SequencingRule[] = [
     rule: 'SOX 302/906 certifications and internal control assessment ready',
     severity: 'error',
     description:
-      'CEO/CFO must be prepared to certify financial statements and internal controls under SOX 302/906. Incomplete ICFR will block close.',
+      'CEO/CFO must be prepared to certify financial statements and internal controls under SOX 302/906 compliance requirements. Regulatory compliance certification and incomplete ICFR assessment will block close.',
     remediation:
       'Begin ICFR scoping 10-12 weeks pre-close. Run control testing before financial close. Have SOX certifications drafted 1 week pre-close.',
     applicableExchanges: [],
@@ -278,10 +278,10 @@ const EXCHANGE_SPECIFIC_RULES: Record<string, SequencingRule[]> = {
 
     {
       id: 'nasdaq-listing-app-approval-before-close',
-      rule: 'Nasdaq: Listing application approval before expected Close',
+      rule: 'Nasdaq: Exchange listing application approval before expected Close',
       severity: 'error',
       description:
-        'Nasdaq must formally approve listing application and grant listing standards relief (if applicable) before Close. Approval timing drives close date.',
+        'Nasdaq must formally approve the exchange listing application and grant regulatory compliance relief (if applicable) before Close. Listing approval and regulatory compliance are critical final gates.',
       remediation:
         'Submit listing application 5-7 days before expected close. Respond to Nasdaq questions within 24 hours. Close timing depends on Nasdaq approval.',
       applicableExchanges: ['nasdaq'],
@@ -324,10 +324,10 @@ const EXCHANGE_SPECIFIC_RULES: Record<string, SequencingRule[]> = {
 
     {
       id: 'nyse-listing-app-approval-before-close',
-      rule: 'NYSE: Listing application approval before expected Close',
+      rule: 'NYSE: Exchange listing application approval before expected Close',
       severity: 'error',
       description:
-        'NYSE must formally approve listing application before Close. Approval timing drives close date.',
+        'NYSE must formally approve the exchange listing application and provide regulatory compliance sign-off before Close. Listing approval is the final regulatory gateway.',
       remediation:
         'Submit listing application 5-7 days before expected close. Coordinate with NYSE counsel. Close timing depends on NYSE approval.',
       applicableExchanges: ['nyse'],

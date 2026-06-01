@@ -1,0 +1,4 @@
+Contact: security@ipoready.ai
+Expires: 2027-06-01T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://app.ipoready.ai/.well-known/security.txt

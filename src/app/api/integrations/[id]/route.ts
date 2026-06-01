@@ -15,7 +15,7 @@ interface IntegrationRow {
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{  id: string  }> }
 ) {
   const session = await getServerSession(authOptions)
   const companyId = (session?.user as any)?.companyId
@@ -24,6 +24,7 @@ export async function PATCH(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const params = await context.params
   const integrationId = params.id
   let body: { status?: string }
   try {

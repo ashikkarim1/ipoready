@@ -49,7 +49,7 @@ interface CapTableCompanyResponse {
  * GET /api/cap-table/company/{id}
  * Returns full cap table + current capitalization
  */
-export async function GET(req: NextRequest, { params }: { params: { id?: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ id?: string }> }) {
   const session = await getServerSession(authOptions)
   const user = session?.user as { id?: string; companyId?: string } | undefined
 
@@ -57,6 +57,7 @@ export async function GET(req: NextRequest, { params }: { params: { id?: string 
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const params = await context.params
   const companyId = params?.id || user.companyId
 
   // Verify user has access to this company
