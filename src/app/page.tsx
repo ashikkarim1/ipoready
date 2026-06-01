@@ -7,7 +7,7 @@ import {
   PieChart, Banknote, ChevronRight, ChevronDown, Zap, Shield, ArrowRight,
   Building2, BarChart3, CheckCircle2, Globe, Star, TrendingUp,
   RefreshCcw, Layers, LayoutGrid, Mail, ExternalLink, Clock,
-  MessageCircle, UserCheck, Calendar, PlayCircle
+  MessageCircle, UserCheck, Calendar, PlayCircle, BookOpen
 } from 'lucide-react'
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -63,6 +63,13 @@ const FEATURES = [
     description: 'Need a CPAB auditor or securities counsel? Skip the cold calls. Our vetted network of IPO-credentialed professionals is on-platform and ready to engage — filtered by exchange and listing type.',
     accentColor: '#2D7A5F',
     accentBg: '#EAF5F0',
+  },
+  {
+    icon: BookOpen,
+    title: 'Prospectus Builder',
+    description: 'Automatically generate professional IPO prospectuses from source documents with AI assistance and multi-tier professional review workflow — no more manual drafting, faster path to filing.',
+    accentColor: '#7C3AED',
+    accentBg: '#F5F3FF',
   },
 ]
 

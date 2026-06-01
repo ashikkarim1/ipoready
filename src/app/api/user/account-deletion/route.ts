@@ -116,8 +116,14 @@ export async function POST(req: Request) {
       )
     `
 
-    // Send confirmation email
-    await sendSubscriptionCancelledEmail(user.email, 'Account Deletion')
+    // Send confirmation email for each company
+    for (const company of companies) {
+      try {
+        await sendSubscriptionCancelledEmail(company.id)
+      } catch (err) {
+        console.error(`Failed to send deletion email for company ${company.id}:`, err)
+      }
+    }
 
     // Send detailed deletion confirmation with timeline
     const response = {

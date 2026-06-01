@@ -7,6 +7,8 @@ import {
   Clock, CheckCircle2, AlertTriangle, ArrowRight, ChevronRight,
   BarChart2, Calendar, Award, Users, X, Info
 } from 'lucide-react'
+import { ReadinessFactorsCard } from '@/components/ReadinessFactorsCard'
+import { SequencingAlertsCard } from '@/components/SequencingAlertsCard'
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -555,6 +557,53 @@ export default function PacePage() {
               26 days <span style={{ fontSize: '12px', fontWeight: 400, color: '#9A9A9A' }}>ahead of benchmark</span>
             </p>
           </div>
+        </motion.div>
+      </div>
+
+      {/* ── Readiness Factors + Sequencing Alerts ────────────────────────── */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.48 }}>
+          <ReadinessFactorsCard
+            cashRunway={8.5}
+            hiringProgress={67}
+            auditorEngaged={true}
+            boardSize={3}
+            boardIndependentCount={1}
+            secondIndependent={false}
+          />
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52 }}>
+          <SequencingAlertsCard
+            alerts={[
+              {
+                severity: 'error',
+                taskId: 'seq-1',
+                title: 'Auditor Engagement Letter Required',
+                description: 'CPAB-registered auditor must be engaged before financial audit phase can begin. This is the highest-weight phase on PACE™.',
+                daysBlocking: 9,
+                remediationSteps: [
+                  'Contact shortlisted CPAB auditors (3 firms identified)',
+                  'Issue engagement letter with fee estimates',
+                  'Obtain board approval of auditor selection',
+                  'Complete engagement by end of week',
+                ],
+              },
+              {
+                severity: 'warning',
+                taskId: 'seq-2',
+                title: 'Second Independent Director Needed',
+                description: 'TSXV requires minimum 2 independent directors. Currently have 1. This blocks downstream corporate governance filings.',
+                daysBlocking: 18,
+                remediationSteps: [
+                  'Engage executive director search firm',
+                  'Develop candidate profile aligned with audit committee needs',
+                  'Review candidates and conduct interviews',
+                  'Board approval and public announcement',
+                ],
+              },
+            ]}
+          />
         </motion.div>
       </div>
 

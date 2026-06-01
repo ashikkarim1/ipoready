@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { sql } from '@/lib/db';
-import { sendTrialExpiredEmail } from '@/lib/billing-notifications';
+import { NextRequest, NextResponse } from 'next/server'
+import { sql } from '@/lib/db'
+import { sendTrialExpiredEmail } from '@/lib/billing-notifications'
+import { handleTrialExpiry, processPendingRetries } from '@/lib/trial-auto-upgrade'
 
 /**
  * Trial Expiry Webhook Handler
@@ -61,39 +62,36 @@ export async function POST(request: NextRequest) {
     stats.checkedCount = expiredTrials.length;
     console.log(`🔍 Found ${stats.checkedCount} expired trials to process`);
 
-    // Process each expired trial
+    // Process each expired trial using auto-upgrade system
     for (const trial of expiredTrials) {
       try {
         const companyId = trial.id;
         const companyEmail = trial.email;
 
-        // No Stripe integration during trial period
-        // Simply expire the trial and send upgrade notification email
-        console.log(`⏭️  Expiring trial for ${trial.company_name} (${companyId})`);
+        console.log(`⏭️  Processing trial expiry for ${trial.company_name} (${companyId})`);
 
-        await sql`
-          UPDATE companies
-          SET
-            trial_status = 'expired',
-            updated_at = NOW()
-          WHERE id = ${companyId}
-        `;
+        // Use auto-upgrade system which handles:
+        // 1. If payment method exists: create Stripe subscription
+        // 2. If payment fails: queue for retry with exponential backoff
+        // 3. If no payment method: mark as expired and send email
+        const result = await handleTrialExpiry(companyId);
 
-        // Send trial expired notification email with checkout link
-        try {
-          await sendTrialExpiredEmail(companyEmail, trial.company_name);
-          console.log(`✅ Sent trial expired email to ${companyEmail}`);
-        } catch (emailError) {
-          console.error(`❌ Failed to send trial expired email to ${companyEmail}:`, emailError);
-          stats.errorCount++;
-          continue; // Skip billing notification on email failure
+        if (result.success) {
+          console.log(`✅ Trial upgraded to subscription: ${result.subscriptionId}`);
+          stats.expiredCount++;
+        } else if (result.retryQueued) {
+          console.log(
+            `⏳ Trial upgrade queued for retry: ${result.error}`
+          );
+          stats.expiredCount++; // Count as processed (will retry)
+        } else {
+          // Trial expired without payment method
+          console.log(`✅ Trial expired (no payment method): ${companyId}`);
+          stats.expiredCount++;
         }
-
-        stats.expiredCount++;
       } catch (error) {
         console.error(`❌ Error processing trial ${trial.id}:`, error);
         stats.errorCount++;
-        // Continue processing other trials even if one fails
       }
     }
 

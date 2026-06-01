@@ -1,182 +1,297 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { sql } from '@/lib/db'
-import { computeAndUpdateCompanyStats } from '@/lib/company-stats'
+import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
 
-// Weights as integers (sum = 100) — must match company-stats.ts
-const PHASE_WEIGHTS: Record<string, number> = {
-  pre_planning: 5,
-  corporate_restructuring: 20,
-  financial_audit: 18,
-  legal_documentation: 18,
-  regulatory_filing: 15,
-  marketing_roadshow: 10,
-  listing_application: 10,
-  post_listing: 4,
-}
+const QuerySchema = z.object({
+  companyId: z.string().uuid().optional(),
+  exchangeId: z.string().optional(),
+})
 
-const PHASE_LABELS: Record<string, string> = {
-  pre_planning: 'Pre-Planning',
-  corporate_restructuring: 'Corporate Restructuring',
-  financial_audit: 'Financial Audit',
-  legal_documentation: 'Legal Documentation',
-  regulatory_filing: 'Regulatory Filing',
-  marketing_roadshow: 'Marketing & Roadshow',
-  listing_application: 'Listing Application',
-  post_listing: 'Post-Listing Readiness',
-}
-
-const PHASE_ORDER = [
-  'pre_planning',
-  'corporate_restructuring',
-  'financial_audit',
-  'legal_documentation',
-  'regulatory_filing',
-  'marketing_roadshow',
-  'listing_application',
-  'post_listing',
-]
-
-interface PhaseTaskRow {
-  phase: string
-  total: string
-  completed: string
-  in_progress: string
-}
-
-interface HistoryRow {
-  week: string
-  score: string
-}
-
-interface SnapshotCountRow {
-  count: string
-}
-
-export async function GET() {
+/**
+ * GET /api/pace/scores
+ * Retrieve PACE score with benchmarks, predictive analysis, sequencing alerts, and document completeness
+ * Query params: companyId, exchangeId
+ */
+export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions)
-  const user = session?.user as { id?: string; companyId?: string } | undefined
+  const user = session?.user as { id?: string; companyId?: string; role?: string } | undefined
 
-  if (!session || !user?.companyId) {
+  if (!session || !user?.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const companyId = user.companyId
+  const searchParams = req.nextUrl.searchParams
+  const companyId = searchParams.get('companyId') || (user?.companyId ?? null)
+  const exchangeId = searchParams.get('exchangeId') || null
 
-  // 1. Compute fresh stats and write to companies table
-  const { paceScore, estimatedDaysToIpo, progressPercentage, currentPhase } =
-    await computeAndUpdateCompanyStats(companyId)
-
-  // 2. Record today's snapshot if none exists yet
-  const todayCount = await sql`
-    SELECT COUNT(*) AS count
-    FROM pace_score_history
-    WHERE company_id = ${companyId}
-      AND DATE_TRUNC('day', recorded_at) = DATE_TRUNC('day', NOW())
-  ` as SnapshotCountRow[]
-
-  if (parseInt(todayCount[0]?.count ?? '0', 10) === 0) {
-    await sql`
-      INSERT INTO pace_score_history (company_id, pace_score, progress_percentage, recorded_at)
-      VALUES (${companyId}, ${paceScore}, ${progressPercentage}, NOW())
-    `
+  // Validate query params
+  try {
+    QuerySchema.parse({ companyId, exchangeId })
+  } catch (err) {
+    return NextResponse.json(
+      { error: 'Invalid query parameters', details: (err as any).message },
+      { status: 400 }
+    )
   }
 
-  // 3. Fetch last 8 weekly snapshots (most recent per week)
-  const historyRows = await sql`
-    SELECT
-      TO_CHAR(DATE_TRUNC('week', recorded_at), 'YYYY-WW') AS week,
-      MAX(pace_score) AS score
-    FROM pace_score_history
-    WHERE company_id = ${companyId}
-    GROUP BY DATE_TRUNC('week', recorded_at)
-    ORDER BY DATE_TRUNC('week', recorded_at) ASC
-    LIMIT 8
-  ` as HistoryRow[]
-
-  // Re-label weeks as W1…W8
-  const trend = historyRows.map((row, i) => ({
-    week: `W${i + 1}`,
-    score: parseInt(row.score, 10),
-  }))
-
-  // 4. paceDelta — current vs previous week snapshot
-  let paceDelta = 0
-  if (trend.length >= 2) {
-    paceDelta = trend[trend.length - 1].score - trend[trend.length - 2].score
+  if (!companyId) {
+    return NextResponse.json({ error: 'Missing companyId' }, { status: 400 })
   }
 
-  // 5. Per-phase task stats
-  const phaseRows = await sql`
-    SELECT
-      phase,
-      COUNT(*) AS total,
-      COUNT(*) FILTER (WHERE status = 'completed') AS completed,
-      COUNT(*) FILTER (WHERE status = 'in_progress') AS in_progress
-    FROM tasks
-    WHERE company_id = ${companyId}
-    GROUP BY phase
-  ` as PhaseTaskRow[]
+  try {
+    // Fetch company and PACE data
+    const companyRows = await sql`
+      SELECT 
+        c.id,
+        c.pace_score,
+        c.target_exchange,
+        c.cash_runway_months,
+        c.team_size,
+        c.cfo_hired_at,
+        c.board_size,
+        c.auditor_selected,
+        c.investor_sophistication_score,
+        c.estimated_days_to_ipo,
+        c.progress_percentage,
+        c.current_phase
+      FROM companies c
+      WHERE c.id = ${companyId}
+      LIMIT 1
+    ` as any[]
 
-  // Build a map for easy lookup
-  const phaseMap: Record<string, { total: number; completed: number; inProgress: number }> = {}
-  for (const row of phaseRows) {
-    phaseMap[row.phase] = {
-      total: parseInt(row.total, 10),
-      completed: parseInt(row.completed, 10),
-      inProgress: parseInt(row.in_progress, 10),
+    if (companyRows.length === 0) {
+      return NextResponse.json({ error: 'Company not found' }, { status: 404 })
     }
+
+    const company = companyRows[0]
+    const exchange = exchangeId || company.target_exchange
+
+    // Fetch benchmark data
+    const benchmarkRows = await sql`
+      SELECT 
+        COALESCE(AVG(pace_score), 0)::float as avg_pace,
+        COALESCE(PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY pace_score), 0)::float as median_pace,
+        COALESCE(PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY pace_score), 0)::float as p90_pace
+      FROM companies
+      WHERE target_exchange = ${exchange}
+    ` as any[]
+
+    const benchmarks = benchmarkRows[0] || {
+      avg_pace: 0,
+      median_pace: 0,
+      p90_pace: 0,
+    }
+
+    // Calculate peer percentile
+    const percentileRows = await sql`
+      SELECT COUNT(*) as total_peers
+      FROM companies
+      WHERE target_exchange = ${exchange} AND pace_score <= ${company.pace_score}
+    ` as any[]
+
+    const totalPeers = percentileRows[0]?.total_peers || 1
+    const allPeersRows = await sql`
+      SELECT COUNT(*) as total_count
+      FROM companies
+      WHERE target_exchange = ${exchange}
+    ` as any[]
+    const totalCount = allPeersRows[0]?.total_count || 1
+    const peerPercentile = Math.round((totalPeers / totalCount) * 100)
+
+    // Calculate predictive score
+    const predictiveScore = calculatePredictiveScore(company)
+
+    // Fetch sequencing alerts
+    const alertRows = await sql`
+      SELECT 
+        rule,
+        severity,
+        remediation
+      FROM pace_sequencing_alerts
+      WHERE company_id = ${companyId}
+      ORDER BY CASE severity 
+        WHEN 'critical' THEN 1 
+        WHEN 'high' THEN 2 
+        WHEN 'medium' THEN 3 
+        ELSE 4 
+      END
+    ` as any[]
+
+    // Fetch cap table status
+    const capTableRows = await sql`
+      SELECT
+        id,
+        validation_status,
+        total_shareholders,
+        total_shares_authorized,
+        total_shares_issued,
+        created_at,
+        updated_at
+      FROM cap_table_documents
+      WHERE company_id = ${companyId}
+      ORDER BY created_at DESC
+      LIMIT 1
+    ` as any[]
+
+    const capTableStatus = capTableRows.length > 0 ? {
+      hasCapTable: true,
+      documentId: capTableRows[0].id,
+      validationStatus: capTableRows[0].validation_status || 'pending',
+      totalShareholders: capTableRows[0].total_shareholders || 0,
+      totalSharesAuthorized: capTableRows[0].total_shares_authorized || 0,
+      totalSharesIssued: capTableRows[0].total_shares_issued || 0,
+      lastUpdated: capTableRows[0].updated_at || capTableRows[0].created_at,
+    } : {
+      hasCapTable: false,
+      documentId: null,
+      validationStatus: 'missing',
+      totalShareholders: 0,
+      totalSharesAuthorized: 0,
+      totalSharesIssued: 0,
+      lastUpdated: null,
+    }
+
+    // Fetch document completeness by phase
+    const docCompRows = await sql`
+      SELECT
+        phase_id,
+        AVG(completion_pct)::float as document_completeness_score
+      FROM document_scorecards
+      WHERE company_id = ${companyId}
+      GROUP BY phase_id
+      ORDER BY phase_id
+    ` as any[]
+
+    // Fetch PACE trend data (last 8 weeks)
+    const trendRows = await sql`
+      SELECT 
+        pace_score,
+        recorded_at
+      FROM pace_score_history
+      WHERE company_id = ${companyId}
+      ORDER BY recorded_at DESC
+      LIMIT 8
+    ` as any[]
+
+    const trend = trendRows.reverse().map((row: any) => ({
+      score: Math.round(row.pace_score),
+      date: new Date(row.recorded_at).toISOString().split('T')[0],
+    }))
+
+    // Calculate paceDelta (change from previous week)
+    let paceDelta = 0
+    if (trendRows.length >= 2) {
+      const current = trendRows[trendRows.length - 1]?.pace_score || company.pace_score
+      const previous = trendRows[trendRows.length - 2]?.pace_score || company.pace_score
+      paceDelta = Math.round((current - previous) * 100) / 100
+    }
+
+    // Fetch phase-by-phase breakdown
+    const phaseRows = await sql`
+      SELECT 
+        phase_id,
+        AVG(completion_pct)::float as completion,
+        0.125 as weight
+      FROM document_scorecards
+      WHERE company_id = ${companyId}
+      GROUP BY phase_id
+      ORDER BY phase_id
+    ` as any[]
+
+    const phases = phaseRows.map((row: any, idx: number) => ({
+      phaseId: row.phase_id,
+      phaseName: ['Pre-Planning', 'Corporate Restructuring', 'Board Selection', 'Financial Audit', 'Legal Review', 'SEC Preparation', 'Marketing & Road Show', 'Listing'][idx] || `Phase ${idx + 1}`,
+      completion: Math.round(row.completion),
+      weight: row.weight,
+      contribution: Math.round((row.completion * row.weight) / 100),
+    }))
+
+    return NextResponse.json({
+      paceScore: company.pace_score,
+      paceDelta,
+      daysToIpo: company.estimated_days_to_ipo || 180,
+      progressPercentage: company.progress_percentage || 0,
+      currentPhase: company.current_phase || 'pre_planning',
+      peerPercentile,
+      benchmarkComparison: {
+        avgPace: Math.round(benchmarks.avg_pace),
+        medianPace: Math.round(benchmarks.median_pace),
+        p90Pace: Math.round(benchmarks.p90_pace),
+      },
+      predictiveScore,
+      sequencingAlerts: alertRows.map((alert: any) => ({
+        severity: alert.severity || 'warning',
+        title: alert.rule || 'Unknown Alert',
+        description: alert.remediation || 'No details available',
+        daysBlocking: 0,
+        remediationSteps: [alert.remediation || 'Review and take action'],
+      })),
+      documentReadinessScore: docCompRows.length > 0
+        ? Math.round(docCompRows.reduce((sum: number, row: any) => sum + row.document_completeness_score, 0) / docCompRows.length)
+        : 0,
+      capTableStatus,
+      trend,
+      phases,
+    })
+  } catch (error) {
+    console.error('[GET /api/pace/scores] Error:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+
+/**
+ * Calculate predictive PACE score based on company factors
+ */
+function calculatePredictiveScore(company: any) {
+  const factors = {
+    cashRunway: Math.min(company.cash_runway_months / 24, 1) * 100, // 24 months = perfect
+    teamSize: Math.min(company.team_size / 150, 1) * 100, // 150+ team = perfect
+    cfoHired: company.cfo_hired_at ? 100 : 0,
+    boardSize: Math.min(company.board_size / 5, 1) * 100, // 5+ = perfect
+    auditorSelected: company.auditor_selected ? 100 : 0,
+    investorSophistication: company.investor_sophistication_score || 0,
   }
 
-  // Max weight for bar normalisation (corporate_restructuring = 20)
-  const maxWeight = 20
+  const weights = {
+    cashRunway: 0.2,
+    teamSize: 0.15,
+    cfoHired: 0.15,
+    boardSize: 0.15,
+    auditorSelected: 0.15,
+    investorSophistication: 0.2,
+  }
 
-  const phases = PHASE_ORDER.map(id => {
-    const data = phaseMap[id] ?? { total: 0, completed: 0, inProgress: 0 }
-    const weight = PHASE_WEIGHTS[id] ?? 0
-    // contribution = how many PACE points this phase contributes
-    const contribution = data.total > 0
-      ? Math.round(weight * (data.completed / data.total))
-      : 0
+  const adjustedPaceScore = Math.round(
+    Object.keys(factors).reduce((sum, key) => {
+      return sum + (factors[key as keyof typeof factors] * weights[key as keyof typeof weights])
+    }, 0)
+  )
 
-    let status: 'complete' | 'in_progress' | 'not_started'
-    if (data.total > 0 && data.completed === data.total) {
-      status = 'complete'
-    } else if (data.inProgress > 0 || data.completed > 0) {
-      status = 'in_progress'
-    } else {
-      status = 'not_started'
-    }
+  const riskFactors: string[] = []
+  if (company.cash_runway_months < 12) riskFactors.push('Low cash runway')
+  if (company.team_size < 50) riskFactors.push('Small team size')
+  if (!company.cfo_hired_at) riskFactors.push('CFO not yet hired')
+  if (company.board_size < 3) riskFactors.push('Insufficient board size')
+  if (!company.auditor_selected) riskFactors.push('Auditor not yet selected')
 
-    return {
-      id,
-      label: PHASE_LABELS[id] ?? id,
-      total: data.total,
-      completed: data.completed,
-      inProgress: data.inProgress,
-      // weight as fraction for UI bar scaling (normalised to maxWeight=20)
-      weight: weight / 100,
-      // max weight fraction used for bar scale denominator
-      maxWeightFraction: maxWeight / 100,
-      contribution,
-      status,
-    }
-  })
-
-  // 6. Peer percentile (placeholder formula until real peer data)
-  const peerPercentile = Math.min(95, Math.round(paceScore * 0.95))
-
-  return NextResponse.json({
-    paceScore,
-    paceDelta,
-    daysToIpo: estimatedDaysToIpo,
-    progressPercentage,
-    currentPhase,
-    peerPercentile,
-    trend,
-    phases,
-  })
+  return {
+    adjustedPaceScore,
+    confidenceLevel: adjustedPaceScore > 75 ? 'high' : adjustedPaceScore > 50 ? 'medium' : 'low',
+    riskFactors,
+    breakdown: {
+      cashRunway: Math.round(factors.cashRunway),
+      teamSize: Math.round(factors.teamSize),
+      cfoHired: factors.cfoHired,
+      boardSize: Math.round(factors.boardSize),
+      auditorSelected: factors.auditorSelected,
+      investorSophistication: Math.round(factors.investorSophistication),
+    },
+  }
 }

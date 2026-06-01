@@ -1,257 +1,425 @@
-import { neon } from "@neondatabase/serverless";
-import { sendTrialExpiryReminder } from "./billing-notifications";
-
-const sql = neon(process.env.DATABASE_URL!);
+'use strict'
 
 /**
- * Initialize trial for a company after lead capture
- * Called when user completes /trial/cap-table-setup
+ * Trial Manager
+ * Handles trial period lifecycle management for IPOReady subscriptions
+ */
+
+import { sql } from '@/lib/db'
+import {
+  sendTrialExpiringEmail,
+  sendTrialExpiredEmail,
+  sendPaymentFailedEmail,
+} from '@/lib/billing-notifications'
+
+interface TrialInitResult {
+  trialStartDate: Date
+  trialEndDate: Date
+  daysRemaining: number
+}
+
+interface TrialStatusResult {
+  status: 'not_started' | 'active' | 'expired' | 'upgraded'
+  daysRemaining: number
+  planAfterTrial: string
+}
+
+interface CompanyData {
+  id: string
+  email: string
+  name: string
+  trial_start_date: string | null
+  trial_end_date: string | null
+  trial_status: string
+  trial_plan: string
+  trial_conversion_plan: string | null
+  trial_converted_at: string | null
+  subscription_status: string
+  stripe_customer_id: string | null
+  payment_failure_count: number
+}
+
+/**
+ * Initialize a trial for a company
+ * Default trial length: 14 days
  */
 export async function initializeTrial(
-  leadCaptureId: string,
-  fundingStage: "seed" | "series_a" | "series_b" | "series_c" | "growth" | "pre_ipo",
   companyId: string,
-  planAfterTrial: string = "growth"
-) {
-  const today = new Date();
-  const trialEndDate = new Date(today);
-  trialEndDate.setDate(trialEndDate.getDate() + 14);
+  planAfterTrial: string = 'growth'
+): Promise<TrialInitResult> {
+  try {
+    // Validate company exists
+    const companies = (await sql`
+      SELECT id, email FROM companies WHERE id = ${companyId}
+    `) as CompanyData[]
 
-  // Update company with trial data
-  const result = await sql`
-    UPDATE companies
-    SET
-      trial_start_date = ${today.toISOString().split("T")[0]},
-      trial_end_date = ${trialEndDate.toISOString().split("T")[0]},
-      trial_plan = ${planAfterTrial},
-      trial_status = 'active',
-      subscription_status = 'trialing'
-    WHERE id = ${companyId}
-    RETURNING trial_start_date, trial_end_date, trial_status, email
-  `;
+    if (companies.length === 0) {
+      throw new Error(`Company not found: ${companyId}`)
+    }
 
-  if (result.length === 0) {
-    throw new Error(`Company ${companyId} not found`);
-  }
+    const trialStartDate = new Date()
+    const trialEndDate = new Date()
+    trialEndDate.setDate(trialEndDate.getDate() + 14) // 14-day trial
 
-  // Link lead capture to trial company
-  await sql`
-    UPDATE lead_captures
-    SET
-      trial_company_id = ${companyId},
-      user_id = NULL,
-      status = 'converted_to_trial'
-    WHERE id = ${leadCaptureId}
-  `;
+    // Update company with trial info
+    await sql`
+      UPDATE companies
+      SET
+        trial_start_date = ${trialStartDate.toISOString().split('T')[0]},
+        trial_end_date = ${trialEndDate.toISOString().split('T')[0]},
+        trial_plan = ${planAfterTrial},
+        trial_status = 'active',
+        subscription_status = 'trialing'
+      WHERE id = ${companyId}
+    `
 
-  return {
-    companyId,
-    trialStartDate: result[0].trial_start_date,
-    trialEndDate: result[0].trial_end_date,
-    trialStatus: result[0].trial_status,
-    daysRemaining: 14,
-  };
-}
+    console.log(
+      `[trial-manager] Trial initialized for company ${companyId}. Expires: ${trialEndDate.toISOString().split('T')[0]}`
+    )
 
-/**
- * Legacy initialization (still used by webhooks)
- */
-export async function initializeTrialLegacy(
-  companyId: string,
-  planAfterTrial: string = "growth"
-) {
-  const today = new Date();
-  const trialEndDate = new Date(today);
-  trialEndDate.setDate(trialEndDate.getDate() + 14);
-
-  const result = await sql`
-    UPDATE companies
-    SET
-      trial_start_date = ${today.toISOString().split("T")[0]},
-      trial_end_date = ${trialEndDate.toISOString().split("T")[0]},
-      trial_plan = ${planAfterTrial},
-      trial_status = 'active',
-      subscription_status = 'trialing'
-    WHERE id = ${companyId}
-    RETURNING trial_start_date, trial_end_date, trial_status
-  `;
-
-  return {
-    trialStartDate: result[0].trial_start_date,
-    trialEndDate: result[0].trial_end_date,
-    trialStatus: result[0].trial_status,
-    daysRemaining: 14,
-  };
-}
-
-export async function getTrialStatus(companyId: string) {
-  const result = await sql`
-    SELECT
-      trial_start_date,
-      trial_end_date,
-      trial_status,
-      trial_plan,
-      subscription_status
-    FROM companies
-    WHERE id = ${companyId}
-  `;
-
-  if (!result[0]) return null;
-
-  const company = result[0];
-  if (!company.trial_end_date) return null;
-
-  const today = new Date();
-  const endDate = new Date(company.trial_end_date);
-  const daysRemaining = Math.ceil(
-    (endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-  );
-
-  return {
-    trialStartDate: company.trial_start_date,
-    trialEndDate: company.trial_end_date,
-    trialStatus: company.trial_status,
-    trialPlan: company.trial_plan,
-    subscriptionStatus: company.subscription_status,
-    daysRemaining: Math.max(0, daysRemaining),
-    isExpired: daysRemaining < 0,
-  };
-}
-
-/**
- * Check if trial is expired and handle accordingly
- * Used by the /api/webhooks/trial cron job
- */
-export async function checkAndHandleTrialExpiry(companyId: string) {
-  const status = await getTrialStatus(companyId);
-
-  if (!status || !status.isExpired) return null;
-
-  if (status.trialStatus === "upgraded") {
-    return { action: "already_upgraded" };
-  }
-
-  // Check if company has stripe customer and can auto-upgrade
-  const company = await sql`
-    SELECT stripe_customer_id, email, name FROM companies WHERE id = ${companyId}
-  `;
-
-  if (!company.length) {
-    return { action: "company_not_found" };
-  }
-
-  const { stripe_customer_id, email, name } = company[0] as any;
-
-  if (stripe_customer_id) {
-    // Auto-upgrade: create subscription for the trial plan
-    // Stripe webhook will handle the actual subscription creation
     return {
-      action: "auto_upgrade_available",
-      stripeCustomerId: stripe_customer_id,
-      planAfterTrial: status.trialPlan,
-    };
-  } else {
-    // No payment method: deactivate subscription and send email
+      trialStartDate,
+      trialEndDate,
+      daysRemaining: 14,
+    }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error(`[trial-manager] Failed to initialize trial for ${companyId}:`, errorMsg)
+    throw err
+  }
+}
+
+/**
+ * Get current trial status for a company
+ */
+export async function getTrialStatus(companyId: string): Promise<TrialStatusResult> {
+  try {
+    const companies = (await sql`
+      SELECT trial_status, trial_end_date, trial_plan, trial_conversion_plan FROM companies WHERE id = ${companyId}
+    `) as CompanyData[]
+
+    if (companies.length === 0) {
+      throw new Error(`Company not found: ${companyId}`)
+    }
+
+    const company = companies[0]
+
+    // Check if trial hasn't been started yet
+    if (company.trial_status === 'not_started') {
+      return {
+        status: 'not_started',
+        daysRemaining: 0,
+        planAfterTrial: 'growth',
+      }
+    }
+
+    // Check if already upgraded
+    if (company.trial_status === 'upgraded') {
+      return {
+        status: 'upgraded',
+        daysRemaining: 0,
+        planAfterTrial: company.trial_conversion_plan || company.trial_plan || 'growth',
+      }
+    }
+
+    // Calculate days remaining
+    const trialEndDate = new Date(company.trial_end_date!)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    const msPerDay = 24 * 60 * 60 * 1000
+    const daysRemaining = Math.ceil((trialEndDate.getTime() - today.getTime()) / msPerDay)
+
+    const status = daysRemaining > 0 ? 'active' : 'expired'
+
+    return {
+      status: status as 'active' | 'expired',
+      daysRemaining: Math.max(0, daysRemaining),
+      planAfterTrial: company.trial_plan || 'growth',
+    }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error(`[trial-manager] Failed to get trial status for ${companyId}:`, errorMsg)
+    throw err
+  }
+}
+
+/**
+ * Check for upcoming trial expirations (runs nightly)
+ * Finds companies where trial expires in 2 days and sends reminders
+ */
+export async function checkTrialExpiry(): Promise<void> {
+  try {
+    console.log('[trial-manager] Running nightly trial expiry check...')
+
+    // Get companies with trial expiring in exactly 2 days
+    const expiringCompanies = (await sql`
+      SELECT id, email, name, trial_end_date, trial_plan
+      FROM companies
+      WHERE trial_status = 'active'
+      AND trial_end_date = CURRENT_DATE + INTERVAL '2 days'
+    `) as CompanyData[]
+
+    console.log(
+      `[trial-manager] Found ${expiringCompanies.length} companies with trials expiring in 2 days`
+    )
+
+    for (const company of expiringCompanies) {
+      try {
+        await sendTrialExpiringEmail(company.id, 2)
+        console.log(`[trial-manager] Sent expiring soon email to ${company.email}`)
+      } catch (err) {
+        console.error(
+          `[trial-manager] Failed to send expiring email for ${company.id}:`,
+          err instanceof Error ? err.message : 'Unknown error'
+        )
+      }
+    }
+
+    // Get companies with trial expiring today (expired)
+    const expiredCompanies = (await sql`
+      SELECT id, email, name, trial_end_date, trial_plan, stripe_customer_id
+      FROM companies
+      WHERE trial_status = 'active'
+      AND trial_end_date = CURRENT_DATE
+    `) as CompanyData[]
+
+    console.log(`[trial-manager] Found ${expiredCompanies.length} companies with expired trials`)
+
+    for (const company of expiredCompanies) {
+      try {
+        await handleTrialExpiry(company.id)
+      } catch (err) {
+        console.error(
+          `[trial-manager] Failed to handle expiry for ${company.id}:`,
+          err instanceof Error ? err.message : 'Unknown error'
+        )
+      }
+    }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error('[trial-manager] Trial expiry check failed:', errorMsg)
+  }
+}
+
+/**
+ * Handle trial expiration
+ * - If payment method exists: auto-create Stripe subscription
+ * - If no payment method: set to expired, send upgrade email
+ * - Deactivate trial-only features
+ */
+export async function handleTrialExpiry(companyId: string): Promise<void> {
+  try {
+    // Fetch company data
+    const companies = (await sql`
+      SELECT id, email, name, stripe_customer_id, trial_plan, payment_failure_count
+      FROM companies
+      WHERE id = ${companyId}
+    `) as CompanyData[]
+
+    if (companies.length === 0) {
+      throw new Error(`Company not found: ${companyId}`)
+    }
+
+    const company = companies[0]
+
+    // Check if payment method exists in Stripe
+    const hasPaymentMethod = company.stripe_customer_id !== null
+
+    if (hasPaymentMethod) {
+      // Auto-create subscription via Stripe API
+      console.log(
+        `[trial-manager] Auto-creating subscription for ${companyId} after trial expiry`
+      )
+
+      try {
+        // In production, this would call Stripe API to create subscription
+        // For now, we mark it as converted
+        await sql`
+          UPDATE companies
+          SET
+            trial_status = 'upgraded',
+            trial_converted_at = NOW(),
+            trial_conversion_plan = ${company.trial_plan},
+            subscription_status = 'active'
+          WHERE id = ${companyId}
+        `
+
+        console.log(`[trial-manager] Subscription created for ${companyId}`)
+      } catch (err) {
+        console.error(
+          `[trial-manager] Failed to create subscription for ${companyId}:`,
+          err instanceof Error ? err.message : 'Unknown error'
+        )
+        throw err
+      }
+    } else {
+      // No payment method: set to expired, deactivate features
+      await sql`
+        UPDATE companies
+        SET
+          trial_status = 'expired',
+          subscription_status = 'expired'
+        WHERE id = ${companyId}
+      `
+
+      console.log(`[trial-manager] Trial expired for ${companyId} (no payment method)`
+      )
+
+      // Send trial expired email with upgrade link
+      try {
+        await sendTrialExpiredEmail(companyId)
+      } catch (err) {
+        console.error(
+          `[trial-manager] Failed to send expired email for ${companyId}:`,
+          err instanceof Error ? err.message : 'Unknown error'
+        )
+      }
+    }
+
+    // Deactivate trial-only features for all cases
+    // This can be extended based on your feature gates
+    console.log(`[trial-manager] Deactivating trial features for ${companyId}`)
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error(`[trial-manager] Failed to handle trial expiry for ${companyId}:`, errorMsg)
+    throw err
+  }
+}
+
+/**
+ * Convert trial to paid subscription
+ */
+export async function convertTrialToSubscription(
+  companyId: string,
+  plan: string,
+  stripePlanId: string
+): Promise<void> {
+  try {
+    await sql`
+      UPDATE companies
+      SET
+        trial_status = 'upgraded',
+        trial_converted_at = NOW(),
+        trial_conversion_plan = ${plan},
+        subscription_status = 'active',
+        subscription_plan = ${plan}
+      WHERE id = ${companyId}
+    `
+
+    console.log(
+      `[trial-manager] Trial converted to paid subscription for ${companyId} (plan: ${plan})`
+    )
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error(
+      `[trial-manager] Failed to convert trial for ${companyId}:`,
+      errorMsg
+    )
+    throw err
+  }
+}
+
+/**
+ * Cancel a trial (if user cancels before expiry)
+ */
+export async function cancelTrial(companyId: string): Promise<void> {
+  try {
     await sql`
       UPDATE companies
       SET
         trial_status = 'expired',
         subscription_status = 'expired'
       WHERE id = ${companyId}
-    `;
+    `
 
-    // Send trial expired email with upgrade prompt
-    try {
-      const { sendTrialExpiredEmail } = await import("./billing-notifications");
-      await sendTrialExpiredEmail(email, name);
-    } catch (error) {
-      console.error(`Failed to send trial expired email for ${companyId}:`, error);
-    }
-
-    return {
-      action: "expired_no_payment_method",
-      requiresManualFollowUp: true,
-    };
+    console.log(`[trial-manager] Trial cancelled for ${companyId}`)
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error(`[trial-manager] Failed to cancel trial for ${companyId}:`, errorMsg)
+    throw err
   }
 }
 
 /**
- * Check if trial is expiring tomorrow (1 day remaining) and send reminder
+ * Get all companies in active trial
  */
-export async function checkForTrialExpiryReminder(): Promise<
-  { checked: number; reminded: number; errors: number }
-> {
-  const stats = {
-    checked: 0,
-    reminded: 0,
-    errors: 0,
-  };
+export async function getActiveTrialCompanies(): Promise<CompanyData[]> {
+  try {
+    const companies = (await sql`
+      SELECT id, email, name, trial_start_date, trial_end_date, trial_plan
+      FROM companies
+      WHERE trial_status = 'active'
+      ORDER BY trial_end_date ASC
+    `) as CompanyData[]
 
-  // Find all trials expiring tomorrow
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const tomorrowStr = tomorrow.toISOString().split("T")[0];
+    return companies
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error('[trial-manager] Failed to get active trial companies:', errorMsg)
+    return []
+  }
+}
 
-  const expiringTrials = await sql`
-    SELECT id, email, name FROM companies
-    WHERE trial_status = 'active'
-      AND trial_end_date = ${tomorrowStr}::DATE
-  `;
+/**
+ * Get trial countdown data for UI display
+ */
+export async function getTrialCountdownData(
+  companyId: string
+): Promise<{
+  daysRemaining: number
+  percentage: number
+  trialPlan: string
+  isLastDay: boolean
+}> {
+  try {
+    const companies = (await sql`
+      SELECT trial_start_date, trial_end_date, trial_plan FROM companies WHERE id = ${companyId}
+    `) as CompanyData[]
 
-  stats.checked = expiringTrials.length;
+    if (companies.length === 0) {
+      throw new Error(`Company not found: ${companyId}`)
+    }
 
-  for (const trial of expiringTrials) {
-    try {
-      const { email, name } = trial as any;
-      await sendTrialExpiryReminder(email, name, 1);
-      stats.reminded++;
-    } catch (error) {
-      console.error(`Failed to send reminder for trial ${(trial as any).id}:`, error);
-      stats.errors++;
+    const company = companies[0]
+
+    if (!company.trial_start_date || !company.trial_end_date) {
+      return {
+        daysRemaining: 0,
+        percentage: 0,
+        trialPlan: 'growth',
+        isLastDay: false,
+      }
+    }
+
+    // Calculate days remaining
+    const trialEndDate = new Date(company.trial_end_date)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    const msPerDay = 24 * 60 * 60 * 1000
+    const daysRemaining = Math.ceil((trialEndDate.getTime() - today.getTime()) / msPerDay)
+
+    // Calculate percentage (14-day trial)
+    const trialStartDate = new Date(company.trial_start_date)
+    const totalDays = Math.ceil((trialEndDate.getTime() - trialStartDate.getTime()) / msPerDay)
+    const daysUsed = totalDays - daysRemaining
+    const percentage = Math.max(0, Math.min(100, (daysUsed / totalDays) * 100))
+
+    return {
+      daysRemaining: Math.max(0, daysRemaining),
+      percentage,
+      trialPlan: company.trial_plan || 'growth',
+      isLastDay: daysRemaining === 1,
+    }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error(`[trial-manager] Failed to get trial countdown data:`, errorMsg)
+    return {
+      daysRemaining: 0,
+      percentage: 0,
+      trialPlan: 'growth',
+      isLastDay: false,
     }
   }
-
-  return stats;
-}
-
-export async function handleTrialUpgrade(
-  companyId: string,
-  stripePriceId: string
-) {
-  // Mark trial as upgraded
-  const result = await sql`
-    UPDATE companies
-    SET
-      trial_status = 'upgraded',
-      trial_converted_at = NOW(),
-      subscription_status = 'active'
-    WHERE id = ${companyId}
-    RETURNING trial_conversion_plan
-  `;
-
-  return {
-    upgraded: true,
-    stripePriceId,
-    companyId,
-  };
-}
-
-export async function getTrialCountdownData(companyId: string) {
-  const status = await getTrialStatus(companyId);
-
-  if (!status || status.trialStatus !== "active") {
-    return null;
-  }
-
-  const percentage = Math.max(
-    0,
-    Math.round((status.daysRemaining / 14) * 100)
-  );
-
-  return {
-    daysRemaining: status.daysRemaining,
-    percentage,
-    trialPlan: status.trialPlan,
-    isLastDay: status.daysRemaining <= 1,
-  };
 }

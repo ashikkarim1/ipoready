@@ -14,6 +14,8 @@ import { PHASE_LABELS, PHASE_ORDER } from '@/lib/utils'
 import { Phase } from '@/types'
 import Link from 'next/link'
 import { TrialCountdownBanner } from '@/components/TrialCountdownBanner'
+import { ReadinessFactorsCard } from '@/components/ReadinessFactorsCard'
+import { SequencingAlertsCard } from '@/components/SequencingAlertsCard'
 
 const DEMO_TASKS_SUMMARY = {
   total: 48, completed: 11, inProgress: 5, blocked: 1, notStarted: 31,
@@ -175,6 +177,12 @@ interface DashStats {
   upcomingDeadlines: { id: string; title: string; phase: string; priority: string; dueDate: string | null }[]
   currentPhase: string | null
   phaseProgress: Record<string, { total: number; completed: number; percentage: number }>
+  cashRunway?: number
+  hiringProgress?: number
+  auditorEngaged?: boolean
+  boardSize?: number
+  boardIndependentCount?: number
+  secondIndependent?: boolean
 }
 
 function getAgingStatusStyle(status: AgingItem['status']) {
@@ -784,6 +792,42 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      {/* READINESS FACTORS & SEQUENCING ALERTS                              */}
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+          <ReadinessFactorsCard
+            cashRunway={dashStats?.cashRunway ?? 8.5}
+            hiringProgress={dashStats?.hiringProgress ?? 67}
+            auditorEngaged={dashStats?.auditorEngaged ?? true}
+            boardSize={dashStats?.boardSize ?? 3}
+            boardIndependentCount={dashStats?.boardIndependentCount ?? 1}
+            secondIndependent={dashStats?.secondIndependent ?? false}
+          />
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
+          <SequencingAlertsCard
+            alerts={[
+              {
+                severity: 'warning' as const,
+                taskId: 'seq-1',
+                title: 'Second Independent Director Needed',
+                description: 'TSXV requires 2 independent directors before filing. Currently have 1 of 2.',
+                daysBlocking: 2,
+                remediationSteps: [
+                  'Engage director search firm with expedited timeline',
+                  'Screen candidates against TSXV independence rules',
+                  'Obtain board approval for appointment',
+                  'File Form 2A with TSXV Exchange',
+                ],
+              },
+            ]}
+          />
+        </motion.div>
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════════ */}

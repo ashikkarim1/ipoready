@@ -17,32 +17,57 @@ export interface StripeWebhookEvent {
 }
 
 /**
- * Verify Stripe webhook signature
- * Uses HMAC-SHA256 to ensure the webhook came from Stripe
+ * Verify Stripe webhook signature using HMAC-SHA256
+ * Implements Stripe's verification protocol: timestamp.signed_content
  */
-export function verifyWebhookSignature(body: string, signature: string, secret: string): boolean {
+export function verifyWebhookSignature(
+  body: string,
+  signature: string,
+  secret: string
+): boolean {
   if (!signature || !secret) {
     console.error('Missing signature or webhook secret')
     return false
   }
 
   try {
-    // Extract timestamp and signed content
-    const [t, v1] = signature.split(',').map((item) => item.split('=')[1])
+    // Stripe signature format: t=timestamp,v1=signature
+    const signatureParts = signature.split(',').reduce<Record<string, string>>(
+      (acc, part) => {
+        const [key, value] = part.split('=')
+        acc[key] = value
+        return acc
+      },
+      {}
+    )
 
-    if (!t || !v1) {
-      console.error('Invalid signature format')
+    const timestamp = signatureParts.t
+    const v1 = signatureParts.v1
+
+    if (!timestamp || !v1) {
+      console.error('Invalid signature format: missing timestamp or v1')
       return false
     }
 
-    // Create signed content (timestamp + body)
-    const signedContent = `${t}.${body}`
+    // Stripe expects: timestamp + '.' + body
+    const signedContent = `${timestamp}.${body}`
 
-    // Calculate expected signature
-    const expectedSig = crypto.createHmac('sha256', secret).update(signedContent).digest('hex')
+    // Calculate expected signature using secret
+    const expectedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(signedContent)
+      .digest('hex')
 
     // Constant-time comparison to prevent timing attacks
-    return crypto.timingSafeEqual(Buffer.from(v1), Buffer.from(expectedSig))
+    const expectedBuffer = Buffer.from(expectedSignature)
+    const signatureBuffer = Buffer.from(v1)
+
+    if (expectedBuffer.length !== signatureBuffer.length) {
+      console.error('Signature length mismatch')
+      return false
+    }
+
+    return crypto.timingSafeEqual(expectedBuffer, signatureBuffer)
   } catch (error) {
     console.error('Webhook signature verification error:', error)
     return false
@@ -51,13 +76,68 @@ export function verifyWebhookSignature(body: string, signature: string, secret: 
 
 /**
  * Check if a webhook event has already been processed (idempotency)
+ * Prevents duplicate processing of the same event
  */
 export async function hasWebhookBeenProcessed(eventId: string): Promise<boolean> {
-  const result = await sql`
-    SELECT 1 FROM webhook_logs WHERE event_id = ${eventId} LIMIT 1
-  `
+  try {
+    const result = await sql`
+      SELECT id FROM webhook_logs WHERE event_id = ${eventId} LIMIT 1
+    `
+    return result.length > 0
+  } catch (error) {
+    console.error('Error checking webhook idempotency:', error)
+    throw error
+  }
+}
 
-  return !!result && result.length > 0
+/**
+ * Check if a specific webhook event has been processed successfully
+ */
+export async function hasProcessedEvent(eventId: string): Promise<boolean> {
+  try {
+    const result = await sql`
+      SELECT id FROM webhook_logs
+      WHERE event_id = ${eventId} AND status = 'processed'
+      LIMIT 1
+    `
+    return result.length > 0
+  } catch (error) {
+    console.error('Error checking processed event:', error)
+    throw error
+  }
+}
+
+/**
+ * Store processed event in webhook_logs table for idempotency and audit trail
+ */
+export async function markEventProcessed(
+  eventId: string,
+  eventType: string,
+  payload: Record<string, any>
+): Promise<void> {
+  try {
+    await sql`
+      INSERT INTO webhook_logs (
+        event_id,
+        event_type,
+        payload,
+        status,
+        processed_at
+      )
+      VALUES (
+        ${eventId},
+        ${eventType},
+        ${JSON.stringify(payload)},
+        'processed',
+        NOW()
+      )
+      ON CONFLICT (event_id) DO UPDATE
+      SET status = 'processed', processed_at = NOW()
+    `
+  } catch (error) {
+    console.error('Error marking event as processed:', error)
+    throw error
+  }
 }
 
 /**
@@ -71,11 +151,29 @@ export async function logWebhookEvent(
   payload: Record<string, any>,
   status: 'processed' | 'failed' | 'pending' | 'duplicate' = 'pending',
   errorMessage?: string
-) {
+): Promise<void> {
   try {
     await sql`
-      INSERT INTO webhook_logs (event_id, event_type, stripe_customer_id, stripe_subscription_id, payload, status, error_message)
-      VALUES (${eventId}, ${eventType}, ${stripeCustomerId}, ${stripeSubscriptionId}, ${JSON.stringify(payload)}, ${status}, ${errorMessage || null})
+      INSERT INTO webhook_logs (
+        event_id,
+        event_type,
+        stripe_customer_id,
+        stripe_subscription_id,
+        payload,
+        status,
+        error_message,
+        created_at
+      )
+      VALUES (
+        ${eventId},
+        ${eventType},
+        ${stripeCustomerId},
+        ${stripeSubscriptionId},
+        ${JSON.stringify(payload)},
+        ${status},
+        ${errorMessage || null},
+        NOW()
+      )
       ON CONFLICT (event_id) DO NOTHING
     `
   } catch (error) {
@@ -84,17 +182,20 @@ export async function logWebhookEvent(
 }
 
 /**
- * Update webhook event status
+ * Update webhook event status after processing
  */
 export async function updateWebhookStatus(
   eventId: string,
   status: 'processed' | 'failed' | 'pending' | 'duplicate',
   errorMessage?: string
-) {
+): Promise<void> {
   try {
     await sql`
       UPDATE webhook_logs
-      SET status = ${status}, error_message = ${errorMessage || null}, processed_at = NOW()
+      SET
+        status = ${status},
+        error_message = ${errorMessage || null},
+        processed_at = NOW()
       WHERE event_id = ${eventId}
     `
   } catch (error) {
@@ -105,28 +206,35 @@ export async function updateWebhookStatus(
 /**
  * Get webhook event history for a customer
  */
-export async function getWebhookHistory(stripeCustomerId: string, limit = 50) {
-  const events = await sql`
-    SELECT
-      event_id,
-      event_type,
-      status,
-      error_message,
-      created_at,
-      processed_at
-    FROM webhook_logs
-    WHERE stripe_customer_id = ${stripeCustomerId}
-    ORDER BY created_at DESC
-    LIMIT ${limit}
-  `
-
-  return events
+export async function getWebhookHistory(
+  stripeCustomerId: string,
+  limit = 50
+): Promise<Array<Record<string, any>>> {
+  try {
+    const events = await sql`
+      SELECT
+        event_id,
+        event_type,
+        status,
+        error_message,
+        created_at,
+        processed_at
+      FROM webhook_logs
+      WHERE stripe_customer_id = ${stripeCustomerId}
+      ORDER BY created_at DESC
+      LIMIT ${limit}
+    `
+    return events as Array<Record<string, any>>
+  } catch (error) {
+    console.error('Error fetching webhook history:', error)
+    throw error
+  }
 }
 
 /**
  * Extract key data from Stripe webhook payloads
  */
-export function extractWebhookData(event: StripeWebhookEvent) {
+export function extractWebhookData(event: StripeWebhookEvent): Record<string, any> {
   const { type, data } = event
   const obj = data.object
 
@@ -150,6 +258,7 @@ export function extractWebhookData(event: StripeWebhookEvent) {
         currentPeriodEnd: obj.current_period_end,
         cancelAtPeriodEnd: obj.cancel_at_period_end,
         collectionMethod: obj.collection_method,
+        trialEnd: obj.trial_end,
       }
 
     case 'customer.subscription.deleted':
@@ -194,22 +303,42 @@ export function extractWebhookData(event: StripeWebhookEvent) {
 }
 
 /**
- * Retry failed webhook processing
+ * Get failed webhooks for retry processing
  */
-export async function getFailedWebhooksForRetry() {
-  const failedEvents = await sql`
-    SELECT
-      event_id,
-      event_type,
-      payload,
-      error_message,
-      created_at
-    FROM webhook_logs
-    WHERE status = 'failed'
-      AND created_at > NOW() - INTERVAL '24 hours'
-    ORDER BY created_at ASC
-    LIMIT 20
-  `
+export async function getFailedWebhooksForRetry(): Promise<Array<Record<string, any>>> {
+  try {
+    const failedEvents = await sql`
+      SELECT
+        event_id,
+        event_type,
+        payload,
+        error_message,
+        created_at
+      FROM webhook_logs
+      WHERE status = 'failed'
+        AND created_at > NOW() - INTERVAL '24 hours'
+      ORDER BY created_at ASC
+      LIMIT 20
+    `
+    return failedEvents as Array<Record<string, any>>
+  } catch (error) {
+    console.error('Error fetching failed webhooks:', error)
+    throw error
+  }
+}
 
-  return failedEvents
+/**
+ * Delete old webhook logs (older than 90 days) for cleanup
+ */
+export async function cleanupOldWebhookLogs(daysOld = 90): Promise<number> {
+  try {
+    const result = await sql`
+      DELETE FROM webhook_logs
+      WHERE created_at < NOW() - INTERVAL '${daysOld} days'
+    `
+    return result.length ?? 0
+  } catch (error) {
+    console.error('Error cleaning up old webhook logs:', error)
+    throw error
+  }
 }

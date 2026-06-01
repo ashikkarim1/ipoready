@@ -1,5 +1,5 @@
 import { resend, FROM_ADDRESS } from '@/lib/resend'
-import { sql, query } from '@/lib/db'
+import { sql } from '@/lib/db'
 import { renderEmailTemplate, EmailTemplateId } from '@/lib/email-templates'
 
 export interface SendEmailOptions {
@@ -200,12 +200,12 @@ export async function sendEmailWithRetry(options: SendEmailOptions, retryCount: 
  */
 export async function getEmailLogs(email: string, limit: number = 50): Promise<EmailLog[]> {
   try {
-    const logs = await query<EmailLog>`
+    const logs = (await sql`
       SELECT * FROM email_logs
       WHERE to_email = ${email}
       ORDER BY created_at DESC
       LIMIT ${limit}
-    `
+    `) as EmailLog[]
     return logs
   } catch (err) {
     console.error('[email-service] Failed to get email logs:', err)
@@ -222,13 +222,13 @@ export async function wasEmailRecentlySent(
   withinMinutes: number = 5
 ): Promise<boolean> {
   try {
-    const logs = await query<{ count: number }>`
+    const logs = (await sql`
       SELECT COUNT(*) as count FROM email_logs
       WHERE to_email = ${to}
         AND template_id = ${templateId}
         AND status = 'sent'
         AND sent_at > NOW() - INTERVAL '${withinMinutes} minutes'
-    `
+    `) as { count: number }[]
     return logs.length > 0 && logs[0].count > 0
   } catch (err) {
     console.error('[email-service] Failed to check recent emails:', err)

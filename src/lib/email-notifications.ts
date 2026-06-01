@@ -315,3 +315,61 @@ export async function sendTaskReminders(): Promise<{ sent: number; failed: numbe
     return { sent: 0, failed: 1 }
   }
 }
+
+/**
+ * Send billing notification emails (bridges Stripe webhooks to new billing-notifications module)
+ */
+export async function sendBillingNotificationEmail(
+  companyEmail: string,
+  companyName: string,
+  eventType: 'subscription_renewed' | 'subscription_cancelled' | 'payment_failed' | 'payment_succeeded',
+  variables: Record<string, any>
+): Promise<void> {
+  try {
+    // Get company ID from email
+    const companies = await sql`
+      SELECT id FROM companies WHERE email = ${companyEmail} LIMIT 1
+    `
+
+    if (companies.length === 0) {
+      console.warn(`[email-notifications] Company not found for email: ${companyEmail}`)
+      return
+    }
+
+    const companyId = (companies[0] as any).id
+
+    // Import and call appropriate billing notification function
+    const {
+      sendSubscriptionRenewedEmail,
+      sendSubscriptionCancelledEmail,
+      sendPaymentFailedEmail,
+      sendPaymentSucceededEmail,
+    } = await import('@/lib/billing-notifications')
+
+    switch (eventType) {
+      case 'subscription_renewed':
+        await sendSubscriptionRenewedEmail(companyId, variables.plan || 'growth')
+        break
+      case 'subscription_cancelled':
+        await sendSubscriptionCancelledEmail(companyId)
+        break
+      case 'payment_failed':
+        // Amount is in cents, convert to dollars for display
+        const amount = variables.amount || 0
+        await sendPaymentFailedEmail(companyId, amount)
+        break
+      case 'payment_succeeded':
+        await sendPaymentSucceededEmail(companyId, variables)
+        break
+      default:
+        console.warn(`[email-notifications] Unknown billing event type: ${eventType}`)
+    }
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+    console.error(
+      `[email-notifications] sendBillingNotificationEmail failed for ${companyEmail}:`,
+      errorMessage
+    )
+    throw err
+  }
+}

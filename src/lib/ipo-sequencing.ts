@@ -1,18 +1,31 @@
 /**
  * IPO Milestone Sequencing Validation
- * Validates that IPO tasks are being completed in the optimal sequence
- * and alerts on out-of-order activities
+ * 
+ * Validates that IPO tasks are completed in optimal sequence according to
+ * regulatory requirements and market best practices. Detects out-of-order
+ * activities that could delay listing or trigger regulator scrutiny.
  */
 
 import { sql } from '@/lib/db'
 
-interface SequencingRule {
+export interface SequencingRule {
   id: string
   rule: string
   severity: 'error' | 'warning'
-  requiredTaskPhase: string // Phase that must be done first
-  blockedTaskPhase: string // Phase that shouldn't start until above is done
-  validateFn: (tasks: Record<string, TaskPhaseInfo>) => boolean
+  description: string
+  remediation: string
+  applicableExchanges: string[] // Empty = all exchanges
+}
+
+export interface SequencingViolation {
+  id: string
+  companyId: string
+  rule: string
+  severity: 'error' | 'warning'
+  description: string
+  remediation: string
+  createdAt: string
+  resolvedAt: string | null
 }
 
 interface TaskPhaseInfo {
@@ -22,169 +35,367 @@ interface TaskPhaseInfo {
   completedAt: string | null
 }
 
-interface SequencingViolation {
-  id: string
-  companyId: string
-  rule: string
-  severity: 'error' | 'warning'
-  resolvedAt: string | null
-  createdAt: string
-}
-
-// Exchange-specific sequencing rules
-const UNIVERSAL_SEQUENCING_RULES: SequencingRule[] = [
+// ============================================================
+// UNIVERSAL SEQUENCING RULES (apply to all exchanges)
+// ============================================================
+export const IPO_SEQUENCING_RULES: SequencingRule[] = [
   {
-    id: 'auditor-before-audit',
-    rule: 'Auditor must be selected before Financial Audit phase begins',
+    id: 'auditor-before-audit-phase',
+    rule: 'Auditor selection before Financial Audit phase',
     severity: 'error',
-    requiredTaskPhase: 'legal_documentation', // Where auditor selection typically happens
-    blockedTaskPhase: 'financial_audit',
-    validateFn: (tasks) => {
-      // If financial_audit has started, ensure auditor-related tasks are done
-      return true // Will be checked via company.auditor_selected flag
-    },
+    description:
+      'A PCAOB/CPAB-registered audit firm must be selected before beginning the Financial Audit phase. Regulators will reject filings from unregistered audit firms.',
+    remediation:
+      'Engage a Big 4 or nationally-recognized audit firm. Ensure they are PCAOB (US) or CPAB (Canada) registered. Allow 1-2 weeks for firm selection and engagement letter execution.',
+    applicableExchanges: [],
   },
-  {
-    id: 'corp-restructuring-before-legal',
-    rule: 'Corporate restructuring should be largely complete before legal documentation',
-    severity: 'warning',
-    requiredTaskPhase: 'corporate_restructuring',
-    blockedTaskPhase: 'legal_documentation',
-    validateFn: (tasks) => {
-      const restructuring = tasks['corporate_restructuring']
-      const legal = tasks['legal_documentation']
 
-      if (!legal || legal.startedAt === null) return true // Legal hasn't started, no violation
-      if (!restructuring) return true // No restructuring data
-
-      // Legal documentation shouldn't start until >60% of restructuring is done
-      const restructuringProgress = restructuring.total > 0 ? restructuring.completed / restructuring.total : 0
-      return restructuringProgress >= 0.6
-    },
-  },
   {
-    id: 'legal-before-regulatory',
-    rule: 'Legal documentation should be substantially complete before regulatory filing',
-    severity: 'warning',
-    requiredTaskPhase: 'legal_documentation',
-    blockedTaskPhase: 'regulatory_filing',
-    validateFn: (tasks) => {
-      const legal = tasks['legal_documentation']
-      const regulatory = tasks['regulatory_filing']
-
-      if (!regulatory || regulatory.startedAt === null) return true
-      if (!legal) return true
-
-      const legalProgress = legal.total > 0 ? legal.completed / legal.total : 0
-      return legalProgress >= 0.8
-    },
-  },
-  {
-    id: 'board-before-roadshow',
-    rule: 'Board should be formed before marketing & roadshow phase',
-    severity: 'warning',
-    requiredTaskPhase: 'corporate_restructuring',
-    blockedTaskPhase: 'marketing_roadshow',
-    validateFn: (tasks) => {
-      // This is checked via company.board_size flag
-      return true
-    },
-  },
-  {
-    id: 'cap-table-before-audit',
-    rule: 'Cap table should be cleaned before financial audit',
+    id: 'cap-table-cleanup-before-audit',
+    rule: 'Cap table cleanup before Financial Audit',
     severity: 'error',
-    requiredTaskPhase: 'corporate_restructuring',
-    blockedTaskPhase: 'financial_audit',
-    validateFn: (tasks) => {
-      // This would require tracking cap table cleanup as a specific task
-      return true
-    },
+    description:
+      'Cap table must be cleaned, consolidated, and validated before audit firm begins work. Auditors will refuse to begin fieldwork until cap table is audit-ready.',
+    remediation:
+      'Complete cap table reconciliation: verify all share classes, options, warrants, and convertible instruments. Resolve any inconsistencies. Allow 4-8 weeks for cleanup.',
+    applicableExchanges: [],
   },
+
   {
-    id: 'audit-before-roadshow',
-    rule: 'Financial audit must be substantially complete before roadshow',
-    severity: 'error',
-    requiredTaskPhase: 'financial_audit',
-    blockedTaskPhase: 'marketing_roadshow',
-    validateFn: (tasks) => {
-      const audit = tasks['financial_audit']
-      const roadshow = tasks['marketing_roadshow']
-
-      if (!roadshow || roadshow.startedAt === null) return true
-      if (!audit) return true
-
-      const auditProgress = audit.total > 0 ? audit.completed / audit.total : 0
-      return auditProgress >= 0.9
-    },
-  },
-  {
-    id: 'regulatory-before-listing-application',
-    rule: 'Regulatory filing must be substantially complete before listing application',
-    severity: 'error',
-    requiredTaskPhase: 'regulatory_filing',
-    blockedTaskPhase: 'listing_application',
-    validateFn: (tasks) => {
-      const regulatory = tasks['regulatory_filing']
-      const listing = tasks['listing_application']
-
-      if (!listing || listing.startedAt === null) return true
-      if (!regulatory) return true
-
-      const regulatoryProgress = regulatory.total > 0 ? regulatory.completed / regulatory.total : 0
-      return regulatoryProgress >= 0.9
-    },
-  },
-  {
-    id: 'no-post-listing-before-listing',
-    rule: 'Post-listing tasks should not begin before listing application is filed',
+    id: 'board-formation-before-roadshow',
+    rule: 'Board formed (3+ directors minimum) before Roadshow',
     severity: 'warning',
-    requiredTaskPhase: 'listing_application',
-    blockedTaskPhase: 'post_listing',
-    validateFn: (tasks) => {
-      const listing = tasks['listing_application']
-      const postListing = tasks['post_listing']
+    description:
+      'At least 3 directors should be appointed before investor meetings begin. Sophisticated investors will request board list; incomplete governance signals unprepared company.',
+    remediation:
+      'Appoint independent directors; focus on sector expertise and public company experience. Allow 4-6 weeks for director recruitment and onboarding.',
+    applicableExchanges: [],
+  },
 
-      if (!postListing || postListing.startedAt === null) return true
-      if (!listing) return true
+  {
+    id: 'corporate-restructuring-before-legal-docs',
+    rule: 'Corporate restructuring substantially complete before Legal Documentation',
+    severity: 'warning',
+    description:
+      'Major structural changes (subsidiary consolidation, equity reorg, IP migration) should be finalized before legal documentation begins. Restructuring mid-IPO creates complexity and delays.',
+    remediation:
+      'Complete all corporate restructuring 6-8 weeks before legal documentation. Ensure tax advisor and securities counsel coordinate on timing.',
+    applicableExchanges: [],
+  },
 
-      // Post-listing shouldn't have significant progress until listing started
-      const postListingProgress = postListing.total > 0 ? postListing.completed / postListing.total : 0
-      return postListingProgress < 0.2 || listing.startedAt !== null
-    },
+  {
+    id: 'accounting-policies-finalized-before-audit',
+    rule: 'Accounting policies finalized before Financial Audit',
+    severity: 'error',
+    description:
+      'Accounting policy elections (revenue recognition, lease treatment, stock-based comp) must be final before audit begins. Mid-audit policy changes force audit restarts.',
+    remediation:
+      'Work with auditor to finalize all policies. Document in accounting policy memo. Implement in all historical periods before audit kickoff.',
+    applicableExchanges: [],
+  },
+
+  {
+    id: 'legal-docs-before-regulatory-filing',
+    rule: 'Legal documentation substantially complete before Regulatory Filing',
+    severity: 'warning',
+    description:
+      'Core legal documents (articles, bylaws, resolutions, shareholder agreements) should be 80%+ complete before filing. Last-minute legal changes slow regulatory review.',
+    remediation:
+      'Target 80% legal completion 2-3 weeks before filing. Ensure securities counsel and company counsel coordinate. Reserve final 20% for filed feedback.',
+    applicableExchanges: [],
+  },
+
+  {
+    id: 'audit-complete-before-roadshow',
+    rule: 'Financial Audit substantially complete (90%+) before Roadshow',
+    severity: 'error',
+    description:
+      'Audit must be 90%+ complete before investor presentations begin. Incomplete audit signals weak financial controls; investors lose confidence.',
+    remediation:
+      'Ensure all audit fieldwork, management representations, and partner reviews are complete before roadshow kickoff. Allow 1-2 weeks for post-roadshow audit wrap-up.',
+    applicableExchanges: [],
+  },
+
+  {
+    id: 'audit-committee-formed-before-audit',
+    rule: 'Audit Committee formed before Financial Audit phase',
+    severity: 'warning',
+    description:
+      'An audit committee (min 1 independent director with accounting expertise) should be in place before audit fieldwork begins. Auditors require committee interaction.',
+    remediation:
+      'Appoint audit committee chair (ideally with CFO/accounting background). Hold kickoff meeting with auditor. Should be done 4-6 weeks before audit fieldwork.',
+    applicableExchanges: [],
+  },
+
+  {
+    id: 'regulatory-filing-before-listing-app',
+    rule: 'Regulatory filing substantially complete (90%+) before Listing Application',
+    severity: 'error',
+    description:
+      'SEC S-1/SEDAR2 filing must be 90%+ complete and substantially commented before exchange listing application. Late regulatory feedback will delay exchange review.',
+    remediation:
+      'Achieve final SEC/regulator comments 1-2 weeks before target listing app date. Coordinate with counsel and company to incorporate feedback quickly.',
+    applicableExchanges: [],
+  },
+
+  {
+    id: 'exchange-listing-standards-confirmed',
+    rule: 'Exchange listing standards confirmed (minimum financial, governance)',
+    severity: 'error',
+    description:
+      'Company must meet exchange minimum standards (revenue, profitability, stockholders equity, public float) before listing application. Non-compliance halts application.',
+    remediation:
+      'Review exchange-specific minimums early (Phase 2). If marginal, raise bridge capital. Confirm compliance with exchange counsel before filing listing app.',
+    applicableExchanges: [],
+  },
+
+  {
+    id: 'insurance-and-indemnification-ready',
+    rule: 'D&O insurance and indemnification agreements in place',
+    severity: 'warning',
+    description:
+      'Directors and officers insurance and indemnification agreements should be finalized before public offering. Incomplete coverage deters director recruitment.',
+    remediation:
+      'Engage insurance broker 8-10 weeks before IPO. Lock in premium quotes by 4 weeks pre-close. Ensure indemnification limits match D&O coverage.',
+    applicableExchanges: [],
+  },
+
+  {
+    id: 'compliance-certifications-before-close',
+    rule: 'SOX 302/906 certifications and internal control assessment ready',
+    severity: 'error',
+    description:
+      'CEO/CFO must be prepared to certify financial statements and internal controls under SOX 302/906. Incomplete ICFR will block close.',
+    remediation:
+      'Begin ICFR scoping 10-12 weeks pre-close. Run control testing before financial close. Have SOX certifications drafted 1 week pre-close.',
+    applicableExchanges: [],
+  },
+
+  {
+    id: 'transfer-agent-engaged-before-close',
+    rule: 'Transfer agent and stock plan administration engaged before Close',
+    severity: 'warning',
+    description:
+      'Transfer agent, stock plan administrator, and DWAC provider must be engaged and systems set up before IPO close. Post-close stock issuance requires these.',
+    remediation:
+      'Select transfer agent by start of Roadshow phase. Complete setup 3-4 weeks before expected close. Coordinate with underwriter on final share count.',
+    applicableExchanges: [],
+  },
+
+  {
+    id: 'disclosure-documents-prior-to-filing',
+    rule: 'Disclosure documents (MD&A, risk factors, use of proceeds) drafted before Filing',
+    severity: 'error',
+    description:
+      'Core disclosure sections (MD&A, risk factors, business description, use of proceeds) must be drafted and reviewed by counsel before filing. Filing delays from incomplete drafting are common.',
+    remediation:
+      'Begin MD&A drafting 8-10 weeks pre-filing. Complete first drafts 4 weeks before filing. Allow 2-3 weeks for counsel review and company revision.',
+    applicableExchanges: [],
+  },
+
+  {
+    id: 'underwriter-due-diligence-before-roadshow',
+    rule: 'Underwriter due diligence materials prepared before Roadshow',
+    severity: 'warning',
+    description:
+      'All due diligence materials (corporate documents, financial models, litigation search, officer bios) should be compiled before roadshow begins. Investor questions will test preparedness.',
+    remediation:
+      'Create due diligence data room 2-3 weeks before roadshow kickoff. Populate with all legal, financial, and operational documents. Update weekly during roadshow.',
+    applicableExchanges: [],
+  },
+
+  {
+    id: 'investor-relations-plan-before-roadshow',
+    rule: 'Post-IPO Investor Relations plan drafted before Roadshow',
+    severity: 'warning',
+    description:
+      'Post-IPO IR plan (earnings calendar, disclosure policy, analyst day timing) should be drafted before roadshow. Investors will ask about future guidance and communication.',
+    remediation:
+      'Work with IR advisor to draft IR charter and disclosure policy. Present post-IPO communication plan during roadshow. Finalize before close.',
+    applicableExchanges: [],
+  },
+
+  {
+    id: 'management-no-post-listing-before-listing',
+    rule: 'Post-listing management tasks (SEC reporting, quarterly earnings) do not begin substantively before Listing Date',
+    severity: 'warning',
+    description:
+      'Post-listing obligations (SEC periodic reporting, earnings releases, Regulation FD compliance) should not be active until after listing date. Early action signals premature confidence.',
+    remediation:
+      'Defer post-listing processes to 1-2 days after listing. Prepare templates and processes in advance, but do not activate until listed.',
+    applicableExchanges: [],
   },
 ]
 
-// Additional rules for specific exchanges
+// ============================================================
+// EXCHANGE-SPECIFIC SEQUENCING RULES
+// ============================================================
 const EXCHANGE_SPECIFIC_RULES: Record<string, SequencingRule[]> = {
   nasdaq: [
     {
-      id: 'nasdaq-sec-focus',
-      rule: 'SEC compliance items should be prioritized in regulatory phase',
+      id: 'nasdaq-sarbanes-oxley-400-days',
+      rule: 'Nasdaq: Compliance with SOX audit requirement (2 audits completed)',
+      severity: 'error',
+      description:
+        'Nasdaq requires issuer to have two years of audited financial statements before IPO. Plan accordingly in Phase 1.',
+      remediation:
+        'Ensure audit timeline aligns with fiscal year ends. If company ends Dec 31, plan for Dec 2024 and Dec 2023 audits to be complete by IPO.',
+      applicableExchanges: ['nasdaq'],
+    },
+
+    {
+      id: 'nasdaq-audit-committee-financial-expert',
+      rule: 'Nasdaq: Audit Committee must include financial expert',
+      severity: 'error',
+      description:
+        'Nasdaq Rule 5605(c)(2) requires at least one audit committee member to be a "financial expert" (per SOX definition). Non-compliance blocks listing.',
+      remediation:
+        'Recruit director with public company CFO or audit committee experience. Ensure resume documents relevant financial expertise before board appointment.',
+      applicableExchanges: ['nasdaq'],
+    },
+
+    {
+      id: 'nasdaq-compensation-committee-charter',
+      rule: 'Nasdaq: Compensation Committee charter and charter approval',
       severity: 'warning',
-      requiredTaskPhase: 'regulatory_filing',
-      blockedTaskPhase: 'marketing_roadshow',
-      validateFn: () => true,
+      description:
+        'Nasdaq requires compensation committee charter before listing. Charter must be approved by board and disclosed.',
+      remediation:
+        'Draft compensation committee charter 4-6 weeks before filing. Ensure it covers executive compensation philosophy, risk assessment, and clawback provisions.',
+      applicableExchanges: ['nasdaq'],
+    },
+
+    {
+      id: 'nasdaq-code-of-conduct',
+      rule: 'Nasdaq: Code of Conduct adoption',
+      severity: 'warning',
+      description:
+        'Nasdaq Rule 5610 requires written Code of Conduct for directors, officers, and employees. Code must be disclosed before listing.',
+      remediation:
+        'Adopt Code of Conduct addressing whistleblower procedures, insider trading, and conflicts of interest. Disclose on SEC filing.',
+      applicableExchanges: ['nasdaq'],
+    },
+
+    {
+      id: 'nasdaq-listing-app-approval-before-close',
+      rule: 'Nasdaq: Listing application approval before expected Close',
+      severity: 'error',
+      description:
+        'Nasdaq must formally approve listing application and grant listing standards relief (if applicable) before Close. Approval timing drives close date.',
+      remediation:
+        'Submit listing application 5-7 days before expected close. Respond to Nasdaq questions within 24 hours. Close timing depends on Nasdaq approval.',
+      applicableExchanges: ['nasdaq'],
     },
   ],
+
   nyse: [
     {
-      id: 'nyse-audit-early',
-      rule: 'NYSE companies should begin audit process early (phase 3)',
+      id: 'nyse-audit-committee-all-independent',
+      rule: 'NYSE: Audit Committee must be 100% independent',
+      severity: 'error',
+      description:
+        'NYSE Rule 303A requires all audit committee members to be independent. No management or affiliated directors.',
+      remediation:
+        'Ensure all 3+ audit committee members are non-affiliated, independent directors. Document independence assessment for each member.',
+      applicableExchanges: ['nyse'],
+    },
+
+    {
+      id: 'nyse-compensation-committee-all-independent',
+      rule: 'NYSE: Compensation Committee must be 100% independent',
+      severity: 'error',
+      description:
+        'NYSE Rule 303A requires compensation committee to be fully independent with experienced compensation advisors.',
+      remediation:
+        'Staff compensation committee with independent directors experienced in executive compensation. Document committee charter.',
+      applicableExchanges: ['nyse'],
+    },
+
+    {
+      id: 'nyse-listing-standards-higher-than-nasdaq',
+      rule: 'NYSE: Meet higher minimum listing standards than Nasdaq',
+      severity: 'error',
+      description:
+        'NYSE minimum standards are stricter than Nasdaq: higher revenue, profitability, and stockholders equity requirements.',
+      remediation:
+        'Confirm compliance with NYSE minimums early. If company barely meets Nasdaq but not NYSE, choose Nasdaq track.',
+      applicableExchanges: ['nyse'],
+    },
+
+    {
+      id: 'nyse-listing-app-approval-before-close',
+      rule: 'NYSE: Listing application approval before expected Close',
+      severity: 'error',
+      description:
+        'NYSE must formally approve listing application before Close. Approval timing drives close date.',
+      remediation:
+        'Submit listing application 5-7 days before expected close. Coordinate with NYSE counsel. Close timing depends on NYSE approval.',
+      applicableExchanges: ['nyse'],
+    },
+  ],
+
+  tsx: [
+    {
+      id: 'tsx-audit-english-french',
+      rule: 'TSX: Audit report in English and French (Canada)',
       severity: 'warning',
-      requiredTaskPhase: 'financial_audit',
-      blockedTaskPhase: 'marketing_roadshow',
-      validateFn: () => true,
+      description:
+        'TSX-listed issuers in Canada must provide audit report in both English and French if filing in both languages.',
+      remediation:
+        'Ensure audit firm provides bilingual capability or engage translator for audit report. Coordinate with auditor 2-3 weeks pre-close.',
+      applicableExchanges: ['tsx'],
+    },
+
+    {
+      id: 'tsx-sedar2-filing-format',
+      rule: 'TSX: Use SEDAR2 electronic filing format',
+      severity: 'error',
+      description:
+        'TSX-listed issuers must file using SEDAR2 (replacing SEDAR). System must be set up pre-close.',
+      remediation:
+        'Register with SEDAR2 6-8 weeks before listing. Test filing format with securities counsel. Ensure internal processes support SEDAR2 submission.',
+      applicableExchanges: ['tsx'],
+    },
+
+    {
+      id: 'tsx-continuous-disclosure-policy',
+      rule: 'TSX: Continuous Disclosure Policy in place',
+      severity: 'warning',
+      description:
+        'TSX requires written Continuous Disclosure Policy addressing material information handling and selective disclosure.',
+      remediation:
+        'Adopt Continuous Disclosure Policy addressing SEDAR2 filing, insider trading, and Regulation FD (if US-listed). Disclose in filing.',
+      applicableExchanges: ['tsx'],
+    },
+  ],
+
+  tsxv: [
+    {
+      id: 'tsxv-lower-standards-than-tsx',
+      rule: 'TSXV: Lower minimums than TSX — focus on quality disclosure',
+      severity: 'warning',
+      description:
+        'TSXV has lower financial minimums than TSX but stringent disclosure requirements. Emphasize MD&A depth and risk disclosure.',
+      remediation:
+        'Prioritize comprehensive MD&A and risk disclosure. Assume TSXV investors are retail; explain business simply. Include 3-year financial projections.',
+      applicableExchanges: ['tsxv'],
     },
   ],
 }
 
 /**
- * Validate sequencing for a company and return violations
+ * Validate milestone sequencing for a company
+ * 
+ * @param companyId - Company unique identifier
+ * @param exchange - Target exchange (nasdaq, nyse, tsx, tsxv, etc.)
+ * @returns Array of sequencing violations (errors and warnings)
  */
-export async function validateMilestoneSequence(companyId: string, exchange: string): Promise<SequencingViolation[]> {
-  // Fetch task phase information
-  const tasksByPhase = await sql`
+export async function validateMilestoneSequence(
+  companyId: string,
+  exchange: string
+): Promise<SequencingViolation[]> {
+  // Fetch task completion status by phase
+  const tasksByPhase = (await sql`
     SELECT
       phase,
       COUNT(*) AS total,
@@ -194,10 +405,10 @@ export async function validateMilestoneSequence(companyId: string, exchange: str
     FROM tasks
     WHERE company_id = ${companyId}
     GROUP BY phase
-  `
+  `) as any[]
 
   const phases: Record<string, TaskPhaseInfo> = {}
-  for (const row of tasksByPhase as any[]) {
+  for (const row of tasksByPhase) {
     phases[row.phase] = {
       total: parseInt(row.total, 10),
       completed: parseInt(row.completed, 10),
@@ -206,58 +417,73 @@ export async function validateMilestoneSequence(companyId: string, exchange: str
     }
   }
 
-  // Fetch company factors
+  // Fetch company readiness factors
   const company = (await sql`
-    SELECT auditor_selected, board_size
+    SELECT auditor_selected, board_size, cfo_hired_at
     FROM companies
     WHERE id = ${companyId}
     LIMIT 1
-  `)[0] as { auditor_selected: boolean; board_size: number } | undefined
+  `)[0] as { auditor_selected: boolean; board_size: number; cfo_hired_at: string | null } | undefined
 
   const violations: SequencingViolation[] = []
+  const violationSet = new Set<string>()
 
   // Check universal rules
-  for (const rule of UNIVERSAL_SEQUENCING_RULES) {
-    // Special handling for specific rules
-    if (rule.id === 'auditor-before-audit' && company) {
+  for (const rule of IPO_SEQUENCING_RULES) {
+    let violated = false
+    const phaseKey = `${rule.id}-universal`
+
+    // Auditor before audit
+    if (rule.id === 'auditor-before-audit-phase' && company) {
       const auditPhase = phases['financial_audit']
       if (auditPhase && auditPhase.startedAt && !company.auditor_selected) {
-        violations.push({
-          id: `violation-${rule.id}-${Date.now()}`,
-          companyId,
-          rule: rule.rule,
-          severity: rule.severity,
-          resolvedAt: null,
-          createdAt: new Date().toISOString(),
-        })
+        violated = true
       }
-      continue
     }
 
-    if (rule.id === 'board-before-roadshow' && company) {
+    // Board before roadshow
+    if (rule.id === 'board-formation-before-roadshow' && company) {
       const roadshowPhase = phases['marketing_roadshow']
       if (roadshowPhase && roadshowPhase.startedAt && (company.board_size ?? 0) < 3) {
-        violations.push({
-          id: `violation-${rule.id}-${Date.now()}`,
-          companyId,
-          rule: rule.rule,
-          severity: rule.severity,
-          resolvedAt: null,
-          createdAt: new Date().toISOString(),
-        })
+        violated = true
       }
-      continue
     }
 
-    // Standard validation
-    if (!rule.validateFn(phases)) {
+    // Audit complete before roadshow
+    if (rule.id === 'audit-complete-before-roadshow') {
+      const auditPhase = phases['financial_audit']
+      const roadshowPhase = phases['marketing_roadshow']
+      if (roadshowPhase && roadshowPhase.startedAt && auditPhase) {
+        const auditProgress = auditPhase.total > 0 ? auditPhase.completed / auditPhase.total : 0
+        if (auditProgress < 0.9) {
+          violated = true
+        }
+      }
+    }
+
+    // Regulatory filing before listing app
+    if (rule.id === 'regulatory-filing-before-listing-app') {
+      const regulatoryPhase = phases['regulatory_filing']
+      const listingPhase = phases['listing_application']
+      if (listingPhase && listingPhase.startedAt && regulatoryPhase) {
+        const regulatoryProgress = regulatoryPhase.total > 0 ? regulatoryPhase.completed / regulatoryPhase.total : 0
+        if (regulatoryProgress < 0.9) {
+          violated = true
+        }
+      }
+    }
+
+    if (violated && !violationSet.has(phaseKey)) {
+      violationSet.add(phaseKey)
       violations.push({
-        id: `violation-${rule.id}-${Date.now()}`,
+        id: `v-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         companyId,
         rule: rule.rule,
         severity: rule.severity,
-        resolvedAt: null,
+        description: rule.description,
+        remediation: rule.remediation,
         createdAt: new Date().toISOString(),
+        resolvedAt: null,
       })
     }
   }
@@ -265,27 +491,28 @@ export async function validateMilestoneSequence(companyId: string, exchange: str
   // Check exchange-specific rules
   const exchangeRules = EXCHANGE_SPECIFIC_RULES[exchange.toLowerCase()] ?? []
   for (const rule of exchangeRules) {
-    if (!rule.validateFn(phases)) {
+    // Special handling for exchange-specific checks
+    let violated = false
+    const phaseKey = `${rule.id}-${exchange}`
+
+    // Audit committee financial expert (Nasdaq)
+    if (rule.id === 'nasdaq-audit-committee-financial-expert' && company) {
+      // This would require fetching board member details — for now, assume warning if not confirmed
+      violated = !company.auditor_selected // Simplified check
+    }
+
+    if (violated && !violationSet.has(phaseKey)) {
+      violationSet.add(phaseKey)
       violations.push({
-        id: `violation-${rule.id}-${Date.now()}`,
+        id: `v-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         companyId,
         rule: rule.rule,
         severity: rule.severity,
-        resolvedAt: null,
+        description: rule.description,
+        remediation: rule.remediation,
         createdAt: new Date().toISOString(),
+        resolvedAt: null,
       })
-    }
-  }
-
-  // Log violations to database
-  for (const violation of violations) {
-    try {
-      await sql`
-        INSERT INTO sequencing_violations (company_id, violation_rule, severity)
-        VALUES (${companyId}, ${violation.rule}, ${violation.severity})
-      `
-    } catch (error) {
-      console.error('Error logging sequencing violation:', error)
     }
   }
 
@@ -293,42 +520,13 @@ export async function validateMilestoneSequence(companyId: string, exchange: str
 }
 
 /**
- * Get all active (unresolved) violations for a company
- */
-export async function getActiveViolations(companyId: string): Promise<SequencingViolation[]> {
-  const violations = await sql`
-    SELECT id, company_id, violation_rule, severity, resolved_at, created_at
-    FROM sequencing_violations
-    WHERE company_id = ${companyId} AND resolved_at IS NULL
-    ORDER BY created_at DESC
-  `
-
-  return (violations as any[]).map((v) => ({
-    id: v.id,
-    companyId: v.company_id,
-    rule: v.violation_rule,
-    severity: v.severity,
-    resolvedAt: v.resolved_at,
-    createdAt: v.created_at,
-  }))
-}
-
-/**
- * Mark a violation as resolved
- */
-export async function markViolationResolved(violationId: string) {
-  await sql`
-    UPDATE sequencing_violations
-    SET resolved_at = NOW()
-    WHERE id = ${violationId}
-  `
-}
-
-/**
  * Get sequencing recommendations based on current progress
+ * 
+ * @param companyId - Company unique identifier
+ * @returns Array of human-readable recommendations for next steps
  */
 export async function getSequencingRecommendations(companyId: string): Promise<string[]> {
-  const tasksByPhase = await sql`
+  const tasksByPhase = (await sql`
     SELECT
       phase,
       COUNT(*) FILTER (WHERE status = 'completed') AS completed,
@@ -336,7 +534,8 @@ export async function getSequencingRecommendations(companyId: string): Promise<s
     FROM tasks
     WHERE company_id = ${companyId}
     GROUP BY phase
-  `
+    ORDER BY phase
+  `) as any[]
 
   const recommendations: string[] = []
   const phaseOrder = [
@@ -350,19 +549,46 @@ export async function getSequencingRecommendations(companyId: string): Promise<s
     'post_listing',
   ]
 
-  for (const row of tasksByPhase as any[]) {
-    const progress = (parseInt(row.completed, 10) / parseInt(row.total, 10)) * 100
+  const phaseNames: Record<string, string> = {
+    pre_planning: 'Pre-Planning',
+    corporate_restructuring: 'Corporate Restructuring',
+    financial_audit: 'Financial Audit',
+    legal_documentation: 'Legal Documentation',
+    regulatory_filing: 'Regulatory Filing',
+    marketing_roadshow: 'Marketing & Roadshow',
+    listing_application: 'Listing Application',
+    post_listing: 'Post-Listing',
+  }
+
+  for (const row of tasksByPhase) {
+    const progress = Math.round((parseInt(row.completed, 10) / parseInt(row.total, 10)) * 100)
     const phaseIndex = phaseOrder.indexOf(row.phase)
+    const phaseName = phaseNames[row.phase] || row.phase
 
-    if (progress < 50) {
-      recommendations.push(`Focus on completing ${row.phase}: ${Math.round(progress)}% done`)
-    }
-
-    // Suggest moving to next phase
-    if (progress >= 80 && phaseIndex < phaseOrder.length - 1) {
+    // Critical: focus on incomplete phases
+    if (progress < 30) {
+      recommendations.push(`URGENT: ${phaseName} is only ${progress}% complete — prioritize these tasks`)
+    } else if (progress < 50) {
+      recommendations.push(`Focus on completing ${phaseName}: ${progress}% done`)
+    } else if (progress >= 80 && phaseIndex < phaseOrder.length - 1) {
       const nextPhase = phaseOrder[phaseIndex + 1]
-      recommendations.push(`Consider beginning ${nextPhase} - ${row.phase} is 80% complete`)
+      const nextPhaseName = phaseNames[nextPhase] || nextPhase
+      recommendations.push(`${phaseName} is 80%+ complete — consider beginning ${nextPhaseName}`)
     }
+  }
+
+  // Add sequencing checks
+  const phases: Record<string, number> = {}
+  for (const row of tasksByPhase) {
+    phases[row.phase] = Math.round((parseInt(row.completed, 10) / parseInt(row.total, 10)) * 100)
+  }
+
+  if (phases['legal_documentation'] && phases['legal_documentation'] < 50 && phases['regulatory_filing'] && phases['regulatory_filing'] > 20) {
+    recommendations.push('WARNING: Regulatory Filing ahead of Legal Documentation — may cause filing delays')
+  }
+
+  if (phases['marketing_roadshow'] && phases['marketing_roadshow'] > 20 && phases['financial_audit'] && phases['financial_audit'] < 80) {
+    recommendations.push('WARNING: Marketing & Roadshow underway but Financial Audit not complete — investor confidence risk')
   }
 
   return recommendations

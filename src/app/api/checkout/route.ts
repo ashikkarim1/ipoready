@@ -8,6 +8,11 @@ const APP_URL = process.env.NEXTAUTH_URL ?? 'https://ipoready.vercel.app'
 
 export const dynamic = 'force-dynamic'
 
+/**
+ * POST /api/checkout
+ * Create Stripe checkout session for plan upgrade or trial completion
+ * Body: { planId, billing, currency, isTrialUpgrade? }
+ */
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
   if (!session?.user) {
@@ -42,14 +47,10 @@ export async function POST(req: NextRequest) {
     LEFT JOIN companies c ON c.id = u.company_id
     WHERE u.id = ${userId}
     LIMIT 1
-  `
+  ` as any[]
   if (!rows.length) return NextResponse.json({ error: 'User not found' }, { status: 404 })
 
-  const { stripe_customer_id, email, name } = rows[0] as {
-    stripe_customer_id: string | null
-    email: string
-    name: string
-  }
+  const { stripe_customer_id, email, name } = rows[0]
 
   let customerId = stripe_customer_id
   if (!customerId) {
@@ -71,7 +72,6 @@ export async function POST(req: NextRequest) {
     currency: currency.toLowerCase(),
 
     // Automatic tax — Stripe Tax calculates US sales tax + Canadian GST/HST/QST
-    // based on the customer's billing address. Enable in Stripe Dashboard → Tax.
     automatic_tax: { enabled: true },
 
     // Allow B2B customers to enter their tax registration number (GST#, EIN, etc.)
