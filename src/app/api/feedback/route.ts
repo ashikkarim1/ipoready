@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { sql } from '@/lib/db'
+import { resend, FROM_ADDRESS } from '@/lib/resend'
 
 export const dynamic = 'force-dynamic'
 
@@ -118,6 +119,41 @@ export async function POST(request: NextRequest) {
         { error: 'Failed to store feedback' },
         { status: 500 }
       )
+    }
+
+    // Send email notification to CEO
+    try {
+      const sentimentEmoji = sentiment === 'positive' ? '😊' : sentiment === 'frustrated' ? '😤' : sentiment === 'negative' ? '😞' : '😐'
+      const userEmail = user?.email || 'Unknown'
+      
+      await resend.emails.send({
+        from: FROM_ADDRESS,
+        to: 'ceo@theupcapital.com',
+        subject: `IPOReady Feedback: ${sentimentEmoji} ${page} (${rating}/5)`,
+        html: `
+          <h2>New Feedback Received</h2>
+          <p><strong>Rating:</strong> ${rating}/5</p>
+          <p><strong>Page:</strong> ${page}</p>
+          ${task ? `<p><strong>Task:</strong> ${task}</p>` : ''}
+          <p><strong>Sentiment:</strong> ${sentiment}</p>
+          ${confusionPoints && confusionPoints.length > 0 ? `
+            <p><strong>Confusion Points:</strong></p>
+            <ul>
+              ${confusionPoints.map(p => `<li>${p}</li>`).join('')}
+            </ul>
+          ` : ''}
+          ${comment ? `
+            <p><strong>Comment:</strong></p>
+            <p>${comment}</p>
+          ` : ''}
+          <p><strong>From:</strong> ${userEmail}</p>
+          <p><strong>Feedback ID:</strong> ${result[0].id}</p>
+          <p><small>View all feedback: <a href="${process.env.NEXTAUTH_URL}/admin/feedback">Admin Dashboard</a></small></p>
+        `,
+      })
+    } catch (emailError) {
+      console.error('[feedback] Failed to send email notification:', emailError)
+      // Don't fail the request if email sending fails
     }
 
     return NextResponse.json(

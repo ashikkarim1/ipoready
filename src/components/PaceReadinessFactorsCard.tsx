@@ -1,168 +1,174 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { CheckCircle2, AlertCircle, TrendingUp } from 'lucide-react'
-import { useState } from 'react'
 
-interface PaceReadinessFactorsCardProps {
-  cashRunwayMonths: number
-  teamSize: number
-  cfoHired: boolean
-  boardSize: number
-  auditorSelected: boolean
-  marketConditions?: string
+interface ReadinessFactorsProps {
+  cashRunwayMonths?: number
+  teamSize?: number
+  cfoHired?: boolean
+  boardSize?: number
+  auditorSelected?: boolean
+  investorSophisticationScore?: number
 }
 
 export function PaceReadinessFactorsCard({
-  cashRunwayMonths,
-  teamSize,
-  cfoHired,
-  boardSize,
-  auditorSelected,
-  marketConditions = 'Stable',
-}: PaceReadinessFactorsCardProps) {
-  const [expandedSection, setExpandedSection] = useState<string | null>(null)
-
-  // Cash runway color coding
-  const getCashRunwayColor = () => {
-    if (cashRunwayMonths >= 12) return { bg: '#F0FDF4', border: '#BBF7D0', text: '#15803D', label: 'Healthy' }
-    if (cashRunwayMonths >= 6) return { bg: '#FFFBEB', border: '#FCD34D', text: '#D97706', label: 'Caution' }
-    return { bg: '#FEF2F2', border: '#FECACA', text: '#DC2626', label: 'Critical' }
+  cashRunwayMonths = 12,
+  teamSize = 0,
+  cfoHired = false,
+  boardSize = 0,
+  auditorSelected = false,
+  investorSophisticationScore = 0,
+}: ReadinessFactorsProps) {
+  const getCashRunwayStatus = (months?: number) => {
+    if (!months) return { status: 'unknown', color: 'bg-gray-100', textColor: 'text-gray-700', label: 'Not specified' }
+    if (months >= 12) return { status: 'healthy', color: 'bg-green-100', textColor: 'text-green-700', label: 'Strong runway' }
+    if (months >= 6) return { status: 'adequate', color: 'bg-blue-100', textColor: 'text-blue-700', label: 'Adequate runway' }
+    return { status: 'critical', color: 'bg-red-100', textColor: 'text-red-700', label: 'Critical runway' }
   }
 
-  const cashColor = getCashRunwayColor()
+  const cashStatus = getCashRunwayStatus(cashRunwayMonths)
+
+  const factors = [
+    {
+      icon: '💰',
+      label: 'Cash Runway',
+      value: cashRunwayMonths ? `${Math.round(cashRunwayMonths)} months` : 'Not set',
+      status: cashRunwayMonths ? (cashRunwayMonths >= 12 ? 'ready' : cashRunwayMonths >= 6 ? 'partial' : 'blocked') : 'unknown',
+      hint: 'Estimated cash runway for IPO operations',
+    },
+    {
+      icon: '👥',
+      label: 'Team Size',
+      value: teamSize > 0 ? `${teamSize} people` : 'Not set',
+      status: teamSize >= 30 ? 'ready' : teamSize >= 15 ? 'partial' : 'blocked',
+      hint: 'Total headcount for IPO readiness',
+    },
+    {
+      icon: '💼',
+      label: 'CFO',
+      value: cfoHired ? 'Hired' : 'Not hired',
+      status: cfoHired ? 'ready' : 'blocked',
+      hint: 'Chief Financial Officer appointed',
+    },
+    {
+      icon: '🏛️',
+      label: 'Board Members',
+      value: boardSize > 0 ? `${boardSize} seats` : 'Not set',
+      status: boardSize >= 5 ? 'ready' : boardSize > 0 ? 'partial' : 'blocked',
+      hint: 'Board seats filled (optimal: 5-7)',
+    },
+    {
+      icon: '✓',
+      label: 'Auditor',
+      value: auditorSelected ? 'Selected' : 'Not selected',
+      status: auditorSelected ? 'ready' : 'blocked',
+      hint: 'Big 4 or equivalent auditor engaged',
+    },
+    {
+      icon: '🤝',
+      label: 'Investor Quality',
+      value: investorSophisticationScore > 0 ? `${investorSophisticationScore}/10` : 'Not set',
+      status: investorSophisticationScore >= 7 ? 'ready' : investorSophisticationScore >= 4 ? 'partial' : 'blocked',
+      hint: 'Institutional investor sophistication',
+    },
+  ]
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'ready':
+        return 'bg-green-50 border-green-200'
+      case 'partial':
+        return 'bg-amber-50 border-amber-200'
+      case 'blocked':
+        return 'bg-red-50 border-red-200'
+      default:
+        return 'bg-gray-50 border-gray-200'
+    }
+  }
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'ready':
+        return '✓'
+      case 'partial':
+        return '◐'
+      case 'blocked':
+        return '✕'
+      default:
+        return '○'
+    }
+  }
+
+  const getStatusTextColor = (status: string) => {
+    switch (status) {
+      case 'ready':
+        return 'text-green-700'
+      case 'partial':
+        return 'text-amber-700'
+      case 'blocked':
+        return 'text-red-700'
+      default:
+        return 'text-gray-700'
+    }
+  }
+
+  const readyCount = factors.filter((f) => f.status === 'ready').length
+  const partialCount = factors.filter((f) => f.status === 'partial').length
+  const readinessPercent = Math.round((readyCount / factors.length) * 100)
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-lg border border-gray-200 bg-white p-6"
+      transition={{ duration: 0.5, delay: 0.6 }}
+      className="rounded-lg border border-gray-200 p-6 bg-white"
     >
-      <h3 className="text-lg font-semibold text-gray-900 mb-6">Readiness Factors</h3>
-
-      {/* Cash Runway Indicator */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
-          <label className="text-sm font-medium text-gray-700">💰 Cash Runway</label>
-          <span className="text-xs font-semibold px-2 py-1 rounded" style={{ background: cashColor.bg, color: cashColor.text }}>
-            {cashColor.label}
-          </span>
+          <h3 className="text-lg font-semibold text-gray-900">Readiness Factors</h3>
+          <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-medium">{readinessPercent}% Ready</span>
         </div>
-        <div
-          className="p-4 rounded-lg border-2"
-          style={{ background: cashColor.bg, borderColor: cashColor.border }}
-        >
-          <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold" style={{ color: cashColor.text }}>
-              {cashRunwayMonths}
-            </span>
-            <span style={{ color: cashColor.text }} className="text-sm font-medium">
-              months remaining
-            </span>
-          </div>
-          <p className="text-xs mt-2 opacity-75" style={{ color: cashColor.text }}>
-            {cashRunwayMonths >= 12 && 'Comfortable timeline for IPO execution'}
-            {cashRunwayMonths >= 6 && cashRunwayMonths < 12 && 'Monitor closely; consider accelerating milestones'}
-            {cashRunwayMonths < 6 && 'Urgent: accelerated execution required'}
-          </p>
+        <p className="text-sm text-gray-600">Track team, financial, and governance readiness for IPO</p>
+        <div className="mt-3 w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+          <motion.div
+            className="h-full bg-gradient-to-r from-blue-500 to-blue-600"
+            initial={{ width: 0 }}
+            animate={{ width: `${readinessPercent}%` }}
+            transition={{ duration: 1, delay: 0.8 }}
+          />
         </div>
       </div>
 
-      {/* Team Hiring Progress Section */}
-      <div className="mb-6">
-        <button
-          onClick={() => setExpandedSection(expandedSection === 'team' ? null : 'team')}
-          className="w-full text-left flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
-        >
-          <h4 className="text-sm font-medium text-gray-700">👥 Team Hiring Progress</h4>
-          <span className="text-gray-400">{expandedSection === 'team' ? '−' : '+'}</span>
-        </button>
-
-        {expandedSection === 'team' && (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {factors.map((factor, idx) => (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="space-y-3 px-3 py-2"
+            key={factor.label}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.7 + idx * 0.05 }}
+            className={`rounded-lg border p-4 transition-all hover:shadow-md cursor-default ${getStatusColor(factor.status)}`}
           >
-            {/* CFO Hired */}
-            <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50">
-              <div className="flex items-center gap-3">
-                {cfoHired ? (
-                  <CheckCircle2 className="w-5 h-5 text-green-600" />
-                ) : (
-                  <AlertCircle className="w-5 h-5 text-yellow-500" />
-                )}
-                <span className="text-sm font-medium text-gray-700">CFO Hired</span>
-              </div>
-              <span className={`text-xs font-semibold px-2 py-1 rounded ${
-                cfoHired
-                  ? 'bg-green-100 text-green-700'
-                  : 'bg-yellow-100 text-yellow-700'
-              }`}>
-                {cfoHired ? '✓ Complete' : 'Pending'}
-              </span>
-            </div>
-
-            {/* Board Size */}
-            <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50">
-              <div className="flex items-center gap-3">
-                {boardSize >= 5 ? (
-                  <CheckCircle2 className="w-5 h-5 text-green-600" />
-                ) : (
-                  <AlertCircle className="w-5 h-5 text-yellow-500" />
-                )}
-                <div>
-                  <span className="text-sm font-medium text-gray-700">Board Size</span>
-                  <p className="text-xs text-gray-500">Target: ≥ 5 directors</p>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-lg">{factor.icon}</span>
+                  <h4 className="font-medium text-gray-900">{factor.label}</h4>
                 </div>
+                <p className="text-sm text-gray-600 mb-2">{factor.hint}</p>
+                <p className="text-sm font-semibold text-gray-900">{factor.value}</p>
               </div>
-              <span className="text-sm font-bold text-gray-900">{boardSize}</span>
-            </div>
-
-            {/* Auditor Selected */}
-            <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50">
-              <div className="flex items-center gap-3">
-                {auditorSelected ? (
-                  <CheckCircle2 className="w-5 h-5 text-green-600" />
-                ) : (
-                  <AlertCircle className="w-5 h-5 text-yellow-500" />
-                )}
-                <span className="text-sm font-medium text-gray-700">Auditor Selected</span>
+              <div className={`text-lg font-bold ${getStatusTextColor(factor.status)}`}>
+                {getStatusIcon(factor.status)}
               </div>
-              <span className={`text-xs font-semibold px-2 py-1 rounded ${
-                auditorSelected
-                  ? 'bg-green-100 text-green-700'
-                  : 'bg-yellow-100 text-yellow-700'
-              }`}>
-                {auditorSelected ? '✓ Selected' : 'Not selected'}
-              </span>
-            </div>
-
-            {/* Team Size */}
-            <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50">
-              <div className="flex items-center gap-3">
-                <TrendingUp className="w-5 h-5 text-blue-600" />
-                <div>
-                  <span className="text-sm font-medium text-gray-700">Team Size</span>
-                  <p className="text-xs text-gray-500">Current headcount</p>
-                </div>
-              </div>
-              <span className="text-sm font-bold text-gray-900">{teamSize} people</span>
             </div>
           </motion.div>
-        )}
+        ))}
       </div>
 
-      {/* Market Conditions */}
-      <div className="p-4 rounded-lg bg-blue-50 border border-blue-200">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-blue-900">Market Conditions</p>
-            <p className="text-xs text-blue-700 mt-1">Capital markets environment</p>
-          </div>
-          <span className="text-sm font-bold text-blue-900">{marketConditions}</span>
-        </div>
+      <div className="mt-6 p-4 rounded-lg bg-blue-50 border border-blue-200">
+        <p className="text-sm text-blue-900">
+          <span className="font-semibold">Tip:</span> Complete all readiness factors to maximize PACE score accuracy. Update team size, cash runway, and governance details in Company Settings.
+        </p>
       </div>
     </motion.div>
   )

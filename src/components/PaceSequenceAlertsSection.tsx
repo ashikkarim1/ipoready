@@ -1,133 +1,216 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
-import { AlertCircle, CheckCircle2, AlertTriangle } from 'lucide-react'
-import { useState } from 'react'
+import { motion } from 'framer-motion'
 
-interface SequencingAlert {
+interface SequenceAlert {
   id: string
-  ruleText: string
-  currentPhase: number
-  blockedUntilPhase: number
+  rule: string
   severity: 'error' | 'warning'
+  description: string
+  remediation: string
+  tasksInvolved: string[]
 }
 
 interface PaceSequenceAlertsSectionProps {
-  alerts: SequencingAlert[]
+  alerts?: SequenceAlert[]
+  exchange?: string
 }
 
-export function PaceSequenceAlertsSection({ alerts }: PaceSequenceAlertsSectionProps) {
-  const [expandedAlertId, setExpandedAlertId] = useState<string | null>(null)
+const DEFAULT_ALERTS: SequenceAlert[] = [
+  {
+    id: '1',
+    rule: 'Auditor selection before Financial Audit phase',
+    severity: 'error',
+    description: 'Your Financial Audit phase is in progress, but auditor has not been selected.',
+    remediation: 'Select and engage a Big 4 auditor before proceeding with audit phase',
+    tasksInvolved: ['Auditor Selection', 'Financial Audit'],
+  },
+  {
+    id: '2',
+    rule: 'Cap table cleanup before Financial Audit',
+    severity: 'error',
+    description: 'Financial Audit phase requires a clean, verified cap table.',
+    remediation: 'Complete cap table reconciliation and legal review in Equity Management phase',
+    tasksInvolved: ['Equity Management', 'Financial Audit'],
+  },
+  {
+    id: '3',
+    rule: 'Board formation before Roadshow phase',
+    severity: 'warning',
+    description: 'Your Roadshow phase is upcoming, but board is not fully formed.',
+    remediation: 'Form board with 5-7 members including independent directors before roadshow',
+    tasksInvolved: ['Governance Setup', 'Investor Roadshow'],
+  },
+  {
+    id: '4',
+    rule: 'Legal documentation before Regulatory Filing',
+    severity: 'warning',
+    description: 'Regulatory Filing phase requires complete legal documentation package.',
+    remediation: 'Draft and review all legal documents (incorporation docs, charter, policies) in Document Prep',
+    tasksInvolved: ['Document Preparation', 'Regulatory Filing'],
+  },
+]
 
-  const errors = alerts.filter(a => a.severity === 'error')
-  const warnings = alerts.filter(a => a.severity === 'warning')
-  const hasAlerts = errors.length > 0 || warnings.length > 0
+export function PaceSequenceAlertsSection({
+  alerts = DEFAULT_ALERTS,
+  exchange = 'TSX',
+}: PaceSequenceAlertsSectionProps) {
+  const errors = alerts.filter((a) => a.severity === 'error')
+  const warnings = alerts.filter((a) => a.severity === 'warning')
+  const hasAlerts = alerts.length > 0
+
+  const getSeverityIcon = (severity: string) => {
+    return severity === 'error' ? '⚠️' : '⚡'
+  }
+
+  const getSeverityColor = (severity: string) => {
+    return severity === 'error'
+      ? 'bg-red-50 border-red-200'
+      : 'bg-amber-50 border-amber-200'
+  }
+
+  const getSeverityBadgeColor = (severity: string) => {
+    return severity === 'error'
+      ? 'bg-red-100 text-red-700'
+      : 'bg-amber-100 text-amber-700'
+  }
+
+  const getSeverityLabel = (severity: string) => {
+    return severity === 'error' ? 'Critical' : 'Warning'
+  }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-lg border border-gray-200 bg-white p-6"
+      transition={{ duration: 0.5, delay: 0.8 }}
+      className="rounded-lg border border-gray-200 p-6 bg-white"
     >
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-1">Milestone Sequencing</h3>
-        <p className="text-sm text-gray-600">Track critical path dependencies</p>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-semibold text-gray-900">Milestone Sequence Alerts</h3>
+          {hasAlerts && (
+            <span className="px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm font-medium">
+              {errors.length} Critical, {warnings.length} Warning
+            </span>
+          )}
+        </div>
+        <p className="text-sm text-gray-600">
+          Ensure tasks follow optimal IPO sequence for {exchange}. Out-of-order milestones may delay your timeline.
+        </p>
       </div>
 
       {!hasAlerts ? (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="p-6 rounded-lg bg-green-50 border border-green-200 flex items-center gap-3"
-        >
-          <CheckCircle2 className="w-6 h-6 text-green-600 flex-shrink-0" />
-          <div>
-            <p className="text-sm font-semibold text-green-900">
-              ✓ All milestones in optimal sequence
-            </p>
-            <p className="text-xs text-green-700 mt-1">
-              No blocking dependencies detected across phases
-            </p>
-          </div>
-        </motion.div>
+        <div className="text-center py-8">
+          <div className="text-4xl mb-3">✓</div>
+          <p className="text-gray-600 font-medium">All milestones in optimal sequence</p>
+          <p className="text-sm text-gray-500 mt-1">Your tasks are properly sequenced for IPO readiness</p>
+        </div>
       ) : (
-        <div className="space-y-3">
-          {/* Error Alerts */}
-          <AnimatePresence>
-            {errors.map((alert) => (
-              <motion.div
-                key={alert.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                className="rounded-lg border-2 border-red-200 bg-red-50 p-4"
-              >
-                <button
-                  onClick={() => setExpandedAlertId(expandedAlertId === alert.id ? null : alert.id)}
-                  className="w-full text-left flex items-start justify-between gap-3"
-                >
-                  <div className="flex items-start gap-3 flex-1">
-                    <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-sm font-semibold text-red-900">{alert.ruleText}</p>
-                      <p className="text-xs text-red-700 mt-1">
-                        Phase {alert.currentPhase} → Blocked until Phase {alert.blockedUntilPhase}
-                      </p>
+        <div className="space-y-4">
+          {/* Critical Errors */}
+          {errors.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.9 }}
+            >
+              <h4 className="text-sm font-semibold text-red-700 mb-3 flex items-center gap-2">
+                <span>🚨</span> Critical Issues ({errors.length})
+              </h4>
+              <div className="space-y-3">
+                {errors.map((alert, idx) => (
+                  <motion.div
+                    key={alert.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.95 + idx * 0.05 }}
+                    className={`rounded-lg border p-4 ${getSeverityColor(alert.severity)}`}
+                  >
+                    <div className="flex gap-3">
+                      <div className="text-xl mt-1">{getSeverityIcon(alert.severity)}</div>
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between gap-2 mb-1">
+                          <h5 className="font-medium text-gray-900">{alert.rule}</h5>
+                          <span className={`px-2 py-1 rounded text-xs font-medium whitespace-nowrap ${getSeverityBadgeColor(alert.severity)}`}>
+                            {getSeverityLabel(alert.severity)}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-700 mb-2">{alert.description}</p>
+                        <div className="mb-3">
+                          <p className="text-xs font-semibold text-gray-600 mb-1">Remediation:</p>
+                          <p className="text-sm text-gray-700 italic">{alert.remediation}</p>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {alert.tasksInvolved.map((task) => (
+                            <span key={task} className="px-2 py-1 rounded-full bg-white/50 text-xs text-gray-700 border border-red-200">
+                              {task}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <span className="text-xs font-semibold px-2 py-1 rounded bg-red-100 text-red-700 flex-shrink-0">
-                    ERROR
-                  </span>
-                </button>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
 
-          {/* Warning Alerts */}
-          <AnimatePresence>
-            {warnings.map((alert) => (
-              <motion.div
-                key={alert.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                className="rounded-lg border-2 border-yellow-200 bg-yellow-50 p-4"
-              >
-                <button
-                  onClick={() => setExpandedAlertId(expandedAlertId === alert.id ? null : alert.id)}
-                  className="w-full text-left flex items-start justify-between gap-3"
-                >
-                  <div className="flex items-start gap-3 flex-1">
-                    <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-sm font-semibold text-yellow-900">{alert.ruleText}</p>
-                      <p className="text-xs text-yellow-700 mt-1">
-                        Phase {alert.currentPhase} → Recommended before Phase {alert.blockedUntilPhase}
-                      </p>
+          {/* Warnings */}
+          {warnings.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 1 }}
+            >
+              <h4 className="text-sm font-semibold text-amber-700 mb-3 flex items-center gap-2">
+                <span>⚡</span> Recommendations ({warnings.length})
+              </h4>
+              <div className="space-y-3">
+                {warnings.map((alert, idx) => (
+                  <motion.div
+                    key={alert.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 1.05 + idx * 0.05 }}
+                    className={`rounded-lg border p-4 ${getSeverityColor(alert.severity)}`}
+                  >
+                    <div className="flex gap-3">
+                      <div className="text-xl mt-1">{getSeverityIcon(alert.severity)}</div>
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between gap-2 mb-1">
+                          <h5 className="font-medium text-gray-900">{alert.rule}</h5>
+                          <span className={`px-2 py-1 rounded text-xs font-medium whitespace-nowrap ${getSeverityBadgeColor(alert.severity)}`}>
+                            {getSeverityLabel(alert.severity)}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-700 mb-2">{alert.description}</p>
+                        <div className="mb-3">
+                          <p className="text-xs font-semibold text-gray-600 mb-1">Recommended Action:</p>
+                          <p className="text-sm text-gray-700 italic">{alert.remediation}</p>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {alert.tasksInvolved.map((task) => (
+                            <span key={task} className="px-2 py-1 rounded-full bg-white/50 text-xs text-gray-700 border border-amber-200">
+                              {task}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <span className="text-xs font-semibold px-2 py-1 rounded bg-yellow-100 text-yellow-700 flex-shrink-0">
-                    WARNING
-                  </span>
-                </button>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
         </div>
       )}
 
-      {/* Summary */}
-      {hasAlerts && (
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <p className="text-xs text-gray-600">
-            <span className="font-semibold text-red-600">{errors.length} Critical Issue{errors.length !== 1 ? 's' : ''}</span>
-            {errors.length > 0 && warnings.length > 0 && ' • '}
-            {warnings.length > 0 && (
-              <span className="font-semibold text-yellow-600">{warnings.length} Warning{warnings.length !== 1 ? 's' : ''}</span>
-            )}
-          </p>
-        </div>
-      )}
+      <div className="mt-6 p-4 rounded-lg bg-blue-50 border border-blue-200">
+        <p className="text-sm text-blue-900">
+          <span className="font-semibold">Info:</span> IPO sequencing rules are exchange-specific. These are optimized for {exchange}. Contact your advisor for custom guidance.
+        </p>
+      </div>
     </motion.div>
   )
 }

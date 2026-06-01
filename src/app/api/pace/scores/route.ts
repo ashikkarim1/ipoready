@@ -1,250 +1,136 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
-import { sql } from '@/lib/db'
-import { z } from 'zod'
-
-export const dynamic = 'force-dynamic'
-
-const QuerySchema = z.object({
-  companyId: z.string().uuid().optional(),
-  exchangeId: z.string().optional(),
-})
-
 /**
  * GET /api/pace/scores
- * Retrieve PACE score with benchmarks, predictive analysis, sequencing alerts, and document completeness
- * Query params: companyId, exchangeId
+ * 
+ * Returns comprehensive PACE scoring including:
+ * - Base PACE score (task completion weighted by phase)
+ * - Adjusted PACE score (with predictive factors)
+ * - Peer percentile (benchmark comparison)
+ * - Sequencing violations (out-of-order tasks)
+ * - Risk factors
+ * - Predicted days to IPO
  */
-export async function GET(req: NextRequest) {
-  const session = await getServerSession(authOptions)
-  const user = session?.user as { id?: string; companyId?: string; role?: string } | undefined
 
-  if (!session || !user?.id) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { computeAndUpdateCompanyStats } from '@/lib/company-stats'
+import { sql } from '@/lib/db'
 
-  const searchParams = req.nextUrl.searchParams
-  const companyId = searchParams.get('companyId') || (user?.companyId ?? null)
-  const exchangeId = searchParams.get('exchangeId') || null
-
-  // Validate query params
+export async function GET(request: NextRequest) {
   try {
-    QuerySchema.parse({ companyId, exchangeId })
-  } catch (err) {
-    return NextResponse.json(
-      { error: 'Invalid query parameters', details: (err as any).message },
-      { status: 400 }
-    )
-  }
+    // Get company ID from query params
+    const { searchParams } = new URL(request.url)
+    const companyId = searchParams.get('companyId')
 
-  if (!companyId) {
-    return NextResponse.json({ error: 'Missing companyId' }, { status: 400 })
-  }
+    if (!companyId) {
+      return NextResponse.json(
+        { error: 'Missing companyId parameter' },
+        { status: 400 }
+      )
+    }
 
-  try {
-    // Fetch company and PACE data
+    // Get user session for auth
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
+    // Verify company ownership
     const companyRows = await sql`
-      SELECT 
-        c.id,
-        c.pace_score,
-        c.target_exchange,
-        c.cash_runway_months,
-        c.team_size,
-        c.cfo_hired_at,
-        c.board_size,
-        c.auditor_selected,
-        c.investor_sophistication_score,
-        c.estimated_days_to_ipo,
-        c.progress_percentage,
-        c.current_phase
-      FROM companies c
-      WHERE c.id = ${companyId}
-      LIMIT 1
-    ` as any[]
+      SELECT id, user_id FROM companies WHERE id = ${companyId} LIMIT 1
+    `
 
-    if (companyRows.length === 0) {
-      return NextResponse.json({ error: 'Company not found' }, { status: 404 })
+    if (!companyRows.length) {
+      return NextResponse.json(
+        { error: 'Company not found' },
+        { status: 404 }
+      )
     }
 
-    const company = companyRows[0]
-    const exchange = exchangeId || company.target_exchange
-
-    // Fetch benchmark data
-    const benchmarkRows = await sql`
-      SELECT 
-        COALESCE(AVG(pace_score), 0)::float as avg_pace,
-        COALESCE(PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY pace_score), 0)::float as median_pace,
-        COALESCE(PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY pace_score), 0)::float as p90_pace
-      FROM companies
-      WHERE target_exchange = ${exchange}
-    ` as any[]
-
-    const benchmarks = benchmarkRows[0] || {
-      avg_pace: 0,
-      median_pace: 0,
-      p90_pace: 0,
+    const company = companyRows[0] as { id: string; user_id: string }
+    if (company.user_id !== session.user.id) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 403 }
+      )
     }
 
-    // Calculate peer percentile
-    const percentileRows = await sql`
-      SELECT COUNT(*) as total_peers
-      FROM companies
-      WHERE target_exchange = ${exchange} AND pace_score <= ${company.pace_score}
-    ` as any[]
+    // Compute enhanced PACE metrics
+    const paceMetrics = await computeAndUpdateCompanyStats(companyId)
 
-    const totalPeers = percentileRows[0]?.total_peers || 1
-    const allPeersRows = await sql`
-      SELECT COUNT(*) as total_count
-      FROM companies
-      WHERE target_exchange = ${exchange}
-    ` as any[]
-    const totalCount = allPeersRows[0]?.total_count || 1
-    const peerPercentile = Math.round((totalPeers / totalCount) * 100)
-
-    // Calculate predictive score
-    const predictiveScore = calculatePredictiveScore(company)
-
-    // Fetch sequencing alerts
-    const alertRows = await sql`
-      SELECT 
-        rule,
-        severity,
-        remediation
-      FROM pace_sequencing_alerts
-      WHERE company_id = ${companyId}
-      ORDER BY CASE severity 
-        WHEN 'critical' THEN 1 
-        WHEN 'high' THEN 2 
-        WHEN 'medium' THEN 3 
-        ELSE 4 
-      END
-    ` as any[]
-
-    // Fetch cap table status
-    const capTableRows = await sql`
-      SELECT
-        id,
-        validation_status,
-        total_shareholders,
-        total_shares_authorized,
-        total_shares_issued,
-        created_at,
-        updated_at
-      FROM cap_table_documents
-      WHERE company_id = ${companyId}
-      ORDER BY created_at DESC
-      LIMIT 1
-    ` as any[]
-
-    const capTableStatus = capTableRows.length > 0 ? {
-      hasCapTable: true,
-      documentId: capTableRows[0].id,
-      validationStatus: capTableRows[0].validation_status || 'pending',
-      totalShareholders: capTableRows[0].total_shareholders || 0,
-      totalSharesAuthorized: capTableRows[0].total_shares_authorized || 0,
-      totalSharesIssued: capTableRows[0].total_shares_issued || 0,
-      lastUpdated: capTableRows[0].updated_at || capTableRows[0].created_at,
-    } : {
-      hasCapTable: false,
-      documentId: null,
-      validationStatus: 'missing',
-      totalShareholders: 0,
-      totalSharesAuthorized: 0,
-      totalSharesIssued: 0,
-      lastUpdated: null,
-    }
-
-    // Fetch document completeness by phase
-    const docCompRows = await sql`
-      SELECT
-        phase_id,
-        AVG(completion_pct)::float as document_completeness_score
-      FROM document_scorecards
-      WHERE company_id = ${companyId}
-      GROUP BY phase_id
-      ORDER BY phase_id
-    ` as any[]
-
-    // Fetch PACE trend data (last 8 weeks)
-    const trendRows = await sql`
-      SELECT 
-        pace_score,
-        recorded_at
-      FROM pace_score_history
-      WHERE company_id = ${companyId}
-      ORDER BY recorded_at DESC
-      LIMIT 8
-    ` as any[]
-
-    const trend = trendRows.reverse().map((row: any) => ({
-      score: Math.round(row.pace_score),
-      date: new Date(row.recorded_at).toISOString().split('T')[0],
-    }))
-
-    // Calculate paceDelta (change from previous week)
-    let paceDelta = 0
-    if (trendRows.length >= 2) {
-      const current = trendRows[trendRows.length - 1]?.pace_score || company.pace_score
-      const previous = trendRows[trendRows.length - 2]?.pace_score || company.pace_score
-      paceDelta = Math.round((current - previous) * 100) / 100
-    }
-
-    // Fetch phase-by-phase breakdown
-    const phaseRows = await sql`
-      SELECT 
-        phase_id,
-        AVG(completion_pct)::float as completion,
-        0.125 as weight
-      FROM document_scorecards
-      WHERE company_id = ${companyId}
-      GROUP BY phase_id
-      ORDER BY phase_id
-    ` as any[]
-
-    const phases = phaseRows.map((row: any, idx: number) => ({
-      phaseId: row.phase_id,
-      phaseName: ['Pre-Planning', 'Corporate Restructuring', 'Board Selection', 'Financial Audit', 'Legal Review', 'SEC Preparation', 'Marketing & Road Show', 'Listing'][idx] || `Phase ${idx + 1}`,
-      completion: Math.round(row.completion),
-      weight: row.weight,
-      contribution: Math.round((row.completion * row.weight) / 100),
-    }))
-
+    // Return comprehensive response
     return NextResponse.json({
-      paceScore: company.pace_score,
-      paceDelta,
-      daysToIpo: company.estimated_days_to_ipo || 180,
-      progressPercentage: company.progress_percentage || 0,
-      currentPhase: company.current_phase || 'pre_planning',
-      peerPercentile,
-      // Company factors for UI components
-      cashRunwayMonths: company.cash_runway_months || null,
-      teamSize: company.team_size || null,
-      cfoHired: !!company.cfo_hired_at,
-      boardSize: company.board_size || null,
-      auditorSelected: company.auditor_selected || false,
-      benchmarkComparison: {
-        avgPace: Math.round(benchmarks.avg_pace),
-        medianPace: Math.round(benchmarks.median_pace),
-        p90Pace: Math.round(benchmarks.p90_pace),
+      success: true,
+      data: {
+        // Core PACE Score
+        paceScore: {
+          base: paceMetrics.paceScore,
+          adjusted: paceMetrics.adjustedPaceScore,
+          confidence: paceMetrics.predictiveFactors.confidence,
+        },
+
+        // Peer Benchmarking
+        peerBenchmarking: {
+          percentile: paceMetrics.peerPercentile,
+          label: paceMetrics.peerPercentileLabel,
+          benchmarkComparison: paceMetrics.benchmarkComparison,
+          interpretation: interpretPeerPercentile(
+            paceMetrics.peerPercentile,
+            paceMetrics.targetExchange
+          ),
+        },
+
+        // Timeline Prediction
+        timeline: {
+          estimatedDaysToIpo: paceMetrics.estimatedDaysToIpo,
+          predictedDaysToIpo: paceMetrics.predictedDaysToIpo,
+          estimatedCompletionDate: addDaysToNow(paceMetrics.predictedDaysToIpo),
+        },
+
+        // Readiness Factors
+        readinessFactors: {
+          cashRunway: paceMetrics.predictiveFactors.cashRunwayMonths
+            ? `${paceMetrics.predictiveFactors.cashRunwayMonths.toFixed(1)} months`
+            : 'Not specified',
+          teamSize: paceMetrics.predictiveFactors.teamSize ?? 'Not specified',
+          cfoHired: paceMetrics.predictiveFactors.cfoHired ? 'Yes' : 'No',
+          boardSize: paceMetrics.predictiveFactors.boardSize ?? 0,
+          auditorSelected: paceMetrics.predictiveFactors.auditorSelected ? 'Yes' : 'No',
+          investorSophistication: scoreInvestorSophistication(
+            paceMetrics.predictiveFactors.investorSophisticationScore ?? 5
+          ),
+        },
+
+        // Risk Assessment
+        riskAssessment: {
+          riskFactors: paceMetrics.riskFactors,
+          overallRiskLevel: calculateRiskLevel(paceMetrics.riskFactors),
+          mitigationActions: generateMitigationActions(paceMetrics.riskFactors),
+        },
+
+        // Sequencing Alerts
+        sequencingAlerts: {
+          total: paceMetrics.sequencingAlerts.length,
+          errors: paceMetrics.sequencingAlerts.filter((a) => a.severity === 'error'),
+          warnings: paceMetrics.sequencingAlerts.filter((a) => a.severity === 'warning'),
+        },
+
+        // Progress Overview
+        progress: {
+          percentage: paceMetrics.progressPercentage,
+          currentPhase: paceMetrics.currentPhase,
+          targetExchange: paceMetrics.targetExchange,
+        },
+
+        // Last Updated
+        lastUpdated: new Date().toISOString(),
       },
-      predictiveScore,
-      sequencingAlerts: alertRows.map((alert: any) => ({
-        severity: alert.severity || 'warning',
-        title: alert.rule || 'Unknown Alert',
-        description: alert.remediation || 'No details available',
-        daysBlocking: 0,
-        remediationSteps: [alert.remediation || 'Review and take action'],
-      })),
-      documentReadinessScore: docCompRows.length > 0
-        ? Math.round(docCompRows.reduce((sum: number, row: any) => sum + row.document_completeness_score, 0) / docCompRows.length)
-        : 0,
-      capTableStatus,
-      trend,
-      phases,
     })
   } catch (error) {
-    console.error('[GET /api/pace/scores] Error:', error)
+    console.error('Error computing PACE scores:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -253,51 +139,93 @@ export async function GET(req: NextRequest) {
 }
 
 /**
- * Calculate predictive PACE score based on company factors
+ * Helper: Interpret peer percentile with narrative
  */
-function calculatePredictiveScore(company: any) {
-  const factors = {
-    cashRunway: Math.min(company.cash_runway_months / 24, 1) * 100, // 24 months = perfect
-    teamSize: Math.min(company.team_size / 150, 1) * 100, // 150+ team = perfect
-    cfoHired: company.cfo_hired_at ? 100 : 0,
-    boardSize: Math.min(company.board_size / 5, 1) * 100, // 5+ = perfect
-    auditorSelected: company.auditor_selected ? 100 : 0,
-    investorSophistication: company.investor_sophistication_score || 0,
+function interpretPeerPercentile(
+  percentile: number,
+  exchange: string
+): string {
+  if (percentile >= 90) {
+    return `Your PACE score ranks in the top 10% of ${exchange} companies - exceptional progress`
+  } else if (percentile >= 75) {
+    return `Your PACE score ranks in the top 25% of ${exchange} companies - strong progress`
+  } else if (percentile >= 50) {
+    return `Your PACE score is above median for ${exchange} companies - on track`
+  } else {
+    return `Your PACE score is below median for ${exchange} companies - acceleration recommended`
   }
+}
 
-  const weights = {
-    cashRunway: 0.2,
-    teamSize: 0.15,
-    cfoHired: 0.15,
-    boardSize: 0.15,
-    auditorSelected: 0.15,
-    investorSophistication: 0.2,
+/**
+ * Helper: Calculate days from now
+ */
+function addDaysToNow(days: number): string {
+  const date = new Date()
+  date.setDate(date.getDate() + days)
+  return date.toISOString().split('T')[0]
+}
+
+/**
+ * Helper: Interpret investor sophistication score
+ */
+function scoreInvestorSophistication(score: number): string {
+  const mappings: Record<number, string> = {
+    1: 'Seed-stage only',
+    2: 'Angel investors',
+    3: 'Early VC stage',
+    4: 'Series A/B',
+    5: 'Mid-stage VCs',
+    6: 'Late-stage (Series C+)',
+    7: 'Multi-stage institutional',
+    8: 'Top-tier institutional',
+    9: 'Strategic/Corporate VCs',
+    10: 'Diverse institutional base',
   }
+  return mappings[score] || 'Unknown'
+}
 
-  const adjustedPaceScore = Math.round(
-    Object.keys(factors).reduce((sum, key) => {
-      return sum + (factors[key as keyof typeof factors] * weights[key as keyof typeof weights])
-    }, 0)
+/**
+ * Helper: Calculate overall risk level
+ */
+function calculateRiskLevel(riskFactors: string[]): 'low' | 'medium' | 'high' {
+  const criticalFactors = riskFactors.filter(
+    (f) =>
+      f.includes('cash') ||
+      f.includes('CFO') ||
+      f.includes('auditor') ||
+      f.includes('governance')
   )
 
-  const riskFactors: string[] = []
-  if (company.cash_runway_months < 12) riskFactors.push('Low cash runway')
-  if (company.team_size < 50) riskFactors.push('Small team size')
-  if (!company.cfo_hired_at) riskFactors.push('CFO not yet hired')
-  if (company.board_size < 3) riskFactors.push('Insufficient board size')
-  if (!company.auditor_selected) riskFactors.push('Auditor not yet selected')
+  if (criticalFactors.length >= 3) return 'high'
+  if (criticalFactors.length >= 1) return 'medium'
+  return 'low'
+}
 
-  return {
-    adjustedPaceScore,
-    confidenceLevel: adjustedPaceScore > 75 ? 'high' : adjustedPaceScore > 50 ? 'medium' : 'low',
-    riskFactors,
-    breakdown: {
-      cashRunway: Math.round(factors.cashRunway),
-      teamSize: Math.round(factors.teamSize),
-      cfoHired: factors.cfoHired,
-      boardSize: Math.round(factors.boardSize),
-      auditorSelected: factors.auditorSelected,
-      investorSophistication: Math.round(factors.investorSophistication),
-    },
+/**
+ * Helper: Generate mitigation actions based on risk factors
+ */
+function generateMitigationActions(riskFactors: string[]): string[] {
+  const actions: string[] = []
+
+  const riskMap: Record<string, string> = {
+    cash: 'Accelerate fundraising or reduce burn rate to extend runway',
+    'team-readiness': 'Hire experienced CFO and complete board formation',
+    CFO: 'Prioritize CFO hiring - investor requirement for roadshow',
+    'auditor': 'Select Big 4 auditor and complete preliminary assessment',
+    'market-volatility': 'Monitor VIX; consider timing adjustments if volatility persists',
+    'investor-concentration': 'Diversify investor base to reduce single-investor dependency',
+    'governance': 'Establish independent board and committee structure',
+    'regulatory': 'Engage securities counsel to ensure full compliance',
   }
+
+  for (const factor of riskFactors) {
+    for (const [key, action] of Object.entries(riskMap)) {
+      if (factor.toLowerCase().includes(key)) {
+        actions.push(action)
+        break
+      }
+    }
+  }
+
+  return [...new Set(actions)] // Remove duplicates
 }

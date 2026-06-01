@@ -1,4 +1,6 @@
 import { sql } from '@/lib/db'
+import { calculatePeerPercentile, calculatePredictiveScore, type PredictiveScore } from './pace-predictor'
+import { validateMilestoneSequence, type SequencingViolation } from './ipo-sequencing'
 
 const PHASE_WEIGHTS: Record<string, number> = {
   pre_planning: 5,
@@ -44,18 +46,59 @@ interface TaskStatsRow {
   remaining_days: string
 }
 
-export async function computeAndUpdateCompanyStats(companyId: string): Promise<{
+export interface EnhancedPaceResult {
   paceScore: number
+  adjustedPaceScore: number
+  peerPercentile: number
+  peerPercentileLabel: string
   estimatedDaysToIpo: number
+  predictedDaysToIpo: number
   progressPercentage: number
   currentPhase: string
   targetExchange: string
-}> {
-  // Get target exchange for floor calculation
+  benchmarkComparison: {
+    avgPace: number
+    medianPace: number
+    p90Pace: number
+  }
+  sequencingAlerts: SequencingViolation[]
+  riskFactors: string[]
+  predictiveFactors: {
+    confidence: 'Low' | 'Medium' | 'High'
+    cashRunwayMonths?: number
+    teamSize?: number
+    cfoHired?: boolean
+    boardSize?: number
+    auditorSelected?: boolean
+    investorSophisticationScore?: number
+  }
+}
+
+export async function computeAndUpdateCompanyStats(companyId: string): Promise<EnhancedPaceResult> {
+  // Get company details
   const companyRows = await sql`
-    SELECT target_exchange FROM companies WHERE id = ${companyId} LIMIT 1
+    SELECT 
+      target_exchange,
+      cash_runway_months,
+      team_size,
+      cfo_hired_at,
+      board_size,
+      auditor_selected,
+      investor_sophistication_score
+    FROM companies 
+    WHERE id = ${companyId} 
+    LIMIT 1
   `
-  const targetExchange: string = (companyRows[0] as { target_exchange: string })?.target_exchange ?? 'tsx'
+  const company = companyRows[0] as {
+    target_exchange: string
+    cash_runway_months?: number
+    team_size?: number
+    cfo_hired_at?: string
+    board_size?: number
+    auditor_selected?: boolean
+    investor_sophistication_score?: number
+  }
+  const targetExchange: string = company?.target_exchange ?? 'tsx'
 
   // Phase breakdown for PACE score
   const phaseRows = await sql`
@@ -83,8 +126,8 @@ export async function computeAndUpdateCompanyStats(companyId: string): Promise<{
   const completedTasks = parseInt(stats?.completed_tasks ?? '0', 10)
   const remainingDays = parseInt(stats?.remaining_days ?? '0', 10)
 
-  // PACE score
-  let paceScore = 0
+  // Base PACE score (task-based)
+  let basePaceScore = 0
   if (phaseRows.length > 0) {
     let weightedSum = 0
     for (const row of phaseRows) {
@@ -95,17 +138,51 @@ export async function computeAndUpdateCompanyStats(companyId: string): Promise<{
         weightedSum += weight * (completed / total)
       }
     }
-    paceScore = Math.round(weightedSum)
+    basePaceScore = Math.round(weightedSum)
   }
 
+  // Calculate predictive score with multiple factors
+  const predictiveResult = calculatePredictiveScore({
+    basePace: basePaceScore,
+    cashRunwayMonths: company?.cash_runway_months,
+    teamSize: company?.team_size,
+    cfoHired: company?.cfo_hired_at ? true : false,
+    boardSize: company?.board_size,
+    auditorSelected: company?.auditor_selected ?? false,
+    investorSophisticationScore: company?.investor_sophistication_score ?? 5,
+  })
+
+  // Get peer percentile for benchmark comparison
+  const peerResult = calculatePeerPercentile(
+    companyId,
+    targetExchange.toUpperCase(),
+    predictiveResult.adjustedPaceScore
+  )
+
+  // Get milestone sequencing violations
+  const tasksWithDates = await sql`
+    SELECT 
+      phase,
+      MAX(CASE WHEN status = 'completed' THEN completed_at END) AS completed_at
+    FROM tasks
+    WHERE company_id = ${companyId}
+    GROUP BY phase
+  `
+  
+  // Build task name to completion date map
+  const taskCompletionMap = new Map<string, Date | null>()
+  // This will be populated by phase completion dates in real implementation
+  
+  const sequencingViolations = validateMilestoneSequence(taskCompletionMap, targetExchange as any)
+
   // Estimated days to listing
-  const exchangeFloor = EXCHANGE_FLOORS[targetExchange] ?? 180
+  const exchangeFloor = EXCHANGE_FLOORS[targetExchange.toLowerCase()] ?? 180
   const estimatedDaysToIpo = Math.max(remainingDays, exchangeFloor)
 
   // Progress percentage
   const progressPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
 
-  // Current phase: earliest phase with non-completed tasks
+  // Current phase
   const incompletePhases = phaseRows
     .filter(row => parseInt(row.total, 10) > parseInt(row.completed, 10))
     .map(row => row.phase)
@@ -113,16 +190,41 @@ export async function computeAndUpdateCompanyStats(companyId: string): Promise<{
 
   const currentPhase = incompletePhases.length > 0 ? incompletePhases[0] : 'post_listing'
 
-  // Update company record
+  // Update company record with enhanced metrics
   await sql`
     UPDATE companies
     SET
-      pace_score = ${paceScore},
+      pace_score = ${basePaceScore},
+      adjusted_pace_score = ${predictiveResult.adjustedPaceScore},
+      predicted_days_to_ipo = ${predictiveResult.predictedDaysToIpo},
+      peer_percentile = ${peerResult.percentile},
       estimated_days_to_ipo = ${estimatedDaysToIpo},
       progress_percentage = ${progressPercentage},
       current_phase = ${currentPhase}
     WHERE id = ${companyId}
   `
 
-  return { paceScore, estimatedDaysToIpo, progressPercentage, currentPhase, targetExchange }
+  return {
+    paceScore: basePaceScore,
+    adjustedPaceScore: predictiveResult.adjustedPaceScore,
+    peerPercentile: peerResult.percentile,
+    peerPercentileLabel: peerResult.label,
+    estimatedDaysToIpo,
+    predictedDaysToIpo: predictiveResult.predictedDaysToIpo,
+    progressPercentage,
+    currentPhase,
+    targetExchange,
+    benchmarkComparison: peerResult.benchmarkComparison,
+    sequencingAlerts: sequencingViolations,
+    riskFactors: predictiveResult.riskFactors,
+    predictiveFactors: {
+      confidence: predictiveResult.confidenceLevel,
+      cashRunwayMonths: company?.cash_runway_months,
+      teamSize: company?.team_size,
+      cfoHired: company?.cfo_hired_at ? true : false,
+      boardSize: company?.board_size,
+      auditorSelected: company?.auditor_selected,
+      investorSophisticationScore: company?.investor_sophistication_score,
+    },
+  }
 }

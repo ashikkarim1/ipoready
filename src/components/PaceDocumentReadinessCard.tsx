@@ -1,152 +1,294 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { AlertCircle } from 'lucide-react'
 
-interface PhaseDocReadiness {
-  phase: number
-  phaseName: string
-  requiredDocCount: number
-  completionPercentage: number
-  hasStaleDocuments: boolean
+interface DocumentStatus {
+  name: string
+  phase: string
+  completionPercent: number
+  status: 'not_started' | 'in_progress' | 'draft' | 'reviewed' | 'final'
+  lastUpdated?: Date
+  refreshNeeded?: boolean
 }
 
 interface PaceDocumentReadinessCardProps {
-  overallScore: number // 0-100
-  phases: PhaseDocReadiness[]
+  documents?: DocumentStatus[]
 }
 
+const DEFAULT_DOCUMENTS: DocumentStatus[] = [
+  {
+    name: 'Articles of Incorporation',
+    phase: 'Governance Setup',
+    completionPercent: 100,
+    status: 'final',
+    lastUpdated: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    refreshNeeded: false,
+  },
+  {
+    name: 'By-laws and Corporate Policies',
+    phase: 'Governance Setup',
+    completionPercent: 85,
+    status: 'reviewed',
+    lastUpdated: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+    refreshNeeded: false,
+  },
+  {
+    name: 'Audited Financial Statements',
+    phase: 'Financial Audit',
+    completionPercent: 45,
+    status: 'in_progress',
+    lastUpdated: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+    refreshNeeded: false,
+  },
+  {
+    name: 'Management Discussion & Analysis',
+    phase: 'Document Preparation',
+    completionPercent: 60,
+    status: 'draft',
+    lastUpdated: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+    refreshNeeded: true,
+  },
+  {
+    name: 'Risk Factors Disclosure',
+    phase: 'Document Preparation',
+    completionPercent: 70,
+    status: 'reviewed',
+    lastUpdated: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
+    refreshNeeded: true,
+  },
+  {
+    name: 'Use of Proceeds Statement',
+    phase: 'Financial Planning',
+    completionPercent: 0,
+    status: 'not_started',
+    refreshNeeded: false,
+  },
+  {
+    name: 'Capital Structure Documentation',
+    phase: 'Equity Management',
+    completionPercent: 55,
+    status: 'draft',
+    lastUpdated: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
+    refreshNeeded: false,
+  },
+  {
+    name: 'Business Description & Market Analysis',
+    phase: 'Strategy',
+    completionPercent: 75,
+    status: 'reviewed',
+    lastUpdated: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+    refreshNeeded: false,
+  },
+  {
+    name: 'Executive Summary',
+    phase: 'Document Preparation',
+    completionPercent: 40,
+    status: 'draft',
+    lastUpdated: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000),
+    refreshNeeded: true,
+  },
+  {
+    name: 'Underwriting Terms & Conditions',
+    phase: 'Underwriter Engagement',
+    completionPercent: 0,
+    status: 'not_started',
+    refreshNeeded: false,
+  },
+  {
+    name: 'Legal Opinion Letters',
+    phase: 'Legal Review',
+    completionPercent: 30,
+    status: 'in_progress',
+    lastUpdated: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000),
+    refreshNeeded: false,
+  },
+  {
+    name: 'Regulatory Compliance Summary',
+    phase: 'Regulatory Filing',
+    completionPercent: 20,
+    status: 'in_progress',
+    lastUpdated: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000),
+    refreshNeeded: false,
+  },
+]
+
 export function PaceDocumentReadinessCard({
-  overallScore,
-  phases,
+  documents = DEFAULT_DOCUMENTS,
 }: PaceDocumentReadinessCardProps) {
+  const completedDocs = documents.filter((d) => d.status === 'final').length
+  const inProgressDocs = documents.filter((d) => d.status !== 'final' && d.completionPercent > 0).length
+  const notStartedDocs = documents.filter((d) => d.status === 'not_started').length
+  const needsRefresh = documents.filter((d) => d.refreshNeeded).length
+
+  const overallCompletion = Math.round(
+    documents.reduce((sum, doc) => sum + doc.completionPercent, 0) / documents.length
+  )
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'final':
+        return 'bg-green-50 border-green-200'
+      case 'reviewed':
+        return 'bg-blue-50 border-blue-200'
+      case 'draft':
+        return 'bg-amber-50 border-amber-200'
+      case 'in_progress':
+        return 'bg-indigo-50 border-indigo-200'
+      default:
+        return 'bg-gray-50 border-gray-200'
+    }
+  }
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'final':
+        return { bg: 'bg-green-100', text: 'text-green-700', label: 'Final' }
+      case 'reviewed':
+        return { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Reviewed' }
+      case 'draft':
+        return { bg: 'bg-amber-100', text: 'text-amber-700', label: 'Draft' }
+      case 'in_progress':
+        return { bg: 'bg-indigo-100', text: 'text-indigo-700', label: 'In Progress' }
+      default:
+        return { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Not Started' }
+    }
+  }
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'final':
+        return '✓'
+      case 'reviewed':
+        return '→'
+      case 'draft':
+        return '✎'
+      case 'in_progress':
+        return '⟳'
+      default:
+        return '○'
+    }
+  }
+
+  const formatDate = (date?: Date) => {
+    if (!date) return 'Never'
+    const days = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24))
+    if (days === 0) return 'Today'
+    if (days === 1) return 'Yesterday'
+    if (days < 7) return `${days} days ago`
+    if (days < 30) return `${Math.floor(days / 7)} weeks ago`
+    return `${Math.floor(days / 30)} months ago`
+  }
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-lg border border-gray-200 bg-white p-6"
+      transition={{ duration: 0.5, delay: 1 }}
+      className="rounded-lg border border-gray-200 p-6 bg-white"
     >
-      {/* Overall Score Section */}
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold text-gray-900 mb-6">Document Readiness Score</h3>
-        <div className="flex flex-col items-center justify-center p-8 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200">
-          <p className="text-sm font-medium text-blue-700 mb-2">Overall Readiness</p>
-          <div className="flex items-baseline gap-2">
-            <span className="text-6xl font-bold text-blue-900">{overallScore}</span>
-            <span className="text-2xl font-semibold text-blue-700">/100</span>
-          </div>
-          <div className="w-full mt-6 bg-blue-200 rounded-full h-2 overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${overallScore}%` }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
-              className="h-full bg-blue-600 rounded-full"
-            />
-          </div>
-          <p className="text-xs text-blue-700 mt-3 text-center">
-            {overallScore >= 80 && 'Excellent - Ready for next phase'}
-            {overallScore >= 60 && overallScore < 80 && 'Good - On track for IPO readiness'}
-            {overallScore >= 40 && overallScore < 60 && 'Moderate - Requires attention on critical docs'}
-            {overallScore < 40 && 'Needs improvement - Prioritize core documents'}
-          </p>
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-semibold text-gray-900">Document Readiness</h3>
+          <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-medium">{overallCompletion}% Complete</span>
+        </div>
+        <p className="text-sm text-gray-600">Track all required prospectus documents across phases</p>
+        <div className="mt-3 w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+          <motion.div
+            className="h-full bg-gradient-to-r from-blue-500 to-blue-600"
+            initial={{ width: 0 }}
+            animate={{ width: `${overallCompletion}%` }}
+            transition={{ duration: 1, delay: 1.1 }}
+          />
         </div>
       </div>
 
-      {/* Phase Breakdown Table */}
-      <div>
-        <h4 className="text-sm font-semibold text-gray-900 mb-4">Phase-by-Phase Breakdown</h4>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Phase</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Required Docs</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Completion</th>
-              </tr>
-            </thead>
-            <tbody>
-              {phases.map((phase, idx) => (
-                <tr
-                  key={phase.phase}
-                  className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
-                >
-                  {/* Phase Column */}
-                  <td className="py-3 px-4">
-                    <div className="flex items-center gap-2">
-                      <span className="font-semibold text-gray-900">Phase {phase.phase}</span>
-                      <span className="text-xs text-gray-500">({phase.phaseName})</span>
-                    </div>
-                  </td>
+      {/* Summary Stats */}
+      <div className="grid grid-cols-4 gap-2 mb-6">
+        {[
+          { label: 'Final', count: completedDocs, color: 'bg-green-100 text-green-700' },
+          { label: 'In Progress', count: inProgressDocs, color: 'bg-indigo-100 text-indigo-700' },
+          { label: 'Not Started', count: notStartedDocs, color: 'bg-gray-100 text-gray-700' },
+          { label: 'Refresh Needed', count: needsRefresh, color: 'bg-orange-100 text-orange-700' },
+        ].map((stat) => (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, delay: 1.15 }}
+            className={`rounded-lg p-3 text-center ${stat.color}`}
+          >
+            <div className="text-xl font-bold">{stat.count}</div>
+            <div className="text-xs font-medium">{stat.label}</div>
+          </motion.div>
+        ))}
+      </div>
 
-                  {/* Required Docs Column */}
-                  <td className="py-3 px-4">
-                    <span className="text-gray-700 font-medium">
-                      {phase.requiredDocCount} docs
+      {/* Document List */}
+      <div className="space-y-2 max-h-80 overflow-y-auto">
+        {documents.map((doc, idx) => {
+          const badge = getStatusBadge(doc.status)
+          return (
+            <motion.div
+              key={doc.name}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: 1.2 + idx * 0.03 }}
+              className={`rounded-lg border p-3 ${getStatusColor(doc.status)}`}
+            >
+              <div className="flex items-start justify-between gap-3 mb-2">
+                <div className="flex-1">
+                  <h5 className="font-medium text-gray-900">{doc.name}</h5>
+                  <p className="text-xs text-gray-600">{doc.phase}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${badge.bg} ${badge.text}`}>
+                    {badge.label}
+                  </span>
+                  {doc.refreshNeeded && (
+                    <span className="px-2 py-1 rounded text-xs font-medium bg-orange-100 text-orange-700">
+                      🔄 Refresh
                     </span>
-                  </td>
+                  )}
+                </div>
+              </div>
 
-                  {/* Completion Column with Progress Bar */}
-                  <td className="py-3 px-4">
-                    <div className="flex items-center gap-3">
-                      {/* Progress Bar */}
-                      <div className="flex-1 max-w-xs">
-                        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${phase.completionPercentage}%` }}
-                            transition={{ duration: 0.5, delay: idx * 0.1 }}
-                            className={`h-full rounded-full ${
-                              phase.completionPercentage === 100
-                                ? 'bg-green-500'
-                                : phase.completionPercentage >= 75
-                                ? 'bg-blue-500'
-                                : phase.completionPercentage >= 50
-                                ? 'bg-yellow-500'
-                                : 'bg-orange-500'
-                            }`}
-                          />
-                        </div>
-                      </div>
+              <div className="flex items-end gap-3">
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-medium text-gray-600">{doc.completionPercent}%</span>
+                  </div>
+                  <div className="w-full bg-gray-300/50 rounded-full h-1.5 overflow-hidden">
+                    <motion.div
+                      className={`h-full ${
+                        doc.status === 'final'
+                          ? 'bg-green-500'
+                          : doc.status === 'reviewed'
+                            ? 'bg-blue-500'
+                            : doc.status === 'draft'
+                              ? 'bg-amber-500'
+                              : 'bg-indigo-500'
+                      }`}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${doc.completionPercent}%` }}
+                      transition={{ duration: 0.8, delay: 1.25 + idx * 0.03 }}
+                    />
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-gray-600">
+                    {doc.lastUpdated ? `Updated ${formatDate(doc.lastUpdated)}` : 'Not started'}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )
+        })}
+      </div>
 
-                      {/* Percentage Text */}
-                      <span className="text-sm font-semibold text-gray-900 min-w-fit">
-                        {phase.completionPercentage}%
-                      </span>
-
-                      {/* Stale Docs Badge */}
-                      {phase.hasStaleDocuments && (
-                        <div className="flex items-center gap-1 px-2 py-1 rounded bg-orange-100 border border-orange-200">
-                          <AlertCircle className="w-3 h-3 text-orange-600" />
-                          <span className="text-xs font-semibold text-orange-700">Refresh needed</span>
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Legend */}
-        <div className="mt-4 pt-4 border-t border-gray-200 flex flex-wrap gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-green-500" />
-            <span className="text-xs text-gray-600">Complete (100%)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-500" />
-            <span className="text-xs text-gray-600">On track (75-99%)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-yellow-500" />
-            <span className="text-xs text-gray-600">In progress (50-74%)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-orange-500" />
-            <span className="text-xs text-gray-600">At risk (&lt;50%)</span>
-          </div>
-        </div>
+      <div className="mt-6 p-4 rounded-lg bg-amber-50 border border-amber-200">
+        <p className="text-sm text-amber-900">
+          <span className="font-semibold">⚠️ Action Needed:</span> {needsRefresh} documents need updates (last modified {'>'}30 days ago). Review and update to ensure prospectus accuracy.
+        </p>
       </div>
     </motion.div>
   )

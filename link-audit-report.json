@@ -1,0 +1,147 @@
+{
+  "working": [],
+  "dead": [],
+  "timeout": [],
+  "error": [
+    {
+      "url": "https://api.stripe.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://api.github.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://api.anthropic.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://api.resend.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://api.slack.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://api.docusign.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://www.docusign.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://carta.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://pulley.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://www.carta.com/cap-table",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://pulley.com/cap-table",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://nextjs.org",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://nextjs.org/docs",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://nextauth.js.org",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://tailwindcss.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://www.postgresql.org",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://neon.tech",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://github.com/ashikkarim1/goipo-ae",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://www.linkedin.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://twitter.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://slack.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://www.tsx.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://www.nasdaq.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://www.nyse.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://www.cboe.com",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://www.sec.gov",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://www.iiroc.ca",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    },
+    {
+      "url": "https://www.occ.ca",
+      "status": "error",
+      "error": "protocol.head is not a function"
+    }
+  ]
+}

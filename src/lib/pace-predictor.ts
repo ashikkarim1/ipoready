@@ -1,372 +1,309 @@
+import { sql } from '@/db/client'
+
 /**
- * PACE Predictive Scoring Model (Enhanced)
- * 
- * Incorporates cash runway, team readiness, market conditions, and investor sophistication
- * into the base PACE score for more accurate IPO timeline predictions.
- * 
- * Scoring Formula:
- * Adjusted PACE = (basePace × 0.40) + (cashScore × 0.20) + (teamScore × 0.20) 
- *                  + (marketScore × 0.10) + (investorScore × 0.10)
+ * PACE Predictive Scoring Model
+ * Adjusts PACE score based on cash runway, team readiness, market conditions, and investor sophistication
  */
 
-import { sql } from '@/lib/db'
+export interface PredictiveFactors {
+  cashRunwayMonths: number | null
+  teamSize: number | null
+  cfoHired: boolean
+  boardSize: number | null
+  auditorSelected: boolean
+  investorSophisticationScore: number | null
+  preIpoFunding: number | null
+}
 
 export interface PredictiveScore {
-  adjustedPaceScore: number // 0-100, adjusted from base PACE
-  baseScore: number // Original PACE score
-  adjustment: number // Net adjustment applied (-/+ points)
-  confidenceLevel: 'low' | 'medium' | 'high'
+  basePace: number
+  adjustedPace: number
+  adjustmentFactors: {
+    cashRunway: { weight: 0.2; score: number; impact: number }
+    teamReadiness: { weight: 0.2; score: number; impact: number }
+    marketConditions: { weight: 0.1; score: number; impact: number }
+    investorSophistication: { weight: 0.1; score: number; impact: number }
+  }
+  confidenceLevel: 'Low' | 'Medium' | 'High'
   riskFactors: string[]
-  opportunityFactors: string[]
-  breakdown: {
-    basePace: number // 40% weight — existing task completion
-    cashRunwayScore: number // 20% weight
-    teamReadinessScore: number // 20% weight
-    marketConditionScore: number // 10% weight
-    investorSophisticationScore: number // 10% weight
-  }
-  estimatedDaysToIpoAdjusted: number
-}
-
-interface CompanyFactors {
-  id: string
-  pace_score: number
-  estimated_days_to_ipo: number
-  cash_runway_months?: number | null
-  team_size?: number | null
-  board_size?: number | null
-  cfo_hired_at?: string | null
-  auditor_selected?: boolean | null
-  investor_sophistication_score?: number | null
-  target_exchange: string
+  predictedDaysToIpo: number
 }
 
 /**
- * Calculate predictive PACE score based on multiple factors
- * 
- * @param companyId - The company's unique identifier
- * @returns PredictiveScore with adjusted score, breakdown, and risk factors
+ * Calculate cash runway score (0-100)
+ * 12+ months = 100, 6-12 = 75, <6 = 50
  */
-export async function calculatePredictiveScore(companyId: string): Promise<PredictiveScore> {
-  // Fetch company factors
-  const company = (await sql`
-    SELECT
-      id, pace_score, cash_runway_months, team_size, board_size, cfo_hired_at,
-      auditor_selected, investor_sophistication_score, target_exchange, 
-      estimated_days_to_ipo
-    FROM companies
-    WHERE id = ${companyId}
-    LIMIT 1
-  `)[0] as (CompanyFactors | undefined)
-
-  if (!company) {
-    throw new Error(`Company not found: ${companyId}`)
+function calculateCashRunwayScore(months: number | null): { score: number; risk: string | null } {
+  if (months === null || months === undefined) {
+    return { score: 50, risk: 'Cash runway not specified' }
   }
-
-  const baseScore = company.pace_score ?? 0
-  const riskFactors: string[] = []
-  const opportunityFactors: string[] = []
-  let dataCompleteCount = 1 // Base score always available
-
-  // ============================================================
-  // 1. CASH RUNWAY (20% weight)
-  // ============================================================
-  let cashRunwayScore = 50 // Default neutral (0-100)
-  
-  if (company.cash_runway_months !== null && company.cash_runway_months !== undefined) {
-    dataCompleteCount++
-    const months = company.cash_runway_months
-
-    if (months >= 18) {
-      cashRunwayScore = 100 // Plenty of time
-      opportunityFactors.push('Healthy cash runway (18+ months) provides timeline flexibility')
-    } else if (months >= 12) {
-      cashRunwayScore = 90 // Comfortable
-      opportunityFactors.push('Good cash runway (12-18 months) supports IPO timeline')
-    } else if (months >= 9) {
-      cashRunwayScore = 75 // Moderate urgency
-    } else if (months >= 6) {
-      cashRunwayScore = 60 // High urgency
-      riskFactors.push('Cash runway 6-9 months — IPO execution must stay on schedule')
-    } else if (months >= 3) {
-      cashRunwayScore = 40 // Critical urgency
-      riskFactors.push('Low cash runway (3-6 months) — accelerated execution required')
-    } else {
-      cashRunwayScore = 20 // Crisis mode
-      riskFactors.push('Critically low cash runway (< 3 months) — must IPO immediately or seek bridge financing')
-    }
-  } else {
-    riskFactors.push('Cash runway not provided — confidence in score reduced')
+  if (months >= 12) {
+    return { score: 100, risk: null }
   }
-
-  // ============================================================
-  // 2. TEAM READINESS (20% weight)
-  // ============================================================
-  let teamReadinessScore = 50 // Default neutral
-  const teamFactors: string[] = []
-
-  if (company.cfo_hired_at !== null && company.cfo_hired_at !== undefined) {
-    dataCompleteCount++
-    teamFactors.push('CFO hired')
-    teamReadinessScore += 20
-    opportunityFactors.push('CFO in place to lead financial reporting and investor relations')
-  } else {
-    riskFactors.push('No CFO hired yet — essential for financial credibility')
+  if (months >= 6) {
+    return { score: 75, risk: `Low cash runway (${months} months)` }
   }
-
-  if (company.board_size !== null && company.board_size !== undefined) {
-    dataCompleteCount++
-    if (company.board_size >= 5) {
-      teamFactors.push('Full board assembled (5+ seats)')
-      teamReadinessScore += 15
-      opportunityFactors.push('Mature board composition supports governance requirements')
-    } else if (company.board_size >= 3) {
-      teamFactors.push(`Partial board (${company.board_size} seats)`)
-      teamReadinessScore += 8
-      riskFactors.push(`Board incomplete (${company.board_size} seats) — auditors/regulators may require expansion`)
-    } else {
-      riskFactors.push('Board not yet assembled — priority task for pre-IPO governance')
-    }
-  }
-
-  if (company.auditor_selected !== null && company.auditor_selected !== undefined) {
-    dataCompleteCount++
-    if (company.auditor_selected) {
-      teamFactors.push('Auditor selected')
-      teamReadinessScore += 15
-      opportunityFactors.push('PCAOB/CPAB-registered auditor enables financial audit process')
-    } else {
-      riskFactors.push('Auditor not yet selected — must engage before Financial Audit phase')
-    }
-  }
-
-  if (company.team_size !== null && company.team_size !== undefined) {
-    dataCompleteCount++
-    if (company.team_size >= 50) {
-      teamReadinessScore += 10
-      opportunityFactors.push('Large team (50+) can support parallel IPO workstreams')
-    } else if (company.team_size >= 30) {
-      teamReadinessScore += 8
-    } else if (company.team_size >= 10) {
-      teamReadinessScore += 3
-    } else if (company.team_size < 5) {
-      riskFactors.push('Very small team (<5) will struggle with IPO parallel processing — consider hiring')
-      teamReadinessScore -= 10
-    } else {
-      riskFactors.push('Small team (5-9) may need external resources to accelerate IPO execution')
-      teamReadinessScore -= 5
-    }
-  }
-
-  teamReadinessScore = Math.min(100, Math.max(0, teamReadinessScore))
-
-  // ============================================================
-  // 3. MARKET CONDITIONS (10% weight)
-  // ============================================================
-  // In production, integrate real market data (VIX, IPO sentiment, sector performance)
-  let marketConditionScore = 50 // Neutral baseline
-  
-  // Placeholder: assumes neutral market conditions
-  // In a real implementation, you would:
-  // - Call market data API (e.g., Alpha Vantage for VIX, PitchBook for IPO sentiment)
-  // - Adjust based on sector-specific trends (e.g., biotech, fintech IPO appetite)
-  // - Consider broader macro factors (rate environment, Fed sentiment)
-  
-  // Example adjustments (commented out until live integration):
-  // if (vix > 25) marketConditionScore -= 10  // High volatility
-  // if (ipoVolume > historicalAvg) marketConditionScore += 5  // Hot market
-  
-  // For now, remain neutral unless external data is available
-
-  // ============================================================
-  // 4. INVESTOR SOPHISTICATION (10% weight)
-  // ============================================================
-  let investorSophisticationScore = 50 // Default neutral
-  
-  if (company.investor_sophistication_score !== null && company.investor_sophistication_score !== undefined) {
-    dataCompleteCount++
-    // Score is 1-10 scale, normalize to 0-100
-    investorSophisticationScore = (company.investor_sophistication_score / 10) * 100
-    
-    if (company.investor_sophistication_score >= 8) {
-      opportunityFactors.push('Sophisticated investor base familiar with public market requirements')
-    } else if (company.investor_sophistication_score <= 3) {
-      riskFactors.push('Early-stage investor base may require extensive public market education')
-    }
-  }
-
-  // ============================================================
-  // Calculate weighted score components
-  // ============================================================
-  const basePaceComponent = baseScore * 0.4
-  const cashRunwayComponent = cashRunwayScore * 0.2
-  const teamReadinessComponent = teamReadinessScore * 0.2
-  const marketConditionComponent = marketConditionScore * 0.1
-  const investorSophisticationComponent = investorSophisticationScore * 0.1
-
-  // Direct weighted sum calculation (not delta-based)
-  const adjustedPaceScore = Math.floor(Math.max(0, Math.min(100, 
-    basePaceComponent + 
-    cashRunwayComponent + 
-    teamReadinessComponent + 
-    marketConditionComponent + 
-    investorSophisticationComponent
-  )))
-
-  const totalAdjustment = adjustedPaceScore - baseScore
-
-  // Determine confidence level based on data completeness
-  // Need: base + cash + team (size/cfo/board/auditor) + investor = 6 data points
-  const dataCompletenessRatio = dataCompleteCount / 6
-  let confidenceLevel: 'low' | 'medium' | 'high'
-  
-  if (dataCompletenessRatio >= 0.67) {
-    confidenceLevel = 'high'
-  } else if (dataCompletenessRatio >= 0.5) {
-    confidenceLevel = 'medium'
-  } else {
-    confidenceLevel = 'low'
-  }
-
-  // Adjust estimated days to IPO based on confidence and adjustment
-  // Higher confidence + positive adjustment = more aggressive timeline
-  const confidenceMultiplier = confidenceLevel === 'high' ? 0.95 : confidenceLevel === 'medium' ? 1.0 : 1.1
-  const adjustmentImpact = (totalAdjustment / 100) * 30 // Up to ±30 days adjustment
-  
-  const adjustedDaysToIpo = Math.max(
-    90, // Minimum 3 months, even with perfect score
-    Math.round(company.estimated_days_to_ipo * confidenceMultiplier - adjustmentImpact)
-  )
-
-  return {
-    adjustedPaceScore,
-    baseScore,
-    adjustment: Math.round(totalAdjustment),
-    confidenceLevel,
-    riskFactors: [...new Set(riskFactors)], // Remove duplicates
-    opportunityFactors: [...new Set(opportunityFactors)],
-    breakdown: {
-      basePace: Math.round(baseScore),
-      cashRunwayScore: Math.round(cashRunwayScore),
-      teamReadinessScore: Math.round(teamReadinessScore),
-      marketConditionScore: Math.round(marketConditionScore),
-      investorSophisticationScore: Math.round(investorSophisticationScore),
-    },
-    estimatedDaysToIpoAdjusted: adjustedDaysToIpo,
-  }
+  return { score: 50, risk: `Critical: Only ${months} months of runway remaining` }
 }
 
 /**
- * Update company's predictive factors
+ * Calculate team readiness score (0-100)
+ * Based on CFO hire, board formation, auditor selection, team size
  */
-export async function updateCompanyFactors(
+function calculateTeamReadinessScore(factors: PredictiveFactors): { score: number; risks: string[] } {
+  const risks: string[] = []
+  let score = 0
+
+  // CFO hired: +25 points
+  if (factors.cfoHired) {
+    score += 25
+  } else {
+    risks.push('CFO not yet hired')
+  }
+
+  // Board size: +20 points if >= 5 seats
+  if (factors.boardSize && factors.boardSize >= 5) {
+    score += 20
+  } else if (factors.boardSize && factors.boardSize > 0) {
+    score += Math.max(0, factors.boardSize * 4)
+    risks.push(`Board incomplete (${factors.boardSize} of 5+ seats)`)
+  } else {
+    risks.push('Board not yet formed')
+  }
+
+  // Auditor selected: +20 points
+  if (factors.auditorSelected) {
+    score += 20
+  } else {
+    risks.push('Auditor not yet selected')
+  }
+
+  // Team size: +20 points if >= 30 people, +10 if >= 15
+  if (factors.teamSize && factors.teamSize >= 30) {
+    score += 20
+  } else if (factors.teamSize && factors.teamSize >= 15) {
+    score += 10
+    risks.push(`Small team size (${factors.teamSize} members)`)
+  } else {
+    risks.push(`Very small team (${factors.teamSize || 0} members)`)
+  }
+
+  // Max 100
+  return { score: Math.min(100, score), risks }
+}
+
+/**
+ * Market conditions score (simplified; would integrate with external API)
+ * VIX-like signal: normal market = 100, volatile = 80, highly volatile = 50
+ */
+function calculateMarketConditionsScore(): { score: number; signal: string } {
+  // Simplified: assume normal market conditions for now
+  // In production, integrate with VIX API or market sentiment service
+  const currentVIX = 18 // Hypothetical; should come from API
+
+  if (currentVIX < 15) {
+    return { score: 100, signal: 'Favorable market conditions' }
+  }
+  if (currentVIX < 20) {
+    return { score: 85, signal: 'Normal market volatility' }
+  }
+  if (currentVIX < 25) {
+    return { score: 70, signal: 'Elevated market volatility' }
+  }
+  return { score: 50, signal: 'High market volatility - consider delaying' }
+}
+
+/**
+ * Investor sophistication score (0-100)
+ * Higher institutional investor concentration = higher score
+ */
+function calculateInvestorSophisticationScore(score: number | null): { score: number; riskLevel: string } {
+  if (score === null || score === undefined) {
+    return { score: 50, riskLevel: 'Unknown investor profile' }
+  }
+
+  // Normalize 1-10 scale to 0-100
+  const normalized = Math.min(100, (score / 10) * 100)
+
+  if (normalized >= 80) {
+    return { score: normalized, riskLevel: 'Sophisticated investors - strong due diligence expected' }
+  }
+  if (normalized >= 50) {
+    return { score: normalized, riskLevel: 'Mixed investor profile' }
+  }
+  return { score: normalized, riskLevel: 'Retail-heavy investor base - may require more roadshow time' }
+}
+
+/**
+ * Main predictive score calculation
+ */
+export async function calculatePredictiveScore(
   companyId: string,
-  factors: {
-    cash_runway_months?: number
-    team_size?: number
-    board_size?: number
-    cfo_hired_at?: string
-    auditor_selected?: boolean
-    investor_sophistication_score?: number
-  }
-) {
-  // Update cash runway
-  if (factors.cash_runway_months !== undefined) {
-    await sql`
-      UPDATE companies
-      SET cash_runway_months = ${factors.cash_runway_months}
-      WHERE id = ${companyId}
-    `
+  basePace: number,
+  factors: PredictiveFactors,
+  historicalDaysToIpo?: number
+): Promise<PredictiveScore> {
+  // Calculate component scores
+  const cashRunwayResult = calculateCashRunwayScore(factors.cashRunwayMonths)
+  const teamReadinessResult = calculateTeamReadinessScore(factors)
+  const marketConditionsResult = calculateMarketConditionsScore()
+  const investorResult = calculateInvestorSophisticationScore(factors.investorSophisticationScore)
+
+  // Weighted adjustment (base PACE: 40% weight, new factors: 60%)
+  const adjustmentFactors = {
+    cashRunway: {
+      weight: 0.2,
+      score: cashRunwayResult.score,
+      impact: (cashRunwayResult.score - 75) * 0.2, // Deviation from 75pt baseline
+    },
+    teamReadiness: {
+      weight: 0.2,
+      score: teamReadinessResult.score,
+      impact: (teamReadinessResult.score - 50) * 0.2,
+    },
+    marketConditions: {
+      weight: 0.1,
+      score: marketConditionsResult.score,
+      impact: (marketConditionsResult.score - 85) * 0.1,
+    },
+    investorSophistication: {
+      weight: 0.1,
+      score: investorResult.score,
+      impact: (investorResult.score - 50) * 0.1,
+    },
   }
 
-  // Update team size
-  if (factors.team_size !== undefined) {
-    await sql`
-      UPDATE companies
-      SET team_size = ${factors.team_size}
-      WHERE id = ${companyId}
-    `
+  // Adjusted PACE = basePace + weighted impact of factors
+  const totalAdjustment =
+    adjustmentFactors.cashRunway.impact +
+    adjustmentFactors.teamReadiness.impact +
+    adjustmentFactors.marketConditions.impact +
+    adjustmentFactors.investorSophistication.impact
+
+  const adjustedPace = Math.max(0, Math.min(100, basePace + totalAdjustment))
+
+  // Calculate confidence level based on data completeness
+  const dataPoints = [
+    factors.cashRunwayMonths !== null,
+    factors.teamSize !== null,
+    factors.cfoHired,
+    factors.boardSize !== null,
+    factors.auditorSelected,
+    factors.investorSophisticationScore !== null,
+  ].filter(Boolean).length
+
+  const confidenceLevel: 'Low' | 'Medium' | 'High' = dataPoints >= 5 ? 'High' : dataPoints >= 3 ? 'Medium' : 'Low'
+
+  // Collect all risk factors
+  const riskFactors = [
+    ...teamReadinessResult.risks,
+    cashRunwayResult.risk,
+    investorResult.riskLevel,
+  ].filter((r): r is string => Boolean(r))
+
+  // Predict days to IPO (rough estimate from historical data)
+  let predictedDaysToIpo = historicalDaysToIpo || 240 // Default 240 days
+  if (adjustedPace >= 80) {
+    predictedDaysToIpo = Math.floor(predictedDaysToIpo * 0.8) // 20% faster if above 80
+  } else if (adjustedPace < 40) {
+    predictedDaysToIpo = Math.floor(predictedDaysToIpo * 1.3) // 30% slower if below 40
   }
 
-  // Update board size
-  if (factors.board_size !== undefined) {
-    await sql`
-      UPDATE companies
-      SET board_size = ${factors.board_size}
-      WHERE id = ${companyId}
-    `
-  }
-
-  // Update CFO hire date
-  if (factors.cfo_hired_at !== undefined) {
-    await sql`
-      UPDATE companies
-      SET cfo_hired_at = ${factors.cfo_hired_at}
-      WHERE id = ${companyId}
-    `
-  }
-
-  // Update auditor selected
-  if (factors.auditor_selected !== undefined) {
-    await sql`
-      UPDATE companies
-      SET auditor_selected = ${factors.auditor_selected}
-      WHERE id = ${companyId}
-    `
-  }
-
-  // Update investor sophistication
-  if (factors.investor_sophistication_score !== undefined) {
-    await sql`
-      UPDATE companies
-      SET investor_sophistication_score = ${factors.investor_sophistication_score}
-      WHERE id = ${companyId}
-    `
+  return {
+    basePace,
+    adjustedPace: Math.round(adjustedPace),
+    adjustmentFactors,
+    confidenceLevel,
+    riskFactors,
+    predictedDaysToIpo,
   }
 }
 
 /**
- * Get readiness factors summary for UI display
+ * Get benchmark comparison for a company
  */
-export async function getReadinessFactors(companyId: string) {
-  const company = (await sql`
-    SELECT
-      cash_runway_months, team_size, board_size, cfo_hired_at,
-      auditor_selected, investor_sophistication_score
-    FROM companies
-    WHERE id = ${companyId}
-    LIMIT 1
-  `)[0] as {
-    cash_runway_months?: number | null
-    team_size?: number | null
-    board_size?: number | null
-    cfo_hired_at?: string | null
-    auditor_selected?: boolean | null
-    investor_sophistication_score?: number | null
-  } | undefined
+export async function calculatePeerPercentile(
+  companyId: string,
+  exchange: string,
+  phaseId: number,
+  paceScore: number
+): Promise<{
+  percentile: number
+  percentileLabel: string
+  benchmarkComparison: {
+    avgPace: number
+    medianPace: number
+    p90Pace: number
+  }
+}> {
+  try {
+    const benchmark = await sql`
+      SELECT
+        avg_completion_pct as avg_pace,
+        median_completion_pct as median_pace,
+        p90_completion_pct as p90_pace
+      FROM ipo_benchmarks
+      WHERE LOWER(exchange) = LOWER(${exchange})
+        AND phase_id = ${phaseId}
+      LIMIT 1
+    `
 
-  if (!company) return null
+    if (!benchmark || benchmark.length === 0) {
+      return {
+        percentile: 50,
+        percentileLabel: 'No benchmark data',
+        benchmarkComparison: {
+          avgPace: 0,
+          medianPace: 0,
+          p90Pace: 0,
+        },
+      }
+    }
 
-  return {
-    cashRunway: company.cash_runway_months
-      ? {
-          months: company.cash_runway_months,
-          status:
-            company.cash_runway_months >= 12
-              ? 'healthy'
-              : company.cash_runway_months >= 6
-                ? 'warning'
-                : 'critical',
-        }
-      : null,
-    team: {
-      size: company.team_size ?? 0,
-      cfoHired: !!company.cfo_hired_at,
-      boardSize: company.board_size ?? 0,
-      auditorSelected: !!company.auditor_selected,
-    },
-    investorSophistication: company.investor_sophistication_score 
-      ? `${company.investor_sophistication_score}/10` 
-      : null,
+    const { avg_pace, median_pace, p90_pace } = benchmark[0]
+
+    // Calculate percentile based on score vs benchmarks
+    let percentile = 50
+    if (paceScore >= p90_pace) {
+      percentile = 90 + (paceScore - p90_pace) / 2 // Extrapolate beyond p90
+    } else if (paceScore >= median_pace) {
+      percentile = 50 + ((paceScore - median_pace) / (p90_pace - median_pace)) * 40
+    } else if (paceScore >= avg_pace) {
+      percentile = 25 + ((paceScore - avg_pace) / (median_pace - avg_pace)) * 25
+    } else {
+      percentile = (paceScore / avg_pace) * 25
+    }
+
+    percentile = Math.max(0, Math.min(100, percentile))
+
+    const percentileLabel =
+      percentile >= 90
+        ? `Top ${100 - percentile}%`
+        : percentile >= 75
+          ? 'Top 25%'
+          : percentile >= 50
+            ? 'Top 50%'
+            : 'Below median'
+
+    return {
+      percentile: Math.round(percentile),
+      percentileLabel,
+      benchmarkComparison: {
+        avgPace: Math.round(avg_pace),
+        medianPace: Math.round(median_pace),
+        p90Pace: Math.round(p90_pace),
+      },
+    }
+  } catch (error) {
+    console.error('Error calculating peer percentile:', error)
+    return {
+      percentile: 50,
+      percentileLabel: 'Error calculating benchmark',
+      benchmarkComparison: {
+        avgPace: 0,
+        medianPace: 0,
+        p90Pace: 0,
+      },
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sql } from '@/lib/db'
+import { resend, FROM_ADDRESS } from '@/lib/resend'
 
 /**
  * GET /api/lead-capture/check-email?email=X
@@ -117,6 +118,28 @@ export async function POST(req: NextRequest) {
     `
 
     const leadId = (result[0] as any).id as string
+
+    // Send notification email to CEO
+    try {
+      await resend.emails.send({
+        from: FROM_ADDRESS,
+        to: 'ceo@theupcapital.com',
+        subject: `🎯 New Lead Captured: ${company_name}`,
+        html: `
+          <h2>New Lead Captured</h2>
+          <p><strong>Name:</strong> ${full_name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Company:</strong> ${company_name}</p>
+          <p><strong>Target Exchange:</strong> ${listing_exchange_target}</p>
+          ${job_title ? `<p><strong>Job Title:</strong> ${job_title}</p>` : ''}
+          <p><strong>Lead ID:</strong> ${leadId}</p>
+          <p><small>View all leads: <a href="${process.env.NEXTAUTH_URL}/admin/leads">Admin Dashboard</a></small></p>
+        `,
+      })
+    } catch (emailError) {
+      console.error('[lead-capture] Failed to send CEO notification:', emailError)
+      // Don't fail the request if email sending fails
+    }
 
     return NextResponse.json({
       success: true,

@@ -202,13 +202,10 @@ export default function PacePage() {
             {/* Confidence Badge */}
             <PaceConfidenceBadge
               confidenceLevel={scores.predictiveScore?.confidenceLevel || 'low'}
-              confidenceScore={Math.round((scores.predictiveScore?.breakdown ? 
+              dataCompleteness={Math.round((scores.predictiveScore?.breakdown ? 
                 (Object.values(scores.predictiveScore.breakdown).filter((v: any) => v > 0).length / 6) * 100 
                 : 0))}
-              factorsComplete={scores.predictiveScore?.breakdown ? 
-                Object.values(scores.predictiveScore.breakdown).filter((v: any) => v > 0).length 
-                : 0}
-              totalFactors={6}
+              explanation="Your PACE score is based on task completion, team readiness, and financial factors."
             />
           </div>
 

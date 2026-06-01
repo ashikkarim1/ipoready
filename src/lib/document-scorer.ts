@@ -1,633 +1,296 @@
 /**
- * Document Completeness Scoring & Phase Scoring
+ * Document Completeness & Quality Scoring
  * 
- * Tracks document quality and completeness by phase.
- * Incorporates into overall PACE score calculation with:
- * - Task completion (60% weight)
- * - Document completeness (40% weight)
- * - Staleness penalty (5% reduction if > 30 days old)
- * - Status quality progression
+ * Extends PACE scoring to include document maturity metrics.
+ * Documents are scored on both completion % and quality indicators.
+ * Phase score = (task_completion × 60%) + (document_completeness × 40%)
  */
 
-'use strict'
+export type DocumentStatus = 'not_started' | 'in_progress' | 'draft' | 'reviewed' | 'final' | 'approved'
 
-import { sql } from '@/lib/db'
+export interface DocumentMetadata {
+  wordCount: number
+  pageCount: number
+  signatureCount: number // For executed documents
+  lastReviewDate?: Date
+  reviewerName?: string
+  versionNumber: number
+  isExecuted: boolean
+  hasDraft: boolean
+}
 
-/**
- * Document score interface tracking completion, status, and freshness
- */
-export interface DocumentScore {
+export interface DocumentScorecard {
+  id: string
+  companyId: string
   documentName: string
-  completionPct: number
-  status: 'not_started' | 'in_progress' | 'draft' | 'reviewed' | 'final'
+  phase: number // IPO phase 1-8
+  completionPercent: number // 0-100
+  status: DocumentStatus
+  metadata: DocumentMetadata
+  maturityScore: number // 0-100 based on quality indicators
+  refreshNeeded: boolean // True if > 30 days old
+  createdAt: Date
   lastUpdated: Date
-  daysOld: number
-  freshness: 'fresh' | 'stale' | 'very_stale'
-  metadata?: {
-    wordCount?: number
-    pageCount?: number
-    signatureCount?: number
-  }
+}
+
+export interface DocumentRefreshIndicator {
+  documentName: string
+  daysOldSinceReview: number
+  recommendedRefreshDate: Date
+  refreshPriority: 'high' | 'medium' | 'low'
 }
 
 /**
- * Phase score interface combining task and document completeness
+ * Status progression weights
+ * Earlier statuses = lower quality, later statuses = higher quality
  */
-export interface PhaseScore {
-  phaseId: number
-  taskCompletionScore: number
-  documentCompletenessScore: number
-  combinedPhaseScore: number
+const STATUS_WEIGHTS: Record<DocumentStatus, number> = {
+  not_started: 0,
+  in_progress: 25,
+  draft: 50,
+  reviewed: 75,
+  final: 90,
+  approved: 100,
 }
 
 /**
- * Document library grouped by phase with health metrics
- */
-export interface DocumentLibrary {
-  byPhase: Map<number, DocumentScore[]>
-  overallDocumentHealth: number
-  staleDocuments: DocumentScore[]
-  completionByStatus: Record<string, number>
-}
-
-/**
- * Phase names for reference
- */
-const PHASE_NAMES: Record<number, string> = {
-  1: 'Pre-Planning',
-  2: 'Corporate Restructuring',
-  3: 'Financial Audit',
-  4: 'Legal Documentation',
-  5: 'Regulatory Filing',
-  6: 'Marketing & Roadshow',
-  7: 'Listing Application',
-  8: 'Post-Listing',
-}
-
-/**
- * Required documents per phase
- */
-const PHASE_DOCUMENTS: Record<number, Record<string, { minPages: number; aiRequired: boolean }>> = {
-  1: {
-    'Business Plan': { minPages: 20, aiRequired: false },
-    'Market Analysis': { minPages: 15, aiRequired: false },
-  },
-  2: {
-    'Cap Table': { minPages: 5, aiRequired: false },
-    'Articles of Incorporation': { minPages: 10, aiRequired: false },
-    'Shareholder Agreements': { minPages: 20, aiRequired: false },
-    'Corporate Structure Diagram': { minPages: 1, aiRequired: false },
-  },
-  3: {
-    '2-Year Audited Financials': { minPages: 30, aiRequired: false },
-    'Accounting Policies': { minPages: 15, aiRequired: false },
-    'Management Discussion & Analysis': { minPages: 20, aiRequired: false },
-  },
-  4: {
-    'Articles & Bylaws': { minPages: 10, aiRequired: false },
-    'Board Resolutions': { minPages: 5, aiRequired: false },
-    'Legal Opinions': { minPages: 15, aiRequired: true },
-    'Material Contracts': { minPages: 50, aiRequired: false },
-    'Litigation History': { minPages: 5, aiRequired: false },
-  },
-  5: {
-    'Prospectus/Registration Statement': { minPages: 100, aiRequired: true },
-    'Risk Factors': { minPages: 20, aiRequired: true },
-    'Regulatory Approvals': { minPages: 10, aiRequired: false },
-    'Compliance Certifications': { minPages: 5, aiRequired: false },
-  },
-  6: {
-    'Pitch Deck': { minPages: 20, aiRequired: false },
-    'Investor Presentation': { minPages: 30, aiRequired: false },
-    'Management Bios': { minPages: 10, aiRequired: false },
-    'Company Overview': { minPages: 15, aiRequired: false },
-  },
-  7: {
-    'Listing Application': { minPages: 50, aiRequired: true },
-    'Exchange Approval Letter': { minPages: 5, aiRequired: false },
-    'Trading Symbol Assignment': { minPages: 2, aiRequired: false },
-    'IPO Certificate': { minPages: 1, aiRequired: false },
-  },
-  8: {
-    'Post-IPO Disclosures': { minPages: 20, aiRequired: false },
-    'Financial Reports': { minPages: 25, aiRequired: false },
-    'Quarterly Filings': { minPages: 30, aiRequired: false },
-  },
-}
-
-/**
- * Calculate freshness category based on days since update
- */
-export function calculateFreshness(lastUpdatedDate: Date): 'fresh' | 'stale' | 'very_stale' {
-  const now = new Date()
-  const daysOld = Math.floor((now.getTime() - lastUpdatedDate.getTime()) / (1000 * 60 * 60 * 24))
-
-  if (daysOld < 7) {
-    return 'fresh'
-  } else if (daysOld < 30) {
-    return 'stale'
-  } else {
-    return 'very_stale'
-  }
-}
-
-/**
- * Convert status to quality score (0-100)
- */
-function getStatusScore(status: string): number {
-  const statusScores: Record<string, number> = {
-    not_started: 0,
-    in_progress: 25,
-    draft: 50,
-    reviewed: 75,
-    final: 100,
-    approved: 100,
-  }
-  return statusScores[status] ?? 0
-}
-
-/**
- * Score phase completeness combining task and document completion
+ * Calculate maturity score based on document quality indicators
  * 
- * Algorithm:
- * 1. Fetch all tasks for phase and calculate completion %
- * 2. Fetch all documents for phase from document_scorecards
- * 3. For each document:
- *    - Start with completion_pct
- *    - Apply status quality adjustment
- *    - Apply staleness penalty (5% reduction if > 30 days)
- * 4. Average document adjustments
- * 5. Return combined: (taskCompletion * 0.60) + (documentAvg * 0.40)
+ * Combines:
+ * - Status progression (40% weight)
+ * - Document substance (word count, pages) (30% weight)
+ * - Evidence of review/execution (30% weight)
  */
-export async function scorePhaseCompleteness(companyId: string, phaseId: number): Promise<PhaseScore> {
-  // Fetch all tasks for this phase
-  const tasksResult = await sql`
-    SELECT
-      COUNT(*) as total_tasks,
-      COUNT(*) FILTER (WHERE status = 'completed') as completed_tasks
-    FROM tasks
-    WHERE company_id = ${companyId} AND phase_id = ${phaseId}
-  `
+export function calculateDocumentMaturityScore(metadata: DocumentMetadata, status: DocumentStatus): number {
+  // Status component (0-40 points)
+  const statusScore = (STATUS_WEIGHTS[status] / 100) * 40
 
-  let taskCompletionScore = 0
-  if (tasksResult && tasksResult.length > 0) {
-    const row = tasksResult[0] as any
-    const totalTasks = row.total_tasks ?? 0
-    const completedTasks = row.completed_tasks ?? 0
-    taskCompletionScore = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
+  // Document substance component (0-30 points)
+  // Expected minimums: 5,000+ words = 100%, 1,000-5,000 = 50%, < 1,000 = 25%
+  let substanceScore = 0
+  if (metadata.wordCount >= 5000) {
+    substanceScore = 30
+  } else if (metadata.wordCount >= 1000) {
+    substanceScore = (metadata.wordCount / 5000) * 30
+  } else if (metadata.wordCount > 0) {
+    substanceScore = (metadata.wordCount / 1000) * 15
   }
 
-  // Fetch all documents for this phase
-  const docsResult = await sql`
-    SELECT
-      document_name,
-      completion_pct,
-      status,
-      last_updated
-    FROM document_scorecards
-    WHERE company_id = ${companyId} AND phase_id = ${phaseId}
-    ORDER BY document_name
-  `
-
-  let documentCompletenessScore = 100 // Default to 100 if no documents
-
-  if (docsResult && docsResult.length > 0) {
-    const documentScores: number[] = []
-
-    for (const doc of docsResult as any[]) {
-      const baseCompletion = doc.completion_pct ?? 0
-      const statusScore = getStatusScore(doc.status)
-
-      // Blend completion_pct with status quality
-      const qualityAdjustedScore = Math.round(baseCompletion * 0.6 + statusScore * 0.4)
-
-      // Apply staleness penalty
-      const lastUpdated = new Date(doc.last_updated)
-      const freshness = calculateFreshness(lastUpdated)
-      let finalScore = qualityAdjustedScore
-
-      if (freshness === 'very_stale') {
-        // 5% reduction for very stale documents (> 30 days)
-        finalScore = Math.round(finalScore * 0.95)
-      }
-
-      documentScores.push(finalScore)
-    }
-
-    // Average all document scores
-    documentCompletenessScore = Math.round(
-      documentScores.reduce((sum, score) => sum + score, 0) / documentScores.length
-    )
+  // Review & execution component (0-30 points)
+  let reviewScore = 0
+  if (metadata.lastReviewDate) {
+    reviewScore += 15 // Has been reviewed
+  }
+  if (metadata.isExecuted) {
+    reviewScore += 15 // Has been executed/signed
+  }
+  if (metadata.signatureCount > 0) {
+    reviewScore = Math.min(30, reviewScore + 5) // Additional points for signatures
   }
 
-  // Combined score: 60% tasks, 40% documents
-  const combinedPhaseScore = Math.round(taskCompletionScore * 0.6 + documentCompletenessScore * 0.4)
+  return Math.round(statusScore + substanceScore + reviewScore)
+}
+
+/**
+ * Determine if a document needs refresh
+ * Documents older than 30 days should be reviewed
+ * Executed documents stay current longer (90 days)
+ */
+export function isDocumentRefreshNeeded(
+  lastReviewDate: Date | undefined,
+  isExecuted: boolean
+): { needsRefresh: boolean; daysOld: number } {
+  if (!lastReviewDate) {
+    return { needsRefresh: true, daysOld: Infinity }
+  }
+
+  const daysOld = Math.floor((new Date().getTime() - lastReviewDate.getTime()) / (1000 * 60 * 60 * 24))
+  const threshold = isExecuted ? 90 : 30
 
   return {
-    phaseId,
-    taskCompletionScore,
-    documentCompletenessScore,
-    combinedPhaseScore,
+    needsRefresh: daysOld > threshold,
+    daysOld,
   }
 }
 
 /**
- * Update document status and completion percentage
- * Recalculates phase score and triggers PACE recalculation if significant change
+ * Calculate phase score combining task completion and document quality
+ * 
+ * Phase Score = (Task Completion % × 60%) + (Document Maturity Score × 40%)
+ * 
+ * This makes document quality a critical driver of phase progress,
+ * not just task checkboxes.
  */
-export async function updateDocumentStatus(
-  companyId: string,
-  documentName: string,
-  completionPct: number,
-  status: 'not_started' | 'in_progress' | 'draft' | 'reviewed' | 'final',
-  reviewerNotes?: string
-): Promise<void> {
-  if (completionPct < 0 || completionPct > 100) {
-    throw new Error('Completion percentage must be between 0 and 100')
-  }
+export function calculatePhaseScore(
+  taskCompletionPercent: number,
+  documentScores: number[]
+): number {
+  const avgDocumentScore = documentScores.length > 0 
+    ? documentScores.reduce((a, b) => a + b, 0) / documentScores.length 
+    : 50 // Default if no documents scored yet
 
-  // Get current document state for comparison
-  const currentResult = await sql`
-    SELECT phase_id, completion_pct, status
-    FROM document_scorecards
-    WHERE company_id = ${companyId} AND document_name = ${documentName}
-  `
-
-  if (!currentResult || currentResult.length === 0) {
-    throw new Error(`Document not found: ${documentName}`)
-  }
-
-  const current = currentResult[0] as any
-  const phaseId = current.phase_id
-
-  // Update document
-  await sql`
-    UPDATE document_scorecards
-    SET
-      completion_pct = ${completionPct},
-      status = ${status},
-      last_updated = NOW(),
-      reviewer_notes = ${reviewerNotes ?? null}
-    WHERE company_id = ${companyId} AND document_name = ${documentName}
-  `
-
-  // Check if change is significant (status or completion changed by >20%)
-  const completionDelta = Math.abs(completionPct - (current.completion_pct ?? 0))
-  const statusChanged = current.status !== status
-  const isSignificant = statusChanged || completionDelta > 20
-
-  // Recalculate phase score
-  if (isSignificant) {
-    const phaseScore = await scorePhaseCompleteness(companyId, phaseId)
-
-    // Update phase score if exists
-    await sql`
-      UPDATE phase_scorecards
-      SET
-        document_completeness_score = ${phaseScore.documentCompletenessScore},
-        combined_phase_score = ${phaseScore.combinedPhaseScore},
-        updated_at = NOW()
-      WHERE company_id = ${companyId} AND phase_id = ${phaseId}
-    `
-  }
+  const phaseScore = (taskCompletionPercent * 0.6) + (avgDocumentScore * 0.4)
+  return Math.round(phaseScore)
 }
 
 /**
- * Get complete document library organized by phase
- * Returns documents grouped by phase with health metrics and stale document list
+ * Generate refresh indicators for all documents in a phase
  */
-export async function getDocumentLibrary(companyId: string): Promise<DocumentLibrary> {
-  const docsResult = await sql`
-    SELECT
-      document_name,
-      phase_id,
-      completion_pct,
-      status,
-      last_updated,
-      word_count,
-      page_count,
-      signature_count
-    FROM document_scorecards
-    WHERE company_id = ${companyId}
-    ORDER BY phase_id, document_name
-  `
-
-  const byPhase = new Map<number, DocumentScore[]>()
-  const staleDocuments: DocumentScore[] = []
-  const completionByStatus: Record<string, number> = {
-    not_started: 0,
-    in_progress: 0,
-    draft: 0,
-    reviewed: 0,
-    final: 0,
-  }
-
-  const allScores: number[] = []
-
-  if (docsResult && docsResult.length > 0) {
-    for (const doc of docsResult as any[]) {
-      const lastUpdated = new Date(doc.last_updated)
-      const daysOld = Math.floor((new Date().getTime() - lastUpdated.getTime()) / (1000 * 60 * 60 * 24))
-      const freshness = calculateFreshness(lastUpdated)
-
-      const docScore: DocumentScore = {
-        documentName: doc.document_name,
-        completionPct: doc.completion_pct ?? 0,
-        status: doc.status,
-        lastUpdated,
-        daysOld,
-        freshness,
-        metadata: {
-          wordCount: doc.word_count,
-          pageCount: doc.page_count,
-          signatureCount: doc.signature_count,
-        },
-      }
-
-      // Add to phase map
-      if (!byPhase.has(doc.phase_id)) {
-        byPhase.set(doc.phase_id, [])
-      }
-      byPhase.get(doc.phase_id)!.push(docScore)
-
-      // Track stale documents
-      if (freshness === 'very_stale') {
-        staleDocuments.push(docScore)
-      }
-
-      // Track completion by status
-      if (completionByStatus[doc.status] !== undefined) {
-        completionByStatus[doc.status]++
-      }
-
-      // Accumulate score for overall health
-      allScores.push(doc.completion_pct ?? 0)
-    }
-  }
-
-  // Calculate overall document health
-  const overallDocumentHealth = allScores.length > 0 ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length) : 0
-
-  return {
-    byPhase,
-    overallDocumentHealth,
-    staleDocuments,
-    completionByStatus,
-  }
-}
-
-/**
- * Initialize document scorecards for a new company
- * Creates entries for all required documents across all phases
- */
-export async function initializeDocumentScorecardsForCompany(companyId: string): Promise<void> {
-  const documents: Array<{ documentName: string; phaseId: number }> = []
-
-  for (const [phaseIdStr, docs] of Object.entries(PHASE_DOCUMENTS)) {
-    const phaseId = parseInt(phaseIdStr, 10)
-    for (const documentName of Object.keys(docs)) {
-      documents.push({
-        documentName,
-        phaseId,
-      })
-    }
-  }
+export function getRefreshIndicators(
+  documents: DocumentScorecard[]
+): DocumentRefreshIndicator[] {
+  const indicators: DocumentRefreshIndicator[] = []
 
   for (const doc of documents) {
-    try {
-      await sql`
-        INSERT INTO document_scorecards (
-          company_id,
-          document_name,
-          phase_id,
-          completion_pct,
-          status,
-          last_updated
-        )
-        VALUES (${companyId}, ${doc.documentName}, ${doc.phaseId}, 0, 'not_started', NOW())
-        ON CONFLICT (company_id, document_name) DO NOTHING
-      `
-    } catch (error) {
-      console.error(`Error initializing document scorecard for ${doc.documentName}:`, error)
-      throw error
-    }
-  }
-}
-
-/**
- * Get document requirements and current status for a phase
- */
-export async function getPhaseDocumentRequirements(
-  phaseId: number,
-  companyId?: string
-): Promise<
-  Array<{
-    name: string
-    minPages: number
-    aiRequired: boolean
-    current?: {
-      completionPct: number
-      status: string
-      pageCount: number | null
-    }
-  }>
-> {
-  const requirements = PHASE_DOCUMENTS[phaseId] ?? {}
-  const requiredDocs = Object.entries(requirements).map(([name, info]) => ({
-    name,
-    minPages: info.minPages,
-    aiRequired: info.aiRequired,
-  }))
-
-  if (!companyId) {
-    return requiredDocs
-  }
-
-  // Get current status
-  const statusResult = await sql`
-    SELECT document_name, completion_pct, status, page_count
-    FROM document_scorecards
-    WHERE company_id = ${companyId} AND phase_id = ${phaseId}
-  `
-
-  const statusMap: Record<string, any> = {}
-  if (statusResult && statusResult.length > 0) {
-    for (const doc of statusResult as any[]) {
-      statusMap[doc.document_name] = {
-        completionPct: doc.completion_pct,
-        status: doc.status,
-        pageCount: doc.page_count,
-      }
-    }
-  }
-
-  return requiredDocs.map((req) => ({
-    ...req,
-    current: statusMap[req.name] || {
-      completionPct: 0,
-      status: 'not_started',
-      pageCount: null,
-    },
-  }))
-}
-
-/**
- * Mark document for legal review
- * Updates status to 'reviewed' and sets legal review date
- */
-export async function markDocumentForLegalReview(companyId: string, documentName: string): Promise<void> {
-  const result = await sql`
-    SELECT phase_id FROM document_scorecards
-    WHERE company_id = ${companyId} AND document_name = ${documentName}
-  `
-
-  if (!result || result.length === 0) {
-    throw new Error(`Document not found: ${documentName}`)
-  }
-
-  const phaseId = (result[0] as any).phase_id
-
-  await sql`
-    UPDATE document_scorecards
-    SET status = 'reviewed', legal_review_date = NOW(), last_updated = NOW()
-    WHERE company_id = ${companyId} AND document_name = ${documentName}
-  `
-
-  // Recalculate phase score
-  const phaseScore = await scorePhaseCompleteness(companyId, phaseId)
-  await sql`
-    UPDATE phase_scorecards
-    SET
-      document_completeness_score = ${phaseScore.documentCompletenessScore},
-      combined_phase_score = ${phaseScore.combinedPhaseScore},
-      updated_at = NOW()
-    WHERE company_id = ${companyId} AND phase_id = ${phaseId}
-  `
-}
-
-/**
- * Get document management summary for dashboard
- * Returns progress metrics per phase
- */
-export async function getDocumentManagementSummary(
-  companyId: string
-): Promise<
-  Array<{
-    phaseId: number
-    phaseName: string
-    total: number
-    approved: number
-    finalized: number
-    reviewed: number
-    progressPercentage: number
-    averageCompletionPct: number
-    staleCount: number
-  }>
-> {
-  const summaryResult = await sql`
-    SELECT
-      phase_id,
-      COUNT(*) as total,
-      COUNT(*) FILTER (WHERE status = 'final' OR status = 'approved') as finalized,
-      COUNT(*) FILTER (WHERE status = 'reviewed') as reviewed,
-      COUNT(*) FILTER (WHERE status NOT IN ('not_started', 'in_progress')) as in_progress_or_better,
-      COUNT(*) FILTER (WHERE (NOW() - INTERVAL '30 days') > last_updated) as stale_count,
-      AVG(completion_pct)::INT as avg_completion
-    FROM document_scorecards
-    WHERE company_id = ${companyId}
-    GROUP BY phase_id
-    ORDER BY phase_id
-  `
-
-  if (!summaryResult || summaryResult.length === 0) {
-    return []
-  }
-
-  return (summaryResult as any[]).map((row) => ({
-    phaseId: row.phase_id,
-    phaseName: PHASE_NAMES[row.phase_id] ?? `Phase ${row.phase_id}`,
-    total: row.total,
-    approved: row.finalized,
-    finalized: row.finalized,
-    reviewed: row.reviewed,
-    progressPercentage: Math.round(((row.in_progress_or_better / row.total) * 100) || 0),
-    averageCompletionPct: row.avg_completion ?? 0,
-    staleCount: row.stale_count ?? 0,
-  }))
-}
-
-/**
- * Get all documents needing attention
- * Returns documents that are stale (>30 days) or incomplete (not final)
- */
-export async function getDocumentsNeedingAttention(companyId: string): Promise<DocumentScore[]> {
-  const docsResult = await sql`
-    SELECT
-      document_name,
-      phase_id,
-      completion_pct,
-      status,
-      last_updated,
-      word_count,
-      page_count,
-      signature_count
-    FROM document_scorecards
-    WHERE company_id = ${companyId}
-    AND (
-      (NOW() - INTERVAL '30 days') > last_updated
-      OR status NOT IN ('final', 'approved')
+    const { needsRefresh, daysOld } = isDocumentRefreshNeeded(
+      doc.metadata.lastReviewDate,
+      doc.metadata.isExecuted
     )
-    ORDER BY last_updated ASC
-  `
 
-  const attention: DocumentScore[] = []
+    if (needsRefresh || daysOld > 30) {
+      let priority: 'high' | 'medium' | 'low' = 'low'
+      if (daysOld > 90) priority = 'high'
+      else if (daysOld > 60) priority = 'medium'
 
-  if (docsResult && docsResult.length > 0) {
-    for (const doc of docsResult as any[]) {
-      const lastUpdated = new Date(doc.last_updated)
-      const daysOld = Math.floor((new Date().getTime() - lastUpdated.getTime()) / (1000 * 60 * 60 * 24))
-      const freshness = calculateFreshness(lastUpdated)
-
-      attention.push({
-        documentName: doc.document_name,
-        completionPct: doc.completion_pct ?? 0,
-        status: doc.status,
-        lastUpdated,
-        daysOld,
-        freshness,
-        metadata: {
-          wordCount: doc.word_count,
-          pageCount: doc.page_count,
-          signatureCount: doc.signature_count,
-        },
+      indicators.push({
+        documentName: doc.documentName,
+        daysOldSinceReview: daysOld === Infinity ? 0 : daysOld,
+        recommendedRefreshDate: new Date(
+          doc.metadata.lastReviewDate!.getTime() + (doc.metadata.isExecuted ? 90 : 30) * 24 * 60 * 60 * 1000
+        ),
+        refreshPriority: priority,
       })
     }
   }
 
-  return attention
+  return indicators.sort((a, b) => {
+    const priorityOrder = { high: 0, medium: 1, low: 2 }
+    return priorityOrder[a.refreshPriority] - priorityOrder[b.refreshPriority]
+  })
 }
 
 /**
- * Calculate overall document readiness score across all phases
- * Weighted: 70% completion, 30% status quality
+ * IPO Phase Documents - Define what documents are required per phase
+ * and their typical content expectations
  */
-export async function calculateDocumentReadinessScore(companyId: string): Promise<number> {
-  const docsResult = await sql`
-    SELECT completion_pct, status
-    FROM document_scorecards
-    WHERE company_id = ${companyId}
-  `
+export const PHASE_REQUIRED_DOCUMENTS: Record<number, string[]> = {
+  1: [
+    'Organizational Chart',
+    'Articles of Incorporation / Bylaws',
+    'Shareholder Registry',
+    'Cap Table (Spreadsheet)',
+  ],
+  2: [
+    'Cap Table (Legal Format)',
+    'Shareholder Agreements',
+    'Option Pool Documentation',
+    'Minute Books',
+  ],
+  3: [
+    'Business Plan (5-Year)',
+    'Market Analysis Report',
+    'Financial Projections',
+    'Competitive Landscape Study',
+  ],
+  4: [
+    'Historical Financial Statements (3 Years)',
+    'Auditor Engagement Letter',
+    'Internal Controls Assessment',
+    'Accounting Policies Documentation',
+  ],
+  5: [
+    'Legal Opinions (Articles, IP, Litigation)',
+    'Articles Amendment Documentation',
+    'Regulatory Compliance Report',
+    'Disclosure of Material Contracts',
+  ],
+  6: [
+    'Draft Prospectus / Form S-1',
+    'Risk Factor Analysis',
+    'Use of Proceeds Statement',
+    'Executive Compensation Schedule',
+  ],
+  7: [
+    'Final Prospectus / Form S-1',
+    'Underwriter Agreements',
+    'Lock-up Agreements',
+    'Officer & Director Certificates',
+  ],
+  8: [
+    'Post-IPO Governance Documents',
+    'Investor Relations Presentation',
+    'Quarterly Earnings Announcement Template',
+    'Corporate Governance Charter',
+  ],
+}
 
-  if (!docsResult || docsResult.length === 0) {
-    return 0
+/**
+ * Document quality assessment based on IPO phase expectations
+ * Returns a quality band: "minimal", "adequate", "comprehensive"
+ */
+export function assessDocumentQualityBand(
+  documentScores: number[]
+): 'minimal' | 'adequate' | 'comprehensive' {
+  if (documentScores.length === 0) return 'minimal'
+
+  const avgScore = documentScores.reduce((a, b) => a + b, 0) / documentScores.length
+
+  if (avgScore >= 80) return 'comprehensive'
+  if (avgScore >= 60) return 'adequate'
+  return 'minimal'
+}
+
+/**
+ * Estimate days to IPO readiness based on document completion
+ * More stringent than task completion alone
+ */
+export function estimateDaysToIPOReadiness(phaseScores: number[]): number {
+  // Calculate average phase score across all 8 phases
+  const averagePhaseScore = phaseScores.length > 0
+    ? phaseScores.reduce((a, b) => a + b, 0) / phaseScores.length
+    : 0
+
+  // Base estimate: 240 days (8 months) for full readiness
+  // Adjust based on current progress
+  const progressFraction = Math.max(0, Math.min(1, averagePhaseScore / 100))
+
+  // Logarithmic scaling: early progress is slow, later phases accelerate
+  const daysRemaining = 240 * Math.log(1 + (1 - progressFraction) * 7)
+
+  return Math.round(daysRemaining)
+}
+
+/**
+ * Generate a document readiness summary for dashboard display
+ */
+export interface DocumentReadinessSummary {
+  totalDocuments: number
+  documentsStarted: number
+  documentsFinal: number
+  averageMaturityScore: number
+  qualityBand: 'minimal' | 'adequate' | 'comprehensive'
+  docsNeedingRefresh: number
+  estimatedDaysToCompletion: number
+}
+
+export function getDocumentReadinessSummary(
+  documents: DocumentScorecard[],
+  phaseScores: number[]
+): DocumentReadinessSummary {
+  const maturityScores = documents.map((d) => d.maturityScore)
+  const avgMaturity = maturityScores.length > 0
+    ? maturityScores.reduce((a, b) => a + b, 0) / maturityScores.length
+    : 0
+
+  const refreshNeeded = documents.filter((d) => d.refreshNeeded).length
+
+  return {
+    totalDocuments: documents.length,
+    documentsStarted: documents.filter((d) => d.completionPercent > 0).length,
+    documentsFinal: documents.filter((d) => d.status === 'final' || d.status === 'approved').length,
+    averageMaturityScore: Math.round(avgMaturity),
+    qualityBand: assessDocumentQualityBand(maturityScores),
+    docsNeedingRefresh: refreshNeeded,
+    estimatedDaysToCompletion: estimateDaysToIPOReadiness(phaseScores),
   }
-
-  const completionScores = (docsResult as any[]).map((d) => d.completion_pct ?? 0)
-  const statusScores = (docsResult as any[]).map((d) => getStatusScore(d.status))
-
-  const avgCompletion = Math.round(completionScores.reduce((a, b) => a + b, 0) / completionScores.length)
-  const avgStatus = Math.round(statusScores.reduce((a, b) => a + b, 0) / statusScores.length)
-
-  // Weighted average: 70% completion, 30% status quality
-  return Math.round(avgCompletion * 0.7 + avgStatus * 0.3)
 }
