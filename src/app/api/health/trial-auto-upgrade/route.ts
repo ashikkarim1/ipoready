@@ -51,13 +51,13 @@ export async function GET(request: NextRequest) {
     // Get top failure reasons
     const topErrors = await sql`
       SELECT 
-        last_error,
+        error_message,
         COUNT(*) as count
       FROM trial_auto_upgrade_queue
       WHERE status IN ('failed', 'retrying')
         AND created_at > NOW() - INTERVAL '24 hours'
-        AND last_error IS NOT NULL
-      GROUP BY last_error
+        AND error_message IS NOT NULL
+      GROUP BY error_message
       ORDER BY count DESC
       LIMIT 3
     `
