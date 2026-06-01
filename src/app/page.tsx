@@ -287,14 +287,14 @@ export default function LandingPage() {
                           { label: 'IPO guide', href: '/checklist-guide' },
                         ] as { label: string; href: string }[]).map(l => (
                           <Link key={l.label} href={l.href}
-                            style={{ fontSize: '12px', fontWeight: 500, color: '#9A9A9A', textDecoration: 'none' }}
+                            style={{ fontSize: '12px', fontWeight: 500, color: '#9A9A9A', textDecoration: 'none' }}>
                             {l.label}
                           </Link>
                         ))}
                       </div>
                       <Link href="/register"
                         className="flex items-center gap-1.5 rounded-full transition-colors"
-                        style={{ background: '#1A1A1A', color: '#FFFFFF', padding: '0.3rem 0.8rem', fontSize: '12px', fontWeight: 600, textDecoration: 'none' }}
+                        style={{ background: '#1A1A1A', color: '#FFFFFF', padding: '0.3rem 0.8rem', fontSize: '12px', fontWeight: 600, textDecoration: 'none' }}>
                         Get started free <ArrowRight className="w-3 h-3" />
                       </Link>
                     </div>
