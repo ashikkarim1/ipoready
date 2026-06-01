@@ -1,4 +1,5 @@
 'use client'
+
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -101,9 +102,15 @@ const TESTIMONIALS = [
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function PurposePill({ icon: Icon, label, sub, color, bg }: {
-  icon: React.ElementType; label: string; sub: string; color: string; bg: string
-}) {
+interface PurposePillProps {
+  icon: React.ElementType
+  label: string
+  sub: string
+  color: string
+  bg: string
+}
+
+function PurposePill({ icon: Icon, label, sub, color, bg }: PurposePillProps) {
   return (
     <div className="card card-hover flex items-center gap-3.5"
       style={{ padding: '1rem 1.25rem' }}>
@@ -117,17 +124,16 @@ function PurposePill({ icon: Icon, label, sub, color, bg }: {
       </div>
     </div>
   )
-}
+};
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function LandingPage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [featuresOpen, setFeaturesOpen] = useState(false)
   const [exchangesOpen, setExchangesOpen] = useState(false)
 
   return (
-    <div className="min-h-screen" style={{ background: '#F7F6F4', color: '#1A1A1A', paddingTop: '4rem' }}>
+    <div className="min-h-screen">
 
       {/* ── Header ──────────────────────────────────────────────────────────── */}
       <header className="fixed top-0 left-0 right-0 z-50"
@@ -357,6 +363,7 @@ export default function LandingPage() {
                           <Link key={ex.label} href={ex.href}
                             className="flex items-center gap-2.5 rounded-xl transition-colors"
                             style={{ padding: '0.5rem', textDecoration: 'none', marginBottom: '1px' }}
+                          >
                             <div className="flex-shrink-0 rounded-lg flex items-center justify-center"
                               style={{ width: '30px', height: '30px', background: ex.bg }}>
                               <ex.icon className="w-3.5 h-3.5" style={{ color: ex.color }} />
@@ -389,6 +396,7 @@ export default function LandingPage() {
                           <Link key={ex.label} href={ex.href}
                             className="flex items-center gap-2.5 rounded-xl transition-colors"
                             style={{ padding: '0.5rem', textDecoration: 'none', marginBottom: '1px' }}
+                          >
                             <div className="flex-shrink-0 rounded-lg flex items-center justify-center"
                               style={{ width: '30px', height: '30px', background: ex.bg }}>
                               <ex.icon className="w-3.5 h-3.5" style={{ color: ex.color }} />
@@ -421,6 +429,7 @@ export default function LandingPage() {
                       <Link href="/register"
                         className="flex items-center gap-1.5 rounded-full flex-shrink-0 transition-colors"
                         style={{ background: '#E8312A', color: '#FFFFFF', padding: '0.375rem 0.875rem', fontSize: '12px', fontWeight: 600, textDecoration: 'none', marginLeft: '1rem' }}
+                      >
                         Find my exchange <ArrowRight className="w-3 h-3" />
                       </Link>
                     </div>
@@ -445,6 +454,7 @@ export default function LandingPage() {
             <Link href="/register"
               className="px-4 py-2 rounded-full text-sm font-semibold text-white transition-colors"
               style={{ background: '#1A1A1A' }}
+            >
               Get started
             </Link>
           </div>
@@ -937,6 +947,7 @@ export default function LandingPage() {
             <Link href="/pricing"
               className="px-7 py-3 rounded-full font-semibold text-sm transition-colors inline-flex items-center gap-2"
               style={{ color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.15)' }}
+            >
               View pricing
             </Link>
           </div>
@@ -969,28 +980,28 @@ export default function LandingPage() {
                 <a href="https://linkedin.com/company/ipoready" target="_blank" rel="noopener noreferrer"
                   aria-label="LinkedIn"
                   className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-                  style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#9A9A9A' }}
+                  style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#9A9A9A' }}>
                   <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
                 </a>
                 {/* X / Twitter */}
                 <a href="https://twitter.com/ipoready" target="_blank" rel="noopener noreferrer"
                   aria-label="Twitter / X"
                   className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-                  style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#9A9A9A' }}
+                  style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#9A9A9A' }}>
                   <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.733-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
                 </a>
                 {/* Email */}
                 <a href="mailto:hello@ipoready.com"
                   aria-label="Email"
                   className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-                  style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#9A9A9A' }}
+                  style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#9A9A9A' }}>
                   <Mail className="w-3.5 h-3.5" />
                 </a>
               </div>
               {/* auditus.ai */}
               <a href="https://auditus.ai" target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors"
-                style={{ color: '#717171' }}
+                style={{ color: '#717171' }}>
                 <Zap className="w-3 h-3" />
                 Powered by auditus.ai
                 <ExternalLink className="w-3 h-3 opacity-50" />
