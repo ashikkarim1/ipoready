@@ -3,6 +3,8 @@ import { sql } from '@/lib/db'
 import { authOptions } from '@/lib/auth'
 import type { NextRequest } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 interface FrictionPoint {
   point: string
   mentions: number
