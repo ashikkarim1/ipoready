@@ -92,8 +92,8 @@ export async function POST(req: NextRequest) {
     // Pre-fill customer email
     customer_email: customerId ? undefined : email,
 
-    success_url: `${APP_URL}/account?tab=billing&checkout=success`,
-    cancel_url:  `${APP_URL}/pricing`,
+    success_url: `${APP_URL}/account?tab=billing&checkout=success${isTrialUpgrade ? '&upgrade_from=trial' : ''}`,
+    cancel_url:  isTrialUpgrade ? `${APP_URL}/checkout?is_trial_upgrade=true&plan=${planId}` : `${APP_URL}/pricing`,
 
     metadata: {
       userId,
@@ -103,6 +103,17 @@ export async function POST(req: NextRequest) {
       isTrialUpgrade: isTrialUpgrade ? 'true' : 'false',
     },
   })
+
+  // Log checkout session creation for analytics
+  try {
+    await sql`
+      INSERT INTO subscription_state_transitions (company_id, subscription_id, from_state, to_state, trigger, metadata)
+      VALUES (${companyId}, ${(checkoutSession as any).subscription ?? null}, 'trial', 'checkout_initiated', 'trial_upgrade_checkout', ${{ planId, billing, isTrialUpgrade }})
+    `
+  } catch (err) {
+    // Non-critical logging error; continue
+    console.error('Failed to log state transition:', err)
+  }
 
   return NextResponse.json({ url: checkoutSession.url })
 }

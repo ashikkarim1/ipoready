@@ -1,115 +1,121 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { getTrialCountdownData } from '@/lib/trial-manager'
+import React, { useMemo } from 'react';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 
-interface TrialBannerProps {
-  companyId: string
+interface TrialCountdownBannerProps {
+  trialEndDate: Date;
+  companyName: string;
 }
 
-export function TrialCountdownBanner({ companyId }: TrialBannerProps) {
-  const [data, setData] = useState<{
-    daysRemaining: number
-    percentage: number
-    trialPlan: string
-    isLastDay: boolean
-  } | null>(null)
-  const [loading, setLoading] = useState(true)
+const TrialCountdownBanner = React.memo<TrialCountdownBannerProps>(
+  ({ trialEndDate, companyName }) => {
+    const trialMetrics = useMemo(() => {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const endDate = new Date(
+        trialEndDate.getFullYear(),
+        trialEndDate.getMonth(),
+        trialEndDate.getDate()
+      );
 
-  useEffect(() => {
-    async function loadTrialData() {
-      try {
-        const trialData = await getTrialCountdownData(companyId)
-        setData(trialData)
-      } catch (error) {
-        console.error('Failed to load trial data:', error)
-      } finally {
-        setLoading(false)
+      const diffTime = endDate.getTime() - today.getTime();
+      const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      const TRIAL_DURATION = 14;
+      const percentageRemaining = Math.max(
+        0,
+        Math.min(100, (daysRemaining / TRIAL_DURATION) * 100)
+      );
+
+      return {
+        daysRemaining: Math.max(0, daysRemaining),
+        percentageRemaining,
+      };
+    }, [trialEndDate]);
+
+    const getProgressBarColor = () => {
+      if (trialMetrics.daysRemaining > 7) {
+        return 'bg-green-500';
+      } else if (trialMetrics.daysRemaining >= 3) {
+        return 'bg-yellow-500';
+      } else {
+        return 'bg-red-500';
       }
-    }
+    };
 
-    loadTrialData()
-  }, [companyId])
+    const getBackgroundColor = () => {
+      if (trialMetrics.daysRemaining > 7) {
+        return 'bg-blue-50 border-blue-200';
+      } else if (trialMetrics.daysRemaining >= 3) {
+        return 'bg-amber-50 border-amber-200';
+      } else {
+        return 'bg-red-50 border-red-200';
+      }
+    };
 
-  if (loading || !data) {
-    return null
-  }
+    const formattedEndDate = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(trialEndDate);
 
-  if (data.daysRemaining <= 0) {
-    return null
-  }
-
-  const bgColor = data.isLastDay
-    ? 'bg-red-50 border-red-200'
-    : 'bg-amber-50 border-amber-200'
-  const textColor = data.isLastDay ? 'text-red-900' : 'text-amber-900'
-  const badgeColor = data.isLastDay
-    ? 'bg-red-100 text-red-800'
-    : 'bg-amber-100 text-amber-800'
-  const progressColor = data.isLastDay ? 'bg-red-500' : 'bg-amber-500'
-
-  return (
-    <div className={`border-l-4 p-4 mb-4 ${bgColor}`}>
-      <div className="flex items-center justify-between">
-        <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <p className={`font-semibold ${textColor}`}>
-              {data.isLastDay
-                ? '⏰ Your trial expires today!'
-                : `📅 Trial expires in ${data.daysRemaining} day${
-                    data.daysRemaining === 1 ? '' : 's'
-                  }`}
-            </p>
-            <span className={`px-2 py-1 rounded text-sm font-medium ${badgeColor}`}>
-              {data.trialPlan.charAt(0).toUpperCase() + data.trialPlan.slice(1)} Plan
-            </span>
-          </div>
-
-          {/* Progress bar */}
-          <div className="w-full bg-gray-200 rounded-full h-2 mb-3 overflow-hidden">
-            <div
-              className={`h-full ${progressColor} transition-all`}
-              style={{ width: `${data.percentage}%` }}
+    return (
+      <div
+        className={`w-full border-b-2 transition-colors duration-300 ${getBackgroundColor()}`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          {/* Progress Bar */}
+          <div className="mb-4 sm:mb-5 h-2 bg-gray-200 rounded-full overflow-hidden">
+            <motion.div
+              className={`h-full ${getProgressBarColor()} transition-colors duration-300`}
+              initial={{ width: 0 }}
+              animate={{ width: `${trialMetrics.percentageRemaining}%` }}
+              transition={{ type: 'spring', stiffness: 100, damping: 15 }}
             />
           </div>
 
-          <p className={`text-sm ${textColor} mb-3`}>
-            Upgrade to a premium plan to continue using IPOReady after your trial ends.
-            All your data will be preserved.
-          </p>
+          {/* Main Content */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {/* Left Content */}
+            <div className="flex-1">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">
+                Trial Expires Soon
+              </h2>
+              <p className="text-sm sm:text-base text-gray-700 mb-2 sm:mb-0">
+                Your trial for{' '}
+                <span className="font-semibold text-gray-900">{companyName}</span>{' '}
+                expires in{' '}
+                <span className="font-bold text-gray-900">
+                  {trialMetrics.daysRemaining}{' '}
+                  {trialMetrics.daysRemaining === 1 ? 'day' : 'days'}
+                </span>{' '}
+                ({formattedEndDate})
+              </p>
+            </div>
 
-          <div className="flex gap-3">
+            {/* CTA Button */}
             <Link
-              href="/checkout?plan=growth"
-              className="inline-block px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+              href="/app/checkout?is_trial_upgrade=true"
+              className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200 whitespace-nowrap text-sm sm:text-base shadow-sm hover:shadow-md"
             >
               Upgrade to Premium
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </Link>
-            <button
-              onClick={(e) => {
-                // Close banner (optional - user can just close it)
-                const banner = (e.currentTarget as HTMLElement).closest('[data-trial-banner]')
-                if (banner) {
-                  (banner as HTMLElement).style.display = 'none'
-                }
-              }}
-              className="px-4 py-2 bg-transparent border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors"
-            >
-              Dismiss
-            </button>
           </div>
-        </div>
-      </div>
 
-      {data.isLastDay && (
-        <div className="mt-3 pt-3 border-t border-red-200">
-          <p className={`text-sm ${textColor}`}>
-            💡 <strong>Need help?</strong> Contact our support team at
-            support@ipoready.ai or call +1-416-555-0123
+          {/* Mobile-only Secondary Text */}
+          <p className="sm:hidden text-xs text-gray-600 mt-3">
+            Upgrade now to continue using IPOReady after your trial ends.
           </p>
         </div>
-      )}
-    </div>
-  )
-}
+      </div>
+    );
+  }
+);
+
+TrialCountdownBanner.displayName = 'TrialCountdownBanner';
+
+export { TrialCountdownBanner };

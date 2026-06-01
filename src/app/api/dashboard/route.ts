@@ -18,6 +18,8 @@ interface CompanyRow {
   currency: string
   language: string
   created_at: string
+  trial_status?: string
+  trial_end_date?: string
 }
 
 interface TaskStatusCountRow {
@@ -60,7 +62,8 @@ export async function GET() {
   // 1. Company data
   const companyRows = await sql`
     SELECT id, name, listing_type, target_exchange, current_phase, pace_score,
-           estimated_days_to_ipo, progress_percentage, currency, language, created_at
+           estimated_days_to_ipo, progress_percentage, currency, language, created_at,
+           trial_status, trial_end_date
     FROM companies
     WHERE id = ${companyId}
     LIMIT 1
@@ -177,6 +180,8 @@ export async function GET() {
       currency: companyRow.currency,
       language: companyRow.language,
       createdAt: companyRow.created_at,
+      trial_status: companyRow.trial_status,
+      trial_end_date: companyRow.trial_end_date,
     },
     tasksSummary,
     phaseData,

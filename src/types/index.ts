@@ -57,6 +57,8 @@ export interface Company {
   language: Language
   createdAt: string
   ownerId: string
+  trial_status?: 'not_started' | 'active' | 'expired' | 'upgraded'
+  trial_end_date?: string
 }
 
 export interface Task {

@@ -173,7 +173,7 @@ export default function PricingPage() {
     ? ((session.user as any).subscriptionPlan ?? 'starter')
     : null
 
-  async function handleCheckout(planId: string) {
+  async function handleCheckout(planId: string, isFromTrial: boolean = false) {
     if (!isLoggedIn) {
       window.location.href = '/register'
       return
@@ -183,7 +183,7 @@ export default function PricingPage() {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ planId, billing, currency }),
+        body: JSON.stringify({ planId, billing, currency, isTrialUpgrade: isFromTrial }),
       })
       const data = await res.json()
       if (data.url) {

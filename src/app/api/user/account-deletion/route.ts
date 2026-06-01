@@ -119,7 +119,12 @@ export async function POST(req: Request) {
     // Send confirmation email for each company
     for (const company of companies) {
       try {
-        await sendSubscriptionCancelledEmail(company.id)
+        await sendSubscriptionCancelledEmail(
+          company.email,
+          company.name,
+          company.subscription_plan || 'starter',
+          new Date().toLocaleDateString()
+        )
       } catch (err) {
         console.error(`Failed to send deletion email for company ${company.id}:`, err)
       }

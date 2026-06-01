@@ -217,6 +217,12 @@ export async function GET(req: NextRequest) {
       progressPercentage: company.progress_percentage || 0,
       currentPhase: company.current_phase || 'pre_planning',
       peerPercentile,
+      // Company factors for UI components
+      cashRunwayMonths: company.cash_runway_months || null,
+      teamSize: company.team_size || null,
+      cfoHired: !!company.cfo_hired_at,
+      boardSize: company.board_size || null,
+      auditorSelected: company.auditor_selected || false,
       benchmarkComparison: {
         avgPace: Math.round(benchmarks.avg_pace),
         medianPace: Math.round(benchmarks.median_pace),

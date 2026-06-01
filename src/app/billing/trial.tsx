@@ -61,7 +61,12 @@ export default function TrialPage({ companyId }: { companyId: string }) {
       {/* Header with countdown banner */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900 mb-4">Your IPOReady Trial</h1>
-        <TrialCountdownBanner companyId={companyId} />
+        {subscription.trialEndDate && (
+          <TrialCountdownBanner
+            trialEndDate={new Date(subscription.trialEndDate)}
+            companyName="Your Company"
+          />
+        )}
       </div>
 
       {/* What's Included */}

@@ -13,9 +13,9 @@ import { useAppStore } from '@/store/app-store'
 import { PHASE_LABELS, PHASE_ORDER } from '@/lib/utils'
 import { Phase } from '@/types'
 import Link from 'next/link'
-import { TrialCountdownBanner } from '@/components/TrialCountdownBanner'
 import { ReadinessFactorsCard } from '@/components/ReadinessFactorsCard'
 import { SequencingAlertsCard } from '@/components/SequencingAlertsCard'
+import { TrialCountdownBanner } from '@/components/TrialCountdownBanner'
 
 const DEMO_TASKS_SUMMARY = {
   total: 48, completed: 11, inProgress: 5, blocked: 1, notStarted: 31,
@@ -357,9 +357,16 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 px-4 sm:px-6 lg:px-0">
+    <>
+      {company?.trial_status === 'active' && company.trial_end_date && (
+        <TrialCountdownBanner
+          trialEndDate={new Date(company.trial_end_date)}
+          companyName={company.name}
+        />
+      )}
+      <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 px-4 sm:px-6 lg:px-0">
 
-      {/* Header */}
+        {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
           <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Mission Control</h1>
@@ -388,10 +395,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Trial Countdown Banner */}
-      {dashData?.company?.id && (
-        <TrialCountdownBanner companyId={dashData.company.id} />
-      )}
 
       {/* Notifications */}
       {notifications.filter(n => !n.read).length > 0 && (
@@ -1734,6 +1737,7 @@ export default function DashboardPage() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+      </div>
+    </>
   )
 }

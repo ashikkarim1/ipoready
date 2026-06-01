@@ -89,8 +89,14 @@ export default function BillingPage() {
     router.push('/api/billing/portal')
   }
 
-  const handleUpgradeClick = (plan: string) => {
-    router.push(`/checkout?plan=${plan.toLowerCase()}`)
+  const handleUpgradeClick = (plan: string, isFromTrial: boolean = false) => {
+    const params = new URLSearchParams({
+      plan: plan.toLowerCase(),
+    })
+    if (isFromTrial) {
+      params.append('is_trial_upgrade', 'true')
+    }
+    router.push(`/checkout?${params.toString()}`)
   }
 
   const handleCancelClick = () => {

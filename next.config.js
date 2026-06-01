@@ -6,11 +6,11 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['@neondatabase/serverless'],
 
-    // Tree-shake lucide-react, framer-motion, date-fns — import only what's
+    // Tree-shake lucide-react, date-fns — import only what's
     // used rather than the full bundle. Saves ~400 KB across all routes.
+    // Removed framer-motion from optimizePackageImports due to RSC bundling conflicts
     optimizePackageImports: [
       'lucide-react',
-      'framer-motion',
       'date-fns',
     ],
   },

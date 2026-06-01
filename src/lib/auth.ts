@@ -14,6 +14,7 @@ declare module 'next-auth' {
     isApproved?: boolean
     subscriptionPlan?: string
     isNewUser?: boolean
+    trialStatus?: string
   }
 
   interface Session {
@@ -27,6 +28,7 @@ declare module 'next-auth' {
       isApproved?: boolean
       subscriptionPlan?: string
       isNewUser?: boolean
+      trialStatus?: string
     }
   }
 }
@@ -39,6 +41,7 @@ declare module 'next-auth/jwt' {
     isApproved?: boolean
     subscriptionPlan?: string
     isNewUser?: boolean
+    trialStatus?: string
   }
 }
 
@@ -65,6 +68,7 @@ async function upsertOAuthUser(params: {
   companyId: string | null
   isApproved: boolean
   subscriptionPlan: string
+  trialStatus: string
   isNewUser: boolean
 }> {
   const { provider, providerAccountId, email, name, avatarUrl } = params
@@ -72,7 +76,8 @@ async function upsertOAuthUser(params: {
   // 1. Try to find by oauth_provider + oauth_id (returning user via same provider)
   const existing = await sql`
     SELECT u.id, u.role, u.company_id, u.is_approved,
-           COALESCE(c.subscription_plan, 'starter') AS subscription_plan
+           COALESCE(c.subscription_plan, 'starter') AS subscription_plan,
+           COALESCE(c.trial_status, 'none') AS trial_status
     FROM users u
     LEFT JOIN companies c ON c.id = u.company_id
     WHERE u.oauth_provider = ${provider} AND u.oauth_id = ${providerAccountId}
@@ -87,6 +92,7 @@ async function upsertOAuthUser(params: {
       companyId: row.company_id,
       isApproved: row.is_approved,
       subscriptionPlan: row.subscription_plan ?? 'starter',
+      trialStatus: row.trial_status ?? 'none',
       isNewUser: false,
     }
   }
@@ -94,7 +100,8 @@ async function upsertOAuthUser(params: {
   // 2. Try to find by email (user may have registered via credentials first)
   const byEmail = await sql`
     SELECT u.id, u.role, u.company_id, u.is_approved,
-           COALESCE(c.subscription_plan, 'starter') AS subscription_plan
+           COALESCE(c.subscription_plan, 'starter') AS subscription_plan,
+           COALESCE(c.trial_status, 'none') AS trial_status
     FROM users u
     LEFT JOIN companies c ON c.id = u.company_id
     WHERE u.email = ${email.toLowerCase()}
@@ -118,6 +125,7 @@ async function upsertOAuthUser(params: {
       companyId: row.company_id,
       isApproved: row.is_approved,
       subscriptionPlan: row.subscription_plan ?? 'starter',
+      trialStatus: row.trial_status ?? 'none',
       isNewUser: false,
     }
   }
@@ -144,6 +152,7 @@ async function upsertOAuthUser(params: {
     companyId: row.company_id ?? null,
     isApproved: false,
     subscriptionPlan: 'starter',
+    trialStatus: 'none',
     isNewUser: true,
   }
 }
@@ -262,6 +271,7 @@ export const authOptions: NextAuthOptions = {
         ;(user as any).companyId       = dbUser.companyId
         ;(user as any).isApproved      = dbUser.isApproved
         ;(user as any).subscriptionPlan = dbUser.subscriptionPlan
+        ;(user as any).trialStatus     = dbUser.trialStatus
         ;(user as any).isNewUser       = dbUser.isNewUser
 
         return true
@@ -281,6 +291,7 @@ export const authOptions: NextAuthOptions = {
         token.companyId       = (user as any).companyId
         token.isApproved      = (user as any).isApproved
         token.subscriptionPlan = (user as any).subscriptionPlan ?? 'starter'
+        token.trialStatus     = (user as any).trialStatus ?? 'none'
         token.isNewUser       = (user as any).isNewUser ?? false
       }
       return token
@@ -296,6 +307,7 @@ export const authOptions: NextAuthOptions = {
         ;(session.user as any).companyId       = token.companyId
         ;(session.user as any).isApproved      = token.isApproved
         ;(session.user as any).subscriptionPlan = token.subscriptionPlan ?? 'starter'
+        ;(session.user as any).trialStatus     = token.trialStatus ?? 'none'
         ;(session.user as any).isNewUser       = token.isNewUser ?? false
       }
       return session

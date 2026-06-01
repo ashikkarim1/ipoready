@@ -9,6 +9,10 @@ import {
 } from 'lucide-react'
 import { ReadinessFactorsCard } from '@/components/ReadinessFactorsCard'
 import { SequencingAlertsCard } from '@/components/SequencingAlertsCard'
+import { PaceReadinessFactorsCard } from '@/components/PaceReadinessFactorsCard'
+import { PaceConfidenceBadge } from '@/components/PaceConfidenceBadge'
+import { PaceSequenceAlertsSection } from '@/components/PaceSequenceAlertsSection'
+import { PaceDocumentReadinessCard } from '@/components/PaceDocumentReadinessCard'
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -38,6 +42,17 @@ interface PaceScores {
   peerPercentile: number
   trend: TrendPoint[]
   phases: PhaseData[]
+  cashRunwayMonths?: number
+  teamSize?: number
+  cfoHired?: boolean
+  boardSize?: number
+  auditorSelected?: boolean
+  documentReadinessScore?: number
+  sequencingAlerts?: any[]
+  predictiveScore?: {
+    confidenceLevel: 'low' | 'medium' | 'high'
+    breakdown?: Record<string, number>
+  }
 }
 
 // ── Static data (not from DB) ──────────────────────────────────────────────
@@ -169,6 +184,64 @@ export default function PacePage() {
           </div>
         </div>
       </motion.div>
+
+      {/* ── NEW PACE UI Components ────────────────────────────────────── */}
+      {!loading && scores && (
+        <>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+            {/* Readiness Factors Card */}
+            <PaceReadinessFactorsCard
+              cashRunwayMonths={scores.cashRunwayMonths || 12}
+              teamSize={scores.teamSize || 45}
+              cfoHired={scores.cfoHired || false}
+              boardSize={scores.boardSize || 4}
+              auditorSelected={scores.auditorSelected || false}
+              marketConditions="Stable"
+            />
+
+            {/* Confidence Badge */}
+            <PaceConfidenceBadge
+              confidenceLevel={scores.predictiveScore?.confidenceLevel || 'low'}
+              confidenceScore={Math.round((scores.predictiveScore?.breakdown ? 
+                (Object.values(scores.predictiveScore.breakdown).filter((v: any) => v > 0).length / 6) * 100 
+                : 0))}
+              factorsComplete={scores.predictiveScore?.breakdown ? 
+                Object.values(scores.predictiveScore.breakdown).filter((v: any) => v > 0).length 
+                : 0}
+              totalFactors={6}
+            />
+          </div>
+
+          {/* Sequencing Alerts Section */}
+          {scores.sequencingAlerts && scores.sequencingAlerts.length > 0 && (
+            <div style={{ marginBottom: '24px' }}>
+              <PaceSequenceAlertsSection
+                alerts={scores.sequencingAlerts.map((alert: any, idx: number) => ({
+                  id: `alert-${idx}`,
+                  ruleText: alert.title || 'Unknown Alert',
+                  currentPhase: 1,
+                  blockedUntilPhase: 5,
+                  severity: alert.severity === 'critical' ? 'error' : 'warning',
+                }))}
+              />
+            </div>
+          )}
+
+          {/* Document Readiness Card */}
+          <div style={{ marginBottom: '24px' }}>
+            <PaceDocumentReadinessCard
+              overallScore={scores.documentReadinessScore || 0}
+              phases={(scores.phases || []).map((phase: any, idx: number) => ({
+                phase: idx + 1,
+                phaseName: phase.phaseName || `Phase ${idx + 1}`,
+                requiredDocCount: Math.max(2, 12 - (idx * 1)),
+                completionPercentage: phase.completion || 0,
+                hasStaleDocuments: idx === 1, // Demo: show stale docs flag for phase 2
+              }))}
+            />
+          </div>
+        </>
+      )}
 
       {/* ── Top KPI row ─────────────────────────────────────────────────── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '24px' }}>

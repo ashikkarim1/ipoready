@@ -1,673 +1,556 @@
-/**
- * Stripe Webhook Handler - SECURE IMPLEMENTATION
- * Endpoint: POST /api/webhooks/stripe
- * 
- * CRITICAL SECURITY: Signature verification happens FIRST (line 1 of processing)
- * Uses state machine for subscription lifecycle validation
- * Implements rate limiting and idempotency checks
- */
-
 import { NextRequest, NextResponse } from 'next/server'
+import Stripe from 'stripe'
 import { sql } from '@/lib/db'
-import {
-  verifyWebhookSignatureSecure,
-  checkWebhookIdempotency,
-  checkWebhookRateLimit,
-  logWebhookEventSecure,
-  processWebhookSecurely,
-} from '@/lib/stripe-webhook-secure'
-import {
-  validateStateTransition,
-  updateSubscriptionStateSecure,
-  SubscriptionState,
-} from '@/lib/subscription-state-machine'
-import { sendBillingNotificationEmail } from '@/lib/email-notifications'
-import { recordWebhookMetrics } from '@/lib/monitoring/webhook-metrics'
+import { sendEmail } from '@/lib/email-service'
+import { getStripe } from '@/lib/stripe'
 
-// Stripe event type definitions
-interface StripeEvent {
-  id: string
-  type: string
-  created: number
-  data: {
-    object: Record<string, any>
-    previous_attributes?: Record<string, any>
-  }
-}
+// Stripe requires raw body for signature verification
+export const runtime = 'nodejs'
 
 /**
- * Helper: Get company from Stripe customer ID
+ * Extract email from company record
  */
-async function getCompanyByStripeCustomerId(customerId: string) {
-  const result = await sql`
-    SELECT id, name, email FROM companies
-    WHERE stripe_customer_id = ${customerId}
-    LIMIT 1
-  `
-  return result.length > 0 ? (result[0] as any) : null
-}
-
-/**
- * Helper: Map Stripe plan ID to plan tier
- */
-function getPlanTierFromStripePrice(priceId: string): string {
-  // Map Stripe price ID to plan tier (starter, growth, enterprise)
-  // This matches the PRICE_IDS config in stripe.ts
-  const priceMap: Record<string, string> = {
-    [process.env.STRIPE_PRICE_STARTER_MONTHLY ?? '']: 'starter',
-    [process.env.STRIPE_PRICE_STARTER_SIXMONTH ?? '']: 'starter',
-    [process.env.STRIPE_PRICE_STARTER_ANNUAL ?? '']: 'starter',
-    [process.env.STRIPE_PRICE_GROWTH_MONTHLY ?? '']: 'growth',
-    [process.env.STRIPE_PRICE_GROWTH_SIXMONTH ?? '']: 'growth',
-    [process.env.STRIPE_PRICE_GROWTH_ANNUAL ?? '']: 'growth',
-    [process.env.STRIPE_PRICE_ENTERPRISE_MONTHLY ?? '']: 'enterprise',
-    [process.env.STRIPE_PRICE_ENTERPRISE_SIXMONTH ?? '']: 'enterprise',
-    [process.env.STRIPE_PRICE_ENTERPRISE_ANNUAL ?? '']: 'enterprise',
-  }
-  return priceMap[priceId] ?? 'growth' // default to growth
-}
-
-/**
- * Helper: Map billing interval to subscription interval
- */
-function getSubscriptionInterval(
-  interval: string,
-  intervalCount: number
-): string {
-  if (interval === 'month') {
-    if (intervalCount === 1) return 'monthly'
-    if (intervalCount === 6) return 'sixmonth'
-    if (intervalCount === 12) return 'annual'
-  }
-  return 'monthly'
-}
-
-/**
- * Handle customer.subscription.created
- */
-async function handleSubscriptionCreated(event: StripeEvent) {
-  const obj = event.data.object
-  const customerId = obj.customer as string
-  const subscriptionId = obj.id as string
-
-  // Find company
-  const company = await getCompanyByStripeCustomerId(customerId)
-  if (!company) {
-    console.warn(`Company not found for customer: ${customerId}`)
-    return
-  }
-
+async function getCompanyEmail(companyId: string): Promise<string | null> {
   try {
-    // Extract subscription details
-    const item = obj.items?.data?.[0]
-    const priceId = item?.price?.id
-    const planTier = getPlanTierFromStripePrice(priceId)
-    const interval = getSubscriptionInterval(obj.billing_cycle_anchor_config?.interval, obj.items?.data?.[0]?.billing_thresholds?.usage_gte ?? 1)
-    const currentPeriodStart = new Date(obj.current_period_start * 1000)
-    const currentPeriodEnd = new Date(obj.current_period_end * 1000)
-    const nextBillingDate = currentPeriodEnd
+    const result = await sql`
+      SELECT email FROM companies WHERE id = ${companyId} LIMIT 1
+    `
+    if (result.length > 0) {
+      const company = result[0] as any
+      return company.email || null
+    }
+    return null
+  } catch (error) {
+    console.error('[stripe-webhook] Error fetching company email:', error)
+    return null
+  }
+}
 
-    // Update company subscription status
+/**
+ * Get company by Stripe customer ID
+ */
+async function getCompanyByStripeCustomerId(
+  stripeCustomerId: string
+): Promise<{ id: string; email: string | null; name: string } | null> {
+  try {
+    const result = await sql`
+      SELECT id, email, name FROM companies WHERE stripe_customer_id = ${stripeCustomerId} LIMIT 1
+    `
+    if (result.length > 0) {
+      const company = result[0] as any
+      return {
+        id: company.id,
+        email: company.email,
+        name: company.name,
+      }
+    }
+    return null
+  } catch (error) {
+    console.error('[stripe-webhook] Error fetching company by Stripe ID:', error)
+    return null
+  }
+}
+
+/**
+ * Handler: customer.subscription.created
+ */
+async function handleSubscriptionCreated(event: Stripe.CustomerSubscriptionCreatedEvent) {
+  const subscription = event.data.object
+  const customerId = subscription.customer as string
+  const subscriptionId = subscription.id
+  const plan = subscription.items.data[0]?.plan
+  const priceId = subscription.items.data[0]?.price.id
+
+  // Extract plan name and interval from metadata
+  let planName = 'growth'
+  let interval = 'monthly'
+
+  if (priceId) {
+    // Match priceId to plan name (you may need to adjust based on your Stripe setup)
+    if (priceId.includes('starter')) planName = 'starter'
+    else if (priceId.includes('enterprise')) planName = 'enterprise'
+    else planName = 'growth'
+
+    // Extract interval
+    if (priceId.includes('annual') || subscription.items.data[0]?.plan.interval === 'year') {
+      interval = 'annual'
+    } else if (priceId.includes('sixmonth')) {
+      interval = 'sixmonth'
+    } else {
+      interval = 'monthly'
+    }
+  }
+
+  const periodStart = new Date((subscription as any).current_period_start * 1000)
+  const periodEnd = new Date((subscription as any).current_period_end * 1000)
+
+  // Update companies table
+  const company = await getCompanyByStripeCustomerId(customerId)
+  if (company) {
     await sql`
       UPDATE companies
       SET
         stripe_customer_id = ${customerId},
         subscription_id = ${subscriptionId},
         subscription_status = 'active',
-        subscription_plan = ${planTier},
+        subscription_plan = ${planName},
         subscription_interval = ${interval},
-        current_period_start = ${currentPeriodStart},
-        current_period_end = ${currentPeriodEnd},
-        next_billing_date = ${nextBillingDate},
-        trial_status = CASE WHEN ${obj.trial_end} THEN 'active' ELSE 'expired' END,
-        trial_end_date = CASE WHEN ${obj.trial_end} THEN ${new Date(obj.trial_end * 1000)} ELSE trial_end_date END
+        current_period_start = ${periodStart.toISOString().split('T')[0]},
+        current_period_end = ${periodEnd.toISOString().split('T')[0]},
+        next_billing_date = ${periodEnd.toISOString().split('T')[0]}
       WHERE id = ${company.id}
     `
 
-    // Log invoice event (billing_invoices table)
-    if (obj.latest_invoice) {
-      await sql`
-        INSERT INTO billing_invoices (company_id, stripe_customer_id, stripe_invoice_id, amount_cents, currency, status, period_start, period_end, description)
-        VALUES (${company.id}, ${customerId}, ${obj.latest_invoice}, 0, 'USD', 'draft', ${currentPeriodStart}, ${currentPeriodEnd}, 'Subscription created')
-        ON CONFLICT DO NOTHING
-      `
+    // Send welcome email
+    if (company.email) {
+      try {
+        await sendEmail({
+          to: company.email,
+          templateId: 'plan-upgrade',
+          variables: {
+            companyName: company.name,
+            planName,
+            interval,
+            periodEnd: periodEnd.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            }),
+          },
+          companyId: company.id,
+        })
+      } catch (emailErr) {
+        console.error(
+          '[stripe-webhook] Failed to send subscription email:',
+          emailErr instanceof Error ? emailErr.message : String(emailErr)
+        )
+        // Continue - email failure shouldn't break the subscription
+      }
     }
 
     console.log(
-      `[Stripe] Subscription created: ${subscriptionId} for ${company.name} (${planTier}/${interval})`
+      `[stripe-webhook] Subscription created: ${subscriptionId} for company ${company.id}`
     )
-  } catch (error) {
-    console.error(
-      `[Stripe] Error processing subscription.created for ${customerId}:`,
-      error
-    )
-    throw error
   }
 }
 
 /**
- * Handle customer.subscription.updated
+ * Handler: customer.subscription.updated
  */
-async function handleSubscriptionUpdated(event: StripeEvent) {
-  const obj = event.data.object
-  const customerId = obj.customer as string
-  const subscriptionId = obj.id as string
+async function handleSubscriptionUpdated(event: Stripe.CustomerSubscriptionUpdatedEvent) {
+  const subscription = event.data.object
+  const previous = event.data.previous_attributes as any
+  const customerId = subscription.customer as string
+  const subscriptionId = subscription.id
+  const priceId = subscription.items.data[0]?.price.id
 
-  const company = await getCompanyByStripeCustomerId(customerId)
-  if (!company) {
-    console.warn(`Company not found for customer: ${customerId}`)
-    return
+  // Extract plan name and interval
+  let planName = 'growth'
+  let interval = 'monthly'
+
+  if (priceId) {
+    if (priceId.includes('starter')) planName = 'starter'
+    else if (priceId.includes('enterprise')) planName = 'enterprise'
+    else planName = 'growth'
+
+    if (priceId.includes('annual') || subscription.items.data[0]?.plan.interval === 'year') {
+      interval = 'annual'
+    } else if (priceId.includes('sixmonth')) {
+      interval = 'sixmonth'
+    } else {
+      interval = 'monthly'
+    }
   }
 
-  try {
-    // Extract updated subscription details
-    const item = obj.items?.data?.[0]
-    const priceId = item?.price?.id
-    const planTier = getPlanTierFromStripePrice(priceId)
-    const interval = getSubscriptionInterval(obj.billing_cycle_anchor_config?.interval, 1)
-    const currentPeriodStart = new Date(obj.current_period_start * 1000)
-    const currentPeriodEnd = new Date(obj.current_period_end * 1000)
-    const nextBillingDate = currentPeriodEnd
+  const periodStart = new Date((subscription as any).current_period_start * 1000)
+  const periodEnd = new Date((subscription as any).current_period_end * 1000)
 
-    // Update company
+  const company = await getCompanyByStripeCustomerId(customerId)
+  if (company) {
+    // Check if plan or interval changed
+    const planChanged = previous?.items?.data?.[0]?.price?.id !== priceId
+    const intervalChanged = previous?.items?.data?.[0]?.plan?.interval !== subscription.items.data[0]?.plan.interval
+
     await sql`
       UPDATE companies
       SET
-        subscription_status = ${obj.status},
-        subscription_plan = ${planTier},
+        subscription_plan = ${planName},
         subscription_interval = ${interval},
-        current_period_start = ${currentPeriodStart},
-        current_period_end = ${currentPeriodEnd},
-        next_billing_date = ${nextBillingDate},
-        trial_status = CASE WHEN ${obj.trial_end} THEN 'active' ELSE 'expired' END,
-        trial_end_date = CASE WHEN ${obj.trial_end} THEN ${new Date(obj.trial_end * 1000)} ELSE trial_end_date END
+        current_period_start = ${periodStart.toISOString().split('T')[0]},
+        current_period_end = ${periodEnd.toISOString().split('T')[0]},
+        next_billing_date = ${periodEnd.toISOString().split('T')[0]}
       WHERE id = ${company.id}
     `
 
-    console.log(
-      `[Stripe] Subscription updated: ${subscriptionId} (${planTier}/${interval})`
-    )
-  } catch (error) {
-    console.error(
-      `[Stripe] Error processing subscription.updated for ${customerId}:`,
-      error
-    )
-    throw error
+    // Send upgrade email if plan upgraded
+    if (planChanged && company.email) {
+      const oldPlan = previous?.items?.data?.[0]?.price?.id || 'unknown'
+      const planNames: Record<string, string> = {
+        starter: 'Starter',
+        growth: 'Growth',
+        enterprise: 'Enterprise',
+      }
+
+      try {
+        await sendEmail({
+          to: company.email,
+          templateId: 'plan-upgrade',
+          variables: {
+            companyName: company.name,
+            planName: planNames[planName],
+            oldPlan: planNames[oldPlan] || 'Previous Plan',
+            periodEnd: periodEnd.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            }),
+          },
+          companyId: company.id,
+        })
+      } catch (emailErr) {
+        console.error(
+          '[stripe-webhook] Failed to send subscription upgraded email:',
+          emailErr instanceof Error ? emailErr.message : String(emailErr)
+        )
+      }
+
+      console.log(
+        `[stripe-webhook] Subscription upgraded: ${subscriptionId} to plan ${planName}`
+      )
+    }
+
+    if (intervalChanged) {
+      console.log(
+        `[stripe-webhook] Subscription interval updated: ${subscriptionId} to ${interval}`
+      )
+    }
   }
 }
 
 /**
- * Handle customer.subscription.deleted
+ * Handler: customer.subscription.deleted
  */
-async function handleSubscriptionDeleted(event: StripeEvent) {
-  const obj = event.data.object
-  const customerId = obj.customer as string
+async function handleSubscriptionDeleted(event: Stripe.CustomerSubscriptionDeletedEvent) {
+  const subscription = event.data.object
+  const customerId = subscription.customer as string
+  const subscriptionId = subscription.id
 
   const company = await getCompanyByStripeCustomerId(customerId)
-  if (!company) {
-    console.warn(`Company not found for customer: ${customerId}`)
-    return
-  }
-
-  try {
-    const canceledAt = new Date(obj.canceled_at * 1000)
-
-    // Update company status to cancelled
+  if (company) {
     await sql`
       UPDATE companies
       SET
         subscription_status = 'cancelled',
-        cancelled_at = ${canceledAt},
-        next_billing_date = NULL
+        subscription_id = NULL,
+        cancelled_at = NOW()
       WHERE id = ${company.id}
     `
 
-    // Send notification email
-    await sendBillingNotificationEmail(
-      company.email,
-      company.name,
-      'subscription_cancelled',
-      {
-        companyName: company.name,
-        cancellationDate: canceledAt.toLocaleDateString('en-US'),
-        reactivationUrl: `${process.env.NEXT_PUBLIC_APP_URL}/billing/reactivate`,
-      }
-    )
+    // Send cancellation email
+    if (company.email) {
+      await sendEmail({
+        to: company.email,
+        templateId: 'plan-upgrade',
+        variables: {
+          companyName: company.name,
+          supportEmail: 'support@ipoready.com',
+        },
+        companyId: company.id,
+        tags: ['billing', 'cancellation'],
+      })
+    }
 
-    console.log(`[Stripe] Subscription cancelled for ${company.name}`)
-  } catch (error) {
-    console.error(
-      `[Stripe] Error processing subscription.deleted for ${customerId}:`,
-      error
-    )
-    throw error
+    console.log(`[stripe-webhook] Subscription cancelled: ${subscriptionId}`)
   }
 }
 
 /**
- * Handle invoice.payment_succeeded
+ * Handler: invoice.payment_failed
  */
-async function handlePaymentSucceeded(event: StripeEvent) {
-  const obj = event.data.object
-  const customerId = obj.customer as string
-  const invoiceId = obj.id as string
+async function handlePaymentFailed(event: Stripe.InvoicePaymentFailedEvent) {
+  const invoice = event.data.object
+  const customerId = invoice.customer as string
+  const invoiceNumber = invoice.number || invoice.id
+  const errorMessage = (invoice as any).last_payment_error?.message || 'Payment failed'
 
   const company = await getCompanyByStripeCustomerId(customerId)
-  if (!company) {
-    console.warn(`Company not found for customer: ${customerId}`)
-    return
-  }
-
-  try {
-    const paidAt = obj.paid_at ? new Date(obj.paid_at * 1000) : new Date()
-    const periodStart = obj.period_start ? new Date(obj.period_start * 1000) : new Date()
-    const periodEnd = obj.period_end ? new Date(obj.period_end * 1000) : new Date()
-
-    // Record invoice
-    await sql`
-      INSERT INTO billing_invoices (
-        company_id,
-        stripe_customer_id,
-        stripe_invoice_id,
-        amount_cents,
-        currency,
-        status,
-        period_start,
-        period_end,
-        paid_at,
-        description
-      )
-      VALUES (
-        ${company.id},
-        ${customerId},
-        ${invoiceId},
-        ${obj.amount_paid},
-        ${obj.currency.toUpperCase()},
-        'paid',
-        ${periodStart},
-        ${periodEnd},
-        ${paidAt},
-        ${obj.description || 'Invoice payment succeeded'}
-      )
-      ON CONFLICT (stripe_invoice_id) DO UPDATE
-      SET status = 'paid', paid_at = ${paidAt}
+  if (company) {
+    // Increment payment failure count
+    const result = await sql`
+      SELECT payment_failure_count FROM companies WHERE id = ${company.id} LIMIT 1
     `
 
-    // Record payment
-    if (obj.charge) {
-      await sql`
-        INSERT INTO payment_history (
-          company_id,
-          stripe_charge_id,
-          stripe_invoice_id,
-          amount_cents,
-          currency,
-          payment_method,
-          status,
-          receipt_url
-        )
-        VALUES (
-          ${company.id},
-          ${obj.charge},
-          ${invoiceId},
-          ${obj.amount_paid},
-          ${obj.currency.toUpperCase()},
-          'card',
-          'succeeded',
-          ${obj.invoice_pdf || null}
-        )
-        ON CONFLICT (stripe_charge_id) DO NOTHING
-      `
+    const currentCount = result.length > 0 ? ((result[0] as any).payment_failure_count || 0) : 0
+    const newCount = currentCount + 1
+
+    await sql`
+      UPDATE companies
+      SET payment_failure_count = ${newCount}
+      WHERE id = ${company.id}
+    `
+
+    // Send appropriate email based on retry count
+    if (company.email) {
+      if (newCount < 3) {
+        // Send retry notification
+        await sendEmail({
+          to: company.email,
+          templateId: 'notification-alert',
+          variables: {
+            companyName: company.name,
+            invoiceNumber,
+            errorMessage,
+            retryCount: newCount,
+            updatePaymentUrl: `${process.env.NEXT_PUBLIC_APP_URL}/settings/billing`,
+          },
+          companyId: company.id,
+          tags: ['billing', 'payment_failed'],
+        })
+      } else {
+        // Send urgent email after 3 failures
+        await sendEmail({
+          to: company.email,
+          templateId: 'notification-alert',
+          variables: {
+            companyName: company.name,
+            invoiceNumber,
+            failureCount: newCount,
+            updatePaymentUrl: `${process.env.NEXT_PUBLIC_APP_URL}/settings/billing`,
+            supportEmail: 'support@ipoready.com',
+          },
+          companyId: company.id,
+          tags: ['billing', 'payment_failed', 'urgent'],
+        })
+      }
     }
 
-    // Reset payment failure count
+    console.log(
+      `[stripe-webhook] Payment failed for invoice ${invoiceNumber}, company ${company.id}, attempt ${newCount}`
+    )
+  }
+}
+
+/**
+ * Handler: invoice.payment_succeeded
+ */
+async function handlePaymentSucceeded(event: Stripe.InvoicePaymentSucceededEvent) {
+  const invoice = event.data.object
+  const customerId = invoice.customer as string
+  const invoiceNumber = invoice.number || invoice.id
+  const amountPaid = (invoice.amount_paid || 0) / 100 // Convert from cents
+  const currency = invoice.currency?.toUpperCase() || 'USD'
+  const paidAt = new Date((invoice as any).paid_at ? (invoice as any).paid_at * 1000 : Date.now())
+  const nextBillingDate =
+    (invoice as any).next_payment_attempt &&
+    new Date((invoice as any).next_payment_attempt * 1000).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+
+  const company = await getCompanyByStripeCustomerId(customerId)
+  if (company) {
+    // Reset payment failure count and update last payment date
     await sql`
       UPDATE companies
       SET
         payment_failure_count = 0,
-        last_payment_at = ${paidAt}
+        last_payment_at = ${paidAt.toISOString()}
       WHERE id = ${company.id}
     `
 
-    // Send payment success email
-    await sendBillingNotificationEmail(
-      company.email,
-      company.name,
-      'payment_succeeded',
-      {
-        companyName: company.name,
-        invoiceId: invoiceId,
-        amount: (obj.amount_paid / 100).toFixed(2),
-        currency: obj.currency.toUpperCase(),
-        paidAt: paidAt.toLocaleDateString('en-US'),
-        invoiceUrl: obj.invoice_pdf || `${process.env.NEXT_PUBLIC_APP_URL}/billing/invoices/${invoiceId}`,
-      }
-    )
+    // Send receipt email
+    if (company.email) {
+      await sendEmail({
+        to: company.email,
+        templateId: 'plan-upgrade',
+        variables: {
+          companyName: company.name,
+          invoiceNumber,
+          amountPaid: amountPaid.toFixed(2),
+          currency,
+          paidAt: paidAt.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }),
+          nextBillingDate,
+          invoiceUrl: invoice.hosted_invoice_url || undefined,
+        },
+        companyId: company.id,
+        tags: ['billing', 'payment_succeeded'],
+      })
+    }
 
     console.log(
-      `[Stripe] Payment succeeded: ${invoiceId} for ${company.name} ($${(obj.amount_paid / 100).toFixed(2)})`
+      `[stripe-webhook] Payment succeeded for invoice ${invoiceNumber}, amount: ${amountPaid} ${currency}`
     )
-  } catch (error) {
-    console.error(
-      `[Stripe] Error processing invoice.payment_succeeded for ${customerId}:`,
-      error
-    )
-    throw error
   }
 }
 
 /**
- * Handle invoice.payment_failed
- * CRITICAL: Uses state machine to transition to past_due only from active state
+ * Log webhook event to database
  */
-async function handlePaymentFailed(event: StripeEvent) {
-  const obj = event.data.object
-  const customerId = obj.customer as string
-  const invoiceId = obj.id as string
-  const subscriptionId = obj.subscription as string | null
-
-  const company = await getCompanyByStripeCustomerId(customerId)
-  if (!company) {
-    console.warn(`Company not found for customer: ${customerId}`)
-    return
-  }
-
+async function logWebhookEvent(
+  eventId: string,
+  eventType: string,
+  customerId: string | null,
+  subscriptionId: string | null,
+  payload: Record<string, any>,
+  status: 'processed' | 'failed' | 'pending',
+  errorMessage?: string
+) {
   try {
-    const periodStart = obj.period_start ? new Date(obj.period_start * 1000) : new Date()
-    const periodEnd = obj.period_end ? new Date(obj.period_end * 1000) : new Date()
-    const nextRetryAt = obj.next_payment_attempt
-      ? new Date(obj.next_payment_attempt * 1000)
-      : null
-
-    // Record invoice
     await sql`
-      INSERT INTO billing_invoices (
-        company_id,
+      INSERT INTO webhook_logs (
+        event_id,
+        event_type,
         stripe_customer_id,
-        stripe_invoice_id,
-        amount_cents,
-        currency,
+        stripe_subscription_id,
+        payload,
         status,
-        period_start,
-        period_end,
-        description
+        error_message,
+        created_at
       )
       VALUES (
-        ${company.id},
+        ${eventId},
+        ${eventType},
         ${customerId},
-        ${invoiceId},
-        ${obj.amount_due},
-        ${obj.currency.toUpperCase()},
-        'open',
-        ${periodStart},
-        ${periodEnd},
-        'Payment failed: ' || ${obj.failure_message || 'Unknown error'}
+        ${subscriptionId},
+        ${JSON.stringify(payload)},
+        ${status},
+        ${errorMessage || null},
+        NOW()
       )
-      ON CONFLICT (stripe_invoice_id) DO UPDATE
-      SET status = 'open'
+      ON CONFLICT (event_id) DO UPDATE
+      SET
+        status = ${status},
+        error_message = COALESCE(${errorMessage || null}, error_message)
     `
-
-    // Get current subscription status
-    const currentCompany = await sql`
-      SELECT subscription_status, payment_failure_count FROM companies WHERE id = ${company.id}
-    `
-    const currentStatus = ((currentCompany[0] as any)?.subscription_status || 'active') as SubscriptionState
-    const failureCount = ((currentCompany[0] as any)?.payment_failure_count ?? 0) + 1
-
-    // Increment payment failure count
-    await sql`
-      UPDATE companies
-      SET payment_failure_count = ${failureCount}
-      WHERE id = ${company.id}
-    `
-
-    // Use state machine: only transition active -> past_due (not past_due -> past_due)
-    if (failureCount >= 3 && currentStatus === 'active') {
-      const stateUpdateResult = await updateSubscriptionStateSecure(
-        company.id,
-        subscriptionId || '',
-        'past_due',
-        'invoice.payment_failed (3+ failures)',
-        ['active'] // Only transition from active
-      )
-
-      if (!stateUpdateResult.success) {
-        console.warn(
-          `[Stripe] State transition failed for ${company.id}: ${stateUpdateResult.error}`
-        )
-      }
-    }
-
-    // Send payment failed notification email
-    await sendBillingNotificationEmail(
-      company.email,
-      company.name,
-      'payment_failed',
-      {
-        companyName: company.name,
-        invoiceId: invoiceId,
-        amount: (obj.amount_due / 100).toFixed(2),
-        currency: obj.currency.toUpperCase(),
-        failureReason: obj.failure_message || 'Payment processing failed',
-        failureCode: obj.failure_code || 'unknown',
-        retryDate: nextRetryAt?.toLocaleDateString('en-US') || 'soon',
-        updatePaymentUrl: `${process.env.NEXT_PUBLIC_APP_URL}/billing/payment-method`,
-      }
-    )
-
-    console.log(
-      `[Stripe] Payment failed: ${invoiceId} for ${company.name} (attempt ${failureCount})`
-    )
   } catch (error) {
-    console.error(
-      `[Stripe] Error processing invoice.payment_failed for ${customerId}:`,
-      error
-    )
-    throw error
+    console.error('[stripe-webhook] Error logging webhook event:', error)
   }
 }
 
 /**
- * Main webhook handler - SECURE IMPLEMENTATION
- * 
- * CRITICAL SECURITY ORDER:
- * 1. Signature verification (FIRST, before any processing)
- * 2. Idempotency check
- * 3. Rate limiting
- * 4. Event processing
- * 5. Status logging
+ * Check if webhook has already been processed (idempotency)
+ */
+async function isWebhookProcessed(eventId: string): Promise<boolean> {
+  try {
+    const result = await sql`
+      SELECT id FROM webhook_logs WHERE event_id = ${eventId} LIMIT 1
+    `
+    return result.length > 0
+  } catch (error) {
+    console.error('[stripe-webhook] Error checking webhook idempotency:', error)
+    return false
+  }
+}
+
+/**
+ * Main webhook handler
  */
 export async function POST(request: NextRequest) {
+  const secret = process.env.STRIPE_WEBHOOK_SECRET
+
+  if (!secret) {
+    console.error('[stripe-webhook] STRIPE_WEBHOOK_SECRET not configured')
+    return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 400 })
+  }
+
   try {
-    // STEP 1: Get raw request body (needed for signature verification)
+    // Get raw body for signature verification
     const body = await request.text()
     const signature = request.headers.get('stripe-signature')
-    const secret = process.env.STRIPE_WEBHOOK_SECRET
-
-    if (!secret) {
-      console.error('[Stripe-Webhook] CRITICAL: STRIPE_WEBHOOK_SECRET not configured')
-      return NextResponse.json(
-        { error: 'Webhook secret not configured' },
-        { status: 500 }
-      )
-    }
 
     if (!signature) {
-      console.error('[Stripe-Webhook] SECURITY: Missing stripe-signature header')
-      return NextResponse.json(
-        { error: 'Missing signature' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Missing stripe-signature header' }, { status: 400 })
     }
 
-    // STEP 2: Verify signature FIRST before any other processing
-    const signatureCheckStart = Date.now()
-    const signatureCheck = verifyWebhookSignatureSecure(body, signature, secret)
-    if (!signatureCheck.valid) {
-      console.error(
-        `[Stripe-Webhook] SECURITY: Signature verification failed - ${signatureCheck.error}`
-      )
-      // Record metric for signature failure
-      await recordWebhookMetrics({
-        eventId: 'unknown',
-        eventType: 'signature_failure',
-        processingLatencyMs: Date.now() - signatureCheckStart,
-        status: 'failed',
-        signatureVerified: false,
-      })
-      return NextResponse.json(
-        { error: 'Invalid signature' },
-        { status: 400 }
-      )
-    }
+    // Verify signature
+    const stripe = getStripe()
+    let event: Stripe.Event
 
-    // STEP 3: Parse event (safe to do now that signature is verified)
-    let event: StripeEvent
     try {
-      event = JSON.parse(body)
+      event = stripe.webhooks.constructEvent(body, signature, secret)
     } catch (error) {
-      console.error('[Stripe-Webhook] JSON parse error:', error)
-      return NextResponse.json(
-        { error: 'Invalid JSON' },
-        { status: 400 }
-      )
+      const message = error instanceof Error ? error.message : 'Unknown error'
+      console.error('[stripe-webhook] Signature verification failed:', message)
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
     }
 
-    const { id: eventId, type: eventType } = event
-    const customerId = event.data.object.customer || null
-    const subscriptionId = event.data.object.subscription || event.data.object.id || null
+    const eventId = event.id
+    const eventType = event.type
+    const customerId = (event.data.object as any)?.customer || null
+    const subscriptionId =
+      (event.data.object as any)?.subscription ||
+      (event.data.object as any)?.id ||
+      null
 
-    // STEP 4: Check idempotency
-    const idempotencyCheck = await checkWebhookIdempotency(eventId)
-    if (idempotencyCheck.processed) {
-      console.log(`[Stripe-Webhook] Duplicate event: ${eventId} (previous status: ${idempotencyCheck.previousStatus})`)
-      await logWebhookEventSecure(
-        eventId,
-        eventType,
-        customerId,
-        subscriptionId,
-        event.data.object,
-        'duplicate'
-      )
+    // Check idempotency
+    const alreadyProcessed = await isWebhookProcessed(eventId)
+    if (alreadyProcessed) {
+      console.log(`[stripe-webhook] Webhook ${eventId} already processed, skipping`)
       return NextResponse.json({ received: true })
     }
 
-    // STEP 5: Check rate limit
-    const rateLimitCheck = checkWebhookRateLimit(customerId || '')
-    if (!rateLimitCheck.allowed) {
-      console.error(
-        `[Stripe-Webhook] SECURITY: Rate limit exceeded for customer ${customerId}`
-      )
-      await logWebhookEventSecure(
-        eventId,
-        eventType,
-        customerId,
-        subscriptionId,
-        event.data.object,
-        'rejected',
-        undefined,
-        rateLimitCheck.reason
-      )
-      return NextResponse.json(
-        { error: 'Rate limit exceeded' },
-        { status: 429 }
-      )
-    }
+    // Log as pending
+    await logWebhookEvent(eventId, eventType, customerId, subscriptionId, event.data.object, 'pending')
 
-    // STEP 6: Log as pending
-    await logWebhookEventSecure(
-      eventId,
-      eventType,
-      customerId,
-      subscriptionId,
-      event.data.object,
-      'pending'
-    )
-
-    // STEP 7: Process based on event type
-    const processingStart = Date.now()
+    // Handle event
     try {
       switch (eventType) {
         case 'customer.subscription.created':
-          await handleSubscriptionCreated(event)
+          await handleSubscriptionCreated(event as Stripe.CustomerSubscriptionCreatedEvent)
           break
 
         case 'customer.subscription.updated':
-          await handleSubscriptionUpdated(event)
+          await handleSubscriptionUpdated(event as Stripe.CustomerSubscriptionUpdatedEvent)
           break
 
         case 'customer.subscription.deleted':
-          await handleSubscriptionDeleted(event)
-          break
-
-        case 'invoice.payment_succeeded':
-          await handlePaymentSucceeded(event)
+          await handleSubscriptionDeleted(event as Stripe.CustomerSubscriptionDeletedEvent)
           break
 
         case 'invoice.payment_failed':
-          await handlePaymentFailed(event)
+          await handlePaymentFailed(event as Stripe.InvoicePaymentFailedEvent)
+          break
+
+        case 'invoice.payment_succeeded':
+          await handlePaymentSucceeded(event as Stripe.InvoicePaymentSucceededEvent)
           break
 
         default:
-          console.log(`[Stripe-Webhook] Unhandled event type: ${eventType}`)
+          console.log(`[stripe-webhook] Unhandled event type: ${eventType}`)
+          break
       }
 
-      // Mark as processed
-      await logWebhookEventSecure(
-        eventId,
-        eventType,
-        customerId,
-        subscriptionId,
-        event.data.object,
-        'processed'
-      )
+      // Log as processed
+      await logWebhookEvent(eventId, eventType, customerId, subscriptionId, event.data.object, 'processed')
 
-      // Record success metric
-      const processingLatencyMs = Date.now() - processingStart
-      await recordWebhookMetrics({
-        eventId,
-        eventType,
-        processingLatencyMs,
-        status: 'processed',
-        signatureVerified: true,
-      })
+      return NextResponse.json({ received: true, status: 'processed' })
+    } catch (handlerError) {
+      const errorMessage = handlerError instanceof Error ? handlerError.message : 'Unknown error'
+      console.error(`[stripe-webhook] Error handling ${eventType}:`, handlerError)
 
-      return NextResponse.json({ received: true })
-    } catch (error) {
-      // Processing error - log and return 500
-      const errorMsg = error instanceof Error ? error.message : String(error)
-      await logWebhookEventSecure(
-        eventId,
-        eventType,
-        customerId,
-        subscriptionId,
-        event.data.object,
-        'failed',
-        errorMsg
-      )
+      // Log as failed
+      await logWebhookEvent(eventId, eventType, customerId, subscriptionId, event.data.object, 'failed', errorMessage)
 
-      // Record failure metric
-      const processingLatencyMs = Date.now() - processingStart
-      await recordWebhookMetrics({
-        eventId,
-        eventType,
-        processingLatencyMs,
+      // Still return 200 to Stripe so they don't retry
+      return NextResponse.json({
+        received: true,
         status: 'failed',
-        signatureVerified: true,
+        error: errorMessage,
       })
-
-      console.error(`[Stripe-Webhook] Processing error for ${eventId}:`, error)
-
-      return NextResponse.json(
-        { error: 'Internal server error' },
-        { status: 500 }
-      )
     }
   } catch (error) {
-    console.error('[Stripe-Webhook] Unexpected error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error('[stripe-webhook] Webhook handler error:', errorMessage)
+
+    // Return 200 so Stripe doesn't keep retrying
+    return NextResponse.json({
+      error: 'Webhook processing failed',
+      message: errorMessage,
+    })
   }
 }

@@ -348,18 +348,42 @@ export async function sendBillingNotificationEmail(
 
     switch (eventType) {
       case 'subscription_renewed':
-        await sendSubscriptionRenewedEmail(companyId, variables.plan || 'growth')
+        await sendSubscriptionRenewedEmail(
+          companyEmail,
+          companyName,
+          variables.plan || 'growth',
+          variables.billingInterval || 'monthly',
+          variables.amount || 0,
+          variables.nextBillingDate || new Date().toLocaleDateString()
+        )
         break
       case 'subscription_cancelled':
-        await sendSubscriptionCancelledEmail(companyId)
+        await sendSubscriptionCancelledEmail(
+          companyEmail,
+          companyName,
+          variables.plan || 'growth',
+          variables.cancelledDate || new Date().toLocaleDateString()
+        )
         break
       case 'payment_failed':
         // Amount is in cents, convert to dollars for display
-        const amount = variables.amount || 0
-        await sendPaymentFailedEmail(companyId, amount)
+        const amount = (variables.amount || 0) / 100
+        await sendPaymentFailedEmail(
+          companyEmail,
+          companyName,
+          variables.invoiceNumber || 'unknown',
+          variables.errorMessage || 'Payment processing failed'
+        )
         break
       case 'payment_succeeded':
-        await sendPaymentSucceededEmail(companyId, variables)
+        await sendPaymentSucceededEmail(
+          companyEmail,
+          companyName,
+          variables.invoiceNumber || 'unknown',
+          (variables.amount || 0) / 100,
+          variables.paidDate || new Date().toLocaleDateString(),
+          variables.nextBillingDate || new Date().toLocaleDateString()
+        )
         break
       default:
         console.warn(`[email-notifications] Unknown billing event type: ${eventType}`)

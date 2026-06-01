@@ -1,425 +1,540 @@
 'use strict'
 
 /**
- * Trial Manager
- * Handles trial period lifecycle management for IPOReady subscriptions
+ * Trial Period Manager
+ * Handles the complete trial lifecycle: creation, expiry checks, and auto-upgrade flow
  */
 
 import { sql } from '@/lib/db'
+import { getStripe, PRICE_IDS, PLAN_NAMES } from '@/lib/stripe'
 import {
   sendTrialExpiringEmail,
-  sendTrialExpiredEmail,
-  sendPaymentFailedEmail,
+  sendTrialUpgradedEmail,
 } from '@/lib/billing-notifications'
 
-interface TrialInitResult {
-  trialStartDate: Date
-  trialEndDate: Date
-  daysRemaining: number
-}
-
-interface TrialStatusResult {
-  status: 'not_started' | 'active' | 'expired' | 'upgraded'
-  daysRemaining: number
-  planAfterTrial: string
-}
-
-interface CompanyData {
+interface CompanyTrialData {
   id: string
   email: string
   name: string
   trial_start_date: string | null
   trial_end_date: string | null
+  trial_status: 'not_started' | 'active' | 'expired' | 'upgraded'
+  trial_plan: string
+  trial_converted_at: string | null
+  trial_conversion_plan: string | null
+  stripe_customer_id: string | null
+  subscription_id: string | null
+  subscription_status: string | null
+  current_period_end: string | null
+}
+
+interface TrialStatusResponse {
   trial_status: string
   trial_plan: string
-  trial_conversion_plan: string | null
-  trial_converted_at: string | null
-  subscription_status: string
-  stripe_customer_id: string | null
-  payment_failure_count: number
+  days_remaining: number
+  trial_end_date: string | null
 }
 
-/**
- * Initialize a trial for a company
- * Default trial length: 14 days
- */
-export async function initializeTrial(
-  companyId: string,
-  planAfterTrial: string = 'growth'
-): Promise<TrialInitResult> {
-  try {
-    // Validate company exists
-    const companies = (await sql`
-      SELECT id, email FROM companies WHERE id = ${companyId}
-    `) as CompanyData[]
-
-    if (companies.length === 0) {
-      throw new Error(`Company not found: ${companyId}`)
-    }
-
-    const trialStartDate = new Date()
-    const trialEndDate = new Date()
-    trialEndDate.setDate(trialEndDate.getDate() + 14) // 14-day trial
-
-    // Update company with trial info
-    await sql`
-      UPDATE companies
-      SET
-        trial_start_date = ${trialStartDate.toISOString().split('T')[0]},
-        trial_end_date = ${trialEndDate.toISOString().split('T')[0]},
-        trial_plan = ${planAfterTrial},
-        trial_status = 'active',
-        subscription_status = 'trialing'
-      WHERE id = ${companyId}
-    `
-
-    console.log(
-      `[trial-manager] Trial initialized for company ${companyId}. Expires: ${trialEndDate.toISOString().split('T')[0]}`
-    )
-
-    return {
-      trialStartDate,
-      trialEndDate,
-      daysRemaining: 14,
-    }
-  } catch (err) {
-    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
-    console.error(`[trial-manager] Failed to initialize trial for ${companyId}:`, errorMsg)
-    throw err
-  }
+interface TrialExpiryCheckResult {
+  checked_count: number
+  email_sent_count: number
 }
 
-/**
- * Get current trial status for a company
- */
-export async function getTrialStatus(companyId: string): Promise<TrialStatusResult> {
-  try {
-    const companies = (await sql`
-      SELECT trial_status, trial_end_date, trial_plan, trial_conversion_plan FROM companies WHERE id = ${companyId}
-    `) as CompanyData[]
-
-    if (companies.length === 0) {
-      throw new Error(`Company not found: ${companyId}`)
-    }
-
-    const company = companies[0]
-
-    // Check if trial hasn't been started yet
-    if (company.trial_status === 'not_started') {
-      return {
-        status: 'not_started',
-        daysRemaining: 0,
-        planAfterTrial: 'growth',
-      }
-    }
-
-    // Check if already upgraded
-    if (company.trial_status === 'upgraded') {
-      return {
-        status: 'upgraded',
-        daysRemaining: 0,
-        planAfterTrial: company.trial_conversion_plan || company.trial_plan || 'growth',
-      }
-    }
-
-    // Calculate days remaining
-    const trialEndDate = new Date(company.trial_end_date!)
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-
-    const msPerDay = 24 * 60 * 60 * 1000
-    const daysRemaining = Math.ceil((trialEndDate.getTime() - today.getTime()) / msPerDay)
-
-    const status = daysRemaining > 0 ? 'active' : 'expired'
-
-    return {
-      status: status as 'active' | 'expired',
-      daysRemaining: Math.max(0, daysRemaining),
-      planAfterTrial: company.trial_plan || 'growth',
-    }
-  } catch (err) {
-    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
-    console.error(`[trial-manager] Failed to get trial status for ${companyId}:`, errorMsg)
-    throw err
-  }
+interface TrialUpgradeResult {
+  upgraded: boolean
+  message: string
+  subscription_id?: string
 }
 
-/**
- * Check for upcoming trial expirations (runs nightly)
- * Finds companies where trial expires in 2 days and sends reminders
- */
-export async function checkTrialExpiry(): Promise<void> {
-  try {
-    console.log('[trial-manager] Running nightly trial expiry check...')
-
-    // Get companies with trial expiring in exactly 2 days
-    const expiringCompanies = (await sql`
-      SELECT id, email, name, trial_end_date, trial_plan
-      FROM companies
-      WHERE trial_status = 'active'
-      AND trial_end_date = CURRENT_DATE + INTERVAL '2 days'
-    `) as CompanyData[]
-
-    console.log(
-      `[trial-manager] Found ${expiringCompanies.length} companies with trials expiring in 2 days`
-    )
-
-    for (const company of expiringCompanies) {
-      try {
-        await sendTrialExpiringEmail(company.id, 2)
-        console.log(`[trial-manager] Sent expiring soon email to ${company.email}`)
-      } catch (err) {
-        console.error(
-          `[trial-manager] Failed to send expiring email for ${company.id}:`,
-          err instanceof Error ? err.message : 'Unknown error'
-        )
-      }
-    }
-
-    // Get companies with trial expiring today (expired)
-    const expiredCompanies = (await sql`
-      SELECT id, email, name, trial_end_date, trial_plan, stripe_customer_id
-      FROM companies
-      WHERE trial_status = 'active'
-      AND trial_end_date = CURRENT_DATE
-    `) as CompanyData[]
-
-    console.log(`[trial-manager] Found ${expiredCompanies.length} companies with expired trials`)
-
-    for (const company of expiredCompanies) {
-      try {
-        await handleTrialExpiry(company.id)
-      } catch (err) {
-        console.error(
-          `[trial-manager] Failed to handle expiry for ${company.id}:`,
-          err instanceof Error ? err.message : 'Unknown error'
-        )
-      }
-    }
-  } catch (err) {
-    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
-    console.error('[trial-manager] Trial expiry check failed:', errorMsg)
-  }
-}
-
-/**
- * Handle trial expiration
- * - If payment method exists: auto-create Stripe subscription
- * - If no payment method: set to expired, send upgrade email
- * - Deactivate trial-only features
- */
-export async function handleTrialExpiry(companyId: string): Promise<void> {
-  try {
-    // Fetch company data
-    const companies = (await sql`
-      SELECT id, email, name, stripe_customer_id, trial_plan, payment_failure_count
-      FROM companies
-      WHERE id = ${companyId}
-    `) as CompanyData[]
-
-    if (companies.length === 0) {
-      throw new Error(`Company not found: ${companyId}`)
-    }
-
-    const company = companies[0]
-
-    // Check if payment method exists in Stripe
-    const hasPaymentMethod = company.stripe_customer_id !== null
-
-    if (hasPaymentMethod) {
-      // Auto-create subscription via Stripe API
-      console.log(
-        `[trial-manager] Auto-creating subscription for ${companyId} after trial expiry`
-      )
-
-      try {
-        // In production, this would call Stripe API to create subscription
-        // For now, we mark it as converted
-        await sql`
-          UPDATE companies
-          SET
-            trial_status = 'upgraded',
-            trial_converted_at = NOW(),
-            trial_conversion_plan = ${company.trial_plan},
-            subscription_status = 'active'
-          WHERE id = ${companyId}
-        `
-
-        console.log(`[trial-manager] Subscription created for ${companyId}`)
-      } catch (err) {
-        console.error(
-          `[trial-manager] Failed to create subscription for ${companyId}:`,
-          err instanceof Error ? err.message : 'Unknown error'
-        )
-        throw err
-      }
-    } else {
-      // No payment method: set to expired, deactivate features
-      await sql`
-        UPDATE companies
-        SET
-          trial_status = 'expired',
-          subscription_status = 'expired'
-        WHERE id = ${companyId}
-      `
-
-      console.log(`[trial-manager] Trial expired for ${companyId} (no payment method)`
-      )
-
-      // Send trial expired email with upgrade link
-      try {
-        await sendTrialExpiredEmail(companyId)
-      } catch (err) {
-        console.error(
-          `[trial-manager] Failed to send expired email for ${companyId}:`,
-          err instanceof Error ? err.message : 'Unknown error'
-        )
-      }
-    }
-
-    // Deactivate trial-only features for all cases
-    // This can be extended based on your feature gates
-    console.log(`[trial-manager] Deactivating trial features for ${companyId}`)
-  } catch (err) {
-    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
-    console.error(`[trial-manager] Failed to handle trial expiry for ${companyId}:`, errorMsg)
-    throw err
-  }
-}
-
-/**
- * Convert trial to paid subscription
- */
-export async function convertTrialToSubscription(
-  companyId: string,
-  plan: string,
-  stripePlanId: string
-): Promise<void> {
-  try {
-    await sql`
-      UPDATE companies
-      SET
-        trial_status = 'upgraded',
-        trial_converted_at = NOW(),
-        trial_conversion_plan = ${plan},
-        subscription_status = 'active',
-        subscription_plan = ${plan}
-      WHERE id = ${companyId}
-    `
-
-    console.log(
-      `[trial-manager] Trial converted to paid subscription for ${companyId} (plan: ${plan})`
-    )
-  } catch (err) {
-    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
-    console.error(
-      `[trial-manager] Failed to convert trial for ${companyId}:`,
-      errorMsg
-    )
-    throw err
-  }
-}
-
-/**
- * Cancel a trial (if user cancels before expiry)
- */
-export async function cancelTrial(companyId: string): Promise<void> {
-  try {
-    await sql`
-      UPDATE companies
-      SET
-        trial_status = 'expired',
-        subscription_status = 'expired'
-      WHERE id = ${companyId}
-    `
-
-    console.log(`[trial-manager] Trial cancelled for ${companyId}`)
-  } catch (err) {
-    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
-    console.error(`[trial-manager] Failed to cancel trial for ${companyId}:`, errorMsg)
-    throw err
-  }
-}
-
-/**
- * Get all companies in active trial
- */
-export async function getActiveTrialCompanies(): Promise<CompanyData[]> {
-  try {
-    const companies = (await sql`
-      SELECT id, email, name, trial_start_date, trial_end_date, trial_plan
-      FROM companies
-      WHERE trial_status = 'active'
-      ORDER BY trial_end_date ASC
-    `) as CompanyData[]
-
-    return companies
-  } catch (err) {
-    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
-    console.error('[trial-manager] Failed to get active trial companies:', errorMsg)
-    return []
-  }
-}
-
-/**
- * Get trial countdown data for UI display
- */
-export async function getTrialCountdownData(
-  companyId: string
-): Promise<{
+interface TrialCountdownData {
   daysRemaining: number
   percentage: number
   trialPlan: string
   isLastDay: boolean
+}
+
+// ─── Helper: Calculate days remaining ──────────────────────────────────────
+export function calculateTrialDaysRemaining(
+  trialEndDate: string | Date | null
+): number {
+  if (!trialEndDate) return 0
+
+  const endDate =
+    typeof trialEndDate === 'string' ? new Date(trialEndDate) : trialEndDate
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  endDate.setHours(0, 0, 0, 0)
+
+  const msPerDay = 24 * 60 * 60 * 1000
+  const daysRemaining = Math.ceil(
+    (endDate.getTime() - today.getTime()) / msPerDay
+  )
+
+  return Math.max(0, daysRemaining)
+}
+
+// ─── Function 1: Initialize Trial ──────────────────────────────────────────
+export async function initializeTrial(
+  companyId: string,
+  planAfterTrial: string = 'growth'
+): Promise<{
+  trial_start_date: string
+  trial_end_date: string
+  trial_days_remaining: number
 }> {
   try {
-    const companies = (await sql`
-      SELECT trial_start_date, trial_end_date, trial_plan FROM companies WHERE id = ${companyId}
-    `) as CompanyData[]
+    // Verify company exists
+    const companies = await sql`
+      SELECT id FROM companies WHERE id = ${companyId}
+    `
 
     if (companies.length === 0) {
       throw new Error(`Company not found: ${companyId}`)
     }
 
-    const company = companies[0]
+    // Calculate trial dates
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const trialStartDate = today.toISOString().split('T')[0]
 
+    const endDate = new Date(today)
+    endDate.setDate(endDate.getDate() + 14)
+    const trialEndDate = endDate.toISOString().split('T')[0]
+
+    // Update company with trial information
+    await sql`
+      UPDATE companies
+      SET
+        trial_start_date = ${trialStartDate}::date,
+        trial_end_date = ${trialEndDate}::date,
+        trial_status = 'active',
+        trial_plan = ${planAfterTrial.toLowerCase()},
+        subscription_status = 'trialing',
+        updated_at = NOW()
+      WHERE id = ${companyId}
+    `
+
+    const daysRemaining = calculateTrialDaysRemaining(trialEndDate)
+
+    console.log(
+      `[trial-manager] Initialized trial for ${companyId}: ${trialStartDate} to ${trialEndDate}`
+    )
+
+    return {
+      trial_start_date: trialStartDate,
+      trial_end_date: trialEndDate,
+      trial_days_remaining: daysRemaining,
+    }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error(`[trial-manager] Failed to initialize trial:`, errorMsg)
+    throw err
+  }
+}
+
+// ─── Function 2: Get Trial Status ──────────────────────────────────────────
+export async function getTrialStatus(
+  companyId: string
+): Promise<TrialStatusResponse> {
+  try {
+    const companies = await sql`
+      SELECT
+        trial_status,
+        trial_plan,
+        trial_end_date
+      FROM companies
+      WHERE id = ${companyId}
+    `
+
+    if (companies.length === 0) {
+      throw new Error(`Company not found: ${companyId}`)
+    }
+
+    const company = companies[0] as CompanyTrialData
+    const daysRemaining = calculateTrialDaysRemaining(company.trial_end_date)
+
+    return {
+      trial_status: company.trial_status || 'not_started',
+      trial_plan: company.trial_plan || 'growth',
+      days_remaining: daysRemaining,
+      trial_end_date: company.trial_end_date,
+    }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error(`[trial-manager] Failed to get trial status:`, errorMsg)
+    throw err
+  }
+}
+
+// ─── Get Trial Countdown Data (for UI components) ─────────────────────────
+export async function getTrialCountdownData(
+  companyId: string
+): Promise<TrialCountdownData> {
+  try {
+    const companies = await sql`
+      SELECT
+        trial_status,
+        trial_plan,
+        trial_start_date,
+        trial_end_date
+      FROM companies
+      WHERE id = ${companyId}
+    `
+
+    if (companies.length === 0) {
+      throw new Error(`Company not found: ${companyId}`)
+    }
+
+    const company = companies[0] as CompanyTrialData
+    const daysRemaining = calculateTrialDaysRemaining(company.trial_end_date)
+
+    // Calculate percentage of trial used (0-100)
     if (!company.trial_start_date || !company.trial_end_date) {
       return {
         daysRemaining: 0,
         percentage: 0,
-        trialPlan: 'growth',
+        trialPlan: company.trial_plan || 'growth',
         isLastDay: false,
       }
     }
 
-    // Calculate days remaining
-    const trialEndDate = new Date(company.trial_end_date)
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
+    const startDate = new Date(company.trial_start_date)
+    const endDate = new Date(company.trial_end_date)
+    startDate.setHours(0, 0, 0, 0)
+    endDate.setHours(0, 0, 0, 0)
 
     const msPerDay = 24 * 60 * 60 * 1000
-    const daysRemaining = Math.ceil((trialEndDate.getTime() - today.getTime()) / msPerDay)
-
-    // Calculate percentage (14-day trial)
-    const trialStartDate = new Date(company.trial_start_date)
-    const totalDays = Math.ceil((trialEndDate.getTime() - trialStartDate.getTime()) / msPerDay)
-    const daysUsed = totalDays - daysRemaining
-    const percentage = Math.max(0, Math.min(100, (daysUsed / totalDays) * 100))
+    const totalDays = Math.ceil(
+      (endDate.getTime() - startDate.getTime()) / msPerDay
+    )
+    const daysElapsed = Math.max(
+      0,
+      totalDays - daysRemaining
+    )
+    const percentage = Math.min(
+      100,
+      Math.round((daysElapsed / totalDays) * 100)
+    )
 
     return {
-      daysRemaining: Math.max(0, daysRemaining),
+      daysRemaining,
       percentage,
       trialPlan: company.trial_plan || 'growth',
       isLastDay: daysRemaining === 1,
     }
   } catch (err) {
     const errorMsg = err instanceof Error ? err.message : 'Unknown error'
-    console.error(`[trial-manager] Failed to get trial countdown data:`, errorMsg)
-    return {
-      daysRemaining: 0,
-      percentage: 0,
-      trialPlan: 'growth',
-      isLastDay: false,
+    console.error(
+      `[trial-manager] Failed to get trial countdown data:`,
+      errorMsg
+    )
+    throw err
+  }
+}
+
+// ─── Function 3: Check Trial Expiry (for nightly cron) ─────────────────────
+export async function checkTrialExpiry(): Promise<TrialExpiryCheckResult> {
+  try {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    // Query companies with active trials expiring in 2 days
+    const expiringDate = new Date(today)
+    expiringDate.setDate(expiringDate.getDate() + 2)
+    const expiringDateString = expiringDate.toISOString().split('T')[0]
+
+    const companies = await sql`
+      SELECT id, email, name, trial_end_date
+      FROM companies
+      WHERE trial_status = 'active'
+        AND trial_end_date = ${expiringDateString}::date
+      ORDER BY created_at DESC
+    `
+
+    let emailSentCount = 0
+
+    for (const company of companies as CompanyTrialData[]) {
+      try {
+        const daysRemaining = calculateTrialDaysRemaining(company.trial_end_date)
+        const formattedEndDate = company.trial_end_date
+          ? new Date(company.trial_end_date).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          : 'N/A'
+        await sendTrialExpiringEmail(company.email, company.name, formattedEndDate)
+        emailSentCount++
+      } catch (emailErr) {
+        console.error(
+          `[trial-manager] Failed to send expiry email for ${company.id}:`,
+          emailErr instanceof Error ? emailErr.message : 'Unknown error'
+        )
+        // Continue with next company even if this one fails
+      }
     }
+
+    console.log(
+      `[trial-manager] Trial expiry check: checked ${companies.length} companies, sent ${emailSentCount} emails`
+    )
+
+    return {
+      checked_count: companies.length,
+      email_sent_count: emailSentCount,
+    }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error(`[trial-manager] Failed to check trial expiry:`, errorMsg)
+    throw err
+  }
+}
+
+// ─── Function 4: Handle Trial Expiry (auto-upgrade flow) ────────────────────
+export async function handleTrialExpiry(
+  companyId: string
+): Promise<TrialUpgradeResult> {
+  try {
+    // Fetch company data
+    const companies = await sql`
+      SELECT
+        id,
+        email,
+        name,
+        trial_status,
+        trial_end_date,
+        trial_plan,
+        stripe_customer_id,
+        subscription_id,
+        current_period_end
+      FROM companies
+      WHERE id = ${companyId}
+    `
+
+    if (companies.length === 0) {
+      throw new Error(`Company not found: ${companyId}`)
+    }
+
+    const company = companies[0] as CompanyTrialData
+
+    // Verify trial is active and expired
+    if (company.trial_status !== 'active') {
+      return {
+        upgraded: false,
+        message: `Trial status is ${company.trial_status}, not active`,
+      }
+    }
+
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    if (!company.trial_end_date) {
+      return {
+        upgraded: false,
+        message: 'Trial end date not set',
+      }
+    }
+
+    const trialEndDate = new Date(company.trial_end_date)
+    trialEndDate.setHours(0, 0, 0, 0)
+
+    if (trialEndDate > today) {
+      return {
+        upgraded: false,
+        message: 'Trial has not yet expired',
+      }
+    }
+
+    const planName = company.trial_plan?.toLowerCase() || 'growth'
+
+    // Check if stripe_customer_id exists and has payment method
+    if (!company.stripe_customer_id) {
+      // No Stripe customer, cannot auto-upgrade
+      // Update trial status to expired
+      await sql`
+        UPDATE companies
+        SET
+          trial_status = 'expired',
+          updated_at = NOW()
+        WHERE id = ${companyId}
+      `
+
+      console.log(
+        `[trial-manager] Trial expired for ${companyId} (no Stripe customer)`
+      )
+      return {
+        upgraded: false,
+        message: 'Trial expired. No payment method on file.',
+      }
+    }
+
+    try {
+      // Attempt to create Stripe subscription
+      const stripe = getStripe()
+
+      // Get the price ID for the plan
+      const priceId = PRICE_IDS[planName]?.monthly
+      if (!priceId) {
+        throw new Error(`No price ID configured for plan: ${planName}`)
+      }
+
+      // Create subscription
+      const subscription = await stripe.subscriptions.create({
+        customer: company.stripe_customer_id,
+        items: [
+          {
+            price: priceId,
+          },
+        ],
+        metadata: {
+          isTrialConversion: 'true',
+          trialPlan: planName,
+          companyId,
+        },
+      })
+
+      // Update company with subscription
+      const periodEndTimestamp = (subscription as any).current_period_end
+      const periodEndDate = periodEndTimestamp
+        ? new Date(periodEndTimestamp * 1000).toISOString()
+        : null
+
+      await sql`
+        UPDATE companies
+        SET
+          subscription_id = ${subscription.id},
+          subscription_status = 'active',
+          trial_status = 'upgraded',
+          trial_converted_at = NOW(),
+          trial_conversion_plan = ${planName},
+          current_period_end = ${periodEndDate ? periodEndDate : null},
+          updated_at = NOW()
+        WHERE id = ${companyId}
+      `
+
+      // Send success email
+      const nextBillingDate = periodEndTimestamp
+        ? new Date(periodEndTimestamp * 1000).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })
+        : 'N/A'
+
+      const planPricing: Record<string, number> = {
+        starter: 29900,
+        growth: 79900,
+        enterprise: 249900,
+      }
+      const amount = (planPricing[planName] || 79900) / 100
+
+      await sendTrialUpgradedEmail(
+        company.email,
+        company.name,
+        PLAN_NAMES[planName] || planName,
+        new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+        amount,
+        'month',
+        nextBillingDate
+      )
+
+      console.log(
+        `[trial-manager] Trial auto-upgraded to subscription for ${companyId}: ${subscription.id}`
+      )
+
+      return {
+        upgraded: true,
+        message: `Trial expired. Auto-upgraded to ${PLAN_NAMES[planName]} subscription.`,
+        subscription_id: subscription.id,
+      }
+    } catch (stripeErr) {
+      // Stripe error - mark trial as expired but not upgraded
+      const errorMsg =
+        stripeErr instanceof Error ? stripeErr.message : 'Unknown error'
+
+      console.error(
+        `[trial-manager] Stripe error during trial upgrade for ${companyId}:`,
+        errorMsg
+      )
+
+      await sql`
+        UPDATE companies
+        SET
+          trial_status = 'expired',
+          updated_at = NOW()
+        WHERE id = ${companyId}
+      `
+
+      return {
+        upgraded: false,
+        message: `Trial expired. Auto-upgrade failed: ${errorMsg}. Manual upgrade required.`,
+      }
+    }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error(`[trial-manager] Failed to handle trial expiry:`, errorMsg)
+    throw err
+  }
+}
+
+// ─── Function 5: Extend Trial (admin only) ─────────────────────────────────
+export async function extendTrial(
+  companyId: string,
+  extendByDays: number = 7
+): Promise<string> {
+  try {
+    // Fetch company
+    const companies = await sql`
+      SELECT id, trial_status, trial_end_date
+      FROM companies
+      WHERE id = ${companyId}
+    `
+
+    if (companies.length === 0) {
+      throw new Error(`Company not found: ${companyId}`)
+    }
+
+    const company = companies[0] as CompanyTrialData
+
+    // Verify trial status is active or expired
+    if (!['active', 'expired'].includes(company.trial_status)) {
+      throw new Error(`Cannot extend trial with status: ${company.trial_status}`)
+    }
+
+    if (!company.trial_end_date) {
+      throw new Error('Trial end date not set')
+    }
+
+    // Calculate new end date
+    const currentEndDate = new Date(company.trial_end_date)
+    currentEndDate.setDate(currentEndDate.getDate() + extendByDays)
+    const newEndDate = currentEndDate.toISOString().split('T')[0]
+
+    // Update trial end date and revert to active if expired
+    await sql`
+      UPDATE companies
+      SET
+        trial_end_date = ${newEndDate}::date,
+        trial_status = CASE
+          WHEN trial_status = 'expired' THEN 'active'
+          ELSE trial_status
+        END,
+        updated_at = NOW()
+      WHERE id = ${companyId}
+    `
+
+    console.log(
+      `[trial-manager] Extended trial for ${companyId} by ${extendByDays} days to ${newEndDate}`
+    )
+
+    return newEndDate
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error(`[trial-manager] Failed to extend trial:`, errorMsg)
+    throw err
   }
 }
