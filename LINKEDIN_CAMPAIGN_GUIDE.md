@@ -75,7 +75,7 @@
 - Bottom: 4-column feature showcase with icons
 - Statistics box: Bold numbers with small labels
 
-**CTA:** "Learn more" (links to https://ipoready.com/pace)
+**CTA:** "Learn more" (links to https://www.ipoready.ai/pace)
 
 **LinkedIn Tips:**
 - Add link to PACE explainer video in comments

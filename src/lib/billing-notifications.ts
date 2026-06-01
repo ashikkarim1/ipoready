@@ -8,7 +8,7 @@
 import { getResend, FROM_ADDRESS } from '@/lib/resend'
 import { sql } from '@/lib/db'
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://app.ipoready.com'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://www.ipoready.ai'
 const BRAND_COLOR = '#E8312A'
 
 interface SendEmailResult {
@@ -844,7 +844,7 @@ export async function sendTrialExpiredEmail(
       <p>To continue using IPOReady and maintain access to your PACE readiness tracking, please upgrade to a paid plan.</p>
 
       <div style="text-align: center; margin: 30px 0;">
-        <a href="https://ipoready.vercel.app/billing" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
+        <a href="${APP_URL}/billing" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
           Upgrade Now
         </a>
       </div>

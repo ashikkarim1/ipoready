@@ -97,7 +97,7 @@ export default function WelcomeEmail({ name, companyName, exchange, loginUrl }: 
             <Section style={{ textAlign: 'center', marginTop: '24px' }}>
               <Text style={{ fontSize: '12px', color: '#B8B7B3', margin: 0, lineHeight: '1.6' }}>
                 IPOReady · hello@ipoready.com<br />
-                You&apos;re receiving this because you registered at ipoready.com.<br />
+                You&apos;re receiving this because you registered at www.ipoready.ai.<br />
                 IPOReady is a workflow platform only and does not provide legal, securities or financial advice.
               </Text>
             </Section>

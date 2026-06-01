@@ -23,4 +23,4 @@ export const resend = {
 }
 
 export const FROM_ADDRESS = 'IPOReady <hello@ipoready.com>'
-export const APP_URL = process.env.NEXTAUTH_URL ?? 'https://ipoready.vercel.app'
+export const APP_URL = process.env.NEXTAUTH_URL ?? 'https://www.ipoready.ai'

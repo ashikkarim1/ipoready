@@ -9,7 +9,7 @@
 
 ### Step 2: Add Your Property
 1. Select **"URL prefix"** property type (not domain)
-2. Enter: `https://ipoready.com`
+2. Enter: `https://www.ipoready.ai`
 3. Click **"Continue"**
 
 ### Step 3: Verify Ownership
@@ -55,11 +55,11 @@ After verification is complete:
 
 ### 2. Request Indexing for Key Pages
 In Search Console, use **"Inspect URL"** to manually request indexing for:
-- `https://ipoready.com`
-- `https://ipoready.com/pricing`
-- `https://ipoready.com/checklist-guide`
-- `https://ipoready.com/resources`
-- `https://ipoready.com/post-listing`
+- `https://www.ipoready.ai`
+- `https://www.ipoready.ai/pricing`
+- `https://www.ipoready.ai/checklist-guide`
+- `https://www.ipoready.ai/resources`
+- `https://www.ipoready.ai/post-listing`
 
 Process: Copy URL → Paste in "Inspect URL" → Click "Request indexing"
 
@@ -71,7 +71,7 @@ Process: Copy URL → Paste in "Inspect URL" → Click "Request indexing"
 1. Go to **Core Web Vitals** report
 2. Current status: ___ (you'll see breakdown)
 3. If RED: Performance issue affecting rankings
-4. Action: Check Lighthouse score (`npm run build && npx lighthouse https://ipoready.com`)
+4. Action: Check Lighthouse score (`npm run build && npx lighthouse https://www.ipoready.ai`)
 
 ### Coverage Report
 1. Go to **Coverage** in Indexing
@@ -242,7 +242,7 @@ Future enhancements:
 - ✓ How-To: Create step-by-step guides for IPO process
 
 ### Performance Optimization
-Current Lighthouse score: ___ (check with: `npx lighthouse https://ipoready.com`)
+Current Lighthouse score: ___ (check with: `npx lighthouse https://www.ipoready.ai`)
 - Target: 90+ (green)
 - If <80: Investigate slow images, unused JavaScript, render-blocking resources
 - Fix priority: Mobile Core Web Vitals > Desktop > HTTP/2

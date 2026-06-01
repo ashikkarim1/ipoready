@@ -20,7 +20,7 @@
 ### 🔧 Environment Variables Required (Set in Vercel)
 
 **NextAuth Configuration:**
-- `NEXTAUTH_URL` → https://ipoready.vercel.app (your production domain)
+- `NEXTAUTH_URL` → https://www.ipoready.ai (your production domain)
 - `NEXTAUTH_SECRET` → Generate with: `openssl rand -base64 32`
 
 **Database:**
@@ -34,7 +34,7 @@
 **Email:**
 - `RESEND_API_KEY` → re_... (from Resend Dashboard)
 - `FROM_ADDRESS` → noreply@ipoready.com (or your domain)
-- `NEXT_PUBLIC_APP_URL` → https://ipoready.vercel.app
+- `NEXT_PUBLIC_APP_URL` → https://www.ipoready.ai
 
 **Trial Cron Job:**
 - `TRIAL_CRON_SECRET` → Generate with: `openssl rand -base64 32`
@@ -75,7 +75,7 @@ SELECT COUNT(*) FROM subscription_state_transitions;
    - Check deployment logs at https://vercel.com/dashboard
 
 3. **Post-deployment verification:**
-   - [x] Homepage loads: https://ipoready.vercel.app
+   - [x] Homepage loads: https://www.ipoready.ai
    - [x] Login works: /api/auth/signin
    - [x] Dashboard loads: /app/dashboard (requires login)
    - [x] PACE page loads: /app/pace (requires login)

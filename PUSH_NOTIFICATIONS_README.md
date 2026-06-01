@@ -257,7 +257,7 @@ curl -X GET "http://localhost:3800/api/push/cron/cleanup-subscriptions" \
 ### Production Cron Job
 ```bash
 # Run daily at 2am UTC to cleanup old subscriptions
-0 2 * * * curl -X GET "https://ipoready.com/api/push/cron/cleanup-subscriptions" \
+0 2 * * * curl -X GET "https://www.ipoready.ai/api/push/cron/cleanup-subscriptions" \
   -H "Authorization: Bearer $CRON_SECRET"
 ```
 

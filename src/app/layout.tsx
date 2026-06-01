@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   title: 'IPOReady — The World\'s Only Central Hub for IPO Readiness',
   description: 'Manage your entire IPO workflow from private issuer to public listing on TSX, TSXV, CSE, NASDAQ, NYSE, or OTC. Checklist, PACE tracking, cap table management, document management, and expert network.',
   keywords: 'IPO, going public, TSXV, TSX, CSE, NASDAQ, NYSE, RTO, listing, securities, compliance, cap table, IPO readiness, IPO timeline, IPO costs',
-  authors: [{ name: 'IPOReady', url: 'https://ipoready.com' }],
+  authors: [{ name: 'IPOReady', url: 'https://www.ipoready.ai' }],
   creator: 'IPOReady Inc.',
   publisher: 'IPOReady Inc.',
   robots: {
@@ -55,12 +55,12 @@ export const metadata: Metadata = {
     title: 'IPOReady — Mission Control for Your IPO',
     description: 'The world\'s first central hub for managing your entire journey from private to public company.',
     type: 'website',
-    url: 'https://ipoready.com',
+    url: 'https://www.ipoready.ai',
     siteName: 'IPOReady',
     locale: 'en_US',
     images: [
       {
-        url: 'https://ipoready.com/og-image.png',
+        url: 'https://www.ipoready.ai/og-image.png',
         width: 1200,
         height: 630,
         alt: 'IPOReady - Central Hub for IPO Readiness',
@@ -73,10 +73,10 @@ export const metadata: Metadata = {
     title: 'IPOReady — Mission Control for Your IPO',
     description: 'The world\'s first central hub for managing your entire journey from private to public company.',
     creator: '@IPOReady',
-    images: ['https://ipoready.com/og-image.png'],
+    images: ['https://www.ipoready.ai/og-image.png'],
   },
   alternates: {
-    canonical: 'https://ipoready.com',
+    canonical: 'https://www.ipoready.ai',
   },
   icons: {
     icon: '/favicon.svg',
@@ -90,8 +90,8 @@ const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'IPOReady',
-  url: 'https://ipoready.com',
-  logo: 'https://ipoready.com/logo.png',
+  url: 'https://www.ipoready.ai',
+  logo: 'https://www.ipoready.ai/logo.png',
   description: 'The world\'s first central hub for IPO readiness workflow management',
   sameAs: [
     'https://twitter.com/IPOReady',
@@ -100,7 +100,7 @@ const organizationSchema = {
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'Customer Support',
-    email: 'support@ipoready.com',
+    email: 'support@ipoready.ai',
   },
   founder: [
     {
@@ -115,7 +115,7 @@ const applicationSchema = {
   '@type': 'SoftwareApplication',
   name: 'IPOReady',
   description: 'IPO Readiness Workflow Management Platform',
-  url: 'https://ipoready.com',
+  url: 'https://www.ipoready.ai',
   applicationCategory: 'BusinessApplication',
   offers: {
     '@type': 'Offer',
@@ -126,6 +126,85 @@ const applicationSchema = {
     '@type': 'AggregateRating',
     ratingValue: '4.9',
     ratingCount: '147',
+  },
+}
+
+// LocalBusiness Schema for multi-location organization
+const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': 'https://www.ipoready.ai',
+  name: 'IPOReady',
+  url: 'https://www.ipoready.ai',
+  description: 'The world\'s first central hub for IPO readiness workflow management. Manage your entire IPO journey from private issuer to public listing.',
+  image: 'https://www.ipoready.ai/logo.png',
+  telephone: '+1-604-000-0000',
+  email: 'support@ipoready.ai',
+  priceRange: '$299-$999',
+  serviceArea: [
+    {
+      '@type': 'Country',
+      name: 'Canada',
+    },
+    {
+      '@type': 'Country',
+      name: 'United States',
+    },
+    {
+      '@type': 'Country',
+      name: 'United Arab Emirates',
+    },
+    {
+      '@type': 'Country',
+      name: 'Hong Kong',
+    },
+    {
+      '@type': 'Country',
+      name: 'Singapore',
+    },
+  ],
+  address: [
+    {
+      '@type': 'PostalAddress',
+      streetAddress: 'P.O. Box 123456',
+      addressLocality: 'Dubai',
+      addressRegion: 'Dubai',
+      postalCode: 'UAE',
+      addressCountry: 'AE',
+      name: 'IPOReady — Dubai Headquarters',
+    },
+    {
+      '@type': 'PostalAddress',
+      streetAddress: 'Suite 1500, 111 King Street West',
+      addressLocality: 'Toronto',
+      addressRegion: 'ON',
+      postalCode: 'M5H 4A1',
+      addressCountry: 'CA',
+      name: 'IPOReady — Toronto Office',
+    },
+  ],
+  contact: [
+    {
+      '@type': 'ContactPoint',
+      contactType: 'Customer Support',
+      telephone: '+1-604-000-0000',
+      email: 'support@ipoready.ai',
+      areaServed: ['CA', 'US', 'AE', 'HK', 'SG'],
+      availableLanguage: ['en', 'fr'],
+    },
+  ],
+  knowsAbout: [
+    'IPO Preparation',
+    'Capital Markets',
+    'Securities Compliance',
+    'PACE Score',
+    'Cap Table Management',
+    'Document Management',
+    'Expert Network',
+  ],
+  mainEntity: {
+    '@type': 'Organization',
+    name: 'IPOReady Inc.',
   },
 }
 
@@ -147,8 +226,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(applicationSchema) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        />
         {/* Canonical URL */}
-        <link rel="canonical" href="https://ipoready.com" />
+        <link rel="canonical" href="https://www.ipoready.ai" />
         {/* Preconnect to Google APIs */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

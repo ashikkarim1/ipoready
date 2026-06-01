@@ -203,7 +203,7 @@
 
 #### Test Data Export
 ```bash
-# 1. Log in to app.ipoready.com
+# 1. Log in to www.ipoready.ai
 # 2. Go to Account Settings → Privacy & Data
 # 3. Click "Export Your Data"
 # 4. Enter your password
@@ -220,7 +220,7 @@
 
 #### Test Account Deletion
 ```bash
-# 1. Log in to app.ipoready.com
+# 1. Log in to www.ipoready.ai
 # 2. Go to Account Settings → Privacy & Data
 # 3. Click "Delete Your Account"
 # 4. Enter password and confirm
@@ -258,12 +258,12 @@ npm run build
 npm run deploy
 
 # 4. Verify pages load
-curl https://app.ipoready.com/privacy
-curl https://app.ipoready.com/terms
-curl https://app.ipoready.com/disclaimer
+curl https://www.ipoready.ai/privacy
+curl https://www.ipoready.ai/terms
+curl https://www.ipoready.ai/disclaimer
 
 # 5. Test APIs
-curl -X POST https://app.ipoready.com/api/user/data-export \
+curl -X POST https://www.ipoready.ai/api/user/data-export \
   -H "Content-Type: application/json" \
   -d '{"password":"test123"}'
 

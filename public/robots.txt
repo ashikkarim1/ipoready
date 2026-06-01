@@ -28,4 +28,4 @@ User-agent: Bingbot
 Allow: /
 
 # Sitemap location
-Sitemap: https://ipoready.com/sitemap.xml
+Sitemap: https://www.ipoready.ai/sitemap.xml

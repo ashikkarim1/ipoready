@@ -1,0 +1,663 @@
+================================================================================
+IPOReady.ai - SEO PRE-LAUNCH CHECKLIST & EXECUTION GUIDE
+Production Launch Phase - June 2026
+================================================================================
+
+This checklist provides a step-by-step execution roadmap for the DevOps, Marketing,
+and Growth teams to complete all SEO infrastructure before production launch.
+
+DOMAIN: https://www.ipoready.ai (primary)
+HEADQUARTERS (for Local SEO): 
+  - Primary: P.O. Box 123456, Silicon Oasis, Dubai, UAE
+  - Secondary: Suite 1500, 111 King Street West, Toronto, ON M5H 4A1, Canada
+
+VERIFICATION EMAIL: ceo@theupcapital.com
+
+================================================================================
+SECTION 1: ENVIRONMENT & DOMAIN SETUP (Day 1 - 2 hours)
+================================================================================
+
+TASK 1.1: Verify Domain Configuration
+[ ] Confirm DNS records are pointing to production Vercel deployment
+    Command: nslookup www.ipoready.ai
+    Expected: A records point to Vercel Edge Network
+    
+[ ] Confirm HTTPS is enabled and SSL certificate is valid
+    Command: openssl s_client -connect www.ipoready.ai:443
+    Expected: Certificate chain shows valid SSL/TLS certificate
+    
+[ ] Verify www subdomain is properly configured
+    Command: curl -I https://www.ipoready.ai
+    Expected: 200 response with valid SSL/TLS certificate
+    Note: Current implementation uses www subdomain (www.ipoready.ai)
+
+TASK 1.2: Update Environment Variables
+[ ] Verify NEXT_PUBLIC_APP_URL environment variable
+    Location: .env.production
+    Value should be: https://www.ipoready.ai
+    Status: ✓ Will be set during Vercel deployment
+
+[ ] Verify robots.txt contains correct sitemap URL
+    Location: /public/robots.txt
+    Check: Sitemap: https://www.ipoready.ai/sitemap.xml
+    Status: ✓ Updated - sitemap URL is correct
+
+[ ] Verify sitemap.ts uses correct base URL
+    Location: /src/app/sitemap.ts
+    Check: baseUrl = 'https://www.ipoready.ai'
+    Status: ✓ Updated - base URL is correct
+
+================================================================================
+SECTION 2: STRUCTURED DATA & METADATA SETUP (Day 1 - 1 hour)
+================================================================================
+
+TASK 2.1: Verify JSON-LD Schemas in Layout
+[ ] Confirm Organization schema is present in /src/app/layout.tsx
+    Fields to verify:
+    - name: "IPOReady"
+    - url: "https://ipoready.io"
+    - logo: "[company logo URL]"
+    - sameAs: [LinkedIn, Twitter, etc. URLs]
+    
+[ ] Confirm SoftwareApplication schema is present
+    Fields to verify:
+    - name: "IPOReady"
+    - applicationCategory: "BusinessApplication"
+    - operatingSystem: "Web"
+    - offers: [pricing tiers with prices]
+    
+[ ] Confirm LocalBusiness schema is present with dual locations
+    Verify two addresses:
+    1. Dubai: P.O. Box 123456, Silicon Oasis, Dubai, UAE
+    2. Toronto: Suite 1500, 111 King Street West, Toronto, ON M5H 4A1
+    
+    Verify service areas include:
+    - Canada, United States, United Arab Emirates, Hong Kong, Singapore
+    
+    Verify contact points and knowsAbout array
+
+TASK 2.2: Verify Canonical URLs
+[ ] Homepage has canonical URL: <link rel="canonical" href="https://www.ipoready.ai" />
+[ ] All pages have self-referencing canonical URLs
+[ ] No duplicate content issues between www and apex domain versions
+
+TASK 2.3: Verify Meta Tags
+[ ] Page titles follow format: "[Page Topic] | IPOReady - IPO Readiness Platform"
+[ ] Meta descriptions are 155-160 characters
+[ ] Meta description includes primary keyword
+[ ] All pages include: <meta name="viewport" content="width=device-width, initial-scale=1" />
+[ ] All pages include: <meta charset="utf-8" />
+
+================================================================================
+SECTION 3: GOOGLE SEARCH CONSOLE SETUP (Day 2 - 3 hours)
+================================================================================
+
+TASK 3.1: Domain Verification via DNS (Recommended Method)
+[ ] Go to https://search.google.com/search-console/
+[ ] Click "Start now" or "Add property"
+[ ] Select "Domain" (not "URL prefix")
+[ ] Enter: ipoready.io
+[ ] Copy the DNS verification code (format: google-site-verification=XXXXX)
+[ ] Access DNS provider (GoDaddy, Cloudflare, Route53, etc.)
+[ ] Add new TXT record:
+    - Name: @ (or www.ipoready.ai)
+    - Type: TXT
+    - Value: google-site-verification=XXXXX [paste exact code]
+    - TTL: 3600 (or default)
+[ ] Click "Verify" in Google Search Console
+[ ] Wait 24-48 hours for verification to complete
+[ ] Confirmation email sent to: ceo@theupcapital.com
+[ ] Status check: https://search.google.com/search-console/settings/ownership
+
+TASK 3.2: Alternative Verification Methods (if DNS fails)
+[ ] Method B - HTML file upload:
+    - Create file: public/google-[verification-code].html
+    - Upload to https://www.ipoready.ai/google-[verification-code].html
+    - Verify in GSC
+    
+[ ] Method C - Google Analytics property:
+    - Link Google Analytics account to GSC property
+    - Requires Analytics property already tracking www.ipoready.ai
+    - Link via: Settings > Verification
+
+TASK 3.3: WWW Subdomain Configuration
+[ ] Create property for https://www.ipoready.ai in GSC
+[ ] Confirm www subdomain is the preferred domain
+    In GSC Settings > Preferred domain > https://www.ipoready.ai
+
+TASK 3.4: Sitemap Submission
+After domain verification is complete:
+[ ] Go to GSC > Sitemaps (left sidebar)
+[ ] Click "New sitemap"
+[ ] Enter: sitemap.xml (or https://www.ipoready.ai/sitemap.xml)
+[ ] Click "Submit"
+[ ] Verify sitemap is indexed (Status should show "Success")
+[ ] Check sample URLs are included:
+    - https://www.ipoready.ai (homepage)
+    - https://www.ipoready.ai/pricing
+    - https://www.ipoready.ai/resources
+    - https://www.ipoready.ai/checklist-guide
+    - https://www.ipoready.ai/marketplace
+
+TASK 3.5: Structured Data Validation
+[ ] Visit Google Rich Results Test: https://search.google.com/test/rich-results
+[ ] Paste URL: https://www.ipoready.ai
+[ ] Run test and verify no errors
+[ ] Check for warnings and address if possible
+[ ] Repeat for key pages:
+    - https://www.ipoready.ai/pricing
+    - https://www.ipoready.ai/marketplace
+    - https://www.ipoready.ai/resources
+
+[ ] Expected valid items (0 errors):
+    - Organization schema (valid)
+    - LocalBusiness schema (valid)
+    - SoftwareApplication schema (valid)
+
+================================================================================
+SECTION 4: ROBOTS.TXT & CRAWL OPTIMIZATION (Day 2 - 30 minutes)
+================================================================================
+
+TASK 4.1: Verify robots.txt Configuration
+[ ] Confirm robots.txt exists at /public/robots.txt
+[ ] Verify file is accessible at https://www.ipoready.ai/robots.txt
+[ ] Confirm all rules are correct:
+    - Allow: / (all pages crawlable)
+    - Disallow: /admin/, /api/, /account/, /dashboard/, /team/
+    - Disallow: /_next/, *.json$, query parameters for sorting/filtering
+    - Crawl-delay: 10 (for slow bots like Ahrefs, Semrush)
+    - Sitemap location is correct
+
+TASK 4.2: Test robots.txt in GSC
+[ ] GSC > Settings > Crawl stats
+[ ] Verify crawl rate and robot activity
+[ ] Check for any crawl errors in GSC
+[ ] Address any 4xx or 5xx errors blocking crawlers
+
+TASK 4.3: Core Web Vitals Setup
+[ ] Verify page speed meets Google Core Web Vitals:
+    - Largest Contentful Paint (LCP): < 2.5s
+    - First Input Delay (FID): < 100ms
+    - Cumulative Layout Shift (CLS): < 0.1
+    
+[ ] Tools to measure:
+    - PageSpeed Insights: https://pagespeed.web.dev/
+    - Google Analytics 4 (Web Vitals report)
+    - Chrome DevTools (Lighthouse tab)
+
+[ ] Optimization priorities if needed:
+    - Minimize JavaScript bundle size
+    - Implement image optimization (next/image)
+    - Enable Vercel Edge Network caching
+    - Optimize CSS and remove unused styles
+
+================================================================================
+SECTION 5: GOOGLE BUSINESS PROFILES (Day 3-4 - 4 hours)
+================================================================================
+
+TASK 5.1: Create Dubai HQ Profile
+[ ] Go to https://business.google.com/
+[ ] Click "Manage your business"
+[ ] Click "Create or claim a business"
+[ ] Business name: IPOReady (or www.ipoready.ai)
+[ ] Category: Software Company / SaaS Platform
+[ ] Address: P.O. Box 123456, Silicon Oasis, Dubai, United Arab Emirates
+[ ] Phone: [add main phone number]
+[ ] Website: https://www.ipoready.ai
+[ ] Email: ceo@theupcapital.com
+[ ] Service areas:
+    - Select "Service area" instead of "Physical location"
+    - Add: Canada, United States, United Arab Emirates, Hong Kong, Singapore
+[ ] Hours of operation: [set business hours, e.g., Monday-Friday 9am-6pm GST]
+[ ] Upload photos (5-10 images):
+    - 1-2 office exterior/interior photos
+    - 1-2 team photos
+    - 2-3 product screenshots
+    - Logo in various formats
+
+[ ] Add business description (280 characters max):
+    "IPOReady is the central hub for IPO readiness. Our PACE™ Velocity Engine 
+    guides companies through all 8 IPO phases with 180+ milestones, AI-assisted 
+    cap tables, and verified expert network access."
+
+[ ] Verification: Google will send verification postcard to address
+    Timeline: 1-2 weeks for postcard arrival
+    Alternative: Phone verification via Google (faster, 24 hours)
+
+TASK 5.2: Create Toronto Secondary Profile
+[ ] Repeat process for Toronto office:
+[ ] Business name: IPOReady - Toronto Office
+[ ] Category: Business to Business Service
+[ ] Address: Suite 1500, 111 King Street West, Toronto, ON M5H 4A1, Canada
+[ ] Phone: [Toronto office number]
+[ ] Website: https://www.ipoready.ai
+[ ] Primary profile link: Link to Dubai profile (if option available)
+[ ] Service areas: Same as primary
+
+TASK 5.3: Add Google Posts (Ongoing)
+[ ] Create 3-5 initial Google Posts showcasing:
+    Post 1: "7 Pillars of IPO Readiness - A Framework for Success"
+    Post 2: "Why Cap Table Management Matters Before Your IPO"
+    Post 3: "Understanding Your PACE™ Score: What It Means for Your Timeline"
+    Post 4: "Meet Our Expert Network - Verified Advisors for Every Phase"
+    Post 5: "Free IPO Readiness Assessment - 5 Minutes to Your Score"
+    
+[ ] Posts should include:
+    - High-quality image (1200x628px recommended)
+    - Compelling headline
+    - 1-2 sentence description
+    - Call-to-action button (Learn More, Sign Up Free, etc.)
+    - Links to relevant landing pages
+
+TASK 5.4: Monitor Profile Health
+[ ] Check monthly:
+    - Response rate to questions
+    - New reviews and star rating
+    - Photos and content freshness
+    - Mobile optimization of profile
+[ ] Respond to all questions within 24 hours
+[ ] Encourage verified customers to leave reviews
+[ ] Update posts monthly with fresh content
+
+================================================================================
+SECTION 6: ANALYTICS & MONITORING SETUP (Day 3 - 2 hours)
+================================================================================
+
+TASK 6.1: Google Analytics 4 Setup
+[ ] Verify GA4 property is created for www.ipoready.ai
+[ ] Property ID: [your GA4 property ID - e.g., G-XXXXXXXXXX]
+[ ] Confirm tracking code is installed in /src/app/layout.tsx
+[ ] Create custom events for tracking:
+    - pace_score_generated (with exchange, industry filters)
+    - document_downloaded
+    - expert_profile_viewed
+    - trial_signup
+    - payment_initiated
+    
+[ ] Setup conversion goals:
+    - Goal 1: Free trial signup (value: $0)
+    - Goal 2: Paid subscription (value: $500+)
+    - Goal 3: Document download (value: engagement metric)
+    - Goal 4: Expert interaction (value: engagement)
+
+TASK 6.2: Link GSC to GA4
+[ ] GSC > Settings > Links to Google properties
+[ ] Link Google Analytics 4 property
+[ ] This enables GSC data to flow into GA4 for unified reporting
+
+TASK 6.3: Google Analytics Dashboard Setup
+[ ] Create custom dashboard showing:
+    - Organic traffic by device (mobile/desktop/tablet)
+    - Top landing pages (track /pricing, /resources, /, /checklist-guide)
+    - Conversion rate to trial signup
+    - Average session duration
+    - Bounce rate by page
+    - User acquisition trends
+
+TASK 6.4: Core Web Vitals Monitoring
+[ ] GA4 > Reports > User Experience > Web Vitals
+[ ] Set baseline metrics:
+    - LCP (Largest Contentful Paint): Target < 2.5s
+    - FID (First Input Delay): Target < 100ms
+    - CLS (Cumulative Layout Shift): Target < 0.1
+[ ] Monitor weekly and alert if metrics degrade
+
+================================================================================
+SECTION 7: SCHEMA.ORG STRUCTURED DATA TESTING (Day 3 - 1 hour)
+================================================================================
+
+TASK 7.1: Homepage Schema Validation
+[ ] URL: https://www.ipoready.ai
+[ ] Use Google Rich Results Test: https://search.google.com/test/rich-results
+[ ] Verify all schemas are valid (0 errors):
+    [ ] Organization schema
+    [ ] LocalBusiness schema
+    [ ] SoftwareApplication schema
+[ ] Check for warnings and address
+
+TASK 7.2: Pricing Page Schema
+[ ] URL: https://www.ipoready.ai/pricing
+[ ] Verify SoftwareApplication schema with Offer items
+[ ] Each pricing tier should show:
+    - name, price, priceCurrency, availability
+    - No errors or warnings
+
+TASK 7.3: Breadcrumb Schema (if applicable)
+[ ] All pages should have breadcrumb navigation
+[ ] If implemented, verify BreadcrumbList schema:
+    Verify itemListElement array matches page hierarchy
+
+TASK 7.4: Video Schema (if applicable)
+[ ] If homepage has video content, verify VideoObject schema:
+    - name, description, thumbnailUrl, uploadDate
+    - No errors
+
+================================================================================
+SECTION 8: PRODUCTION DEPLOYMENT (Day 4)
+================================================================================
+
+TASK 8.1: Final Pre-Launch Verification
+[ ] All structured data tests pass (0 errors in Rich Results Test)
+[ ] robots.txt is accessible and correct
+[ ] sitemap.xml is valid and includes all key pages
+[ ] GSC domain verification initiated (DNS TXT record added)
+[ ] Google Business Profiles created for Dubai and Toronto
+[ ] Analytics tracking confirmed working
+[ ] Core Web Vitals meet targets (LCP < 2.5s, FID < 100ms, CLS < 0.1)
+[ ] No crawler errors blocking indexing
+
+TASK 8.2: Deployment Steps
+[ ] Merge SEO changes to production branch:
+    - Updated robots.txt ✓
+    - Updated sitemap.ts ✓
+    - Layout.tsx with LocalBusiness schema ✓
+    
+[ ] Deploy to Vercel:
+    Command: git push origin main
+    Vercel will auto-deploy and assign preview URL
+    
+[ ] Verify deployment:
+    [ ] Check https://www.ipoready.ai loads without errors
+    [ ] View page source and verify JSON-LD schemas are present
+    [ ] Check robots.txt at https://www.ipoready.ai/robots.txt
+    [ ] Check sitemap.xml at https://www.ipoready.ai/sitemap.xml
+
+TASK 8.3: Post-Deployment Verification
+[ ] Run mobile-friendly test:
+    URL: https://mobile-friendly-test.appspot.com/
+    Result should be: MOBILE-FRIENDLY
+    
+[ ] Run PageSpeed Insights:
+    URL: https://pagespeed.web.dev/
+    Mobile score target: > 75
+    Desktop score target: > 85
+
+[ ] GSC Verification Status (24-48 hours after DNS TXT record added):
+    [ ] Domain verification complete
+    [ ] GSC shows property as verified and active
+    [ ] Confirmation email received at ceo@theupcapital.com
+
+================================================================================
+SECTION 9: FIRST MONTH MONITORING (Weeks 1-4)
+================================================================================
+
+TASK 9.1: Week 1 Monitoring
+[ ] GSC: Domain verification status = Verified ✓
+[ ] GSC: Sitemaps section shows "Success" for sitemap.xml ✓
+[ ] GSC: Coverage tab shows pages being indexed
+    Expected: At least 10-15 pages indexed
+[ ] GA4: Organic traffic arriving (may be low in Week 1)
+[ ] Search Console: Check for any crawl errors or warnings
+[ ] Business Profiles: Verification postcards/emails received
+
+TASK 9.2: Week 2 Monitoring (Wait for GSC indexing)
+[ ] GSC: Check if pages are appearing in search results
+    Search: "site:ipoready.io" in Google
+    Expected: 10+ pages indexed and appearing
+    
+[ ] Performance Check:
+    [ ] PageSpeed Insights score remains above 75 (mobile)
+    [ ] Core Web Vitals are healthy
+    [ ] No new crawl errors in GSC
+    
+[ ] Google Business Profiles:
+    [ ] Both profiles verified and live
+    [ ] Initial posts published (3-5 posts)
+    [ ] Profile photos uploaded and visible
+
+TASK 9.3: Week 3-4 Monitoring (Ongoing)
+[ ] GSC: Click performance improving
+    Track: impressions, clicks, average position, CTR
+    Target Week 3-4: 50+ impressions, 2-5 clicks
+    
+[ ] Organic Traffic GA4:
+    Check organic users and sessions
+    Identify top landing pages
+    
+[ ] Business Profile engagement:
+    Monitor for questions/answers
+    Check review notifications
+    Respond to customer inquiries
+    
+[ ] Keyword Ranking:
+    Use GSC to track queries bringing traffic
+    Note: GSC shows queries with > 3 impressions
+    
+[ ] Content Performance:
+    Which pages are getting clicks?
+    Optimize title/meta for pages with high impressions, low CTR
+
+================================================================================
+SECTION 10: ONGOING SEO MAINTENANCE (Monthly & Quarterly)
+================================================================================
+
+TASK 10.1: Monthly Checklist (30 minutes)
+[ ] GSC: Review search performance
+    - New queries appearing?
+    - Any ranking changes?
+    - Any crawl errors?
+[ ] GA4: Review organic traffic metrics
+    - Organic users trending up or down?
+    - Conversion rate from organic traffic
+    - Top performing landing pages
+[ ] Google Business Profiles:
+    - Respond to all questions
+    - Check new reviews
+    - Publish new Google Post
+[ ] Page Speed: Run PageSpeed Insights check
+    - Monitor Core Web Vitals trends
+    - Address any issues that arise
+
+TASK 10.2: Quarterly Review (1 hour)
+[ ] GSC: Comprehensive search performance analysis
+    - Ranking changes (up/down)
+    - Keyword opportunity analysis
+    - Query performance trends
+[ ] GA4: Quarterly organic performance report
+    - Sessions, users, conversion rate
+    - Top pages, exit pages
+    - Device and browser analysis
+[ ] Content Optimization:
+    - Update high-performing pages
+    - Refresh old content (> 6 months old)
+    - Add internal links to related pages
+[ ] Competitive Analysis:
+    - Check competitor rankings
+    - Identify keyword gaps
+[ ] Backlink Review:
+    - Monitor backlinks in GSC
+    - Disavow any spammy links
+
+TASK 10.3: Quarterly Technical Audit
+[ ] Core Web Vitals: Ensure still meeting targets
+[ ] Mobile Optimization: Test on multiple devices
+[ ] Structured Data: Validate with Rich Results Test
+[ ] SSL Certificate: Verify valid and not expiring
+[ ] Redirect chains: Check no unnecessary redirects
+[ ] 404 Errors: Fix broken links in GSC
+
+================================================================================
+TIMELINE SUMMARY
+================================================================================
+
+DAY 1 (June 1):
+  - Task 1.1-1.2: Environment setup (2 hours)
+  - Task 2.1-2.3: Metadata & schemas (1 hour)
+  - Task 4.1-4.3: robots.txt setup (30 min)
+  SUBTOTAL: 3.5 hours
+
+DAY 2 (June 2):
+  - Task 3.1-3.5: GSC setup & sitemap (3 hours)
+  SUBTOTAL: 3 hours
+
+DAY 3 (June 3):
+  - Task 5.1-5.4: Google Business Profiles (4 hours)
+  - Task 6.1-6.4: Analytics setup (2 hours)
+  - Task 7.1-7.4: Schema testing (1 hour)
+  SUBTOTAL: 7 hours
+
+DAY 4 (June 4):
+  - Task 8.1-8.3: Production deployment (2 hours)
+  SUBTOTAL: 2 hours
+
+WEEK 1-4 (June 5-30):
+  - Task 9.1-9.3: Ongoing monitoring (5-10 min daily)
+  SUBTOTAL: ~2 hours across month
+
+TOTAL TIME: ~17.5 hours over 4 days + ongoing monitoring
+
+================================================================================
+RESOURCES & TOOLS
+================================================================================
+
+REQUIRED TOOLS (Free):
+- Google Search Console: https://search.google.com/search-console/
+- Google Analytics 4: https://analytics.google.com/
+- Google Business Profile: https://business.google.com/
+- Google Rich Results Test: https://search.google.com/test/rich-results
+- PageSpeed Insights: https://pagespeed.web.dev/
+- Mobile-Friendly Test: https://mobile-friendly-test.appspot.com/
+- DNS Provider admin panel (GoDaddy, Cloudflare, Route53, etc.)
+
+DOCUMENTATION:
+- Google Search Console docs: https://support.google.com/webmasters
+- Local SEO guide: https://support.google.com/business/
+- Structured Data docs: https://schema.org/
+- Core Web Vitals guide: https://web.dev/vitals/
+
+HELPFUL TOOLS (Optional):
+- Screaming Frog (SEO audit): https://www.screamingfrog.co.uk/
+- Semrush (keyword research): https://www.semrush.com/
+- Ahrefs (backlink analysis): https://ahrefs.com/
+- Moz (SEO tools): https://moz.com/
+
+================================================================================
+TROUBLESHOOTING GUIDE
+================================================================================
+
+Problem: GSC Domain Verification Fails
+Solution:
+  1. Verify DNS TXT record is exactly correct (copy/paste entire string)
+  2. Wait 24-48 hours for DNS propagation
+  3. Check DNS provider shows record as active
+  4. Try alternative: HTML file verification method
+  5. If still failing: Contact Google Search Console support
+
+Problem: Sitemap.xml Not Being Submitted
+Solution:
+  1. Verify sitemap is accessible: https://www.ipoready.ai/sitemap.xml
+  2. Check sitemap has valid XML structure
+  3. Verify all URLs in sitemap are valid and accessible
+  4. Check robots.txt isn't blocking /sitemap.xml
+  5. Resubmit in GSC > Sitemaps section
+
+Problem: Pages Not Appearing in Search Results
+Solution:
+  1. Check GSC Coverage tab - are pages indexed?
+  2. If not indexed:
+     - Verify pages are accessible (no 404)
+     - Check robots.txt isn't blocking them
+     - Request indexing via GSC > URL Inspection > "Request indexing"
+  3. If indexed but not ranking:
+     - Check competitor rankings for same keywords
+     - Optimize page title and meta description
+     - Improve Core Web Vitals if they're below target
+     - Add internal links from other pages
+
+Problem: Core Web Vitals Not Meeting Targets
+Solution:
+  1. Use PageSpeed Insights to identify issues
+  2. Common issues:
+     - LCP: Optimize images, lazy load, reduce JS
+     - FID: Reduce JavaScript complexity
+     - CLS: Add size attributes to media, avoid dynamic content shifts
+  3. Vercel recommendations:
+     - Enable Edge Caching
+     - Use next/image for responsive images
+     - Enable Static Export if applicable
+  4. Test after each optimization in PageSpeed
+
+Problem: Google Business Profile Verification Taking Too Long
+Solution:
+  1. Postcard verification: Normal timeline is 1-2 weeks
+  2. Faster option: Request phone verification instead
+     - Go to profile > Verify location > Call Google
+     - Receive verification code by phone
+     - Typically completes in 24 hours
+  3. Ensure address is exact and verifiable
+  4. Check business address is not considered "non-verifiable"
+
+================================================================================
+SUCCESS CRITERIA (By June 30, 2026)
+================================================================================
+
+✓ WEEK 1 (June 1-7):
+  - GSC domain verification initiated (DNS TXT record added)
+  - Sitemap submitted to GSC
+  - Google Business Profiles created
+  - Structured data validated with 0 errors
+  - Deployment complete with all SEO infrastructure live
+
+✓ WEEK 2 (June 8-14):
+  - GSC domain verification complete
+  - First pages appearing in Google search results
+  - site:www.ipoready.ai search shows 10+ indexed pages
+  - Google Business Profiles verified and live
+  - 50+ impressions in GSC for branded searches
+
+✓ WEEK 3-4 (June 15-30):
+  - Organic traffic arriving (even if low volume)
+  - 2-5 clicks from organic search in GSC
+  - Business Profile engagement (questions/reviews)
+  - Core Web Vitals meeting all targets
+  - No crawl errors or coverage issues in GSC
+
+✓ MONTH 1 TARGETS (By June 30):
+  - 50-100 organic sessions in GA4
+  - 20+ indexed pages in GSC
+  - 0 crawl errors or URL issues
+  - 5+ Google Posts published
+  - Average ranking position: 15-25 for brand keywords
+  - CTR for branded searches: 5-10%
+
+================================================================================
+NOTES FOR DEVOPS TEAM
+================================================================================
+
+1. The sitemap is auto-generated by Next.js at /src/app/sitemap.ts
+   - Ensure NEXT_PUBLIC_APP_URL is set to https://www.ipoready.ai in production
+   - Sitemap is served at /sitemap.xml automatically
+
+2. The robots.txt file is located at /public/robots.txt
+   - Update the sitemap URL if domain changes
+   - Remember to redeploy after any robots.txt changes
+
+3. All JSON-LD schemas are in /src/app/layout.tsx
+   - They're injected into <head> as <script type="application/ld+json"> tags
+   - They render on every page automatically
+   - Verify in production with view-source or Rich Results Test
+
+4. No additional deployment steps needed for SEO
+   - Just deploy code changes to Vercel as normal
+   - Vercel handles static file serving (robots.txt, sitemaps)
+   - DNS verification is handled separately (not by deployment)
+
+5. Post-deployment verification:
+   - Check https://www.ipoready.ai/robots.txt is accessible
+   - Check https://www.ipoready.ai/sitemap.xml returns valid XML
+   - Check Google Rich Results Test shows 0 errors
+
+================================================================================
+QUESTIONS? CONTACT
+================================================================================
+
+GSC Support: https://support.google.com/webmasters/
+Google Business Support: https://support.google.com/business/
+Analytics Support: https://support.google.com/analytics/
+Technical SEO: See Google Search Central: https://developers.google.com/search
+
+================================================================================
+Document Version: 1.0
+Last Updated: June 1, 2026
+Status: PRODUCTION READY FOR LAUNCH
+================================================================================
