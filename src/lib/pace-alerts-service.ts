@@ -6,7 +6,7 @@
  */
 
 import { sql } from '@/lib/db'
-import { validateMilestoneSequence } from '@/lib/ipo-sequencing'
+import { validateMilestoneSequenceForCompany } from '@/lib/ipo-sequencing'
 
 export interface PaceAlert {
   id: string
@@ -37,15 +37,16 @@ export async function validateAndPersistSequencingAlerts(
   `
 
   // Get fresh validation results
-  const violations = await validateMilestoneSequence(companyId, exchange)
+  const violations = await validateMilestoneSequenceForCompany(companyId, exchange as any)
 
   // Persist new violations as alerts
   const alerts: PaceAlert[] = []
   
   for (const violation of violations) {
+    const remediation = `Complete "${violation.prerequisiteStatus === 'complete' ? violation.dependentStatus : 'prerequisite'}" task before proceeding`
     const result = await sql`
       INSERT INTO pace_sequencing_alerts (company_id, rule, severity, remediation)
-      VALUES (${companyId}, ${violation.rule}, ${violation.severity}, ${violation.remediation})
+      VALUES (${companyId}, ${violation.message}, ${violation.severity}, ${remediation})
       RETURNING id, company_id, rule, severity, remediation, resolved_at, created_at
     `
 

@@ -1,4 +1,4 @@
-import { sql } from '@/db/client'
+import { sql } from '@/lib/db'
 
 /**
  * Seed IPO benchmarking data based on historical IPO trends

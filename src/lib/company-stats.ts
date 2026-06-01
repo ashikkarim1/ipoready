@@ -142,21 +142,49 @@ export async function computeAndUpdateCompanyStats(companyId: string): Promise<E
   }
 
   // Calculate predictive score with multiple factors
-  const predictiveResult = calculatePredictiveScore({
-    basePace: basePaceScore,
-    cashRunwayMonths: company?.cash_runway_months,
-    teamSize: company?.team_size,
-    cfoHired: company?.cfo_hired_at ? true : false,
-    boardSize: company?.board_size,
-    auditorSelected: company?.auditor_selected ?? false,
-    investorSophisticationScore: company?.investor_sophistication_score ?? 5,
-  })
+  const predictiveResult = await calculatePredictiveScore(
+    companyId,
+    basePaceScore,
+    {
+      cashRunwayMonths: company?.cash_runway_months ?? null,
+      teamSize: company?.team_size ?? null,
+      cfoHired: company?.cfo_hired_at ? true : false,
+      boardSize: company?.board_size ?? null,
+      auditorSelected: company?.auditor_selected ?? false,
+      investorSophisticationScore: company?.investor_sophistication_score ?? null,
+      preIpoFunding: null,
+    },
+    remainingDays
+  )
+
+  // Determine current phase (phase with most in-progress tasks)
+  let currentPhaseId = 1
+  if (phaseRows.length > 0) {
+    // Sort by phase number (assuming phase is a number like 1, 2, 3, etc.)
+    const sortedPhases = phaseRows.sort((a, b) => {
+      const phaseA = parseInt(a.phase, 10)
+      const phaseB = parseInt(b.phase, 10)
+      return phaseA - phaseB
+    })
+    // Get the first phase with incomplete tasks, or the last phase if all are complete
+    const incompletePhase = sortedPhases.find((row) => {
+      const total = parseInt(row.total, 10)
+      const completed = parseInt(row.completed, 10)
+      return completed < total
+    })
+    if (incompletePhase) {
+      currentPhaseId = parseInt(incompletePhase.phase, 10)
+    } else if (sortedPhases.length > 0) {
+      currentPhaseId = parseInt(sortedPhases[sortedPhases.length - 1].phase, 10)
+    }
+  }
 
   // Get peer percentile for benchmark comparison
-  const peerResult = calculatePeerPercentile(
+  const peerResult = await calculatePeerPercentile(
     companyId,
     targetExchange.toUpperCase(),
-    predictiveResult.adjustedPaceScore
+    currentPhaseId,
+    predictiveResult.adjustedPace
   )
 
   // Get milestone sequencing violations
@@ -195,7 +223,7 @@ export async function computeAndUpdateCompanyStats(companyId: string): Promise<E
     UPDATE companies
     SET
       pace_score = ${basePaceScore},
-      adjusted_pace_score = ${predictiveResult.adjustedPaceScore},
+      adjusted_pace_score = ${predictiveResult.adjustedPace},
       predicted_days_to_ipo = ${predictiveResult.predictedDaysToIpo},
       peer_percentile = ${peerResult.percentile},
       estimated_days_to_ipo = ${estimatedDaysToIpo},
@@ -206,9 +234,9 @@ export async function computeAndUpdateCompanyStats(companyId: string): Promise<E
 
   return {
     paceScore: basePaceScore,
-    adjustedPaceScore: predictiveResult.adjustedPaceScore,
+    adjustedPaceScore: predictiveResult.adjustedPace,
     peerPercentile: peerResult.percentile,
-    peerPercentileLabel: peerResult.label,
+    peerPercentileLabel: peerResult.percentileLabel,
     estimatedDaysToIpo,
     predictedDaysToIpo: predictiveResult.predictedDaysToIpo,
     progressPercentage,

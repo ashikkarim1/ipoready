@@ -7,7 +7,7 @@
  * Usage: npx ts-node test-pace-integration.ts
  */
 
-import { sql } from '@/lib/db'
+import { sql } from '@/lib/db/client'
 import { calculatePredictiveScore, updateCompanyFactors, getReadinessFactors } from '@/lib/pace-predictor'
 
 async function runIntegrationTests() {
@@ -44,34 +44,42 @@ async function runIntegrationTests() {
 
     // Test 3: Calculate predictive score
     console.log('Test 3: Calculating predictive PACE score...')
-    const score = await calculatePredictiveScore(testCompanyId)
+    
+    // Get readiness factors first
+    const readinessFactors = await getReadinessFactors(testCompanyId)
+    if (!readinessFactors) {
+      console.log('⚠️  Could not retrieve readiness factors. Skipping score calculation.\n')
+      return
+    }
+
+    // Use a default base PACE of 60 for testing
+    const basePace = 60
+    const score = await calculatePredictiveScore(testCompanyId, basePace, readinessFactors)
     
     console.log(`✓ Calculation successful:`)
-    console.log(`  Base PACE: ${score.baseScore}`)
-    console.log(`  Adjusted PACE: ${score.adjustedPaceScore}`)
-    console.log(`  Adjustment: ${score.adjustment > 0 ? '+' : ''}${score.adjustment}`)
+    console.log(`  Base PACE: ${score.basePace}`)
+    console.log(`  Adjusted PACE: ${score.adjustedPace}`)
     console.log(`  Confidence Level: ${score.confidenceLevel}`)
-    console.log(`  Estimated Days to IPO: ${score.estimatedDaysToIpoAdjusted}\n`)
+    console.log(`  Predicted Days to IPO: ${score.predictedDaysToIpo}\n`)
 
     // Test 4: Verify score components
     console.log('Test 4: Validating score breakdown...')
-    console.log(`  Cash Runway Score: ${score.breakdown.cashRunwayScore}/100`)
-    console.log(`  Team Readiness Score: ${score.breakdown.teamReadinessScore}/100`)
-    console.log(`  Market Condition Score: ${score.breakdown.marketConditionScore}/100`)
-    console.log(`  Investor Sophistication Score: ${score.breakdown.investorSophisticationScore}/100`)
+    console.log(`  Cash Runway Score: ${score.adjustmentFactors.cashRunway.score}/100`)
+    console.log(`  Team Readiness Score: ${score.adjustmentFactors.teamReadiness.score}/100`)
+    console.log(`  Market Condition Score: ${score.adjustmentFactors.marketConditions.score}/100`)
+    console.log(`  Investor Sophistication Score: ${score.adjustmentFactors.investorSophistication.score}/100`)
     
-    // Verify components sum to adjusted score (within rounding)
-    const calculatedSum = 
-      (score.breakdown.basePace * 0.4) +
-      (score.breakdown.cashRunwayScore * 0.2) +
-      (score.breakdown.teamReadinessScore * 0.2) +
-      (score.breakdown.marketConditionScore * 0.1) +
-      (score.breakdown.investorSophisticationScore * 0.1)
+    // Verify adjustment factors are weighted correctly
+    const totalWeightedImpact = 
+      score.adjustmentFactors.cashRunway.impact +
+      score.adjustmentFactors.teamReadiness.impact +
+      score.adjustmentFactors.marketConditions.impact +
+      score.adjustmentFactors.investorSophistication.impact
     
-    console.log(`  Calculated Sum: ${Math.round(calculatedSum)}`)
-    console.log(`  Adjusted Score: ${score.adjustedPaceScore}`)
+    console.log(`  Total Weighted Impact: ${totalWeightedImpact.toFixed(2)}`)
+    console.log(`  Adjusted Score: ${score.adjustedPace}`)
     
-    if (Math.abs(Math.round(calculatedSum) - score.adjustedPaceScore) <= 1) {
+    if (Math.abs((score.basePace + totalWeightedImpact) - score.adjustedPace) <= 1) {
       console.log(`  ✓ Calculation verified\n`)
     } else {
       console.log(`  ✗ Calculation mismatch\n`)
@@ -89,29 +97,35 @@ async function runIntegrationTests() {
     }
     console.log()
 
-    // Test 6: Verify opportunity factors
-    console.log('Test 6: Opportunity factor identification...')
-    if (score.opportunityFactors.length > 0) {
-      console.log(`  Identified ${score.opportunityFactors.length} opportunity factors:`)
-      score.opportunityFactors.forEach((of, idx) => {
-        console.log(`    ${idx + 1}. ${of}`)
-      })
+    // Test 6: Verify adjustment factor weights
+    console.log('Test 6: Verifying adjustment factor weights...')
+    console.log(`  Cash Runway Weight: ${score.adjustmentFactors.cashRunway.weight} (Impact: ${score.adjustmentFactors.cashRunway.impact.toFixed(2)})`)
+    console.log(`  Team Readiness Weight: ${score.adjustmentFactors.teamReadiness.weight} (Impact: ${score.adjustmentFactors.teamReadiness.impact.toFixed(2)})`)
+    console.log(`  Market Conditions Weight: ${score.adjustmentFactors.marketConditions.weight} (Impact: ${score.adjustmentFactors.marketConditions.impact.toFixed(2)})`)
+    console.log(`  Investor Sophistication Weight: ${score.adjustmentFactors.investorSophistication.weight} (Impact: ${score.adjustmentFactors.investorSophistication.impact.toFixed(2)})`)
+    
+    const totalWeight = 
+      score.adjustmentFactors.cashRunway.weight +
+      score.adjustmentFactors.teamReadiness.weight +
+      score.adjustmentFactors.marketConditions.weight +
+      score.adjustmentFactors.investorSophistication.weight
+    
+    console.log(`  Total Weight: ${totalWeight}`)
+    if (Math.abs(totalWeight - 0.6) < 0.001) {
+      console.log(`  ✓ Weights sum to 60% (correct)\n`)
     } else {
-      console.log(`  ✓ No additional opportunities identified`)
+      console.log(`  ✗ Weights do not sum to 0.6\n`)
     }
-    console.log()
 
     // Test 7: Get readiness factors summary
     console.log('Test 7: Fetching readiness factors summary...')
-    const readiness = await getReadinessFactors(testCompanyId)
-    
-    if (readiness) {
-      console.log(`  Cash Runway: ${readiness.cashRunway?.months} months (${readiness.cashRunway?.status})`)
-      console.log(`  Team Size: ${readiness.team.size}`)
-      console.log(`  CFO Hired: ${readiness.team.cfoHired ? 'Yes' : 'No'}`)
-      console.log(`  Board Size: ${readiness.team.boardSize}`)
-      console.log(`  Auditor Selected: ${readiness.team.auditorSelected ? 'Yes' : 'No'}`)
-      console.log(`  Investor Sophistication: ${readiness.investorSophistication || 'Not provided'}\n`)
+    if (readinessFactors) {
+      console.log(`  Cash Runway Months: ${readinessFactors.cashRunwayMonths}`)
+      console.log(`  Team Size: ${readinessFactors.teamSize}`)
+      console.log(`  CFO Hired: ${readinessFactors.cfoHired ? 'Yes' : 'No'}`)
+      console.log(`  Board Size: ${readinessFactors.boardSize}`)
+      console.log(`  Auditor Selected: ${readinessFactors.auditorSelected ? 'Yes' : 'No'}`)
+      console.log(`  Investor Sophistication: ${readinessFactors.investorSophisticationScore}\n`)
     } else {
       console.log(`  ✗ Company not found\n`)
     }
@@ -119,14 +133,12 @@ async function runIntegrationTests() {
     // Test 8: Validate types and interfaces
     console.log('Test 8: Type validation...')
     const typeChecks = [
-      { field: 'adjustedPaceScore', type: 'number', valid: typeof score.adjustedPaceScore === 'number' },
-      { field: 'baseScore', type: 'number', valid: typeof score.baseScore === 'number' },
-      { field: 'adjustment', type: 'number', valid: typeof score.adjustment === 'number' },
-      { field: 'confidenceLevel', type: 'string', valid: ['low', 'medium', 'high'].includes(score.confidenceLevel) },
+      { field: 'adjustedPace', type: 'number', valid: typeof score.adjustedPace === 'number' },
+      { field: 'basePace', type: 'number', valid: typeof score.basePace === 'number' },
+      { field: 'confidenceLevel', type: 'string', valid: ['Low', 'Medium', 'High'].includes(score.confidenceLevel) },
       { field: 'riskFactors', type: 'array', valid: Array.isArray(score.riskFactors) },
-      { field: 'opportunityFactors', type: 'array', valid: Array.isArray(score.opportunityFactors) },
-      { field: 'breakdown', type: 'object', valid: typeof score.breakdown === 'object' },
-      { field: 'estimatedDaysToIpoAdjusted', type: 'number', valid: typeof score.estimatedDaysToIpoAdjusted === 'number' },
+      { field: 'adjustmentFactors', type: 'object', valid: typeof score.adjustmentFactors === 'object' },
+      { field: 'predictedDaysToIpo', type: 'number', valid: typeof score.predictedDaysToIpo === 'number' },
     ]
 
     let allTypeChecksPass = true
@@ -140,13 +152,13 @@ async function runIntegrationTests() {
     // Test 9: Validate score bounds
     console.log('Test 9: Score boundary validation...')
     const boundChecks = [
-      { name: 'Adjusted PACE', value: score.adjustedPaceScore, min: 0, max: 100 },
-      { name: 'Base PACE', value: score.baseScore, min: 0, max: 100 },
-      { name: 'Cash Runway Score', value: score.breakdown.cashRunwayScore, min: 0, max: 100 },
-      { name: 'Team Readiness Score', value: score.breakdown.teamReadinessScore, min: 0, max: 100 },
-      { name: 'Market Condition Score', value: score.breakdown.marketConditionScore, min: 0, max: 100 },
-      { name: 'Investor Sophistication Score', value: score.breakdown.investorSophisticationScore, min: 0, max: 100 },
-      { name: 'Estimated Days to IPO', value: score.estimatedDaysToIpoAdjusted, min: 90, max: 365 },
+      { name: 'Adjusted PACE', value: score.adjustedPace, min: 0, max: 100 },
+      { name: 'Base PACE', value: score.basePace, min: 0, max: 100 },
+      { name: 'Cash Runway Score', value: score.adjustmentFactors.cashRunway.score, min: 0, max: 100 },
+      { name: 'Team Readiness Score', value: score.adjustmentFactors.teamReadiness.score, min: 0, max: 100 },
+      { name: 'Market Condition Score', value: score.adjustmentFactors.marketConditions.score, min: 0, max: 100 },
+      { name: 'Investor Sophistication Score', value: score.adjustmentFactors.investorSophistication.score, min: 0, max: 100 },
+      { name: 'Predicted Days to IPO', value: score.predictedDaysToIpo, min: 90, max: 365 },
     ]
 
     let allBoundsPass = true

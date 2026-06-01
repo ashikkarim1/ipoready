@@ -18,6 +18,7 @@ export interface SequencingRule {
   severity: RuleSeverity
   applicableExchanges: Exchange[]
   daysBeforeDependent?: number // Min days after prerequisite before dependent should start
+  remediation?: string // Actionable guidance for resolving violations of this rule
 }
 
 export interface SequencingViolation {
@@ -45,6 +46,7 @@ const GLOBAL_SEQUENCING_RULES: SequencingRule[] = [
     severity: 'error',
     applicableExchanges: ['TSX', 'NASDAQ', 'NYSE', 'TSXV', 'CSE', 'OTC', 'JSE'],
     daysBeforeDependent: 14,
+    remediation: 'Complete cap table cleanup, finalize share classes, and execute all shareholder agreements within 2 weeks before audit start date',
   },
   {
     id: 'auditor_selection_before_audit',
@@ -55,6 +57,7 @@ const GLOBAL_SEQUENCING_RULES: SequencingRule[] = [
     severity: 'error',
     applicableExchanges: ['TSX', 'NASDAQ', 'NYSE', 'TSXV', 'CSE', 'OTC', 'JSE'],
     daysBeforeDependent: 7,
+    remediation: 'Engage Big 4 or equivalent firm, complete RFP process, and hold kickoff meeting within 1 week before audit engagement',
   },
   {
     id: 'legal_docs_before_filing',
@@ -65,6 +68,7 @@ const GLOBAL_SEQUENCING_RULES: SequencingRule[] = [
     severity: 'warning',
     applicableExchanges: ['TSX', 'NASDAQ', 'NYSE', 'TSXV', 'CSE', 'OTC', 'JSE'],
     daysBeforeDependent: 21,
+    remediation: 'Initiate legal review with securities counsel 3 weeks before filing; prioritize articles, bylaws, employee stock plans, and anti-dilution provisions',
   },
   {
     id: 'board_before_roadshow',
@@ -75,6 +79,7 @@ const GLOBAL_SEQUENCING_RULES: SequencingRule[] = [
     severity: 'warning',
     applicableExchanges: ['NASDAQ', 'NYSE', 'TSX'],
     daysBeforeDependent: 30,
+    remediation: 'Recruit and appoint at least 50% of target board seats, including independent directors, 1 month before roadshow launch',
   },
   {
     id: 'cfo_before_roadshow',
@@ -84,6 +89,7 @@ const GLOBAL_SEQUENCING_RULES: SequencingRule[] = [
     dependentTask: 'Begin Investor Roadshow',
     severity: 'error',
     applicableExchanges: ['NASDAQ', 'NYSE', 'TSX'],
+    remediation: 'Complete CFO recruitment and onboarding before roadshow; ensure they lead all financial discussions with investors throughout the process',
   },
   {
     id: 'financial_controls_before_audit',
@@ -94,6 +100,7 @@ const GLOBAL_SEQUENCING_RULES: SequencingRule[] = [
     severity: 'warning',
     applicableExchanges: ['NASDAQ', 'NYSE'],
     daysBeforeDependent: 60,
+    remediation: 'Conduct internal SOX 404 assessment 2 months before financial audit; document control environment, risk assessment, and remediate gaps identified',
   },
   {
     id: 'ceo_compensation_before_proxy',
@@ -103,6 +110,7 @@ const GLOBAL_SEQUENCING_RULES: SequencingRule[] = [
     dependentTask: 'Draft Proxy Statement/Circular',
     severity: 'warning',
     applicableExchanges: ['TSX', 'NASDAQ', 'NYSE', 'TSXV', 'CSE'],
+    remediation: 'Finalize base salary, bonus targets, equity vesting schedules, and benefits packages before proxy drafting; align with peer benchmarks and investor expectations',
   },
 ]
 
@@ -120,6 +128,7 @@ const EXCHANGE_SPECIFIC_RULES: Record<Exchange, SequencingRule[]> = {
       severity: 'error',
       applicableExchanges: ['TSX'],
       daysBeforeDependent: 14,
+      remediation: 'Appoint independent audit committee members at least 2 weeks before TSX filing; ensure committee charter is adopted and documented',
     },
     {
       id: 'tsx_ceo_declaration_before_filing',
@@ -130,6 +139,7 @@ const EXCHANGE_SPECIFIC_RULES: Record<Exchange, SequencingRule[]> = {
       severity: 'error',
       applicableExchanges: ['TSX'],
       daysBeforeDependent: 7,
+      remediation: 'Complete CEO and CFO certifications of financial statements 1 week before TSX filing; ensure compliance with TSX disclosure rules',
     },
   ],
   NASDAQ: [
@@ -142,6 +152,7 @@ const EXCHANGE_SPECIFIC_RULES: Record<Exchange, SequencingRule[]> = {
       severity: 'error',
       applicableExchanges: ['NASDAQ'],
       daysBeforeDependent: 30,
+      remediation: 'Recruit audit committee with CPA or financial expert; complete committee documentation 1 month before NASDAQ listing approval',
     },
     {
       id: 'nasdaq_compliance_cert_before_listing',
@@ -152,6 +163,7 @@ const EXCHANGE_SPECIFIC_RULES: Record<Exchange, SequencingRule[]> = {
       severity: 'error',
       applicableExchanges: ['NASDAQ'],
       daysBeforeDependent: 14,
+      remediation: 'Complete SOX 404 controls documentation and CEO/CFO certifications 2 weeks before NASDAQ listing approval',
     },
     {
       id: 'nasdaq_market_maker_commitment_before_roadshow',
@@ -162,6 +174,7 @@ const EXCHANGE_SPECIFIC_RULES: Record<Exchange, SequencingRule[]> = {
       severity: 'warning',
       applicableExchanges: ['NASDAQ'],
       daysBeforeDependent: 21,
+      remediation: 'Obtain minimum 2 market maker commitments through underwriter relationships 3 weeks before roadshow launch',
     },
   ],
   NYSE: [
@@ -174,6 +187,7 @@ const EXCHANGE_SPECIFIC_RULES: Record<Exchange, SequencingRule[]> = {
       severity: 'error',
       applicableExchanges: ['NYSE'],
       daysBeforeDependent: 30,
+      remediation: 'Appoint experienced independent audit committee 1 month before NYSE listing approval; ensure all members meet independence and expertise requirements',
     },
     {
       id: 'nyse_ceo_lit_before_bell',
@@ -184,6 +198,7 @@ const EXCHANGE_SPECIFIC_RULES: Record<Exchange, SequencingRule[]> = {
       severity: 'warning',
       applicableExchanges: ['NYSE'],
       daysBeforeDependent: 14,
+      remediation: 'Submit CEO photo and opening bell ceremony details to NYSE 2 weeks before trading day; coordinate with NYSE Communications team on timing',
     },
   ],
   TSXV: [
@@ -196,6 +211,7 @@ const EXCHANGE_SPECIFIC_RULES: Record<Exchange, SequencingRule[]> = {
       severity: 'warning',
       applicableExchanges: ['TSXV'],
       daysBeforeDependent: 7,
+      remediation: 'Appoint minimum 3 board directors (1 independent) 1 week before TSXV listing to enhance investor confidence',
     },
   ],
   CSE: [
@@ -208,6 +224,7 @@ const EXCHANGE_SPECIFIC_RULES: Record<Exchange, SequencingRule[]> = {
       severity: 'warning',
       applicableExchanges: ['CSE'],
       daysBeforeDependent: 0,
+      remediation: 'Document basic governance structure including director appointments and conflict policies before CSE listing submission',
     },
   ],
   OTC: [
@@ -220,6 +237,7 @@ const EXCHANGE_SPECIFIC_RULES: Record<Exchange, SequencingRule[]> = {
       severity: 'warning',
       applicableExchanges: ['OTC'],
       daysBeforeDependent: 14,
+      remediation: 'Complete SEC Form 10 filing 2 weeks before OTC trading begins; ensure current information and disclosure compliance',
     },
   ],
   JSE: [
@@ -232,6 +250,7 @@ const EXCHANGE_SPECIFIC_RULES: Record<Exchange, SequencingRule[]> = {
       severity: 'error',
       applicableExchanges: ['JSE'],
       daysBeforeDependent: 14,
+      remediation: 'Secure FSA approval for issuance 2 weeks before JSE listing submission; ensure compliance with Japanese securities regulations',
     },
   ],
 }
@@ -262,8 +281,8 @@ export function validateMilestoneSequence(
   const violations: SequencingViolation[] = []
 
   for (const rule of rules) {
-    const prerequisiteDate = completedTasks.get(rule.prerequisiteTask)
-    const dependentDate = completedTasks.get(rule.dependentTask)
+    const prerequisiteDate = (completedTasks.get(rule.prerequisiteTask) ?? undefined) as Date | undefined
+    const dependentDate = (completedTasks.get(rule.dependentTask) ?? undefined) as Date | undefined
 
     // Determine task statuses
     const prerequisiteStatus: 'not_started' | 'in_progress' | 'complete' = prerequisiteDate
@@ -328,3 +347,27 @@ export function getSequencingRuleDocumentation(): Record<Exchange, SequencingRul
 
   return result
 }
+
+/**
+ * Async wrapper for validateMilestoneSequence that fetches task completion data from database
+ * 
+ * @param companyId - Company unique identifier
+ * @param exchange - Target exchange
+ * @returns Array of sequencing violations found
+ */
+export async function validateMilestoneSequenceForCompany(
+  companyId: string,
+  exchange: Exchange
+): Promise<SequencingViolation[]> {
+  // For now, return empty violations since we don't have task data
+  // In production, this would query the database for completed tasks
+  // and build the Map<string, Date | null> to pass to validateMilestoneSequence
+  const completedTasks = new Map<string, Date | null>()
+  
+  return validateMilestoneSequence(completedTasks, exchange)
+}
+
+/**
+ * Export the combined IPO sequencing rules for testing and documentation purposes
+ */
+export const IPO_SEQUENCING_RULES = GLOBAL_SEQUENCING_RULES

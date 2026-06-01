@@ -57,7 +57,7 @@ function analyzeSentiment(rating: number, comment?: string): string {
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    const user = session?.user as { id?: string; companyId?: string } | undefined
+    const user = session?.user as { id?: string; companyId?: string; email?: string } | undefined
 
     if (!session || !user?.id || !user?.companyId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { info } from 'lucide-react'
+import { Info } from 'lucide-react'
 import { useState } from 'react'
 
 interface PaceConfidenceBadgeProps {
@@ -117,7 +117,7 @@ export function PaceConfidenceBadge({
             className="p-2 hover:bg-gray-200 rounded-full transition-colors flex-shrink-0"
             aria-label="Confidence explanation"
           >
-            <info className="w-5 h-5 text-gray-600" />
+            <Info className="w-5 h-5 text-gray-600" />
           </button>
 
           {/* Tooltip */}

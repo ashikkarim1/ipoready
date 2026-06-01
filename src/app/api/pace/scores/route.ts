@@ -12,9 +12,9 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth'
 import { computeAndUpdateCompanyStats } from '@/lib/company-stats'
-import { sql } from '@/lib/db'
+import { sql } from '@/lib/db/client'
 
 export async function GET(request: NextRequest) {
   try {
