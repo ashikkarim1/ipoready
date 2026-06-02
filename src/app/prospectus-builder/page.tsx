@@ -1,9 +1,13 @@
 'use client'
 
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Rocket, ArrowRight, BookOpen, Sparkles, Lock, RefreshCcw, Upload, Eye, BarChart3, FileText, Users } from 'lucide-react'
 import { FeaturesMegaMenu } from '@/app/components/FeaturesMegaMenu'
+import { ScheduleDemoModal } from '@/app/components/ScheduleDemoModal'
 
 const CAPABILITIES = [
   {
@@ -101,6 +105,8 @@ const WORKFLOW_STEPS = [
 ]
 
 export default function ProspectusBuilderPage() {
+  const [demoModalOpen, setDemoModalOpen] = useState(false)
+
   return (
     <div>
       {/* ── Header ──────────────────────────────────────────────────────────── */}
@@ -298,12 +304,18 @@ export default function ProspectusBuilderPage() {
             <Link href="/register" className="btn btn-primary gap-2 font-semibold px-6 py-2.5 rounded-full">
               Start Building <ArrowRight className="w-4 h-4" />
             </Link>
-            <a href="mailto:hello@ipoready.ai" className="btn btn-secondary px-6 py-2.5 rounded-full">
+            <button
+              onClick={() => setDemoModalOpen(true)}
+              className="btn btn-secondary px-6 py-2.5 rounded-full"
+            >
               Schedule Demo
-            </a>
+            </button>
           </div>
         </motion.div>
       </section>
+
+      {/* Demo Modal */}
+      <ScheduleDemoModal isOpen={demoModalOpen} onClose={() => setDemoModalOpen(false)} />
     </div>
   )
 }

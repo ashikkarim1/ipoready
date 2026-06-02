@@ -2,10 +2,12 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ChevronDown, CheckSquare, PieChart, FileText, ShoppingBag, BookOpen } from 'lucide-react'
+import { ChevronDown, CheckSquare, PieChart, FileText, ShoppingBag, BookOpen, Calendar } from 'lucide-react'
+import { ScheduleDemoModal } from './ScheduleDemoModal'
 
 export function FeaturesMegaMenu() {
   const [featuresOpen, setFeaturesOpen] = useState(false)
+  const [demoModalOpen, setDemoModalOpen] = useState(false)
 
   return (
     <nav className="flex items-center gap-1" style={{ marginLeft: '2rem' }}>
@@ -66,6 +68,19 @@ export function FeaturesMegaMenu() {
       <Link href="/pricing" className="px-3 py-1.5 rounded-lg text-sm font-medium text-nav hover:bg-gray-100 transition-colors">
         Pricing
       </Link>
+
+      {/* Schedule A Demo Button */}
+      <button
+        onClick={() => setDemoModalOpen(true)}
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-white transition-colors hover:opacity-90"
+        style={{ background: '#E8312A' }}
+      >
+        <Calendar className="w-4 h-4" />
+        Schedule Demo
+      </button>
+
+      {/* Demo Modal */}
+      <ScheduleDemoModal isOpen={demoModalOpen} onClose={() => setDemoModalOpen(false)} />
     </nav>
   )
 }
