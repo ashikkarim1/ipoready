@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+export const dynamic = 'force-dynamic'
 
 interface DemoSubmission {
   company: string
@@ -12,6 +12,9 @@ interface DemoSubmission {
 
 export async function POST(request: NextRequest) {
   try {
+    // Lazy-load Resend client to avoid instantiation during build
+    const resend = new Resend(process.env.RESEND_API_KEY)
+    
     const body: DemoSubmission = await request.json()
 
     // Validate required fields

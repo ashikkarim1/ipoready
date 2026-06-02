@@ -19,6 +19,13 @@ interface CompanyRow {
   language: string
   created_at: string
   owner_id: string
+  subscription_plan: string
+  subscription_status: string
+  trial_status: string | null
+  trial_start_date: string | null
+  trial_end_date: string | null
+  current_period_start: string | null
+  current_period_end: string | null
 }
 
 export async function GET() {
@@ -33,7 +40,9 @@ export async function GET() {
 
   const companyRows = await sql`
     SELECT id, name, listing_type, target_exchange, current_phase, pace_score,
-           estimated_days_to_ipo, progress_percentage, currency, language, created_at, owner_id
+           estimated_days_to_ipo, progress_percentage, currency, language, created_at, owner_id,
+           subscription_plan, subscription_status, trial_status, trial_start_date, trial_end_date,
+           current_period_start, current_period_end
     FROM companies
     WHERE id = ${companyId}
     LIMIT 1
@@ -61,6 +70,13 @@ export async function GET() {
       currency: row.currency,
       language: row.language,
       createdAt: row.created_at,
+      subscription_plan: row.subscription_plan,
+      subscription_status: row.subscription_status,
+      trial_status: row.trial_status,
+      trial_start_date: row.trial_start_date,
+      trial_end_date: row.trial_end_date,
+      current_period_start: row.current_period_start,
+      current_period_end: row.current_period_end,
     },
   })
 }
