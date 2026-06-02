@@ -9,7 +9,18 @@ import Stripe from 'stripe'
 import { sendTrialExpiredEmail, sendPaymentFailedEmail } from '@/lib/billing-notifications'
 import { recordTrialUpgradeMetrics } from '@/lib/monitoring/trial-metrics'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '')
+let stripeInstance: Stripe | null = null
+
+function getStripe(): Stripe {
+  if (!stripeInstance) {
+    const apiKey = process.env.STRIPE_SECRET_KEY
+    if (!apiKey) {
+      throw new Error('STRIPE_SECRET_KEY is not configured')
+    }
+    stripeInstance = new Stripe(apiKey)
+  }
+  return stripeInstance
+}
 
 export interface TrialAutoUpgradeQueueItem {
   id: string
@@ -114,7 +125,7 @@ export async function handleTrialExpiry(
       }
 
       // Create subscription with trial_from_meterable: false (trial is over)
-      const subscription = await stripe.subscriptions.create({
+      const subscription = await getStripe().subscriptions.create({
         customer: company.stripe_customer_id,
         items: [{ price: priceId }],
         payment_behavior: 'default_incomplete',

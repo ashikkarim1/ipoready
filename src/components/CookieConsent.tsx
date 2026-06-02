@@ -5,6 +5,7 @@ import { X } from 'lucide-react'
 
 const COOKIE_CONSENT_KEY = 'ipoready_cookie_consent'
 const COOKIE_CONSENT_VERSION = '1.0'
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''
 
 export interface CookiePreferences {
   version: string
@@ -82,10 +83,10 @@ export function CookieConsent() {
     localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(prefs))
 
     // Enable/disable analytics based on preference
-    if (prefs.analytics && typeof window !== 'undefined') {
+    if (prefs.analytics && typeof window !== 'undefined' && GA_MEASUREMENT_ID) {
       // Load Google Analytics
       const script = document.createElement('script')
-      script.src = 'https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID'
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`
       script.async = true
       document.head.appendChild(script)
 
@@ -94,7 +95,7 @@ export function CookieConsent() {
         ;(window as any).dataLayer.push(arguments)
       }
       gtag('js', new Date())
-      gtag('config', 'GA_MEASUREMENT_ID')
+      gtag('config', GA_MEASUREMENT_ID)
     }
   }
 

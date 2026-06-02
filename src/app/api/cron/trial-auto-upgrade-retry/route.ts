@@ -5,6 +5,8 @@ import {
   getQueueStatus,
 } from '@/lib/trial-auto-upgrade';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * CRON: Process pending trial auto-upgrade retries
  * 
