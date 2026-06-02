@@ -22,6 +22,7 @@ const NAV_ITEMS = [
   { href: '/cap-table',       icon: PieChart,        label: 'Cap Table',          badge: 'AI',   key: 'cap-table'   },
   { href: '/raising-capital', icon: Banknote,        label: 'Raising Capital',    badge: 'New',  key: 'raising'     },
   { href: '/documents',       icon: FileText,        label: 'Documents',          badge: null,   key: 'documents'   },
+  { href: '/prospectus',      icon: FileText,        label: 'Prospectus Builder', badge: '✨',   key: 'prospectus'  },
   { href: '/team',            icon: Users,           label: 'Team & Roles',       badge: null,   key: 'team'        },
   { href: '/templates',       icon: Award,           label: 'Templates & Forms',  badge: null,   key: 'templates'   },
   { href: '/resources',       icon: BookOpen,        label: 'Resource Centre',    badge: 'New',  key: 'resources'   },

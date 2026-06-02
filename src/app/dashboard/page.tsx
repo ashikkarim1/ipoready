@@ -174,6 +174,10 @@ interface DashStats {
   overdueTasks: number
   teamMembersCount: number
   documentsCount: number
+  prospectusStatus?: string | null
+  prospectusCompletion?: number
+  prospectusSectionsComplete?: number
+  prospectusSectionsTotal?: number
   upcomingDeadlines: { id: string; title: string; phase: string; priority: string; dueDate: string | null }[]
   currentPhase: string | null
   phaseProgress: Record<string, { total: number; completed: number; percentage: number }>
@@ -756,6 +760,16 @@ export default function DashboardPage() {
                     href: '/documents',
                   },
                   {
+                    value: dashStats?.prospectusSectionsComplete && dashStats?.prospectusSectionsTotal
+                      ? `${dashStats.prospectusSectionsComplete}/${dashStats.prospectusSectionsTotal}`
+                      : '—',
+                    label: 'Prospectus',
+                    icon: FileText,
+                    color: '#E8312A',
+                    bg: '#FDECEB',
+                    href: '/prospectus',
+                  },
+                  {
                     value: dashStats?.overdueTasks ?? '—',
                     label: 'Overdue',
                     icon: AlertOctagon,
@@ -780,6 +794,7 @@ export default function DashboardPage() {
             <p className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-4">Quick Access</p>
             <div className="space-y-1">
               {[
+                { href: '/prospectus', icon: FileText, label: 'Build Prospectus',   badge: dashStats?.prospectusCompletion ? `${dashStats.prospectusCompletion}%` : null },
                 { href: '/documents',  icon: FileText, label: 'Upload Documents',   badge: dashStats ? `${dashStats.documentsCount} uploaded` : null },
                 { href: '/templates',  icon: Award,    label: 'Download PIF Form',  badge: 'Template'  },
                 { href: '/team',       icon: Users,    label: 'Invite Team Member', badge: dashStats ? `${dashStats.teamMembersCount} members` : null },
