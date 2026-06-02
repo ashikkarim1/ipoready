@@ -1,7 +1,12 @@
+'use client'
+
 import { ArrowLeft, Home } from 'lucide-react'
 import Link from 'next/link'
+import { useState } from 'react'
 
 export default function NotFoundPage() {
+  const [dashboardHovered, setDashboardHovered] = useState(false)
+  const [homeHovered, setHomeHovered] = useState(false)
   return (
     <div
       style={{
@@ -90,59 +95,66 @@ export default function NotFoundPage() {
             width: '100%',
           }}
         >
-          <Link
-            href="/dashboard"
-            style={{
-              flex: 1,
-              height: '44px',
-              borderRadius: '10px',
-              backgroundColor: '#1A1A1A',
-              color: '#F7F6F4',
-              border: 'none',
-              fontSize: '14px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              letterSpacing: '-0.2px',
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '7px',
-              transition: 'opacity 0.15s ease',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+          <div
+            onMouseEnter={() => setDashboardHovered(true)}
+            onMouseLeave={() => setDashboardHovered(false)}
           >
-            <ArrowLeft size={15} />
-            Back to dashboard
-          </Link>
+            <Link
+              href="/dashboard"
+              style={{
+                flex: 1,
+                height: '44px',
+                borderRadius: '10px',
+                backgroundColor: '#1A1A1A',
+                color: '#F7F6F4',
+                border: 'none',
+                fontSize: '14px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                letterSpacing: '-0.2px',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '7px',
+                transition: 'opacity 0.15s ease',
+                opacity: dashboardHovered ? 0.85 : 1,
+              }}
+            >
+              <ArrowLeft size={15} />
+              Back to dashboard
+            </Link>
+          </div>
 
-          <Link
-            href="/"
-            style={{
-              flex: 1,
-              height: '44px',
-              borderRadius: '10px',
-              backgroundColor: 'transparent',
-              color: '#1A1A1A',
-              border: '1.5px solid #E5E4E0',
-              fontSize: '14px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              letterSpacing: '-0.2px',
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '7px',
-              transition: 'border-color 0.15s ease',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.borderColor = '#1A1A1A')}
-            onMouseLeave={e => (e.currentTarget.style.borderColor = '#E5E4E0')}
+          <div
+            onMouseEnter={() => setHomeHovered(true)}
+            onMouseLeave={() => setHomeHovered(false)}
           >
-            <Home size={15} />
-            Go home
-          </Link>
+            <Link
+              href="/"
+              style={{
+                flex: 1,
+                height: '44px',
+                borderRadius: '10px',
+                backgroundColor: 'transparent',
+                color: '#1A1A1A',
+                border: `1.5px solid ${homeHovered ? '#1A1A1A' : '#E5E4E0'}`,
+                fontSize: '14px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                letterSpacing: '-0.2px',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '7px',
+                transition: 'border-color 0.15s ease',
+              }}
+            >
+              <Home size={15} />
+              Go home
+            </Link>
+          </div>
         </div>
       </div>
     </div>

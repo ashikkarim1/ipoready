@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { AlertTriangle } from 'lucide-react'
 import Link from 'next/link'
+import { useState } from 'react'
 
 interface ErrorPageProps {
   error: Error
@@ -10,6 +11,8 @@ interface ErrorPageProps {
 }
 
 export default function ErrorPage({ error, reset }: ErrorPageProps) {
+  const [tryAgainHovered, setTryAgainHovered] = useState(false)
+  const [dashboardHovered, setDashboardHovered] = useState(false)
   return (
     <div
       style={{
@@ -130,6 +133,8 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
         >
           <button
             onClick={reset}
+            onMouseEnter={() => setTryAgainHovered(true)}
+            onMouseLeave={() => setTryAgainHovered(false)}
             style={{
               flex: 1,
               height: '44px',
@@ -142,37 +147,39 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
               cursor: 'pointer',
               letterSpacing: '-0.2px',
               transition: 'opacity 0.15s ease',
+              opacity: tryAgainHovered ? 0.85 : 1,
             }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
           >
             Try again
           </button>
 
-          <Link
-            href="/dashboard"
-            style={{
-              flex: 1,
-              height: '44px',
-              borderRadius: '10px',
-              backgroundColor: 'transparent',
-              color: '#1A1A1A',
-              border: '1.5px solid #E5E4E0',
-              fontSize: '14px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              letterSpacing: '-0.2px',
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'border-color 0.15s ease',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.borderColor = '#1A1A1A')}
-            onMouseLeave={e => (e.currentTarget.style.borderColor = '#E5E4E0')}
+          <div
+            onMouseEnter={() => setDashboardHovered(true)}
+            onMouseLeave={() => setDashboardHovered(false)}
           >
-            Go to dashboard
-          </Link>
+            <Link
+              href="/dashboard"
+              style={{
+                flex: 1,
+                height: '44px',
+                borderRadius: '10px',
+                backgroundColor: 'transparent',
+                color: '#1A1A1A',
+                border: `1.5px solid ${dashboardHovered ? '#1A1A1A' : '#E5E4E0'}`,
+                fontSize: '14px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                letterSpacing: '-0.2px',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'border-color 0.15s ease',
+              }}
+            >
+              Go to dashboard
+            </Link>
+          </div>
         </div>
       </motion.div>
     </div>
