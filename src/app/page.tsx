@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FeaturesMegaMenu } from '@/app/components/FeaturesMegaMenu'
@@ -130,6 +130,11 @@ function PurposePill({ icon: Icon, label, sub, color, bg }: PurposePillProps) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function LandingPage() {
+  const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear())
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear())
+  }, [])
 
   return (
     <div className="min-h-screen">
@@ -819,7 +824,7 @@ export default function LandingPage() {
                 All regulatory filings, legal opinions, and compliance determinations must be executed by licensed professionals. Nothing on this platform constitutes legal advice, financial advice, or an offer to buy or sell securities.
               </p>
               <div className="flex items-center gap-4 flex-shrink-0 self-end md:self-auto">
-                <p className="text-xs text-text-light">© {new Date().getFullYear()} IPOReady. All rights reserved.</p>
+                <p className="text-xs text-text-light">© {currentYear} IPOReady. All rights reserved.</p>
                 <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: '#EFEFED', border: '1px solid #E5E4E0' }}>
                   {(['EN', 'FR'] as const).map(l => (
                     <span key={l} className="text-xs px-2 py-0.5 rounded font-mono font-medium cursor-default"
