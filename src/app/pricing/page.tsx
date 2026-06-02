@@ -555,7 +555,7 @@ export default function PricingPage() {
           <h2 className="serif text-2xl text-nav mb-6 text-center">
             {language === 'en' ? 'Frequently Asked Questions' : 'Questions Fréquentes'}
           </h2>
-          <div className="space-y-2">
+          <div className="space-y-4">
             {FAQS.map((faq, i) => (
               <div key={i} className="card rounded-xl overflow-hidden">
                 <button
