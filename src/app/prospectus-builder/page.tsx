@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Rocket, ArrowRight, BookOpen, Sparkles, Lock, RefreshCcw, Upload, Eye, BarChart3, FileText } from 'lucide-react'
+import { Rocket, ArrowRight, BookOpen, Sparkles, Lock, RefreshCcw, Upload, Eye, BarChart3, FileText, Users } from 'lucide-react'
 import { FeaturesMegaMenu } from '@/app/components/FeaturesMegaMenu'
 
 const CAPABILITIES = [
