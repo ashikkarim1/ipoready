@@ -237,17 +237,18 @@ export default function PricingPage() {
   }
 
   function getBilledNote(plan: typeof PLANS[0]) {
+    const months = plan.minCommitmentMonths
+    const monthText = months === 1 ? 'month' : 'months'
+    
     if (billing === 'annual') {
       const yr = currency === 'CAD' ? plan.annualCAD * 12 : plan.annualUSD * 12
-      return `${formatPrice(yr)}/yr · billed annually`
+      return language === 'en' ? `${formatPrice(yr)}/yr · ${months}-${monthText} minimum, then month-to-month` : `${formatPrice(yr)}/an · ${months} ${monthText} minimum, puis mensuellement`
     }
     if (billing === 'sixmonth') {
       const total = currency === 'CAD' ? plan.sixmonthCAD * 6 : plan.sixmonthUSD * 6
-      return `${formatPrice(total)} billed every 6 months`
+      return language === 'en' ? `${formatPrice(total)} every 6 months · ${months}-${monthText} minimum` : `${formatPrice(total)} tous les 6 mois · ${months} ${monthText} minimum`
     }
-    const months = plan.minCommitmentMonths
-    const monthText = months === 1 ? 'month' : 'months'
-    return language === 'en' ? `${months}-${monthText} minimum · cancel after` : `${months} mois minimum · annulez après`
+    return language === 'en' ? `${months}-${monthText} minimum · then month-to-month · cancel anytime` : `${months} ${monthText} minimum · puis mensuellement · annulez à tout moment`
   }
 
   const BILLING_OPTIONS: { key: Billing; labelEn: string; labelFr: string; badge: string | null; badgeColor: string }[] = [
