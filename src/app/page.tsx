@@ -161,7 +161,7 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <section className="max-w-7xl mx-auto" style={{ paddingTop: '3.5rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '4.5rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         <div className="grid lg:grid-cols-[1fr_420px] gap-12 xl:gap-16 items-start">
 
           {/* Left: Copy */}

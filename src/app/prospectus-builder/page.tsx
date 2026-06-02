@@ -122,7 +122,7 @@ export default function ProspectusBuilderPage() {
       </header>
 
       {/* ── Hero ────────────────────────────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto" style={{ paddingTop: '3.5rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '4.5rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
