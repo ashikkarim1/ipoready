@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import { useDropzone } from 'react-dropzone'
 
 interface ProspectusSection {
   id: string
@@ -79,6 +80,9 @@ export default function ProspectusEditorPage() {
   const [newComment, setNewComment] = useState('')
   const [completionScore, setCompletionScore] = useState(0)
   const [estimatedHours, setEstimatedHours] = useState(2)
+  const [uploadLoading, setUploadLoading] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+  const [extractionProgress, setExtractionProgress] = useState(0)
   const autosaveTimer = useRef<NodeJS.Timeout | null>(null)
 
   // Fetch prospectus data
@@ -192,6 +196,91 @@ export default function ProspectusEditorPage() {
       }
     }
   }, [content, selectedSection, autosave])
+
+  // Handle file drop and extraction
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      setUploadLoading(true)
+      setUploadError(null)
+      setExtractionProgress(0)
+
+      for (const file of acceptedFiles) {
+        try {
+          // Determine document type from file extension
+          const ext = file.name.split('.').pop()?.toLowerCase() || 'text'
+          const validTypes = ['pdf', 'docx', 'csv', 'text']
+          const documentType = validTypes.includes(ext) ? ext : 'text'
+
+          const formData = new FormData()
+          formData.append('file', file)
+          formData.append('documentName', file.name.replace(/\.[^/.]+$/, ''))
+          formData.append('documentType', documentType)
+
+          setExtractionProgress(25)
+
+          const response = await fetch(
+            `/api/prospectus/${prospectusId}/upload-and-extract`,
+            {
+              method: 'POST',
+              body: formData,
+            }
+          )
+
+          if (!response.ok) {
+            const errorData = await response.json()
+            throw new Error(errorData.error || 'Upload failed')
+          }
+
+          const result = await response.json()
+
+          if (result.success) {
+            setExtractionProgress(75)
+
+            // Add to linked documents
+            setLinkedDocs((prev) => [
+              ...prev,
+              {
+                id: result.documentId,
+                name: file.name,
+                type: documentType,
+                uploadedAt: new Date(),
+              },
+            ])
+
+            // Process extracted sections for display
+            if (result.extractedSections && Array.isArray(result.extractedSections)) {
+              // Show extraction results for user review/approval
+              // This triggers the review UI to show mappings before applying
+              setExtractionProgress(100)
+            } else {
+              setUploadError('No sections extracted from document')
+            }
+          } else {
+            setUploadError(`Extraction failed: ${result.error || 'Unknown error'}`)
+          }
+        } catch (error) {
+          setUploadError(
+            `Upload failed: ${error instanceof Error ? error.message : String(error)}`
+          )
+        }
+      }
+
+      setUploadLoading(false)
+    },
+    [prospectusId]
+  )
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'application/pdf': ['.pdf'],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [
+        '.docx',
+      ],
+      'text/csv': ['.csv'],
+      'text/plain': ['.txt'],
+    },
+  })
 
   // Handle section selection
   const handleSectionClick = (section: ProspectusSection) => {
@@ -409,13 +498,68 @@ export default function ProspectusEditorPage() {
         </header>
 
         {/* Editor Content */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Start writing or paste content here..."
-            className="w-full h-full p-4 border border-slate-200 rounded-lg font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col">
+          {uploadError && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-sm text-red-800">{uploadError}</p>
+              <button
+                onClick={() => setUploadError(null)}
+                className="text-xs text-red-600 mt-2 hover:underline"
+              >
+                Dismiss
+              </button>
+            </div>
+          )}
+
+          <div
+            {...getRootProps()}
+            className={`flex-1 border-2 border-dashed rounded-lg p-6 transition-colors ${
+              isDragActive
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-slate-300 bg-white'
+            }`}
+          >
+            <input {...getInputProps()} />
+
+            {uploadLoading ? (
+              <div className="flex flex-col items-center justify-center h-full">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-3" />
+                <p className="text-slate-600 font-medium">Extracting document...</p>
+                <div className="mt-3 w-48 bg-slate-200 rounded-full h-2">
+                  <div
+                    className="bg-blue-600 h-2 rounded-full transition-all"
+                    style={{ width: `${extractionProgress}%` }}
+                  />
+                </div>
+              </div>
+            ) : isDragActive ? (
+              <div className="flex flex-col items-center justify-center h-full">
+                <p className="text-blue-600 font-medium text-lg">Drop files here</p>
+                <p className="text-blue-500 text-sm mt-1">
+                  Supported: PDF, DOCX, CSV, TXT
+                </p>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full">
+                <p className="text-slate-600 font-medium text-lg">
+                  Drag & drop documents here
+                </p>
+                <p className="text-slate-500 text-sm mt-1">
+                  or click to browse (PDF, DOCX, CSV, TXT)
+                </p>
+              </div>
+            )}
+          </div>
+
+          {!uploadLoading && !isDragActive && content && (
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Start writing or paste content here..."
+              className="w-full mt-4 p-4 border border-slate-200 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              style={{ minHeight: '200px' }}
+            />
+          )}
         </div>
       </main>
 

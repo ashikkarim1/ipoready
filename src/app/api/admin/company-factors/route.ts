@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { sql } from '@/lib/db';
+import { sql } from '@/lib/db/client';
 import { calculatePredictiveScore } from '@/lib/pace-predictor';
 
 export const dynamic = 'force-dynamic';
@@ -140,8 +140,21 @@ export async function PATCH(request: NextRequest) {
     // Recalculate PACE score using predictive model
     let newPaceScore = updatedCompany.pace_score;
     try {
-      const prediction = await calculatePredictiveScore(body.companyId);
-      newPaceScore = prediction.adjustedPaceScore;
+      const factors = {
+        cashRunwayMonths: updatedCompany.cash_runway_months,
+        teamSize: updatedCompany.team_size,
+        cfoHired: updatedCompany.cfo_hired_at !== null,
+        boardSize: updatedCompany.board_size,
+        auditorSelected: updatedCompany.auditor_selected,
+        investorSophisticationScore: updatedCompany.investor_sophistication_score,
+        preIpoFunding: null,
+      };
+      const prediction = await calculatePredictiveScore(
+        body.companyId,
+        updatedCompany.pace_score,
+        factors
+      );
+      newPaceScore = prediction.adjustedPace;
 
       // Update company with new PACE score
       await sql`

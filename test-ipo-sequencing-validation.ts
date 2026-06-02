@@ -158,6 +158,12 @@ let badRemediations = []
 
 for (const rule of IPO_SEQUENCING_RULES) {
   const remediation = rule.remediation
+  
+  if (!remediation) {
+    badRemediations.push(`${rule.id}: missing remediation guidance`)
+    continue
+  }
+  
   const hasLength = remediation.length > 20
   const hasActionableContent = !remediation.match(/^(fix|do|error|warning|todo)/i)
   const hasTimeframes = remediation.includes('week') || remediation.includes('month')
@@ -293,7 +299,7 @@ const thresholdRules = [
 
 for (const { id, threshold } of thresholdRules) {
   const rule = IPO_SEQUENCING_RULES.find((r) => r.id === id)
-  if (rule && (rule.remediation.includes(threshold) || rule.description.includes(threshold))) {
+  if (rule && rule.remediation && (rule.remediation.includes(threshold) || rule.description.includes(threshold))) {
     thresholdsFound++
     pass(`${id} specifies ${threshold} completion threshold`)
   } else {

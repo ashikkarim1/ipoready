@@ -196,7 +196,6 @@ export default function PacePage() {
               cfoHired={scores.cfoHired || false}
               boardSize={scores.boardSize || 4}
               auditorSelected={scores.auditorSelected || false}
-              marketConditions="Stable"
             />
 
             {/* Confidence Badge */}
@@ -210,31 +209,26 @@ export default function PacePage() {
           </div>
 
           {/* Sequencing Alerts Section */}
-          {scores.sequencingAlerts && scores.sequencingAlerts.length > 0 && (
-            <div style={{ marginBottom: '24px' }}>
-              <PaceSequenceAlertsSection
-                alerts={scores.sequencingAlerts.map((alert: any, idx: number) => ({
-                  id: `alert-${idx}`,
-                  ruleText: alert.title || 'Unknown Alert',
-                  currentPhase: 1,
-                  blockedUntilPhase: 5,
-                  severity: alert.severity === 'critical' ? 'error' : 'warning',
-                }))}
-              />
-            </div>
-          )}
+          <div style={{ marginBottom: '24px' }}>
+            <PaceSequenceAlertsSection />
+          </div>
 
           {/* Document Readiness Card */}
           <div style={{ marginBottom: '24px' }}>
             <PaceDocumentReadinessCard
-              overallScore={scores.documentReadinessScore || 0}
-              phases={(scores.phases || []).map((phase: any, idx: number) => ({
-                phase: idx + 1,
-                phaseName: phase.phaseName || `Phase ${idx + 1}`,
-                requiredDocCount: Math.max(2, 12 - (idx * 1)),
-                completionPercentage: phase.completion || 0,
-                hasStaleDocuments: idx === 1, // Demo: show stale docs flag for phase 2
-              }))}
+              documents={(scores.phases || []).flatMap((phase: any, phaseIdx: number) =>
+                Array.from({ length: Math.max(2, 12 - (phaseIdx * 1)) }, (_, docIdx) => ({
+                  name: `${phase.phaseName || `Phase ${phaseIdx + 1}`} - Doc ${docIdx + 1}`,
+                  phase: phase.phaseName || `Phase ${phaseIdx + 1}`,
+                  completionPercent: phase.completion || 0,
+                  status:
+                    (phase.completion || 0) === 100 ? 'final' :
+                    (phase.completion || 0) >= 50 ? 'reviewed' :
+                    'in_progress' as 'not_started' | 'in_progress' | 'draft' | 'reviewed' | 'final',
+                  lastUpdated: new Date(),
+                  refreshNeeded: phaseIdx === 1,
+                }))
+              )}
             />
           </div>
         </>

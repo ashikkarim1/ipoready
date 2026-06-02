@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { sql } from '@/lib/db'
 import { initializeProspectus } from '@/lib/prospectus-engine'
 import { z } from 'zod'
+import { userCanAccessFeature } from '@/lib/feature-gates'
 
 export const dynamic = 'force-dynamic'
 
@@ -47,6 +48,18 @@ export async function POST(req: NextRequest) {
 
     if (companyRows.length === 0) {
       return NextResponse.json({ error: 'Company not found' }, { status: 404 })
+    }
+
+    // Check feature access
+    const hasAccess = await userCanAccessFeature(
+      user.id,
+      'prospectus_builder'
+    )
+    if (!hasAccess) {
+      return NextResponse.json(
+        { error: 'Feature not available in your plan. Upgrade to access Prospectus Builder.' },
+        { status: 403 }
+      )
     }
 
     // Initialize prospectus using engine

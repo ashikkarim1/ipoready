@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { getEmailQueue, getPendingEmails, getQueueSize } from '@/lib/email-queue'
 import { getEmailLogs } from '@/lib/email-service'
@@ -10,6 +12,7 @@ import { getEmailLogs } from '@/lib/email-service'
  * Query params:
  * ?email=user@example.com (get logs for specific email)
  */
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)

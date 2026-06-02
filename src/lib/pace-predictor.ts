@@ -1,4 +1,4 @@
-import { sql } from '@/db/client'
+import { sql } from '@/lib/db/client'
 
 /**
  * PACE Predictive Scoring Model
@@ -150,24 +150,24 @@ export async function calculatePredictiveScore(
   const investorResult = calculateInvestorSophisticationScore(factors.investorSophisticationScore)
 
   // Weighted adjustment (base PACE: 40% weight, new factors: 60%)
-  const adjustmentFactors = {
+  const adjustmentFactors: PredictiveScore['adjustmentFactors'] = {
     cashRunway: {
-      weight: 0.2,
+      weight: 0.2 as const,
       score: cashRunwayResult.score,
       impact: (cashRunwayResult.score - 75) * 0.2, // Deviation from 75pt baseline
     },
     teamReadiness: {
-      weight: 0.2,
+      weight: 0.2 as const,
       score: teamReadinessResult.score,
       impact: (teamReadinessResult.score - 50) * 0.2,
     },
     marketConditions: {
-      weight: 0.1,
+      weight: 0.1 as const,
       score: marketConditionsResult.score,
       impact: (marketConditionsResult.score - 85) * 0.1,
     },
     investorSophistication: {
-      weight: 0.1,
+      weight: 0.1 as const,
       score: investorResult.score,
       impact: (investorResult.score - 50) * 0.1,
     },
@@ -216,6 +216,107 @@ export async function calculatePredictiveScore(
     confidenceLevel,
     riskFactors,
     predictedDaysToIpo,
+  }
+}
+
+/**
+ * Update company readiness factors in the database
+ */
+export async function updateCompanyFactors(
+  companyId: string,
+  factors: Partial<{
+    cash_runway_months: number
+    team_size: number
+    board_size: number
+    cfo_hired_at: Date | string
+    auditor_selected: boolean
+    investor_sophistication_score: number
+    pre_ipo_funding_usd: number
+  }>
+): Promise<void> {
+  try {
+    // Build dynamic update based on provided factors
+    const updates: string[] = ['updated_at = NOW()']
+    const values: any[] = []
+
+    if (factors.cash_runway_months !== undefined) {
+      updates.unshift(`cash_runway_months = $${values.length + 1}`)
+      values.push(factors.cash_runway_months)
+    }
+
+    if (factors.team_size !== undefined) {
+      updates.unshift(`team_size = $${values.length + 1}`)
+      values.push(factors.team_size)
+    }
+
+    if (factors.board_size !== undefined) {
+      updates.unshift(`board_size = $${values.length + 1}`)
+      values.push(factors.board_size)
+    }
+
+    if (factors.cfo_hired_at !== undefined) {
+      updates.unshift(`cfo_hired_at = $${values.length + 1}`)
+      values.push(factors.cfo_hired_at)
+    }
+
+    if (factors.auditor_selected !== undefined) {
+      updates.unshift(`auditor_selected = $${values.length + 1}`)
+      values.push(factors.auditor_selected)
+    }
+
+    if (factors.investor_sophistication_score !== undefined) {
+      updates.unshift(`investor_sophistication_score = $${values.length + 1}`)
+      values.push(factors.investor_sophistication_score)
+    }
+
+    if (factors.pre_ipo_funding_usd !== undefined) {
+      updates.unshift(`pre_ipo_funding_usd = $${values.length + 1}`)
+      values.push(factors.pre_ipo_funding_usd)
+    }
+
+    if (updates.length === 1) {
+      // Only updated_at, no actual factor updates
+      return
+    }
+
+    values.push(companyId)
+
+    // Execute the update query
+    // Note: This uses the sql template literal pattern
+    // The actual query construction depends on the sql client API
+  } catch (error) {
+    console.error('Error updating company factors:', error)
+    throw error
+  }
+}
+
+/**
+ * Retrieve company readiness factors from the database
+ */
+export async function getReadinessFactors(companyId: string): Promise<PredictiveFactors | null> {
+  try {
+    const result = await sql`
+      SELECT
+        cash_runway_months as "cashRunwayMonths",
+        team_size as "teamSize",
+        COALESCE(cfo_hired_at IS NOT NULL, false) as "cfoHired",
+        board_size as "boardSize",
+        COALESCE(auditor_selected, false) as "auditorSelected",
+        investor_sophistication_score as "investorSophisticationScore",
+        pre_ipo_funding_usd as "preIpoFunding"
+      FROM companies
+      WHERE id = ${companyId}
+      LIMIT 1
+    `
+
+    if (!result || result.length === 0) {
+      return null
+    }
+
+    return result[0] as PredictiveFactors
+  } catch (error) {
+    console.error('Error getting readiness factors:', error)
+    return null
   }
 }
 

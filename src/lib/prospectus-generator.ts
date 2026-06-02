@@ -600,3 +600,251 @@ async function createProspectusRecord(
   return result[0].id
 }
 
+/**
+ * Export function: Generate PDF from prospectus sections
+ * Accepts pre-formatted sections array and metadata
+ */
+export async function generatePDF(
+  sections: Array<{ title: string; content: string; number: number; status: string }>,
+  metadata: {
+    companyName: string
+    exchange: string
+    formType: string
+    createdAt: string
+    completionPercentage: number
+  }
+): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    try {
+      const chunks: Buffer[] = []
+      const doc = new PDFDocument({
+        size: 'LETTER',
+        margin: 72,
+      })
+
+      doc.on('data', (chunk: Buffer) => chunks.push(chunk))
+      doc.on('end', () => {
+        resolve(Buffer.concat(chunks))
+      })
+      doc.on('error', reject)
+
+      // Title page
+      doc.fontSize(24).font('Helvetica-Bold').text('PROSPECTUS')
+      doc.fontSize(18).text(metadata.companyName)
+      doc.fontSize(12).text(`Exchange: ${metadata.exchange.toUpperCase()}`)
+      doc.fontSize(10).text(`Form Type: ${metadata.formType}`)
+      doc.fontSize(10).text(`Generated: ${new Date(metadata.createdAt).toLocaleDateString()}`)
+      doc.fontSize(10).text(`Completeness: ${metadata.completionPercentage}%`)
+      doc.addPage()
+
+      // Table of Contents
+      doc.fontSize(14).font('Helvetica-Bold').text('Table of Contents')
+      sections.forEach(section => {
+        doc
+          .fontSize(10)
+          .font('Helvetica')
+          .text(`${section.number}. ${section.title}`, { link: null })
+      })
+      doc.addPage()
+
+      // Sections
+      sections.forEach((section, index) => {
+        doc.fontSize(14).font('Helvetica-Bold').text(`${section.number}. ${section.title}`)
+        doc.moveDown(0.5)
+
+        const lines = section.content.split('\n')
+        for (const line of lines) {
+          if (line.trim()) {
+            const heading = line.match(/^#+/)
+            if (heading) {
+              const level = heading[0].length
+              const size = Math.max(10, 16 - level * 2)
+              doc.fontSize(size).font('Helvetica-Bold').text(line.replace(/^#+\s*/, ''))
+            } else {
+              doc.fontSize(10).font('Helvetica').text(line, { align: 'left' })
+            }
+          } else {
+            doc.moveDown(0.25)
+          }
+        }
+        doc.moveDown(1)
+
+        if (index < sections.length - 1) {
+          doc.addPage()
+        }
+      })
+
+      doc.end()
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+/**
+ * Export function: Generate DOCX from prospectus sections
+ * Accepts pre-formatted sections array and metadata
+ */
+export async function generateDOCX(
+  sections: Array<{ title: string; content: string; number: number; status: string }>,
+  metadata: {
+    companyName: string
+    exchange: string
+    formType: string
+    createdAt: string
+    completionPercentage: number
+  }
+): Promise<Buffer> {
+  const paragraphs: Paragraph[] = []
+
+  // Title page
+  paragraphs.push(
+    new Paragraph({
+      text: 'PROSPECTUS',
+      heading: HeadingLevel.HEADING_1,
+      spacing: { line: 240, lineRule: 'auto' },
+    }),
+    new Paragraph({
+      text: metadata.companyName,
+      heading: HeadingLevel.HEADING_2,
+      spacing: { line: 240, lineRule: 'auto' },
+    }),
+    new Paragraph({
+      text: `Exchange: ${metadata.exchange.toUpperCase()}`,
+      spacing: { line: 240, lineRule: 'auto' },
+    }),
+    new Paragraph({
+      text: `Form Type: ${metadata.formType}`,
+      spacing: { line: 240, lineRule: 'auto' },
+    }),
+    new Paragraph({
+      text: `Generated: ${new Date(metadata.createdAt).toLocaleDateString()}`,
+      spacing: { line: 240, lineRule: 'auto' },
+    }),
+    new Paragraph({
+      text: `Completeness: ${metadata.completionPercentage}%`,
+      spacing: { line: 240, lineRule: 'auto' },
+    }),
+    new Paragraph({ text: '' })
+  )
+
+  // Table of Contents
+  paragraphs.push(
+    new Paragraph({
+      text: 'Table of Contents',
+      heading: HeadingLevel.HEADING_2,
+      spacing: { line: 240, lineRule: 'auto' },
+    })
+  )
+
+  sections.forEach(section => {
+    paragraphs.push(
+      new Paragraph({
+        text: `${section.number}. ${section.title}`,
+        spacing: { line: 240, lineRule: 'auto' },
+      })
+    )
+  })
+
+  paragraphs.push(new Paragraph({ text: '' }))
+
+  // Sections
+  sections.forEach(section => {
+    paragraphs.push(
+      new Paragraph({
+        text: `${section.number}. ${section.title}`,
+        heading: HeadingLevel.HEADING_2,
+        spacing: { line: 240, lineRule: 'auto' },
+      })
+    )
+
+    const lines = section.content.split('\n')
+    for (const line of lines) {
+      if (line.trim()) {
+        const heading = line.match(/^#+/)
+        if (heading) {
+          const level = Math.min(heading[0].length, 3)
+          const headingLevels = [HeadingLevel.HEADING_2, HeadingLevel.HEADING_3, HeadingLevel.HEADING_4]
+          paragraphs.push(
+            new Paragraph({
+              text: line.replace(/^#+\s*/, ''),
+              heading: headingLevels[level - 1],
+              spacing: { line: 240, lineRule: 'auto' },
+            })
+          )
+        } else {
+          paragraphs.push(
+            new Paragraph({
+              text: line,
+              spacing: { line: 240, lineRule: 'auto' },
+            })
+          )
+        }
+      }
+    }
+    paragraphs.push(new Paragraph({ text: '' }))
+  })
+
+  const doc = new DocxDocument({
+    sections: [
+      {
+        children: paragraphs,
+      },
+    ],
+  })
+
+  return await Packer.toBuffer(doc)
+}
+
+/**
+ * Export function: Generate ZIP archive containing PDF, DOCX, and metadata
+ * Accepts pre-formatted sections array and metadata
+ */
+export async function generateZIPFile(
+  sections: Array<{ title: string; content: string; number: number; status: string }>,
+  metadata: {
+    companyName: string
+    exchange: string
+    formType: string
+    createdAt: string
+    completionPercentage: number
+  }
+): Promise<Buffer> {
+  try {
+    // Dynamic import JSZip
+    const JSZip = require('jszip')
+    const zip = new JSZip()
+    const safeCompanyName = metadata.companyName.replace(/[^a-z0-9]/gi, '_').toLowerCase()
+
+    // Generate PDF
+    const pdfBuffer = await generatePDF(sections, metadata)
+    zip.file(`${safeCompanyName}_prospectus.pdf`, pdfBuffer)
+
+    // Generate DOCX
+    const docxBuffer = await generateDOCX(sections, metadata)
+    zip.file(`${safeCompanyName}_prospectus.docx`, docxBuffer)
+
+    // Add metadata JSON
+    const metadataJson = {
+      ...metadata,
+      sections: sections.map(s => ({
+        number: s.number,
+        title: s.title,
+        status: s.status,
+        wordCount: s.content.split(/\s+/).length,
+      })),
+      exportedAt: new Date().toISOString(),
+      totalWordCount: sections.reduce((sum, s) => sum + s.content.split(/\s+/).length, 0),
+    }
+    zip.file('metadata.json', JSON.stringify(metadataJson, null, 2))
+
+    // Generate and return ZIP buffer
+    const buffer = await zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' })
+    return buffer
+  } catch (error) {
+    throw new Error(`Failed to generate ZIP archive: ${error instanceof Error ? error.message : String(error)}`)
+  }
+}
+
+
+

@@ -35,6 +35,7 @@ export const FEATURES = {
   // Document Management
   DOCUMENT_COMPLETENESS: ['growth', 'enterprise', 'trial'] as FeatureTier[],
   DOCUMENT_UPLOAD: ['growth', 'enterprise', 'trial'] as FeatureTier[],
+  PROSPECTUS_BUILDER: ['growth', 'enterprise', 'trial'] as FeatureTier[],
 
   // IPO Benchmarking
   IPO_BENCHMARKING: ['enterprise'] as FeatureTier[],

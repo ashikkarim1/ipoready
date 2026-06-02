@@ -1,5 +1,17 @@
-import * as pdfParse from 'pdf-parse'
-import { extractText } from 'office-text-extractor'
+// PDF parsing module - only imported on server side
+let pdfParse: any = null
+
+async function getPdfParser() {
+  if (pdfParse === null) {
+    try {
+      const module = await import('pdf-parse')
+      pdfParse = (module as any).default || (module as any)
+    } catch (error) {
+      console.warn('pdf-parse not available, PDF extraction will not work')
+    }
+  }
+  return pdfParse
+}
 
 export interface ExtractedSection {
   sectionName: string
@@ -72,7 +84,11 @@ export const PROSPECTUS_SECTIONS = [
 
 async function extractTextFromPDF(buffer: Buffer): Promise<string> {
   try {
-    const data = await pdfParse(buffer)
+    const parser = await getPdfParser()
+    if (!parser) {
+      throw new Error('pdf-parse module not available')
+    }
+    const data = await parser(buffer)
     return data.text
   } catch (error) {
     console.error('PDF extraction error:', error)
@@ -81,12 +97,48 @@ async function extractTextFromPDF(buffer: Buffer): Promise<string> {
 }
 
 async function extractTextFromDOCX(buffer: Buffer): Promise<string> {
+  // Try primary method: ZIP-based extraction (fast, works for most DOCX files)
   try {
-    const text = await extractText(buffer)
-    return text
-  } catch (error) {
-    console.error('DOCX extraction error:', error)
-    throw new Error('Failed to extract text from DOCX')
+    const JSZip = (await import('jszip')).default
+    const zip = new JSZip()
+    const loaded = await zip.loadAsync(buffer)
+    
+    // Read the main document.xml file from the DOCX
+    const docXml = await loaded.file('word/document.xml')?.async('text')
+    if (!docXml) {
+      throw new Error('document.xml not found')
+    }
+    
+    // Extract text content from all text runs
+    const textMatches = docXml.match(/<w:t[^>]*>([^<]*)<\/w:t>/g) || []
+    
+    if (textMatches.length === 0) {
+      console.warn('[DOCX Extraction] No text found using primary method')
+      return ''
+    }
+    
+    // Join all text runs with space
+    const text = textMatches
+      .map(match => match.replace(/<w:t[^>]*>|<\/w:t>/g, ''))
+      .join(' ')
+    
+    // Clean and normalize whitespace
+    const cleaned = text
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0)
+      .join('\n')
+    
+    if (cleaned.length > 0) {
+      return cleaned
+    }
+    
+    throw new Error('Primary extraction yielded empty result')
+  } catch (primaryError) {
+    console.error('[DOCX Extraction] Primary method failed:', 
+      primaryError instanceof Error ? primaryError.message : String(primaryError))
+    
+    throw new Error('Failed to extract text from DOCX file - file may be corrupted or unsupported format')
   }
 }
 

@@ -48,6 +48,9 @@ export default function ProspectusList() {
   const [showLockedOverlay, setShowLockedOverlay] = useState(false)
   const [filterStatus, setFilterStatus] = useState<'all' | 'draft' | 'in_review' | 'complete'>('all')
   const [sortBy, setSortBy] = useState<'recent' | 'completion' | 'name'>('recent')
+  const [downloadMenuOpen, setDownloadMenuOpen] = useState<string | null>(null)
+  const [downloadLoading, setDownloadLoading] = useState(false)
+  const [downloadError, setDownloadError] = useState<string | null>(null)
 
   const tier: FeatureTier = subscription.status === 'trialing' ? 'trial' : subscription.plan
   const canAccess = canAccessFeature(tier, 'prospectus_builder')
@@ -71,6 +74,42 @@ export default function ProspectusList() {
 
   const handleEditClick = (id: string) => {
     router.push(`/prospectus/${id}/editor`)
+  }
+
+  const handleDownloadClick = async (prospectusId: string, format: 'pdf' | 'docx' | 'zip') => {
+    setDownloadLoading(true)
+    setDownloadError(null)
+    setDownloadMenuOpen(null)
+
+    try {
+      const response = await fetch(`/api/prospectus/${prospectusId}/export`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ format }),
+      })
+
+      if (!response.ok) {
+        throw new Error(`Export failed: ${response.statusText}`)
+      }
+
+      const blob = await response.blob()
+      const prospectus = MOCK_PROSPECTUSES.find(p => p.id === prospectusId)
+      const fileName = `${prospectus?.name.replace(/\s+/g, '_').toLowerCase()}_${new Date().toISOString().slice(0, 10)}.${format === 'pdf' ? 'pdf' : format === 'docx' ? 'docx' : 'zip'}`
+
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = fileName
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to download prospectus'
+      setDownloadError(message)
+    } finally {
+      setDownloadLoading(false)
+    }
   }
 
   const getStatusBadgeColor = (status: string) => {
@@ -232,13 +271,46 @@ export default function ProspectusList() {
                 >
                   Edit
                 </button>
-                <button className="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                  Download
-                </button>
+                <div className="relative">
+                  <button
+                    onClick={() => setDownloadMenuOpen(downloadMenuOpen === prospectus.id ? null : prospectus.id)}
+                    disabled={downloadLoading}
+                    className="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                  >
+                    {downloadLoading ? 'Downloading...' : 'Download'}
+                  </button>
+                  {downloadMenuOpen === prospectus.id && (
+                    <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                      <button
+                        onClick={() => handleDownloadClick(prospectus.id, 'pdf')}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 first:rounded-t-md"
+                      >
+                        PDF
+                      </button>
+                      <button
+                        onClick={() => handleDownloadClick(prospectus.id, 'docx')}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        DOCX
+                      </button>
+                      <button
+                        onClick={() => handleDownloadClick(prospectus.id, 'zip')}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 last:rounded-b-md"
+                      >
+                        ZIP (All)
+                      </button>
+                    </div>
+                  )}
+                </div>
                 <button className="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                   Share
                 </button>
               </div>
+              {downloadError && (
+                <div className="mt-3 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-700">
+                  {downloadError}
+                </div>
+              )}
             </div>
           ))}
         </div>
