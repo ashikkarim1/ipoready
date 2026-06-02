@@ -117,43 +117,43 @@ export default function ProspectusList() {
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
       case 'draft':
-        return 'bg-blue-100 text-blue-800'
+        return { bg: '#EFF6FF', color: '#1D4ED8' }
       case 'in_review':
-        return 'bg-amber-100 text-amber-800'
+        return { bg: '#FEF3C7', color: '#B45309' }
       case 'complete':
-        return 'bg-green-100 text-green-800'
+        return { bg: '#EAF5F0', color: '#2D7A5F' }
       default:
-        return 'bg-gray-100 text-gray-800'
+        return { bg: '#F3F4F6', color: '#6B7280' }
     }
   }
 
   const getApprovalTierColor = (tier: string) => {
     switch (tier) {
       case 'ai':
-        return 'bg-blue-50 text-blue-700 border border-blue-200'
+        return { bg: '#EFF6FF', color: '#1D4ED8', border: '#BFDBFE' }
       case 'admin':
-        return 'bg-amber-50 text-amber-700 border border-amber-200'
+        return { bg: '#FEF3C7', color: '#B45309', border: '#FCD34D' }
       case 'professional':
-        return 'bg-green-50 text-green-700 border border-green-200'
+        return { bg: '#EAF5F0', color: '#2D7A5F', border: '#86EFAC' }
       default:
-        return 'bg-gray-50 text-gray-700 border border-gray-200'
+        return { bg: '#F3F4F6', color: '#6B7280', border: '#D1D5DB' }
     }
   }
 
   // Show loading state while subscription data is being fetched
   if (subscription.isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#F7F6F4' }}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-slate-600 font-medium">Loading prospectus builder...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderColor: '#E8312A' }}></div>
+          <p className="font-medium" style={{ color: '#717171' }}>Loading prospectus builder...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 p-6 md:p-8">
+    <div className="min-h-screen p-6 md:p-8" style={{ background: '#F7F6F4' }}>
       {/* Feature Lock Overlay */}
       <FeatureLockedOverlay
         isOpen={showLockedOverlay && !canAccess}
@@ -175,10 +175,10 @@ export default function ProspectusList() {
         >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-2">
+              <h1 className="text-4xl md:text-5xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
                 Prospectus Builder
               </h1>
-              <p className="text-slate-600 text-lg">Create, manage, and distribute IPO prospectus documents</p>
+              <p className="text-lg" style={{ color: '#717171' }}>Create, manage, and distribute IPO prospectus documents</p>
             </div>
 
             <motion.button
@@ -186,11 +186,12 @@ export default function ProspectusList() {
               whileTap={{ scale: canAccess ? 0.95 : 1 }}
               onClick={handleCreateClick}
               disabled={!canAccess}
-              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
-                canAccess
-                  ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl cursor-pointer'
-                  : 'bg-slate-100 text-slate-400 cursor-not-allowed'
-              }`}
+              className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all hover:opacity-90"
+              style={{
+                background: canAccess ? '#E8312A' : '#E5E4E0',
+                color: canAccess ? '#FFFFFF' : '#9A9A9A',
+                cursor: canAccess ? 'pointer' : 'not-allowed',
+              }}
             >
               <Plus size={20} />
               Create New
@@ -213,11 +214,12 @@ export default function ProspectusList() {
                   key={status}
                   whileHover={{ y: -2 }}
                   onClick={() => setFilterStatus(status)}
-                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-                    filterStatus === status
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:shadow-md'
-                  }`}
+                  className="px-4 py-2 rounded-lg text-sm font-semibold transition-all"
+                  style={{
+                    background: filterStatus === status ? '#E8312A' : '#FFFFFF',
+                    color: filterStatus === status ? '#FFFFFF' : '#1A1A1A',
+                    border: filterStatus === status ? 'none' : '1px solid #E5E4E0',
+                  }}
                 >
                   {status === 'all' ? 'All' : status === 'in_review' ? 'In Review' : status === 'complete' ? 'Complete' : 'Draft'}
                 </motion.button>
@@ -227,7 +229,14 @@ export default function ProspectusList() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 bg-white hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 border rounded-lg text-sm font-medium focus:outline-none"
+              style={{
+                borderColor: '#E5E4E0',
+                color: '#1A1A1A',
+                background: '#FFFFFF',
+              }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = '#1A1A1A' }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = '#E5E4E0' }}
             >
               <option value="recent">Newest First</option>
               <option value="completion">Completion %</option>
@@ -242,21 +251,26 @@ export default function ProspectusList() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-2xl border-2 border-dashed border-slate-300 p-16 text-center bg-gradient-to-br from-slate-50 to-blue-50"
+          className="rounded-2xl border-2 border-dashed p-16 text-center"
+          style={{
+            borderColor: '#E5E4E0',
+            background: '#FFFFFF',
+          }}
         >
           <div className="text-6xl mb-4">📄</div>
-          <h3 className="text-2xl font-bold text-slate-900 mb-2">No prospectuses yet</h3>
-          <p className="text-slate-600 mb-8 max-w-md mx-auto">Get started by creating your first prospectus document to begin building your IPO narrative</p>
+          <h3 className="text-2xl font-bold mb-2" style={{ color: '#1A1A1A' }}>No prospectuses yet</h3>
+          <p className="mb-8 max-w-md mx-auto" style={{ color: '#717171' }}>Get started by creating your first prospectus document to begin building your IPO narrative</p>
           <motion.button
             whileHover={{ scale: canAccess ? 1.05 : 1 }}
             whileTap={{ scale: canAccess ? 0.95 : 1 }}
             onClick={handleCreateClick}
             disabled={!canAccess}
-            className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
-              canAccess
-                ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl cursor-pointer'
-                : 'bg-slate-100 text-slate-400 cursor-not-allowed'
-            }`}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all hover:opacity-90"
+            style={{
+              background: canAccess ? '#E8312A' : '#E5E4E0',
+              color: canAccess ? '#FFFFFF' : '#9A9A9A',
+              cursor: canAccess ? 'pointer' : 'not-allowed',
+            }}
           >
             <Plus size={20} />
             Create Your First Prospectus
@@ -276,21 +290,25 @@ export default function ProspectusList() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
               whileHover={{ y: -4 }}
-              className="rounded-xl border border-slate-200 p-6 bg-white hover:border-blue-300 transition-all cursor-pointer group"
+              className="rounded-xl p-6 cursor-pointer group transition-all"
+              style={{
+                border: '1px solid #E5E4E0',
+                background: '#FFFFFF',
+              }}
               onClick={() => handleEditClick(prospectus.id)}
             >
               {/* Card Header */}
               <div className="flex items-start justify-between gap-4 mb-4">
                 <div className="flex items-start gap-3 flex-1">
-                  <FileText className="w-8 h-8 text-blue-600 mt-1 flex-shrink-0" />
+                  <FileText className="w-8 h-8 mt-1 flex-shrink-0" style={{ color: '#E8312A' }} />
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-slate-900 text-lg group-hover:text-blue-600 transition-colors truncate">{prospectus.name}</h3>
-                    <p className="text-sm text-slate-500 mt-1">{prospectus.exchange}</p>
+                    <h3 className="font-bold text-lg truncate" style={{ color: '#1A1A1A' }}>{prospectus.name}</h3>
+                    <p className="text-sm mt-1" style={{ color: '#9A9A9A' }}>{prospectus.exchange}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${getStatusBadgeColor(prospectus.status)}`}>
+                  <span className="px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap" style={getStatusBadgeColor(prospectus.status)}>
                     {prospectus.status === 'in_review' ? 'In Review' : prospectus.status === 'complete' ? 'Complete' : 'Draft'}
                   </span>
                 </div>
@@ -299,21 +317,22 @@ export default function ProspectusList() {
               {/* Progress Bar */}
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-slate-700">Progress</span>
-                  <span className="text-sm font-bold text-blue-600">{prospectus.completionPercent}%</span>
+                  <span className="text-sm font-medium" style={{ color: '#717171' }}>Progress</span>
+                  <span className="text-sm font-bold" style={{ color: '#E8312A' }}>{prospectus.completionPercent}%</span>
                 </div>
-                <div className="w-full bg-slate-200 rounded-full h-2.5">
+                <div className="w-full rounded-full h-2.5" style={{ background: '#E5E4E0' }}>
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${prospectus.completionPercent}%` }}
                     transition={{ duration: 0.6, ease: 'easeOut' }}
-                    className="bg-gradient-to-r from-blue-600 to-blue-500 h-2.5 rounded-full"
+                    className="h-2.5 rounded-full"
+                    style={{ background: '#E8312A' }}
                   />
                 </div>
               </div>
 
               {/* Meta Info */}
-              <div className="flex items-center gap-4 text-sm text-slate-600 mb-4 pb-4 border-b border-slate-100">
+              <div className="flex items-center gap-4 text-sm mb-4 pb-4" style={{ borderBottom: '1px solid #E5E4E0', color: '#717171' }}>
                 <div className="flex items-center gap-1">
                   <Clock size={16} />
                   <span>{new Date(prospectus.createdAt).toLocaleDateString()}</span>
@@ -321,10 +340,10 @@ export default function ProspectusList() {
               </div>
 
               {/* Footer with Approval Tier */}
-              <div className="flex items-center justify-between">
-                <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${getApprovalTierColor(prospectus.approvalTier)}`}>
-                    {prospectus.approvalTier === 'ai' ? 'AI Draft' : prospectus.approvalTier === 'admin' ? 'Admin Review' : 'Professional'}
-                  </span>
+              <div className="flex items-center justify-between mb-4">
+                <span className="px-2.5 py-1 rounded-lg text-xs font-semibold" style={{ ...getApprovalTierColor(prospectus.approvalTier), border: `1px solid ${getApprovalTierColor(prospectus.approvalTier).border}` }}>
+                  {prospectus.approvalTier === 'ai' ? 'AI Draft' : prospectus.approvalTier === 'admin' ? 'Admin Review' : 'Professional'}
+                </span>
               </div>
 
               {/* Action Buttons */}
@@ -336,7 +355,11 @@ export default function ProspectusList() {
                     e.stopPropagation()
                     handleEditClick(prospectus.id)
                   }}
-                  className="flex-1 px-3 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-semibold hover:bg-blue-100 transition-colors group-hover:bg-blue-100"
+                  className="flex-1 px-3 py-2 rounded-lg text-sm font-semibold transition-colors hover:opacity-90"
+                  style={{
+                    background: '#FDECEB',
+                    color: '#E8312A',
+                  }}
                 >
                   Edit
                 </motion.button>
@@ -349,7 +372,12 @@ export default function ProspectusList() {
                       setDownloadMenuOpen(downloadMenuOpen === prospectus.id ? null : prospectus.id)
                     }}
                     disabled={downloadLoading}
-                    className="flex items-center gap-1 px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-200 transition-colors disabled:opacity-50"
+                    className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
+                    style={{
+                      background: '#F7F6F4',
+                      color: '#717171',
+                      opacity: downloadLoading ? 0.5 : 1,
+                    }}
                   >
                     <Download size={16} />
                     {downloadLoading ? '...' : 'Export'}
@@ -360,23 +388,27 @@ export default function ProspectusList() {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="absolute right-0 mt-2 w-40 bg-white border border-slate-200 rounded-lg shadow-xl z-10 overflow-hidden"
+                        className="absolute right-0 mt-2 w-40 rounded-lg shadow-lg z-10 overflow-hidden"
+                        style={{ background: '#FFFFFF', border: '1px solid #E5E4E0' }}
                       >
                         <button
                           onClick={() => handleDownloadClick(prospectus.id, 'pdf')}
-                          className="block w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-blue-50 transition-colors"
+                          className="block w-full text-left px-4 py-2.5 text-sm font-medium transition-colors hover:opacity-80"
+                          style={{ color: '#717171', borderBottom: '1px solid #E5E4E0' }}
                         >
                           📄 PDF
                         </button>
                         <button
                           onClick={() => handleDownloadClick(prospectus.id, 'docx')}
-                          className="block w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-blue-50 transition-colors border-t border-slate-100"
+                          className="block w-full text-left px-4 py-2.5 text-sm font-medium transition-colors hover:opacity-80"
+                          style={{ color: '#717171', borderBottom: '1px solid #E5E4E0' }}
                         >
                           📝 Word Document
                         </button>
                         <button
                           onClick={() => handleDownloadClick(prospectus.id, 'zip')}
-                          className="block w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-blue-50 transition-colors border-t border-slate-100"
+                          className="block w-full text-left px-4 py-2.5 text-sm font-medium transition-colors hover:opacity-80"
+                          style={{ color: '#717171' }}
                         >
                           📦 All Formats
                         </button>
@@ -389,7 +421,12 @@ export default function ProspectusList() {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700 font-medium"
+                  className="mt-3 p-3 rounded-lg text-sm font-medium"
+                  style={{
+                    background: '#FEE2E2',
+                    color: '#B91C1C',
+                    border: '1px solid #FECACA',
+                  }}
                 >
                   {downloadError}
                 </motion.div>
