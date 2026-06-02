@@ -44,10 +44,64 @@ export default function CapTableDashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Load cap table data from API (placeholder - would be fetched from backend)
+  // Load cap table data from API
   useEffect(() => {
-    // Placeholder: In production, fetch from /api/cap-table/latest or similar
-    setSelectedDocument(null);
+    const fetchCapTableData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/cap-table');
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            setError('Please log in to view cap table');
+          } else {
+            setError('Failed to load cap table');
+          }
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!data.document) {
+          setSelectedDocument(null);
+          return;
+        }
+
+        // Transform API response to component state
+        const holdings = (data.holdings || []).map((h: any) => ({
+          shareholderName: h.shareholder_name,
+          shareClassName: h.class_name,
+          quantity: parseFloat(h.quantity),
+          percentage: 0, // Will calculate below
+          vested: true,
+        }));
+
+        // Calculate ownership percentages
+        const totalShares = holdings.reduce((sum: number, h: any) => sum + h.quantity, 0);
+        holdings.forEach((h: any) => {
+          h.percentage = totalShares > 0 ? Math.round((h.quantity / totalShares) * 10000) / 100 : 0;
+        });
+
+        setSelectedDocument({
+          id: data.document.id,
+          fileName: data.document.document_name,
+          validationStatus: data.document.validation_status,
+          totalShareholders: data.shareholders?.length || 0,
+          shareClasses: data.shareClasses?.length || 0,
+          totalSharesIssued: totalShares,
+          totalSharesAuthorized: totalShares * 1.5,
+          holdings,
+          lastUpdated: data.document.created_at,
+        });
+      } catch (err) {
+        console.error('Error fetching cap table:', err);
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCapTableData();
   }, []);
 
   const handleFileUpload = async (file: File) => {
