@@ -5,7 +5,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Rocket, ArrowRight, BookOpen, Sparkles, Lock, RefreshCcw, Upload, Eye, BarChart3, FileText, Users } from 'lucide-react'
+import { Rocket, ArrowRight, BookOpen, Sparkles, Lock, RefreshCcw, Upload, Eye, BarChart3, FileText, Users, Mail, Zap, ExternalLink } from 'lucide-react'
 import { FeaturesMegaMenu } from '@/app/components/FeaturesMegaMenu'
 import { ScheduleDemoModal } from '@/app/components/ScheduleDemoModal'
 
@@ -316,6 +316,190 @@ export default function ProspectusBuilderPage() {
 
       {/* Demo Modal */}
       <ScheduleDemoModal isOpen={demoModalOpen} onClose={() => setDemoModalOpen(false)} />
+
+      {/* ── Footer ──────────────────────────────────────────────────────────── */}
+      <footer style={{ background: '#FFFFFF', borderTop: '1px solid #E5E4E0' }}>
+
+        {/* Main grid */}
+        <div className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+          <div className="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-8">
+
+            {/* Brand column */}
+            <div className="col-span-2 md:col-span-1">
+              <Link href="/" className="flex items-center gap-2.5" style={{ marginBottom: '1rem' }}>
+                <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: '#1A1A1A' }}>
+                  <Rocket className="w-4 h-4 text-white" />
+                </div>
+                <span className="font-display font-bold text-lg text-nav">
+                  IPO<span style={{ color: '#E8312A' }}>Ready</span>
+                </span>
+              </Link>
+              <p className="text-text-muted text-sm leading-relaxed" style={{ marginBottom: '1.25rem', maxWidth: '260px' }}>
+                The world's first central hub for IPO readiness workflow management — from first board resolution to exchange approval.
+              </p>
+              {/* Social */}
+              <div className="flex items-center gap-2" style={{ marginBottom: '1.25rem' }}>
+                {/* LinkedIn */}
+                <a href="https://linkedin.com/company/ipoready" target="_blank" rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+                  style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#9A9A9A' }}>
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                </a>
+                {/* X / Twitter */}
+                <a href="https://twitter.com/ipoready" target="_blank" rel="noopener noreferrer"
+                  aria-label="Twitter / X"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+                  style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#9A9A9A' }}>
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.733-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+                </a>
+                {/* Email */}
+                <a href="mailto:hello@ipoready.com"
+                  aria-label="Email"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+                  style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#9A9A9A' }}>
+                  <Mail className="w-3.5 h-3.5" />
+                </a>
+              </div>
+              {/* auditus.ai */}
+              <a href="https://auditus.ai" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors"
+                style={{ color: '#717171' }}>
+                <Zap className="w-3 h-3" />
+                Powered by auditus.ai
+                <ExternalLink className="w-3 h-3 opacity-50" />
+              </a>
+            </div>
+
+            {/* Product */}
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Product</p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                {[
+                  { label: 'IPO Checklist',     href: '/checklist' },
+                  { label: 'Cap Table',          href: '/cap-table' },
+                  { label: 'Raising Capital',    href: '/raising-capital' },
+                  { label: 'Document Workspace', href: '/documents' },
+                  { label: 'Expert Network',     href: '/marketplace' },
+                  { label: 'Templates & Forms',  href: '/templates' },
+                  { label: 'PACE™ Score',        href: '/dashboard' },
+                ].map(({ label, href }) => (
+                  <li key={label}>
+                    <Link href={href}
+                      className="text-sm text-text-muted transition-colors hover:text-nav">
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Company */}
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Company</p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                {[
+                  { label: 'Pricing',          href: '/pricing' },
+                  { label: 'Referral Program', href: '/referrals' },
+                  { label: 'Mission Control',  href: '/dashboard' },
+                  { label: 'Team & Roles',     href: '/team' },
+                  { label: 'Account',          href: '/account' },
+                  { label: 'Get Started',      href: '/register' },
+                  { label: 'Sign In',          href: '/login' },
+                ].map(({ label, href }) => (
+                  <li key={label}>
+                    <Link href={href}
+                      className="text-sm text-text-muted transition-colors hover:text-nav">
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Exchanges */}
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Exchanges</p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                {[
+                  'TSX', 'TSXV', 'CSE', 'NASDAQ', 'NYSE', 'OTC Markets', 'Cboe Canada',
+                ].map(ex => (
+                  <li key={ex}>
+                    <span className="text-sm text-text-muted">{ex}</span>
+                  </li>
+                ))}
+              </ul>
+              <div style={{ marginTop: '1.5rem' }}>
+                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Listing Types</p>
+                <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                  {['IPO', 'Direct Listing', 'RTO', 'SPAC', 'Regulation A+'].map(t => (
+                    <li key={t}><span className="text-sm text-text-muted">{t}</span></li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Legal & Support */}
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Legal</p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                {[
+                  { label: 'Privacy Policy',   href: '/privacy' },
+                  { label: 'Terms of Service', href: '/terms' },
+                  { label: 'Disclaimer',       href: '/disclaimer' },
+                  { label: 'Cookie Policy',    href: '/cookies' },
+                ].map(({ label, href }) => (
+                  <li key={label}>
+                    <Link href={href}
+                      className="text-sm text-text-muted transition-colors hover:text-nav">
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <div style={{ marginTop: '1.5rem' }}>
+                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Support</p>
+                <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                  {[
+                    { label: 'Contact Us',    href: 'mailto:hello@ipoready.com' },
+                    { label: 'Help Centre',   href: '/help' },
+                    { label: 'System Status', href: '/status' },
+                  ].map(({ label, href }) => (
+                    <li key={label}>
+                      <a href={href}
+                        className="text-sm text-text-muted transition-colors hover:text-nav">
+                        {label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Compliance bar */}
+        <div style={{ borderTop: '1px solid #E5E4E0', background: '#F7F6F4' }}>
+          <div className="max-w-7xl mx-auto" style={{ paddingTop: '1.25rem', paddingBottom: '1.25rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+              <p className="text-xs leading-relaxed text-text-light" style={{ maxWidth: '680px' }}>
+                <span className="font-semibold text-text-muted">Important:</span>{' '}
+                IPOReady is a workflow management and project tracking platform only. It does not provide legal, compliance, accounting, securities, or investment banking services, and does not act on your behalf in any regulatory or professional capacity.
+                All regulatory filings, legal opinions, and compliance determinations must be executed by licensed professionals. Nothing on this platform constitutes legal advice, financial advice, or an offer to buy or sell securities.
+              </p>
+              <div className="flex items-center gap-4 flex-shrink-0 self-end md:self-auto">
+                <p className="text-xs text-text-light">© {new Date().getFullYear()} IPOReady. All rights reserved.</p>
+                <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: '#EFEFED', border: '1px solid #E5E4E0' }}>
+                  {(['EN', 'FR'] as const).map(l => (
+                    <span key={l} className="text-xs px-2 py-0.5 rounded font-mono font-medium cursor-default"
+                      style={{ color: '#9A9A9A' }}>{l}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
