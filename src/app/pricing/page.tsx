@@ -110,7 +110,7 @@ const PLANS = [
     originalSixmonthCAD: 5336,
     originalAnnualUSD: 3330,
     originalAnnualCAD: 4450,
-    minCommitmentMonths: 12,
+    minCommitmentMonths: 3,
     features: [
       'Everything in Growth',
       'Advanced prospectus builder (multi-segment S-1/F-1)',
@@ -125,6 +125,7 @@ const PLANS = [
       'Multi-entity support (RTOs)',
       'Priority API access',
       '24/7 expert support',
+      'Auto-renews month-to-month after 3 months · cancel anytime',
     ],
     isPopular: false,
     maxMembers: 999,
@@ -148,7 +149,7 @@ const FAQS = [
   },
   {
     q: 'What are the commitment periods?',
-    a: 'Starter plans require a 1-month minimum, Growth plans require 3 months, and Enterprise plans require an annual commitment. These minimums ensure you have enough runway to experience the full value of the platform — IPO readiness is a multi-month journey, not a one-time checklist. After your commitment period, you can cancel anytime with 30 days notice.',
+    a: 'Starter plans require a 1-month minimum, Growth plans require 3 months, and Enterprise plans require a 3-month minimum. After your initial commitment, all plans auto-renew on a month-to-month basis — you must cancel manually to stop. These minimums ensure you have enough runway to experience the full value of the platform — IPO readiness is a multi-month journey, not a one-time checklist.',
   },
   {
     q: 'Can I switch plans mid-listing?',
@@ -362,7 +363,7 @@ export default function PricingPage() {
               {billing === 'monthly' && (
                 <motion.p key="monthly-note" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                   className="text-text-light text-xs">
-                  {language === 'en' ? 'Starter: 1-month · Growth: 3-month · Enterprise: 12-month minimum' : 'Débutant: 1 mois · Croissance: 3 mois · Entreprise: 12 mois minimum'}
+                  {language === 'en' ? 'All auto-renew month-to-month after initial commitment · cancel anytime' : 'Tous se renouvellent automatiquement mensuellement · annulez à tout moment'}
                 </motion.p>
               )}
               {billing === 'sixmonth' && (
