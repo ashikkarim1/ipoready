@@ -2,47 +2,70 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, CheckSquare, PieChart, FileText, ShoppingBag, BookOpen } from 'lucide-react'
 
 export function FeaturesMegaMenu() {
-  const [open, setOpen] = useState(false)
+  const [featuresOpen, setFeaturesOpen] = useState(false)
 
   return (
-    <div className="relative">
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-nav hover:bg-gray-100 transition-colors"
-      >
-        Features
-        <ChevronDown className="w-4 h-4" style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
-      </button>
-
-      {open && (
-        <div
-          className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-3 z-50"
-          onMouseLeave={() => setOpen(false)}
+    <nav className="flex items-center gap-1" style={{ marginLeft: '2rem' }}>
+      {/* Features Dropdown */}
+      <div className="relative">
+        <button
+          onClick={() => setFeaturesOpen(!featuresOpen)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-nav hover:bg-gray-100 transition-colors"
         >
-          <Link href="/#features" className="block px-4 py-2.5 hover:bg-gray-50 text-sm text-nav font-medium">
-            All Features
-          </Link>
-          <Link href="/cap-table" className="block px-4 py-2.5 hover:bg-gray-50 text-sm text-nav">
-            Cap Table
-          </Link>
-          <Link href="/checklist" className="block px-4 py-2.5 hover:bg-gray-50 text-sm text-nav">
-            IPO Checklist
-          </Link>
-          <Link href="/documents" className="block px-4 py-2.5 hover:bg-gray-50 text-sm text-nav">
-            Document Workspace
-          </Link>
-          <Link href="/marketplace" className="block px-4 py-2.5 hover:bg-gray-50 text-sm text-nav">
-            Expert Network
-          </Link>
-          <div className="border-t border-gray-200 my-2" />
-          <Link href="/pricing" className="block px-4 py-2.5 hover:bg-gray-50 text-sm text-nav">
-            Pricing
-          </Link>
-        </div>
-      )}
-    </div>
+          Features
+          <ChevronDown className="w-4 h-4" style={{ transform: featuresOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
+        </button>
+
+        {featuresOpen && (
+          <div
+            className="absolute top-full left-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-3 z-50"
+            onMouseLeave={() => setFeaturesOpen(false)}
+          >
+            <div className="px-4 py-2">
+              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3">Core Features</p>
+              <Link href="/#features" className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-lg text-sm text-nav font-medium transition-colors">
+                <CheckSquare className="w-4 h-4 text-blue-600" />
+                All Features
+              </Link>
+              <Link href="/cap-table" className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-lg text-sm text-nav transition-colors">
+                <PieChart className="w-4 h-4 text-amber-600" />
+                Cap Table
+              </Link>
+              <Link href="/checklist" className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-lg text-sm text-nav transition-colors">
+                <CheckSquare className="w-4 h-4 text-green-600" />
+                IPO Checklist
+              </Link>
+              <Link href="/documents" className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-lg text-sm text-nav transition-colors">
+                <FileText className="w-4 h-4 text-gray-600" />
+                Document Workspace
+              </Link>
+              <Link href="/marketplace" className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-lg text-sm text-nav transition-colors">
+                <ShoppingBag className="w-4 h-4 text-purple-600" />
+                Expert Network
+              </Link>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Prospectus Builder - Direct Link */}
+      <Link href="/prospectus-builder" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-nav hover:bg-gray-100 transition-colors">
+        <BookOpen className="w-4 h-4" />
+        Prospectus Builder
+      </Link>
+
+      {/* Resources Link */}
+      <Link href="/resources" className="px-3 py-1.5 rounded-lg text-sm font-medium text-nav hover:bg-gray-100 transition-colors">
+        Resources
+      </Link>
+
+      {/* Pricing Link */}
+      <Link href="/pricing" className="px-3 py-1.5 rounded-lg text-sm font-medium text-nav hover:bg-gray-100 transition-colors">
+        Pricing
+      </Link>
+    </nav>
   )
 }
