@@ -11,28 +11,28 @@ const CAPABILITIES = [
   {
     icon: Upload,
     title: 'Multi-Format Import',
-    description: 'Upload existing prospectuses, financial documents, or business plans in PDF, DOCX, or TXT format. Our AI extracts and organizes all relevant content automatically.',
+    description: 'Upload prospectuses, financial documents, or business plans in PDF, DOCX, or TXT. AI extracts and organizes content automatically.',
     color: '#1D4ED8',
     bg: '#EFF6FF',
   },
   {
     icon: Sparkles,
     title: 'AI-Assisted Generation',
-    description: 'Prospectus Builder automatically structures your documents into proper sections, fills gaps with intelligent recommendations, and maintains regulatory compliance for your target exchange.',
-    color: '#7C3AED',
-    bg: '#F5F3FF',
+    description: 'Structures documents into proper sections, fills gaps with intelligent recommendations, and maintains regulatory compliance for your target exchange.',
+    color: '#E8312A',
+    bg: '#FDECEB',
   },
   {
     icon: Eye,
     title: 'Multi-Tier Review Workflow',
-    description: 'Route prospectuses through internal review, legal counsel review, and underwriter feedback — all tracked, versioned, and commented in-platform. No more email chains.',
+    description: 'Route through internal, legal, and underwriter review — tracked, versioned, and commented in-platform with no email chains.',
     color: '#2D7A5F',
     bg: '#EAF5F0',
   },
   {
     icon: Lock,
     title: 'Compliance-First Design',
-    description: 'Every generated prospectus follows TSX, TSXV, CSE, NASDAQ, and NYSE formatting and disclosure requirements. Reduces legal review cycles and accelerates filing timelines.',
+    description: 'Generated prospectuses follow TSX, TSXV, CSE, NASDAQ, and NYSE formatting and disclosure requirements.',
     color: '#B45309',
     bg: '#FEF3C7',
   },
@@ -46,7 +46,7 @@ const CAPABILITIES = [
   {
     icon: BarChart3,
     title: 'Export to Any Format',
-    description: 'Generate final prospectuses as PDF, DOCX, or ZIP packages. Compatible with all filing systems and ready for underwriter and regulatory review.',
+    description: 'Generate final prospectuses as PDF, DOCX, or ZIP packages ready for underwriter and regulatory review.',
     color: '#059669',
     bg: '#ECFDF5',
   },
@@ -69,9 +69,9 @@ const BENEFITS = [
     sub: 'Complete version history for compliance',
   },
   {
-    metric: '24h',
-    label: 'Ready for Filing',
-    sub: 'From source documents to final draft',
+    metric: '7',
+    label: 'Exchanges Supported',
+    sub: 'TSX, TSXV, CSE, NASDAQ, NYSE, OTC & more',
   },
 ]
 
@@ -119,7 +119,7 @@ export default function ProspectusBuilderPage() {
             transition={{ duration: 0.4 }}
             className="flex items-center justify-center gap-2" style={{ marginBottom: '1.5rem' }}>
             <span className="pill text-xs font-bold uppercase tracking-wider"
-              style={{ background: '#F5F3FF', color: '#7C3AED' }}>
+              style={{ background: '#FDECEB', color: '#E8312A' }}>
               <BookOpen className="w-3.5 h-3.5 inline mr-1.5" />
               Prospectus Builder
             </span>
@@ -132,7 +132,7 @@ export default function ProspectusBuilderPage() {
             className="serif text-nav"
             style={{ fontSize: '2.5rem', lineHeight: '1.2', marginBottom: '1.5rem' }}>
             From Documents to<br />
-            <span style={{ color: '#7C3AED' }}>Filing-Ready Prospectus</span>
+            <span style={{ color: '#E8312A' }}>Filing-Ready Prospectus</span>
           </motion.h1>
 
           <motion.p
@@ -140,7 +140,7 @@ export default function ProspectusBuilderPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.12 }}
             className="text-text-muted text-lg leading-relaxed" style={{ marginBottom: '1.5rem', maxWidth: '620px', margin: '0 auto 1.5rem' }}>
-            Stop manually drafting prospectuses. Upload your documents, let AI organize and complete them with regulatory compliance built-in, then route through multi-tier review — all in one platform.
+            Upload documents. AI organizes and structures them with compliance built-in. Route through multi-tier review — all in one platform.
           </motion.p>
 
           {/* CTAs */}
@@ -183,9 +183,9 @@ export default function ProspectusBuilderPage() {
       {/* ── How It Works ────────────────────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         <div style={{ marginBottom: '2.5rem' }}>
-          <div className="text-xs uppercase tracking-widest text-text-muted font-semibold" style={{ marginBottom: '1rem' }}>How It Works</div>
+          <div className="text-xs uppercase tracking-widest text-text-muted font-semibold" style={{ marginBottom: '1rem' }}>Workflow</div>
           <h2 className="serif text-3xl md:text-4xl text-nav leading-tight" style={{ marginBottom: '0.875rem' }}>
-            4 simple steps to filing-ready prospectus
+            4 steps to completion
           </h2>
         </div>
 
@@ -200,10 +200,10 @@ export default function ProspectusBuilderPage() {
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.06 }}
                 className="card p-6 card-hover">
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{ background: '#F5F3FF' }}>
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{ background: '#FDECEB' }}>
                   <span className="font-black text-lg text-nav">{item.step}</span>
                 </div>
-                <Icon className="w-5 h-5 mb-4" style={{ color: '#7C3AED' }} />
+                <Icon className="w-5 h-5 mb-4" style={{ color: '#E8312A' }} />
                 <h3 className="font-semibold text-nav mb-2">{item.title}</h3>
                 <p className="text-sm text-text-muted leading-relaxed">{item.description}</p>
               </motion.div>
@@ -270,13 +270,13 @@ export default function ProspectusBuilderPage() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
           className="card p-8 lg:p-12 text-center"
-          style={{ background: '#F5F3FF', border: '1px solid #E9D5FF' }}
+          style={{ background: '#FDECEB', border: '1px solid #F5E5E1' }}
         >
           <h2 className="serif text-3xl md:text-4xl text-nav mb-4 leading-tight">
-            Ready to build faster?
+            Build prospectuses faster.
           </h2>
           <p className="text-text-muted text-lg mb-8 max-w-2xl mx-auto" style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-            Join companies building filing-ready prospectuses 70% faster with IPOReady.
+            Streamline drafting, review, and compliance with AI-powered prospectus builder.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link href="/register" className="btn btn-primary gap-2 font-semibold px-6 py-2.5 rounded-full">
