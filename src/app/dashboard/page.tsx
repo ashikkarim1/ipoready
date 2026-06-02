@@ -371,28 +371,29 @@ export default function DashboardPage() {
       <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 px-4 sm:px-6 lg:px-0">
 
         {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div>
           <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Mission Control</h1>
           <p className="text-text-muted text-sm">Your IPO readiness command centre</p>
         </div>
-        <div className="flex flex-col xs:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+        <div className="flex flex-row gap-2 sm:gap-3 flex-shrink-0">
           <button onClick={() => setBoardModal(true)}
-            className="flex items-center justify-center gap-2 px-3 sm:px-4 py-3 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold min-h-touch"
+            className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap"
             style={{ background: 'white', border: '1px solid #E5E4E0', color: '#1A1A1A' }}>
-            <Award className="w-4 h-4" />
+            <Award className="w-4 h-4 flex-shrink-0" />
             <span className="hidden sm:inline">Board Report</span>
             <span className="sm:hidden">Board</span>
           </button>
           <button onClick={() => setEmailModal(true)}
-            className="flex items-center justify-center gap-2 px-3 sm:px-4 py-3 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold min-h-touch"
+            className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap"
             style={{ background: 'white', border: '1px solid #E5E4E0', color: '#1A1A1A' }}>
-            <Mail className="w-4 h-4" />
+            <Mail className="w-4 h-4 flex-shrink-0" />
             <span className="hidden sm:inline">Email Dashboard</span>
             <span className="sm:hidden">Email</span>
           </button>
-          <Link href="/checklist" className="btn btn-primary gap-2 text-xs sm:text-sm px-3 sm:px-4 py-3 sm:py-2 inline-flex items-center justify-center min-h-touch">
-            <CheckCircle2 className="w-4 h-4" />
+          <Link href="/checklist" className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap"
+            style={{ background: '#E8312A', color: 'white', textDecoration: 'none' }}>
+            <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
             <span className="hidden sm:inline">Open Checklist</span>
             <span className="sm:hidden">Checklist</span>
           </Link>
