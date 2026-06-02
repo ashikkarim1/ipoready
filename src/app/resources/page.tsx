@@ -616,7 +616,7 @@ export default function ResourcesPage() {
 
         {/* Page header */}
         <div style={{ marginBottom: '1.75rem' }}>
-        <div className="flex items-center gap-2" style={{ marginBottom: '0.375rem' }}>
+          <div className="flex items-center gap-2" style={{ marginBottom: '0.375rem' }}>
           <BookOpen className="w-5 h-5" style={{ color: '#E8312A' }} />
           <h1 className="text-nav font-bold text-2xl">Resource Centre</h1>
         </div>
