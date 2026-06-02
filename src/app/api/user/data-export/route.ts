@@ -10,10 +10,8 @@
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import { sql } from '@/lib/db'
-import { hash, compare } from 'bcryptjs'
+import { compare } from 'bcryptjs'
 import { NextResponse } from 'next/server'
-import archiver from 'archiver'
-import { Readable } from 'stream'
 
 export async function POST(req: Request) {
   try {

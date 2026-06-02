@@ -97,12 +97,49 @@ async function extractTextFromPDF(buffer: Buffer): Promise<string> {
 }
 
 async function extractTextFromDOCX(buffer: Buffer): Promise<string> {
-  // Note: DOCX extraction requires server-side processing with specialized libraries
-  // For now, we return an empty string. In production, use a dedicated API endpoint
-  // that handles DOCX extraction with proper Node.js dependencies.
-  console.warn('DOCX extraction requires server-side processing. Using fallback method.')
-  // Return empty string - UI should handle this case
-  return ''
+  // Try primary method: ZIP-based extraction (fast, works for most DOCX files)
+  try {
+    const JSZip = (await import('jszip')).default
+    const zip = new JSZip()
+    const loaded = await zip.loadAsync(buffer)
+    
+    // Read the main document.xml file from the DOCX
+    const docXml = await loaded.file('word/document.xml')?.async('text')
+    if (!docXml) {
+      throw new Error('document.xml not found')
+    }
+    
+    // Extract text content from all text runs
+    const textMatches = docXml.match(/<w:t[^>]*>([^<]*)<\/w:t>/g) || []
+    
+    if (textMatches.length === 0) {
+      console.warn('[DOCX Extraction] No text found using primary method')
+      return ''
+    }
+    
+    // Join all text runs with space
+    const text = textMatches
+      .map(match => match.replace(/<w:t[^>]*>|<\/w:t>/g, ''))
+      .join(' ')
+    
+    // Clean and normalize whitespace
+    const cleaned = text
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0)
+      .join('\n')
+    
+    if (cleaned.length > 0) {
+      return cleaned
+    }
+    
+    throw new Error('Primary extraction yielded empty result')
+  } catch (primaryError) {
+    console.error('[DOCX Extraction] Primary method failed:', 
+      primaryError instanceof Error ? primaryError.message : String(primaryError))
+    
+    throw new Error('Failed to extract text from DOCX file - file may be corrupted or unsupported format')
+  }
 }
 
 async function extractTextFromCSV(buffer: Buffer): Promise<string> {
