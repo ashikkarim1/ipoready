@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { FeaturesMegaMenu } from '@/app/components/FeaturesMegaMenu'
 import {
   BookOpen, FileText, ExternalLink, Newspaper, ChevronRight,
   Search, Filter, Clock, Building2, AlertCircle, Globe, Scale,
@@ -605,9 +606,13 @@ export default function ResourcesPage() {
   ]
 
   return (
-    <div style={{ maxWidth: '1280px' }}>
+    <>
+      {/* Main menu */}
+      <FeaturesMegaMenu />
 
-      {/* Page header */}
+      <div style={{ maxWidth: '1280px' }}>
+
+        {/* Page header */}
       <div style={{ marginBottom: '1.75rem' }}>
         <div className="flex items-center gap-2" style={{ marginBottom: '0.375rem' }}>
           <BookOpen className="w-5 h-5" style={{ color: '#E8312A' }} />
@@ -988,6 +993,6 @@ export default function ResourcesPage() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }

@@ -3,8 +3,9 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
+import { FeaturesMegaMenu } from '@/app/components/FeaturesMegaMenu'
 import {
-  CheckCircle2, ArrowRight, Zap, Globe,
+  CheckCircle2, ArrowRight, Zap, Globe, Mail, ExternalLink, Rocket,
   Users, ChevronDown, ChevronUp, Clock, Sparkles, X, BadgeCheck, TrendingUp
 } from 'lucide-react'
 
@@ -242,9 +243,13 @@ export default function PricingPage() {
   ]
 
   return (
-    <div className="relative" style={{ overflowX: 'clip' }}>
+    <>
+      {/* Main menu */}
+      <FeaturesMegaMenu />
 
-      <div className="max-w-6xl mx-auto relative z-10" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem', paddingTop: '0.5rem', paddingBottom: '4rem' }}>
+      <div className="relative" style={{ overflowX: 'clip' }}>
+
+        <div className="max-w-6xl mx-auto relative z-10" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem', paddingTop: '0.5rem', paddingBottom: '4rem' }}>
 
         {/* 90-day promo banner */}
         <AnimatePresence>
@@ -832,5 +837,6 @@ export default function PricingPage() {
         </footer>
       </div>
     </div>
+    </>
   )
 }
