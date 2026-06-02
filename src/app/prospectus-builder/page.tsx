@@ -104,81 +104,106 @@ const WORKFLOW_STEPS = [
 
 export default function ProspectusBuilderPage() {
   return (
-    <div className="min-h-screen" style={{ background: '#F7F6F4' }}>
-      {/* Hero */}
-      <section className="max-w-6xl mx-auto px-6 py-24 lg:py-32">
+    <div>
+      {/* ── Hero ────────────────────────────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '3.5rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.45 }}
           className="text-center"
         >
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <BookOpen className="w-6 h-6" style={{ color: '#7C3AED' }} />
-            <span className="pill text-xs font-bold uppercase tracking-wider" style={{ background: '#F5F3FF', color: '#7C3AED' }}>
-              IPOReady Prospectus Builder
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex items-center justify-center gap-2" style={{ marginBottom: '1.5rem' }}>
+            <span className="pill text-xs font-bold uppercase tracking-wider"
+              style={{ background: '#F5F3FF', color: '#7C3AED' }}>
+              <BookOpen className="w-3.5 h-3.5 inline mr-1.5" />
+              Prospectus Builder
             </span>
-          </div>
+          </motion.div>
 
-          <h1 className="serif text-nav mb-6" style={{ fontSize: '2.8rem', lineHeight: '1.15' }}>
+          <motion.h1
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.06 }}
+            className="serif text-nav"
+            style={{ fontSize: '2.5rem', lineHeight: '1.2', marginBottom: '1.5rem' }}>
             From Documents to<br />
             <span style={{ color: '#7C3AED' }}>Filing-Ready Prospectus</span>
-          </h1>
+          </motion.h1>
 
-          <p className="text-text-muted text-lg max-w-3xl mx-auto mb-8 leading-relaxed">
-            Stop manually drafting prospectuses. Upload your documents, let AI organize and complete them with regulatory compliance built-in, then route through multi-tier review — all in one platform. Ready for filing in 24 hours.
-          </p>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.12 }}
+            className="text-text-muted text-lg leading-relaxed" style={{ marginBottom: '1.5rem', maxWidth: '620px', margin: '0 auto 1.5rem' }}>
+            Stop manually drafting prospectuses. Upload your documents, let AI organize and complete them with regulatory compliance built-in, then route through multi-tier review — all in one platform.
+          </motion.p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
-            <Link href="/register" className="btn btn-primary gap-2 font-semibold px-7 py-3 rounded-full">
-              Start Building Now <ArrowRight className="w-4 h-4" />
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.18 }}
+            className="flex flex-wrap items-center justify-center gap-3" style={{ marginBottom: '2.5rem' }}>
+            <Link href="/register"
+              className="btn btn-primary gap-2 font-semibold px-6 py-2.5 rounded-full">
+              Start Building <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/resources" className="btn btn-secondary px-7 py-3 rounded-full">
+            <Link href="/resources" className="btn btn-secondary px-6 py-2.5 rounded-full">
               Learn More
             </Link>
-          </div>
+          </motion.div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
-            {BENEFITS.map((benefit, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="card p-6"
-              >
-                <p className="font-black text-3xl text-nav mb-1">{benefit.metric}</p>
-                <p className="font-semibold text-sm text-nav mb-1">{benefit.label}</p>
-                <p className="text-xs text-text-muted">{benefit.sub}</p>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.2 }}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {BENEFITS.map((s, i) => (
+              <motion.div key={s.label}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06 }}
+                className="card p-6">
+                <p className="serif text-3xl md:text-4xl text-nav mb-1">{s.metric}</p>
+                <p className="font-semibold text-sm text-nav mb-0.5">{s.label}</p>
+                <p className="text-text-muted text-xs leading-relaxed">{s.sub}</p>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </motion.div>
       </section>
 
-      {/* How It Works */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <div className="text-center mb-16">
-          <h2 className="serif text-nav mb-4" style={{ fontSize: '2.2rem' }}>How It Works</h2>
-          <p className="text-text-muted text-lg max-w-2xl mx-auto">4 simple steps from source documents to filing-ready prospectus</p>
+      {/* ── How It Works ────────────────────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <div style={{ marginBottom: '2.5rem' }}>
+          <div className="text-xs uppercase tracking-widest text-text-muted font-semibold" style={{ marginBottom: '1rem' }}>How It Works</div>
+          <h2 className="serif text-3xl md:text-4xl text-nav leading-tight" style={{ marginBottom: '0.875rem' }}>
+            4 simple steps to filing-ready prospectus
+          </h2>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-4 gap-4">
           {WORKFLOW_STEPS.map((item, idx) => {
             const Icon = item.icon
             return (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="card p-8"
-              >
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style={{ background: '#F5F3FF' }}>
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.06 }}
+                className="card p-6 card-hover">
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{ background: '#F5F3FF' }}>
                   <span className="font-black text-lg text-nav">{item.step}</span>
                 </div>
-                <Icon className="w-8 h-8 mb-4" style={{ color: '#7C3AED' }} />
+                <Icon className="w-5 h-5 mb-4" style={{ color: '#7C3AED' }} />
                 <h3 className="font-semibold text-nav mb-2">{item.title}</h3>
                 <p className="text-sm text-text-muted leading-relaxed">{item.description}</p>
               </motion.div>
@@ -187,66 +212,77 @@ export default function ProspectusBuilderPage() {
         </div>
       </section>
 
-      {/* Capabilities Grid */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <div className="text-center mb-16">
-          <h2 className="serif text-nav mb-4" style={{ fontSize: '2.2rem' }}>Powerful Capabilities</h2>
-          <p className="text-text-muted text-lg max-w-2xl mx-auto">Everything you need to build compliance-ready prospectuses</p>
+      {/* ── Capabilities ────────────────────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <div style={{ marginBottom: '2.5rem' }}>
+          <div className="text-xs uppercase tracking-widest text-text-muted font-semibold" style={{ marginBottom: '1rem' }}>Platform</div>
+          <h2 className="serif text-3xl md:text-4xl text-nav leading-tight max-w-xl" style={{ marginBottom: '0.875rem' }}>
+            Everything you need for compliance-ready prospectuses.
+          </h2>
+          <p className="text-text-muted" style={{ maxWidth: '540px', lineHeight: '1.65' }}>
+            Purpose-built capabilities for drafting, review, and filing across all major exchanges.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {CAPABILITIES.map((cap, idx) => {
             const Icon = cap.icon
             return (
               <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: idx * 0.08 }}
-                className="card p-8"
-              >
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style={{ background: cap.bg }}>
-                  <Icon className="w-6 h-6" style={{ color: cap.color }} />
+                key={cap.title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.06 }}
+                className="card p-6 card-hover">
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{ background: cap.bg }}>
+                  <Icon className="w-5 h-5" style={{ color: cap.color }} />
                 </div>
-                <h3 className="font-semibold text-nav text-lg mb-2">{cap.title}</h3>
-                <p className="text-sm text-text-muted leading-relaxed">{cap.description}</p>
+                <h3 className="font-semibold text-nav mb-3">{cap.title}</h3>
+                <p className="text-text-muted text-sm leading-relaxed">{cap.description}</p>
               </motion.div>
             )
           })}
         </div>
       </section>
 
-      {/* Supported Exchanges */}
-      <section className="max-w-6xl mx-auto px-6 py-20 border-t border-gray-200">
-        <div className="text-center">
-          <h3 className="font-semibold text-nav mb-8">Compliant with All Major Exchanges</h3>
-          <div className="flex flex-wrap items-center justify-center gap-4">
+      {/* ── Exchanges ───────────────────────────────────────────────────────── */}
+      <section style={{ background: '#FFFFFF', borderTop: '1px solid #E5E4E0' }}>
+        <div className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+          <div className="text-xs uppercase tracking-widest text-text-muted font-semibold text-center" style={{ marginBottom: '1.5rem' }}>
+            Supported Exchanges
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-3">
             {['TSX', 'TSXV', 'CSE', 'NASDAQ', 'NYSE', 'OTC Markets', 'Cboe Canada'].map((exchange) => (
-              <div key={exchange} className="pill px-4 py-2 text-sm font-semibold" style={{ background: '#F0EFED', color: '#1A1A1A' }}>
+              <span key={exchange} className="pill px-4 py-2 text-sm font-semibold" style={{ background: '#F7F6F4', color: '#1A1A1A' }}>
                 {exchange}
-              </div>
+              </span>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="max-w-4xl mx-auto px-6 py-24 text-center">
+      {/* ── CTA ─────────────────────────────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="card p-12" style={{ background: '#F5F3FF', border: '2px solid #E9D5FF' }}
+          className="card p-8 lg:p-12 text-center"
+          style={{ background: '#F5F3FF', border: '1px solid #E9D5FF' }}
         >
-          <h2 className="serif text-nav mb-4" style={{ fontSize: '2rem' }}>Ready to Build Your Prospectus?</h2>
-          <p className="text-text-muted text-lg mb-8 max-w-2xl mx-auto">
-            Join companies across North America who are building filing-ready prospectuses 70% faster with IPOReady.
+          <h2 className="serif text-3xl md:text-4xl text-nav mb-4 leading-tight">
+            Ready to build faster?
+          </h2>
+          <p className="text-text-muted text-lg mb-8 max-w-2xl mx-auto" style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+            Join companies building filing-ready prospectuses 70% faster with IPOReady.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <Link href="/register" className="btn btn-primary gap-2 font-semibold px-7 py-3 rounded-full">
-              Start Free Trial <ArrowRight className="w-4 h-4" />
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link href="/register" className="btn btn-primary gap-2 font-semibold px-6 py-2.5 rounded-full">
+              Start Building <ArrowRight className="w-4 h-4" />
             </Link>
-            <a href="mailto:hello@ipoready.ai" className="btn btn-secondary px-7 py-3 rounded-full">
+            <a href="mailto:hello@ipoready.ai" className="btn btn-secondary px-6 py-2.5 rounded-full">
               Schedule Demo
             </a>
           </div>
