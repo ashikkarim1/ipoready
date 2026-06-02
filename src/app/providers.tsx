@@ -1,16 +1,15 @@
 'use client'
-'use client';
 
 import { SessionProvider } from 'next-auth/react'
 import { ReactNode } from 'react'
-import { PushPermissionPrompt } from '@/components/PushPermissionPrompt'
 import { NotificationConsumer } from '@/components/NotificationConsumer'
+import { AuthenticatedPushPrompt } from '@/components/AuthenticatedPushPrompt'
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <SessionProvider>
       <NotificationConsumer />
-      <PushPermissionPrompt showDelay={5000} minDismissals={2} />
+      <AuthenticatedPushPrompt />
       {children}
     </SessionProvider>
   )
