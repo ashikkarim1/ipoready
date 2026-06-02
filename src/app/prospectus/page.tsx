@@ -6,6 +6,8 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { FeatureLockedOverlay } from '@/components/FeatureLockedOverlay'
 import { canAccessFeature, type FeatureTier } from '@/lib/features'
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Plus, Download, FileText, Clock, CheckCircle2, AlertCircle, Search, Filter } from 'lucide-react'
 
 interface ProspectusItem {
   id: string
@@ -141,17 +143,17 @@ export default function ProspectusList() {
   // Show loading state while subscription data is being fetched
   if (subscription.isLoading) {
     return (
-      <div className="max-w-6xl mx-auto p-6 flex items-center justify-center min-h-screen">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading prospectus builder...</p>
+          <p className="text-slate-600 font-medium">Loading prospectus builder...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 p-6 md:p-8">
       {/* Feature Lock Overlay */}
       <FeatureLockedOverlay
         isOpen={showLockedOverlay && !canAccess}
@@ -164,169 +166,239 @@ export default function ProspectusList() {
         }}
       />
 
-      {/* Header */}
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Prospectus Builder</h1>
-          <p className="text-gray-600 mt-1">Create and manage your IPO prospectus documents</p>
-        </div>
-
-        <button
-          onClick={handleCreateClick}
-          disabled={!canAccess}
-          className={`px-6 py-3 rounded-md font-medium transition-colors ${
-            canAccess
-              ? 'bg-blue-600 text-white hover:bg-blue-700'
-              : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-          }`}
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
         >
-          Create New Prospectus
-        </button>
-      </div>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-2">
+                Prospectus Builder
+              </h1>
+              <p className="text-slate-600 text-lg">Create, manage, and distribute IPO prospectus documents</p>
+            </div>
+
+            <motion.button
+              whileHover={{ scale: canAccess ? 1.05 : 1 }}
+              whileTap={{ scale: canAccess ? 0.95 : 1 }}
+              onClick={handleCreateClick}
+              disabled={!canAccess}
+              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                canAccess
+                  ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl cursor-pointer'
+                  : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+              }`}
+            >
+              <Plus size={20} />
+              Create New
+            </motion.button>
+          </div>
+        </motion.div>
 
       {/* Filters and Sort */}
       {filteredProspectuses.length > 0 && (
-        <div className="flex gap-4 items-center flex-wrap">
-          <div className="flex gap-2">
-            {(['all', 'draft', 'in_review', 'complete'] as const).map((status) => (
-              <button
-                key={status}
-                onClick={() => setFilterStatus(status)}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  filterStatus === status
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {status === 'all' ? 'All' : status === 'in_review' ? 'In Review' : status === 'complete' ? 'Complete' : 'Draft'}
-              </button>
-            ))}
-          </div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-8"
+        >
+          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+            <div className="flex gap-2 flex-wrap">
+              {(['all', 'draft', 'in_review', 'complete'] as const).map((status) => (
+                <motion.button
+                  key={status}
+                  whileHover={{ y: -2 }}
+                  onClick={() => setFilterStatus(status)}
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                    filterStatus === status
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:shadow-md'
+                  }`}
+                >
+                  {status === 'all' ? 'All' : status === 'in_review' ? 'In Review' : status === 'complete' ? 'Complete' : 'Draft'}
+                </motion.button>
+              ))}
+            </div>
 
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
-            className="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:border-gray-400"
-          >
-            <option value="recent">Newest First</option>
-            <option value="completion">Completion %</option>
-            <option value="name">Alphabetical</option>
-          </select>
-        </div>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as any)}
+              className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 bg-white hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="recent">Newest First</option>
+              <option value="completion">Completion %</option>
+              <option value="name">Alphabetical</option>
+            </select>
+          </div>
+        </motion.div>
       )}
 
       {/* List View */}
       {filteredProspectuses.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-gray-300 p-12 text-center bg-gray-50">
-          <div className="text-4xl mb-3">📄</div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">No prospectuses yet</h3>
-          <p className="text-gray-600 mb-4">Create your first prospectus to get started</p>
-          <button
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-2xl border-2 border-dashed border-slate-300 p-16 text-center bg-gradient-to-br from-slate-50 to-blue-50"
+        >
+          <div className="text-6xl mb-4">📄</div>
+          <h3 className="text-2xl font-bold text-slate-900 mb-2">No prospectuses yet</h3>
+          <p className="text-slate-600 mb-8 max-w-md mx-auto">Get started by creating your first prospectus document to begin building your IPO narrative</p>
+          <motion.button
+            whileHover={{ scale: canAccess ? 1.05 : 1 }}
+            whileTap={{ scale: canAccess ? 0.95 : 1 }}
             onClick={handleCreateClick}
             disabled={!canAccess}
-            className={`px-4 py-2 rounded-md font-medium transition-colors ${
+            className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
               canAccess
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
-                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl cursor-pointer'
+                : 'bg-slate-100 text-slate-400 cursor-not-allowed'
             }`}
           >
-            Create Prospectus
-          </button>
-        </div>
+            <Plus size={20} />
+            Create Your First Prospectus
+          </motion.button>
+        </motion.div>
       ) : (
-        <div className="space-y-3">
-          {filteredProspectuses.map((prospectus) => (
-            <div
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ staggerChildren: 0.05 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {filteredProspectuses.map((prospectus, index) => (
+            <motion.div
               key={prospectus.id}
-              className="rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow bg-white hover:bg-gray-50"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              whileHover={{ y: -4, shadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}
+              className="rounded-xl border border-slate-200 p-6 bg-white hover:border-blue-300 transition-all cursor-pointer group"
+              onClick={() => handleEditClick(prospectus.id)}
             >
-              <div className="flex items-start justify-between gap-4 mb-3">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-2xl">📋</span>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">{prospectus.name}</h3>
-                      <p className="text-sm text-gray-600">{prospectus.exchange} • Created {new Date(prospectus.createdAt).toLocaleDateString()}</p>
-                    </div>
+              {/* Card Header */}
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div className="flex items-start gap-3 flex-1">
+                  <FileText className="w-8 h-8 text-blue-600 mt-1 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-slate-900 text-lg group-hover:text-blue-600 transition-colors truncate">{prospectus.name}</h3>
+                    <p className="text-sm text-slate-500 mt-1">{prospectus.exchange}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusBadgeColor(prospectus.status)}`}>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${getStatusBadgeColor(prospectus.status)}`}>
                     {prospectus.status === 'in_review' ? 'In Review' : prospectus.status === 'complete' ? 'Complete' : 'Draft'}
-                  </span>
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${getApprovalTierColor(prospectus.approvalTier)}`}>
-                    {prospectus.approvalTier === 'ai' ? 'AI Draft' : prospectus.approvalTier === 'admin' ? 'Admin' : 'Professional'}
                   </span>
                 </div>
               </div>
 
-              {/* Progress bar */}
+              {/* Progress Bar */}
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-600">Progress</span>
-                  <span className="text-sm font-semibold text-gray-900">{prospectus.completionPercent}%</span>
+                  <span className="text-sm font-medium text-slate-700">Progress</span>
+                  <span className="text-sm font-bold text-blue-600">{prospectus.completionPercent}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div
-                    className="h-full bg-blue-500 transition-all"
-                    style={{ width: `${prospectus.completionPercent}%` }}
+                <div className="w-full bg-slate-200 rounded-full h-2.5">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${prospectus.completionPercent}%` }}
+                    transition={{ duration: 0.6, ease: 'easeOut' }}
+                    className="bg-gradient-to-r from-blue-600 to-blue-500 h-2.5 rounded-full"
                   />
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="flex gap-3">
-                <button
-                  onClick={() => handleEditClick(prospectus.id)}
-                  className="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              {/* Meta Info */}
+              <div className="flex items-center gap-4 text-sm text-slate-600 mb-4 pb-4 border-b border-slate-100">
+                <div className="flex items-center gap-1">
+                  <Clock size={16} />
+                  <span>{new Date(prospectus.createdAt).toLocaleDateString()}</span>
+                </div>
+              </div>
+
+              {/* Footer with Approval Tier */}
+              <div className="flex items-center justify-between">
+                <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${getApprovalTierColor(prospectus.approvalTier)}`}>
+                    {prospectus.approvalTier === 'ai' ? 'AI Draft' : prospectus.approvalTier === 'admin' ? 'Admin Review' : 'Professional'}
+                  </span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-2 mt-4">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleEditClick(prospectus.id)
+                  }}
+                  className="flex-1 px-3 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-semibold hover:bg-blue-100 transition-colors group-hover:bg-blue-100"
                 >
                   Edit
-                </button>
+                </motion.button>
                 <div className="relative">
-                  <button
-                    onClick={() => setDownloadMenuOpen(downloadMenuOpen === prospectus.id ? null : prospectus.id)}
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setDownloadMenuOpen(downloadMenuOpen === prospectus.id ? null : prospectus.id)
+                    }}
                     disabled={downloadLoading}
-                    className="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                    className="flex items-center gap-1 px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-200 transition-colors disabled:opacity-50"
                   >
-                    {downloadLoading ? 'Downloading...' : 'Download'}
-                  </button>
-                  {downloadMenuOpen === prospectus.id && (
-                    <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                      <button
-                        onClick={() => handleDownloadClick(prospectus.id, 'pdf')}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 first:rounded-t-md"
+                    <Download size={16} />
+                    {downloadLoading ? '...' : 'Export'}
+                  </motion.button>
+                  <AnimatePresence>
+                    {downloadMenuOpen === prospectus.id && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="absolute right-0 mt-2 w-40 bg-white border border-slate-200 rounded-lg shadow-xl z-10 overflow-hidden"
                       >
-                        PDF
-                      </button>
-                      <button
-                        onClick={() => handleDownloadClick(prospectus.id, 'docx')}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        DOCX
-                      </button>
-                      <button
-                        onClick={() => handleDownloadClick(prospectus.id, 'zip')}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 last:rounded-b-md"
-                      >
-                        ZIP (All)
-                      </button>
-                    </div>
-                  )}
+                        <button
+                          onClick={() => handleDownloadClick(prospectus.id, 'pdf')}
+                          className="block w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-blue-50 transition-colors"
+                        >
+                          📄 PDF
+                        </button>
+                        <button
+                          onClick={() => handleDownloadClick(prospectus.id, 'docx')}
+                          className="block w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-blue-50 transition-colors border-t border-slate-100"
+                        >
+                          📝 Word Document
+                        </button>
+                        <button
+                          onClick={() => handleDownloadClick(prospectus.id, 'zip')}
+                          className="block w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-blue-50 transition-colors border-t border-slate-100"
+                        >
+                          📦 All Formats
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-                <button className="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                  Share
-                </button>
               </div>
               {downloadError && (
-                <div className="mt-3 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-700">
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700 font-medium"
+                >
                   {downloadError}
-                </div>
+                </motion.div>
               )}
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
+      </div>
     </div>
   )
 }
