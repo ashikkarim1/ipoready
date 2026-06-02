@@ -15,6 +15,7 @@ type Billing = 'monthly' | 'sixmonth' | 'annual'
 
 // Prices already reflect 50% launch promo — originals shown crossed out
 // 6-month: 20% off monthly | Annual: 33% off monthly
+// Starter: 1-month minimum | Growth: 3-month minimum | Enterprise: annual commitment
 const PLANS = [
   {
     id: 'starter',
@@ -22,21 +23,23 @@ const PLANS = [
     nameFr: 'Débutant',
     descriptionEn: 'For companies in early exploration of going public',
     descriptionFr: "Pour les entreprises en exploration du processus d'inscription",
-    monthlyUSD: 299,
-    monthlyCAD: 399,
-    sixmonthUSD: 239,
-    sixmonthCAD: 319,
-    annualUSD: 199,
-    annualCAD: 265,
-    originalMonthlyUSD: 599,
-    originalMonthlyCAD: 799,
-    originalSixmonthUSD: 479,
-    originalSixmonthCAD: 639,
-    originalAnnualUSD: 399,
-    originalAnnualCAD: 529,
+    monthlyUSD: 349,
+    monthlyCAD: 465,
+    sixmonthUSD: 279,
+    sixmonthCAD: 372,
+    annualUSD: 233,
+    annualCAD: 310,
+    originalMonthlyUSD: 699,
+    originalMonthlyCAD: 930,
+    originalSixmonthUSD: 559,
+    originalSixmonthCAD: 744,
+    originalAnnualUSD: 465,
+    originalAnnualCAD: 620,
+    minCommitmentMonths: 1,
     features: [
       'Full IPO checklist (all 8 phases)',
       'PACE™ tracking engine',
+      'AI-powered prospectus builder (S-1 drafting)',
       'Up to 5 team members',
       'Document management (5 GB)',
       'CSE & OTC exchange support',
@@ -55,24 +58,28 @@ const PLANS = [
     nameFr: 'Croissance',
     descriptionEn: 'For companies actively pursuing a listing',
     descriptionFr: "Pour les entreprises activement en processus d'inscription",
-    monthlyUSD: 799,
-    monthlyCAD: 1049,
-    sixmonthUSD: 639,
-    sixmonthCAD: 839,
-    annualUSD: 535,
-    annualCAD: 699,
-    originalMonthlyUSD: 1599,
-    originalMonthlyCAD: 2099,
-    originalSixmonthUSD: 1279,
-    originalSixmonthCAD: 1679,
-    originalAnnualUSD: 1069,
-    originalAnnualCAD: 1399,
+    monthlyUSD: 999,
+    monthlyCAD: 1335,
+    sixmonthUSD: 799,
+    sixmonthCAD: 1068,
+    annualUSD: 665,
+    annualCAD: 890,
+    originalMonthlyUSD: 1999,
+    originalMonthlyCAD: 2670,
+    originalSixmonthUSD: 1599,
+    originalSixmonthCAD: 2136,
+    originalAnnualUSD: 1330,
+    originalAnnualCAD: 1780,
+    minCommitmentMonths: 3,
     features: [
       'Everything in Starter',
+      'AI-powered prospectus builder (full S-1/F-1)',
+      'Compliance checker & section validator',
+      'Team collaboration & version control',
       'TSX, TSXV, CSE, OTC support',
       'Up to 15 team members',
       'Document management (25 GB)',
-      'Auto-fill template credits (5/mo)',
+      'Auto-fill template credits (10/mo)',
       'Daily notifications & digest',
       'PIF form auto-fill',
       'WhatsApp AI Companion',
@@ -91,29 +98,33 @@ const PLANS = [
     nameFr: 'Entreprise',
     descriptionEn: 'For NASDAQ/NYSE listings and complex transactions',
     descriptionFr: 'Pour les inscriptions NASDAQ/NYSE et les transactions complexes',
-    monthlyUSD: 1999,
-    monthlyCAD: 2599,
-    sixmonthUSD: 1599,
-    sixmonthCAD: 2079,
-    annualUSD: 1339,
-    annualCAD: 1739,
-    originalMonthlyUSD: 3999,
-    originalMonthlyCAD: 5199,
-    originalSixmonthUSD: 3199,
-    originalSixmonthCAD: 4159,
-    originalAnnualUSD: 2679,
-    originalAnnualCAD: 3479,
+    monthlyUSD: 2499,
+    monthlyCAD: 3335,
+    sixmonthUSD: 1999,
+    sixmonthCAD: 2668,
+    annualUSD: 1665,
+    annualCAD: 2225,
+    originalMonthlyUSD: 4999,
+    originalMonthlyCAD: 6670,
+    originalSixmonthUSD: 3999,
+    originalSixmonthCAD: 5336,
+    originalAnnualUSD: 3330,
+    originalAnnualCAD: 4450,
+    minCommitmentMonths: 12,
     features: [
       'Everything in Growth',
+      'Advanced prospectus builder (multi-segment S-1/F-1)',
+      'Save $20K–60K on document preparation',
       'All 7 exchanges (incl. NASDAQ & NYSE)',
       'Unlimited team members',
       'Document management (100 GB)',
-      'Unlimited auto-fill templates',
-      'Full prospectus template (S-1/F-1)',
+      'Unlimited auto-fill templates & AI sections',
       'Dedicated IPO coordinator',
       'White-glove onboarding',
       'Custom notification workflows',
       'Multi-entity support (RTOs)',
+      'Priority API access',
+      '24/7 expert support',
     ],
     isPopular: false,
     maxMembers: 999,
@@ -136,8 +147,8 @@ const FAQS = [
     a: 'Our templates are drafted with input from securities lawyers and updated quarterly to reflect current exchange policies. They are starting points — your legal counsel must review and customize them for your specific situation.',
   },
   {
-    q: 'What is the 3-month minimum commitment?',
-    a: 'Monthly plans require a 3-month minimum commitment. This ensures you have enough runway to experience the full value of the platform — IPO readiness is a multi-month journey, not a one-time checklist. After 3 months, cancel anytime with 30 days notice.',
+    q: 'What are the commitment periods?',
+    a: 'Starter plans require a 1-month minimum, Growth plans require 3 months, and Enterprise plans require an annual commitment. These minimums ensure you have enough runway to experience the full value of the platform — IPO readiness is a multi-month journey, not a one-time checklist. After your commitment period, you can cancel anytime with 30 days notice.',
   },
   {
     q: 'Can I switch plans mid-listing?',
@@ -158,7 +169,7 @@ const PLAN_TIER: Record<string, number> = { starter: 0, growth: 1, enterprise: 2
 
 export default function PricingPage() {
   const { data: session } = useSession()
-  const [currency, setCurrency] = useState<Currency>('CAD')
+  const [currency, setCurrency] = useState<Currency>('USD')
   const [language, setLanguage] = useState<Language>('en')
   const [billing, setBilling] = useState<Billing>('annual')
   const [openFaq, setOpenFaq] = useState<number | null>(null)
@@ -233,7 +244,9 @@ export default function PricingPage() {
       const total = currency === 'CAD' ? plan.sixmonthCAD * 6 : plan.sixmonthUSD * 6
       return `${formatPrice(total)} billed every 6 months`
     }
-    return language === 'en' ? '3-month minimum · cancel after' : '3 mois minimum · annulez après'
+    const months = plan.minCommitmentMonths
+    const monthText = months === 1 ? 'month' : 'months'
+    return language === 'en' ? `${months}-${monthText} minimum · cancel after` : `${months} mois minimum · annulez après`
   }
 
   const BILLING_OPTIONS: { key: Billing; labelEn: string; labelFr: string; badge: string | null; badgeColor: string }[] = [
@@ -349,7 +362,7 @@ export default function PricingPage() {
               {billing === 'monthly' && (
                 <motion.p key="monthly-note" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                   className="text-text-light text-xs">
-                  {language === 'en' ? '3-month minimum commitment · cancel anytime after' : 'Engagement minimum de 3 mois · annulez après'}
+                  {language === 'en' ? 'Starter: 1-month · Growth: 3-month · Enterprise: 12-month minimum' : 'Débutant: 1 mois · Croissance: 3 mois · Entreprise: 12 mois minimum'}
                 </motion.p>
               )}
               {billing === 'sixmonth' && (
@@ -372,7 +385,7 @@ export default function PricingPage() {
             <Globe className="w-3.5 h-3.5 text-text-light" />
             <div className="inline-flex items-center gap-0.5 p-0.5 rounded-lg"
               style={{ background: '#EFEFED', border: '1px solid #E5E4E0' }}>
-              {(['CAD', 'USD'] as Currency[]).map(c => (
+              {(['USD', 'CAD'] as Currency[]).map(c => (
                 <button key={c} onClick={() => setCurrency(c)}
                   className="px-3 py-1 rounded text-xs font-mono font-semibold transition-all"
                   style={currency === c ? { background: '#1A1A1A', color: 'white' } : { color: '#9A9A9A' }}>
@@ -541,9 +554,9 @@ export default function PricingPage() {
           </p>
           <div className="grid md:grid-cols-3 gap-5 text-center">
             {[
-              { label: 'Securities Lawyer',    typical: '$200K–$800K', ipoReady: 'Included guidance', savings: 'up to $400K' },
-              { label: 'Workflow Management',  typical: '$50K–$150K',  ipoReady: 'from $299/mo',      savings: 'up to $148K' },
-              { label: 'Form Preparation',     typical: '$20K–$60K',   ipoReady: 'from $149/template', savings: 'up to $58K' },
+              { label: 'Securities Lawyer',       typical: '$200K–$800K', ipoReady: 'Included guidance', savings: 'up to $400K' },
+              { label: 'Workflow Management',     typical: '$50K–$150K',  ipoReady: 'from $349/mo',      savings: 'up to $148K' },
+              { label: 'Prospectus & S-1 Prep',   typical: '$20K–$60K',   ipoReady: 'AI-powered builder', savings: 'up to $60K' },
             ].map(({ label, typical, ipoReady, savings }) => (
               <div key={label} className="p-5 rounded-xl" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
                 <p className="font-semibold text-nav text-sm mb-3">{label}</p>
