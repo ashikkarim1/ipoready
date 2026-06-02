@@ -43,11 +43,9 @@ export async function middleware(req: NextRequest) {
       pathname.startsWith('/documents') ||
       pathname.startsWith('/team') ||
       pathname.startsWith('/templates') ||
-      pathname.startsWith('/resources') ||
       pathname.startsWith('/marketplace') ||
       pathname.startsWith('/referrals') ||
       pathname.startsWith('/account') ||
-      pathname.startsWith('/pricing') ||
       pathname.startsWith('/admin') ||
       pathname.startsWith('/wizard') ||
       pathname.startsWith('/pace') ||
@@ -88,11 +86,9 @@ export const config = {
     '/documents/:path*',
     '/team/:path*',
     '/templates/:path*',
-    '/resources/:path*',
     '/marketplace/:path*',
     '/referrals/:path*',
     '/account/:path*',
-    '/pricing/:path*',
     '/admin/:path*',
     '/wizard/:path*',
     '/pace/:path*',
