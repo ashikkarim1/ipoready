@@ -275,7 +275,7 @@ export default function ProspectusList() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              whileHover={{ y: -4, shadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}
+              whileHover={{ y: -4 }}
               className="rounded-xl border border-slate-200 p-6 bg-white hover:border-blue-300 transition-all cursor-pointer group"
               onClick={() => handleEditClick(prospectus.id)}
             >
