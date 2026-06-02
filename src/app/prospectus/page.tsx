@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useSubscription } from '@/hooks/useSubscription'
 import { FeatureLockedOverlay } from '@/components/FeatureLockedOverlay'
-import { canAccessFeature, type FeatureTier } from '@/lib/feature-gates'
+import { canAccessFeature, type FeatureTier } from '@/lib/features'
 import { useState } from 'react'
 
 interface ProspectusItem {
@@ -53,7 +53,7 @@ export default function ProspectusList() {
   const [downloadError, setDownloadError] = useState<string | null>(null)
 
   const tier: FeatureTier = subscription.status === 'trialing' ? 'trial' : subscription.plan
-  const canAccess = canAccessFeature(tier, 'prospectus_builder')
+  const canAccess = canAccessFeature(tier, 'PROSPECTUS_BUILDER')
 
   const filteredProspectuses = MOCK_PROSPECTUSES.filter((p) => {
     if (filterStatus === 'all') return true
