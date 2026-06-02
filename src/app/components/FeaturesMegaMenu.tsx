@@ -13,9 +13,9 @@ export function FeaturesMegaMenu() {
   const { data: session } = useSession()
 
   return (
-    <nav className="flex items-center justify-between flex-1" style={{ marginLeft: '2rem' }}>
+    <nav className="flex items-center flex-1" style={{ marginLeft: '2rem' }}>
       {/* Left side menu */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1" style={{ flex: 1 }}>
         {/* Features Dropdown */}
         <div className="relative">
           <button
@@ -75,18 +75,18 @@ export function FeaturesMegaMenu() {
         </Link>
       </div>
 
-      {/* Right side - Schedule A Demo + Auth */}
-      <div className="flex items-center gap-3" style={{ marginRight: '1.5rem' }}>
-        {/* Schedule Demo Button */}
-        <button
-          onClick={() => setDemoModalOpen(true)}
-          className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold text-white transition-colors hover:opacity-90"
-          style={{ background: '#E8312A' }}
-        >
-          <Calendar className="w-4 h-4" />
-          Schedule Demo
-        </button>
+      {/* Middle - Schedule A Demo Button */}
+      <button
+        onClick={() => setDemoModalOpen(true)}
+        className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold text-white transition-colors hover:opacity-90"
+        style={{ background: '#E8312A' }}
+      >
+        <Calendar className="w-4 h-4" />
+        Schedule Demo
+      </button>
 
+      {/* Right side - Auth CTAs (completely separated) */}
+      <div className="flex items-center gap-3" style={{ marginLeft: 'auto', marginRight: '1.5rem' }}>
         {/* Auth Section */}
         {session?.user ? (
           // Account Menu - Logged In
