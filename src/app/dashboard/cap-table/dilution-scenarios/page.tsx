@@ -13,6 +13,7 @@ import {
   Shield,
   AlertCircle,
   Loader2,
+  TrendingUp,
 } from 'lucide-react'
 import {
   DilutionScenarioEngine,
@@ -33,7 +34,7 @@ const containerVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.06,
       duration: 0.5,
     },
   },
@@ -127,9 +128,9 @@ export default function DilutionScenariosPage() {
 
   if (loading && !presetScenarios) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex h-screen items-center justify-center" style={{ background: '#F7F6F4' }}>
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <Loader2 className="h-8 w-8 animate-spin" style={{ color: '#E8312A' }} />
           <p className="text-gray-600">Loading cap table scenarios...</p>
         </div>
       </div>
@@ -141,95 +142,184 @@ export default function DilutionScenariosPage() {
       variants={containerVariants}
       initial="hidden"
       animate="show"
-      className="space-y-6 p-6"
+      style={{ background: '#F7F6F4', minHeight: '100vh' }}
       suppressHydrationWarning
     >
-      {/* Header */}
-      <motion.div variants={itemVariants} className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dilution Scenarios</h1>
-          <p className="mt-2 text-gray-600">
-            Analyze share ownership changes from warrant exercises, financing, and vesting
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setShowCustomForm(!showCustomForm)}
-            className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 label font-medium text-gray-900 transition-colors hover:bg-gray-200"
-          >
-            <Plus className="h-4 w-4" />
-            Custom Scenario
-          </button>
-          <button
-            onClick={handleExport}
-            disabled={!selectedScenario || exportLoading}
-            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 label font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
-          >
-            {exportLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Download className="h-4 w-4" />
-            )}
-            Export CSV
-          </button>
-        </div>
-      </motion.div>
-
-      {/* Error Message */}
-      {error && (
+      {/* Hero Section */}
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '4.5rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         <motion.div
-          variants={itemVariants}
-          className="flex gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-red-900"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
+          className="text-center"
         >
-          <AlertCircle className="h-5 w-5 flex-shrink-0" />
-          <p>{error}</p>
-        </motion.div>
-      )}
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex items-center justify-center gap-2"
+            style={{ marginBottom: '1.5rem' }}
+          >
+            <span
+              className="pill text-xs font-bold uppercase tracking-wider"
+              style={{ background: '#FDECEB', color: '#E8312A' }}
+            >
+              <TrendingUp className="w-3.5 h-3.5 inline mr-1.5" />
+              Cap Table Scenarios
+            </span>
+          </motion.div>
 
-      {/* Preset Scenarios */}
-      {presetScenarios && (
-        <motion.div variants={itemVariants} className="grid gap-4 md:grid-cols-3">
-          <ScenarioCard
-            title="Base Case"
-            description="Typical IPO scenario"
-            icon={<Shield className="h-5 w-5" />}
-            isSelected={selectedScenario?.scenarioType === 'base'}
-            onClick={() => setSelectedScenario(presetScenarios.base)}
-            scenario={presetScenarios.base}
-          />
-          <ScenarioCard
-            title="Optimistic Case"
-            description="High warrant exercise, strong growth"
-            icon={<TrendingDown className="h-5 w-5" />}
-            isSelected={selectedScenario?.scenarioType === 'optimistic'}
-            onClick={() => setSelectedScenario(presetScenarios.optimistic)}
-            scenario={presetScenarios.optimistic}
-          />
-          <ScenarioCard
-            title="Conservative Case"
-            description="Low warrant exercise, moderate growth"
-            icon={<AlertCircle className="h-5 w-5" />}
-            isSelected={selectedScenario?.scenarioType === 'conservative'}
-            onClick={() => setSelectedScenario(presetScenarios.conservative)}
-            scenario={presetScenarios.conservative}
-          />
-        </motion.div>
-      )}
+          {/* Heading */}
+          <motion.h1
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.06 }}
+            className="serif"
+            style={{ fontSize: '2.5rem', lineHeight: '1.2', marginBottom: '1.5rem' }}
+          >
+            Analyze Share Dilution<br />
+            <span style={{ color: '#E8312A' }}>from Multiple Sources</span>
+          </motion.h1>
 
-      {/* Custom Scenario Form */}
-      <AnimatePresence>
-        {showCustomForm && (
-          <motion.div variants={itemVariants} className="rounded-lg border border-gray-200 bg-white p-6">
-            <h3 className="mb-4 h4 font-semibold text-gray-900">Create Custom Scenario</h3>
-            <CustomScenarioForm onSubmit={handleCustomScenarioSubmit} />
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.12 }}
+            className="text-lg leading-relaxed"
+            style={{ marginBottom: '1.5rem', maxWidth: '620px', margin: '0 auto 2.5rem', color: '#666666' }}
+          >
+            Understand ownership changes from warrant exercises, financing rounds, and employee option vesting.
+          </motion.p>
+
+          {/* Action Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.18 }}
+            className="flex gap-3 justify-center"
+          >
+            <button
+              onClick={() => setShowCustomForm(!showCustomForm)}
+              className="flex items-center gap-2 rounded-full px-6 py-2.5 font-semibold transition-all text-sm"
+              style={{
+                background: '#FFFFFF',
+                color: '#E8312A',
+                border: '2px solid #E8312A',
+                transform: 'translateY(0)',
+                transitionProperty: 'all',
+                transitionDuration: '0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)'
+                e.currentTarget.style.boxShadow = '0 8px 16px rgba(232, 49, 42, 0.15)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.boxShadow = 'none'
+              }}
+            >
+              <Plus className="w-4 h-4" />
+              Custom Scenario
+            </button>
+            <button
+              onClick={handleExport}
+              disabled={!selectedScenario || exportLoading}
+              className="flex items-center gap-2 rounded-full px-6 py-2.5 font-semibold transition-all text-sm text-white active:scale-95"
+              style={{
+                background: '#E8312A',
+                opacity: !selectedScenario || exportLoading ? 0.5 : 1,
+                transform: 'translateY(0)',
+                transitionProperty: 'all',
+                transitionDuration: '0.2s',
+              }}
+              onMouseEnter={(e) => {
+                if (!(!selectedScenario || exportLoading)) {
+                  e.currentTarget.style.transform = 'translateY(-2px)'
+                  e.currentTarget.style.boxShadow = '0 8px 16px rgba(232, 49, 42, 0.2)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.boxShadow = 'none'
+              }}
+            >
+              {exportLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Download className="w-4 h-4" />
+              )}
+              Export CSV
+            </button>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* Main Content Section */}
+      <section className="max-w-7xl mx-auto" style={{ paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        {/* Error Message */}
+        {error && (
+          <motion.div
+            variants={itemVariants}
+            className="flex gap-3 rounded-lg border p-4 mb-6"
+            style={{ borderColor: '#FFD4CE', background: '#FDECEB', color: '#E8312A' }}
+          >
+            <AlertCircle className="h-5 w-5 flex-shrink-0" />
+            <p>{error}</p>
           </motion.div>
         )}
-      </AnimatePresence>
 
-      {/* Scenario Details */}
-      {selectedScenario && (
-        <motion.div variants={itemVariants} className="space-y-6">
-          <div className="rounded-lg border border-gray-200 bg-white p-6">
+        {/* Preset Scenarios */}
+        {presetScenarios && (
+          <motion.div variants={itemVariants} className="grid gap-6 md:grid-cols-3">
+            <ScenarioCard
+              title="Base Case"
+              description="Typical IPO scenario"
+              icon={<Shield className="h-5 w-5" />}
+              isSelected={selectedScenario?.scenarioType === 'base'}
+              onClick={() => setSelectedScenario(presetScenarios.base)}
+              scenario={presetScenarios.base}
+              color="#0066CC"
+              bg="#E6F0FF"
+            />
+            <ScenarioCard
+              title="Optimistic Case"
+              description="High warrant exercise, strong growth"
+              icon={<TrendingUp className="h-5 w-5" />}
+              isSelected={selectedScenario?.scenarioType === 'optimistic'}
+              onClick={() => setSelectedScenario(presetScenarios.optimistic)}
+              scenario={presetScenarios.optimistic}
+              color="#10B981"
+              bg="#D1F4E9"
+            />
+            <ScenarioCard
+              title="Conservative Case"
+              description="Low warrant exercise, moderate growth"
+              icon={<AlertCircle className="h-5 w-5" />}
+              isSelected={selectedScenario?.scenarioType === 'conservative'}
+              onClick={() => setSelectedScenario(presetScenarios.conservative)}
+              scenario={presetScenarios.conservative}
+              color="#F59E0B"
+              bg="#FEF3C7"
+            />
+          </motion.div>
+        )}
+
+        {/* Custom Scenario Form */}
+        <AnimatePresence>
+          {showCustomForm && (
+            <motion.div variants={itemVariants} className="card p-6 mt-6">
+              <h3 className="mb-4 h4 font-semibold text-gray-900">Create Custom Scenario</h3>
+              <CustomScenarioForm onSubmit={handleCustomScenarioSubmit} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Scenario Details */}
+        {selectedScenario && (
+          <motion.div variants={itemVariants} className="space-y-6 mt-8">
+            <div className="card p-6">
             <h2 className="mb-4 h4 font-bold text-gray-900">{selectedScenario.scenarioName}</h2>
 
             {/* Summary Metrics */}
@@ -339,7 +429,8 @@ export default function DilutionScenariosPage() {
             </div>
           </div>
         </motion.div>
-      )}
+        )}
+      </section>
     </motion.div>
   )
 }
@@ -352,6 +443,8 @@ interface ScenarioCardProps {
   isSelected: boolean
   onClick: () => void
   scenario: DilutionScenarioResult
+  color: string
+  bg: string
 }
 
 function ScenarioCard({
@@ -361,6 +454,8 @@ function ScenarioCard({
   isSelected,
   onClick,
   scenario,
+  color,
+  bg,
 }: ScenarioCardProps) {
   const dilutionPercent =
     (Number(scenario.postDilutionSnapshot.newSharesIssued) /
@@ -370,22 +465,35 @@ function ScenarioCard({
   return (
     <motion.button
       onClick={onClick}
-      className={`rounded-lg border-2 p-4 text-left transition-all ${
-        isSelected
-          ? 'border-blue-600 bg-blue-50'
-          : 'border-gray-200 bg-white hover:border-gray-300'
-      }`}
-      whileHover={{ scale: 1.02 }}
+      className="card p-6 text-left transition-all hover:shadow-lg"
+      style={{
+        borderWidth: isSelected ? '2px' : '1px',
+        borderColor: isSelected ? color : '#E5E7EB',
+        background: isSelected ? bg : '#FFFFFF',
+        transform: 'scale(1)',
+        transitionProperty: 'all',
+        transitionDuration: '0.2s',
+      }}
+      onMouseEnter={(e) => {
+        const target = e.currentTarget as HTMLElement
+        target.style.transform = 'scale(1.02)'
+      }}
+      onMouseLeave={(e) => {
+        const target = e.currentTarget as HTMLElement
+        target.style.transform = 'scale(1)'
+      }}
       whileTap={{ scale: 0.98 }}
     >
-      <div className="flex items-start gap-3">
-        <div className={isSelected ? 'text-blue-600' : 'text-gray-600'}>{icon}</div>
+      <div className="flex items-start gap-4">
+        <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: bg }}>
+          <div style={{ color }}>{icon}</div>
+        </div>
         <div className="flex-1">
-          <h3 className="font-semibold text-gray-900">{title}</h3>
+          <h3 className="text-lg font-semibold" style={{ color: isSelected ? color : '#111827' }}>{title}</h3>
           <p className="mt-1 caption-sm text-gray-600">{description}</p>
-          <div className="mt-3 flex items-baseline gap-1">
-            <span className="h4 font-bold text-gray-900">{dilutionPercent.toFixed(1)}%</span>
-            <span className="caption-sm text-gray-600">dilution</span>
+          <div className="mt-4 flex items-baseline gap-2">
+            <span className="text-2xl font-bold" style={{ color }}>{dilutionPercent.toFixed(1)}%</span>
+            <span className="caption-sm text-gray-600">estimated dilution</span>
           </div>
         </div>
       </div>
@@ -402,9 +510,9 @@ interface MetricCardProps {
 
 function MetricCard({ label, value, highlight }: MetricCardProps) {
   return (
-    <div className={`rounded-lg p-4 ${highlight ? 'bg-blue-50' : 'bg-gray-50'}`}>
+    <div className="rounded-lg p-4" style={{ background: highlight ? '#FDECEB' : '#F3F4F6' }}>
       <p className="caption-sm text-gray-600">{label}</p>
-      <p className={`mt-1 text-2xl font-bold ${highlight ? 'text-blue-600' : 'text-gray-900'}`}>
+      <p className="mt-1 text-2xl font-bold" style={{ color: highlight ? '#E8312A' : '#111827' }}>
         {value}
       </p>
     </div>
@@ -470,7 +578,21 @@ function CustomScenarioForm({ onSubmit }: CustomScenarioFormProps) {
       </div>
       <button
         type="submit"
-        className="w-full rounded-lg bg-blue-600 px-4 py-2 label font-medium text-white transition-colors hover:bg-blue-700"
+        className="w-full rounded-full px-4 py-2.5 label font-semibold text-white transition-all active:scale-95"
+        style={{
+          background: '#E8312A',
+          transform: 'translateY(0)',
+          transitionProperty: 'all',
+          transitionDuration: '0.2s',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'translateY(-2px)'
+          e.currentTarget.style.boxShadow = '0 8px 16px rgba(232, 49, 42, 0.2)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'translateY(0)'
+          e.currentTarget.style.boxShadow = 'none'
+        }}
       >
         Calculate Scenario
       </button>
@@ -494,7 +616,16 @@ function FormInput({ label, type = 'text', value, onChange }: FormInputProps) {
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 body-sm transition-colors focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 body-sm transition-all"
+        onFocus={(e) => {
+          e.currentTarget.style.borderColor = '#E8312A'
+          e.currentTarget.style.boxShadow = '0 0 0 3px rgba(232, 49, 42, 0.1)'
+          e.currentTarget.style.outline = 'none'
+        }}
+        onBlur={(e) => {
+          e.currentTarget.style.borderColor = '#D1D5DB'
+          e.currentTarget.style.boxShadow = 'none'
+        }}
       />
     </div>
   )
