@@ -298,7 +298,53 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const paceScore = company?.paceScore ?? 62
   const estimatedDays = company?.estimatedDaysToIPO ?? 187
 
-  const breadcrumb = pathname.split('/')[1] || 'Dashboard'
+  // Derive breadcrumb label from current pathname
+  const getBreadcrumbLabel = (path: string): string => {
+    // Map full paths and patterns to breadcrumb labels
+    const pathMappings: Record<string, string> = {
+      '/dashboard': 'Dashboard',
+      '/checklist': 'IPO Checklist',
+      '/cap-table': 'Cap Table',
+      '/documents': 'Documents',
+      '/prospectus': 'Prospectus Builder',
+      '/templates': 'Templates & Forms',
+      '/compliance/listing-rules': 'Listing Rules',
+      '/compliance/resolutions': 'Corporate Resolutions',
+      '/demo/consent-workflow': 'Consent Workflow',
+      '/resources': 'Resource Centre',
+      '/checklist-guide': 'Compliance Guide',
+      '/marketplace': 'Expert Network',
+      '/team': 'Team & Roles',
+      '/integrations': 'Integrations',
+      '/account': 'Account',
+      '/notifications': 'Notifications',
+      '/dashboard/financial-mgmt/cost-calculator': 'Cost Calculator',
+      '/financial/cost-calculator': 'Cost Calculator',
+      '/financial/budget-tracking': 'Budget Tracking',
+      '/dilution-demo': 'Dilution Scenarios',
+      '/dashboard/documents/contracts-map': 'Prospectus Map',
+      '/pace/pulse': 'PACE™ Daily Pulse',
+    }
+
+    // Check for exact match first
+    if (pathMappings[path]) return pathMappings[path]
+
+    // Check for pattern matches (for dynamic routes)
+    if (path.includes('cost-calculator')) return 'Cost Calculator'
+    if (path.includes('budget-tracking')) return 'Budget Tracking'
+    if (path.includes('dilution')) return 'Dilution Scenarios'
+    if (path.includes('consent')) return 'Consent Workflow'
+    if (path.includes('listing-rules')) return 'Listing Rules'
+    if (path.includes('resolutions')) return 'Corporate Resolutions'
+    if (path.includes('prospectus')) return 'Prospectus Builder'
+    if (path.includes('contracts-map')) return 'Prospectus Map'
+
+    // Fallback to first path segment capitalized
+    const segment = path.split('/')[1] || 'Dashboard'
+    return segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ')
+  }
+
+  const breadcrumb = getBreadcrumbLabel(pathname)
 
   return (
     <div className="min-h-screen flex" style={{ background: 'var(--color-bg-primary)' }}>
@@ -610,8 +656,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="flex-1 flex items-center gap-2 body-sm min-w-0">
             <span className="text-text-light flex-shrink-0">IPOReady</span>
             <ChevronRight className="w-3 h-3 text-text-light flex-shrink-0" />
-            <span className="capitalize font-medium text-text-muted truncate">
-              {breadcrumb.replace(/-/g, ' ')}
+            <span className="font-medium text-text-muted truncate">
+              {breadcrumb}
             </span>
           </div>
 

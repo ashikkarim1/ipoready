@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -142,6 +142,33 @@ export function CostCalculatorForm() {
     },
   })
 
+  // Load default calculation on component mount
+  useEffect(() => {
+    const loadDefaultCalculation = async () => {
+      try {
+        const response = await fetch('/api/financial/cost-calculator', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            companyRevenue: 50000000,
+            selectedExchange: 'NASDAQ',
+            complexityLevel: 'medium',
+            timelineMonths: 6,
+          }),
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          setResult(data.analysis)
+        }
+      } catch (err) {
+        console.error('Failed to load default calculation:', err)
+      }
+    }
+
+    loadDefaultCalculation()
+  }, [])
+
   const timelineMonths = watch('timelineMonths')
   const companySize = watch('companySize')
   const industry = watch('industry')
@@ -238,7 +265,7 @@ export function CostCalculatorForm() {
   return (
     <motion.div style={{ background: '#F7F6F4', minHeight: '100vh' }} suppressHydrationWarning>
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto" style={{ paddingTop: '3rem', paddingBottom: '1.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '1.5rem', paddingBottom: '1rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -251,7 +278,7 @@ export function CostCalculatorForm() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className="flex items-center justify-center gap-2"
-            style={{ marginBottom: '1rem' }}
+            style={{ marginBottom: '0.5rem' }}
           >
             <span
               className="pill text-xs font-bold uppercase tracking-wider"
@@ -268,7 +295,7 @@ export function CostCalculatorForm() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.06 }}
             className="serif"
-            style={{ fontSize: '2.5rem', lineHeight: '1.2', marginBottom: '1rem' }}
+            style={{ fontSize: '2.5rem', lineHeight: '1.2', marginBottom: '0.75rem' }}
           >
             Calculate Your<br />
             <span style={{ color: '#E8312A' }}>IPO Cost Estimate</span>
@@ -288,7 +315,7 @@ export function CostCalculatorForm() {
       </section>
 
       {/* Main Content */}
-      <section className="max-w-7xl mx-auto" style={{ paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem', paddingTop: '1.5rem' }}>
+      <section className="max-w-7xl mx-auto" style={{ paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem', paddingTop: '1rem' }}>
         {/* Tabs */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
