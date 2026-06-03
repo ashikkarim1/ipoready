@@ -77,7 +77,10 @@ export default function ListingRulesPage() {
               </div>
 
               <button
-                onClick={() => router.push(`/dashboard/compliance/listing-requirements?exchange=${exchange.name.toLowerCase()}`)}
+                onClick={() => {
+                  const url = `/dashboard/compliance/listing-requirements?exchange=${exchange.name.toLowerCase()}`
+                  window.location.href = url
+                }}
                 onMouseEnter={() => setHoveredExchange(exchange.name)}
                 onMouseLeave={() => setHoveredExchange(null)}
                 className="mt-6 px-6 py-3 rounded-lg font-semibold transition-all hover:shadow-lg active:scale-95 flex items-center gap-2 text-base"
