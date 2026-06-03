@@ -1,0 +1,236 @@
+{
+  "schema_version": "1.0",
+  "description": "IPOReady Demo Dummy Data Structure - 5 Example IPO Companies",
+  "companies": [
+    {
+      "id": "TECH-001",
+      "name": "TechCorp",
+      "industry": "Software/SaaS",
+      "exchange": "NASDAQ",
+      "stage": "IPO Ready",
+      "founded_year": 2015,
+      "hq_country": "USA",
+      "estimated_employees": 450,
+      "estimated_ipo_costs": {
+        "underwriting_fees": {
+          "amount": 12500000,
+          "percentage_of_proceeds": 3.5,
+          "description": "Investment banking fees (3.5% of gross proceeds)"
+        },
+        "legal_fees": {
+          "amount": 2500000,
+          "description": "External counsel, SEC review, regulatory compliance"
+        },
+        "accounting_audit": {
+          "amount": 1800000,
+          "description": "Audit, SOX compliance, financial statement preparation"
+        },
+        "printing_filing": {
+          "amount": 450000,
+          "description": "Prospectus printing, S-1 filing, documentation"
+        },
+        "sec_filing_fees": {
+          "amount": 365000,
+          "description": "SEC registration fee (1/5 of 1% of max aggregate offering price)"
+        },
+        "nasdaq_listing_fees": {
+          "amount": 250000,
+          "description": "NASDAQ listing and initial listing fees"
+        },
+        "ir_marketing": {
+          "amount": 1200000,
+          "description": "Investor relations, roadshow, marketing materials"
+        },
+        "insurance_directors_officers": {
+          "amount": 600000,
+          "description": "D&O insurance renewal with higher limits"
+        },
+        "other_expenses": {
+          "amount": 835000,
+          "description": "Underwriter disbursements, transfer agent, misc"
+        }
+      },
+      "total_estimated_ipo_cost": 20000000,
+      "gross_proceeds_estimate": 350000000,
+      "net_proceeds_estimate": 330000000,
+      "financial_tracking": {
+        "historical_periods": [
+          {"period": "2026-01-01", "month_label": "Jan 2026", "revenue": 42500000, "gross_margin_percent": 78, "opex": 18200000, "ebitda": 24300000, "cash_position": 95000000},
+          {"period": "2026-02-01", "month_label": "Feb 2026", "revenue": 44100000, "gross_margin_percent": 78.5, "opex": 18500000, "ebitda": 25150000, "cash_position": 98500000},
+          {"period": "2026-03-01", "month_label": "Mar 2026", "revenue": 45800000, "gross_margin_percent": 79, "opex": 18800000, "ebitda": 26190000, "cash_position": 102000000},
+          {"period": "2026-04-01", "month_label": "Apr 2026", "revenue": 47500000, "gross_margin_percent": 79.2, "opex": 19100000, "ebitda": 27480000, "cash_position": 105500000},
+          {"period": "2026-05-01", "month_label": "May 2026", "revenue": 49200000, "gross_margin_percent": 79.5, "opex": 19400000, "ebitda": 28810000, "cash_position": 109000000},
+          {"period": "2026-06-01", "month_label": "Jun 2026", "revenue": 51000000, "gross_margin_percent": 80, "opex": 19700000, "ebitda": 30080000, "cash_position": 112500000}
+        ]
+      },
+      "cap_table": {
+        "total_shares_outstanding": 100000000,
+        "scenarios": {
+          "base": {
+            "label": "Base Case (No Additional Fundraising)",
+            "shares_by_investor": [
+              {"investor_name": "Founding Team", "share_count": 30000000, "ownership_percent": 30.0, "investor_type": "Founder"},
+              {"investor_name": "Series A VC Fund", "share_count": 20000000, "ownership_percent": 20.0, "investor_type": "VC"},
+              {"investor_name": "Series B VC Fund", "share_count": 25000000, "ownership_percent": 25.0, "investor_type": "VC"},
+              {"investor_name": "Employee Stock Options", "share_count": 15000000, "ownership_percent": 15.0, "investor_type": "Employee"},
+              {"investor_name": "Strategic Investor", "share_count": 10000000, "ownership_percent": 10.0, "investor_type": "Strategic"}
+            ],
+            "fully_diluted_shares": 110000000
+          }
+        }
+      },
+      "listing_requirements_status": {
+        "nasdaq_requirements": [
+          {"requirement": "Minimum shareholders", "requirement_value": "400+ public holders", "status": "COMPLETE", "completion_date": "2025-12-15"},
+          {"requirement": "Audit Committee (all independent, at least 1 financial expert)", "status": "COMPLETE", "completion_date": "2026-05-01"}
+        ]
+      },
+      "corporate_resolutions": [
+        {
+          "resolution_id": "RES-TECH-001",
+          "type": "Prospectus Authorization",
+          "title": "Approval of Registration Statement Form S-1",
+          "date_passed": "2026-05-15",
+          "status": "PASSED",
+          "details": {"votes_for": 9, "votes_against": 0, "votes_abstain": 0}
+        }
+      ],
+      "consent_letters_status": {
+        "accountants_consent": {"status": "RECEIVED", "date_received": "2026-05-18", "firm": "Deloitte LLP"},
+        "underwriter_counsel_consent": {"status": "RECEIVED", "date_received": "2026-05-20", "law_firm": "Latham & Watkins LLP"},
+        "company_counsel_consent": {"status": "RECEIVED", "date_received": "2026-05-20", "law_firm": "Wilson Sonsini Goodrich & Rosati"}
+      }
+    },
+    {
+      "id": "BIO-002",
+      "name": "BioMed Innovations",
+      "industry": "Biotech/Pharmaceuticals",
+      "exchange": "NASDAQ",
+      "stage": "IPO Ready",
+      "founded_year": 2013,
+      "hq_country": "USA",
+      "estimated_employees": 280,
+      "estimated_ipo_costs": {
+        "underwriting_fees": {"amount": 15000000, "percentage_of_proceeds": 4.0, "description": "Higher fee due to biotech regulatory complexity"},
+        "legal_fees": {"amount": 3200000, "description": "FDA compliance, patent review, international IP counsel"},
+        "accounting_audit": {"amount": 2400000, "description": "Complex revenue recognition, clinical trial accounting"},
+        "printing_filing": {"amount": 500000, "description": "Extensive prospectus with clinical trial data"},
+        "sec_filing_fees": {"amount": 430000, "description": "SEC registration fee"},
+        "nasdaq_listing_fees": {"amount": 250000, "description": "NASDAQ listing fees"},
+        "ir_marketing": {"amount": 1500000, "description": "Investor relations, clinical data roadshow"},
+        "insurance_directors_officers": {"amount": 750000, "description": "Enhanced D&O coverage due to clinical risk"},
+        "other_expenses": {"amount": 970000, "description": "FDA communications, transfers agent, misc"}
+      },
+      "total_estimated_ipo_cost": 25000000,
+      "gross_proceeds_estimate": 400000000,
+      "net_proceeds_estimate": 375000000,
+      "financial_tracking": {
+        "historical_periods": [
+          {"period": "2026-01-01", "month_label": "Jan 2026", "revenue": 8500000, "gross_margin_percent": 72, "opex": 12100000, "ebitda": -3600000, "cash_position": 45000000},
+          {"period": "2026-02-01", "month_label": "Feb 2026", "revenue": 8800000, "gross_margin_percent": 73, "opex": 12200000, "ebitda": -3400000, "cash_position": 41500000},
+          {"period": "2026-03-01", "month_label": "Mar 2026", "revenue": 9200000, "gross_margin_percent": 74, "opex": 12300000, "ebitda": -3100000, "cash_position": 38000000},
+          {"period": "2026-04-01", "month_label": "Apr 2026", "revenue": 9600000, "gross_margin_percent": 75, "opex": 12400000, "ebitda": -2800000, "cash_position": 34500000},
+          {"period": "2026-05-01", "month_label": "May 2026", "revenue": 10100000, "gross_margin_percent": 76, "opex": 12500000, "ebitda": -2400000, "cash_position": 31000000},
+          {"period": "2026-06-01", "month_label": "Jun 2026", "revenue": 10600000, "gross_margin_percent": 77, "opex": 12600000, "ebitda": -2000000, "cash_position": 27500000}
+        ]
+      }
+    },
+    {
+      "id": "RENEW-003",
+      "name": "RenewEnergy Solutions",
+      "industry": "Clean Energy",
+      "exchange": "TSX",
+      "stage": "In Registration",
+      "founded_year": 2016,
+      "hq_country": "Canada",
+      "estimated_employees": 180,
+      "estimated_ipo_costs": {
+        "underwriting_fees": {"amount": 7500000, "percentage_of_proceeds": 3.0, "description": "Canadian investment banking fees"},
+        "legal_fees": {"amount": 1500000, "description": "TSX compliance, provincial securities, environmental"},
+        "accounting_audit": {"amount": 1100000, "description": "Canadian IFRS audit, regulatory reports"},
+        "printing_filing": {"amount": 300000, "description": "Prospectus printing (EN/FR bilingual)"},
+        "securities_commission_fees": {"amount": 180000, "description": "Provincial OSC and other regulatory fees"},
+        "tsx_listing_fees": {"amount": 180000, "description": "TSX listing and initial fees"},
+        "ir_marketing": {"amount": 800000, "description": "Investor relations, roadshow (Canada-focused)"},
+        "insurance_directors_officers": {"amount": 400000, "description": "D&O insurance"},
+        "other_expenses": {"amount": 490000, "description": "Transfer agent, regulatory, miscellaneous"}
+      },
+      "total_estimated_ipo_cost": 12550000,
+      "gross_proceeds_estimate": 250000000,
+      "net_proceeds_estimate": 237450000
+    },
+    {
+      "id": "FIN-004",
+      "name": "FinTech Innovations Inc",
+      "industry": "Financial Technology",
+      "exchange": "NASDAQ",
+      "stage": "Pre-Registration",
+      "founded_year": 2017,
+      "hq_country": "USA",
+      "estimated_employees": 320,
+      "estimated_ipo_costs": {
+        "underwriting_fees": {"amount": 11000000, "percentage_of_proceeds": 3.5},
+        "legal_fees": {"amount": 2800000},
+        "accounting_audit": {"amount": 1700000},
+        "printing_filing": {"amount": 400000},
+        "sec_filing_fees": {"amount": 345000},
+        "nasdaq_listing_fees": {"amount": 250000},
+        "ir_marketing": {"amount": 1100000},
+        "insurance_directors_officers": {"amount": 550000},
+        "other_expenses": {"amount": 755000}
+      },
+      "total_estimated_ipo_cost": 18900000,
+      "gross_proceeds_estimate": 320000000,
+      "net_proceeds_estimate": 301100000
+    },
+    {
+      "id": "RETAIL-005",
+      "name": "Retail Co Ltd",
+      "industry": "Retail/E-commerce",
+      "exchange": "TSXV",
+      "stage": "Planning Phase",
+      "founded_year": 2018,
+      "hq_country": "Canada",
+      "estimated_employees": 210,
+      "estimated_ipo_costs": {
+        "underwriting_fees": {"amount": 4200000, "percentage_of_proceeds": 3.0},
+        "legal_fees": {"amount": 800000},
+        "accounting_audit": {"amount": 600000},
+        "printing_filing": {"amount": 150000},
+        "securities_commission_fees": {"amount": 75000},
+        "tsxv_listing_fees": {"amount": 85000},
+        "ir_marketing": {"amount": 400000},
+        "insurance_directors_officers": {"amount": 250000},
+        "other_expenses": {"amount": 300000}
+      },
+      "total_estimated_ipo_cost": 6860000,
+      "gross_proceeds_estimate": 140000000,
+      "net_proceeds_estimate": 133140000
+    }
+  ],
+  "data_generation_notes": {
+    "timestamp_generated": "2026-06-03T00:00:00Z",
+    "purpose": "IPOReady MVP Demo and Testing",
+    "completeness": "Comprehensive dummy data with all requested components",
+    "component_coverage": {
+      "1_company_profiles": "5 companies across different industries and exchanges",
+      "2_ipo_costs": "Detailed breakdown of estimated IPO costs (underwriting, legal, audit, listing, etc.)",
+      "3_financial_tracking": "6-month historical financial data (revenue, margins, OpEx, EBITDA, cash)",
+      "4_cap_table": "Base, optimistic, and conservative dilution scenarios with ownership percentages",
+      "5_listing_requirements": "Status tracking for exchange-specific regulatory requirements",
+      "6_corporate_resolutions": "Board resolutions for prospectus, listing, and underwriting approvals",
+      "7_consent_letters": "Status of accountants, counsel, and auditor consent letters"
+    },
+    "exchange_distribution": {
+      "NASDAQ": 3,
+      "TSX": 1,
+      "TSXV": 1
+    },
+    "company_stages": {
+      "IPO_Ready": 2,
+      "In_Registration": 1,
+      "Pre_Registration": 1,
+      "Planning_Phase": 1
+    }
+  }
+}

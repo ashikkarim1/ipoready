@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
-import { FeaturesMegaMenu } from '@/app/components/FeaturesMegaMenu'
+import { Header } from '@/app/components/Header'
 import {
   CheckCircle2, ArrowRight, Zap, Globe, Mail, ExternalLink, Rocket,
   Users, ChevronDown, ChevronUp, Clock, Sparkles, X, BadgeCheck, TrendingUp
@@ -259,10 +259,10 @@ export default function PricingPage() {
 
   return (
     <>
-      {/* Main menu */}
-      <FeaturesMegaMenu />
+      {/* Header with menu */}
+      <Header />
 
-      <div className="relative" style={{ overflowX: 'clip' }}>
+      <div className="relative" style={{ overflowX: 'clip' }} suppressHydrationWarning>
 
         <div className="max-w-6xl mx-auto relative z-10" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem', paddingTop: '0.5rem', paddingBottom: '4rem' }}>
 

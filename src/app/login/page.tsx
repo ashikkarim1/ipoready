@@ -48,17 +48,39 @@ export default function LoginPage() {
     e.preventDefault()
     setError('')
     setLoading(true)
+    
+    // First check if user exists
+    try {
+      const checkResponse = await fetch('/api/auth/check-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.toLowerCase().trim() }),
+      })
+      
+      const { exists } = await checkResponse.json()
+      
+      if (!exists) {
+        setLoading(false)
+        setError('User does not exist. Please create an account.')
+        return
+      }
+    } catch (err) {
+      // If check fails, continue with normal login
+      console.error('User check failed:', err)
+    }
+    
+    // Try to sign in
     const result = await signIn('credentials', { email, password, redirect: false })
     setLoading(false)
     if (result?.error) {
-      setError('Invalid email or password')
+      setError('Invalid password')
     } else {
       window.location.assign('/dashboard')
     }
   }
 
   return (
-    <div className="min-h-screen flex" style={{ background: '#F7F6F4' }}>
+    <div className="min-h-screen flex" style={{ background: '#F7F6F4' }} suppressHydrationWarning>
 
       {/* Left panel */}
       <div className="hidden lg:flex lg:w-[42%] flex-col justify-between p-12"
@@ -125,14 +147,14 @@ export default function LoginPage() {
 
           {/* Social sign-in */}
           <div className="space-y-2.5 mb-6">
-            <button type="button" onClick={() => signIn('google', { callbackUrl: '/login' })}
+            <button type="button" onClick={() => signIn('google')}
               className="w-full flex items-center justify-center gap-3 py-2.5 rounded-xl text-sm font-medium transition-all"
               style={{ background: 'white', border: '1px solid #E5E4E0', color: '#1A1A1A' }}
               onMouseEnter={e => (e.currentTarget.style.background = '#F7F6F4')}
               onMouseLeave={e => (e.currentTarget.style.background = 'white')}>
               <GoogleIcon /> Continue with Google
             </button>
-            <button type="button" onClick={() => signIn('linkedin', { callbackUrl: '/login' })}
+            <button type="button" onClick={() => signIn('linkedin')}
               className="w-full flex items-center justify-center gap-3 py-2.5 rounded-xl text-sm font-medium transition-all"
               style={{ background: 'white', border: '1px solid #E5E4E0', color: '#1A1A1A' }}
               onMouseEnter={e => (e.currentTarget.style.background = '#F7F6F4')}
@@ -154,8 +176,8 @@ export default function LoginPage() {
             <div>
               <label className="text-sm font-medium text-nav mb-1.5 block">Email Address</label>
               <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border text-nav text-sm outline-none transition-all"
-                style={{ background: '#FFFFFF', borderColor: '#E5E4E0' }}
+                className="w-full px-4 py-3 rounded-xl border text-sm outline-none transition-all"
+                style={{ background: '#FFFFFF', borderColor: '#E5E4E0', color: '#1A1A1A' }}
                 onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
                 onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }}
                 placeholder="you@company.com" required autoComplete="email" />
@@ -166,8 +188,8 @@ export default function LoginPage() {
               <div className="relative">
                 <input type={showPassword ? 'text' : 'password'} value={password}
                   onChange={e => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 pr-10 rounded-xl border text-nav text-sm outline-none transition-all"
-                  style={{ background: '#FFFFFF', borderColor: '#E5E4E0' }}
+                  className="w-full px-4 py-3 pr-10 rounded-xl border text-sm outline-none transition-all"
+                  style={{ background: '#FFFFFF', borderColor: '#E5E4E0', color: '#1A1A1A' }}
                   onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
                   onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }}
                   placeholder="••••••••" required autoComplete="current-password" />

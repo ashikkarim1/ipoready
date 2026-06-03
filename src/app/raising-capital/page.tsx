@@ -697,7 +697,7 @@ export default function RaisingCapitalPage() {
   }
 
   return (
-    <div style={{ maxWidth: '900px' }}>
+    <div style={{ maxWidth: '900px' }} suppressHydrationWarning>
 
       {/* Page header */}
       <div style={{ marginBottom: '1.5rem' }}>

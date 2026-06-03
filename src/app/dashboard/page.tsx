@@ -190,9 +190,9 @@ interface DashStats {
 }
 
 function getAgingStatusStyle(status: AgingItem['status']) {
-  if (status === 'overdue')     return { color: '#DC2626', bg: '#FEE2E2', border: '#FECACA', label: 'Overdue' }
-  if (status === 'at_risk')     return { color: '#B45309', bg: '#FEF3C7', border: '#FDE68A', label: 'At Risk' }
-  return                               { color: '#1D4ED8', bg: '#EFF6FF', border: '#BFDBFE', label: 'In Progress' }
+  if (status === 'overdue')     return { color: 'var(--color-error)', bg: 'var(--color-error-pale)', border: 'var(--color-error-light)', label: 'Overdue' }
+  if (status === 'at_risk')     return { color: 'var(--color-warning)', bg: 'var(--color-warning-soft)', border: 'var(--color-warning-medium)', label: 'At Risk' }
+  return                               { color: 'var(--color-info)', bg: 'var(--color-info-soft)', border: 'var(--color-info-medium)', label: 'In Progress' }
 }
 
 function buildReminderMessage(item: AgingItem, senderCompany = 'IPOReady'): string {
@@ -251,6 +251,12 @@ export default function DashboardPage() {
   const [agingEditing, setAgingEditing] = useState(false)
   const [agingReminderSent, setAgingReminderSent] = useState<Set<string>>(new Set())
   const [showPaceModal, setShowPaceModal] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Hydration safety: prevent hydration mismatches
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   async function handleSendBoardReport() {
     setSendingReport(true)
@@ -333,7 +339,7 @@ export default function DashboardPage() {
           {/* 4 stat cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '24px' }}>
             {[0, 1, 2, 3].map(i => (
-              <div key={i} style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E5E4E0', padding: '24px', height: '120px' }}>
+              <div key={i} style={{ background: 'var(--color-surface-primary)', borderRadius: '16px', border: '1px solid #E5E4E0', padding: '24px', height: '120px' }}>
                 <div style={{ ...shimmerStyle, height: '10px', width: '60%', marginBottom: '16px' }} />
                 <div style={{ ...shimmerStyle, height: '28px', width: '80%', marginBottom: '10px' }} />
                 <div style={{ ...shimmerStyle, height: '10px', width: '45%' }} />
@@ -342,13 +348,13 @@ export default function DashboardPage() {
           </div>
           {/* Main content + sidebar */}
           <div style={{ display: 'flex', gap: '24px' }}>
-            <div style={{ flex: 1, background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E5E4E0', padding: '28px', height: '420px' }}>
+            <div style={{ flex: 1, background: 'var(--color-surface-primary)', borderRadius: '16px', border: '1px solid #E5E4E0', padding: '28px', height: '420px' }}>
               <div style={{ ...shimmerStyle, height: '14px', width: '40%', marginBottom: '24px' }} />
               {[0, 1, 2, 3, 4, 5].map(i => (
                 <div key={i} style={{ ...shimmerStyle, height: '36px', marginBottom: '12px', borderRadius: '10px' }} />
               ))}
             </div>
-            <div style={{ width: '280px', background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E5E4E0', padding: '28px', height: '420px', flexShrink: 0 }}>
+            <div style={{ width: '280px', background: 'var(--color-surface-primary)', borderRadius: '16px', border: '1px solid #E5E4E0', padding: '28px', height: '420px', flexShrink: 0 }}>
               <div style={{ ...shimmerStyle, height: '14px', width: '55%', marginBottom: '24px' }} />
               {[0, 1, 2, 3].map(i => (
                 <div key={i} style={{ ...shimmerStyle, height: '52px', marginBottom: '12px', borderRadius: '10px' }} />
@@ -361,7 +367,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <>
+    <div style={{ background: '#F7F6F4', minHeight: '100vh', colorScheme: 'light' }} suppressHydrationWarning>
       {company?.trial_status === 'active' && company.trial_end_date && (
         <TrialCountdownBanner
           trialEndDate={new Date(company.trial_end_date)}
@@ -379,20 +385,20 @@ export default function DashboardPage() {
         <div className="flex flex-row gap-2 sm:gap-3 flex-shrink-0">
           <button onClick={() => setBoardModal(true)}
             className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap"
-            style={{ background: 'white', border: '1px solid #E5E4E0', color: '#1A1A1A' }}>
+            style={{ background: 'white', border: '1px solid #E5E4E0', color: 'var(--color-text-primary)' }}>
             <Award className="w-4 h-4 flex-shrink-0" />
             <span className="hidden sm:inline">Board Report</span>
             <span className="sm:hidden">Board</span>
           </button>
           <button onClick={() => setEmailModal(true)}
             className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap"
-            style={{ background: 'white', border: '1px solid #E5E4E0', color: '#1A1A1A' }}>
+            style={{ background: 'white', border: '1px solid #E5E4E0', color: 'var(--color-text-primary)' }}>
             <Mail className="w-4 h-4 flex-shrink-0" />
             <span className="hidden sm:inline">Email Dashboard</span>
             <span className="sm:hidden">Email</span>
           </button>
           <Link href="/checklist" className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap"
-            style={{ background: '#E8312A', color: 'white', textDecoration: 'none' }}>
+            style={{ background: 'var(--color-accent)', color: 'var(--color-text-inverse)', textDecoration: 'none' }}>
             <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
             <span className="hidden sm:inline">Open Checklist</span>
             <span className="sm:hidden">Checklist</span>
@@ -401,6 +407,9 @@ export default function DashboardPage() {
       </div>
 
 
+      {/* Only render Framer Motion-animated content after hydration to prevent mismatches */}
+      {isMounted && (
+        <>
       {/* Notifications */}
       {notifications.filter(n => !n.read).length > 0 && (
         <div className="space-y-2">
@@ -409,7 +418,7 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
               className="flex items-start gap-3 p-4 rounded-xl card">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{ background: notif.type === 'milestone' ? '#FEF3C7' : '#EFF6FF' }}>
+                style={{ background: notif.type === 'milestone' ? 'var(--color-warning-soft)' : 'var(--color-info-soft)' }}>
                 {notif.type === 'milestone'
                   ? <Trophy className="w-4 h-4 text-amber" />
                   : <Bell className="w-4 h-4 text-blue" />}
@@ -439,9 +448,9 @@ export default function DashboardPage() {
               <button
                 onClick={() => setShowPaceModal(true)}
                 title="What is PACE™?"
-                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0', display: 'flex', alignItems: 'center', color: '#C4C2BE' }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#717171')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#C4C2BE')}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0', display: 'flex', alignItems: 'center', color: 'var(--color-text-muted)' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text-muted)')}
               >
                 <HelpCircle className="w-3.5 h-3.5" />
               </button>
@@ -473,7 +482,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <Link href="/pace" className="flex items-center gap-1 mt-3"
-            style={{ fontSize: '11px', fontWeight: 600, color: '#E8312A', textDecoration: 'none' }}
+            style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-accent)', textDecoration: 'none' }}
             onMouseEnter={e => (e.currentTarget.style.opacity = '0.7')}
             onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
             <Activity className="w-3 h-3" /> Full velocity breakdown →
@@ -488,21 +497,21 @@ export default function DashboardPage() {
             <div className="space-y-2.5 animate-pulse">
               {[1,2,3,4].map(i => (
                 <div key={i} className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#E5E4E0' }} />
-                  <div className="h-3 rounded flex-1" style={{ background: '#E5E4E0' }} />
-                  <div className="h-3 w-4 rounded" style={{ background: '#E5E4E0' }} />
+                  <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: 'var(--color-border)' }} />
+                  <div className="h-3 rounded flex-1" style={{ background: 'var(--color-border)' }} />
+                  <div className="h-3 w-4 rounded" style={{ background: 'var(--color-border)' }} />
                 </div>
               ))}
-              <div className="mt-3 h-2 rounded-full w-full" style={{ background: '#E5E4E0' }} />
+              <div className="mt-3 h-2 rounded-full w-full" style={{ background: 'var(--color-border)' }} />
             </div>
           ) : (
             <>
               <div className="space-y-2">
                 {[
-                  { label: 'Completed',   value: (dashData?.tasksSummary ?? DEMO_TASKS_SUMMARY).completed,   color: '#2D7A5F' },
-                  { label: 'In Progress', value: (dashData?.tasksSummary ?? DEMO_TASKS_SUMMARY).inProgress,  color: '#1D4ED8' },
-                  { label: 'Blocked',     value: (dashData?.tasksSummary ?? DEMO_TASKS_SUMMARY).blocked,     color: '#E8312A' },
-                  { label: 'Not Started', value: (dashData?.tasksSummary ?? DEMO_TASKS_SUMMARY).notStarted,  color: '#E5E4E0' },
+                  { label: 'Completed',   value: (dashData?.tasksSummary ?? DEMO_TASKS_SUMMARY).completed,   color: 'var(--color-success)' },
+                  { label: 'In Progress', value: (dashData?.tasksSummary ?? DEMO_TASKS_SUMMARY).inProgress,  color: 'var(--color-info)' },
+                  { label: 'Blocked',     value: (dashData?.tasksSummary ?? DEMO_TASKS_SUMMARY).blocked,     color: 'var(--color-accent)' },
+                  { label: 'Not Started', value: (dashData?.tasksSummary ?? DEMO_TASKS_SUMMARY).notStarted,  color: 'var(--color-border)' },
                 ].map(({ label, value, color }) => (
                   <div key={label} className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: color }} />
@@ -525,9 +534,9 @@ export default function DashboardPage() {
           <p className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-3">Current Phase</p>
           {statsLoading ? (
             <div className="space-y-2 animate-pulse">
-              <div className="h-4 rounded-lg w-3/4" style={{ background: '#E5E4E0' }} />
-              <div className="h-3 rounded-lg w-1/2" style={{ background: '#E5E4E0' }} />
-              <div className="h-2 rounded-full w-full mt-3" style={{ background: '#E5E4E0' }} />
+              <div className="h-4 rounded-lg w-3/4" style={{ background: 'var(--color-border)' }} />
+              <div className="h-3 rounded-lg w-1/2" style={{ background: 'var(--color-border)' }} />
+              <div className="h-2 rounded-full w-full mt-3" style={{ background: 'var(--color-border)' }} />
             </div>
           ) : (
             <>
@@ -569,15 +578,15 @@ export default function DashboardPage() {
                   transition={{ delay: i * 0.06 }}
                   className="flex items-center gap-4 p-3 rounded-xl border transition-all"
                   style={
-                    isDone  ? { background: '#EAF5F0', borderColor: '#2D7A5F30' } :
-                    isActive ? { background: '#FDECEB', borderColor: '#E8312A30' } :
-                    { background: '#F7F6F4', borderColor: '#E5E4E0' }
+                    isDone  ? { background: 'var(--color-success-soft)', borderColor: '#2D7A5F30' } :
+                    isActive ? { background: 'var(--color-error-soft)', borderColor: '#E8312A30' } :
+                    { background: 'var(--color-bg-primary)', borderColor: 'var(--color-border)' }
                   }>
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-sm"
                     style={
-                      isDone   ? { background: '#EAF5F0' } :
-                      isActive ? { background: '#FDECEB' } :
-                      { background: '#FFFFFF' }
+                      isDone   ? { background: 'var(--color-success-soft)' } :
+                      isActive ? { background: 'var(--color-error-soft)' } :
+                      { background: 'var(--color-surface-primary)' }
                     }>
                     {isDone ? '✅' : isActive ? '⚡' :
                       i < PHASE_ORDER.indexOf(effectiveCurrentPhase) ? '⏳' : '🔒'}
@@ -585,11 +594,11 @@ export default function DashboardPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1.5">
                       <p className="text-sm font-medium"
-                        style={{ color: isDone ? '#2D7A5F' : isActive ? '#1A1A1A' : '#9A9A9A' }}>
+                        style={{ color: isDone ? 'var(--color-success)' : isActive ? 'var(--color-text-primary)' : 'var(--color-text-tertiary)' }}>
                         {PHASE_LABELS[phase]}
                       </p>
                       <span className="text-xs font-medium"
-                        style={{ color: isDone ? '#2D7A5F' : isActive ? '#E8312A' : '#C8C7C2' }}>
+                        style={{ color: isDone ? 'var(--color-success)' : isActive ? 'var(--color-accent)' : 'var(--color-border-dark)' }}>
                         {completed}/{total}
                       </span>
                     </div>
@@ -597,12 +606,12 @@ export default function DashboardPage() {
                       <div className="h-full rounded-full transition-all duration-1000"
                         style={{
                           width: `${percentage}%`,
-                          background: isDone ? '#2D7A5F' : isActive ? '#E8312A' : '#E5E4E0',
+                          background: isDone ? 'var(--color-success)' : isActive ? 'var(--color-accent)' : 'var(--color-border)',
                         }} />
                     </div>
                   </div>
                   <span className="text-xs font-bold flex-shrink-0"
-                    style={{ color: isDone ? '#2D7A5F' : isActive ? '#E8312A' : '#C8C7C2' }}>
+                    style={{ color: isDone ? 'var(--color-success)' : isActive ? 'var(--color-accent)' : 'var(--color-border-dark)' }}>
                     {percentage}%
                   </span>
                 </motion.div>
@@ -615,7 +624,7 @@ export default function DashboardPage() {
         <div className="card p-7">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-nav font-bold text-base">Mission Milestones</h2>
-            <Star className="w-4 h-4 text-gold" />
+            <Star className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
           </div>
           <div className="space-y-2 max-h-80 overflow-y-auto">
             {MILESTONES.map((milestone, i) => (
@@ -624,23 +633,23 @@ export default function DashboardPage() {
                 transition={{ delay: i * 0.05 }}
                 className="flex items-center gap-3 p-3 rounded-xl border transition-all"
                 style={milestone.earned
-                  ? { background: '#FEF3C7', borderColor: '#D4A96A30' }
-                  : { background: '#F7F6F4', borderColor: '#E5E4E0' }}>
+                  ? { background: 'var(--color-error-soft)', borderColor: 'rgba(232, 49, 42, 0.2)' }
+                  : { background: 'var(--color-bg-primary)', borderColor: 'var(--color-border)' }}>
                 <span className={`text-base ${!milestone.earned ? 'opacity-30 grayscale' : ''}`}>
                   {milestone.icon}
                 </span>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold"
-                    style={{ color: milestone.earned ? '#1A1A1A' : '#9A9A9A' }}>
+                    style={{ color: milestone.earned ? 'var(--color-text-primary)' : 'var(--color-text-tertiary)' }}>
                     {milestone.title}
                   </p>
                   <p className="text-xs mt-0.5"
-                    style={{ color: milestone.earned ? '#B45309' : '#C8C7C2' }}>
+                    style={{ color: milestone.earned ? 'var(--color-accent)' : 'var(--color-border-dark)' }}>
                     +{milestone.xp.toLocaleString()} XP
                     {milestone.date && <span className="text-text-light ml-1">· {milestone.date}</span>}
                   </p>
                 </div>
-                {milestone.earned && <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-amber" />}
+                {milestone.earned && <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--color-accent)' }} />}
               </motion.div>
             ))}
           </div>
@@ -663,7 +672,7 @@ export default function DashboardPage() {
                 transition={{ delay: i * 0.07 }}
                 className="flex items-start gap-3 p-3 rounded-xl border border-border hover:border-border-dark card-hover cursor-pointer">
                 <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
-                  style={{ background: task.priority === 'critical' ? '#E8312A' : '#D97706' }} />
+                  style={{ background: task.priority === 'critical' ? 'var(--color-accent)' : 'var(--color-warning-dark)' }} />
                 <div className="flex-1 min-w-0">
                   <p className="text-nav text-sm font-medium">{task.title}</p>
                   <div className="flex items-center gap-2 mt-1">
@@ -677,8 +686,8 @@ export default function DashboardPage() {
                 </div>
                 <span className="badge flex-shrink-0 text-[10px]"
                   style={task.priority === 'critical'
-                    ? { background: '#FDECEB', color: '#E8312A', borderColor: '#E8312A30' }
-                    : { background: '#FEF3C7', color: '#B45309', borderColor: '#D4A96A30' }}>
+                    ? { background: 'var(--color-error-soft)', color: 'var(--color-accent)', borderColor: '#E8312A30' }
+                    : { background: 'var(--color-warning-soft)', color: 'var(--color-warning)', borderColor: '#D4A96A30' }}>
                   {task.priority}
                 </span>
               </motion.div>
@@ -688,7 +697,7 @@ export default function DashboardPage() {
 
         <div className="space-y-5">
           {/* auditus.ai */}
-          <div className="card p-6" style={{ background: '#FDECEB', borderColor: '#E8312A30' }}>
+          <div className="card p-6" style={{ background: 'var(--color-error-soft)', borderColor: '#E8312A30' }}>
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#E8312A15' }}>
                 <Zap className="w-4 h-4 text-accent" />
@@ -713,9 +722,9 @@ export default function DashboardPage() {
             {statsLoading ? (
               <div className="grid grid-cols-3 gap-3 animate-pulse">
                 {[1,2,3].map(i => (
-                  <div key={i} className="rounded-xl p-3" style={{ background: '#F7F6F4' }}>
-                    <div className="h-5 w-6 rounded mb-1.5 mx-auto" style={{ background: '#E5E4E0' }} />
-                    <div className="h-3 rounded w-full" style={{ background: '#E5E4E0' }} />
+                  <div key={i} className="rounded-xl p-3" style={{ background: 'var(--color-bg-primary)' }}>
+                    <div className="h-5 w-6 rounded mb-1.5 mx-auto" style={{ background: 'var(--color-border)' }} />
+                    <div className="h-3 rounded w-full" style={{ background: 'var(--color-border)' }} />
                   </div>
                 ))}
               </div>
@@ -726,16 +735,16 @@ export default function DashboardPage() {
                     value: dashStats?.teamMembersCount ?? '—',
                     label: 'Team',
                     icon: Users,
-                    color: '#1A1A1A',
-                    bg: '#F7F6F4',
+                    color: 'var(--color-text-primary)',
+                    bg: 'var(--color-bg-primary)',
                     href: '/team',
                   },
                   {
                     value: dashStats?.documentsCount ?? '—',
                     label: 'Docs',
                     icon: FileText,
-                    color: '#1D4ED8',
-                    bg: '#EFF6FF',
+                    color: 'var(--color-info)',
+                    bg: 'var(--color-info-soft)',
                     href: '/documents',
                   },
                   {
@@ -744,16 +753,16 @@ export default function DashboardPage() {
                       : '—',
                     label: 'Prospectus',
                     icon: FileText,
-                    color: '#E8312A',
-                    bg: '#FDECEB',
+                    color: 'var(--color-accent)',
+                    bg: 'var(--color-error-soft)',
                     href: '/prospectus',
                   },
                   {
                     value: dashStats?.overdueTasks ?? '—',
                     label: 'Overdue',
                     icon: AlertOctagon,
-                    color: dashStats && dashStats.overdueTasks > 0 ? '#E8312A' : '#2D7A5F',
-                    bg: dashStats && dashStats.overdueTasks > 0 ? '#FDECEB' : '#EAF5F0',
+                    color: dashStats && dashStats.overdueTasks > 0 ? 'var(--color-accent)' : 'var(--color-success)',
+                    bg: dashStats && dashStats.overdueTasks > 0 ? 'var(--color-error-soft)' : 'var(--color-success-soft)',
                     href: '/checklist',
                   },
                 ].map(({ value, label, icon: Icon, color, bg, href }) => (
@@ -761,7 +770,7 @@ export default function DashboardPage() {
                     className="rounded-xl p-3 text-center transition-opacity hover:opacity-80"
                     style={{ background: bg, textDecoration: 'none' }}>
                     <p className="font-bold text-lg leading-tight" style={{ color }}>{value}</p>
-                    <p className="text-xs mt-0.5" style={{ color: '#717171' }}>{label}</p>
+                    <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-secondary)' }}>{label}</p>
                   </Link>
                 ))}
               </div>
@@ -830,25 +839,25 @@ export default function DashboardPage() {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* CRITICAL ITEM AGING REPORT                                         */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="rounded-2xl border overflow-hidden" style={{ background: 'white', borderColor: '#E5E4E0' }}>
+      <div className="rounded-2xl border overflow-hidden" style={{ background: 'white', borderColor: 'var(--color-border)' }}>
 
         {/* Header */}
-        <div className="flex items-center justify-between flex-wrap gap-3" style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #E5E4E0', background: '#F7F6F4' }}>
+        <div className="flex items-center justify-between flex-wrap gap-3" style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #E5E4E0', background: 'var(--color-bg-primary)' }}>
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ background: '#FDECEB', border: '1px solid rgba(232,49,42,0.2)' }}>
-              <BarChart2 className="w-5 h-5" style={{ color: '#E8312A' }} />
+              style={{ background: 'var(--color-error-soft)', border: '1px solid rgba(232,49,42,0.2)' }}>
+              <BarChart2 className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
             </div>
             <div>
               <h2 className="text-nav font-bold text-base">Critical Item Aging Report</h2>
-              <p className="text-xs" style={{ color: '#9A9A9A' }}>Track how long critical tasks have been open — click any row to send a detailed reminder</p>
+              <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Track how long critical tasks have been open — click any row to send a detailed reminder</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             {[
-              { label: 'Overdue',     count: AGING_ITEMS.filter(i => i.status === 'overdue').length,     color: '#DC2626', bg: '#FEE2E2' },
-              { label: 'At Risk',     count: AGING_ITEMS.filter(i => i.status === 'at_risk').length,     color: '#B45309', bg: '#FEF3C7' },
-              { label: 'In Progress', count: AGING_ITEMS.filter(i => i.status === 'in_progress').length, color: '#1D4ED8', bg: '#EFF6FF' },
+              { label: 'Overdue',     count: AGING_ITEMS.filter(i => i.status === 'overdue').length,     color: 'var(--color-error)', bg: 'var(--color-error-pale)' },
+              { label: 'At Risk',     count: AGING_ITEMS.filter(i => i.status === 'at_risk').length,     color: 'var(--color-warning)', bg: 'var(--color-warning-soft)' },
+              { label: 'In Progress', count: AGING_ITEMS.filter(i => i.status === 'in_progress').length, color: 'var(--color-info)', bg: 'var(--color-info-soft)' },
             ].map(({ label, count, color, bg }) => (
               <div key={label} className="flex items-center gap-1.5 rounded-full"
                 style={{ background: bg, border: `1px solid ${color}30`, padding: '0.2rem 0.65rem' }}>
@@ -860,8 +869,8 @@ export default function DashboardPage() {
         </div>
 
         {/* Aging Timeline Graph */}
-        <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #E5E4E0', background: '#FAFAF9' }}>
-          <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#9A9A9A', marginBottom: '0.875rem' }}>Days Open — Aging Visualization</p>
+        <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #E5E4E0', background: 'var(--color-surface-light)' }}>
+          <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-text-secondary)', marginBottom: '0.875rem' }}>Days Open — Aging Visualization</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {(() => {
               const maxDays = Math.max(...AGING_ITEMS.map(i => i.daysOpen))
@@ -875,11 +884,11 @@ export default function DashboardPage() {
                     style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     {/* Name */}
                     <div style={{ width: '200px', flexShrink: 0 }}>
-                      <p className="text-xs font-medium truncate" style={{ color: '#1A1A1A' }}>{item.title}</p>
-                      <p className="text-xs truncate" style={{ color: '#9A9A9A' }}>{item.owner}</p>
+                      <p className="text-xs font-medium truncate" style={{ color: 'var(--color-text-primary)' }}>{item.title}</p>
+                      <p className="text-xs truncate" style={{ color: 'var(--color-text-secondary)' }}>{item.owner}</p>
                     </div>
                     {/* Bar */}
-                    <div className="flex-1" style={{ position: 'relative', height: '28px', background: '#F0EFED', borderRadius: '6px', overflow: 'hidden' }}>
+                    <div className="flex-1" style={{ position: 'relative', height: '28px', background: 'var(--color-surface-secondary)', borderRadius: '6px', overflow: 'hidden' }}>
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${widthPct}%` }}
@@ -893,7 +902,7 @@ export default function DashboardPage() {
                           opacity: 0.85,
                         }} />
                       <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', padding: '0 0.625rem' }}>
-                        <span className="text-xs font-bold" style={{ color: 'white', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
+                        <span className="text-xs font-bold" style={{ color: 'var(--color-text-primary)', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
                           {item.daysOpen}d open
                         </span>
                       </div>
@@ -908,18 +917,18 @@ export default function DashboardPage() {
                     {/* Days overdue / remaining */}
                     <div style={{ width: '100px', flexShrink: 0, textAlign: 'right' }}>
                       {item.daysOverdue > 0 ? (
-                        <span className="text-xs font-bold" style={{ color: '#DC2626' }}>
+                        <span className="text-xs font-bold" style={{ color: 'var(--color-error)' }}>
                           {item.daysOverdue}d overdue
                         </span>
                       ) : (
-                        <span className="text-xs" style={{ color: Math.abs(item.daysOverdue) <= 7 ? '#B45309' : '#9A9A9A' }}>
+                        <span className="text-xs" style={{ color: Math.abs(item.daysOverdue) <= 7 ? 'var(--color-warning)' : 'var(--color-text-tertiary)' }}>
                           {Math.abs(item.daysOverdue)}d left
                         </span>
                       )}
                     </div>
                     {/* Click hint */}
                     <ChevronRight className="w-4 h-4 flex-shrink-0 transition-transform group-hover:translate-x-0.5"
-                      style={{ color: '#C8C7C2' }} />
+                      style={{ color: 'var(--color-border-dark)' }} />
                   </button>
                 )
               })
@@ -930,9 +939,9 @@ export default function DashboardPage() {
         {/* Item Rows Table */}
         <div>
           {/* Column headers */}
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 0.8fr 1fr 0.5fr', gap: '0', padding: '0.5rem 1.5rem', borderBottom: '1px solid #E5E4E0', background: '#F7F6F4' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 0.8fr 1fr 0.5fr', gap: '0', padding: '0.5rem 1.5rem', borderBottom: '1px solid #E5E4E0', background: 'var(--color-bg-primary)' }}>
             {['Task', 'Owner', 'Phase', 'Status / Due', ''].map((h, i) => (
-              <span key={i} className="text-xs font-bold uppercase tracking-wider" style={{ color: '#9A9A9A' }}>{h}</span>
+              <span key={i} className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-secondary)' }}>{h}</span>
             ))}
           </div>
           {AGING_ITEMS.map((item, idx) => {
@@ -950,37 +959,37 @@ export default function DashboardPage() {
                   background: item.status === 'overdue' ? 'rgba(254,226,226,0.35)' : 'transparent',
                   alignItems: 'center',
                 }}
-                onMouseEnter={e => (e.currentTarget.style.background = item.status === 'overdue' ? 'rgba(254,226,226,0.6)' : '#FAFAF9')}
+                onMouseEnter={e => (e.currentTarget.style.background = item.status === 'overdue' ? 'rgba(254,226,226,0.6)' : 'var(--color-surface-light)')}
                 onMouseLeave={e => (e.currentTarget.style.background = item.status === 'overdue' ? 'rgba(254,226,226,0.35)' : 'transparent')}>
 
                 {/* Task */}
                 <div style={{ paddingRight: '0.75rem' }}>
                   <div className="flex items-center gap-2">
-                    {item.status === 'overdue' && <AlertOctagon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#DC2626' }} />}
-                    <p className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>{item.title}</p>
+                    {item.status === 'overdue' && <AlertOctagon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: 'var(--color-error)' }} />}
+                    <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{item.title}</p>
                   </div>
                   <div className="flex items-center gap-2" style={{ marginTop: '0.2rem' }}>
-                    <span className="text-xs rounded-full" style={{ background: '#F7F6F4', color: '#717171', border: '1px solid #E5E4E0', padding: '0.1rem 0.45rem' }}>
+                    <span className="text-xs rounded-full" style={{ background: 'var(--color-bg-primary)', color: 'var(--color-text-secondary)', border: '1px solid #E5E4E0', padding: '0.1rem 0.45rem' }}>
                       {item.category}
                     </span>
-                    <span className="text-xs font-mono" style={{ color: '#9A9A9A' }}>{item.reference}</span>
+                    <span className="text-xs font-mono" style={{ color: 'var(--color-text-secondary)' }}>{item.reference}</span>
                   </div>
                 </div>
 
                 {/* Owner */}
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-white text-xs font-bold"
-                    style={{ background: item.ownerEmail.includes('sarah') ? '#1A1A1A' : item.ownerEmail.includes('marc') ? '#2D7A5F' : '#7C3AED' }}>
+                    style={{ background: item.ownerEmail.includes('sarah') ? 'var(--color-text-primary)' : item.ownerEmail.includes('marc') ? 'var(--color-success)' : 'var(--color-accent-purple)' }}>
                     {item.owner.split(' ').map(n => n[0]).join('').slice(0, 2)}
                   </div>
                   <div className="min-w-0">
                     <p className="text-xs font-semibold text-nav truncate">{item.owner}</p>
-                    <p className="text-xs truncate" style={{ color: '#9A9A9A' }}>{item.ownerRole}</p>
+                    <p className="text-xs truncate" style={{ color: 'var(--color-text-secondary)' }}>{item.ownerRole}</p>
                   </div>
                 </div>
 
                 {/* Phase */}
-                <p className="text-xs" style={{ color: '#717171' }}>{item.phase.split(' ')[0]} {item.phase.split(' ')[1] || ''}</p>
+                <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{item.phase.split(' ')[0]} {item.phase.split(' ')[1] || ''}</p>
 
                 {/* Status / Due */}
                 <div>
@@ -988,7 +997,7 @@ export default function DashboardPage() {
                     style={{ background: style.bg, color: style.color, border: `1px solid ${style.border}`, padding: '0.2rem 0.55rem' }}>
                     {style.label}
                   </span>
-                  <p className="text-xs" style={{ color: item.daysOverdue > 0 ? '#DC2626' : '#9A9A9A', marginTop: '0.2rem' }}>
+                  <p className="text-xs" style={{ color: item.daysOverdue > 0 ? 'var(--color-error)' : 'var(--color-text-tertiary)', marginTop: '0.2rem' }}>
                     {item.daysOverdue > 0 ? `${item.daysOverdue}d overdue` : `Due ${item.dueDate}`}
                   </p>
                 </div>
@@ -996,12 +1005,12 @@ export default function DashboardPage() {
                 {/* Send action */}
                 <div className="flex justify-end">
                   {sent ? (
-                    <span className="flex items-center gap-1 text-xs font-medium" style={{ color: '#16A34A' }}>
+                    <span className="flex items-center gap-1 text-xs font-medium" style={{ color: 'var(--color-success-bright)' }}>
                       <CheckCircle2 className="w-3.5 h-3.5" /> Sent
                     </span>
                   ) : (
                     <span className="flex items-center gap-1 text-xs font-semibold rounded-lg transition-colors"
-                      style={{ background: '#1A1A1A', color: 'white', padding: '0.3rem 0.625rem' }}>
+                      style={{ background: 'var(--color-accent)', color: 'var(--color-text-inverse)', padding: '0.3rem 0.625rem' }}>
                       <Send className="w-3 h-3" /> Remind
                     </span>
                   )}
@@ -1012,9 +1021,9 @@ export default function DashboardPage() {
         </div>
 
         {/* Footer note */}
-        <div className="flex items-center gap-2" style={{ padding: '0.75rem 1.5rem', borderTop: '1px solid #E5E4E0', background: '#F7F6F4' }}>
-          <AlertOctagon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#9A9A9A' }} />
-          <p className="text-xs" style={{ color: '#9A9A9A' }}>
+        <div className="flex items-center gap-2" style={{ padding: '0.75rem 1.5rem', borderTop: '1px solid #E5E4E0', background: 'var(--color-bg-primary)' }}>
+          <AlertOctagon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: 'var(--color-text-secondary)' }} />
+          <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
             Click any row to preview and send a detailed step-by-step reminder directly to the task owner. All reminders are logged.
           </p>
         </div>
@@ -1034,51 +1043,51 @@ export default function DashboardPage() {
               {emailSent ? (
                 <div className="text-center py-4">
                   <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
-                    style={{ background: '#F0FDF4', border: '1px solid #86EFAC' }}>
-                    <CheckCircle2 className="w-7 h-7" style={{ color: '#16A34A' }} />
+                    style={{ background: 'var(--color-success-light)', border: '1px solid #86EFAC' }}>
+                    <CheckCircle2 className="w-7 h-7" style={{ color: 'var(--color-success-bright)' }} />
                   </div>
-                  <h2 className="font-bold text-lg mb-2" style={{ color: '#1A1A1A' }}>Dashboard Sent</h2>
-                  <p className="text-sm" style={{ color: '#9A9A9A' }}>
+                  <h2 className="font-bold text-lg mb-2" style={{ color: 'var(--color-text-primary)' }}>Dashboard Sent</h2>
+                  <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
                     A live snapshot of your IPO progress has been sent to {emailAddress || 'your email'}.
                   </p>
                   <button onClick={() => { setEmailModal(false); setEmailSent(false) }}
                     className="mt-5 px-5 py-2.5 rounded-xl text-sm font-semibold"
-                    style={{ background: '#1A1A1A', color: 'white' }}>Done</button>
+                    style={{ background: 'var(--color-accent)', color: 'var(--color-text-inverse)' }}>Done</button>
                 </div>
               ) : (
                 <>
                   <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-                        style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
-                        <Mail className="w-4 h-4" style={{ color: '#1A1A1A' }} />
+                        style={{ background: 'var(--color-bg-primary)', border: '1px solid #E5E4E0' }}>
+                        <Mail className="w-4 h-4" style={{ color: 'var(--color-text-primary)' }} />
                       </div>
                       <div>
-                        <h2 className="font-bold text-base" style={{ color: '#1A1A1A' }}>Send Dashboard</h2>
-                        <p className="text-xs" style={{ color: '#9A9A9A' }}>Send your live IPO progress snapshot</p>
+                        <h2 className="font-bold text-base" style={{ color: 'var(--color-text-primary)' }}>Send Dashboard</h2>
+                        <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Send your live IPO progress snapshot</p>
                       </div>
                     </div>
-                    <button onClick={() => setEmailModal(false)} style={{ color: '#9A9A9A' }}>
+                    <button onClick={() => setEmailModal(false)} style={{ color: 'var(--color-text-secondary)' }}>
                       <X className="w-5 h-5" />
                     </button>
                   </div>
 
                   <div className="space-y-4">
                     <div>
-                      <label className="text-xs font-semibold uppercase tracking-wider block mb-2" style={{ color: '#9A9A9A' }}>
+                      <label className="text-xs font-semibold uppercase tracking-wider block mb-2" style={{ color: 'var(--color-text-secondary)' }}>
                         Send To
                       </label>
                       <input type="email" value={emailAddress}
                         onChange={e => setEmailAddress(e.target.value)}
                         placeholder="you@company.com or colleague@firm.com"
                         className="w-full px-4 py-2.5 rounded-xl text-sm outline-none"
-                        style={{ border: '1px solid #E5E4E0', background: '#FAFAFA', color: '#1A1A1A' }}
-                        onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
-                        onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }} />
+                        style={{ border: '1px solid #E5E4E0', background: 'var(--color-surface-light)', color: 'var(--color-text-primary)' }}
+                        onFocus={e => { e.target.style.borderColor = 'var(--color-text-primary)'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
+                        onBlur={e => { e.target.style.borderColor = 'var(--color-border)'; e.target.style.boxShadow = 'none' }} />
                     </div>
 
                     <div>
-                      <label className="text-xs font-semibold uppercase tracking-wider block mb-2" style={{ color: '#9A9A9A' }}>
+                      <label className="text-xs font-semibold uppercase tracking-wider block mb-2" style={{ color: 'var(--color-text-secondary)' }}>
                         Format
                       </label>
                       <div className="flex gap-2">
@@ -1086,20 +1095,20 @@ export default function DashboardPage() {
                           <button key={fmt} onClick={() => setEmailFormat(fmt)}
                             className="flex-1 py-2.5 rounded-xl text-sm font-semibold border transition-all"
                             style={emailFormat === fmt
-                              ? { background: '#1A1A1A', border: '1px solid #1A1A1A', color: 'white' }
-                              : { background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#717171' }}>
+                              ? { background: 'var(--color-accent)', border: '1px solid var(--color-accent)', color: 'var(--color-text-inverse)' }
+                              : { background: 'var(--color-bg-primary)', border: '1px solid #E5E4E0', color: 'var(--color-text-secondary)' }}>
                             {fmt === 'html' ? '📧 Email (HTML)' : '📄 PDF Attachment'}
                           </button>
                         ))}
                       </div>
                     </div>
 
-                    <div className="px-3.5 py-3 rounded-xl" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
-                      <p className="text-xs font-semibold mb-1" style={{ color: '#1A1A1A' }}>What&apos;s included</p>
+                    <div className="px-3.5 py-3 rounded-xl" style={{ background: 'var(--color-bg-primary)', border: '1px solid #E5E4E0' }}>
+                      <p className="text-xs font-semibold mb-1" style={{ color: 'var(--color-text-primary)' }}>What&apos;s included</p>
                       <ul className="space-y-0.5">
                         {['PACE™ score & velocity trend', 'Phase-by-phase progress overview', 'Blocked & in-progress tasks', 'Recent milestone completions', 'Days to estimated listing'].map(item => (
-                          <li key={item} className="flex items-center gap-2 text-xs" style={{ color: '#717171' }}>
-                            <div className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: '#9A9A9A' }} />
+                          <li key={item} className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                            <div className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: 'var(--color-border-medium)' }} />
                             {item}
                           </li>
                         ))}
@@ -1109,12 +1118,12 @@ export default function DashboardPage() {
                     <div className="flex gap-3">
                       <button onClick={() => setEmailModal(false)}
                         className="flex-1 py-2.5 rounded-xl text-sm font-semibold"
-                        style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#1A1A1A' }}>
+                        style={{ background: 'var(--color-bg-primary)', border: '1px solid #E5E4E0', color: 'var(--color-text-primary)' }}>
                         Cancel
                       </button>
                       <button onClick={() => setEmailSent(true)}
                         className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold"
-                        style={{ background: '#1A1A1A', color: 'white' }}>
+                        style={{ background: 'var(--color-accent)', color: 'var(--color-text-inverse)' }}>
                         <Mail className="w-4 h-4" /> Send Now
                       </button>
                     </div>
@@ -1150,23 +1159,23 @@ export default function DashboardPage() {
                 onClick={e => e.stopPropagation()}>
 
                 {/* Modal header */}
-                <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #E5E4E0', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', background: '#F7F6F4', flexShrink: 0 }}>
+                <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #E5E4E0', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', background: 'var(--color-bg-primary)', flexShrink: 0 }}>
                   <div className="flex items-start gap-3 min-w-0">
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                       style={{ background: style.bg, border: `1px solid ${style.border}` }}>
                       <AlertOctagon className="w-5 h-5" style={{ color: style.color }} />
                     </div>
                     <div className="min-w-0">
-                      <p className="font-bold text-sm" style={{ color: '#1A1A1A' }}>{item.title}</p>
+                      <p className="font-bold text-sm" style={{ color: 'var(--color-text-primary)' }}>{item.title}</p>
                       <div className="flex items-center gap-2 flex-wrap" style={{ marginTop: '0.25rem' }}>
                         <span className="text-xs font-semibold rounded-full"
                           style={{ background: style.bg, color: style.color, border: `1px solid ${style.border}`, padding: '0.15rem 0.5rem' }}>
                           {style.label}
                         </span>
-                        <span className="text-xs" style={{ color: '#9A9A9A' }}>{item.daysOpen} days open</span>
-                        <span className="text-xs" style={{ color: '#9A9A9A' }}>·</span>
-                        <span className="text-xs" style={{ color: '#9A9A9A' }}>{item.phase}</span>
-                        <span className="text-xs font-mono" style={{ color: '#9A9A9A' }}>{item.reference}</span>
+                        <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{item.daysOpen} days open</span>
+                        <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>·</span>
+                        <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{item.phase}</span>
+                        <span className="text-xs font-mono" style={{ color: 'var(--color-text-secondary)' }}>{item.reference}</span>
                       </div>
                     </div>
                   </div>
@@ -1181,43 +1190,43 @@ export default function DashboardPage() {
                   {/* Owner info */}
                   <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #F0EFED', display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-white text-sm font-bold"
-                      style={{ background: item.ownerEmail.includes('sarah') ? '#1A1A1A' : item.ownerEmail.includes('marc') ? '#2D7A5F' : '#7C3AED' }}>
+                      style={{ background: item.ownerEmail.includes('sarah') ? 'var(--color-text-primary)' : item.ownerEmail.includes('marc') ? 'var(--color-success)' : 'var(--color-accent-purple)' }}>
                       {item.owner.split(' ').map(n => n[0]).join('').slice(0, 2)}
                     </div>
                     <div>
-                      <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>{item.owner}</p>
-                      <p className="text-xs" style={{ color: '#9A9A9A' }}>{item.ownerRole} · {item.ownerEmail}</p>
+                      <p className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>{item.owner}</p>
+                      <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{item.ownerRole} · {item.ownerEmail}</p>
                     </div>
                     <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
                       {item.daysOverdue > 0 ? (
-                        <p className="text-sm font-bold" style={{ color: '#DC2626' }}>{item.daysOverdue} day{item.daysOverdue !== 1 ? 's' : ''} overdue</p>
+                        <p className="text-sm font-bold" style={{ color: 'var(--color-error)' }}>{item.daysOverdue} day{item.daysOverdue !== 1 ? 's' : ''} overdue</p>
                       ) : (
-                        <p className="text-sm font-bold" style={{ color: Math.abs(item.daysOverdue) <= 7 ? '#B45309' : '#1A1A1A' }}>
+                        <p className="text-sm font-bold" style={{ color: Math.abs(item.daysOverdue) <= 7 ? 'var(--color-warning)' : 'var(--color-text-primary)' }}>
                           {Math.abs(item.daysOverdue)} days remaining
                         </p>
                       )}
-                      <p className="text-xs" style={{ color: '#9A9A9A' }}>Due: {item.dueDate}</p>
+                      <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Due: {item.dueDate}</p>
                     </div>
                   </div>
 
                   {/* What to do — always visible */}
                   <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #F0EFED' }}>
-                    <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#9A9A9A', marginBottom: '0.625rem' }}>
+                    <p className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-secondary)', marginBottom: '0.625rem' }}>
                       Exactly What Needs to Be Done
                     </p>
-                    <div className="rounded-xl" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', padding: '1rem' }}>
+                    <div className="rounded-xl" style={{ background: 'var(--color-bg-primary)', border: '1px solid #E5E4E0', padding: '1rem' }}>
                       {item.whatToDo.split('\n').map((line, i) => (
-                        <p key={i} className="text-sm leading-relaxed" style={{ marginBottom: line === '' ? '0.5rem' : '0.25rem', fontWeight: line.startsWith('OVERDUE') ? 700 : 400, color: line.startsWith('OVERDUE') ? '#DC2626' : '#1A1A1A' }}>
+                        <p key={i} className="text-sm leading-relaxed" style={{ marginBottom: line === '' ? '0.5rem' : '0.25rem', fontWeight: line.startsWith('OVERDUE') ? 700 : 400, color: line.startsWith('OVERDUE') ? 'var(--color-error)' : 'var(--color-text-primary)' }}>
                           {line}
                         </p>
                       ))}
                     </div>
                     {item.blockers && (
-                      <div className="flex items-start gap-2 rounded-xl mt-2" style={{ background: '#FEF3C7', border: '1px solid #FDE68A', padding: '0.75rem' }}>
-                        <AlertOctagon className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: '#B45309' }} />
+                      <div className="flex items-start gap-2 rounded-xl mt-2" style={{ background: 'var(--color-warning-soft)', border: '1px solid #FDE68A', padding: '0.75rem' }}>
+                        <AlertOctagon className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: 'var(--color-warning)' }} />
                         <div>
-                          <p className="text-xs font-bold" style={{ color: '#78350F' }}>Current Blocker</p>
-                          <p className="text-xs leading-relaxed" style={{ color: '#92400E' }}>{item.blockers}</p>
+                          <p className="text-xs font-bold" style={{ color: 'var(--color-warning-dark)' }}>Current Blocker</p>
+                          <p className="text-xs leading-relaxed" style={{ color: 'var(--color-warning-dark)' }}>{item.blockers}</p>
                         </div>
                       </div>
                     )}
@@ -1226,10 +1235,10 @@ export default function DashboardPage() {
                   {/* Reminder message — editable */}
                   <div style={{ padding: '1rem 1.5rem' }}>
                     <div className="flex items-center justify-between" style={{ marginBottom: '0.625rem' }}>
-                      <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#9A9A9A' }}>Reminder Message to {item.owner.split(' ')[0]}</p>
+                      <p className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-secondary)' }}>Reminder Message to {item.owner.split(' ')[0]}</p>
                       <button onClick={() => setAgingEditing(e => !e)}
                         className="flex items-center gap-1 text-xs font-semibold rounded-lg transition-colors"
-                        style={{ background: agingEditing ? '#1A1A1A' : '#F7F6F4', color: agingEditing ? 'white' : '#717171', border: `1px solid ${agingEditing ? '#1A1A1A' : '#E5E4E0'}`, padding: '0.25rem 0.6rem' }}>
+                        style={{ background: agingEditing ? 'var(--color-text-primary)' : 'var(--color-bg-primary)', color: agingEditing ? 'white' : 'var(--color-text-secondary)', border: `1px solid ${agingEditing ? 'var(--color-text-primary)' : 'var(--color-border)'}`, padding: '0.25rem 0.6rem' }}>
                         <Edit3 className="w-3 h-3" />
                         {agingEditing ? 'Lock' : 'Edit'}
                       </button>
@@ -1240,32 +1249,32 @@ export default function DashboardPage() {
                         onChange={e => setAgingMessageEdit(e.target.value)}
                         rows={12}
                         className="w-full rounded-xl text-xs outline-none resize-none font-mono leading-relaxed"
-                        style={{ background: '#F7F6F4', border: '1px solid #1A1A1A', padding: '0.875rem', color: '#1A1A1A', boxShadow: '0 0 0 3px rgba(26,26,26,0.07)' }}
+                        style={{ background: 'var(--color-bg-primary)', border: '1px solid #1A1A1A', padding: '0.875rem', color: 'var(--color-text-primary)', boxShadow: '0 0 0 3px rgba(26,26,26,0.07)' }}
                       />
                     ) : (
-                      <div className="rounded-xl" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', padding: '0.875rem' }}>
-                        <p className="text-xs font-mono leading-relaxed whitespace-pre-wrap" style={{ color: '#1A1A1A' }}>{agingMessageEdit}</p>
+                      <div className="rounded-xl" style={{ background: 'var(--color-bg-primary)', border: '1px solid #E5E4E0', padding: '0.875rem' }}>
+                        <p className="text-xs font-mono leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--color-text-primary)' }}>{agingMessageEdit}</p>
                       </div>
                     )}
                   </div>
                 </div>
 
                 {/* Fixed footer */}
-                <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #E5E4E0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', background: '#F7F6F4', flexShrink: 0 }}>
-                  <p className="text-xs" style={{ color: '#9A9A9A' }}>
-                    Sends to <span className="font-semibold" style={{ color: '#1A1A1A' }}>{item.ownerEmail}</span>
+                <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #E5E4E0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', background: 'var(--color-bg-primary)', flexShrink: 0 }}>
+                  <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                    Sends to <span className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>{item.ownerEmail}</span>
                   </p>
                   <div className="flex items-center gap-2">
                     <button onClick={() => setAgingModal(null)}
                       className="px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-                      style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#717171' }}>
+                      style={{ background: 'var(--color-bg-primary)', border: '1px solid #E5E4E0', color: 'var(--color-text-secondary)' }}>
                       Cancel
                     </button>
                     <button onClick={sendReminder}
                       className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-                      style={{ background: '#E8312A', color: 'white' }}
-                      onMouseEnter={e => (e.currentTarget.style.background = '#C82020')}
-                      onMouseLeave={e => (e.currentTarget.style.background = '#E8312A')}>
+                      style={{ background: 'var(--color-accent)', color: 'var(--color-text-inverse)' }}
+                      onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-error)')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'var(--color-accent)')}>
                       <Send className="w-4 h-4" />
                       Send Reminder to {item.owner.split(' ')[0]}
                     </button>
@@ -1298,17 +1307,17 @@ export default function DashboardPage() {
 
               {/* Header */}
               <div style={{ padding: '20px 24px', borderBottom: '1px solid #E5E4E0', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#1A1A1A', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Activity style={{ width: '18px', height: '18px', color: 'white' }} />
+                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'var(--color-accent)', color: 'var(--color-text-inverse)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Activity style={{ width: '18px', height: '18px', color: 'var(--color-text-primary)' }} />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: '16px', fontWeight: 800, color: '#1A1A1A', marginBottom: '1px' }}>What is PACE™?</p>
-                  <p style={{ fontSize: '12px', color: '#9A9A9A' }}>IPOReady Proprietary Velocity Engine · Protected IP</p>
+                  <p style={{ fontSize: '16px', fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: '1px' }}>What is PACE™?</p>
+                  <p style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>IPOReady Proprietary Velocity Engine · Protected IP</p>
                 </div>
                 <button onClick={() => setShowPaceModal(false)}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9A9A9A', padding: '4px' }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#1A1A1A')}
-                  onMouseLeave={e => (e.currentTarget.style.color = '#9A9A9A')}>
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-secondary)', padding: '4px' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text-primary)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text-tertiary)')}>
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -1316,15 +1325,15 @@ export default function DashboardPage() {
               <div style={{ overflowY: 'auto', padding: '24px' }}>
 
                 {/* What it is */}
-                <p style={{ fontSize: '14px', color: '#1A1A1A', lineHeight: 1.6, marginBottom: '20px' }}>
+                <p style={{ fontSize: '14px', color: 'var(--color-text-primary)', lineHeight: 1.6, marginBottom: '20px' }}>
                   <strong>PACE™</strong> (Progress and Compliance Execution) is IPOReady's proprietary velocity scoring engine. It measures how quickly and effectively your company is progressing toward a public listing — not just task completion, but <strong>execution quality</strong> and <strong>momentum</strong>.
                 </p>
 
                 {/* Formula */}
-                <div style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', borderRadius: '12px', padding: '16px', marginBottom: '20px' }}>
-                  <p style={{ fontSize: '11px', fontWeight: 700, color: '#9A9A9A', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>The Formula</p>
-                  <div style={{ fontFamily: 'monospace', fontSize: '13px', color: '#1A1A1A', lineHeight: 1.8 }}>
-                    <span style={{ color: '#E8312A', fontWeight: 700 }}>PACE™ = </span>
+                <div style={{ background: 'var(--color-bg-primary)', border: '1px solid #E5E4E0', borderRadius: '12px', padding: '16px', marginBottom: '20px' }}>
+                  <p style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>The Formula</p>
+                  <div style={{ fontFamily: 'monospace', fontSize: '13px', color: 'var(--color-text-primary)', lineHeight: 1.8 }}>
+                    <span style={{ color: 'var(--color-accent)', fontWeight: 700 }}>PACE™ = </span>
                     <span>(tasks_completed / total_tasks) × velocity_multiplier × phase_weighting</span>
                   </div>
                   <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -1334,34 +1343,34 @@ export default function DashboardPage() {
                       { term: 'phase_weighting', def: 'Regulatory and financial phases (Audit, Legal, Filing) carry higher weight than admin phases' },
                     ].map(({ term, def }) => (
                       <div key={term} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                        <span style={{ fontSize: '11px', fontFamily: 'monospace', fontWeight: 600, color: '#1D4ED8', background: '#EFF6FF', padding: '1px 6px', borderRadius: '4px', flexShrink: 0, marginTop: '1px' }}>{term}</span>
-                        <span style={{ fontSize: '12px', color: '#717171', lineHeight: 1.5 }}>{def}</span>
+                        <span style={{ fontSize: '11px', fontFamily: 'monospace', fontWeight: 600, color: 'var(--color-info)', background: 'var(--color-info-soft)', padding: '1px 6px', borderRadius: '4px', flexShrink: 0, marginTop: '1px' }}>{term}</span>
+                        <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>{def}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Score bands */}
-                <p style={{ fontSize: '11px', fontWeight: 700, color: '#9A9A9A', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>Score Interpretation</p>
+                <p style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>Score Interpretation</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '20px' }}>
                   {[
-                    { range: '80–100', label: 'Accelerating', desc: 'Exceptional execution. On track or ahead of schedule.', color: '#2D7A5F', bg: '#F0FDF4', border: '#BBF7D0' },
-                    { range: '60–79', label: 'On Track', desc: 'Solid progress. A few areas to tighten up.', color: '#1D4ED8', bg: '#EFF6FF', border: '#BFDBFE' },
-                    { range: '40–59', label: 'At Risk', desc: 'Moderate delays detected. Take action this week.', color: '#D97706', bg: '#FFFBEB', border: '#FDE68A' },
-                    { range: '0–39', label: 'Critical', desc: 'Material delays. Immediate intervention required.', color: '#DC2626', bg: '#FEF2F2', border: '#FECACA' },
+                    { range: '80–100', label: 'Accelerating', desc: 'Exceptional execution. On track or ahead of schedule.', color: 'var(--color-success)', bg: 'var(--color-success-light)', border: 'var(--color-success-light)' },
+                    { range: '60–79', label: 'On Track', desc: 'Solid progress. A few areas to tighten up.', color: 'var(--color-info)', bg: 'var(--color-info-soft)', border: 'var(--color-info-medium)' },
+                    { range: '40–59', label: 'At Risk', desc: 'Moderate delays detected. Take action this week.', color: 'var(--color-warning-dark)', bg: 'var(--color-warning-pale)', border: 'var(--color-warning-medium)' },
+                    { range: '0–39', label: 'Critical', desc: 'Material delays. Immediate intervention required.', color: 'var(--color-error)', bg: 'var(--color-error-light)', border: 'var(--color-error-light)' },
                   ].map(({ range, label, desc, color, bg, border }) => (
                     <div key={range} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', background: bg, border: `1px solid ${border}` }}>
                       <span style={{ fontSize: '13px', fontWeight: 800, color, fontFamily: 'monospace', width: '48px', flexShrink: 0 }}>{range}</span>
                       <div>
                         <span style={{ fontSize: '13px', fontWeight: 700, color }}>{label}</span>
-                        <span style={{ fontSize: '12px', color: '#717171', marginLeft: '6px' }}>{desc}</span>
+                        <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)', marginLeft: '6px' }}>{desc}</span>
                       </div>
                     </div>
                   ))}
                 </div>
 
                 {/* Current score callout */}
-                <div style={{ background: '#1A1A1A', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{ background: 'var(--color-accent)', color: 'var(--color-text-inverse)', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
                   <div style={{ position: 'relative', width: '48px', height: '48px', flexShrink: 0 }}>
                     <svg width="48" height="48" viewBox="0 0 48 48">
                       <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="5" />
@@ -1371,29 +1380,29 @@ export default function DashboardPage() {
                         strokeDashoffset={`${2 * Math.PI * 20 * (1 - effectivePaceScore / 100)}`} />
                     </svg>
                     <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <span style={{ fontSize: '12px', fontWeight: 900, color: 'white' }}>{effectivePaceScore}</span>
+                      <span style={{ fontSize: '12px', fontWeight: 900, color: 'var(--color-text-primary)' }}>{effectivePaceScore}</span>
                     </div>
                   </div>
                   <div>
-                    <p style={{ fontSize: '14px', fontWeight: 700, color: 'white', marginBottom: '3px' }}>Your current PACE™ is {effectivePaceScore} / 100</p>
-                    <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>
+                    <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: '3px' }}>Your current PACE™ is {effectivePaceScore} / 100</p>
+                    <p style={{ fontSize: '12px', color: 'var(--color-text-primary)' }}>
                       On Track · Top 30% of TSXV issuers at this stage · +7 this week
                     </p>
                   </div>
                 </div>
 
                 {/* Phase ETA context */}
-                <div style={{ marginTop: '16px', padding: '14px', borderRadius: '10px', background: '#FFFBEB', border: '1px solid #FDE68A' }}>
-                  <p style={{ fontSize: '11px', fontWeight: 700, color: '#B45309', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px' }}>
+                <div style={{ marginTop: '16px', padding: '14px', borderRadius: '10px', background: 'var(--color-warning-pale)', border: '1px solid #FDE68A' }}>
+                  <p style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-warning)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px' }}>
                     <Info style={{ width: '10px', height: '10px', display: 'inline', marginRight: '4px', verticalAlign: '-1px' }} />
                     Estimated Days to Listing
                   </p>
-                  <p style={{ fontSize: '12px', color: '#92400E', lineHeight: 1.6 }}>
+                  <p style={{ fontSize: '12px', color: 'var(--color-warning-dark)', lineHeight: 1.6 }}>
                     At your current PACE™ of <strong>{effectivePaceScore}</strong>, your estimated listing date is <strong>{effectiveDaysToIpo} days</strong> from today. To reduce this by 30 days, you need to complete 4–6 additional governance and audit tasks in the next 3 weeks.
                   </p>
                 </div>
 
-                <p style={{ fontSize: '11px', color: '#C4C2BE', textAlign: 'center', marginTop: '16px' }}>
+                <p style={{ fontSize: '11px', color: 'var(--color-text-muted)', textAlign: 'center', marginTop: '16px' }}>
                   PACE™ is updated in real-time as tasks are completed and milestones hit. ™ IPOReady Inc.
                 </p>
               </div>
@@ -1417,19 +1426,19 @@ export default function DashboardPage() {
               {boardSent ? (
                 <div className="p-10 text-center">
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
-                    style={{ background: '#F0FDF4', border: '1px solid #86EFAC' }}>
-                    <CheckCircle2 className="w-8 h-8" style={{ color: '#16A34A' }} />
+                    style={{ background: 'var(--color-success-light)', border: '1px solid #86EFAC' }}>
+                    <CheckCircle2 className="w-8 h-8" style={{ color: 'var(--color-success-bright)' }} />
                   </div>
-                  <h3 className="font-bold text-xl mb-2" style={{ color: '#1A1A1A' }}>Board Report Sent</h3>
-                  <p className="text-sm mb-1" style={{ color: '#717171' }}>
-                    Delivered to: <strong style={{ color: '#1A1A1A' }}>{boardEmail || 'board members'}</strong>
+                  <h3 className="font-bold text-xl mb-2" style={{ color: 'var(--color-text-primary)' }}>Board Report Sent</h3>
+                  <p className="text-sm mb-1" style={{ color: 'var(--color-text-secondary)' }}>
+                    Delivered to: <strong style={{ color: 'var(--color-text-primary)' }}>{boardEmail || 'board members'}</strong>
                   </p>
-                  <p className="text-xs mb-6" style={{ color: '#9A9A9A' }}>
+                  <p className="text-xs mb-6" style={{ color: 'var(--color-text-secondary)' }}>
                     Full email with metrics, risk analysis, and remediation steps sent in board-ready format.
                   </p>
                   <button onClick={() => { setBoardModal(false); setBoardSent(false) }}
                     className="px-6 py-2.5 rounded-xl text-sm font-semibold"
-                    style={{ background: '#1A1A1A', color: 'white' }}>Done</button>
+                    style={{ background: 'var(--color-accent)', color: 'var(--color-text-inverse)' }}>Done</button>
                 </div>
               ) : (
                 <>
@@ -1438,23 +1447,23 @@ export default function DashboardPage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                          style={{ background: '#1A1A1A' }}>
+                          style={{ background: 'var(--color-accent)' }}>
                           <Award className="w-4 h-4 text-white" />
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
-                            <h3 className="font-bold text-lg" style={{ color: '#1A1A1A' }}>Board &amp; Advisory Report</h3>
+                            <h3 className="font-bold text-lg" style={{ color: 'var(--color-text-primary)' }}>Board &amp; Advisory Report</h3>
                             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                              style={{ background: '#F5F3FF', color: '#7C3AED', border: '1px solid #DDD6FE' }}>
+                              style={{ background: 'var(--color-surface-light)', color: 'var(--color-accent-purple)', border: '1px solid #DDD6FE' }}>
                               Growth &amp; Enterprise
                             </span>
                           </div>
-                          <p className="text-xs mt-0.5" style={{ color: '#9A9A9A' }}>
+                          <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-secondary)' }}>
                             Transparent, board-ready analysis — metrics, risks, blockers, and remediation
                           </p>
                         </div>
                       </div>
-                      <button onClick={() => setBoardModal(false)} style={{ color: '#9A9A9A' }}>
+                      <button onClick={() => setBoardModal(false)} style={{ color: 'var(--color-text-secondary)' }}>
                         <X className="w-5 h-5" />
                       </button>
                     </div>
@@ -1465,7 +1474,7 @@ export default function DashboardPage() {
 
                     {/* Period selector */}
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#9A9A9A' }}>Reporting Period</p>
+                      <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: 'var(--color-text-secondary)' }}>Reporting Period</p>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
                         {([
                           { id: '7d'        as const, label: 'Last 7 Days',    sub: 'This week' },
@@ -1476,10 +1485,10 @@ export default function DashboardPage() {
                           <button key={id} onClick={() => setBoardPeriod(id)}
                             className="p-3 rounded-xl text-left transition-all"
                             style={boardPeriod === id
-                              ? { background: '#1A1A1A', border: '1px solid #1A1A1A' }
-                              : { background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
-                            <p className="text-xs font-bold" style={{ color: boardPeriod === id ? 'white' : '#1A1A1A' }}>{label}</p>
-                            <p className="text-[10px] mt-0.5" style={{ color: boardPeriod === id ? 'rgba(255,255,255,0.5)' : '#9A9A9A' }}>{sub}</p>
+                              ? { background: 'var(--color-accent)', color: 'var(--color-text-inverse)', border: '1px solid #1A1A1A' }
+                              : { background: 'var(--color-bg-primary)', border: '1px solid #E5E4E0' }}>
+                            <p className="text-xs font-bold" style={{ color: boardPeriod === id ? 'white' : 'var(--color-text-primary)' }}>{label}</p>
+                            <p className="text-[10px] mt-0.5" style={{ color: boardPeriod === id ? 'rgba(255,255,255,0.5)' : 'var(--color-text-tertiary)' }}>{sub}</p>
                           </button>
                         ))}
                       </div>
@@ -1488,24 +1497,24 @@ export default function DashboardPage() {
                     {/* ── FULL EMAIL PREVIEW ─────────────────────────────────── */}
                     <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E5E4E0' }}>
                       <div className="px-5 py-3 flex items-center justify-between"
-                        style={{ background: '#1A1A1A' }}>
+                        style={{ background: 'var(--color-accent)' }}>
                         <div>
                           <p className="text-xs font-bold text-white">Board &amp; Advisory Update — {effectiveName}</p>
-                          <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                          <p className="text-[10px]" style={{ color: 'var(--color-text-primary)' }}>
                             {boardPeriod === '7d' ? 'May 15 – May 22, 2026' : boardPeriod === '30d' ? 'Apr 22 – May 22, 2026' : boardPeriod === '90d' ? 'Feb 22 – May 22, 2026' : 'Jan 2026 – May 22, 2026'}
                             {' · '}Prepared by IPOReady AI · Confidential
                           </p>
                         </div>
                         <span className="text-[10px] px-2 py-0.5 rounded font-semibold"
-                          style={{ background: 'rgba(34,197,94,0.2)', color: '#4ADE80' }}>Live Preview</span>
+                          style={{ background: 'rgba(34,197,94,0.2)', color: 'var(--color-success-bright)' }}>Live Preview</span>
                       </div>
 
-                      <div className="p-5" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', background: '#FAFAF9' }}>
+                      <div className="p-5" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', background: 'var(--color-surface-light)' }}>
 
                         {/* Executive Summary */}
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#9A9A9A' }}>Executive Summary</p>
-                          <p className="text-xs leading-relaxed" style={{ color: '#1A1A1A' }}>
+                          <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--color-text-secondary)' }}>Executive Summary</p>
+                          <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-primary)' }}>
                             {boardPeriod === '7d'
                               ? `${effectiveName} progressed on key governance tasks this week. PACE™ score held at ${effectivePaceScore}/100. The team remains on the current phase track. One item flagged for board attention: the Audit Committee financial expert designation is pending a board resolution.`
                               : boardPeriod === '30d'
@@ -1518,7 +1527,7 @@ export default function DashboardPage() {
 
                         {/* Key Metrics */}
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#9A9A9A' }}>Key Metrics</p>
+                          <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--color-text-secondary)' }}>Key Metrics</p>
                           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
                             {[
                               { label: 'PACE™ Score', value: '62 / 100', delta: boardPeriod === '7d' ? '+2 this week' : boardPeriod === '30d' ? '+5 this month' : boardPeriod === '90d' ? '+12 this quarter' : '+62 from zero', ok: true },
@@ -1529,9 +1538,9 @@ export default function DashboardPage() {
                               { label: 'Blocked Tasks', value: '1 flagged', delta: 'Audit Committee resolution needed', ok: false },
                             ].map(({ label, value, delta, ok }) => (
                               <div key={label} className="p-2.5 rounded-lg" style={{ background: 'white', border: '1px solid #E5E4E0' }}>
-                                <p className="text-[10px]" style={{ color: '#9A9A9A' }}>{label}</p>
-                                <p className="text-sm font-bold" style={{ color: '#1A1A1A' }}>{value}</p>
-                                <p className="text-[10px]" style={{ color: ok ? '#15803D' : '#E8312A' }}>{delta}</p>
+                                <p className="text-[10px]" style={{ color: 'var(--color-text-secondary)' }}>{label}</p>
+                                <p className="text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>{value}</p>
+                                <p className="text-[10px]" style={{ color: ok ? 'var(--color-success-dark)' : 'var(--color-accent)' }}>{delta}</p>
                               </div>
                             ))}
                           </div>
@@ -1539,7 +1548,7 @@ export default function DashboardPage() {
 
                         {/* Key Updates */}
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#9A9A9A' }}>
+                          <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--color-text-secondary)' }}>
                             Key Updates — {boardPeriod === '7d' ? 'Last 7 Days' : boardPeriod === '30d' ? 'Last 30 Days' : boardPeriod === '90d' ? 'Last 3 Months' : 'Since Inception'}
                           </p>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
@@ -1575,11 +1584,11 @@ export default function DashboardPage() {
                             ]).map(({ text, type }, i) => (
                               <div key={i} className="flex items-start gap-2">
                                 <div className="w-3.5 h-3.5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                                  style={{ background: type === 'done' ? '#DCFCE7' : type === 'warn' ? '#FEF2F2' : '#EFF6FF' }}>
+                                  style={{ background: type === 'done' ? 'var(--color-success-light)' : type === 'warn' ? 'var(--color-error-light)' : 'var(--color-info-soft)' }}>
                                   <div className="w-1.5 h-1.5 rounded-full"
-                                    style={{ background: type === 'done' ? '#16A34A' : type === 'warn' ? '#E8312A' : '#1D4ED8' }} />
+                                    style={{ background: type === 'done' ? 'var(--color-success-bright)' : type === 'warn' ? 'var(--color-accent)' : 'var(--color-info)' }} />
                                 </div>
-                                <p className="text-xs leading-relaxed" style={{ color: type === 'warn' ? '#7F1D1D' : '#1A1A1A' }}>{text}</p>
+                                <p className="text-xs leading-relaxed" style={{ color: type === 'warn' ? 'var(--color-error-dark)' : 'var(--color-text-primary)' }}>{text}</p>
                               </div>
                             ))}
                           </div>
@@ -1587,33 +1596,33 @@ export default function DashboardPage() {
 
                         {/* Risk Analysis */}
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#9A9A9A' }}>Risk Analysis &amp; Remediation</p>
+                          <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--color-text-secondary)' }}>Risk Analysis &amp; Remediation</p>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                             {[
                               {
                                 severity: 'High',
-                                severityColor: '#DC2626', severityBg: '#FEE2E2',
+                                severityColor: 'var(--color-error)', severityBg: 'var(--color-error-pale)',
                                 risk: 'Independent Director Recruitment — Not Initiated',
                                 detail: 'TSXV listing requires a minimum of 2 independent directors on the board, with at least 1 designated as Audit Committee financial expert (NI 52-110). Recruitment has not commenced. At current pace, this will become a hard blocker in Phase 3.',
                                 remediation: 'Engage an independent director search firm or use the IPOReady Expert Network immediately. Target appointment no later than 90 days before filing the preliminary prospectus. AI assistance available in the checklist for this task.',
                               },
                               {
                                 severity: 'Medium',
-                                severityColor: '#B45309', severityBg: '#FEF3C7',
+                                severityColor: 'var(--color-warning)', severityBg: 'var(--color-warning-soft)',
                                 risk: 'Legal Counsel Engagement Letter Not Signed',
                                 detail: 'Securities counsel has been identified but no formal engagement letter has been executed. Without retained counsel, the prospectus drafting phase (Phase 3) cannot begin. This creates timeline risk.',
                                 remediation: 'Prioritize finalizing engagement letter within the next 14 days. If counsel terms are in negotiation, request a limited scope engagement to begin NI 41-101 gap analysis immediately.',
                               },
                               {
                                 severity: 'Medium',
-                                severityColor: '#B45309', severityBg: '#FEF3C7',
+                                severityColor: 'var(--color-warning)', severityBg: 'var(--color-warning-soft)',
                                 risk: 'Audit Committee Financial Expert Not Designated',
                                 detail: 'Board resolution to designate the Audit Committee financial expert is outstanding. NI 52-110 requires this designation before the preliminary prospectus is filed. This is currently flagged as a blocker in Phase 2.',
                                 remediation: 'Prepare a board resolution template (available in Templates & Forms) and schedule a board meeting to formally designate the financial expert. IPOReady AI can pre-fill the resolution with current board data.',
                               },
                               {
                                 severity: 'Low',
-                                severityColor: '#15803D', severityBg: '#DCFCE7',
+                                severityColor: 'var(--color-success-dark)', severityBg: 'var(--color-success-light)',
                                 risk: 'Cap Table — Convertible Note Conversion Mechanics Not Confirmed',
                                 detail: 'The CA$300K convertible note conversion terms have not been reviewed with legal counsel. Conversion at listing will impact fully-diluted share count and may be subject to escrow.',
                                 remediation: 'Schedule a cap table review with securities counsel as part of the engagement scope. Use the Cap Table Scenario Workshop to model conversion scenarios before counsel review.',
@@ -1623,12 +1632,12 @@ export default function DashboardPage() {
                                 <div className="flex items-center gap-2 mb-1.5">
                                   <span className="text-[9px] font-black px-1.5 py-0.5 rounded"
                                     style={{ background: severityBg, color: severityColor }}>{severity.toUpperCase()} RISK</span>
-                                  <p className="text-xs font-bold" style={{ color: '#1A1A1A' }}>{risk}</p>
+                                  <p className="text-xs font-bold" style={{ color: 'var(--color-text-primary)' }}>{risk}</p>
                                 </div>
-                                <p className="text-[11px] leading-relaxed mb-2" style={{ color: '#717171' }}>{detail}</p>
-                                <div className="flex items-start gap-1.5 rounded-lg px-2.5 py-2" style={{ background: '#F0FDF4', border: '1px solid #BBF7D0' }}>
-                                  <span className="text-[10px] font-bold flex-shrink-0" style={{ color: '#15803D' }}>→ Remediation:</span>
-                                  <p className="text-[10px] leading-relaxed" style={{ color: '#14532D' }}>{remediation}</p>
+                                <p className="text-[11px] leading-relaxed mb-2" style={{ color: 'var(--color-text-secondary)' }}>{detail}</p>
+                                <div className="flex items-start gap-1.5 rounded-lg px-2.5 py-2" style={{ background: 'var(--color-success-light)', border: '1px solid #BBF7D0' }}>
+                                  <span className="text-[10px] font-bold flex-shrink-0" style={{ color: 'var(--color-success-dark)' }}>→ Remediation:</span>
+                                  <p className="text-[10px] leading-relaxed" style={{ color: 'var(--color-success-dark)' }}>{remediation}</p>
                                 </div>
                               </div>
                             ))}
@@ -1637,7 +1646,7 @@ export default function DashboardPage() {
 
                         {/* Gated Items & Blockers */}
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: '#9A9A9A' }}>Gated Items &amp; Blockers</p>
+                          <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--color-text-secondary)' }}>Gated Items &amp; Blockers</p>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
                             {[
                               { blocker: 'Phase 3 (Financial Audit & Prospectus) is gated behind Phase 2 completion', gate: 'Complete 5 remaining Phase 2 corporate governance tasks', critical: true },
@@ -1646,14 +1655,14 @@ export default function DashboardPage() {
                               { blocker: 'Audit Committee Charter approval requires board resolution', gate: 'Schedule board meeting for resolution vote', critical: false },
                             ].map(({ blocker, gate, critical }) => (
                               <div key={blocker} className="flex items-start gap-2.5 p-2.5 rounded-lg"
-                                style={{ background: critical ? '#FFF5F5' : '#FFFBEB', border: `1px solid ${critical ? '#FECACA' : '#FDE68A'}` }}>
+                                style={{ background: critical ? 'var(--color-error-pale)' : 'var(--color-warning-pale)', border: `1px solid ${critical ? 'var(--color-error-light)' : 'var(--color-warning-medium)'}` }}>
                                 <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                                  style={{ background: critical ? '#FEE2E2' : '#FEF3C7' }}>
-                                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: critical ? '#DC2626' : '#B45309' }} />
+                                  style={{ background: critical ? 'var(--color-error-pale)' : 'var(--color-warning-soft)' }}>
+                                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: critical ? 'var(--color-error)' : 'var(--color-warning)' }} />
                                 </div>
                                 <div>
-                                  <p className="text-[11px] font-semibold" style={{ color: critical ? '#7F1D1D' : '#78350F' }}>{blocker}</p>
-                                  <p className="text-[10px] mt-0.5" style={{ color: critical ? '#B91C1C' : '#92400E' }}>Unlock: {gate}</p>
+                                  <p className="text-[11px] font-semibold" style={{ color: critical ? 'var(--color-error-dark)' : 'var(--color-warning-dark)' }}>{blocker}</p>
+                                  <p className="text-[10px] mt-0.5" style={{ color: critical ? 'var(--color-error-dark)' : 'var(--color-warning-dark)' }}>Unlock: {gate}</p>
                                 </div>
                               </div>
                             ))}
@@ -1663,10 +1672,10 @@ export default function DashboardPage() {
                         {/* AI Board Assessment */}
                         <div className="rounded-xl p-4" style={{ background: 'linear-gradient(135deg, #1A1A1A 0%, #1e1145 100%)' }}>
                           <div className="flex items-center gap-2 mb-2">
-                            <Sparkles className="w-3.5 h-3.5" style={{ color: '#A78BFA' }} />
-                            <p className="text-xs font-bold" style={{ color: 'white' }}>IPOReady AI Assessment</p>
+                            <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--color-accent-purple)' }} />
+                            <p className="text-xs font-bold" style={{ color: 'var(--color-text-primary)' }}>IPOReady AI Assessment</p>
                           </div>
-                          <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)' }}>
+                          <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
                             {boardPeriod === '7d'
                               ? 'This week\'s progress was steady but not accelerating. The outstanding board resolution for the Audit Committee financial expert is the most immediate action item for management. The board should confirm this is on the agenda for the next board meeting. No material risks changed this week.'
                               : boardPeriod === '30d'
@@ -1682,18 +1691,18 @@ export default function DashboardPage() {
 
                     {/* Recipients */}
                     <div>
-                      <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#9A9A9A' }}>
+                      <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: 'var(--color-text-secondary)' }}>
                         Send To Board / Advisors
                       </label>
                       <input
                         value={boardEmail} onChange={e => setBoardEmail(e.target.value)}
                         placeholder="ceo@company.com, board@firm.com, advisor@law.com"
                         className="w-full px-4 py-2.5 rounded-xl text-sm outline-none"
-                        style={{ border: '1px solid #E5E4E0', background: 'white', color: '#1A1A1A' }}
-                        onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
-                        onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }}
+                        style={{ border: '1px solid #E5E4E0', background: 'white', color: 'var(--color-text-primary)' }}
+                        onFocus={e => { e.target.style.borderColor = 'var(--color-text-primary)'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
+                        onBlur={e => { e.target.style.borderColor = 'var(--color-border)'; e.target.style.boxShadow = 'none' }}
                       />
-                      <p className="text-xs mt-1.5" style={{ color: '#9A9A9A' }}>
+                      <p className="text-xs mt-1.5" style={{ color: 'var(--color-text-secondary)' }}>
                         Sent as a clean, board-formatted email with full risk analysis and remediation steps. Separate multiple recipients with commas.
                       </p>
                     </div>
@@ -1705,14 +1714,14 @@ export default function DashboardPage() {
                     <div className="flex gap-3">
                       <button onClick={() => setBoardModal(false)}
                         className="flex-1 py-2.5 rounded-xl text-sm font-semibold"
-                        style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#1A1A1A' }}>
+                        style={{ background: 'var(--color-bg-primary)', border: '1px solid #E5E4E0', color: 'var(--color-text-primary)' }}>
                         Cancel
                       </button>
                       <button onClick={handleSendBoardReport} disabled={sendingReport}
                         className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold"
-                        style={{ background: '#1A1A1A', color: 'white', flex: 2, opacity: sendingReport ? 0.7 : 1, cursor: sendingReport ? 'not-allowed' : 'pointer' }}>
+                        style={{ background: 'var(--color-accent)', color: 'var(--color-text-inverse)', flex: 2, opacity: sendingReport ? 0.7 : 1, cursor: sendingReport ? 'not-allowed' : 'pointer' }}>
                         {sendingReport ? (
-                          <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none" style={{ color: 'white' }}>
+                          <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none" style={{ color: 'var(--color-text-primary)' }}>
                             <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeDasharray="31.4" strokeDashoffset="10" />
                           </svg>
                         ) : (
@@ -1722,7 +1731,7 @@ export default function DashboardPage() {
                       </button>
                     </div>
                     {boardError && (
-                      <p className="text-xs mt-2 text-center" style={{ color: '#dc2626' }}>{boardError}</p>
+                      <p className="text-xs mt-2 text-center" style={{ color: 'var(--color-error)' }}>{boardError}</p>
                     )}
                   </div>
                 </>
@@ -1731,7 +1740,9 @@ export default function DashboardPage() {
           </motion.div>
         )}
       </AnimatePresence>
+        </>
+      )}
       </div>
-    </>
+    </div>
   )
 }

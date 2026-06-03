@@ -265,7 +265,7 @@ export default function AccountPage() {
   }
 
   return (
-    <div style={{ maxWidth: '900px', display: 'flex', flexDirection: 'column', gap: '0' }}>
+    <div style={{ maxWidth: '900px', display: 'flex', flexDirection: 'column', gap: '0' }} suppressHydrationWarning>
 
       {/* Profile hero card */}
       <div className="rounded-2xl overflow-hidden mb-6" style={{ background: '#1A1A1A' }}>

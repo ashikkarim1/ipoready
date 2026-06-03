@@ -238,7 +238,7 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+    <div style={{ maxWidth: '900px', margin: '0 auto' }} suppressHydrationWarning>
 
       {/* ── Save toast ── */}
       <AnimatePresence>

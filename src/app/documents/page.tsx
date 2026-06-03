@@ -235,7 +235,7 @@ export default function DocumentsPage() {
   const docTypes = Array.from(new Set(docs.map(d => d.type))).sort()
 
   return (
-    <div className="max-w-5xl mx-auto" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+    <div className="max-w-5xl mx-auto" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} suppressHydrationWarning>
 
       {/* Header */}
       <div className="flex items-start justify-between">

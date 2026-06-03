@@ -426,7 +426,7 @@ export default function IntegrationsPage() {
   }
 
   return (
-    <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+    <div style={{ maxWidth: '1100px', margin: '0 auto' }} suppressHydrationWarning>
 
       {/* ── Page header ── */}
       <motion.div

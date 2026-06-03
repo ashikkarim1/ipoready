@@ -198,7 +198,7 @@ export default function MarketplacePage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
+    <div className="max-w-6xl mx-auto space-y-6" suppressHydrationWarning>
 
       <div>
         <h1 className="font-display text-3xl font-black mb-1" style={{ color: '#1A1A1A' }}>Expert Network</h1>

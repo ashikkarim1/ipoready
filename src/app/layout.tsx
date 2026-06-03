@@ -214,7 +214,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning
+    <html lang="en" suppressHydrationWarning style={{ colorScheme: 'light' }}
       className={`${hanken.variable} ${jakartaSans.variable} ${inter.variable}`}>
       <head>
         {/* JSON-LD Structured Data */}
@@ -239,8 +239,8 @@ export default function RootLayout({
         <meta name="google-site-verification" content="REPLACE_WITH_YOUR_GSC_TOKEN" />
         {/* Additional SEO meta tags */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="theme-color" content="#000000" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+        <meta name="theme-color" content="#E8312A" />
       </head>
       <body>
         <Providers>

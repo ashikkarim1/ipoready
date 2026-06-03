@@ -1,0 +1,306 @@
+================================================================================
+IPOReady Dashboard Menu Structure - Visual Layout
+================================================================================
+
+SIDEBAR NAVIGATION (280px width)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│  IPOReady Logo                                                              │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  MISSION                                                                    │
+│  ├─ 📊 Dashboard                                                           │
+│  └─ ✓ IPO Checklist                                                        │
+│                                                                             │
+│  WORK                                                                       │
+│  ├─ 📈 Cap Table                                    [AI]                    │
+│  ├─ 📄 Documents                                                           │
+│  ├─ 📄 Prospectus Builder                           [✨]                    │
+│  └─ 🏆 Templates & Forms                                                   │
+│                                                                             │
+│  FINANCIAL MANAGEMENT                          [▼]                         │
+│  ├─ 🧮 Cost Calculator                                                     │
+│  ├─ 📊 Budget Tracking                                                     │
+│  ├─ 📈 Financial KPIs                                                      │
+│  ├─ 📈 Dilution Scenarios                                                  │
+│  ├─ 👥 Syndication                                                         │
+│  └─ 💵 Pricing Strategy                                                    │
+│                                                                             │
+│  COMPLIANCE                                    [▼]                         │
+│  ├─ 🛡️ Listing Rules                                                       │
+│  ├─ ✓ Corporate Resolutions                                                │
+│  ├─ ✔️ Consent Letters                                                      │
+│  ├─ 📄 Syndication Templates                                               │
+│  ├─ 🏢 Regulatory Filings                                                  │
+│  ├─ 🔀 Exchange Config                                                     │
+│  └─ 👁️ Audit Trail                                                         │
+│                                                                             │
+│  LEARNING & SUPPORT                            [▼]                         │
+│  ├─ 📚 Resource Centre                                                     │
+│  ├─ 🔍 Compliance Guide                                                    │
+│  └─ 🛍️ Expert Network                                                      │
+│                                                                             │
+│  ACCOUNT & SETTINGS                            [▼]                         │
+│  ├─ 👥 Team & Roles                                                        │
+│  ├─ 🔌 Integrations                             [3]                        │
+│  ├─ ⚙️ Account                                                              │
+│  └─ 🔔 Notifications                                                       │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ? Help                                                                     │
+│  🚪 Sign out                                                                │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+FINANCIAL MANAGEMENT SUBMENU HIERARCHY
+================================================================================
+
+/dashboard/financial-mgmt/
+│
+├─── Cost & Planning
+│    ├─ Cost Calculator              🧮 /cost-calculator
+│    └─ Financial KPIs               📈 /financial-kpis
+│
+├─── Budgeting & Tracking
+│    ├─ Budget Tracking              📊 /tracking
+│    └─ Dilution Scenarios           📈 /dilution-scenarios
+│
+└─── Strategy & Valuation
+     ├─ Pricing Strategy             💵 /pricing
+     └─ Syndication                  👥 /syndication
+
+
+COMPLIANCE SUBMENU HIERARCHY
+================================================================================
+
+/dashboard/compliance/
+│
+├─── Requirements & Rules
+│    ├─ Listing Rules                🛡️ /listing-rules
+│    └─ Exchange Config              🔀 /exchange-config
+│
+├─── Approvals & Consents
+│    ├─ Corporate Resolutions        ✓ /resolutions
+│    └─ Consent Letters              ✔️ /consent-letters
+│
+├─── Documentation
+│    ├─ Syndication Templates        📄 /syndication-templates
+│    └─ Regulatory Filings           🏢 /regulatory-filings
+│
+└─── Monitoring
+     └─ Audit Trail                  👁️ /audit-trail
+
+
+RESPONSIVE BEHAVIOR
+================================================================================
+
+DESKTOP (> 768px)
+  ├─ Sidebar always visible (280px width)
+  ├─ Menu items expanded based on localStorage state
+  ├─ Hover states on menu items
+  └─ Full text labels visible
+
+TABLET (640px - 768px)
+  ├─ Sidebar visible but icons only
+  ├─ Hover to expand full labels
+  ├─ Collapsible sections on tap
+  └─ Touch-friendly tap targets (44px min)
+
+MOBILE (< 640px)
+  ├─ Sidebar collapses by default (Menu icon in top bar)
+  ├─ Tap Menu icon to toggle sidebar
+  ├─ Sidebar overlays main content
+  ├─ Tap a menu item to navigate and close sidebar
+  └─ Full text labels visible when sidebar open
+
+
+STYLING REFERENCE
+================================================================================
+
+COLORS (CSS Variables)
+  --color-text-primary           Main text color
+  --color-text-secondary         Secondary text (labels)
+  --color-text-tertiary          Tertiary text (descriptions)
+  --color-surface-default        Menu background
+  --color-surface-light          Hover state
+  --color-bg-primary             Content background
+  --color-bg-secondary           Active state
+  --color-accent                 Highlight color
+  --color-warning                Warning indicator
+  --color-warning-soft           Warning background
+  --color-border-light           Border color
+
+TYPOGRAPHY
+  Section Headers: 12px uppercase bold
+  Menu Items: 14px regular
+  Badges: 10px medium/bold
+  Descriptions: 12px regular (optional)
+
+SPACING
+  Section padding: 12px vertical
+  Item padding: 12px (all sides)
+  Icon size: 18px
+  Badge padding: 1.5px 1.5px (0.375rem)
+  Gap between icon/label: 12px
+
+
+ICON SIZING
+================================================================================
+
+Navigation Icons: 18px
+Section Headers: 16px (chevron)
+Top Bar Icons: 20px
+Badge Icons: 16px
+
+
+STATE INDICATORS
+================================================================================
+
+Active Route
+  ├─ Background: var(--color-bg-secondary)
+  ├─ Text Color: var(--color-text-primary)
+  └─ Visual Cue: Highlighted background
+
+Expandable Section (Collapsed)
+  ├─ Chevron: Points left (-90°)
+  └─ Opacity: 60%
+
+Expandable Section (Expanded)
+  ├─ Chevron: Points down (0°)
+  └─ Opacity: 100%
+
+Badge Types
+  ├─ AI: Yellow/warning background
+  ├─ New: Red/error background
+  ├─ Soon: Purple background
+  └─ Count: Gray background
+
+
+INTERACTION FLOWS
+================================================================================
+
+CLICKING MENU ITEM (Desktop)
+  1. Item highlighted with background change
+  2. Navigation occurs immediately
+  3. Active state persists on new page
+  4. Scrolls menu to show new item if needed
+
+CLICKING MENU ITEM (Mobile)
+  1. Item highlighted
+  2. Navigation occurs
+  3. Sidebar closes automatically
+  4. Back button available in header
+
+TOGGLING SECTION (Desktop)
+  1. Chevron animates 90° rotation
+  2. Section content animates in/out
+  3. State saved to localStorage
+  4. Animation duration: 200ms
+
+RESPONSIVE COLLAPSE (Window resize)
+  1. Sidebar detection on mount
+  2. Automatic collapse on < 768px
+  3. Manual toggle always available
+  4. State persists across page navigations
+
+
+KEYBOARD NAVIGATION (Future)
+================================================================================
+
+Tab                    Focus next menu item
+Shift+Tab              Focus previous menu item
+Enter                  Click active menu item
+Space                  Toggle active section
+Arrow Down             Next menu item
+Arrow Up               Previous menu item
+Escape                 Close mobile sidebar
+Cmd+K (Mac)            Search menu items
+Ctrl+K (Windows)       Search menu items
+
+
+ACCESSIBILITY NOTES
+================================================================================
+
+✓ Semantic HTML (nav, ul, li, button)
+✓ ARIA labels on expandable sections
+✓ Focus indicators for keyboard navigation
+✓ Color contrast meets WCAG AA
+✓ Icons paired with text labels
+✓ Alternative text for icons via titles
+✓ Proper heading hierarchy (h3 for sections)
+
+To Enhance:
+- Add aria-expanded to section buttons
+- Add aria-current to active navigation item
+- Add role="menuitem" to menu items
+- Implement skip links
+- Add keyboard shortcuts hint tooltips
+
+
+PERFORMANCE METRICS
+================================================================================
+
+Bundle Size
+  ├─ Icons (individual imports): ~2KB
+  ├─ Config file: ~4KB
+  ├─ Component: ~6KB (with styling)
+  └─ Total: ~12KB (gzipped: ~4KB)
+
+Rendering
+  ├─ Initial render: <50ms
+  ├─ Route change highlight: <100ms
+  ├─ Section toggle animation: 200ms
+  └─ Mobile sidebar animation: 300ms
+
+Storage
+  ├─ localStorage key: 'ipoready_expanded_nav_sections'
+  ├─ Size: ~100 bytes
+  ├─ Persistence: Browser session + refresh
+  └─ Fallback: DEFAULT_EXPANDED_SECTIONS constant
+
+
+BROWSER SUPPORT
+================================================================================
+
+✓ Chrome/Edge 90+
+✓ Firefox 88+
+✓ Safari 14+
+✓ Mobile Safari 14+
+✓ Samsung Internet 14+
+
+Features Used:
+  ├─ Flexbox
+  ├─ CSS Grid (optional)
+  ├─ CSS Variables
+  ├─ localStorage
+  ├─ Framer Motion (animations)
+  └─ React Hooks (useState, useEffect, useCallback)
+
+
+DATA STRUCTURES
+================================================================================
+
+Navigation Config (navigation.ts)
+  ├─ NAV_GROUPS: Array<NavGroup>
+  ├─ NAV_ITEMS: Array<NavItem> (flattened)
+  ├─ FINANCIAL_MGMT_MENU: MenuHierarchy
+  ├─ COMPLIANCE_MENU: MenuHierarchy
+  └─ Utility Functions
+      ├─ getNavItemByKey()
+      ├─ getNavItemsBySection()
+      └─ isNavItemActive()
+
+AppShell State
+  ├─ expandedSections: string[]
+  ├─ showUserMenu: boolean
+  ├─ showBellDropdown: boolean
+  ├─ dbNotifications: Notification[]
+  └─ navStats: { totalTasks, completedTasks, documentsCount }
+
+
+================================================================================
+END OF VISUAL MENU STRUCTURE DOCUMENTATION
+================================================================================

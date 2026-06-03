@@ -137,14 +137,14 @@ export default function AdminPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#F7F6F4' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#F7F6F4' }} suppressHydrationWarning>
         <Loader2 className="w-6 h-6 animate-spin" style={{ color: '#9A9A9A' }} />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#F7F6F4' }}>
+    <div className="min-h-screen" style={{ background: '#F7F6F4' }} suppressHydrationWarning>
 
       {/* Toast */}
       <AnimatePresence>

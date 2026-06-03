@@ -2,44 +2,103 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── Auditus colour system ─────────────────────────────────────────── */
-  --color-nav:          #1A1A1A;
-  --color-bg:           #F7F6F4;
-  --color-surface:      #FFFFFF;
+  /* ═══════════════════════════════════════════════════════════════════════
+     IPOReady Semantic Color System
+     All colors organized by function for consistency, accessibility & theming
+     ═══════════════════════════════════════════════════════════════════════ */
 
-  --color-text:         #1A1A1A;
-  --color-text-muted:   #717171;
-  --color-text-light:   #9A9A9A;
+  /* ── PRIMARY / BRAND COLORS ─────────────────────────────────────────── */
+  --color-primary:              #1A1A1A;  /* Primary text, primary buttons */
+  --color-accent:               #E8312A;  /* Call-to-action, brand highlights */
+  --color-accent-secondary:     #FF6B35;  /* Secondary CTAs, links */
+  --color-accent-purple:        #7C3AED;  /* Alternative states, badges */
+  --color-surface-primary:      #FFFFFF;  /* White elevated surfaces */
 
-  --color-border:       #E5E4E0;
-  --color-border-dark:  #C8C7C2;
+  /* ── TEXT COLORS (Hierarchy) ────────────────────────────────────────── */
+  --color-text-primary:         #1A1A1A;  /* Headings, main body text */
+  --color-text-secondary:       #717171;  /* Subheadings, secondary labels */
+  --color-text-tertiary:        #9A9A9A;  /* Captions, disabled, placeholder */
+  --color-text-muted:           #717171;  /* Hints, very subtle text (changed from #C4C2BE for readability) */
+  --color-text-inverse:         #FFFFFF;  /* Text on dark backgrounds */
+  --color-text-chart:           #6B7280;  /* Chart axes, annotations */
 
-  --color-accent:       #E8312A;
-  --color-accent-deep:  #C4261F;
-  --color-accent-soft:  #FDECEB;
+  /* ── BACKGROUNDS & SURFACES ────────────────────────────────────────── */
+  --color-bg-primary:           #F7F6F4;  /* Page background, main surface */
+  --color-surface-secondary:    #F0EFED;  /* Grouped sections, hover states */
+  --color-surface-light:        #FAFAF9;  /* Near-white distinction */
+  --color-surface-warm:         #FFFBEB;  /* Cream/vanilla warmth */
 
-  --color-green:        #2D7A5F;
-  --color-green-soft:   #EAF5F0;
+  /* ── BORDERS & DIVIDERS ────────────────────────────────────────────── */
+  --color-border:               #E5E4E0;  /* Card borders, dividers */
+  --color-border-medium:        #EEECE8;  /* Medium-emphasis borders */
+  --color-border-dark:          #C8C7C2;  /* Strong dividers, dark gray */
+  --color-stroke-dark:          #2A2A2A;  /* SVG strokes, chart elements */
 
-  --color-amber:        #B45309;
-  --color-amber-soft:   #FEF3C7;
+  /* ── SUCCESS STATE ─────────────────────────────────────────────────── */
+  --color-success:              #2D7A5F;  /* Success indicators */
+  --color-success-dark:         #15803D;  /* Success hover, strong states */
+  --color-success-bright:       #22C55E;  /* Progress rings, indicator dots */
+  --color-success-soft:         #EAF5F0;  /* Success backgrounds */
+  --color-success-light:        #F0FDF4;  /* Alternative light success bg */
 
-  --color-blue:         #1D4ED8;
-  --color-blue-soft:    #EFF6FF;
+  /* ── ERROR STATE ───────────────────────────────────────────────────── */
+  --color-error:                #DC2626;  /* Error messages, destructive */
+  --color-error-dark:           #B91C1C;  /* Error hover, strong states */
+  --color-error-soft:           #FDECEB;  /* Error backgrounds */
+  --color-error-light:          #FEF2F2;  /* Alternative light error bg */
+  --color-error-pale:           #FEE2E2;  /* Very light error emphasis */
 
+  /* ── WARNING STATE ─────────────────────────────────────────────────── */
+  --color-warning:              #B45309;  /* Warning badges, due soon */
+  --color-warning-dark:         #D97706;  /* Warning hover, strong states */
+  --color-warning-soft:         #FEF3C7;  /* Warning backgrounds */
+  --color-warning-medium:       #FDE68A;  /* Medium warning emphasis */
+  --color-warning-pale:         #FFFBEB;  /* Very light warning bg */
+
+  /* ── INFO STATE ────────────────────────────────────────────────────── */
+  --color-info:                 #1D4ED8;  /* Info messages, indicators */
+  --color-info-medium:          #BFDBFE;  /* Medium info blue */
+  --color-info-soft:            #EFF6FF;  /* Info backgrounds */
+
+  /* ── UTILITY COLORS ────────────────────────────────────────────────── */
+  --color-input-bg:             #F0EFED;  /* Input field backgrounds */
+  --color-disabled:             #D1D5DB;  /* Disabled states */
+
+  /* ── OVERLAYS & SHADOWS ────────────────────────────────────────────── */
+  --overlay-dark-subtle:        rgba(26,26,26,0.07);
+  --overlay-white-subtle:       rgba(255,255,255,0.1);
+  --overlay-white-medium:       rgba(255,255,255,0.5);
+  --overlay-white-high:         rgba(255,255,255,0.65);
+  --overlay-accent-subtle:      rgba(232,49,42,0.2);
+  --overlay-success-subtle:     rgba(45,122,95,0.2);
+
+  /* ── LEGACY ALIASES (backward compatibility) ───────────────────────── */
+  --color-nav:          #1A1A1A;          /* Use --color-primary instead */
+  --color-bg:           #F7F6F4;          /* Use --color-bg-primary instead */
+  --color-surface:      #FFFFFF;          /* Use --color-surface-primary instead */
+  --color-text:         #1A1A1A;          /* Use --color-text-primary instead */
+  --color-text-light:   #9A9A9A;          /* Use --color-text-tertiary instead */
+  --color-accent-deep:  #C4261F;          /* Derived accent */
+  --color-accent-soft:  #FDECEB;          /* Use --color-error-soft instead */
+  --color-green:        #2D7A5F;          /* Use --color-success instead */
+  --color-green-soft:   #EAF5F0;          /* Use --color-success-soft instead */
+  --color-amber:        #B45309;          /* Use --color-warning instead */
+  --color-amber-soft:   #FEF3C7;          /* Use --color-warning-soft instead */
+  --color-blue:         #1D4ED8;          /* Use --color-info instead */
+  --color-blue-soft:    #EFF6FF;          /* Use --color-info-soft instead */
   --color-gold:         #D4A96A;
-
-  /* keep brand-* for any remnant references */
-  --color-brand-500:    #1D4ED8;
+  --color-brand-500:    #1D4ED8;          /* Use --color-info instead */
   --color-brand-400:    #3B82F6;
   --color-brand-300:    #93C5FD;
 
-  /* ── Typography ────────────────────────────────────────────────────── */
+  /* ── TYPOGRAPHY ────────────────────────────────────────────────────── */
   --font-sans:    "Hanken Grotesk", system-ui, sans-serif;
   --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
   --font-mono:    "Inter", monospace;
 
-  /* ── Shadows ───────────────────────────────────────────────────────── */
+  /* ── SHADOWS ───────────────────────────────────────────────────────── */
+  --shadow-light:      rgba(0,0,0,0.08);
+  --shadow-minimal:    rgba(0,0,0,0.04);
   --shadow-card:       0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
   --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
   --shadow-lg:         0 16px 48px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06);
@@ -83,6 +142,14 @@ body {
   font-weight: 700;
   letter-spacing: -0.02em;
 }
+
+/* ─── Text color utilities ───────────────────────────────────────────────────── */
+.text-nav { color: #1A1A1A !important; }
+.text-text-muted { color: #717171 !important; }
+.text-text-secondary { color: #717171 !important; }
+.text-text-primary { color: #1A1A1A !important; }
+.text-accent { color: #E8312A !important; }
+.text-text-light { color: #717171 !important; }
 
 /* ─── Card ───────────────────────────────────────────────────────────────── */
 .card {
@@ -198,7 +265,7 @@ body {
   gap: 10px;
   padding: 9px 14px;
   border-radius: 999px;
-  color: #717171;
+  color: #1A1A1A;
   font-size: 13.5px;
   font-weight: 500;
   cursor: pointer;
@@ -207,15 +274,25 @@ body {
   border: 1px solid transparent;
 }
 .nav-item:hover {
-  background: #F7F6F4;
+  background: rgba(26, 26, 26, 0.08);
   color: #1A1A1A;
 }
 .nav-item.active {
-  background: #1A1A1A;
+  background: #E8312A;
   color: #FFFFFF;
+  font-weight: 600;
 }
 
 /* ─── Inputs ─────────────────────────────────────────────────────────────── */
+input, textarea, select {
+  color: #1A1A1A;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #717171;
+  opacity: 1;
+}
+
 .input-dark {
   background: #FFFFFF;
   border: 1px solid #E5E4E0;
@@ -232,7 +309,7 @@ body {
   border-color: #1A1A1A;
   box-shadow: 0 0 0 3px rgba(26,26,26,0.08);
 }
-.input-dark::placeholder { color: #9A9A9A; }
+.input-dark::placeholder { color: #717171; opacity: 1; }
 
 /* ─── Progress bar ───────────────────────────────────────────────────────── */
 .progress-bar {
@@ -389,3 +466,6 @@ body {
 .space-y-5   > * + * { margin-top: 1.25rem; }
 .space-y-6   > * + * { margin-top: 1.5rem; }
 .space-y-8   > * + * { margin-top: 2rem; }
+
+/* Light theme only - dark mode disabled */
+/* All pages use the light theme colors defined above */

@@ -17,7 +17,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
     <div
       style={{
         minHeight: '100vh',
-        backgroundColor: '#F7F6F4',
+        backgroundColor: 'var(--color-bg-primary)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -45,7 +45,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
             style={{
               fontSize: '18px',
               fontWeight: 900,
-              color: '#1A1A1A',
+              color: 'var(--color-text-primary)',
               letterSpacing: '-0.5px',
             }}
           >
@@ -59,14 +59,14 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
             width: '56px',
             height: '56px',
             borderRadius: '16px',
-            backgroundColor: '#FEF2F2',
+            backgroundColor: 'var(--color-error-light)',
             border: '1px solid #FECACA',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <AlertTriangle size={26} style={{ color: '#E8312A' }} />
+          <AlertTriangle size={26} style={{ color: 'var(--color-accent)' }} />
         </div>
 
         {/* Heading */}
@@ -75,7 +75,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
             style={{
               fontSize: '28px',
               fontWeight: 900,
-              color: '#1A1A1A',
+              color: 'var(--color-text-primary)',
               letterSpacing: '-0.7px',
               margin: 0,
               lineHeight: 1.1,
@@ -87,7 +87,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
             style={{
               fontSize: '15px',
               fontWeight: 400,
-              color: '#717171',
+              color: 'var(--color-text-secondary)',
               margin: 0,
               lineHeight: 1.6,
             }}
@@ -101,7 +101,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
           <div
             style={{
               width: '100%',
-              backgroundColor: '#F0EFED',
+              backgroundColor: 'var(--color-surface-secondary)',
               border: '1px solid #E5E4E0',
               borderRadius: '10px',
               padding: '12px 16px',
@@ -112,7 +112,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
                 fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
                 fontSize: '12px',
                 fontWeight: 400,
-                color: '#9A9A9A',
+                color: 'var(--color-text-tertiary)',
                 margin: 0,
                 wordBreak: 'break-word',
                 lineHeight: 1.6,
@@ -139,8 +139,8 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
               flex: 1,
               height: '44px',
               borderRadius: '10px',
-              backgroundColor: '#1A1A1A',
-              color: '#F7F6F4',
+              backgroundColor: 'var(--color-text-primary)',
+              color: 'var(--color-bg-primary)',
               border: 'none',
               fontSize: '14px',
               fontWeight: 700,
@@ -164,8 +164,8 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
                 height: '44px',
                 borderRadius: '10px',
                 backgroundColor: 'transparent',
-                color: '#1A1A1A',
-                border: `1.5px solid ${dashboardHovered ? '#1A1A1A' : '#E5E4E0'}`,
+                color: 'var(--color-text-primary)',
+                border: `1.5px solid ${dashboardHovered ? 'var(--color-text-primary)' : 'var(--color-border)'}`,
                 fontSize: '14px',
                 fontWeight: 700,
                 cursor: 'pointer',

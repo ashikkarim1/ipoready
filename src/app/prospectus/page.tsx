@@ -220,7 +220,7 @@ export default function ProspectusList() {
   }
 
   return (
-    <div style={{ background: '#F7F6F4', minHeight: '100vh', padding: '1.5rem' }}>
+    <div style={{ background: '#F7F6F4', minHeight: '100vh', padding: '1.5rem' }} suppressHydrationWarning>
       {/* Feature Lock Overlay */}
       <FeatureLockedOverlay
         isOpen={showLockedOverlay && !canAccess}

@@ -230,7 +230,7 @@ export default function ProspectusEditor() {
   const completionPercent = Math.round((completedSections.length / sections.length) * 100)
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
+    <div className="max-w-6xl mx-auto p-6 space-y-6" suppressHydrationWarning>
       {/* Header */}
       <div className="flex items-center justify-between gap-4 mb-6">
         <div>

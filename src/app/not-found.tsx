@@ -11,7 +11,7 @@ export default function NotFoundPage() {
     <div
       style={{
         minHeight: '100vh',
-        backgroundColor: '#F7F6F4',
+        backgroundColor: 'var(--color-bg-primary)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -36,7 +36,7 @@ export default function NotFoundPage() {
             style={{
               fontSize: '18px',
               fontWeight: 900,
-              color: '#1A1A1A',
+              color: 'var(--color-text-primary)',
               letterSpacing: '-0.5px',
             }}
           >
@@ -50,7 +50,7 @@ export default function NotFoundPage() {
             style={{
               fontSize: '128px',
               fontWeight: 900,
-              color: '#1A1A1A',
+              color: 'var(--color-text-primary)',
               margin: 0,
               lineHeight: 1,
               letterSpacing: '-6px',
@@ -66,7 +66,7 @@ export default function NotFoundPage() {
             style={{
               fontSize: '28px',
               fontWeight: 900,
-              color: '#1A1A1A',
+              color: 'var(--color-text-primary)',
               letterSpacing: '-0.7px',
               margin: 0,
               lineHeight: 1.1,
@@ -78,7 +78,7 @@ export default function NotFoundPage() {
             style={{
               fontSize: '15px',
               fontWeight: 400,
-              color: '#717171',
+              color: 'var(--color-text-secondary)',
               margin: 0,
               lineHeight: 1.6,
             }}
@@ -105,8 +105,8 @@ export default function NotFoundPage() {
                 flex: 1,
                 height: '44px',
                 borderRadius: '10px',
-                backgroundColor: '#1A1A1A',
-                color: '#F7F6F4',
+                backgroundColor: 'var(--color-text-primary)',
+                color: 'var(--color-bg-primary)',
                 border: 'none',
                 fontSize: '14px',
                 fontWeight: 700,
@@ -137,8 +137,8 @@ export default function NotFoundPage() {
                 height: '44px',
                 borderRadius: '10px',
                 backgroundColor: 'transparent',
-                color: '#1A1A1A',
-                border: `1.5px solid ${homeHovered ? '#1A1A1A' : '#E5E4E0'}`,
+                color: 'var(--color-text-primary)',
+                border: `1.5px solid ${homeHovered ? 'var(--color-text-primary)' : 'var(--color-border)'}`,
                 fontSize: '14px',
                 fontWeight: 700,
                 cursor: 'pointer',

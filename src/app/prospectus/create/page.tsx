@@ -77,7 +77,7 @@ export default function CreateProspectuPage() {
   const selectedTemplate = EXCHANGE_TEMPLATES.find(t => t.id === selectedExchange)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-6" suppressHydrationWarning>
       <div className="max-w-4xl mx-auto">
         <div className="mb-12 text-center">
           <motion.div

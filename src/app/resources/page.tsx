@@ -1,9 +1,8 @@
 'use client'
-'use client'
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FeaturesMegaMenu } from '@/app/components/FeaturesMegaMenu'
+import { Header } from '@/app/components/Header'
 import {
   BookOpen, FileText, ExternalLink, Newspaper, ChevronRight,
   Search, Filter, Clock, Building2, AlertCircle, Globe, Scale,
@@ -609,10 +608,10 @@ export default function ResourcesPage() {
 
   return (
     <>
-      {/* Main menu */}
-      <FeaturesMegaMenu />
+      {/* Header with menu */}
+      <Header />
 
-      <div style={{ maxWidth: '1280px' }}>
+      <div style={{ maxWidth: '1280px' }} suppressHydrationWarning>
 
         {/* Page header */}
         <div style={{ marginBottom: '1.75rem' }}>

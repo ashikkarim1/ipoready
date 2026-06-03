@@ -153,7 +153,7 @@ export default function OnboardingPage() {
   const categories = Object.keys(groupedItems).sort()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4 py-12" suppressHydrationWarning>
       <div className="max-w-2xl mx-auto">
         {/* Welcome Stage */}
         <AnimatePresence mode="wait">
@@ -193,7 +193,7 @@ export default function OnboardingPage() {
                       <div className="text-sm text-slate-400">{exchange.fullName}</div>
                     </div>
                     {loading && selectedExchange === exchange.id && (
-                      <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-slate-900/50">
+                      <div className="absolute inset-0 flex items-center justify-center rounded-lg" style={{ background: 'rgba(255, 255, 255, 0.7)' }}>
                         <div className="h-6 w-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                       </div>
                     )}

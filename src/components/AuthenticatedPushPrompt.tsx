@@ -9,10 +9,11 @@ import { PushPermissionPrompt } from './PushPermissionPrompt'
  * Public/unauthenticated users won't see the notification request
  */
 export function AuthenticatedPushPrompt() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
 
-  // Only show prompt if user is authenticated
-  if (!session?.user) {
+  // Only show prompt if user is authenticated and session is fully loaded
+  // Don't show during loading state or for unauthenticated users
+  if (status !== 'authenticated' || !session?.user) {
     return null
   }
 

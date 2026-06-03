@@ -1,0 +1,14 @@
+'use client'
+
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+
+export default function DocumentsPage() {
+  const router = useRouter()
+
+  useEffect(() => {
+    router.replace('/dashboard/documents/contracts-map')
+  }, [router])
+
+  return null
+}

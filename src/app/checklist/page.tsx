@@ -28,10 +28,10 @@ const PHASE_ICONS: Record<Phase, string> = {
 const PRIORITY_ORDER = { critical: 0, high: 1, medium: 2, low: 3 }
 
 const STATUS_STYLE: Record<LocalTaskStatus, { bg: string; border: string; color: string; label: string }> = {
-  not_started: { bg: '#F7F6F4', border: '#E5E4E0',    color: '#9A9A9A', label: 'Not Started' },
-  in_progress:  { bg: '#EFF6FF', border: '#1D4ED820', color: '#1D4ED8', label: 'In Progress'  },
-  completed:    { bg: '#EAF5F0', border: '#2D7A5F20', color: '#2D7A5F', label: 'Completed'    },
-  blocked:      { bg: '#FDECEB', border: '#E8312A20', color: '#E8312A', label: 'Blocked'      },
+  not_started: { bg: 'var(--color-bg-primary)', border: 'var(--color-border)',    color: 'var(--color-text-tertiary)', label: 'Not Started' },
+  in_progress:  { bg: 'var(--color-info-soft)', border: '#1D4ED820', color: 'var(--color-info)', label: 'In Progress'  },
+  completed:    { bg: 'var(--color-success-soft)', border: '#2D7A5F20', color: 'var(--color-success)', label: 'Completed'    },
+  blocked:      { bg: 'var(--color-error-soft)', border: '#E8312A20', color: 'var(--color-accent)', label: 'Blocked'      },
 }
 
 const INITIAL_STATUSES: Record<string, LocalTaskStatus> = {
@@ -119,7 +119,7 @@ export default function ChecklistPage() {
   }, [IPO_CHECKLIST, taskStatuses])
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="max-w-6xl mx-auto space-y-8" suppressHydrationWarning>
 
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-text-muted mb-4">
@@ -139,13 +139,13 @@ export default function ChecklistPage() {
               {overallCompletion.completed}/{overallCompletion.total} tasks · {overallCompletion.percentage}% complete
             </p>
             {tasksLoading && (
-              <span style={{ fontSize: '11px', color: '#9A9A9A' }} className="flex items-center gap-1">
+              <span style={{ fontSize: '11px', color: 'var(--color-text-tertiary)' }} className="flex items-center gap-1">
                 <Loader2 className="w-3 h-3 animate-spin" /> Syncing…
               </span>
             )}
           </div>
         </div>
-        <span className="pill text-xs font-semibold" style={{ background: '#EFF6FF', color: '#1D4ED8' }}>
+        <span className="pill text-xs font-semibold" style={{ background: 'var(--color-info-soft)', color: 'var(--color-info)' }}>
           TSXV · IPO · TSX Company Manual
         </span>
       </div>
@@ -155,9 +155,9 @@ export default function ChecklistPage() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex gap-6">
             {[
-              { label: 'Completed',   count: Object.values(taskStatuses).filter(s => s === 'completed').length,   color: '#2D7A5F' },
-              { label: 'In Progress', count: Object.values(taskStatuses).filter(s => s === 'in_progress').length, color: '#1D4ED8' },
-              { label: 'Blocked',     count: Object.values(taskStatuses).filter(s => s === 'blocked').length,     color: '#E8312A' },
+              { label: 'Completed',   count: Object.values(taskStatuses).filter(s => s === 'completed').length,   color: 'var(--color-success)' },
+              { label: 'In Progress', count: Object.values(taskStatuses).filter(s => s === 'in_progress').length, color: 'var(--color-info)' },
+              { label: 'Blocked',     count: Object.values(taskStatuses).filter(s => s === 'blocked').length,     color: 'var(--color-accent)' },
             ].map(({ label, count, color }) => (
               <div key={label} className="text-center">
                 <p className="text-lg font-bold" style={{ color }}>{count}</p>
@@ -172,7 +172,7 @@ export default function ChecklistPage() {
         </div>
         <div className="progress-bar h-2">
           <motion.div className="h-full rounded-full"
-            style={{ background: '#1A1A1A' }}
+            style={{ background: 'var(--color-text-primary)' }}
             initial={{ width: 0 }}
             animate={{ width: `${overallCompletion.percentage}%` }}
             transition={{ duration: 1.2, ease: 'easeOut' }} />
@@ -193,13 +193,13 @@ export default function ChecklistPage() {
             <div className="flex items-center gap-2.5 mb-4">
               <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{ background: 'rgba(232,49,42,0.25)', border: '1px solid rgba(232,49,42,0.35)' }}>
-                <Sparkles className="w-4 h-4" style={{ color: '#FCA5A5' }} />
+                <Sparkles className="w-4 h-4" style={{ color: 'var(--color-error-soft)' }} />
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <p className="font-bold text-sm text-white">AI Task Advisor</p>
                   <span className="text-[9px] px-1.5 py-0.5 rounded font-bold tracking-wide"
-                    style={{ background: 'rgba(232,49,42,0.3)', color: '#FCA5A5', border: '1px solid rgba(232,49,42,0.25)' }}>LIVE</span>
+                    style={{ background: 'rgba(232,49,42,0.3)', color: 'var(--color-error-soft)', border: '1px solid rgba(232,49,42,0.25)' }}>LIVE</span>
                 </div>
                 <p className="text-[11px]" style={{ color: 'rgba(255,255,255,0.4)' }}>Critical path analysis · TSXV timeline · updated now</p>
               </div>
@@ -208,19 +208,19 @@ export default function ChecklistPage() {
               {[
                 {
                   icon: AlertTriangle,
-                  color: '#FCA5A5', bg: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.22)',
+                  color: 'var(--color-error-soft)', bg: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.22)',
                   label: 'Critical Path Alert',
                   text: '1 blocked task is holding back 4 downstream tasks. Resolving "Corporate Structure Review" unlocks your entire Legal Documentation phase — estimated 3–4 week delay if unresolved.',
                 },
                 {
                   icon: Zap,
-                  color: '#FDE68A', bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.22)',
+                  color: 'var(--color-warning-medium)', bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.22)',
                   label: 'Quickest Win Today',
                   text: '"Director Independence Confirmation" needs only a board resolution — completable today in ~2 hours. Finishing it advances 2 governance milestones and improves your PACE score by ~4 points.',
                 },
                 {
                   icon: TrendingUp,
-                  color: '#6EE7B7', bg: 'rgba(16,185,129,0.12)', border: 'rgba(16,185,129,0.22)',
+                  color: 'var(--color-success-bright)', bg: 'rgba(16,185,129,0.12)', border: 'rgba(16,185,129,0.22)',
                   label: 'Phase 3 Unlock Path',
                   text: 'Complete 3 more Corporate Restructuring tasks to unlock Financial Audit phase. At current pace you\'re 12 days ahead of TSXV average — stay consistent to keep that buffer.',
                 },
@@ -272,8 +272,8 @@ export default function ChecklistPage() {
             <button key={tab} onClick={() => setActiveTab(tab as any)}
               className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium transition-all border"
               style={isActive
-                ? { background: '#1A1A1A', borderColor: '#1A1A1A', color: '#FFFFFF' }
-                : { background: '#FFFFFF', borderColor: '#E5E4E0', color: '#717171' }}>
+                ? { background: 'var(--color-text-primary)', borderColor: 'var(--color-text-primary)', color: 'var(--color-surface-primary)' }
+                : { background: 'var(--color-surface-primary)', borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}>
               {!isAll && <span>{PHASE_ICONS[tab as Phase]}</span>}
               <span>{isAll ? 'All Phases' : PHASE_LABELS[tab as Phase].split(' ')[0]}</span>
               {data && <span className="opacity-60">({data.completed}/{data.total})</span>}
@@ -299,7 +299,7 @@ export default function ChecklistPage() {
                 <div className="h-full rounded-full transition-all duration-700"
                   style={{
                     width: `${total > 0 ? (completed / total) * 100 : 0}%`,
-                    background: completed === total && total > 0 ? '#2D7A5F' : '#1A1A1A',
+                    background: completed === total && total > 0 ? 'var(--color-success)' : 'var(--color-text-primary)',
                   }} />
               </div>
               <span className="text-text-muted text-xs w-8 text-right">
@@ -345,9 +345,9 @@ export default function ChecklistPage() {
                                 </p>
                                 <span className="badge flex-shrink-0 text-[10px]"
                                   style={
-                                    task.priority === 'critical' ? { background: '#FDECEB', color: '#E8312A', borderColor: '#E8312A20' } :
-                                    task.priority === 'high'     ? { background: '#FEF3C7', color: '#B45309', borderColor: '#D4A96A20' } :
-                                    { background: '#F7F6F4', color: '#9A9A9A', borderColor: '#E5E4E0' }
+                                    task.priority === 'critical' ? { background: 'var(--color-error-soft)', color: 'var(--color-accent)', borderColor: '#E8312A20' } :
+                                    task.priority === 'high'     ? { background: 'var(--color-warning-soft)', color: 'var(--color-warning)', borderColor: '#D4A96A20' } :
+                                    { background: 'var(--color-bg-primary)', color: 'var(--color-text-tertiary)', borderColor: 'var(--color-border)' }
                                   }>
                                   {task.priority}
                                 </span>
@@ -370,7 +370,7 @@ export default function ChecklistPage() {
                             <div className="flex items-center gap-2 flex-shrink-0">
                               <select value={status} onChange={e => setStatus(task, e.target.value as LocalTaskStatus)}
                                 className="text-xs px-2 py-1 rounded-lg border outline-none cursor-pointer"
-                                style={{ background: '#FFFFFF', borderColor: ss.border, color: ss.color, fontFamily: 'inherit' }}>
+                                style={{ background: 'var(--color-surface-primary)', borderColor: ss.border, color: ss.color, fontFamily: 'inherit' }}>
                                 <option value="not_started">Not Started</option>
                                 <option value="in_progress">In Progress</option>
                                 <option value="completed">Completed</option>
@@ -394,7 +394,7 @@ export default function ChecklistPage() {
 
                                   <div className="grid md:grid-cols-3 gap-4">
                                     {task.commonPitfalls.length > 0 && (
-                                      <div className="p-3 rounded-xl" style={{ background: '#FDECEB', border: '1px solid #E8312A20' }}>
+                                      <div className="p-3 rounded-xl" style={{ background: 'var(--color-error-soft)', border: '1px solid #E8312A20' }}>
                                         <p className="text-accent text-xs font-semibold mb-2 flex items-center gap-1">
                                           <AlertTriangle className="w-3.5 h-3.5" /> Common Pitfalls
                                         </p>
@@ -408,7 +408,7 @@ export default function ChecklistPage() {
                                       </div>
                                     )}
                                     {task.examples.length > 0 && (
-                                      <div className="p-3 rounded-xl" style={{ background: '#EFF6FF', border: '1px solid #1D4ED820' }}>
+                                      <div className="p-3 rounded-xl" style={{ background: 'var(--color-info-soft)', border: '1px solid #1D4ED820' }}>
                                         <p className="text-blue text-xs font-semibold mb-2 flex items-center gap-1">
                                           <BookOpen className="w-3.5 h-3.5" /> Examples
                                         </p>
@@ -421,7 +421,7 @@ export default function ChecklistPage() {
                                         </ul>
                                       </div>
                                     )}
-                                    <div className="p-3 rounded-xl" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
+                                    <div className="p-3 rounded-xl" style={{ background: 'var(--color-bg-primary)', border: '1px solid #E5E4E0' }}>
                                       <p className="text-text-muted text-xs font-semibold mb-2 flex items-center gap-1">
                                         <FileText className="w-3.5 h-3.5" /> Regulatory Citations
                                       </p>
@@ -438,7 +438,7 @@ export default function ChecklistPage() {
 
                                   {task.title.toLowerCase().includes('audit') && (
                                     <div className="flex items-center gap-2 p-3 rounded-xl"
-                                      style={{ background: '#FDECEB', border: '1px solid #E8312A20' }}>
+                                      style={{ background: 'var(--color-error-soft)', border: '1px solid #E8312A20' }}>
                                       <Zap className="w-4 h-4 text-accent flex-shrink-0" />
                                       <p className="text-text-muted text-xs">
                                         <strong className="text-nav">Pro tip:</strong> Use{' '}

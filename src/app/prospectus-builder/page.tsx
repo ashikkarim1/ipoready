@@ -108,7 +108,7 @@ export default function ProspectusBuilderPage() {
   const [demoModalOpen, setDemoModalOpen] = useState(false)
 
   return (
-    <div>
+    <div suppressHydrationWarning>
       {/* ── Header ──────────────────────────────────────────────────────────── */}
       <header className="fixed top-0 left-0 right-0 z-50"
         style={{ background: 'rgba(247,246,244,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #E5E4E0' }}>
@@ -481,14 +481,14 @@ export default function ProspectusBuilderPage() {
         {/* Compliance bar */}
         <div style={{ borderTop: '1px solid #E5E4E0', background: '#F7F6F4' }}>
           <div className="max-w-7xl mx-auto" style={{ paddingTop: '1.25rem', paddingBottom: '1.25rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-              <p className="text-xs leading-relaxed text-text-light" style={{ maxWidth: '680px' }}>
-                <span className="font-semibold text-text-muted">Important:</span>{' '}
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <p className="text-xs leading-relaxed flex-1 min-w-0" style={{ color: '#555555' }}>
+                <span className="font-semibold" style={{ color: '#333333' }}>Important:</span>{' '}
                 IPOReady is a workflow management and project tracking platform only. It does not provide legal, compliance, accounting, securities, or investment banking services, and does not act on your behalf in any regulatory or professional capacity.
                 All regulatory filings, legal opinions, and compliance determinations must be executed by licensed professionals. Nothing on this platform constitutes legal advice, financial advice, or an offer to buy or sell securities.
               </p>
               <div className="flex items-center gap-4 flex-shrink-0 self-end md:self-auto">
-                <p className="text-xs text-text-light">© {new Date().getFullYear()} IPOReady. All rights reserved.</p>
+                <p className="text-xs" style={{ color: '#555555' }}>© {new Date().getFullYear()} IPOReady. All rights reserved.</p>
                 <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: '#EFEFED', border: '1px solid #E5E4E0' }}>
                   {(['EN', 'FR'] as const).map(l => (
                     <span key={l} className="text-xs px-2 py-0.5 rounded font-mono font-medium cursor-default"

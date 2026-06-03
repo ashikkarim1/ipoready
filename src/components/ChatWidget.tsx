@@ -36,14 +36,14 @@ export function ChatWidget() {
             transition={{ type: 'spring', stiffness: 340, damping: 28 }}
             className="mb-4 w-[340px] rounded-2xl overflow-hidden"
             style={{
-              background: '#FFFFFF',
+              background: 'var(--color-surface-primary)',
               border: '1px solid #E5E4E0',
               boxShadow: '0 16px 48px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06)',
             }}
           >
             {/* Header */}
             <div className="px-5 py-4 flex items-center justify-between"
-              style={{ background: '#1A1A1A' }}>
+              style={{ background: 'var(--color-text-primary)' }}>
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center"
                   style={{ background: 'rgba(255,255,255,0.1)' }}>
@@ -52,7 +52,7 @@ export function ChatWidget() {
                 <div>
                   <p className="text-white font-semibold text-sm">IPOReady Support</p>
                   <div className="flex items-center gap-1.5 mt-0.5">
-                    <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#4ade80' }} />
+                    <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--color-success-bright)' }} />
                     <p className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>Replies within 1 hour</p>
                   </div>
                 </div>
@@ -67,7 +67,7 @@ export function ChatWidget() {
             </div>
 
             {/* Body */}
-            <div className="p-5" style={{ background: '#FFFFFF' }}>
+            <div className="p-5" style={{ background: 'var(--color-surface-primary)' }}>
               {!sent ? (
                 <form onSubmit={handleSubmit} className="space-y-3">
                   <p className="text-text-muted text-xs leading-relaxed">
@@ -101,7 +101,7 @@ export function ChatWidget() {
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                   className="text-center py-6 space-y-3">
                   <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto"
-                    style={{ background: '#EAF5F0', border: '1px solid #2D7A5F30' }}>
+                    style={{ background: 'var(--color-success-soft)', border: '1px solid #2D7A5F30' }}>
                     <CheckCircle2 className="w-6 h-6 text-green" />
                   </div>
                   <div>
@@ -128,7 +128,7 @@ export function ChatWidget() {
         whileTap={{ scale: 0.95 }}
         className="w-14 h-14 rounded-full flex items-center justify-center transition-all"
         style={{
-          background: '#1A1A1A',
+          background: 'var(--color-text-primary)',
           boxShadow: '0 4px 20px rgba(26,26,26,0.35)',
         }}
         aria-label="Open chat"

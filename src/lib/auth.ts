@@ -133,17 +133,35 @@ async function upsertOAuthUser(params: {
     }
   }
 
-  // 3. Brand-new user — create their account (pending approval)
+  // 3. Brand-new user — create their account + company (pending approval)
+  // First, create a company for the new user
+  const companyInserted = await sql`
+    INSERT INTO companies (
+      name, listing_type, target_exchange, currency, language,
+      current_phase, pace_score, estimated_days_to_ipo, progress_percentage,
+      created_at, updated_at
+    )
+    VALUES (
+      ${name || 'My Company'}, 'public', 'TSXV', 'CAD', 'en',
+      'pre_planning', 0, 365, 0,
+      NOW(), NOW()
+    )
+    RETURNING id
+  `
+
+  const newCompanyId = (companyInserted[0] as any).id
+
+  // Then create the user with the new company
   const inserted = await sql`
     INSERT INTO users (
       email, name, role, is_approved,
       oauth_provider, oauth_id, avatar_url,
-      language, currency, is_new_user, created_at, updated_at
+      language, currency, is_new_user, company_id, created_at, updated_at
     )
     VALUES (
       ${email.toLowerCase()}, ${name}, 'ceo', FALSE,
       ${provider}, ${providerAccountId}, ${avatarUrl ?? null},
-      'en', 'CAD', TRUE, NOW(), NOW()
+      'en', 'CAD', TRUE, ${newCompanyId}, NOW(), NOW()
     )
     RETURNING id, role, company_id, is_approved
   `
@@ -152,7 +170,7 @@ async function upsertOAuthUser(params: {
   return {
     id: row.id,
     role: row.role,
-    companyId: row.company_id ?? null,
+    companyId: row.company_id,
     isApproved: false,
     subscriptionPlan: 'starter',
     trialStatus: 'none',
@@ -314,6 +332,18 @@ export const authOptions: NextAuthOptions = {
         ;(session.user as any).isNewUser       = token.isNewUser ?? false
       }
       return session
+    },
+
+    // -----------------------------------------------------------------------
+    // redirect callback — post-login routing
+    // -----------------------------------------------------------------------
+    async redirect({ url, baseUrl }) {
+      // Allow relative URLs
+      if (url.startsWith('/')) return `${baseUrl}${url}`
+      // Only allow redirects to the same origin
+      if (new URL(url).origin === baseUrl) return url
+      // Default to dashboard for any other origin
+      return `${baseUrl}/dashboard`
     },
   },
 

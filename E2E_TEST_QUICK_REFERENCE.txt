@@ -1,0 +1,451 @@
+================================================================================
+                    IPOReady E2E Test Plan - Quick Reference Card
+================================================================================
+
+DOCUMENTS INCLUDED (3 FILES):
+  1. E2E_TEST_PLAN_ALL_FEATURES.md ........... Detailed test scenarios (12K words)
+  2. E2E_TEST_EXECUTION_CHECKLIST.md ........ Quick reference & tracking (4K words)
+  3. E2E_TEST_PLAN_SUMMARY.md ............... Navigation & overview (this suite)
+
+================================================================================
+                                 QUICK LOOKUP TABLE
+================================================================================
+
+FEATURE                    TEST CASES    TIME EST.   GO TO SECTION
+─────────────────────────────────────────────────────────────────────────────
+1. Cost Calculator              20        45 min    Feature 1 (line 330)
+   ├─ Add/Edit/Delete costs
+   ├─ Export (CSV/Excel/PDF)
+   └─ Cost category validation
+
+2. Financial Dashboard           18        40 min    Feature 2 (line 520)
+   ├─ Period selection
+   ├─ Metric accuracy
+   ├─ KPI card sync
+   └─ Risk factors display
+
+3. Dilution Scenarios            16        50 min    Feature 3 (line 710)
+   ├─ Base/Optimistic/Conservative
+   ├─ Custom scenarios
+   ├─ Comparison
+   └─ Recalculation
+
+4. Consent Workflow              22        60 min    Feature 4 (line 900)
+   ├─ Generate requests
+   ├─ Send via email
+   ├─ Track approvals
+   ├─ Status updates
+   ├─ Expiry management
+   └─ Exchange requirements
+
+5. Resolutions                   18        50 min    Feature 5 (line 1140)
+   ├─ Create resolutions
+   ├─ Board member management
+   ├─ Vote tracking
+   ├─ Export (PDF/Word)
+   └─ Compliance tracking
+
+6. Syndication                   16        40 min    Feature 6 (line 1370)
+   ├─ Browse templates
+   ├─ Customize agreements
+   ├─ Export
+   └─ Version control
+
+7. Listing Requirements          20        60 min    Feature 7 (line 1570)
+   ├─ Exchange selection
+   ├─ Violation detection
+   ├─ Gap analysis
+   ├─ Exchange rules
+   └─ Compliance checklist
+
+8. Post-Listing                  10        20 min    Feature 8 (line 1830)
+   ├─ Lock-up configuration
+   ├─ Shareholder tracking
+   └─ Ongoing disclosure
+
+Cross-Feature Integration       10        30 min    Integration (line 1920)
+  Cost ↔ Dashboard
+  Cap Table ↔ Dilution
+  Exchange ↔ Consent
+  Resolution ↔ Readiness
+  Consent ↔ Compliance
+
+─────────────────────────────────────────────────────────────────────────────
+TOTAL:                         150+      5-6 hrs
+─────────────────────────────────────────────────────────────────────────────
+
+================================================================================
+                              TEST EXECUTION PHASES
+================================================================================
+
+PHASE 1: PRE-TEST SETUP (30 minutes)
+  [ ] Deploy test environment
+  [ ] Create test user account
+  [ ] Load sample cap table (30M shares, 3 shareholders)
+  [ ] Verify exchange configs (TSX, NASDAQ, NYSE, TSXV, CSE)
+  [ ] Seed sample costs and tracking data
+  [ ] Configure email testing (mock service)
+  [ ] Set up file export directory
+
+PHASE 2: FEATURE TESTING (4 hours)
+  Option A: Sequential Testing
+    [ ] Cost Calculator (45 min)
+    [ ] Financial Dashboard (40 min)
+    [ ] Dilution Scenarios (50 min)
+    [ ] Consent Workflow (60 min)
+    [ ] Resolutions (50 min)
+    [ ] Syndication (40 min)
+    [ ] Listing Requirements (60 min)
+    [ ] Post-Listing (20 min)
+
+  Option B: Parallel Testing (Recommended)
+    Team A: Cost, Dashboard, Dilution (1h 45m)
+    Team B: Consent, Resolutions, Syndication (2h 30m)
+    Team C: Listing, Post-Listing (1h 20m)
+
+PHASE 3: CRITICAL PATH TESTING (30 minutes)
+  [ ] Cost → Dashboard sync
+  [ ] Cap table → Dilution recalculation
+  [ ] Exchange → Consent requirements
+  [ ] Resolution completion → Listing readiness
+  [ ] Consent completion → Exchange compliance
+
+PHASE 4: QUALITY & PERFORMANCE (30 minutes)
+  [ ] Page load times (< 2-3 seconds)
+  [ ] Mobile responsiveness
+  [ ] Data validation
+  [ ] Security (XSS, SQL injection, auth)
+  [ ] Accessibility (WCAG 2.1 AA)
+
+PHASE 5: SIGN-OFF (15 minutes)
+  [ ] QA Lead review
+  [ ] Critical bugs assessment
+  [ ] Overall pass/fail decision
+  [ ] PM & Engineering sign-off
+
+================================================================================
+                            CRITICAL TEST PATHS
+================================================================================
+
+PATH 1: Cost to Listing Readiness
+  1. Add costs in Cost Calculator
+  2. View totals in Financial Dashboard
+  3. Check impact in Listing Requirements compliance score
+  Expected: Cost total syncs, compliance score updates ✓
+
+PATH 2: Cap Table to Dilution Impact
+  1. Load cap table
+  2. Create dilution scenario
+  3. Update cap table shares
+  4. Recalculate scenario
+  Expected: Scenario values update with new cap table ✓
+
+PATH 3: Exchange to Compliance
+  1. Select TSX exchange
+  2. Generate consent requirements
+  3. Send consent requests
+  4. Mark consents as signed
+  5. Check Listing Requirements
+  Expected: Exchange shows all consents satisfied ✓
+
+PATH 4: Resolution Voting
+  1. Create board resolution
+  2. Add board members (3+ members)
+  3. Track voting status
+  4. Mark all as voted "For"
+  5. Check resolution status
+  Expected: Status = Approved, Listing readiness improves ✓
+
+================================================================================
+                            SEVERITY LEVEL GUIDE
+================================================================================
+
+P0 (CRITICAL - BLOCKING)
+  └─ Prevents core feature from working
+     Examples: Cost Calculator won't save, Dashboard data incorrect, Export fails
+     Action: Must be fixed before launch
+
+P1 (MAJOR - HIGH PRIORITY)
+  └─ Significant impact but has workaround
+     Examples: Consent letter formatting issue, Minor validation missing
+     Action: Should be fixed before launch
+
+P2 (MINOR - MEDIUM PRIORITY)
+  └─ Low impact, cosmetic or edge case
+     Examples: Typo in label, Rare edge case crash
+     Action: Can defer to post-launch if necessary
+
+P3 (TRIVIAL - LOW PRIORITY)
+  └─ No functional impact
+     Examples: Spacing, color consistency, hover text
+     Action: Can defer to v1.1 or later
+
+================================================================================
+                          PASS CRITERIA FOR LAUNCH
+================================================================================
+
+✓ 95%+ test case pass rate (requirement: 143/150 cases passing)
+✓ ZERO P0 bugs (no critical blocking issues)
+✓ <5 P1 bugs (documented and understood)
+✓ P2/P3 bugs acceptable with product sign-off
+✓ All critical paths validated
+✓ Cross-feature integration working
+✓ Performance benchmarks met (< 3 sec page load)
+✓ Mobile responsive (all features tested on mobile)
+✓ Security checks passed (no XSS, injection, auth bypasses)
+✓ Accessibility baseline met (WCAG 2.1 AA)
+
+================================================================================
+                           TESTING CHECKLIST ITEMS
+================================================================================
+
+COST CALCULATOR:
+  [ ] Add cost with validation
+  [ ] Edit cost & total recalculates
+  [ ] Delete cost with confirmation
+  [ ] Export CSV/Excel/PDF
+  [ ] Category validation
+
+FINANCIAL DASHBOARD:
+  [ ] Period selection (3M/6M/12M/Custom)
+  [ ] Budget vs. Actual accuracy
+  [ ] KPI cards sync with Cost Calculator
+  [ ] Risk factors display
+  [ ] Data export works
+
+DILUTION SCENARIOS:
+  [ ] Base case generates correctly
+  [ ] Optimistic case shows higher dilution
+  [ ] Conservative case shows lower dilution
+  [ ] Custom scenarios work
+  [ ] Comparison view displays correctly
+  [ ] Recalculation on cap table change
+
+CONSENT WORKFLOW:
+  [ ] Generate consent requests
+  [ ] Email sending works
+  [ ] Status tracking (Pending→Signed→Expired)
+  [ ] Dashboard summary updates
+  [ ] Exchange-specific requirements
+
+RESOLUTIONS:
+  [ ] Create board resolutions
+  [ ] Add board members
+  [ ] Vote tracking
+  [ ] Export as PDF/Word
+  [ ] Compliance tracking
+
+SYNDICATION:
+  [ ] Browse templates
+  [ ] Customize agreements
+  [ ] All key terms editable
+  [ ] Export customized versions
+  [ ] Template updates work
+
+LISTING REQUIREMENTS:
+  [ ] Exchange selection
+  [ ] Violation detection & severity
+  [ ] Gap analysis accurate
+  [ ] Exchange rules correct
+  [ ] Generate compliance checklist
+
+POST-LISTING:
+  [ ] Lock-up configuration
+  [ ] Lock-up tracking
+  [ ] Ongoing disclosure tracking
+
+CROSS-FEATURE:
+  [ ] Cost ↔ Dashboard sync
+  [ ] Cap Table ↔ Dilution recalc
+  [ ] Exchange ↔ Consent requirements
+  [ ] Resolution completion ↔ Listing readiness
+
+================================================================================
+                            QUICK BUG REPORT TEMPLATE
+================================================================================
+
+FEATURE: ___________________
+BUG: ________________________
+SEVERITY: [ ] P0  [ ] P1  [ ] P2  [ ] P3
+
+STEPS TO REPRODUCE:
+1. ___________________________
+2. ___________________________
+3. ___________________________
+
+EXPECTED RESULT:
+___________________________
+
+ACTUAL RESULT:
+___________________________
+
+ATTACHMENTS: [ ] Screenshot  [ ] Console log  [ ] Video
+
+================================================================================
+                              SIGN-OFF TEMPLATE
+================================================================================
+
+TEST EXECUTION SUMMARY
+======================
+
+Project: IPOReady MVP E2E Testing
+Date: ______________
+Test Cycle: Feature Validation
+Duration: 5-6 hours
+Team Size: 1-3 testers
+
+RESULTS
+-------
+Total Test Cases: 150+
+Cases Passed: _____
+Cases Failed: _____
+Cases Blocked: _____
+Pass Rate: _____%
+
+BUGS FOUND
+----------
+P0 (Critical): _____ bugs
+P1 (Major): _____ bugs
+P2 (Minor): _____ bugs
+P3 (Trivial): _____ bugs
+
+RECOMMENDATION
+--------------
+[ ] READY FOR PRODUCTION
+[ ] READY WITH KNOWN LIMITATIONS
+[ ] NOT READY - Blocking Issues Found
+
+CRITICAL ISSUES (if any):
+1. _________________________
+2. _________________________
+
+SIGN-OFF
+--------
+QA Lead: _________________ Date: _______
+Signature: _______________
+
+Product Manager: _________ Date: _______
+Signature: _______________
+
+Engineering Lead: ________ Date: _______
+Signature: _______________
+
+================================================================================
+                           ENVIRONMENT REQUIREMENTS
+================================================================================
+
+HARDWARE:
+  • Desktop/Laptop with 4GB+ RAM
+  • Modern browser (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+)
+  • Stable internet connection (min 5 Mbps)
+
+SOFTWARE:
+  • PostgreSQL database with sample data
+  • Email testing service (Mailhog, MailSlurp, or mock)
+  • PDF reader (Adobe Reader or browser)
+  • File download directory accessible
+  • Local file system for export testing
+
+CREDENTIALS:
+  • Test user account with admin permissions
+  • Company ID for data isolation
+  • Sample cap table (30M shares, 3 shareholders)
+
+================================================================================
+                              QUICK REFERENCE: FILES
+================================================================================
+
+Document 1: E2E_TEST_PLAN_ALL_FEATURES.md
+  Use For: Detailed test planning and execution
+  Size: ~12,000 words, 150+ test cases
+  Contains: Step-by-step procedures, expected results, validation rules
+  Time: Read in 30 min, reference during execution
+
+Document 2: E2E_TEST_EXECUTION_CHECKLIST.md
+  Use For: During actual testing, tracking results
+  Size: ~4,000 words, checkbox format
+  Contains: Quick reference, pass/fail tracking, bug logging
+  Time: Fill out during test execution
+
+Document 3: E2E_TEST_PLAN_SUMMARY.md
+  Use For: Navigation and overview
+  Size: ~3,000 words
+  Contains: Links to sections, feature lookup, best practices
+  Time: Read in 15 min for orientation
+
+Document 4: E2E_TEST_QUICK_REFERENCE.txt
+  Use For: Quick lookup during execution (this file)
+  Size: Concise reference card
+  Contains: Quick lookup tables, checklists, templates
+  Time: Scan as needed
+
+================================================================================
+                              HOW TO GET STARTED
+================================================================================
+
+STEP 1: Orient Yourself (15 minutes)
+  1. Read this Quick Reference card (you are here)
+  2. Skim E2E_TEST_PLAN_SUMMARY.md
+  3. Review environment requirements above
+
+STEP 2: Plan Testing (30 minutes)
+  1. Read E2E_TEST_PLAN_ALL_FEATURES.md sections for features you'll test
+  2. Set up test environment per requirements
+  3. Choose parallel or sequential execution
+  4. Assign testers to features
+
+STEP 3: Execute Tests (4-5 hours)
+  1. Use E2E_TEST_EXECUTION_CHECKLIST.md as you test
+  2. Check off each test case
+  3. Log any bugs with P0-P3 priority
+  4. Track pass/fail for each feature
+
+STEP 4: Report Results (30 minutes)
+  1. Complete E2E_TEST_EXECUTION_CHECKLIST.md sign-off
+  2. Document critical issues
+  3. Calculate pass rate
+  4. Make launch recommendation
+  5. Get QA Lead, PM, Engineering Lead sign-offs
+
+STEP 5: Archive (5 minutes)
+  1. Store completed checklist with test results
+  2. Attach bug reports
+  3. Upload to project repository
+  4. Link from release notes
+
+================================================================================
+                            TEST CASE STATISTICS
+================================================================================
+
+Total Test Cases: 150+
+Average Test Duration: 2-3 minutes per case
+Total Estimated Time: 5-6 hours (1 team of 3 testers in parallel)
+
+Test Cases by Feature:
+  Cost Calculator:          20 cases (13%)
+  Financial Dashboard:      18 cases (12%)
+  Dilution Scenarios:       16 cases (11%)
+  Consent Workflow:         22 cases (15%)
+  Resolutions:              18 cases (12%)
+  Syndication:              16 cases (11%)
+  Listing Requirements:     20 cases (13%)
+  Post-Listing:             10 cases (7%)
+  Cross-Feature:            10 cases (7%)
+
+Test Case Breakdown:
+  Functional Tests:         120+ cases
+  Integration Tests:        10 cases
+  Performance Tests:        8-10 cases
+  Security Tests:           5 cases
+  Accessibility Tests:      5 cases
+
+================================================================================
+
+Version: 1.0
+Last Updated: June 3, 2026
+Next Review: Post-MVP Launch
+
+For detailed information, refer to the comprehensive test plan documents.
+For questions, contact QA Lead or review E2E_TEST_PLAN_ALL_FEATURES.md.
+
+================================================================================

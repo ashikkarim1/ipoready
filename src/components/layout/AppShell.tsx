@@ -10,7 +10,8 @@ import {
   Award, ChevronRight, Zap, PieChart, Banknote, Gift, BookOpen,
   CreditCard, Shield, Flame, HelpCircle, ExternalLink, TrendingUp,
   AlertTriangle, RefreshCcw, Activity, Plug, BellRing, Store, FileSearch,
-  CheckCheck, Clock
+  CheckCheck, Clock, Calculator, Target, CheckCircle, Percent, Briefcase,
+  FileCheck, Scale, Signature, Share2, BarChart3
 } from 'lucide-react'
 import { useAppStore } from '@/store/app-store'
 import type { Notification } from '@/types'
@@ -29,10 +30,30 @@ const NAV_GROUPS = [
     section: 'WORK',
     collapsible: false,
     items: [
-      { href: '/cap-table',       icon: PieChart,        label: 'Cap Table',          badge: 'AI',   key: 'cap-table'   },
-      { href: '/documents',       icon: FileText,        label: 'Documents',          badge: null,   key: 'documents'   },
-      { href: '/prospectus',      icon: FileText,        label: 'Prospectus Builder', badge: '✨',   key: 'prospectus'  },
-      { href: '/templates',       icon: Award,           label: 'Templates & Forms',  badge: null,   key: 'templates'   },
+      { href: '/cap-table',                              icon: PieChart,        label: 'Cap Table',          badge: 'AI',   key: 'cap-table'        },
+      { href: '/documents',                              icon: FileText,        label: 'Documents',          badge: null,   key: 'documents'        },
+      { href: '/dashboard/documents/contracts-map',      icon: FileText,        label: 'Prospectus Map',     badge: null,   key: 'prospectus-map'   },
+      { href: '/prospectus',                             icon: FileText,        label: 'Prospectus Builder', badge: '✨',   key: 'prospectus'       },
+      { href: '/templates',                              icon: Award,           label: 'Templates & Forms',  badge: null,   key: 'templates'        },
+    ],
+  },
+  {
+    section: 'FINANCIAL MANAGEMENT',
+    collapsible: true,
+    items: [
+      { href: '/financial/cost-calculator',    icon: Calculator,  label: 'Cost Calculator',      badge: null,   key: 'cost-calc'      },
+      { href: '/financial/budget-tracking',    icon: BarChart3,   label: 'Budget Tracking',      badge: null,   key: 'budget-tracking'},
+      { href: '/dilution-demo',                icon: Percent,     label: 'Dilution Scenarios',   badge: null,   key: 'dilution'       },
+    ],
+  },
+  {
+    section: 'COMPLIANCE',
+    collapsible: true,
+    items: [
+      { href: '/compliance/listing-rules',  icon: Scale,       label: 'Listing Rules',         badge: null,   key: 'listing-rules'  },
+      { href: '/compliance/resolutions',    icon: FileCheck,   label: 'Corporate Resolutions', badge: null,   key: 'resolutions'    },
+      { href: '/demo/consent-workflow',     icon: Signature,   label: 'Consent Workflow',      badge: null,   key: 'consent'        },
+      { href: '/marketplace',               icon: Share2,      label: 'Expert Network',        badge: null,   key: 'syndication'    },
     ],
   },
   {
@@ -87,23 +108,23 @@ function getInitials(name?: string | null): string {
 function BadgeChip({ badge }: { badge: string }) {
   if (badge === 'IP')  return (
     <span className="text-[9px] px-1.5 py-0.5 rounded font-bold"
-      style={{ background: '#1A1A1A', color: 'white', letterSpacing: '0.04em' }}>{badge}</span>
+      style={{ background: 'var(--color-text-primary)', color: 'white', letterSpacing: '0.04em' }}>{badge}</span>
   )
   if (badge === 'AI')  return (
     <span className="text-[10px] px-1.5 py-0.5 rounded-full font-semibold"
-      style={{ background: '#FEF3C7', color: '#B45309' }}>{badge}</span>
+      style={{ background: 'var(--color-warning-soft)', color: 'var(--color-warning)' }}>{badge}</span>
   )
   if (badge === 'New') return (
     <span className="text-[10px] px-1.5 py-0.5 rounded-full font-semibold"
-      style={{ background: '#FDECEB', color: '#E8312A' }}>{badge}</span>
+      style={{ background: 'var(--color-error-soft)', color: 'var(--color-accent)' }}>{badge}</span>
   )
   if (badge === 'Soon') return (
     <span className="text-[10px] px-1.5 py-0.5 rounded-full font-semibold"
-      style={{ background: '#F5F3FF', color: '#7C3AED' }}>{badge}</span>
+      style={{ background: 'var(--color-surface-light)', color: 'var(--color-accent-purple)' }}>{badge}</span>
   )
   return (
     <span className="text-[10px] px-1.5 py-0.5 rounded-full font-medium"
-      style={{ background: '#F7F6F4', color: '#9A9A9A' }}>{badge}</span>
+      style={{ background: 'var(--color-bg-primary)', color: 'var(--color-text-tertiary)' }}>{badge}</span>
   )
 }
 
@@ -113,6 +134,31 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const { company, currency, language, setCurrency, setLanguage, sidebarOpen, toggleSidebar, setCompany, setUserPlan } = useAppStore()
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [showAccountPanel, setShowAccountPanel] = useState(false)
+
+  // Collapsible sections state with localStorage persistence
+  const [expandedSections, setExpandedSections] = useState<string[]>(['MISSION', 'WORK', 'FINANCIAL MANAGEMENT', 'COMPLIANCE'])
+
+  useEffect(() => {
+    // Load from localStorage on mount
+    const saved = localStorage.getItem('ipoready_expanded_nav_sections')
+    if (saved) {
+      try {
+        setExpandedSections(JSON.parse(saved))
+      } catch {
+        // If parsing fails, keep defaults
+      }
+    }
+  }, [])
+
+  const toggleSection = (section: string) => {
+    setExpandedSections(prev => {
+      const updated = prev.includes(section)
+        ? prev.filter(s => s !== section)
+        : [...prev, section]
+      localStorage.setItem('ipoready_expanded_nav_sections', JSON.stringify(updated))
+      return updated
+    })
+  }
 
   // Dynamic nav stats (checklist badge)
   const [navStats, setNavStats] = useState<{ totalTasks: number; completedTasks: number; documentsCount: number } | null>(null)
@@ -255,37 +301,38 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const breadcrumb = pathname.split('/')[1] || 'Dashboard'
 
   return (
-    <div className="min-h-screen flex" style={{ background: '#F7F6F4' }}>
+    <div className="min-h-screen flex" style={{ background: 'var(--color-bg-primary)' }}>
 
       {/* ── Sidebar ───────────────────────────────────────────────────────── */}
       <AnimatePresence>
         {sidebarOpen && (
-          <motion.aside
+          <motion.div
             initial={{ x: -264 }}
             animate={{ x: 0 }}
             exit={{ x: -264 }}
             transition={{ type: 'spring', stiffness: 320, damping: 32 }}
             className="fixed left-0 top-0 bottom-0 w-64 z-40 flex flex-col"
-            style={{ background: '#FFFFFF', borderRight: '1px solid #E5E4E0' }}
+            style={{ background: 'var(--color-surface-primary)', borderRight: '1px solid var(--color-border)' }}
+            role="complementary"
           >
             {/* Logo */}
-            <div className="px-6 py-5" style={{ borderBottom: '1px solid #E5E4E0' }}>
+            <div className="px-6 py-5" style={{ borderBottom: '1px solid var(--color-border)' }}>
               <Link href="/dashboard" className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl flex items-center justify-center"
-                  style={{ background: '#1A1A1A' }}>
+                  style={{ background: 'var(--color-text-primary)' }}>
                   <Rocket className="w-4 h-4 text-white" />
                 </div>
                 <span className="font-display font-bold text-lg text-nav tracking-tight">
-                  IPO<span style={{ color: '#E8312A' }}>Ready</span>
+                  IPO<span style={{ color: 'var(--color-accent)' }}>Ready</span>
                 </span>
               </Link>
             </div>
 
             {/* Company summary */}
             {company && (
-              <div className="px-4 py-4" style={{ borderBottom: '1px solid #E5E4E0' }}>
+              <div className="px-4 py-4" style={{ borderBottom: '1px solid var(--color-border)' }}>
                 <div className="flex items-start gap-2.5 p-3 rounded-xl"
-                  style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
+                  style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)' }}>
                   <Building2 className="w-3.5 h-3.5 text-text-muted mt-0.5 flex-shrink-0" />
                   <div className="min-w-0 flex-1">
                     <p className="text-nav text-xs font-semibold truncate">{company.name}</p>
@@ -296,7 +343,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         <span className="text-xs font-semibold text-accent">{company.progressPercentage}%</span>
                       </div>
                       <div className="progress-bar" style={{ height: '4px' }}>
-                        <div className="progress-fill" style={{ width: `${company.progressPercentage}%`, background: '#E8312A' }} />
+                        <div className="progress-fill" style={{ width: `${company.progressPercentage}%`, background: 'var(--color-accent)' }} />
                       </div>
                     </div>
                   </div>
@@ -304,46 +351,77 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </div>
             )}
 
-            {/* Navigation - Grouped */}
+            {/* Navigation - Grouped with Collapsible Sections */}
             <nav className="flex-1 px-0 py-4 overflow-y-auto">
-              {NAV_GROUPS.map((group) => (
-                <div key={group.section} className="mb-6 last:mb-0">
-                  {/* Section Header */}
-                  <div className="px-6 mb-3">
-                    <h3 className="text-xs font-bold tracking-wider text-text-muted uppercase">
-                      {group.section}
-                    </h3>
+              {NAV_GROUPS.map((group) => {
+                const isCollapsible = group.collapsible
+                const isExpanded = expandedSections.includes(group.section)
+
+                return (
+                  <div key={group.section} className="mb-6 last:mb-0">
+                    {/* Section Header - Clickable if collapsible */}
+                    <div
+                      className={`px-6 mb-3 flex items-center justify-between ${
+                        isCollapsible ? 'cursor-pointer hover:opacity-70 transition-opacity' : ''
+                      }`}
+                      onClick={() => isCollapsible && toggleSection(group.section)}
+                    >
+                      <h3 className="text-xs font-bold tracking-wider text-text-muted uppercase">
+                        {group.section}
+                      </h3>
+                      {isCollapsible && (
+                        <motion.div
+                          animate={{ rotate: isExpanded ? 0 : -90 }}
+                          transition={{ duration: 0.2 }}
+                          className="flex items-center"
+                        >
+                          <ChevronDown className="w-3.5 h-3.5 text-text-muted flex-shrink-0" />
+                        </motion.div>
+                      )}
+                    </div>
+
+                    {/* Section Items - Animated collapse/expand */}
+                    <AnimatePresence>
+                      {(!isCollapsible || isExpanded) && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-3 space-y-1">
+                            {group.items.map(({ href, icon: Icon, label, badge, key }) => {
+                              const isActive = pathname === href || pathname.startsWith(href + '/')
+
+                              // Derive dynamic badge overrides
+                              let resolvedBadge: string | null = badge
+                              if (key === 'checklist' && navStats) {
+                                const incomplete = navStats.totalTasks - navStats.completedTasks
+                                resolvedBadge = incomplete > 0 ? String(incomplete) : null
+                              }
+
+                              return (
+                                <Link key={href} href={href} className={`nav-item ${isActive ? 'active' : ''}`}>
+                                  <Icon className="w-[15px] h-[15px] flex-shrink-0" />
+                                  <span className="flex-1 text-[13.5px]">{label}</span>
+                                  {resolvedBadge && <BadgeChip badge={resolvedBadge} />}
+                                </Link>
+                              )
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
-
-                  {/* Section Items */}
-                  <div className="px-3 space-y-1">
-                    {group.items.map(({ href, icon: Icon, label, badge, key }) => {
-                      const isActive = pathname === href || pathname.startsWith(href + '/')
-
-                      // Derive dynamic badge overrides
-                      let resolvedBadge: string | null = badge
-                      if (key === 'checklist' && navStats) {
-                        const incomplete = navStats.totalTasks - navStats.completedTasks
-                        resolvedBadge = incomplete > 0 ? String(incomplete) : null
-                      }
-
-                      return (
-                        <Link key={href} href={href} className={`nav-item ${isActive ? 'active' : ''}`}>
-                          <Icon className="w-[15px] h-[15px] flex-shrink-0" />
-                          <span className="flex-1 text-[13.5px]">{label}</span>
-                          {resolvedBadge && <BadgeChip badge={resolvedBadge} />}
-                        </Link>
-                      )
-                    })}
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </nav>
 
             {/* PACE Score */}
             {company && (
-              <div className="px-4 py-4" style={{ borderTop: '1px solid #E5E4E0' }}>
-                <div className="p-3 rounded-xl" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
+              <div className="px-4 py-4" style={{ borderTop: '1px solid var(--color-border)' }}>
+                <div className="p-3 rounded-xl" style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)' }}>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-1.5">
                       <Zap className="w-3.5 h-3.5 text-accent" />
@@ -351,7 +429,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                       <div style={{ position: 'relative' }}>
                         <HelpCircle
                           className="w-3 h-3"
-                          style={{ color: '#C4C2BE', cursor: 'pointer' }}
+                          style={{ color: 'var(--color-text-muted)', cursor: 'pointer' }}
                           id="pace-help-trigger"
                           onMouseEnter={() => {
                             const tt = document.getElementById('pace-sidebar-tooltip')
@@ -364,7 +442,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         />
                         <div id="pace-sidebar-tooltip" style={{
                           display: 'none', position: 'absolute', bottom: '18px', left: '-8px',
-                          width: '220px', background: '#1A1A1A', color: 'white', borderRadius: '10px',
+                          width: '220px', background: 'var(--color-text-primary)', color: 'white', borderRadius: '10px',
                           padding: '10px 12px', fontSize: '11px', lineHeight: 1.5, zIndex: 100,
                           boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
                         }}>
@@ -372,36 +450,36 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                           <p style={{ color: 'rgba(255,255,255,0.65)', marginBottom: '8px' }}>
                             IPOReady&apos;s proprietary velocity engine measuring execution speed × phase weighting × quality.
                           </p>
-                          <Link href="/dashboard" style={{ color: '#FF6B35', fontWeight: 600, textDecoration: 'none', fontSize: '11px' }}>
+                          <Link href="/dashboard" style={{ color: 'var(--color-accent-secondary)', fontWeight: 600, textDecoration: 'none', fontSize: '11px' }}>
                             See full breakdown →
                           </Link>
                           {/* Tooltip arrow */}
-                          <div style={{ position: 'absolute', bottom: '-5px', left: '12px', width: '10px', height: '10px', background: '#1A1A1A', transform: 'rotate(45deg)', borderRadius: '1px' }} />
+                          <div style={{ position: 'absolute', bottom: '-5px', left: '12px', width: '10px', height: '10px', background: 'var(--color-text-primary)', transform: 'rotate(45deg)', borderRadius: '1px' }} />
                         </div>
                       </div>
                     </div>
                     <span className="font-bold text-xl text-nav">{company.paceScore}</span>
                   </div>
                   <div className="progress-bar">
-                    <div className="progress-fill" style={{ width: `${company.paceScore}%`, background: '#1A1A1A' }} />
+                    <div className="progress-fill" style={{ width: `${company.paceScore}%`, background: 'var(--color-text-primary)' }} />
                   </div>
                   <div className="flex items-center justify-between mt-1.5">
                     <p className="text-text-light text-xs">~{company.estimatedDaysToIPO} days to listing</p>
-                    <span className="text-[9px] font-bold rounded-sm" style={{ background: '#1A1A1A', color: 'white', padding: '1px 4px', letterSpacing: '0.04em' }}>IP</span>
+                    <span className="text-[9px] font-bold rounded-sm" style={{ background: 'var(--color-text-primary)', color: 'white', padding: '1px 4px', letterSpacing: '0.04em' }}>IP</span>
                   </div>
                 </div>
               </div>
             )}
 
             {/* User */}
-            <div className="px-4 py-4" style={{ borderTop: '1px solid #E5E4E0' }}>
+            <div className="px-4 py-4" style={{ borderTop: '1px solid var(--color-border)' }}>
               <div className="relative">
                 <button
                   onClick={() => setShowUserMenu(v => !v)}
                   className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-bg transition-colors"
                 >
                   <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                    style={{ background: '#1A1A1A' }}>
+                    style={{ background: 'var(--color-text-primary)' }}>
                     {session?.user?.name?.charAt(0) || 'U'}
                   </div>
                   <div className="flex-1 min-w-0 text-left">
@@ -419,23 +497,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                       exit={{ opacity: 0, y: 8, scale: 0.97 }}
                       transition={{ duration: 0.15 }}
                       className="absolute bottom-full left-0 right-0 mb-2 z-50 overflow-hidden rounded-2xl"
-                      style={{ background: 'white', border: '1px solid #E5E4E0', boxShadow: '0 -12px 48px rgba(0,0,0,0.12), 0 -2px 8px rgba(0,0,0,0.06)' }}
+                      style={{ background: 'white', border: '1px solid var(--color-border)', boxShadow: '0 -12px 48px rgba(0,0,0,0.12), 0 -2px 8px rgba(0,0,0,0.06)' }}
                     >
                       {/* User info */}
-                      <div className="px-4 py-3.5" style={{ background: '#F7F6F4', borderBottom: '1px solid #EEECE8' }}>
+                      <div className="px-4 py-3.5" style={{ background: 'var(--color-bg-primary)', borderBottom: '1px solid var(--color-border-medium)' }}>
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
-                            style={{ background: '#1A1A1A' }}>
+                            style={{ background: 'var(--color-text-primary)' }}>
                             {getInitials(session?.user?.name)}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <p className="text-sm font-bold truncate" style={{ color: '#1A1A1A' }}>{session?.user?.name || 'User'}</p>
-                            <p className="text-xs truncate" style={{ color: '#9A9A9A' }}>{session?.user?.email}</p>
+                            <p className="text-sm font-bold truncate" style={{ color: 'var(--color-text-primary)' }}>{session?.user?.name || 'User'}</p>
+                            <p className="text-xs truncate" style={{ color: 'var(--color-text-tertiary)' }}>{session?.user?.email}</p>
                           </div>
                         </div>
                         <div className="mt-2 flex items-center gap-1.5">
-                          <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: '#22C55E' }} />
-                          <span className="text-xs font-medium" style={{ color: '#717171' }}>
+                          <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: 'var(--color-success-bright)' }} />
+                          <span className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
                             {formatRole((session?.user as any)?.role)}
                           </span>
                         </div>
@@ -446,42 +524,42 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         <Link href="/account"
                           onClick={() => setShowUserMenu(false)}
                           className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-colors"
-                          style={{ color: '#1A1A1A' }}
-                          onMouseEnter={e => (e.currentTarget.style.background = '#F7F6F4')}
+                          style={{ color: 'var(--color-text-primary)' }}
+                          onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-bg-primary)')}
                           onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                          <Settings className="w-4 h-4 flex-shrink-0" style={{ color: '#717171' }} />
+                          <Settings className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--color-text-secondary)' }} />
                           Account Settings
                         </Link>
                       </div>
 
                       {/* Preferences */}
                       <div className="px-4 py-3" style={{ borderBottom: '1px solid #F0EFED' }}>
-                        <p className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: '#C4C2BE' }}>
+                        <p className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--color-text-muted)' }}>
                           Preferences
                         </p>
                         <div className="flex items-center justify-between mb-2.5">
-                          <span className="text-xs font-medium" style={{ color: '#717171' }}>Currency</span>
-                          <div className="flex items-center p-0.5 rounded-lg gap-0.5" style={{ background: '#F0EFED' }}>
+                          <span className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>Currency</span>
+                          <div className="flex items-center p-0.5 rounded-lg gap-0.5" style={{ background: 'var(--color-surface-secondary)' }}>
                             {(['CAD', 'USD'] as const).map(c => (
                               <button key={c} onClick={() => setCurrency(c)}
                                 className="text-xs px-2.5 py-1 rounded-md font-semibold transition-all"
                                 style={currency === c
-                                  ? { background: 'white', color: '#1A1A1A', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }
-                                  : { color: '#9A9A9A' }}>
+                                  ? { background: 'white', color: 'var(--color-text-primary)', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }
+                                  : { color: 'var(--color-text-tertiary)' }}>
                                 ${c}
                               </button>
                             ))}
                           </div>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium" style={{ color: '#717171' }}>Language</span>
-                          <div className="flex items-center p-0.5 rounded-lg gap-0.5" style={{ background: '#F0EFED' }}>
+                          <span className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>Language</span>
+                          <div className="flex items-center p-0.5 rounded-lg gap-0.5" style={{ background: 'var(--color-surface-secondary)' }}>
                             {(['en', 'fr'] as const).map(l => (
                               <button key={l} onClick={() => setLanguage(l)}
                                 className="text-xs px-2.5 py-1 rounded-md font-semibold transition-all"
                                 style={language === l
-                                  ? { background: 'white', color: '#1A1A1A', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }
-                                  : { color: '#9A9A9A' }}>
+                                  ? { background: 'white', color: 'var(--color-text-primary)', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }
+                                  : { color: 'var(--color-text-tertiary)' }}>
                                 {l.toUpperCase()}
                               </button>
                             ))}
@@ -494,8 +572,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         <button
                           onClick={() => signOut({ callbackUrl: '/login' })}
                           className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-colors"
-                          style={{ color: '#E8312A' }}
-                          onMouseEnter={e => (e.currentTarget.style.background = '#FDECEB')}
+                          style={{ color: 'var(--color-accent)' }}
+                          onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-error-soft)')}
                           onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                           <LogOut className="w-4 h-4 flex-shrink-0" /> Sign Out
                         </button>
@@ -505,7 +583,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </AnimatePresence>
               </div>
             </div>
-          </motion.aside>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -518,7 +596,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         {/* Top bar — always visible, content scrolls below */}
         <header className="flex-shrink-0 z-30 h-16 flex items-center gap-4"
-          style={{ background: 'rgba(247,246,244,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #E5E4E0', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+          style={{ background: 'rgba(247,246,244,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid var(--color-border)', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <button onClick={toggleSidebar}
             className="text-text-muted hover:text-nav transition-colors flex-shrink-0">
             {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -536,9 +614,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {/* auditus.ai */}
           <a href="https://auditus.ai" target="_blank"
             className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors flex-shrink-0"
-            style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#717171' }}
-            onMouseEnter={e => (e.currentTarget.style.background = '#FDECEB', e.currentTarget.style.color = '#E8312A', e.currentTarget.style.borderColor = '#E8312A')}
-            onMouseLeave={e => (e.currentTarget.style.background = '#F7F6F4', e.currentTarget.style.color = '#717171', e.currentTarget.style.borderColor = '#E5E4E0')}>
+            style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)' }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-error-soft)', e.currentTarget.style.color = 'var(--color-accent)', e.currentTarget.style.borderColor = 'var(--color-accent)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'var(--color-bg-primary)', e.currentTarget.style.color = 'var(--color-text-secondary)', e.currentTarget.style.borderColor = 'var(--color-border)')}>
             <Zap className="w-3 h-3" /> Preparing for audit?
           </a>
 
@@ -552,7 +630,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Bell className="w-5 h-5 text-text-muted" />
               {unreadCount > 0 && (
                 <span className="absolute top-1 right-1 w-4 h-4 rounded-full text-white flex items-center justify-center font-bold"
-                  style={{ background: '#E8312A', fontSize: '9px' }}>
+                  style={{ background: 'var(--color-accent)', fontSize: '9px' }}>
                   {unreadCount > 9 ? '9+' : unreadCount}
                 </span>
               )}
@@ -571,7 +649,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     position: 'absolute', top: 'calc(100% + 8px)', right: 0,
                     width: '360px', maxHeight: '480px',
                     background: 'white', borderRadius: '16px',
-                    border: '1px solid #E5E4E0',
+                    border: '1px solid var(--color-border)',
                     boxShadow: '0 12px 48px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)',
                     zIndex: 50, overflow: 'hidden', display: 'flex', flexDirection: 'column',
                   }}
@@ -579,15 +657,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   {/* Header */}
                   <div style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '14px 16px', borderBottom: '1px solid #E5E4E0',
-                    background: '#F7F6F4', flexShrink: 0,
+                    padding: '14px 16px', borderBottom: '1px solid var(--color-border)',
+                    background: 'var(--color-bg-primary)', flexShrink: 0,
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Bell style={{ width: '14px', height: '14px', color: '#1A1A1A' }} />
-                      <span style={{ fontSize: '13px', fontWeight: 700, color: '#1A1A1A' }}>Notifications</span>
+                      <Bell style={{ width: '14px', height: '14px', color: 'var(--color-text-primary)' }} />
+                      <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-text-primary)' }}>Notifications</span>
                       {unreadCount > 0 && (
                         <span style={{
-                          fontSize: '10px', fontWeight: 700, background: '#E8312A', color: 'white',
+                          fontSize: '10px', fontWeight: 700, background: 'var(--color-accent)', color: 'white',
                           borderRadius: '20px', padding: '1px 6px',
                         }}>
                           {unreadCount}
@@ -599,12 +677,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         onClick={markAllRead}
                         style={{
                           display: 'flex', alignItems: 'center', gap: '4px',
-                          fontSize: '11px', fontWeight: 600, color: '#717171',
+                          fontSize: '11px', fontWeight: 600, color: 'var(--color-text-secondary)',
                           background: 'none', border: 'none', cursor: 'pointer', padding: '4px 6px',
                           borderRadius: '6px',
                         }}
-                        onMouseEnter={e => (e.currentTarget.style.background = '#F0EFED', e.currentTarget.style.color = '#1A1A1A')}
-                        onMouseLeave={e => (e.currentTarget.style.background = 'none', e.currentTarget.style.color = '#717171')}
+                        onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-surface-secondary)', e.currentTarget.style.color = 'var(--color-text-primary)')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'none', e.currentTarget.style.color = 'var(--color-text-secondary)')}
                       >
                         <CheckCheck style={{ width: '12px', height: '12px' }} /> Mark all read
                       </button>
@@ -615,8 +693,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <div style={{ overflowY: 'auto', flex: 1 }}>
                     {dbNotifications.length === 0 ? (
                       <div style={{ padding: '32px 16px', textAlign: 'center' }}>
-                        <Bell style={{ width: '24px', height: '24px', color: '#D1D5DB', margin: '0 auto 8px' }} />
-                        <p style={{ fontSize: '13px', color: '#9A9A9A', margin: 0 }}>No notifications yet</p>
+                        <Bell style={{ width: '24px', height: '24px', color: 'var(--color-disabled)', margin: '0 auto 8px' }} />
+                        <p style={{ fontSize: '13px', color: 'var(--color-text-tertiary)', margin: 0 }}>No notifications yet</p>
                       </div>
                     ) : (
                       dbNotifications.map((n, i) => (
@@ -633,28 +711,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                             display: 'flex', alignItems: 'flex-start', gap: '10px',
                             padding: '12px 16px',
                             borderBottom: i < dbNotifications.length - 1 ? '1px solid #F0EFED' : 'none',
-                            background: n.read ? 'transparent' : '#FDFCFB',
+                            background: n.read ? 'transparent' : 'var(--color-surface-light)',
                             cursor: n.link ? 'pointer' : 'default',
                             transition: 'background 0.15s',
                           }}
-                          onMouseEnter={e => { if (n.link) (e.currentTarget as HTMLDivElement).style.background = '#F7F6F4' }}
-                          onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = n.read ? 'transparent' : '#FDFCFB' }}
+                          onMouseEnter={e => { if (n.link) (e.currentTarget as HTMLDivElement).style.background = 'var(--color-bg-primary)' }}
+                          onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = n.read ? 'transparent' : 'var(--color-surface-light)' }}
                         >
                           {/* Unread dot */}
                           <div style={{
                             width: '7px', height: '7px', borderRadius: '50%', flexShrink: 0, marginTop: '5px',
-                            background: n.read ? 'transparent' : '#E8312A',
+                            background: n.read ? 'transparent' : 'var(--color-accent)',
                           }} />
                           <div style={{ flex: 1, minWidth: 0 }}>
-                            <p style={{ fontSize: '13px', fontWeight: n.read ? 500 : 700, color: '#1A1A1A', margin: '0 0 2px', lineHeight: 1.4 }}>
+                            <p style={{ fontSize: '13px', fontWeight: n.read ? 500 : 700, color: 'var(--color-text-primary)', margin: '0 0 2px', lineHeight: 1.4 }}>
                               {n.title}
                             </p>
-                            <p style={{ fontSize: '12px', color: '#717171', margin: '0 0 4px', lineHeight: 1.4 }}>
+                            <p style={{ fontSize: '12px', color: 'var(--color-text-secondary)', margin: '0 0 4px', lineHeight: 1.4 }}>
                               {n.message}
                             </p>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                              <Clock style={{ width: '10px', height: '10px', color: '#9A9A9A' }} />
-                              <span style={{ fontSize: '11px', color: '#9A9A9A' }}>{timeAgo(n.createdAt)}</span>
+                              <Clock style={{ width: '10px', height: '10px', color: 'var(--color-text-tertiary)' }} />
+                              <span style={{ fontSize: '11px', color: 'var(--color-text-tertiary)' }}>{timeAgo(n.createdAt)}</span>
                             </div>
                           </div>
                         </div>
@@ -663,13 +741,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   </div>
 
                   {/* Footer link */}
-                  <div style={{ flexShrink: 0, padding: '10px 16px', borderTop: '1px solid #E5E4E0', background: '#F7F6F4' }}>
+                  <div style={{ flexShrink: 0, padding: '10px 16px', borderTop: '1px solid var(--color-border)', background: 'var(--color-bg-primary)' }}>
                     <Link
                       href="/notifications"
                       onClick={() => setShowBellDropdown(false)}
-                      style={{ fontSize: '12px', fontWeight: 600, color: '#717171', textDecoration: 'none', display: 'block', textAlign: 'center' }}
-                      onMouseEnter={e => (e.currentTarget.style.color = '#1A1A1A')}
-                      onMouseLeave={e => (e.currentTarget.style.color = '#717171')}
+                      style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-secondary)', textDecoration: 'none', display: 'block', textAlign: 'center' }}
+                      onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text-primary)')}
+                      onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
                     >
                       Manage notification preferences →
                     </Link>
@@ -683,23 +761,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <button
             onClick={() => setShowAccountPanel(true)}
             className="hidden md:flex items-center gap-2.5 pl-3 flex-shrink-0 rounded-xl transition-colors"
-            style={{ borderLeft: '1px solid #E5E4E0', paddingRight: '8px', paddingTop: '6px', paddingBottom: '6px', cursor: 'pointer' }}
-            onMouseEnter={e => (e.currentTarget.style.background = '#F0EFED')}
+            style={{ borderLeft: '1px solid var(--color-border)', paddingRight: '8px', paddingTop: '6px', paddingBottom: '6px', cursor: 'pointer' }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-surface-secondary)')}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-              style={{ background: '#1A1A1A' }}>
+              style={{ background: 'var(--color-text-primary)' }}>
               {getInitials(session?.user?.name)}
             </div>
             <div className="text-left">
               <p className="text-nav text-sm font-semibold leading-tight">
                 {session?.user?.name || 'User'}
               </p>
-              <p className="text-xs leading-tight" style={{ color: '#9A9A9A' }}>
+              <p className="text-xs leading-tight" style={{ color: 'var(--color-text-tertiary)' }}>
                 {formatRole((session?.user as any)?.role)}
               </p>
             </div>
-            <ChevronDown className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#C4C2BE', marginLeft: '2px' }} />
+            <ChevronDown className="w-3.5 h-3.5 flex-shrink-0" style={{ color: 'var(--color-text-muted)', marginLeft: '2px' }} />
           </button>
         </header>
 
@@ -715,18 +793,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               transition={{ duration: 0.2 }}
               style={{ flexShrink: 0, overflow: 'hidden' }}
             >
-              <div style={{ background: '#FFFBEB', borderBottom: '1px solid #FDE68A', padding: '10px 24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <AlertTriangle className="w-4 h-4 flex-shrink-0" style={{ color: '#D97706' }} />
-                <p style={{ fontSize: '13px', fontWeight: 600, color: '#92400E', flex: 1 }}>
+              <div style={{ background: 'var(--color-warning-pale)', borderBottom: '1px solid #FDE68A', padding: '10px 24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <AlertTriangle className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--color-warning-dark)' }} />
+                <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-warning-dark)', flex: 1 }}>
                   Your subscription renews in <strong>{daysRemaining} days</strong> on {renewalDate}. Billing processes automatically — no action needed.
                 </p>
                 <Link href="/account"
-                  style={{ fontSize: '12px', fontWeight: 600, color: '#B45309', textDecoration: 'none', whiteSpace: 'nowrap', padding: '4px 10px', borderRadius: '6px', border: '1px solid #FDE68A', background: 'rgba(253,230,138,0.3)' }}
+                  style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-warning)', textDecoration: 'none', whiteSpace: 'nowrap', padding: '4px 10px', borderRadius: '6px', border: '1px solid #FDE68A', background: 'rgba(253,230,138,0.3)' }}
                   onMouseEnter={e => (e.currentTarget.style.background = 'rgba(253,230,138,0.6)')}
                   onMouseLeave={e => (e.currentTarget.style.background = 'rgba(253,230,138,0.3)')}>
                   Manage Billing
                 </Link>
-                <button onClick={() => setShowRenewalBanner(false)} style={{ color: '#B45309', opacity: 0.5, background: 'none', border: 'none', cursor: 'pointer', padding: '2px', flexShrink: 0 }}
+                <button onClick={() => setShowRenewalBanner(false)} style={{ color: 'var(--color-warning)', opacity: 0.5, background: 'none', border: 'none', cursor: 'pointer', padding: '2px', flexShrink: 0 }}
                   onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
                   onMouseLeave={e => (e.currentTarget.style.opacity = '0.5')}>
                   <X className="w-3.5 h-3.5" />
@@ -745,15 +823,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               transition={{ duration: 0.2 }}
               style={{ flexShrink: 0, overflow: 'hidden' }}
             >
-              <div style={{ background: '#FEF2F2', borderBottom: '1px solid #FECACA', padding: '10px 24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <AlertTriangle className="w-4 h-4 flex-shrink-0" style={{ color: '#DC2626' }} />
-                <p style={{ fontSize: '13px', fontWeight: 700, color: '#991B1B', flex: 1 }}>
+              <div style={{ background: 'var(--color-error-light)', borderBottom: '1px solid #FECACA', padding: '10px 24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <AlertTriangle className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--color-error)' }} />
+                <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-error-dark)', flex: 1 }}>
                   ⚠ Action required — subscription expires in <strong>{daysRemaining} day{daysRemaining > 1 ? 's' : ''}</strong>. Renew now to avoid service interruption and data freeze.
                 </p>
                 <Link href="/account"
-                  style={{ fontSize: '12px', fontWeight: 700, color: 'white', textDecoration: 'none', whiteSpace: 'nowrap', padding: '5px 12px', borderRadius: '6px', background: '#DC2626' }}
-                  onMouseEnter={e => (e.currentTarget.style.background = '#B91C1C')}
-                  onMouseLeave={e => (e.currentTarget.style.background = '#DC2626')}>
+                  style={{ fontSize: '12px', fontWeight: 700, color: 'white', textDecoration: 'none', whiteSpace: 'nowrap', padding: '5px 12px', borderRadius: '6px', background: 'var(--color-error)' }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-error-dark)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'var(--color-error)')}>
                   Renew Now →
                 </Link>
               </div>
@@ -770,14 +848,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               transition={{ duration: 0.2 }}
               style={{ flexShrink: 0, overflow: 'hidden' }}
             >
-              <div style={{ background: '#1A1A1A', borderBottom: '1px solid #333', padding: '10px 24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <RefreshCcw className="w-4 h-4 flex-shrink-0" style={{ color: '#9CA3AF' }} />
-                <p style={{ fontSize: '13px', fontWeight: 600, color: '#D1D5DB', flex: 1 }}>
-                  Your subscription has lapsed. <span style={{ color: '#9CA3AF', fontWeight: 400 }}>Your data is safe — renew to restore full access.</span>
+              <div style={{ background: 'var(--color-text-primary)', borderBottom: '1px solid #333', padding: '10px 24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <RefreshCcw className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--color-text-muted)' }} />
+                <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-disabled)', flex: 1 }}>
+                  Your subscription has lapsed. <span style={{ color: 'var(--color-text-muted)', fontWeight: 400 }}>Your data is safe — renew to restore full access.</span>
                 </p>
                 <Link href="/account"
-                  style={{ fontSize: '12px', fontWeight: 700, color: '#1A1A1A', textDecoration: 'none', whiteSpace: 'nowrap', padding: '5px 12px', borderRadius: '6px', background: 'white' }}
-                  onMouseEnter={e => (e.currentTarget.style.background = '#F7F6F4')}
+                  style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-text-primary)', textDecoration: 'none', whiteSpace: 'nowrap', padding: '5px 12px', borderRadius: '6px', background: 'white' }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-bg-primary)')}
                   onMouseLeave={e => (e.currentTarget.style.background = 'white')}>
                   Restore Access →
                 </Link>
@@ -798,21 +876,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               gap: '16px', padding: '32px',
             }}>
-              <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#1A1A1A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <RefreshCcw style={{ width: '22px', height: '22px', color: 'white' }} />
               </div>
               <div style={{ textAlign: 'center', maxWidth: '380px' }}>
-                <p style={{ fontSize: '18px', fontWeight: 800, color: '#1A1A1A', marginBottom: '6px' }}>Account Frozen — Read Only</p>
-                <p style={{ fontSize: '14px', color: '#717171', lineHeight: 1.6, marginBottom: '20px' }}>
-                  Your subscription has lapsed. All editing is disabled. <strong style={{ color: '#1A1A1A' }}>Your data is safe</strong> — nothing has been deleted.
+                <p style={{ fontSize: '18px', fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: '6px' }}>Account Frozen — Read Only</p>
+                <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: '20px' }}>
+                  Your subscription has lapsed. All editing is disabled. <strong style={{ color: 'var(--color-text-primary)' }}>Your data is safe</strong> — nothing has been deleted.
                 </p>
                 <Link href="/account"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px', borderRadius: '12px', background: '#1A1A1A', color: 'white', fontWeight: 700, fontSize: '14px', textDecoration: 'none' }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px', borderRadius: '12px', background: 'var(--color-text-primary)', color: 'white', fontWeight: 700, fontSize: '14px', textDecoration: 'none' }}
                   onMouseEnter={e => (e.currentTarget.style.background = '#333')}
-                  onMouseLeave={e => (e.currentTarget.style.background = '#1A1A1A')}>
+                  onMouseLeave={e => (e.currentTarget.style.background = 'var(--color-text-primary)')}>
                   Restore Access — Renew Now →
                 </Link>
-                <p style={{ fontSize: '11px', color: '#9A9A9A', marginTop: '10px' }}>Data preserved for 90 days after expiry</p>
+                <p style={{ fontSize: '11px', color: 'var(--color-text-tertiary)', marginTop: '10px' }}>Data preserved for 90 days after expiry</p>
               </div>
             </div>
           )}
@@ -845,24 +923,24 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 position: 'fixed', top: 0, right: 0, bottom: 0,
                 width: '380px', zIndex: 50,
                 display: 'flex', flexDirection: 'column',
-                background: '#111111',
+                background: 'var(--color-primary)',
                 boxShadow: '-8px 0 48px rgba(0,0,0,0.4)',
               }}
             >
               {/* Panel Header (fixed) */}
-              <div style={{ flexShrink: 0, background: '#1A1A1A', padding: '20px 20px 16px', borderBottom: '1px solid #2A2A2A' }}>
+              <div style={{ flexShrink: 0, background: 'var(--color-text-primary)', padding: '20px 20px 16px', borderBottom: '1px solid #2A2A2A' }}>
                 {/* Close button */}
                 <button
                   onClick={() => setShowAccountPanel(false)}
                   style={{
                     position: 'absolute', top: '16px', right: '16px',
                     width: '28px', height: '28px', borderRadius: '50%',
-                    background: '#2A2A2A', border: 'none', cursor: 'pointer',
+                    background: 'var(--color-stroke-dark)', border: 'none', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#9A9A9A',
+                    color: 'var(--color-text-tertiary)',
                   }}
                   onMouseEnter={e => (e.currentTarget.style.background = '#333')}
-                  onMouseLeave={e => (e.currentTarget.style.background = '#2A2A2A')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'var(--color-stroke-dark)')}
                 >
                   <X style={{ width: '14px', height: '14px' }} />
                 </button>
@@ -880,14 +958,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <p style={{ fontSize: '16px', fontWeight: 700, color: 'white', marginBottom: '3px' }}>
                   {session?.user?.name || 'User'}
                 </p>
-                <p style={{ fontSize: '12px', color: '#9A9A9A', marginBottom: '10px' }}>
+                <p style={{ fontSize: '12px', color: 'var(--color-text-tertiary)', marginBottom: '10px' }}>
                   {formatRole((session?.user as any)?.role)}
                 </p>
 
                 {/* Active status */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#22C55E', flexShrink: 0 }} />
-                  <span style={{ fontSize: '12px', color: '#9A9A9A' }}>{planName} · Active</span>
+                  <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'var(--color-success-bright)', flexShrink: 0 }} />
+                  <span style={{ fontSize: '12px', color: 'var(--color-text-tertiary)' }}>{planName} · Active</span>
                 </div>
               </div>
 
@@ -897,10 +975,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 {/* Section 1 — PACE™ Velocity */}
                 <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid #1E1E1E' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-                    <span style={{ fontSize: '11px', fontWeight: 700, color: '#9A9A9A', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                       PACE™ Velocity Score
                     </span>
-                    <span style={{ fontSize: '8px', fontWeight: 700, background: '#1A1A1A', color: '#9A9A9A', border: '1px solid #2A2A2A', borderRadius: '3px', padding: '1px 4px', letterSpacing: '0.05em' }}>
+                    <span style={{ fontSize: '8px', fontWeight: 700, background: 'var(--color-text-primary)', color: 'var(--color-text-tertiary)', border: '1px solid #2A2A2A', borderRadius: '3px', padding: '1px 4px', letterSpacing: '0.05em' }}>
                       IP
                     </span>
                   </div>
@@ -935,26 +1013,26 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     </div>
 
                     <div style={{ flex: 1 }}>
-                      <p style={{ fontSize: '13px', fontWeight: 600, color: '#22C55E', marginBottom: '4px' }}>
+                      <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-success-bright)', marginBottom: '4px' }}>
                         Accelerating ↑
                       </p>
-                      <p style={{ fontSize: '11px', color: '#717171', marginBottom: '10px' }}>
+                      <p style={{ fontSize: '11px', color: 'var(--color-text-secondary)', marginBottom: '10px' }}>
                         Top 30% of issuers
                       </p>
                       {/* Progress bar */}
-                      <div style={{ height: '4px', background: '#2A2A2A', borderRadius: '2px', overflow: 'hidden' }}>
+                      <div style={{ height: '4px', background: 'var(--color-stroke-dark)', borderRadius: '2px', overflow: 'hidden' }}>
                         <div style={{ height: '100%', width: `${paceScore}%`, background: 'linear-gradient(90deg, #E8312A, #FF6B35)', borderRadius: '2px' }} />
                       </div>
-                      <p style={{ fontSize: '10px', color: '#717171', marginTop: '6px' }}>
+                      <p style={{ fontSize: '10px', color: 'var(--color-text-secondary)', marginTop: '6px' }}>
                         {paceScore} / 100
                       </p>
                     </div>
                   </div>
 
                   {/* Days to listing */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#1A1A1A', border: '1px solid #2A2A2A', borderRadius: '10px', padding: '8px 12px' }}>
-                    <Flame style={{ width: '14px', height: '14px', color: '#FF6B35', flexShrink: 0 }} />
-                    <span style={{ fontSize: '12px', color: '#C4C2BE', fontWeight: 500 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--color-text-primary)', border: '1px solid #2A2A2A', borderRadius: '10px', padding: '8px 12px' }}>
+                    <Flame style={{ width: '14px', height: '14px', color: 'var(--color-accent-secondary)', flexShrink: 0 }} />
+                    <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: 500 }}>
                       ~{estimatedDays} days to TSXV listing
                     </span>
                   </div>
@@ -962,15 +1040,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
                 {/* Section 2 — Plan & Billing */}
                 <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid #1E1E1E' }}>
-                  <p style={{ fontSize: '11px', fontWeight: 700, color: '#9A9A9A', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>
+                  <p style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>
                     Your Plan &amp; Billing
                   </p>
 
-                  <div style={{ background: '#1A1A1A', border: '1px solid #2A2A2A', borderRadius: '12px', padding: '14px' }}>
+                  <div style={{ background: 'var(--color-text-primary)', border: '1px solid #2A2A2A', borderRadius: '12px', padding: '14px' }}>
                     {/* Plan name + badge */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                       <span style={{ fontSize: '14px', fontWeight: 700, color: 'white' }}>{planName}</span>
-                      <span style={{ fontSize: '10px', fontWeight: 700, background: '#3B0764', color: '#D8B4FE', borderRadius: '20px', padding: '2px 8px' }}>
+                      <span style={{ fontSize: '10px', fontWeight: 700, background: 'var(--color-accent-purple)', color: 'var(--color-surface-light)', borderRadius: '20px', padding: '2px 8px' }}>
                         GROWTH
                       </span>
                     </div>
@@ -982,19 +1060,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
                     {/* Status row */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                      <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#22C55E', flexShrink: 0 }} />
-                      <span style={{ fontSize: '12px', color: '#22C55E', fontWeight: 600 }}>Active</span>
+                      <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'var(--color-success-bright)', flexShrink: 0 }} />
+                      <span style={{ fontSize: '12px', color: 'var(--color-success-bright)', fontWeight: 600 }}>Active</span>
                     </div>
 
                     {/* Renewal */}
-                    <p style={{ fontSize: '11px', color: '#717171', marginBottom: '12px' }}>
+                    <p style={{ fontSize: '11px', color: 'var(--color-text-secondary)', marginBottom: '12px' }}>
                       Renews: {renewalDate} · {daysRemaining} days remaining
                     </p>
 
                     {/* Renewal warning */}
                     {daysRemaining <= 14 && (
-                      <div style={{ background: '#2D0A0A', border: '1px solid #7F1D1D', borderRadius: '8px', padding: '8px 10px', marginBottom: '10px' }}>
-                        <p style={{ fontSize: '11px', color: '#FCA5A5', fontWeight: 500 }}>
+                      <div style={{ background: 'var(--color-error-dark)', border: '1px solid #7F1D1D', borderRadius: '8px', padding: '8px 10px', marginBottom: '10px' }}>
+                        <p style={{ fontSize: '11px', color: 'var(--color-error-soft)', fontWeight: 500 }}>
                           ⚠ Renewal due in {daysRemaining} days — renew now to avoid service interruption
                         </p>
                       </div>
@@ -1002,9 +1080,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
                     {/* Manage billing link */}
                     <Link href="/account" onClick={() => setShowAccountPanel(false)}
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: '#717171', textDecoration: 'none' }}
-                      onMouseEnter={e => (e.currentTarget.style.color = '#9A9A9A')}
-                      onMouseLeave={e => (e.currentTarget.style.color = '#717171')}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: 'var(--color-text-secondary)', textDecoration: 'none' }}
+                      onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text-tertiary)')}
+                      onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
                     >
                       <CreditCard style={{ width: '12px', height: '12px' }} />
                       Manage Billing →
@@ -1014,7 +1092,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
                 {/* Section 3 — Quick Access */}
                 <div style={{ padding: '20px 20px 8px', borderBottom: '1px solid #1E1E1E' }}>
-                  <p style={{ fontSize: '11px', fontWeight: 700, color: '#9A9A9A', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
+                  <p style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
                     Quick Access
                   </p>
 
@@ -1033,21 +1111,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         padding: '10px 10px', borderRadius: '10px',
                         textDecoration: 'none', marginBottom: '2px', cursor: 'pointer',
                       }}
-                      onMouseEnter={e => (e.currentTarget.style.background = '#1A1A1A')}
+                      onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-text-primary)')}
                       onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                     >
                       <div style={{
                         width: '32px', height: '32px', borderRadius: '8px',
-                        background: '#1A1A1A', border: '1px solid #2A2A2A',
+                        background: 'var(--color-text-primary)', border: '1px solid #2A2A2A',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         flexShrink: 0,
                       }}>
-                        <Icon style={{ width: '14px', height: '14px', color: '#9A9A9A' }} />
+                        <Icon style={{ width: '14px', height: '14px', color: 'var(--color-text-tertiary)' }} />
                       </div>
-                      <span style={{ flex: 1, fontSize: '13px', fontWeight: 500, color: '#E5E4E0' }}>{label}</span>
+                      <span style={{ flex: 1, fontSize: '13px', fontWeight: 500, color: 'var(--color-border)' }}>{label}</span>
                       {badge !== null && (
                         <span style={{
-                          fontSize: '10px', fontWeight: 700, background: '#E8312A', color: 'white',
+                          fontSize: '10px', fontWeight: 700, background: 'var(--color-accent)', color: 'white',
                           borderRadius: '20px', padding: '1px 6px', flexShrink: 0,
                         }}>
                           {badge}
@@ -1060,19 +1138,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
                 {/* Section 4 — Preferences */}
                 <div style={{ padding: '20px 20px 20px' }}>
-                  <p style={{ fontSize: '11px', fontWeight: 700, color: '#9A9A9A', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>
+                  <p style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>
                     Preferences
                   </p>
 
                   {/* Currency */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                    <span style={{ fontSize: '13px', color: '#9A9A9A', fontWeight: 500 }}>Currency</span>
-                    <div style={{ display: 'flex', alignItems: 'center', padding: '3px', borderRadius: '8px', gap: '2px', background: '#1A1A1A', border: '1px solid #2A2A2A' }}>
+                    <span style={{ fontSize: '13px', color: 'var(--color-text-tertiary)', fontWeight: 500 }}>Currency</span>
+                    <div style={{ display: 'flex', alignItems: 'center', padding: '3px', borderRadius: '8px', gap: '2px', background: 'var(--color-text-primary)', border: '1px solid #2A2A2A' }}>
                       {(['CAD', 'USD'] as const).map(c => (
                         <button key={c} onClick={() => setCurrency(c)}
                           style={currency === c
-                            ? { background: '#2A2A2A', color: 'white', fontSize: '12px', fontWeight: 700, padding: '4px 10px', borderRadius: '6px', border: 'none', cursor: 'pointer' }
-                            : { background: 'transparent', color: '#717171', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}
+                            ? { background: 'var(--color-stroke-dark)', color: 'white', fontSize: '12px', fontWeight: 700, padding: '4px 10px', borderRadius: '6px', border: 'none', cursor: 'pointer' }
+                            : { background: 'transparent', color: 'var(--color-text-secondary)', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}
                         >
                           ${c}
                         </button>
@@ -1082,13 +1160,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
                   {/* Language */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '13px', color: '#9A9A9A', fontWeight: 500 }}>Language</span>
-                    <div style={{ display: 'flex', alignItems: 'center', padding: '3px', borderRadius: '8px', gap: '2px', background: '#1A1A1A', border: '1px solid #2A2A2A' }}>
+                    <span style={{ fontSize: '13px', color: 'var(--color-text-tertiary)', fontWeight: 500 }}>Language</span>
+                    <div style={{ display: 'flex', alignItems: 'center', padding: '3px', borderRadius: '8px', gap: '2px', background: 'var(--color-text-primary)', border: '1px solid #2A2A2A' }}>
                       {(['en', 'fr'] as const).map(l => (
                         <button key={l} onClick={() => setLanguage(l)}
                           style={language === l
-                            ? { background: '#2A2A2A', color: 'white', fontSize: '12px', fontWeight: 700, padding: '4px 10px', borderRadius: '6px', border: 'none', cursor: 'pointer' }
-                            : { background: 'transparent', color: '#717171', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}
+                            ? { background: 'var(--color-stroke-dark)', color: 'white', fontSize: '12px', fontWeight: 700, padding: '4px 10px', borderRadius: '6px', border: 'none', cursor: 'pointer' }
+                            : { background: 'transparent', color: 'var(--color-text-secondary)', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}
                         >
                           {l.toUpperCase()}
                         </button>
@@ -1100,17 +1178,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </div>
 
               {/* Panel Footer (fixed) */}
-              <div style={{ flexShrink: 0, padding: '16px 20px', borderTop: '1px solid #1E1E1E', background: '#111111' }}>
+              <div style={{ flexShrink: 0, padding: '16px 20px', borderTop: '1px solid #1E1E1E', background: 'var(--color-primary)' }}>
                 <button
                   onClick={() => signOut({ callbackUrl: '/login' })}
                   style={{
                     width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
                     gap: '8px', padding: '12px', borderRadius: '12px',
-                    background: '#2D0A0A', border: '1px solid #7F1D1D',
-                    color: '#FCA5A5', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+                    background: 'var(--color-error-dark)', border: '1px solid #7F1D1D',
+                    color: 'var(--color-error-soft)', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.background = '#450A0A')}
-                  onMouseLeave={e => (e.currentTarget.style.background = '#2D0A0A')}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-error-dark)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'var(--color-error-dark)')}
                 >
                   <LogOut style={{ width: '15px', height: '15px' }} />
                   Sign Out
@@ -1151,23 +1229,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               }}
             >
               {/* Icon */}
-              <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#FEF2F2', border: '2px solid #FECACA', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
-                <AlertTriangle style={{ width: '24px', height: '24px', color: '#DC2626' }} />
+              <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'var(--color-error-light)', border: '2px solid #FECACA', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+                <AlertTriangle style={{ width: '24px', height: '24px', color: 'var(--color-error)' }} />
               </div>
 
-              <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#1A1A1A', marginBottom: '8px' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: '8px' }}>
                 Subscription Expires Tomorrow
               </h2>
-              <p style={{ fontSize: '14px', color: '#717171', lineHeight: 1.6, marginBottom: '6px' }}>
-                Your <strong style={{ color: '#1A1A1A' }}>{planName}</strong> subscription expires on <strong style={{ color: '#1A1A1A' }}>{renewalDate}</strong>.
+              <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: '6px' }}>
+                Your <strong style={{ color: 'var(--color-text-primary)' }}>{planName}</strong> subscription expires on <strong style={{ color: 'var(--color-text-primary)' }}>{renewalDate}</strong>.
               </p>
-              <p style={{ fontSize: '13px', color: '#9A9A9A', lineHeight: 1.6, marginBottom: '28px' }}>
-                Renew now to maintain uninterrupted access. If billing is not resolved by expiry, your account will be frozen in read-only mode. <strong style={{ color: '#1A1A1A' }}>Your data is always safe.</strong>
+              <p style={{ fontSize: '13px', color: 'var(--color-text-tertiary)', lineHeight: 1.6, marginBottom: '28px' }}>
+                Renew now to maintain uninterrupted access. If billing is not resolved by expiry, your account will be frozen in read-only mode. <strong style={{ color: 'var(--color-text-primary)' }}>Your data is always safe.</strong>
               </p>
 
               {/* What happens if frozen */}
-              <div style={{ background: '#FFF8F1', border: '1px solid #FDE68A', borderRadius: '10px', padding: '14px 16px', marginBottom: '24px', textAlign: 'left' }}>
-                <p style={{ fontSize: '11px', fontWeight: 700, color: '#B45309', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>If not renewed by tomorrow</p>
+              <div style={{ background: 'var(--color-surface-light)', border: '1px solid #FDE68A', borderRadius: '10px', padding: '14px 16px', marginBottom: '24px', textAlign: 'left' }}>
+                <p style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-warning)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>If not renewed by tomorrow</p>
                 {[
                   'Site enters read-only mode — no edits or uploads',
                   'Team members cannot update tasks or checklist items',
@@ -1176,8 +1254,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   'Full access restored immediately upon renewal',
                 ].map((item, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: i < 4 ? '6px' : '0' }}>
-                    <span style={{ fontSize: '11px', color: i < 2 ? '#DC2626' : '#2D7A5F', fontWeight: 700, flexShrink: 0, marginTop: '1px' }}>{i < 2 ? '✗' : '✓'}</span>
-                    <span style={{ fontSize: '12px', color: '#717171', lineHeight: 1.4 }}>{item}</span>
+                    <span style={{ fontSize: '11px', color: i < 2 ? 'var(--color-error)' : 'var(--color-success)', fontWeight: 700, flexShrink: 0, marginTop: '1px' }}>{i < 2 ? '✗' : '✓'}</span>
+                    <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)', lineHeight: 1.4 }}>{item}</span>
                   </div>
                 ))}
               </div>
@@ -1185,16 +1263,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               {/* Actions */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <Link href="/account"
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '13px 24px', borderRadius: '12px', background: '#DC2626', color: 'white', fontWeight: 700, fontSize: '14px', textDecoration: 'none' }}
-                  onMouseEnter={e => (e.currentTarget.style.background = '#B91C1C')}
-                  onMouseLeave={e => (e.currentTarget.style.background = '#DC2626')}>
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '13px 24px', borderRadius: '12px', background: 'var(--color-error)', color: 'white', fontWeight: 700, fontSize: '14px', textDecoration: 'none' }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-error-dark)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'var(--color-error)')}>
                   Renew Subscription Now →
                 </Link>
                 <button
                   onClick={() => setShowRenewalModal(false)}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '13px', color: '#9A9A9A', padding: '6px' }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#717171')}
-                  onMouseLeave={e => (e.currentTarget.style.color = '#9A9A9A')}>
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '13px', color: 'var(--color-text-tertiary)', padding: '6px' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text-tertiary)')}>
                   Remind me later
                 </button>
               </div>
