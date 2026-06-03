@@ -31,6 +31,7 @@ const NAV_GROUPS = [
     items: [
       { href: '/cap-table',       icon: PieChart,        label: 'Cap Table',          badge: 'AI',   key: 'cap-table'   },
       { href: '/documents',       icon: FileText,        label: 'Documents',          badge: null,   key: 'documents'   },
+      { href: '/prospectus',      icon: FileText,        label: 'Prospectus Builder', badge: '✨',   key: 'prospectus'  },
       { href: '/templates',       icon: Award,           label: 'Templates & Forms',  badge: null,   key: 'templates'   },
     ],
   },
