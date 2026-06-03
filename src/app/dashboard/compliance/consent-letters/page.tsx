@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { motion } from 'framer-motion'
+import { Plus, AlertCircle, FileCheck } from 'lucide-react'
 import {
   ConsentRecord,
   ConsentStatus,
@@ -230,24 +231,90 @@ export default function ConsentLettersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6" suppressHydrationWarning>
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">Consent Letters</h1>
-              <p className="text-gray-600">Track regulatory and expert consents required for IPO listing</p>
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setShowForm(!showForm)}
-              className="px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition"
+    <motion.div style={{ background: '#F7F6F4', minHeight: '100vh' }} suppressHydrationWarning>
+      {/* Hero Section */}
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '4.5rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
+          className="text-center"
+        >
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex items-center justify-center gap-2"
+            style={{ marginBottom: '1.5rem' }}
+          >
+            <span
+              className="pill text-xs font-bold uppercase tracking-wider"
+              style={{ background: '#FDECEB', color: '#E8312A' }}
             >
-              {showForm ? 'Cancel' : '+ New Consent'}
-            </motion.button>
-          </div>
+              <FileCheck className="w-3.5 h-3.5 inline mr-1.5" />
+              Regulatory Consents
+            </span>
+          </motion.div>
+
+          {/* Heading */}
+          <motion.h1
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.06 }}
+            className="serif"
+            style={{ fontSize: '2.5rem', lineHeight: '1.2', marginBottom: '1.5rem' }}
+          >
+            Track Expert and<br />
+            <span style={{ color: '#E8312A' }}>Regulatory Consents</span>
+          </motion.h1>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.12 }}
+            className="text-lg leading-relaxed"
+            style={{ marginBottom: '1.5rem', maxWidth: '620px', margin: '0 auto 2.5rem', color: '#666666' }}
+          >
+            Manage and collect required consents from auditors, legal counsel, and other experts for IPO compliance.
+          </motion.p>
+
+          {/* Action Button */}
+          <motion.button
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.18 }}
+            onClick={() => setShowForm(!showForm)}
+            className="flex items-center gap-2 rounded-full px-6 py-2.5 font-semibold transition-all text-sm text-white active:scale-95 mx-auto"
+            style={{
+              background: '#E8312A',
+              transform: 'translateY(0)',
+              transitionProperty: 'all',
+              transitionDuration: '0.2s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)'
+              e.currentTarget.style.boxShadow = '0 8px 16px rgba(232, 49, 42, 0.2)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)'
+              e.currentTarget.style.boxShadow = 'none'
+            }}
+          >
+            <Plus className="w-4 h-4" />
+            {showForm ? 'Cancel' : 'New Consent'}
+          </motion.button>
+        </motion.div>
+      </section>
+
+      {/* Main Content Section */}
+      <section className="max-w-7xl mx-auto" style={{ paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.24 }}
+        >
 
           {/* Compliance Summary */}
           {compliance && (
@@ -256,10 +323,11 @@ export default function ConsentLettersPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-white rounded-lg p-4 border border-gray-200"
+                className="card p-4"
+                style={{ background: '#FDECEB' }}
               >
                 <div className="body-sm text-gray-600 mb-1">Compliance</div>
-                <div className="text-3xl font-bold text-blue-600">{compliance.compliance_percentage}%</div>
+                <div className="text-3xl font-bold" style={{ color: '#E8312A' }}>{compliance.compliance_percentage}%</div>
                 <div className="caption-sm text-gray-500 mt-2">
                   {compliance.signed} of {compliance.total} signed
                 </div>
@@ -269,10 +337,11 @@ export default function ConsentLettersPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="bg-white rounded-lg p-4 border border-gray-200"
+                className="card p-4"
+                style={{ background: '#FEF3C7' }}
               >
                 <div className="body-sm text-gray-600 mb-1">Pending</div>
-                <div className="text-3xl font-bold text-yellow-600">{compliance.pending}</div>
+                <div className="text-3xl font-bold" style={{ color: '#F59E0B' }}>{compliance.pending}</div>
                 <div className="caption-sm text-gray-500 mt-2">awaiting response</div>
               </motion.div>
 
@@ -280,10 +349,11 @@ export default function ConsentLettersPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="bg-white rounded-lg p-4 border border-gray-200"
+                className="card p-4"
+                style={{ background: '#FFE8CC' }}
               >
                 <div className="body-sm text-gray-600 mb-1">Expiring Soon</div>
-                <div className="text-3xl font-bold text-orange-600">{compliance.expiring_soon}</div>
+                <div className="text-3xl font-bold" style={{ color: '#FF6D00' }}>{compliance.expiring_soon}</div>
                 <div className="caption-sm text-gray-500 mt-2">within 30 days</div>
               </motion.div>
 
@@ -291,7 +361,8 @@ export default function ConsentLettersPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="bg-white rounded-lg p-4 border border-gray-200"
+                className="card p-4"
+                style={{ background: '#F3F4F6' }}
               >
                 <div className="body-sm text-gray-600 mb-1">Total</div>
                 <div className="text-3xl font-bold text-gray-900">{compliance.total}</div>
@@ -518,7 +589,7 @@ export default function ConsentLettersPage() {
             ))
           )}
         </motion.div>
-      </div>
-    </div>
+      </section>
+    </motion.div>
   )
 }

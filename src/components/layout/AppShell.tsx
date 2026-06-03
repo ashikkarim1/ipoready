@@ -392,7 +392,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         >
                           <div className="px-3 space-y-1">
                             {group.items.map(({ href, icon: Icon, label, badge, key }) => {
-                              const isActive = pathname === href || pathname.startsWith(href + '/')
+                              // Check if this route is active
+                              // Prefer exact match; only use startsWith if no other route is more specific
+                              const isExactMatch = pathname === href
+                              const isChildMatch = pathname.startsWith(href + '/') && href !== '/dashboard'
+                              const isActive = isExactMatch || isChildMatch
 
                               // Derive dynamic badge overrides
                               let resolvedBadge: string | null = badge

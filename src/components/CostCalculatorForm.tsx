@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell, LineChart, Line, ComposedChart } from 'recharts'
-import { Download, Loader2, AlertCircle, Save, CheckCircle, TrendingUp, DollarSign, Calendar, Info, ChevronDown, Zap } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Download, Loader2, AlertCircle, Save, CheckCircle, TrendingUp, DollarSign, Calendar, Info, ChevronDown, Zap, Plus } from 'lucide-react'
 
 const FormSchema = z.object({
   companyRevenue: z.coerce.number().positive('Revenue must be greater than 0'),
@@ -46,7 +47,7 @@ interface PhaseBreakdown {
   description: string
 }
 
-const COLORS = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899']
+const COLORS = ['#E8312A', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899']
 
 const COMPARABLE_COMPANIES = {
   tech: [
@@ -222,7 +223,7 @@ export function CostCalculatorForm() {
         { category: 'Gross Proceeds', value: result.ipoSizeEstimate, fill: '#10b981' },
         { category: 'Direct Costs', value: -result.total, fill: '#ef4444' },
         { category: 'Est. Hidden Costs', value: -(totalHiddenCosts * 0.5), fill: '#f59e0b' },
-        { category: 'Net to Company', value: result.ipoSizeEstimate - result.total - totalHiddenCosts * 0.5, fill: '#3b82f6' },
+        { category: 'Net to Company', value: result.ipoSizeEstimate - result.total - totalHiddenCosts * 0.5, fill: '#E8312A' },
       ]
     : []
 
@@ -235,23 +236,78 @@ export function CostCalculatorForm() {
   ]
 
   return (
-    <div className="min-h-screen p-6" style={{ background: '#F7F6F4' }}>
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header */}
-        <div>
-          <h1 className="h1 text-slate-900 mb-2">IPO Cost Calculator</h1>
-          <p className="body text-slate-600">Comprehensive cost estimation with benchmarking and scenario analysis</p>
-        </div>
+    <motion.div style={{ background: '#F7F6F4', minHeight: '100vh' }} suppressHydrationWarning>
+      {/* Hero Section */}
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '4.5rem', paddingBottom: '2rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
+          className="text-center"
+        >
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex items-center justify-center gap-2"
+            style={{ marginBottom: '1.5rem' }}
+          >
+            <span
+              className="pill text-xs font-bold uppercase tracking-wider"
+              style={{ background: '#FDECEB', color: '#E8312A' }}
+            >
+              <DollarSign className="w-3.5 h-3.5 inline mr-1.5" />
+              Financial Planning
+            </span>
+          </motion.div>
 
+          {/* Heading */}
+          <motion.h1
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.06 }}
+            className="serif"
+            style={{ fontSize: '2.5rem', lineHeight: '1.2', marginBottom: '1.5rem' }}
+          >
+            Calculate Your<br />
+            <span style={{ color: '#E8312A' }}>IPO Cost Estimate</span>
+          </motion.h1>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.12 }}
+            className="text-lg leading-relaxed"
+            style={{ marginBottom: '2.5rem', maxWidth: '620px', margin: '0 auto 2.5rem', color: '#666666' }}
+          >
+            Comprehensive cost estimation with benchmarking, comparable companies, and scenario analysis for your IPO journey.
+          </motion.p>
+        </motion.div>
+      </section>
+
+      {/* Main Content */}
+      <section className="max-w-7xl mx-auto" style={{ paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         {/* Tabs */}
-        <div className="flex gap-4 border-b border-slate-200">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.18 }}
+          className="flex gap-4 border-b"
+          style={{ borderColor: '#E8E7E5' }}
+        >
           <button
             onClick={() => setActiveTab('estimate')}
             className={`px-6 py-3 font-medium transition-colors border-b-2 ${
               activeTab === 'estimate'
-                ? 'text-blue-600 border-blue-600'
+                ? 'border-b-2'
                 : 'text-slate-600 border-transparent hover:text-slate-900'
             }`}
+            style={{
+              color: activeTab === 'estimate' ? '#E8312A' : '#666666',
+              borderBottomColor: activeTab === 'estimate' ? '#E8312A' : 'transparent',
+            }}
           >
             <DollarSign className="inline mr-2 h-5 w-5" />
             Cost Estimate
@@ -260,9 +316,13 @@ export function CostCalculatorForm() {
             onClick={() => setActiveTab('compare')}
             className={`px-6 py-3 font-medium transition-colors border-b-2 ${
               activeTab === 'compare'
-                ? 'text-blue-600 border-blue-600'
+                ? 'border-b-2'
                 : 'text-slate-600 border-transparent hover:text-slate-900'
             }`}
+            style={{
+              color: activeTab === 'compare' ? '#E8312A' : '#666666',
+              borderBottomColor: activeTab === 'compare' ? '#E8312A' : 'transparent',
+            }}
           >
             <TrendingUp className="inline mr-2 h-5 w-5" />
             Compare Paths
@@ -271,14 +331,18 @@ export function CostCalculatorForm() {
             onClick={() => setActiveTab('impact')}
             className={`px-6 py-3 font-medium transition-colors border-b-2 ${
               activeTab === 'impact'
-                ? 'text-blue-600 border-blue-600'
+                ? 'border-b-2'
                 : 'text-slate-600 border-transparent hover:text-slate-900'
             }`}
+            style={{
+              color: activeTab === 'impact' ? '#E8312A' : '#666666',
+              borderBottomColor: activeTab === 'impact' ? '#E8312A' : 'transparent',
+            }}
           >
             <TrendingUp className="inline mr-2 h-5 w-5" />
             Financial Impact
           </button>
-        </div>
+        </motion.div>
 
         {/* TAB 1: COST ESTIMATE */}
         {activeTab === 'estimate' && (
@@ -293,7 +357,7 @@ export function CostCalculatorForm() {
                     <input
                       type="number"
                       {...register('companyRevenue')}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500"
                       placeholder="50000000"
                     />
                     {errors.companyRevenue && <p className="caption-sm text-red-600 mt-1">{errors.companyRevenue.message}</p>}
@@ -301,7 +365,7 @@ export function CostCalculatorForm() {
 
                   <div>
                     <label className="label font-medium text-slate-700 mb-2 block">Industry</label>
-                    <select {...register('industry')} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <select {...register('industry')} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500">
                       <option value="tech">Technology</option>
                       <option value="healthcare">Healthcare/Biotech</option>
                       <option value="finance">Financial Services</option>
@@ -312,7 +376,7 @@ export function CostCalculatorForm() {
 
                   <div>
                     <label className="label font-medium text-slate-700 mb-2 block">Company Stage</label>
-                    <select {...register('companySize')} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <select {...register('companySize')} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500">
                       <option value="early">Early Growth</option>
                       <option value="growth">Growth</option>
                       <option value="mature">Mature</option>
@@ -321,7 +385,7 @@ export function CostCalculatorForm() {
 
                   <div>
                     <label className="label font-medium text-slate-700 mb-2 block">Exchange</label>
-                    <select {...register('selectedExchange')} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <select {...register('selectedExchange')} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500">
                       <option value="NASDAQ">NASDAQ</option>
                       <option value="NYSE">NYSE</option>
                       <option value="TSX">TSX</option>
@@ -333,8 +397,8 @@ export function CostCalculatorForm() {
               </div>
 
               {/* Comparable Companies */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                <h3 className="label font-semibold text-blue-900 mb-4 flex items-center gap-2">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+                <h3 className="label font-semibold text-red-900 mb-4 flex items-center gap-2">
                   <Zap className="h-4 w-4" /> Select Comparable Company
                 </h3>
                 <select
@@ -342,7 +406,7 @@ export function CostCalculatorForm() {
                     setValue('comparableCompany', e.target.value)
                     handleComparableChange(e.target.value)
                   }}
-                  className="w-full px-4 py-2 border border-blue-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-red-300 rounded-lg bg-white focus:ring-2 focus:ring-red-500"
                 >
                   <option value="">-- Auto-populate from comparable --</option>
                   {industry === 'tech' &&
@@ -358,7 +422,7 @@ export function CostCalculatorForm() {
                       </option>
                     ))}
                 </select>
-                <p className="caption-sm text-blue-800 mt-2">Companies like yours typically spend in the ranges shown above</p>
+                <p className="caption-sm text-red-800 mt-2">Companies like yours typically spend in the ranges shown above</p>
               </div>
 
               {/* Calculator Settings */}
@@ -369,7 +433,7 @@ export function CostCalculatorForm() {
                     <label className="label font-medium text-slate-700 mb-2 block">Complexity Level</label>
                     <select
                       {...register('complexityLevel')}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500"
                     >
                       <option value="simple">Simple (Domestic, clean cap table)</option>
                       <option value="medium">Medium (Standard complexity)</option>
@@ -385,7 +449,10 @@ export function CostCalculatorForm() {
                 </div>
               </div>
 
-              <button type="submit" disabled={isLoading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition disabled:opacity-50">
+              <button type="submit" disabled={isLoading} className="w-full text-white font-medium py-3 rounded-lg transition disabled:opacity-50"
+              style={{ background: '#E8312A' }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#D41F14')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = '#E8312A')}>
                 {isLoading ? <Loader2 className="inline mr-2 h-4 w-4 animate-spin" /> : null}
                 Calculate Costs
               </button>
@@ -480,7 +547,7 @@ export function CostCalculatorForm() {
                       <XAxis dataKey="name" stroke="#6b7280" />
                       <YAxis stroke="#6b7280" tickFormatter={(value) => `$${(value / 1000000).toFixed(1)}M`} />
                       <Tooltip formatter={(value: any) => `$${(value / 1000000).toFixed(1)}M`} />
-                      <Bar dataKey="value" fill="#3b82f6">
+                      <Bar dataKey="value" fill="#E8312A">
                         {chartData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.fill} />
                         ))}
@@ -519,10 +586,10 @@ export function CostCalculatorForm() {
 
                 {/* Summary & Actions */}
                 <div className="grid grid-cols-3 gap-6">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-6">
-                    <p className="caption-sm text-blue-700 mb-1">Total Direct Costs</p>
-                    <p className="h2 text-blue-900">${(result.total / 1000000).toFixed(1)}M</p>
-                    <p className="caption-sm text-blue-700 mt-2">As % of IPO: {result.costAsPercentageOfIPO}%</p>
+                  <div className="border rounded-lg p-6">
+                    <p className="caption-sm text-red-700 mb-1">Total Direct Costs</p>
+                    <p className="h2 text-red-900">${(result.total / 1000000).toFixed(1)}M</p>
+                    <p className="caption-sm text-red-700 mt-2">As % of IPO: {result.costAsPercentageOfIPO}%</p>
                   </div>
                   <div className="bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 rounded-lg p-6">
                     <p className="caption-sm text-amber-700 mb-1">Est. Hidden Costs</p>
@@ -568,8 +635,8 @@ export function CostCalculatorForm() {
         {/* TAB 2: COMPARE PATHS */}
         {activeTab === 'compare' && (
           <div className="space-y-8">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-              <p className="body text-blue-900">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
+              <p className="body text-red-900">
                 Compare different paths to going public. Each path has different cost implications, timelines, and strategic implications. Traditional IPO maximizes capital raise but has the
                 highest costs. Direct listing reduces costs and dilution but provides no capital raise. SPAC offers speed and certainty.
               </p>
@@ -581,8 +648,8 @@ export function CostCalculatorForm() {
                   key={idx}
                   className={`rounded-lg border-2 p-6 transition cursor-pointer ${
                     selectedScenario === path.path.toLowerCase().replace(' ', '-')
-                      ? 'border-blue-600 bg-blue-50 shadow-lg'
-                      : 'border-slate-200 bg-white hover:border-blue-300'
+                      ? 'border-red-600 bg-red-50 shadow-lg'
+                      : 'border-slate-200 bg-white hover:border-red-300'
                   }`}
                   onClick={() => setSelectedScenario(path.path.toLowerCase().replace(' ', '-'))}
                 >
@@ -702,7 +769,7 @@ export function CostCalculatorForm() {
                   <XAxis dataKey="category" stroke="#6b7280" />
                   <YAxis stroke="#6b7280" tickFormatter={(value) => `$${(value / 1000000).toFixed(0)}M`} />
                   <Tooltip formatter={(value: any) => `$${(value / 1000000).toFixed(1)}M`} />
-                  <Bar dataKey="value" fill="#3b82f6">
+                  <Bar dataKey="value" fill="#E8312A">
                     {waterfallData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.fill} />
                     ))}
@@ -721,18 +788,18 @@ export function CostCalculatorForm() {
                 <p className="caption text-red-700 mb-1">Total IPO Costs</p>
                 <p className="h2 text-red-900">–${(result.total / 1000000).toFixed(1)}M</p>
               </div>
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-6">
-                <p className="caption text-blue-700 mb-1">Net Proceeds to Company</p>
-                <p className="h2 text-blue-900">${((result.ipoSizeEstimate - result.total) / 1000000).toFixed(1)}M</p>
-                <p className="caption-sm text-blue-700 mt-2">{((((result.ipoSizeEstimate - result.total) / result.ipoSizeEstimate) * 100).toFixed(1))}% of gross</p>
+              <div className="border rounded-lg p-6">
+                <p className="caption text-red-700 mb-1">Net Proceeds to Company</p>
+                <p className="h2 text-red-900">${((result.ipoSizeEstimate - result.total) / 1000000).toFixed(1)}M</p>
+                <p className="caption-sm text-red-700 mt-2">{((((result.ipoSizeEstimate - result.total) / result.ipoSizeEstimate) * 100).toFixed(1))}% of gross</p>
               </div>
             </div>
 
             {/* Post-IPO Costs */}
             <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
               <h2 className="h3 text-slate-900 mb-6">Year 1 Public Company Costs (Ongoing)</h2>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                <p className="body-sm text-blue-900">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <p className="body-sm text-red-900">
                   These are <strong>additional annual costs</strong> you'll incur being a public company. The IPO is a one-time event, but these costs continue every year. Budget these into
                   your financial projections.
                 </p>
@@ -794,7 +861,7 @@ export function CostCalculatorForm() {
             </div>
           </div>
         )}
-      </div>
-    </div>
+      </section>
+    </motion.div>
   )
 }
