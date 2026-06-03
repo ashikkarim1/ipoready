@@ -238,7 +238,7 @@ export function CostCalculatorForm() {
   return (
     <motion.div style={{ background: '#F7F6F4', minHeight: '100vh' }} suppressHydrationWarning>
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto" style={{ paddingTop: '4.5rem', paddingBottom: '2rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '3rem', paddingBottom: '1.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -251,7 +251,7 @@ export function CostCalculatorForm() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className="flex items-center justify-center gap-2"
-            style={{ marginBottom: '1.5rem' }}
+            style={{ marginBottom: '1rem' }}
           >
             <span
               className="pill text-xs font-bold uppercase tracking-wider"
@@ -268,7 +268,7 @@ export function CostCalculatorForm() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.06 }}
             className="serif"
-            style={{ fontSize: '2.5rem', lineHeight: '1.2', marginBottom: '1.5rem' }}
+            style={{ fontSize: '2.5rem', lineHeight: '1.2', marginBottom: '1rem' }}
           >
             Calculate Your<br />
             <span style={{ color: '#E8312A' }}>IPO Cost Estimate</span>
@@ -280,7 +280,7 @@ export function CostCalculatorForm() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.12 }}
             className="text-lg leading-relaxed"
-            style={{ marginBottom: '2.5rem', maxWidth: '620px', margin: '0 auto 2.5rem', color: '#666666' }}
+            style={{ marginBottom: '0', maxWidth: '620px', margin: '0 auto', color: '#666666' }}
           >
             Comprehensive cost estimation with benchmarking, comparable companies, and scenario analysis for your IPO journey.
           </motion.p>
@@ -288,7 +288,7 @@ export function CostCalculatorForm() {
       </section>
 
       {/* Main Content */}
-      <section className="max-w-7xl mx-auto" style={{ paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+      <section className="max-w-7xl mx-auto" style={{ paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem', paddingTop: '1.5rem' }}>
         {/* Tabs */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
