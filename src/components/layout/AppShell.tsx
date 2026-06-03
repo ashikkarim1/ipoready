@@ -41,7 +41,7 @@ const NAV_GROUPS = [
     section: 'FINANCIAL MANAGEMENT',
     collapsible: true,
     items: [
-      { href: '/financial/cost-calculator',    icon: Calculator,  label: 'Cost Calculator',      badge: null,   key: 'cost-calc'      },
+      { href: '/dashboard/financial-mgmt/cost-calculator',    icon: Calculator,  label: 'Cost Calculator',      badge: null,   key: 'cost-calc'      },
       { href: '/financial/budget-tracking',    icon: BarChart3,   label: 'Budget Tracking',      badge: null,   key: 'budget-tracking'},
       { href: '/dilution-demo',                icon: Percent,     label: 'Dilution Scenarios',   badge: null,   key: 'dilution'       },
     ],
