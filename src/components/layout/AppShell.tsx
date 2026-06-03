@@ -15,28 +15,48 @@ import {
 import { useAppStore } from '@/store/app-store'
 import type { Notification } from '@/types'
 
-const NAV_ITEMS = [
-  { href: '/dashboard',       icon: LayoutDashboard, label: 'Mission Control',    badge: null,   key: 'dashboard'   },
-  { href: '/pace',            icon: Activity,        label: 'PACE™ Velocity',     badge: 'IP',   key: 'pace'        },
-  { href: '/checklist',       icon: CheckSquare,     label: 'IPO Checklist',      badge: null,   key: 'checklist'   },
-  { href: '/cap-table',       icon: PieChart,        label: 'Cap Table',          badge: 'AI',   key: 'cap-table'   },
-  { href: '/raising-capital', icon: Banknote,        label: 'Raising Capital',    badge: 'New',  key: 'raising'     },
-  { href: '/documents',       icon: FileText,        label: 'Documents',          badge: null,   key: 'documents'   },
-  { href: '/prospectus',      icon: FileText,        label: 'Prospectus Builder', badge: '✨',   key: 'prospectus'  },
-  { href: '/team',            icon: Users,           label: 'Team & Roles',       badge: null,   key: 'team'        },
-  { href: '/templates',       icon: Award,           label: 'Templates & Forms',  badge: null,   key: 'templates'   },
-  { href: '/resources',       icon: BookOpen,        label: 'Resource Centre',    badge: 'New',  key: 'resources'   },
-  { href: '/checklist-guide', icon: FileSearch,      label: 'Compliance Guide',   badge: 'New',  key: 'guide'       },
-  { href: '/marketplace',     icon: ShoppingBag,     label: 'Expert Network',     badge: null,   key: 'marketplace' },
-  { href: '/vendor',          icon: Store,           label: 'Vendor Portal',      badge: 'New',  key: 'vendor'      },
-  { href: '/integrations',    icon: Plug,            label: 'Integrations',       badge: '3',    key: 'integrations'},
-  { href: '/notifications',   icon: BellRing,        label: 'Notifications',      badge: null,   key: 'notifs'      },
-  { href: '/referrals',       icon: Gift,            label: 'Referral Program',   badge: '$',    key: 'referrals'   },
-  { href: '/partners',        icon: Rocket,          label: 'Partner Programme',  badge: null,   key: 'partners'    },
-  { href: '/post-listing',    icon: TrendingUp,      label: 'Post-Listing',       badge: 'Soon', key: 'post'        },
-  { href: '/pricing',         icon: DollarSign,      label: 'Pricing',            badge: null,   key: 'pricing'     },
-  { href: '/account',         icon: Settings,        label: 'Account',            badge: null,   key: 'account'     },
+// Navigation organized into semantic groups
+const NAV_GROUPS = [
+  {
+    section: 'MISSION',
+    collapsible: false,
+    items: [
+      { href: '/dashboard',       icon: LayoutDashboard, label: 'Dashboard',          badge: null,   key: 'dashboard'   },
+      { href: '/checklist',       icon: CheckSquare,     label: 'IPO Checklist',      badge: null,   key: 'checklist'   },
+    ],
+  },
+  {
+    section: 'WORK',
+    collapsible: false,
+    items: [
+      { href: '/cap-table',       icon: PieChart,        label: 'Cap Table',          badge: 'AI',   key: 'cap-table'   },
+      { href: '/documents',       icon: FileText,        label: 'Documents',          badge: null,   key: 'documents'   },
+      { href: '/templates',       icon: Award,           label: 'Templates & Forms',  badge: null,   key: 'templates'   },
+    ],
+  },
+  {
+    section: 'LEARNING & COMPLIANCE',
+    collapsible: true,
+    items: [
+      { href: '/resources',       icon: BookOpen,        label: 'Resource Centre',    badge: null,   key: 'resources'   },
+      { href: '/checklist-guide', icon: FileSearch,      label: 'Compliance Guide',   badge: null,   key: 'guide'       },
+      { href: '/marketplace',     icon: ShoppingBag,     label: 'Expert Network',     badge: null,   key: 'marketplace' },
+    ],
+  },
+  {
+    section: 'ACCOUNT & SETTINGS',
+    collapsible: true,
+    items: [
+      { href: '/team',            icon: Users,           label: 'Team & Roles',       badge: null,   key: 'team'        },
+      { href: '/integrations',    icon: Plug,            label: 'Integrations',       badge: '3',    key: 'integrations'},
+      { href: '/account',         icon: Settings,        label: 'Account',            badge: null,   key: 'account'     },
+      { href: '/notifications',   icon: BellRing,        label: 'Notifications',      badge: null,   key: 'notifs'      },
+    ],
+  },
 ]
+
+// Legacy flat list for backwards compatibility in badge logic
+const NAV_ITEMS = NAV_GROUPS.flatMap(g => g.items)
 
 function formatRole(role?: string): string {
   if (!role) return 'Member'
@@ -283,26 +303,40 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </div>
             )}
 
-            {/* Navigation */}
-            <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-1">
-              {NAV_ITEMS.map(({ href, icon: Icon, label, badge, key }) => {
-                const isActive = pathname === href || pathname.startsWith(href + '/')
+            {/* Navigation - Grouped */}
+            <nav className="flex-1 px-0 py-4 overflow-y-auto">
+              {NAV_GROUPS.map((group) => (
+                <div key={group.section} className="mb-6 last:mb-0">
+                  {/* Section Header */}
+                  <div className="px-6 mb-3">
+                    <h3 className="text-xs font-bold tracking-wider text-text-muted uppercase">
+                      {group.section}
+                    </h3>
+                  </div>
 
-                // Derive dynamic badge overrides
-                let resolvedBadge: string | null = badge
-                if (key === 'checklist' && navStats) {
-                  const incomplete = navStats.totalTasks - navStats.completedTasks
-                  resolvedBadge = incomplete > 0 ? String(incomplete) : null
-                }
+                  {/* Section Items */}
+                  <div className="px-3 space-y-1">
+                    {group.items.map(({ href, icon: Icon, label, badge, key }) => {
+                      const isActive = pathname === href || pathname.startsWith(href + '/')
 
-                return (
-                  <Link key={href} href={href} className={`nav-item ${isActive ? 'active' : ''}`}>
-                    <Icon className="w-[15px] h-[15px] flex-shrink-0" />
-                    <span className="flex-1 text-[13.5px]">{label}</span>
-                    {resolvedBadge && <BadgeChip badge={resolvedBadge} />}
-                  </Link>
-                )
-              })}
+                      // Derive dynamic badge overrides
+                      let resolvedBadge: string | null = badge
+                      if (key === 'checklist' && navStats) {
+                        const incomplete = navStats.totalTasks - navStats.completedTasks
+                        resolvedBadge = incomplete > 0 ? String(incomplete) : null
+                      }
+
+                      return (
+                        <Link key={href} href={href} className={`nav-item ${isActive ? 'active' : ''}`}>
+                          <Icon className="w-[15px] h-[15px] flex-shrink-0" />
+                          <span className="flex-1 text-[13.5px]">{label}</span>
+                          {resolvedBadge && <BadgeChip badge={resolvedBadge} />}
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+              ))}
             </nav>
 
             {/* PACE Score */}

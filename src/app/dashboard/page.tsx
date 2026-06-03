@@ -428,11 +428,11 @@ export default function DashboardPage() {
       )}
 
       {/* Top metrics */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
 
-        {/* PACE Score */}
+        {/* PACE Score - DOMINANT */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          className="card p-6 col-span-2 lg:col-span-1">
+          className="card p-6 col-span-2 lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-1.5">
               <p className="text-text-muted text-xs uppercase tracking-wider font-semibold">PACE™ Score</p>
@@ -450,9 +450,9 @@ export default function DashboardPage() {
               <TrendingUp className="w-3 h-3" /> +7 this week
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="relative w-16 h-16 flex-shrink-0">
-              <svg className="w-16 h-16 pace-ring" viewBox="0 0 64 64">
+          <div className="flex items-end gap-6 mb-2">
+            <div className="relative w-20 h-20 flex-shrink-0">
+              <svg className="w-20 h-20 pace-ring" viewBox="0 0 64 64">
                 <circle cx="32" cy="32" r="26" fill="none" stroke="#E5E4E0" strokeWidth="6" />
                 <circle cx="32" cy="32" r="26" fill="none" stroke="#1A1A1A" strokeWidth="6"
                   strokeLinecap="round"
@@ -461,13 +461,13 @@ export default function DashboardPage() {
                   style={{ transition: 'stroke-dashoffset 0.3s ease' }} />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-nav font-black text-sm">{paceAnimated}</span>
+                <span className="text-nav font-black text-lg">{paceAnimated}</span>
               </div>
             </div>
-            <div>
-              <p className="text-nav font-bold text-2xl">{effectiveDaysToIpo} days</p>
-              <p className="text-text-muted text-xs">to TSXV listing</p>
-              <p className="text-green text-xs mt-1 flex items-center gap-1 font-medium">
+            <div className="flex-1">
+              <p className="text-nav font-black text-4xl leading-tight mb-0.5">{effectiveDaysToIpo}</p>
+              <p className="text-text-muted text-sm font-medium mb-2">days to TSXV listing</p>
+              <p className="text-green text-xs flex items-center gap-1 font-medium">
                 <Flame className="w-3 h-3" /> Accelerating
               </p>
             </div>
@@ -517,28 +517,6 @@ export default function DashboardPage() {
               <p className="text-text-light text-xs mt-1">{(dashData?.tasksSummary ?? DEMO_TASKS_SUMMARY).completed}/{(dashData?.tasksSummary ?? DEMO_TASKS_SUMMARY).total} tasks</p>
             </>
           )}
-        </motion.div>
-
-        {/* Mission Rank */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-          className="card p-6">
-          <p className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-3">Mission Rank</p>
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-sm"
-              style={{ background: '#D4A96A' }}>
-              {level}
-            </div>
-            <div>
-              <p className="text-nav font-bold text-base">
-                {level < 3 ? 'Cadet' : level < 5 ? 'Navigator' : level < 8 ? 'Commander' : 'Captain'}
-              </p>
-              <p className="text-text-muted text-xs">{earnedXP.toLocaleString()} XP earned</p>
-            </div>
-          </div>
-          <div className="xp-bar">
-            <div className="xp-fill" style={{ width: `${(earnedXP % 500) / 500 * 100}%` }} />
-          </div>
-          <p className="text-text-light text-xs mt-1">{earnedXP % 500}/{500} XP to Level {level + 1}</p>
         </motion.div>
 
         {/* Current Phase */}

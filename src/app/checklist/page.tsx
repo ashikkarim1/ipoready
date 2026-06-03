@@ -3,8 +3,10 @@ import { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   CheckCircle2, Circle, Clock, AlertTriangle, ChevronDown, ChevronUp,
-  ExternalLink, Info, Search, BookOpen, Zap, FileText, Sparkles, TrendingUp, X, Loader2
+  ExternalLink, Info, Search, BookOpen, Zap, FileText, Sparkles, TrendingUp, X, Loader2,
+  ChevronRight
 } from 'lucide-react'
+import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { IPO_CHECKLIST, ChecklistTask } from '@/lib/checklist-data'
 import { PHASE_LABELS, PHASE_ORDER } from '@/lib/utils'
@@ -118,6 +120,15 @@ export default function ChecklistPage() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
+
+      {/* Breadcrumb */}
+      <div className="flex items-center gap-2 text-sm text-text-muted mb-4">
+        <Link href="/dashboard" className="hover:text-nav transition-colors">
+          Dashboard
+        </Link>
+        <ChevronRight className="w-4 h-4" />
+        <span className="text-nav font-medium">IPO Checklist</span>
+      </div>
 
       {/* Header */}
       <div className="flex items-start justify-between">
