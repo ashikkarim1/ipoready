@@ -36,34 +36,34 @@ export function CapTableSummary({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <div className="border border-gray-200 rounded-lg p-6 bg-white">
-        <h3 className="text-sm font-medium text-gray-600 mb-4">Shareholders</h3>
+        <h3 className="label font-medium text-gray-600 mb-4">Shareholders</h3>
         <p className="text-3xl font-bold">{totalShareholders}</p>
-        <p className="text-xs text-gray-500 mt-1">Individual parties</p>
+        <p className="caption-sm text-gray-500 mt-1">Individual parties</p>
       </div>
 
       <div className="border border-gray-200 rounded-lg p-6 bg-white">
-        <h3 className="text-sm font-medium text-gray-600 mb-4">Share Classes</h3>
+        <h3 className="label font-medium text-gray-600 mb-4">Share Classes</h3>
         <p className="text-3xl font-bold">{shareClasses}</p>
-        <p className="text-xs text-gray-500 mt-1">Class types</p>
+        <p className="caption-sm text-gray-500 mt-1">Class types</p>
       </div>
 
       <div className="border border-gray-200 rounded-lg p-6 bg-white">
-        <h3 className="text-sm font-medium text-gray-600 mb-4">Shares Issued</h3>
+        <h3 className="label font-medium text-gray-600 mb-4">Shares Issued</h3>
         <p className="text-3xl font-bold">
           {(totalSharesIssued / 1000000).toFixed(1)}M
         </p>
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="caption-sm text-gray-500 mt-1">
           {((totalSharesIssued / totalSharesAuthorized) * 100).toFixed(1)}% of authorized
         </p>
       </div>
 
       <div className="border border-gray-200 rounded-lg p-6 bg-white">
-        <h3 className="text-sm font-medium text-gray-600 mb-4">Validation Status</h3>
+        <h3 className="label font-medium text-gray-600 mb-4">Validation Status</h3>
         <p className={`text-2xl font-bold ${statusColors[validationStatus]}`}>
           {statusLabels[validationStatus]}
         </p>
         {lastUpdated && (
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="caption-sm text-gray-500 mt-1">
             {new Date(lastUpdated).toLocaleDateString()}
           </p>
         )}

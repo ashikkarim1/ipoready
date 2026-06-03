@@ -26,7 +26,7 @@ import {
 export function HeaderWithBadges() {
   return (
     <header className="flex items-center justify-between p-4 border-b">
-      <h1 className="text-xl font-bold">IPOReady</h1>
+      <h1 className="h4 font-bold">IPOReady</h1>
 
       <div className="flex items-center gap-4">
         {/* Notification bell badge */}
@@ -41,7 +41,7 @@ export function HeaderWithBadges() {
             status="online"
             size="sm"
           />
-          <span className="text-sm font-medium">John Doe</span>
+          <span className="label font-medium">John Doe</span>
         </div>
       </div>
     </header>
@@ -57,14 +57,14 @@ export function HeaderWithBadges() {
 export function DashboardStatCard() {
   return (
     <div className="p-6 bg-white rounded-lg border shadow-sm">
-      <h2 className="text-sm font-semibold text-gray-600 mb-4">Task Status</h2>
+      <h2 className="label font-semibold text-gray-600 mb-4">Task Status</h2>
 
       <div className="flex items-center justify-between mb-4">
         <span className="text-2xl font-bold">42</span>
         <TaskBadge variant="combined" />
       </div>
 
-      <p className="text-xs text-gray-500">
+      <p className="caption-sm text-gray-500">
         Total tasks in progress across all phases
       </p>
     </div>
@@ -90,13 +90,13 @@ export function NotificationListItem() {
         />
 
         <div className="flex-1">
-          <h3 className="font-semibold text-sm mb-1">
+          <h3 className="font-semibold body-sm mb-1">
             Personal Information Forms Due
           </h3>
-          <p className="text-sm text-gray-600 mb-2">
+          <p className="body-sm text-gray-600 mb-2">
             Forms for 3 directors are due for submission next week
           </p>
-          <time className="text-xs text-gray-500">2 hours ago</time>
+          <time className="caption-sm text-gray-500">2 hours ago</time>
         </div>
       </div>
     </div>
@@ -116,28 +116,28 @@ export function TaskListWithBadges() {
       <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
         <div className="flex items-center gap-3 mb-2">
           <TaskBadge variant="overdue" compact={false} />
-          <h3 className="font-semibold text-sm">File Annual Report</h3>
+          <h3 className="font-semibold body-sm">File Annual Report</h3>
         </div>
-        <p className="text-xs text-gray-600">Due: May 15, 2026</p>
+        <p className="caption-sm text-gray-600">Due: May 15, 2026</p>
       </div>
 
       {/* Due soon task */}
       <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
         <div className="flex items-center gap-3 mb-2">
           <TaskBadge variant="due-soon" compact={false} />
-          <h3 className="font-semibold text-sm">Audit Review</h3>
+          <h3 className="font-semibold body-sm">Audit Review</h3>
         </div>
-        <p className="text-xs text-gray-600">Due: May 28, 2026</p>
+        <p className="caption-sm text-gray-600">Due: May 28, 2026</p>
       </div>
 
       {/* Completed task */}
       <div className="p-4 bg-white border rounded-lg opacity-60">
         <div className="flex items-center gap-3 mb-2">
-          <h3 className="font-semibold text-sm text-gray-600 line-through">
+          <h3 className="font-semibold body-sm text-gray-600 line-through">
             Board Resolution
           </h3>
         </div>
-        <p className="text-xs text-gray-500">Completed: May 1, 2026</p>
+        <p className="caption-sm text-gray-500">Completed: May 1, 2026</p>
       </div>
     </div>
   )
@@ -157,8 +157,8 @@ export function DocumentListWithBadges() {
         <div className="flex items-center gap-3">
           <FileText className="w-5 h-5 text-blue-500" />
           <div>
-            <h3 className="font-semibold text-sm">Financial Statements Q1</h3>
-            <p className="text-xs text-gray-500">Uploaded today</p>
+            <h3 className="font-semibold body-sm">Financial Statements Q1</h3>
+            <p className="caption-sm text-gray-500">Uploaded today</p>
           </div>
         </div>
         <CountBadge
@@ -197,12 +197,12 @@ export function TeamMemberWithStatus() {
       {/* Accepted member */}
       <div className="p-4 bg-white border rounded-lg flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-sm font-bold">
+          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center body-sm font-bold">
             JD
           </div>
           <div>
-            <h3 className="font-semibold text-sm">John Doe</h3>
-            <p className="text-xs text-gray-500">CEO</p>
+            <h3 className="font-semibold body-sm">John Doe</h3>
+            <p className="caption-sm text-gray-500">CEO</p>
           </div>
         </div>
         <ActivityBadge status="online" showLabel size="sm" />
@@ -211,12 +211,12 @@ export function TeamMemberWithStatus() {
       {/* Pending invite */}
       <div className="p-4 bg-gray-50 border rounded-lg flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-sm font-bold">
+          <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center body-sm font-bold">
             SD
           </div>
           <div>
-            <h3 className="font-semibold text-sm">Sarah Davis</h3>
-            <p className="text-xs text-gray-500">CFO - Invite pending</p>
+            <h3 className="font-semibold body-sm">Sarah Davis</h3>
+            <p className="caption-sm text-gray-500">CFO - Invite pending</p>
           </div>
         </div>
         <CountBadge
@@ -242,8 +242,8 @@ export function AchievementNotification() {
       <div className="flex items-start gap-4">
         <div className="text-3xl">🏆</div>
         <div className="flex-1">
-          <h3 className="font-bold text-sm mb-1">Milestone Achieved!</h3>
-          <p className="text-xs text-gray-600 mb-3">
+          <h3 className="font-bold body-sm mb-1">Milestone Achieved!</h3>
+          <p className="caption-sm text-gray-600 mb-3">
             You've completed Phase 1 of the Pre-Planning stage
           </p>
           <AchievementBadge compact={true} />
@@ -267,7 +267,7 @@ export function NavItemWithBadge() {
         href="/dashboard"
         className="px-4 py-2 rounded-lg hover:bg-gray-100 flex items-center justify-between group"
       >
-        <span className="font-medium text-sm">Mission Control</span>
+        <span className="font-medium body-sm">Mission Control</span>
         <TaskBadge variant="overdue" compact={true} />
       </a>
 
@@ -276,7 +276,7 @@ export function NavItemWithBadge() {
         href="/notifications"
         className="px-4 py-2 rounded-lg hover:bg-gray-100 flex items-center justify-between group"
       >
-        <span className="font-medium text-sm">Notifications</span>
+        <span className="font-medium body-sm">Notifications</span>
         <CountBadge
           count={2}
           variant="badge"
@@ -290,7 +290,7 @@ export function NavItemWithBadge() {
         href="/documents"
         className="px-4 py-2 rounded-lg hover:bg-gray-100 flex items-center justify-between group"
       >
-        <span className="font-medium text-sm">Documents</span>
+        <span className="font-medium body-sm">Documents</span>
         <CountBadge
           count={3}
           variant="badge"
@@ -304,7 +304,7 @@ export function NavItemWithBadge() {
         href="/team"
         className="px-4 py-2 rounded-lg hover:bg-gray-100 flex items-center justify-between group"
       >
-        <span className="font-medium text-sm">Team</span>
+        <span className="font-medium body-sm">Team</span>
         <CountBadge
           count={1}
           variant="badge"
@@ -344,7 +344,7 @@ export function TabsWithBadges() {
               count={tab.count}
               variant="minimal"
               bgColor={tab.highlight ? '#E8312A' : '#9CA3AF'}
-              className="ml-2 text-xs"
+              className="ml-2 caption-sm"
             />
           )}
         </button>
@@ -365,7 +365,7 @@ export function StatsOverview() {
       {/* Notifications stat */}
       <div className="bg-white rounded-lg border p-4">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xs font-semibold text-gray-600 uppercase">
+          <h3 className="label-sm font-semibold text-gray-600 uppercase">
             Notifications
           </h3>
           <CountBadge
@@ -376,25 +376,25 @@ export function StatsOverview() {
           />
         </div>
         <p className="text-2xl font-bold text-gray-900">2 New</p>
-        <p className="text-xs text-gray-500 mt-1">Items requiring attention</p>
+        <p className="caption-sm text-gray-500 mt-1">Items requiring attention</p>
       </div>
 
       {/* Tasks stat */}
       <div className="bg-white rounded-lg border p-4">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xs font-semibold text-gray-600 uppercase">
+          <h3 className="label-sm font-semibold text-gray-600 uppercase">
             Overdue Tasks
           </h3>
           <TaskBadge variant="overdue" compact={true} />
         </div>
         <p className="text-2xl font-bold text-gray-900">1 Task</p>
-        <p className="text-xs text-gray-500 mt-1">Needs immediate action</p>
+        <p className="caption-sm text-gray-500 mt-1">Needs immediate action</p>
       </div>
 
       {/* Documents stat */}
       <div className="bg-white rounded-lg border p-4">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xs font-semibold text-gray-600 uppercase">
+          <h3 className="label-sm font-semibold text-gray-600 uppercase">
             New Documents
           </h3>
           <CountBadge
@@ -405,13 +405,13 @@ export function StatsOverview() {
           />
         </div>
         <p className="text-2xl font-bold text-gray-900">3 Documents</p>
-        <p className="text-xs text-gray-500 mt-1">Uploaded this week</p>
+        <p className="caption-sm text-gray-500 mt-1">Uploaded this week</p>
       </div>
 
       {/* Team stat */}
       <div className="bg-white rounded-lg border p-4">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xs font-semibold text-gray-600 uppercase">
+          <h3 className="label-sm font-semibold text-gray-600 uppercase">
             Pending Invites
           </h3>
           <CountBadge
@@ -422,7 +422,7 @@ export function StatsOverview() {
           />
         </div>
         <p className="text-2xl font-bold text-gray-900">1 Invite</p>
-        <p className="text-xs text-gray-500 mt-1">Awaiting response</p>
+        <p className="caption-sm text-gray-500 mt-1">Awaiting response</p>
       </div>
     </div>
   )

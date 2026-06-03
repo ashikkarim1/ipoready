@@ -99,10 +99,10 @@ export function PushPermissionPrompt({
               </div>
 
               <div className="flex-1 min-w-0">
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
+                <h3 className="label font-semibold text-slate-900 dark:text-white">
                   Enable Notifications
                 </h3>
-                <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                <p className="mt-1 body-sm text-slate-600 dark:text-slate-400">
                   Stay updated with task reminders, milestones, and important IPO progress updates.
                 </p>
 
@@ -110,13 +110,13 @@ export function PushPermissionPrompt({
                   <button
                     onClick={handleEnable}
                     disabled={isLoading}
-                    className="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white label font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     {isLoading ? 'Enabling...' : 'Enable'}
                   </button>
                   <button
                     onClick={handleDismiss}
-                    className="inline-flex items-center px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                    className="inline-flex items-center px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 label font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                   >
                     Ask Later
                   </button>

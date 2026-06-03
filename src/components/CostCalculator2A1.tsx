@@ -413,7 +413,7 @@ export function CostCalculator2A1() {
         <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-slate-600 dark:text-slate-400">CAPEX Total</p>
+              <p className="label font-medium text-slate-600 dark:text-slate-400">CAPEX Total</p>
               <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">
                 ${(capexTotal / 1000000).toFixed(1)}M
               </p>
@@ -422,7 +422,7 @@ export function CostCalculator2A1() {
               <Zap className="h-6 w-6 text-blue-600 dark:text-blue-400" />
             </div>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-500 mt-2">
+          <p className="caption-sm text-slate-500 dark:text-slate-500 mt-2">
             {((capexTotal / grandTotal) * 100).toFixed(1)}% of total
           </p>
         </div>
@@ -430,7 +430,7 @@ export function CostCalculator2A1() {
         <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-slate-600 dark:text-slate-400">OPEX Total</p>
+              <p className="label font-medium text-slate-600 dark:text-slate-400">OPEX Total</p>
               <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">
                 ${(opexTotal / 1000000).toFixed(1)}M
               </p>
@@ -439,7 +439,7 @@ export function CostCalculator2A1() {
               <TrendingUp className="h-6 w-6 text-purple-600 dark:text-purple-400" />
             </div>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-500 mt-2">
+          <p className="caption-sm text-slate-500 dark:text-slate-500 mt-2">
             {((opexTotal / grandTotal) * 100).toFixed(1)}% of total
           </p>
         </div>
@@ -447,7 +447,7 @@ export function CostCalculator2A1() {
         <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Grand Total</p>
+              <p className="label font-medium text-slate-600 dark:text-slate-400">Grand Total</p>
               <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">
                 ${(grandTotal / 1000000).toFixed(1)}M
               </p>
@@ -456,7 +456,7 @@ export function CostCalculator2A1() {
               <DollarSign className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
             </div>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-500 mt-2">
+          <p className="caption-sm text-slate-500 dark:text-slate-500 mt-2">
             {costs.length} line items
           </p>
         </div>
@@ -466,7 +466,7 @@ export function CostCalculator2A1() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Timeline Chart */}
         <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+          <h2 className="h4 font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
             <Calendar className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             Cost Timeline
           </h2>
@@ -494,7 +494,7 @@ export function CostCalculator2A1() {
 
         {/* Category Breakdown Pie */}
         <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+          <h2 className="h4 font-semibold text-slate-900 dark:text-white mb-4">
             Cost Breakdown by Category
           </h2>
           <ResponsiveContainer width="100%" height={300}>
@@ -521,7 +521,7 @@ export function CostCalculator2A1() {
 
       {/* Cumulative Cost Over Time */}
       <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+        <h2 className="h4 font-semibold text-slate-900 dark:text-white mb-4">
           Cumulative Cost Projection
         </h2>
         <ResponsiveContainer width="100%" height={300}>
@@ -562,9 +562,9 @@ export function CostCalculator2A1() {
                   className="h-3 w-3 rounded-full"
                   style={{ backgroundColor: COLORS_PALETTE[idx % COLORS_PALETTE.length] }}
                 />
-                <p className="text-sm font-medium text-slate-900 dark:text-white">{cat.name}</p>
+                <p className="label font-medium text-slate-900 dark:text-white">{cat.name}</p>
               </div>
-              <p className="text-sm font-semibold text-slate-900 dark:text-white">
+              <p className="label font-semibold text-slate-900 dark:text-white">
                 ${(cat.value / 1000000).toFixed(2)}M
               </p>
             </div>
@@ -577,7 +577,7 @@ export function CostCalculator2A1() {
                 }}
               />
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{cat.percentage}% of total</p>
+            <p className="caption-sm text-slate-500 dark:text-slate-400 mt-1">{cat.percentage}% of total</p>
           </div>
         ))}
       </div>
@@ -585,7 +585,7 @@ export function CostCalculator2A1() {
       {/* Add New Cost Form */}
       <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Add Cost Item</h2>
+          <h2 className="h4 font-semibold text-slate-900 dark:text-white">Add Cost Item</h2>
           <button
             onClick={() => setShowAddForm(!showAddForm)}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
@@ -672,8 +672,8 @@ export function CostCalculator2A1() {
 
       {/* Cost Line Items Table */}
       <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700 shadow-sm overflow-x-auto">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Cost Line Items</h2>
-        <table className="w-full text-sm">
+        <h2 className="h4 font-semibold text-slate-900 dark:text-white mb-4">Cost Line Items</h2>
+        <table className="w-full body-sm">
           <thead>
             <tr className="border-b border-slate-200 dark:border-slate-700">
               <th className="text-left py-3 px-4 font-semibold text-slate-900 dark:text-white">
@@ -702,16 +702,16 @@ export function CostCalculator2A1() {
                 <td className="py-3 px-4">
                   <p className="font-medium text-slate-900 dark:text-white">{cost.name}</p>
                   {cost.notes && (
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{cost.notes}</p>
+                    <p className="caption-sm text-slate-500 dark:text-slate-400 mt-1">{cost.notes}</p>
                   )}
                 </td>
                 <td className="py-3 px-4">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full label-sm font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
                     {cost.category.toUpperCase()} - {cost.subcategory}
                   </span>
                 </td>
                 <td className="py-3 px-4">
-                  <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
+                  <span className="label-sm font-medium text-slate-600 dark:text-slate-400">
                     {cost.timeline === 'pre-ipo'
                       ? 'Pre-IPO'
                       : cost.timeline === 'pre-launch'
@@ -738,11 +738,11 @@ export function CostCalculator2A1() {
 
       {/* Summary Statistics */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+        <h2 className="h4 font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
           <AlertCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           Cost Summary & Insights
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 body-sm">
           <div>
             <p className="text-slate-600 dark:text-slate-300 mb-2">
               <strong>Average Cost Per Item:</strong> ${(grandTotal / costs.length / 1000000).toFixed(2)}M

@@ -121,7 +121,7 @@ export default function SyndicationTemplatesPage() {
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="text-4xl font-bold mb-2" style={{ color: '#1A1A1A' }}>Syndication Agreement Templates</h1>
-          <p className="text-lg" style={{ color: '#717171' }}>
+          <p className="h4" style={{ color: '#717171' }}>
             Pre-drafted templates for lead underwriter, co-underwriter, and standstill agreements.
             Download and customize for your IPO process.
           </p>
@@ -223,10 +223,10 @@ export default function SyndicationTemplatesPage() {
           {/* Active Filters Display */}
           {(selectedType || selectedExchange || searchTerm) && (
             <div className="mt-6 pt-6" style={{ borderTop: '1px solid #E5E4E0' }}>
-              <div className="flex items-center gap-2 text-sm">
+              <div className="flex items-center gap-2 body-sm">
                 <span className="font-medium" style={{ color: '#717171' }}>Active filters:</span>
                 {selectedType && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm" style={{ background: '#DFF2F0', color: '#0F766E' }}>
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full body-sm" style={{ background: '#DFF2F0', color: '#0F766E' }}>
                     Type: {TEMPLATE_TYPES.find((t) => t.value === selectedType)?.label}
                     <button
                       onClick={() => setSelectedType(null)}
@@ -237,7 +237,7 @@ export default function SyndicationTemplatesPage() {
                   </span>
                 )}
                 {selectedExchange && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm" style={{ background: '#DFF2F0', color: '#0F766E' }}>
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full body-sm" style={{ background: '#DFF2F0', color: '#0F766E' }}>
                     Exchange: {selectedExchange}
                     <button
                       onClick={() => setSelectedExchange(null)}
@@ -248,7 +248,7 @@ export default function SyndicationTemplatesPage() {
                   </span>
                 )}
                 {searchTerm && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm" style={{ background: '#DFF2F0', color: '#0F766E' }}>
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full body-sm" style={{ background: '#DFF2F0', color: '#0F766E' }}>
                     Search: {searchTerm}
                     <button
                       onClick={() => setSearchTerm('')}
@@ -278,7 +278,7 @@ export default function SyndicationTemplatesPage() {
             style={{ background: '#FFFFFF' }}
           >
             <FileText size={48} className="mx-auto mb-4" style={{ color: '#9A9A9A' }} />
-            <h3 className="text-xl font-semibold mb-2" style={{ color: '#1A1A1A' }}>No templates found</h3>
+            <h3 className="h4 font-semibold mb-2" style={{ color: '#1A1A1A' }}>No templates found</h3>
             <p style={{ color: '#717171' }}>
               Try adjusting your filters or search term to find syndication agreement templates.
             </p>
@@ -303,33 +303,33 @@ export default function SyndicationTemplatesPage() {
                   <div className="p-6">
                     {/* Template Type Badge */}
                     <div className="flex items-center justify-between mb-4">
-                      <span className="inline-block px-3 py-1 rounded-full text-sm font-semibold" style={{ background: '#DFF2F0', color: '#0F766E' }}>
+                      <span className="inline-block px-3 py-1 rounded-full label font-semibold" style={{ background: '#DFF2F0', color: '#0F766E' }}>
                         {TEMPLATE_TYPES.find((t) => t.value === template.type)?.label}
                       </span>
-                      <span className="text-xs" style={{ color: '#9A9A9A' }}>v{template.lastUpdated.split('-')[0]}</span>
+                      <span className="caption-sm" style={{ color: '#9A9A9A' }}>v{template.lastUpdated.split('-')[0]}</span>
                     </div>
 
                     {/* Template Title */}
-                    <h3 className="text-lg font-bold mb-3" style={{ color: '#1A1A1A' }}>{template.title}</h3>
+                    <h3 className="h4 font-bold mb-3" style={{ color: '#1A1A1A' }}>{template.title}</h3>
 
                     {/* Template Description */}
-                    <p className="text-sm mb-4 line-clamp-3" style={{ color: '#717171' }}>{template.description}</p>
+                    <p className="body-sm mb-4 line-clamp-3" style={{ color: '#717171' }}>{template.description}</p>
 
                     {/* Key Terms */}
                     <div className="mb-4">
-                      <h4 className="text-xs font-semibold uppercase mb-2" style={{ color: '#9A9A9A' }}>Key Terms</h4>
+                      <h4 className="label-sm font-semibold uppercase mb-2" style={{ color: '#9A9A9A' }}>Key Terms</h4>
                       <div className="flex flex-wrap gap-1">
                         {template.keyTerms.slice(0, 5).map((term, i) => (
                           <span
                             key={i}
-                            className="inline-block text-xs px-2 py-1 rounded"
+                            className="inline-block caption-sm px-2 py-1 rounded"
                             style={{ background: '#F0EFED', color: '#717171' }}
                           >
                             {term.split(':')[0]}
                           </span>
                         ))}
                         {template.keyTerms.length > 5 && (
-                          <span className="inline-block text-xs px-2 py-1 rounded" style={{ background: '#F0EFED', color: '#717171' }}>
+                          <span className="inline-block caption-sm px-2 py-1 rounded" style={{ background: '#F0EFED', color: '#717171' }}>
                             +{template.keyTerms.length - 5} more
                           </span>
                         )}
@@ -338,15 +338,15 @@ export default function SyndicationTemplatesPage() {
 
                     {/* Exchanges */}
                     <div className="mb-6">
-                      <h4 className="text-xs font-semibold uppercase mb-2" style={{ color: '#9A9A9A' }}>Used by Exchanges</h4>
+                      <h4 className="label-sm font-semibold uppercase mb-2" style={{ color: '#9A9A9A' }}>Used by Exchanges</h4>
                       <div className="flex flex-wrap gap-1">
                         {template.exchanges.slice(0, 3).map((exchange, i) => (
-                          <span key={i} className="inline-block text-xs px-2 py-1 rounded" style={{ background: '#F0EFED', color: '#717171' }}>
+                          <span key={i} className="inline-block caption-sm px-2 py-1 rounded" style={{ background: '#F0EFED', color: '#717171' }}>
                             {exchange}
                           </span>
                         ))}
                         {template.exchanges.length > 3 && (
-                          <span className="inline-block text-xs px-2 py-1 rounded" style={{ background: '#F0EFED', color: '#717171' }}>
+                          <span className="inline-block caption-sm px-2 py-1 rounded" style={{ background: '#F0EFED', color: '#717171' }}>
                             +{template.exchanges.length - 3}
                           </span>
                         )}
@@ -386,7 +386,7 @@ export default function SyndicationTemplatesPage() {
             animate={{ opacity: 1 }}
             className="mt-8 text-center"
           >
-            <p className="text-sm" style={{ color: '#717171' }}>
+            <p className="body-sm" style={{ color: '#717171' }}>
               Showing {filteredTemplates.length} of {templates.length} templates
             </p>
           </motion.div>

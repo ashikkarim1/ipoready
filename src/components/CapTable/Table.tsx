@@ -94,7 +94,7 @@ export function CapTableSpreadsheet({
     <div className="w-full overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
       {/* Table Container */}
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full body-sm">
           {/* Header */}
           <thead>
             <tr className="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
@@ -152,14 +152,14 @@ export function CapTableSpreadsheet({
                         type="text"
                         value={editValues.name || ''}
                         onChange={(e) => handleFieldChange('name', e.target.value)}
-                        className="w-full rounded border border-blue-300 px-2 py-1 text-sm dark:border-blue-600 dark:bg-gray-800"
+                        className="w-full rounded border border-blue-300 px-2 py-1 body-sm dark:border-blue-600 dark:bg-gray-800"
                       />
                     </td>
                     <td className="px-4 py-3">
                       <select
                         value={editValues.shareClass || 'common'}
                         onChange={(e) => handleFieldChange('shareClass', e.target.value)}
-                        className="w-full rounded border border-blue-300 px-2 py-1 text-sm dark:border-blue-600 dark:bg-gray-800"
+                        className="w-full rounded border border-blue-300 px-2 py-1 body-sm dark:border-blue-600 dark:bg-gray-800"
                       >
                         <option>common</option>
                         <option>preferred_a</option>
@@ -172,7 +172,7 @@ export function CapTableSpreadsheet({
                         type="number"
                         value={editValues.shares || 0}
                         onChange={(e) => handleFieldChange('shares', e.target.value)}
-                        className="w-full rounded border border-blue-300 px-2 py-1 text-right text-sm dark:border-blue-600 dark:bg-gray-800"
+                        className="w-full rounded border border-blue-300 px-2 py-1 text-right body-sm dark:border-blue-600 dark:bg-gray-800"
                       />
                     </td>
                     <td className="px-4 py-3">
@@ -180,7 +180,7 @@ export function CapTableSpreadsheet({
                         type="date"
                         value={editValues.vestingStart || ''}
                         onChange={(e) => handleFieldChange('vestingStart', e.target.value)}
-                        className="w-full rounded border border-blue-300 px-2 py-1 text-sm dark:border-blue-600 dark:bg-gray-800"
+                        className="w-full rounded border border-blue-300 px-2 py-1 body-sm dark:border-blue-600 dark:bg-gray-800"
                       />
                     </td>
                     <td className="px-4 py-3">
@@ -188,7 +188,7 @@ export function CapTableSpreadsheet({
                         type="number"
                         value={editValues.vestingCliff || ''}
                         onChange={(e) => handleFieldChange('vestingCliff', e.target.value)}
-                        className="w-full rounded border border-blue-300 px-2 py-1 text-right text-sm dark:border-blue-600 dark:bg-gray-800"
+                        className="w-full rounded border border-blue-300 px-2 py-1 text-right body-sm dark:border-blue-600 dark:bg-gray-800"
                       />
                     </td>
                     <td className="px-4 py-3">
@@ -196,7 +196,7 @@ export function CapTableSpreadsheet({
                         type="number"
                         value={editValues.vestingPeriod || ''}
                         onChange={(e) => handleFieldChange('vestingPeriod', e.target.value)}
-                        className="w-full rounded border border-blue-300 px-2 py-1 text-right text-sm dark:border-blue-600 dark:bg-gray-800"
+                        className="w-full rounded border border-blue-300 px-2 py-1 text-right body-sm dark:border-blue-600 dark:bg-gray-800"
                       />
                     </td>
                     <td className="px-4 py-3 text-right text-gray-600 dark:text-gray-400">
@@ -211,7 +211,7 @@ export function CapTableSpreadsheet({
                         value={editValues.strikePrice || ''}
                         onChange={(e) => handleFieldChange('strikePrice', e.target.value)}
                         step="0.01"
-                        className="w-full rounded border border-blue-300 px-2 py-1 text-right text-sm dark:border-blue-600 dark:bg-gray-800"
+                        className="w-full rounded border border-blue-300 px-2 py-1 text-right body-sm dark:border-blue-600 dark:bg-gray-800"
                       />
                     </td>
                     <td className="px-4 py-3">
@@ -291,27 +291,27 @@ export function CapTableSpreadsheet({
       <div className="border-t border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <div>
-            <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">Total Shares</p>
-            <p className="mt-1 text-lg font-bold text-gray-900 dark:text-gray-100">
+            <p className="label-sm font-semibold text-gray-600 dark:text-gray-400">Total Shares</p>
+            <p className="mt-1 h4 font-bold text-gray-900 dark:text-gray-100">
               {totalShares.toLocaleString()}
             </p>
           </div>
           <div>
-            <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+            <p className="label-sm font-semibold text-gray-600 dark:text-gray-400">
               Fully Diluted (20%)
             </p>
-            <p className="mt-1 text-lg font-bold text-gray-900 dark:text-gray-100">
+            <p className="mt-1 h4 font-bold text-gray-900 dark:text-gray-100">
               {fullyDilutedShares.toLocaleString()}
             </p>
           </div>
           <div>
-            <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">Shareholders</p>
-            <p className="mt-1 text-lg font-bold text-gray-900 dark:text-gray-100">{data.length}</p>
+            <p className="label-sm font-semibold text-gray-600 dark:text-gray-400">Shareholders</p>
+            <p className="mt-1 h4 font-bold text-gray-900 dark:text-gray-100">{data.length}</p>
           </div>
           {isEditable && (
             <button
               onClick={onAddRow}
-              className="flex items-center gap-2 rounded bg-blue-500 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-600"
+              className="flex items-center gap-2 rounded bg-blue-500 px-3 py-2 label font-semibold text-white hover:bg-blue-600"
             >
               <Plus size={16} /> Add Row
             </button>

@@ -322,7 +322,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   style={{ background: 'var(--color-text-primary)' }}>
                   <Rocket className="w-4 h-4 text-white" />
                 </div>
-                <span className="font-display font-bold text-lg text-nav tracking-tight">
+                <span className="font-display font-bold h4 text-nav tracking-tight">
                   IPO<span style={{ color: 'var(--color-accent)' }}>Ready</span>
                 </span>
               </Link>
@@ -335,12 +335,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)' }}>
                   <Building2 className="w-3.5 h-3.5 text-text-muted mt-0.5 flex-shrink-0" />
                   <div className="min-w-0 flex-1">
-                    <p className="text-nav text-xs font-semibold truncate">{company.name}</p>
-                    <p className="text-text-muted text-xs">{company.targetExchange.toUpperCase()} · {company.listingType.toUpperCase()}</p>
+                    <p className="text-nav label-sm font-semibold truncate">{company.name}</p>
+                    <p className="text-text-muted caption-sm">{company.targetExchange.toUpperCase()} · {company.listingType.toUpperCase()}</p>
                     <div className="mt-2 space-y-1">
                       <div className="flex items-center justify-between">
-                        <span className="text-text-light text-xs">Progress</span>
-                        <span className="text-xs font-semibold text-accent">{company.progressPercentage}%</span>
+                        <span className="text-text-light caption-sm">Progress</span>
+                        <span className="label-sm font-semibold text-accent">{company.progressPercentage}%</span>
                       </div>
                       <div className="progress-bar" style={{ height: '4px' }}>
                         <div className="progress-fill" style={{ width: `${company.progressPercentage}%`, background: 'var(--color-accent)' }} />
@@ -366,7 +366,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                       }`}
                       onClick={() => isCollapsible && toggleSection(group.section)}
                     >
-                      <h3 className="text-xs font-bold tracking-wider text-text-muted uppercase">
+                      <h3 className="label-xs font-bold tracking-wider text-text-muted uppercase">
                         {group.section}
                       </h3>
                       {isCollapsible && (
@@ -425,7 +425,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-1.5">
                       <Zap className="w-3.5 h-3.5 text-accent" />
-                      <span className="text-xs font-semibold text-text-muted">PACE™ Score</span>
+                      <span className="label-sm font-semibold text-text-muted">PACE™ Score</span>
                       <div style={{ position: 'relative' }}>
                         <HelpCircle
                           className="w-3 h-3"
@@ -458,13 +458,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         </div>
                       </div>
                     </div>
-                    <span className="font-bold text-xl text-nav">{company.paceScore}</span>
+                    <span className="font-bold h4 text-nav">{company.paceScore}</span>
                   </div>
                   <div className="progress-bar">
                     <div className="progress-fill" style={{ width: `${company.paceScore}%`, background: 'var(--color-text-primary)' }} />
                   </div>
                   <div className="flex items-center justify-between mt-1.5">
-                    <p className="text-text-light text-xs">~{company.estimatedDaysToIPO} days to listing</p>
+                    <p className="text-text-light caption-sm">~{company.estimatedDaysToIPO} days to listing</p>
                     <span className="text-[9px] font-bold rounded-sm" style={{ background: 'var(--color-text-primary)', color: 'white', padding: '1px 4px', letterSpacing: '0.04em' }}>IP</span>
                   </div>
                 </div>
@@ -478,13 +478,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   onClick={() => setShowUserMenu(v => !v)}
                   className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-bg transition-colors"
                 >
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-white label-xs font-bold flex-shrink-0"
                     style={{ background: 'var(--color-text-primary)' }}>
                     {session?.user?.name?.charAt(0) || 'U'}
                   </div>
                   <div className="flex-1 min-w-0 text-left">
-                    <p className="text-nav text-xs font-semibold truncate">{session?.user?.name || 'User'}</p>
-                    <p className="text-text-muted text-xs truncate">{session?.user?.email}</p>
+                    <p className="text-nav label-sm font-semibold truncate">{session?.user?.name || 'User'}</p>
+                    <p className="text-text-muted caption-sm truncate">{session?.user?.email}</p>
                   </div>
                   <ChevronDown className="w-3.5 h-3.5 text-text-light flex-shrink-0" />
                 </button>
@@ -502,18 +502,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                       {/* User info */}
                       <div className="px-4 py-3.5" style={{ background: 'var(--color-bg-primary)', borderBottom: '1px solid var(--color-border-medium)' }}>
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
+                          <div className="w-9 h-9 rounded-full flex items-center justify-center text-white body-sm font-bold flex-shrink-0"
                             style={{ background: 'var(--color-text-primary)' }}>
                             {getInitials(session?.user?.name)}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <p className="text-sm font-bold truncate" style={{ color: 'var(--color-text-primary)' }}>{session?.user?.name || 'User'}</p>
-                            <p className="text-xs truncate" style={{ color: 'var(--color-text-tertiary)' }}>{session?.user?.email}</p>
+                            <p className="body-sm font-bold truncate" style={{ color: 'var(--color-text-primary)' }}>{session?.user?.name || 'User'}</p>
+                            <p className="caption-sm truncate" style={{ color: 'var(--color-text-tertiary)' }}>{session?.user?.email}</p>
                           </div>
                         </div>
                         <div className="mt-2 flex items-center gap-1.5">
                           <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: 'var(--color-success-bright)' }} />
-                          <span className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+                          <span className="label-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
                             {formatRole((session?.user as any)?.role)}
                           </span>
                         </div>
@@ -523,7 +523,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                       <div className="p-1.5" style={{ borderBottom: '1px solid #F0EFED' }}>
                         <Link href="/account"
                           onClick={() => setShowUserMenu(false)}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-colors"
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl label font-medium transition-colors"
                           style={{ color: 'var(--color-text-primary)' }}
                           onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-bg-primary)')}
                           onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
@@ -538,11 +538,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                           Preferences
                         </p>
                         <div className="flex items-center justify-between mb-2.5">
-                          <span className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>Currency</span>
+                          <span className="label-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>Currency</span>
                           <div className="flex items-center p-0.5 rounded-lg gap-0.5" style={{ background: 'var(--color-surface-secondary)' }}>
                             {(['CAD', 'USD'] as const).map(c => (
                               <button key={c} onClick={() => setCurrency(c)}
-                                className="text-xs px-2.5 py-1 rounded-md font-semibold transition-all"
+                                className="label-sm px-2.5 py-1 rounded-md font-semibold transition-all"
                                 style={currency === c
                                   ? { background: 'white', color: 'var(--color-text-primary)', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }
                                   : { color: 'var(--color-text-tertiary)' }}>
@@ -552,11 +552,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                           </div>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>Language</span>
+                          <span className="label-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>Language</span>
                           <div className="flex items-center p-0.5 rounded-lg gap-0.5" style={{ background: 'var(--color-surface-secondary)' }}>
                             {(['en', 'fr'] as const).map(l => (
                               <button key={l} onClick={() => setLanguage(l)}
-                                className="text-xs px-2.5 py-1 rounded-md font-semibold transition-all"
+                                className="label-sm px-2.5 py-1 rounded-md font-semibold transition-all"
                                 style={language === l
                                   ? { background: 'white', color: 'var(--color-text-primary)', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }
                                   : { color: 'var(--color-text-tertiary)' }}>
@@ -571,7 +571,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                       <div className="p-1.5">
                         <button
                           onClick={() => signOut({ callbackUrl: '/login' })}
-                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-colors"
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl label font-medium transition-colors"
                           style={{ color: 'var(--color-accent)' }}
                           onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-error-soft)')}
                           onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
@@ -603,7 +603,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </button>
 
           {/* Breadcrumb */}
-          <div className="flex-1 flex items-center gap-2 text-sm min-w-0">
+          <div className="flex-1 flex items-center gap-2 body-sm min-w-0">
             <span className="text-text-light flex-shrink-0">IPOReady</span>
             <ChevronRight className="w-3 h-3 text-text-light flex-shrink-0" />
             <span className="capitalize font-medium text-text-muted truncate">
@@ -613,7 +613,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
           {/* auditus.ai */}
           <a href="https://auditus.ai" target="_blank"
-            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors flex-shrink-0"
+            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full label-sm font-medium transition-colors flex-shrink-0"
             style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)' }}
             onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-error-soft)', e.currentTarget.style.color = 'var(--color-accent)', e.currentTarget.style.borderColor = 'var(--color-accent)')}
             onMouseLeave={e => (e.currentTarget.style.background = 'var(--color-bg-primary)', e.currentTarget.style.color = 'var(--color-text-secondary)', e.currentTarget.style.borderColor = 'var(--color-border)')}>
@@ -765,15 +765,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-surface-secondary)')}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
-            <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-white label-xs font-bold flex-shrink-0"
               style={{ background: 'var(--color-text-primary)' }}>
               {getInitials(session?.user?.name)}
             </div>
             <div className="text-left">
-              <p className="text-nav text-sm font-semibold leading-tight">
+              <p className="text-nav label font-semibold leading-tight">
                 {session?.user?.name || 'User'}
               </p>
-              <p className="text-xs leading-tight" style={{ color: 'var(--color-text-tertiary)' }}>
+              <p className="caption-sm leading-tight" style={{ color: 'var(--color-text-tertiary)' }}>
                 {formatRole((session?.user as any)?.role)}
               </p>
             </div>

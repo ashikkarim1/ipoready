@@ -23,7 +23,7 @@ export function CapTableGrid({ holdings }: CapTableGridProps) {
   if (!holdings || holdings.length === 0) {
     return (
       <div className="border border-gray-200 rounded-lg p-6 bg-white">
-        <h3 className="text-lg font-semibold mb-4">Holdings</h3>
+        <h3 className="h4 font-semibold mb-4">Holdings</h3>
         <p className="text-gray-500">No holdings to display</p>
       </div>
     )
@@ -31,9 +31,9 @@ export function CapTableGrid({ holdings }: CapTableGridProps) {
 
   return (
     <div className="border border-gray-200 rounded-lg p-6 bg-white">
-      <h3 className="text-lg font-semibold mb-4">Holdings</h3>
+      <h3 className="h4 font-semibold mb-4">Holdings</h3>
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full body-sm">
           <thead>
             <tr className="border-b">
               <th className="text-left py-2 px-2 font-semibold">Shareholder</th>

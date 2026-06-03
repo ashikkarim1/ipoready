@@ -114,8 +114,8 @@ export default function ProspectusGeneratorModal({
                   <Sparkles className="w-5 h-5" style={{ color: '#B45309' }} />
                 </div>
                 <div>
-                  <h2 className="text-nav font-bold text-xl">Generate Prospectus</h2>
-                  <p className="text-text-muted text-sm">{companyName}</p>
+                  <h2 className="text-nav font-bold h4">Generate Prospectus</h2>
+                  <p className="text-text-muted body-sm">{companyName}</p>
                 </div>
               </div>
               <button
@@ -130,7 +130,7 @@ export default function ProspectusGeneratorModal({
               <>
                 {/* Exchange Selection */}
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <label className="text-nav text-sm font-medium block" style={{ marginBottom: '0.75rem' }}>
+                  <label className="text-nav label font-medium block" style={{ marginBottom: '0.75rem' }}>
                     Target Exchange
                   </label>
                   <div className="grid grid-cols-2 gap-3">
@@ -139,7 +139,7 @@ export default function ProspectusGeneratorModal({
                         key={ex.id}
                         type="button"
                         onClick={() => setExchange(ex.id)}
-                        className="rounded-xl border text-sm font-medium transition-all text-left"
+                        className="rounded-xl border label font-medium transition-all text-left"
                         style={{
                           padding: '0.875rem 1rem',
                           ...(exchange === ex.id
@@ -155,7 +155,7 @@ export default function ProspectusGeneratorModal({
 
                 {/* Format Selection */}
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <label className="text-nav text-sm font-medium block" style={{ marginBottom: '0.75rem' }}>
+                  <label className="text-nav label font-medium block" style={{ marginBottom: '0.75rem' }}>
                     Document Format
                   </label>
                   <div className="flex gap-3">
@@ -164,7 +164,7 @@ export default function ProspectusGeneratorModal({
                         key={fmt.id}
                         type="button"
                         onClick={() => setFormat(fmt.id)}
-                        className="flex-1 rounded-xl border text-sm font-medium transition-all"
+                        className="flex-1 rounded-xl border label font-medium transition-all"
                         style={{
                           padding: '0.875rem',
                           ...(format === fmt.id
@@ -190,8 +190,8 @@ export default function ProspectusGeneratorModal({
                 >
                   <FileText className="w-5 h-5 text-green-700 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-green-900">Auto-generates from PACE data</p>
-                    <p className="text-xs text-green-700 mt-0.5">
+                    <p className="label font-medium text-green-900">Auto-generates from PACE data</p>
+                    <p className="caption-sm text-green-700 mt-0.5">
                       IPOReady will fill the prospectus with company info, financials, and team data from your PACE workflow. Review and customize before final submission.
                     </p>
                   </div>
@@ -201,7 +201,7 @@ export default function ProspectusGeneratorModal({
                 <div className="flex gap-3">
                   <button
                     onClick={onClose}
-                    className="flex-1 rounded-xl border text-sm font-medium text-text-muted hover:text-nav transition-colors"
+                    className="flex-1 rounded-xl border label font-medium text-text-muted hover:text-nav transition-colors"
                     style={{ background: 'white', borderColor: '#E5E4E0', padding: '0.875rem' }}
                   >
                     Cancel
@@ -238,8 +238,8 @@ export default function ProspectusGeneratorModal({
                 >
                   <AlertCircle className="w-5 h-5 text-red-700 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-red-900">Generation failed</p>
-                    <p className="text-xs text-red-700 mt-0.5">{error}</p>
+                    <p className="label font-medium text-red-900">Generation failed</p>
+                    <p className="caption-sm text-red-700 mt-0.5">{error}</p>
                   </div>
                 </div>
 
@@ -249,7 +249,7 @@ export default function ProspectusGeneratorModal({
                       setError(null)
                       setResult(null)
                     }}
-                    className="flex-1 rounded-xl border text-sm font-medium text-text-muted hover:text-nav transition-colors"
+                    className="flex-1 rounded-xl border label font-medium text-text-muted hover:text-nav transition-colors"
                     style={{ background: 'white', borderColor: '#E5E4E0', padding: '0.875rem' }}
                   >
                     Try Again
@@ -277,13 +277,13 @@ export default function ProspectusGeneratorModal({
                 >
                   <CheckCircle2 className="w-5 h-5 text-green-700 flex-shrink-0 mt-0.5" />
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-green-900">Prospectus generated successfully</p>
-                    <p className="text-xs text-green-700 mt-1">
+                    <p className="label font-medium text-green-900">Prospectus generated successfully</p>
+                    <p className="caption-sm text-green-700 mt-1">
                       {result.metadata?.wordCount || 0} words · {result.metadata?.pageCount || 0} pages ·{' '}
                       {Math.round(result.documentSize / 1024)} KB
                     </p>
                     {result.completeness !== undefined && (
-                      <p className="text-xs text-green-700 mt-1">
+                      <p className="caption-sm text-green-700 mt-1">
                         Data completeness: {result.completeness}%
                         {result.completeness < 100 && ' (some fields require manual entry)'}
                       </p>
@@ -304,8 +304,8 @@ export default function ProspectusGeneratorModal({
                   >
                     <AlertCircle className="w-5 h-5 text-amber-700 flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-amber-900">Notes</p>
-                      <ul className="text-xs text-amber-700 mt-1 space-y-1">
+                      <p className="label font-medium text-amber-900">Notes</p>
+                      <ul className="caption-sm text-amber-700 mt-1 space-y-1">
                         {result.warnings.map((w: string, i: number) => (
                           <li key={i}>• {w}</li>
                         ))}
@@ -324,7 +324,7 @@ export default function ProspectusGeneratorModal({
                     marginBottom: '1.5rem',
                   }}
                 >
-                  <p className="text-sm font-medium text-nav mb-3">Download or Preview</p>
+                  <p className="label font-medium text-nav mb-3">Download or Preview</p>
                   <div className="flex gap-3">
                     {result.documentUrl && (
                       <a
@@ -337,7 +337,7 @@ export default function ProspectusGeneratorModal({
                     )}
                     <button
                       onClick={() => setShowDetails(!showDetails)}
-                      className="flex-1 rounded-xl border text-sm font-medium text-text-muted hover:text-nav transition-colors"
+                      className="flex-1 rounded-xl border label font-medium text-text-muted hover:text-nav transition-colors"
                       style={{ background: 'white', borderColor: '#E5E4E0', padding: '0.75rem' }}
                     >
                       <ChevronDown
@@ -365,13 +365,13 @@ export default function ProspectusGeneratorModal({
                         lineHeight: '1.5',
                       }}
                     >
-                      <p className="text-xs text-text-muted uppercase font-semibold mb-2">
+                      <p className="label-sm text-text-muted uppercase font-semibold mb-2">
                         Generation Details
                       </p>
                       <dl className="space-y-2">
                         <div className="flex justify-between">
                           <dt className="text-text-muted">Document ID:</dt>
-                          <dd className="text-nav font-mono text-xs">
+                          <dd className="text-nav font-mono caption-sm">
                             {result.documentId?.slice(0, 8)}...
                           </dd>
                         </div>
@@ -399,7 +399,7 @@ export default function ProspectusGeneratorModal({
                 {/* Close Button */}
                 <button
                   onClick={onClose}
-                  className="w-full rounded-xl border text-sm font-medium text-text-muted hover:text-nav transition-colors"
+                  className="w-full rounded-xl border label font-medium text-text-muted hover:text-nav transition-colors"
                   style={{ background: 'white', borderColor: '#E5E4E0', padding: '0.875rem' }}
                 >
                   Close

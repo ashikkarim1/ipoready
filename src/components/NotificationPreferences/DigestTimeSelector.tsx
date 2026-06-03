@@ -70,9 +70,9 @@ export function DigestTimeSelector({
       <div className="px-4 py-4" style={{ background: '#FAFAFA', borderBottom: '1px solid #F0EFED' }}>
         <div className="flex items-center gap-2 mb-1">
           <Clock className="w-4 h-4" style={{ color: '#9A9A9A' }} />
-          <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Digest Email Time</p>
+          <p className="font-semibold body-sm" style={{ color: '#1A1A1A' }}>Digest Email Time</p>
         </div>
-        <p className="text-xs mt-1" style={{ color: '#9A9A9A' }}>
+        <p className="caption-sm mt-1" style={{ color: '#9A9A9A' }}>
           When should we send your daily digest emails?
         </p>
       </div>
@@ -81,14 +81,14 @@ export function DigestTimeSelector({
       <div className="p-4 space-y-4">
         {/* Timezone Selector */}
         <div>
-          <label className="text-xs font-medium mb-2 block" style={{ color: '#717171' }}>
+          <label className="label-sm font-medium mb-2 block" style={{ color: '#717171' }}>
             Timezone
           </label>
           <div className="relative">
             <button
               onClick={() => setShowTimezoneDropdown(!showTimezoneDropdown)}
               disabled={isSaving}
-              className="w-full px-4 py-2.5 rounded-lg text-sm border text-left transition-all flex items-center justify-between"
+              className="w-full px-4 py-2.5 rounded-lg body-sm border text-left transition-all flex items-center justify-between"
               style={{
                 borderColor: '#E5E4E0',
                 background: '#FAFAFA',
@@ -131,8 +131,8 @@ export function DigestTimeSelector({
                       color: '#1A1A1A',
                     }}
                   >
-                    <p className="text-sm font-medium">{tz.name}</p>
-                    <p className="text-xs" style={{ color: '#9A9A9A' }}>{tz.code}</p>
+                    <p className="label font-medium">{tz.name}</p>
+                    <p className="caption-sm" style={{ color: '#9A9A9A' }}>{tz.code}</p>
                   </button>
                 ))}
               </div>
@@ -142,7 +142,7 @@ export function DigestTimeSelector({
 
         {/* Time Presets */}
         <div>
-          <label className="text-xs font-medium mb-2 block" style={{ color: '#717171' }}>
+          <label className="label-sm font-medium mb-2 block" style={{ color: '#717171' }}>
             Preferred Times
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -151,7 +151,7 @@ export function DigestTimeSelector({
                 key={time}
                 onClick={() => handleTimeChange(time)}
                 disabled={isSaving}
-                className="px-3 py-2.5 rounded-lg text-xs font-medium border transition-all"
+                className="px-3 py-2.5 rounded-lg label-sm font-medium border transition-all"
                 style={{
                   background: settings.digestTime === time ? '#1A1A1A' : '#FAFAFA',
                   border: settings.digestTime === time ? '1px solid #1A1A1A' : '1px solid #E5E4E0',
@@ -168,7 +168,7 @@ export function DigestTimeSelector({
 
         {/* Custom Time Input */}
         <div>
-          <label className="text-xs font-medium mb-2 block" style={{ color: '#717171' }}>
+          <label className="label-sm font-medium mb-2 block" style={{ color: '#717171' }}>
             Custom Time
           </label>
           <input
@@ -176,7 +176,7 @@ export function DigestTimeSelector({
             value={settings.digestTime}
             onChange={e => handleTimeChange(e.target.value)}
             disabled={isSaving}
-            className="w-full px-4 py-2.5 rounded-lg text-sm border outline-none transition-all"
+            className="w-full px-4 py-2.5 rounded-lg body-sm border outline-none transition-all"
             style={{
               borderColor: '#E5E4E0',
               background: '#FAFAFA',
@@ -189,7 +189,7 @@ export function DigestTimeSelector({
 
         {/* Info */}
         <div
-          className="p-3 rounded-lg text-xs"
+          className="p-3 rounded-lg caption-sm"
           style={{
             background: '#F7F6F4',
             color: '#717171',

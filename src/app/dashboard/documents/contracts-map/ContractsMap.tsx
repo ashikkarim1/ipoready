@@ -219,7 +219,7 @@ const ContractsMap: React.FC<ContractsMapProps> = ({
           Material Contracts Network
         </h2>
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-600">
+          <p className="body-sm text-gray-600">
             Prospectus relationships and document status
           </p>
           <div className="flex items-center gap-6">
@@ -227,19 +227,19 @@ const ContractsMap: React.FC<ContractsMapProps> = ({
               <p className="text-2xl font-bold text-red-600">
                 {requiredMissingCount}
               </p>
-              <p className="text-xs text-gray-600">Required Missing</p>
+              <p className="caption-sm text-gray-600">Required Missing</p>
             </div>
             <div className="text-center">
               <p className="text-2xl font-bold text-amber-600">
                 {recommendedCount}
               </p>
-              <p className="text-xs text-gray-600">Recommended</p>
+              <p className="caption-sm text-gray-600">Recommended</p>
             </div>
             <div className="text-center">
               <p className="text-2xl font-bold text-green-600">
                 {submittedCount}
               </p>
-              <p className="text-xs text-gray-600">Submitted</p>
+              <p className="caption-sm text-gray-600">Submitted</p>
             </div>
           </div>
         </div>
@@ -419,7 +419,7 @@ const ContractsMap: React.FC<ContractsMapProps> = ({
                     x={pos.x}
                     y={pos.y + radius + 25}
                     textAnchor="middle"
-                    className="text-xs font-semibold"
+                    className="label-sm font-semibold"
                     fill={colors.node}
                     opacity={node.id === 'prospectus' ? 1 : isHovered ? 1 : 0}
                     style={{
@@ -436,19 +436,19 @@ const ContractsMap: React.FC<ContractsMapProps> = ({
 
           {/* Legend */}
           <div className="absolute bottom-4 left-4 bg-white rounded-lg border border-gray-200 p-4 shadow-lg">
-            <p className="text-xs font-semibold text-gray-700 mb-3">STATUS</p>
+            <p className="label-sm font-semibold text-gray-700 mb-3">STATUS</p>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-red-500" />
-                <span className="text-xs text-gray-600">Required - Missing</span>
+                <span className="caption-sm text-gray-600">Required - Missing</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-amber-500" />
-                <span className="text-xs text-gray-600">Recommended</span>
+                <span className="caption-sm text-gray-600">Recommended</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-green-500" />
-                <span className="text-xs text-gray-600">Submitted</span>
+                <span className="caption-sm text-gray-600">Submitted</span>
               </div>
             </div>
           </div>
@@ -497,7 +497,7 @@ const ContractsMap: React.FC<ContractsMapProps> = ({
               <div className="p-6 border-b border-gray-200">
                 <button
                   onClick={() => setSelectedNode(null)}
-                  className="text-gray-400 hover:text-gray-600 text-lg font-bold mb-3"
+                  className="text-gray-400 hover:text-gray-600 h4 font-bold mb-3"
                 >
                   ✕
                 </button>
@@ -511,10 +511,10 @@ const ContractsMap: React.FC<ContractsMapProps> = ({
                     {selectedNode.icon}
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">
+                    <h3 className="h4 font-bold text-gray-900">
                       {selectedNode.name}
                     </h3>
-                    <p className="text-xs text-gray-600">
+                    <p className="caption-sm text-gray-600">
                       {selectedNode.type}
                     </p>
                   </div>
@@ -525,11 +525,11 @@ const ContractsMap: React.FC<ContractsMapProps> = ({
               <div className="flex-1 p-6 space-y-6">
                 {/* Status badge */}
                 <div>
-                  <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">
+                  <p className="label-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">
                     Status
                   </p>
                   <div
-                    className="inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-sm"
+                    className="inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium body-sm"
                     style={{
                       backgroundColor:
                         getStatusColor(selectedNode.status).light,
@@ -543,10 +543,10 @@ const ContractsMap: React.FC<ContractsMapProps> = ({
 
                 {/* Description */}
                 <div>
-                  <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">
+                  <p className="label-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">
                     Description
                   </p>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="body-sm text-gray-600 leading-relaxed">
                     {selectedNode.description}
                   </p>
                 </div>
@@ -554,10 +554,10 @@ const ContractsMap: React.FC<ContractsMapProps> = ({
                 {/* Submitted date */}
                 {selectedNode.submittedAt && (
                   <div>
-                    <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">
+                    <p className="label-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">
                       Submitted Date
                     </p>
-                    <p className="text-sm text-gray-600">
+                    <p className="body-sm text-gray-600">
                       {new Date(selectedNode.submittedAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -565,10 +565,10 @@ const ContractsMap: React.FC<ContractsMapProps> = ({
 
                 {/* Requirements */}
                 <div>
-                  <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">
+                  <p className="label-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">
                     Requirement
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="body-sm text-gray-600">
                     {selectedNode.status === 'required-missing'
                       ? 'This document is required for prospectus filing'
                       : 'This document is recommended for enhanced IPO readiness'}

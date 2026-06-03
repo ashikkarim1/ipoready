@@ -155,7 +155,7 @@ export default function DilutionScenariosPage() {
         <div className="flex gap-2">
           <button
             onClick={() => setShowCustomForm(!showCustomForm)}
-            className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-200"
+            className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 label font-medium text-gray-900 transition-colors hover:bg-gray-200"
           >
             <Plus className="h-4 w-4" />
             Custom Scenario
@@ -163,7 +163,7 @@ export default function DilutionScenariosPage() {
           <button
             onClick={handleExport}
             disabled={!selectedScenario || exportLoading}
-            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 label font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
           >
             {exportLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -220,7 +220,7 @@ export default function DilutionScenariosPage() {
       <AnimatePresence>
         {showCustomForm && (
           <motion.div variants={itemVariants} className="rounded-lg border border-gray-200 bg-white p-6">
-            <h3 className="mb-4 text-lg font-semibold text-gray-900">Create Custom Scenario</h3>
+            <h3 className="mb-4 h4 font-semibold text-gray-900">Create Custom Scenario</h3>
             <CustomScenarioForm onSubmit={handleCustomScenarioSubmit} />
           </motion.div>
         )}
@@ -230,7 +230,7 @@ export default function DilutionScenariosPage() {
       {selectedScenario && (
         <motion.div variants={itemVariants} className="space-y-6">
           <div className="rounded-lg border border-gray-200 bg-white p-6">
-            <h2 className="mb-4 text-xl font-bold text-gray-900">{selectedScenario.scenarioName}</h2>
+            <h2 className="mb-4 h4 font-bold text-gray-900">{selectedScenario.scenarioName}</h2>
 
             {/* Summary Metrics */}
             <div className="mb-6 grid gap-4 md:grid-cols-4">
@@ -255,10 +255,10 @@ export default function DilutionScenariosPage() {
 
             {/* Assumptions */}
             <div className="mb-6 rounded-lg bg-gray-50 p-4">
-              <h3 className="mb-3 text-sm font-semibold text-gray-900">Scenario Assumptions</h3>
+              <h3 className="mb-3 label font-semibold text-gray-900">Scenario Assumptions</h3>
               <div className="grid gap-3 md:grid-cols-2">
                 {selectedScenario.assumptions.warrantsExercisedPercent && (
-                  <div className="text-sm">
+                  <div className="body-sm">
                     <span className="text-gray-600">Warrants Exercised:</span>
                     <span className="ml-2 font-medium text-gray-900">
                       {selectedScenario.assumptions.warrantsExercisedPercent}%
@@ -266,7 +266,7 @@ export default function DilutionScenariosPage() {
                   </div>
                 )}
                 {selectedScenario.assumptions.employeeOptionVestingShares && (
-                  <div className="text-sm">
+                  <div className="body-sm">
                     <span className="text-gray-600">Employee Options Vesting:</span>
                     <span className="ml-2 font-medium text-gray-900">
                       {formatNumber(selectedScenario.assumptions.employeeOptionVestingShares)}
@@ -274,7 +274,7 @@ export default function DilutionScenariosPage() {
                   </div>
                 )}
                 {selectedScenario.assumptions.newFinancingAmount && (
-                  <div className="text-sm">
+                  <div className="body-sm">
                     <span className="text-gray-600">New Financing:</span>
                     <span className="ml-2 font-medium text-gray-900">
                       ${formatNumber(selectedScenario.assumptions.newFinancingAmount / 1000000)}M
@@ -282,7 +282,7 @@ export default function DilutionScenariosPage() {
                   </div>
                 )}
                 {selectedScenario.assumptions.projectedValuation && (
-                  <div className="text-sm">
+                  <div className="body-sm">
                     <span className="text-gray-600">Projected Valuation:</span>
                     <span className="ml-2 font-medium text-gray-900">
                       ${formatNumber(selectedScenario.assumptions.projectedValuation / 1000000)}M
@@ -294,9 +294,9 @@ export default function DilutionScenariosPage() {
 
             {/* Shareholder Impact Table */}
             <div>
-              <h3 className="mb-3 text-sm font-semibold text-gray-900">Shareholder Impact</h3>
+              <h3 className="mb-3 label font-semibold text-gray-900">Shareholder Impact</h3>
               <div className="overflow-x-auto">
-                <table className="w-full text-sm">
+                <table className="w-full body-sm">
                   <thead>
                     <tr className="border-b border-gray-200">
                       <th className="px-4 py-2 text-left font-medium text-gray-900">Shareholder</th>
@@ -312,7 +312,7 @@ export default function DilutionScenariosPage() {
                         <tr key={position.shareholderId} className="border-b border-gray-100">
                           <td className="px-4 py-3 text-gray-900">
                             <div className="font-medium">{position.shareholderName}</div>
-                            <div className="text-xs text-gray-600">{position.shareClass}</div>
+                            <div className="caption-sm text-gray-600">{position.shareClass}</div>
                           </td>
                           <td className="px-4 py-3 text-right">
                             {Number(position.currentOwnership).toFixed(2)}%
@@ -382,10 +382,10 @@ function ScenarioCard({
         <div className={isSelected ? 'text-blue-600' : 'text-gray-600'}>{icon}</div>
         <div className="flex-1">
           <h3 className="font-semibold text-gray-900">{title}</h3>
-          <p className="mt-1 text-xs text-gray-600">{description}</p>
+          <p className="mt-1 caption-sm text-gray-600">{description}</p>
           <div className="mt-3 flex items-baseline gap-1">
-            <span className="text-xl font-bold text-gray-900">{dilutionPercent.toFixed(1)}%</span>
-            <span className="text-xs text-gray-600">dilution</span>
+            <span className="h4 font-bold text-gray-900">{dilutionPercent.toFixed(1)}%</span>
+            <span className="caption-sm text-gray-600">dilution</span>
           </div>
         </div>
       </div>
@@ -403,7 +403,7 @@ interface MetricCardProps {
 function MetricCard({ label, value, highlight }: MetricCardProps) {
   return (
     <div className={`rounded-lg p-4 ${highlight ? 'bg-blue-50' : 'bg-gray-50'}`}>
-      <p className="text-xs text-gray-600">{label}</p>
+      <p className="caption-sm text-gray-600">{label}</p>
       <p className={`mt-1 text-2xl font-bold ${highlight ? 'text-blue-600' : 'text-gray-900'}`}>
         {value}
       </p>
@@ -470,7 +470,7 @@ function CustomScenarioForm({ onSubmit }: CustomScenarioFormProps) {
       </div>
       <button
         type="submit"
-        className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+        className="w-full rounded-lg bg-blue-600 px-4 py-2 label font-medium text-white transition-colors hover:bg-blue-700"
       >
         Calculate Scenario
       </button>
@@ -489,12 +489,12 @@ interface FormInputProps {
 function FormInput({ label, type = 'text', value, onChange }: FormInputProps) {
   return (
     <div>
-      <label className="text-sm font-medium text-gray-900">{label}</label>
+      <label className="label font-medium text-gray-900">{label}</label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm transition-colors focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 body-sm transition-colors focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
       />
     </div>
   )

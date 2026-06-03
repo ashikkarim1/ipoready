@@ -44,7 +44,7 @@ export default function ListingRulesPageEnhanced() {
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             Listing Agreement Rules Engine
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-600 h4">
             Validate your cap table against exchange-specific listing requirements
           </p>
         </motion.div>
@@ -65,7 +65,7 @@ export default function ListingRulesPageEnhanced() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-xl shadow-lg p-6 mb-8"
         >
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Analysis Mode</h3>
+          <h3 className="h4 font-semibold text-gray-900 mb-4">Analysis Mode</h3>
           <div className="flex gap-4 mb-6">
             <button
               onClick={() => setViewMode('single')}
@@ -91,7 +91,7 @@ export default function ListingRulesPageEnhanced() {
 
           {/* Exchange Selection */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
+            <label className="block label font-semibold text-gray-700 mb-3">
               Primary Exchange
             </label>
             <select
@@ -114,7 +114,7 @@ export default function ListingRulesPageEnhanced() {
           {/* Comparison Exchanges */}
           {viewMode === 'comparison' && (
             <div className="mt-6 pt-6 border-t border-gray-200">
-              <label className="block text-sm font-semibold text-gray-700 mb-3">
+              <label className="block label font-semibold text-gray-700 mb-3">
                 Compare Against
               </label>
               <div className="flex flex-wrap gap-2">
@@ -182,32 +182,32 @@ export default function ListingRulesPageEnhanced() {
                       <p className="text-5xl font-bold text-gray-900">
                         {report.complianceScore}
                       </p>
-                      <p className="text-sm text-gray-600 mt-1">Compliance Score</p>
+                      <p className="body-sm text-gray-600 mt-1">Compliance Score</p>
                     </div>
                   </div>
 
                   {/* Key Metrics Grid */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="bg-white bg-opacity-60 rounded p-4">
-                      <p className="text-xs text-gray-600 uppercase font-semibold">Total Issues</p>
+                      <p className="label-sm text-gray-600 uppercase font-semibold">Total Issues</p>
                       <p className="text-2xl font-bold text-gray-900">
                         {report.summary.totalViolations}
                       </p>
                     </div>
                     <div className="bg-white bg-opacity-60 rounded p-4">
-                      <p className="text-xs text-red-600 uppercase font-semibold">Critical</p>
+                      <p className="label-sm text-red-600 uppercase font-semibold">Critical</p>
                       <p className="text-2xl font-bold text-red-600">
                         {report.summary.criticalViolations}
                       </p>
                     </div>
                     <div className="bg-white bg-opacity-60 rounded p-4">
-                      <p className="text-xs text-orange-600 uppercase font-semibold">Errors</p>
+                      <p className="label-sm text-orange-600 uppercase font-semibold">Errors</p>
                       <p className="text-2xl font-bold text-orange-600">
                         {report.summary.errorViolations}
                       </p>
                     </div>
                     <div className="bg-white bg-opacity-60 rounded p-4">
-                      <p className="text-xs text-yellow-600 uppercase font-semibold">Warnings</p>
+                      <p className="label-sm text-yellow-600 uppercase font-semibold">Warnings</p>
                       <p className="text-2xl font-bold text-yellow-600">
                         {report.summary.warningViolations}
                       </p>
@@ -217,7 +217,7 @@ export default function ListingRulesPageEnhanced() {
 
                 {/* Gap Analysis */}
                 <div className="p-8 border-t border-gray-200">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6">Gap Analysis</h3>
+                  <h3 className="h4 font-bold text-gray-900 mb-6">Gap Analysis</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {report.gaps.map((gap) => (
                       <ComplianceProgressBar
@@ -233,7 +233,7 @@ export default function ListingRulesPageEnhanced() {
                 {/* Violations */}
                 {report.violations.length > 0 && (
                   <div className="p-8 border-t border-gray-200">
-                    <h3 className="text-xl font-bold text-gray-900 mb-6">
+                    <h3 className="h4 font-bold text-gray-900 mb-6">
                       Violations & Issues
                     </h3>
                     <div className="space-y-4">
@@ -262,11 +262,11 @@ export default function ListingRulesPageEnhanced() {
                                 <h4 className="font-semibold text-gray-900">
                                   {violation.rule}
                                 </h4>
-                                <p className="text-sm text-gray-700 mt-1">
+                                <p className="body-sm text-gray-700 mt-1">
                                   {violation.message}
                                 </p>
                                 {violation.suggestion && (
-                                  <p className="text-xs text-gray-600 mt-2 italic">
+                                  <p className="caption-sm text-gray-600 mt-2 italic">
                                     Suggestion: {violation.suggestion}
                                   </p>
                                 )}
@@ -322,7 +322,7 @@ export default function ListingRulesPageEnhanced() {
                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <p className="text-gray-600 text-lg">
+            <p className="text-gray-600 h4">
               Fill out the form above and click "Validate Against Exchanges" to begin
             </p>
           </motion.div>

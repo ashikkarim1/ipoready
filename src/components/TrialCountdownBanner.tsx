@@ -81,10 +81,10 @@ const TrialCountdownBanner = React.memo<TrialCountdownBannerProps>(
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             {/* Left Content */}
             <div className="flex-1">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">
+              <h2 className="h4 sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">
                 Trial Expires Soon
               </h2>
-              <p className="text-sm sm:text-base text-gray-700 mb-2 sm:mb-0">
+              <p className="body-sm sm:body text-gray-700 mb-2 sm:mb-0">
                 Your trial for{' '}
                 <span className="font-semibold text-gray-900">{companyName}</span>{' '}
                 expires in{' '}
@@ -99,7 +99,7 @@ const TrialCountdownBanner = React.memo<TrialCountdownBannerProps>(
             {/* CTA Button */}
             <Link
               href="/app/checkout?is_trial_upgrade=true"
-              className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200 whitespace-nowrap text-sm sm:text-base shadow-sm hover:shadow-md"
+              className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200 whitespace-nowrap body-sm sm:body shadow-sm hover:shadow-md"
             >
               Upgrade to Premium
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -107,7 +107,7 @@ const TrialCountdownBanner = React.memo<TrialCountdownBannerProps>(
           </div>
 
           {/* Mobile-only Secondary Text */}
-          <p className="sm:hidden text-xs text-gray-600 mt-3">
+          <p className="sm:hidden caption-sm text-gray-600 mt-3">
             Upgrade now to continue using IPOReady after your trial ends.
           </p>
         </div>

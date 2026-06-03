@@ -243,7 +243,7 @@ export default function ConsentLettersPage() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowForm(!showForm)}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
+              className="px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition"
             >
               {showForm ? 'Cancel' : '+ New Consent'}
             </motion.button>
@@ -258,9 +258,9 @@ export default function ConsentLettersPage() {
                 transition={{ delay: 0.1 }}
                 className="bg-white rounded-lg p-4 border border-gray-200"
               >
-                <div className="text-sm text-gray-600 mb-1">Compliance</div>
+                <div className="body-sm text-gray-600 mb-1">Compliance</div>
                 <div className="text-3xl font-bold text-blue-600">{compliance.compliance_percentage}%</div>
-                <div className="text-xs text-gray-500 mt-2">
+                <div className="caption-sm text-gray-500 mt-2">
                   {compliance.signed} of {compliance.total} signed
                 </div>
               </motion.div>
@@ -271,9 +271,9 @@ export default function ConsentLettersPage() {
                 transition={{ delay: 0.2 }}
                 className="bg-white rounded-lg p-4 border border-gray-200"
               >
-                <div className="text-sm text-gray-600 mb-1">Pending</div>
+                <div className="body-sm text-gray-600 mb-1">Pending</div>
                 <div className="text-3xl font-bold text-yellow-600">{compliance.pending}</div>
-                <div className="text-xs text-gray-500 mt-2">awaiting response</div>
+                <div className="caption-sm text-gray-500 mt-2">awaiting response</div>
               </motion.div>
 
               <motion.div
@@ -282,9 +282,9 @@ export default function ConsentLettersPage() {
                 transition={{ delay: 0.3 }}
                 className="bg-white rounded-lg p-4 border border-gray-200"
               >
-                <div className="text-sm text-gray-600 mb-1">Expiring Soon</div>
+                <div className="body-sm text-gray-600 mb-1">Expiring Soon</div>
                 <div className="text-3xl font-bold text-orange-600">{compliance.expiring_soon}</div>
-                <div className="text-xs text-gray-500 mt-2">within 30 days</div>
+                <div className="caption-sm text-gray-500 mt-2">within 30 days</div>
               </motion.div>
 
               <motion.div
@@ -293,9 +293,9 @@ export default function ConsentLettersPage() {
                 transition={{ delay: 0.4 }}
                 className="bg-white rounded-lg p-4 border border-gray-200"
               >
-                <div className="text-sm text-gray-600 mb-1">Total</div>
+                <div className="body-sm text-gray-600 mb-1">Total</div>
                 <div className="text-3xl font-bold text-gray-900">{compliance.total}</div>
-                <div className="text-xs text-gray-500 mt-2">consent letters</div>
+                <div className="caption-sm text-gray-500 mt-2">consent letters</div>
               </motion.div>
             </div>
           )}
@@ -308,11 +308,11 @@ export default function ConsentLettersPage() {
             animate={{ opacity: 1, height: 'auto' }}
             className="bg-white rounded-lg p-6 border border-blue-200 mb-8"
           >
-            <h2 className="text-xl font-semibold mb-4">Create New Consent Request</h2>
+            <h2 className="h4 font-semibold mb-4">Create New Consent Request</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Entity Name *</label>
+                <label className="block label font-medium text-gray-700 mb-2">Entity Name *</label>
                 <input
                   type="text"
                   value={formData.from_entity}
@@ -323,7 +323,7 @@ export default function ConsentLettersPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Entity Type *</label>
+                <label className="block label font-medium text-gray-700 mb-2">Entity Type *</label>
                 <select
                   value={formData.entity_type}
                   onChange={(e) => setFormData({ ...formData, entity_type: e.target.value as EntityType })}
@@ -338,7 +338,7 @@ export default function ConsentLettersPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Consent Type</label>
+                <label className="block label font-medium text-gray-700 mb-2">Consent Type</label>
                 <input
                   type="text"
                   value={formData.consent_type}
@@ -349,7 +349,7 @@ export default function ConsentLettersPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Expiry Date</label>
+                <label className="block label font-medium text-gray-700 mb-2">Expiry Date</label>
                 <input
                   type="date"
                   value={formData.expiry_date}
@@ -359,7 +359,7 @@ export default function ConsentLettersPage() {
               </div>
             </div>
 
-            {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
+            {error && <div className="text-red-600 body-sm mb-4">{error}</div>}
 
             <div className="flex gap-2">
               <motion.button
@@ -391,11 +391,11 @@ export default function ConsentLettersPage() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white rounded-lg p-4 mb-6 border border-gray-200">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Status</label>
+              <label className="block label font-medium text-gray-700 mb-2">Filter by Status</label>
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value as any)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent body-sm"
               >
                 <option value="all">All Statuses</option>
                 {CONSENT_STATUSES.map((status) => (
@@ -407,11 +407,11 @@ export default function ConsentLettersPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Entity Type</label>
+              <label className="block label font-medium text-gray-700 mb-2">Filter by Entity Type</label>
               <select
                 value={filterEntityType}
                 onChange={(e) => setFilterEntityType(e.target.value as any)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent body-sm"
               >
                 <option value="all">All Types</option>
                 {ENTITY_TYPES.map((type) => (
@@ -423,11 +423,11 @@ export default function ConsentLettersPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Exchange</label>
+              <label className="block label font-medium text-gray-700 mb-2">Exchange</label>
               <select
                 value={exchange}
                 onChange={(e) => setExchange(e.target.value as ExchangeCode)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent body-sm"
               >
                 <option value="tsx">TSX</option>
                 <option value="nasdaq">NASDAQ</option>
@@ -470,13 +470,13 @@ export default function ConsentLettersPage() {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <span className="text-2xl">{getEntityIcon(consent.entity_type)}</span>
-                      <h3 className="text-lg font-semibold text-gray-900">{consent.from_entity}</h3>
+                      <h3 className="h4 font-semibold text-gray-900">{consent.from_entity}</h3>
                       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusBadge(consent.status).bg_color} ${getStatusBadge(consent.status).color}`}>
                         {getStatusBadge(consent.status).icon} {getStatusBadge(consent.status).label}
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-3">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 body-sm text-gray-600 mb-3">
                       <div>
                         <span className="font-medium">Entity Type:</span> {getEntityTypeLabel(consent.entity_type)}
                       </div>
@@ -493,7 +493,7 @@ export default function ConsentLettersPage() {
                     </div>
 
                     {isExpiringSoon(consent.expiry_date) && consent.status !== 'signed' && (
-                      <div className="text-xs text-orange-700 bg-orange-50 px-2 py-1 rounded inline-block">
+                      <div className="caption-sm text-orange-700 bg-orange-50 px-2 py-1 rounded inline-block">
                         ⚠️ Expiring soon - action required
                       </div>
                     )}
@@ -504,7 +504,7 @@ export default function ConsentLettersPage() {
                       onClick={(e) => e.stopPropagation()}
                       onChange={(e) => updateConsentStatus(consent.id, e.target.value as ConsentStatus)}
                       value={consent.status}
-                      className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="px-3 py-2 border border-gray-300 rounded-lg body-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       {CONSENT_STATUSES.map((status) => (
                         <option key={status} value={status}>

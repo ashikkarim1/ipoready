@@ -103,7 +103,7 @@ export default function ResolutionsPage() {
       {error && (
         <Card className="border-red-200 bg-red-50">
           <CardContent className="pt-6">
-            <p className="text-red-800 text-sm">{error}</p>
+            <p className="text-red-800 body-sm">{error}</p>
           </CardContent>
         </Card>
       )}
@@ -112,8 +112,8 @@ export default function ResolutionsPage() {
       {!loading && resolutions.length === 0 && (
         <Card>
           <CardContent className="pt-12 pb-12 text-center">
-            <h3 className="text-base font-semibold text-slate-900 mb-2">No resolutions yet</h3>
-            <p className="text-slate-600 text-sm mb-6">Create your first board resolution to get started</p>
+            <h3 className="body font-semibold text-slate-900 mb-2">No resolutions yet</h3>
+            <p className="text-slate-600 body-sm mb-6">Create your first board resolution to get started</p>
             <Link href="/dashboard/compliance/resolutions/new">
               <Button className="bg-blue-600 hover:bg-blue-700">
                 Create First Resolution
@@ -131,10 +131,10 @@ export default function ResolutionsPage() {
               <CardHeader>
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
-                    <CardTitle className="text-lg font-bold text-slate-900">
+                    <CardTitle className="h4 font-bold text-slate-900">
                       {resolution.document_title}
                     </CardTitle>
-                    <CardDescription className="mt-1 text-sm text-slate-600">
+                    <CardDescription className="mt-1 body-sm text-slate-600">
                       {getTypeLabel(resolution.resolution_type)} • {resolution.company_name}
                     </CardDescription>
                   </div>
@@ -144,7 +144,7 @@ export default function ResolutionsPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 gap-4 mb-4 text-xs">
+                <div className="grid grid-cols-2 gap-4 mb-4 caption-sm">
                   <div>
                     <p className="text-slate-600 font-semibold mb-1">Approval Date</p>
                     <p className="text-slate-900 font-medium">{new Date(resolution.approval_date).toLocaleDateString()}</p>
@@ -218,9 +218,9 @@ export default function ResolutionsPage() {
       {/* Quick Reference */}
       <Card className="bg-blue-50 border-blue-200">
         <CardHeader>
-          <CardTitle className="text-lg">About Corporate Resolutions</CardTitle>
+          <CardTitle className="h4">About Corporate Resolutions</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2 text-sm">
+        <CardContent className="space-y-2 body-sm">
           <p>
             <strong>Prospectus Approval:</strong> Board approval of the prospectus document before filing with securities regulators.
           </p>

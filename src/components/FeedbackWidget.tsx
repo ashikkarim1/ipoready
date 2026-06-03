@@ -107,7 +107,7 @@ export function FeedbackWidget({ page, task, onClose }: FeedbackWidgetProps) {
       <div className="p-4">
         {step === 'rating' && (
           <div className="space-y-4">
-            <p className="text-sm text-gray-600">How satisfied are you with IPOReady?</p>
+            <p className="body-sm text-gray-600">How satisfied are you with IPOReady?</p>
             <div className="flex gap-2 justify-center">
               {[1, 2, 3, 4, 5].map((value) => (
                 <button
@@ -123,7 +123,7 @@ export function FeedbackWidget({ page, task, onClose }: FeedbackWidgetProps) {
                 </button>
               ))}
             </div>
-            <p className="text-xs text-gray-500 text-center">1 = Not Satisfied, 5 = Very Satisfied</p>
+            <p className="caption-sm text-gray-500 text-center">1 = Not Satisfied, 5 = Very Satisfied</p>
           </div>
         )}
 
@@ -131,11 +131,11 @@ export function FeedbackWidget({ page, task, onClose }: FeedbackWidgetProps) {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Category */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <label className="block label font-medium text-gray-700 mb-1">Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as FeedbackCategory)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg body-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 {FEEDBACK_CATEGORIES.map((cat) => (
                   <option key={cat} value={cat}>
@@ -147,33 +147,33 @@ export function FeedbackWidget({ page, task, onClose }: FeedbackWidgetProps) {
 
             {/* Subject */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Subject (Optional)</label>
+              <label className="block label font-medium text-gray-700 mb-1">Subject (Optional)</label>
               <input
                 type="text"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="Brief subject..."
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg body-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
 
             {/* Feedback Text */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Your Feedback *</label>
+              <label className="block label font-medium text-gray-700 mb-1">Your Feedback *</label>
               <textarea
                 value={feedbackText}
                 onChange={(e) => setFeedbackText(e.target.value)}
                 placeholder="Tell us what you think..."
                 maxLength={1000}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg body-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               />
-              <p className="text-xs text-gray-500 mt-1">{feedbackText.length}/1000</p>
+              <p className="caption-sm text-gray-500 mt-1">{feedbackText.length}/1000</p>
             </div>
 
             {/* Confusion Points */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Confusing Points (Optional)</label>
+              <label className="block label font-medium text-gray-700 mb-1">Confusing Points (Optional)</label>
               <div className="flex gap-1 mb-2">
                 <input
                   type="text"
@@ -181,7 +181,7 @@ export function FeedbackWidget({ page, task, onClose }: FeedbackWidgetProps) {
                   onChange={(e) => setConfusionInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddConfusionPoint())}
                   placeholder="What was confusing?"
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg body-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
                 <button
                   type="button"
@@ -196,7 +196,7 @@ export function FeedbackWidget({ page, task, onClose }: FeedbackWidgetProps) {
                   {confusionPoints.map((point, idx) => (
                     <span
                       key={idx}
-                      className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs"
+                      className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full caption-sm"
                     >
                       {point}
                       <button
@@ -216,7 +216,7 @@ export function FeedbackWidget({ page, task, onClose }: FeedbackWidgetProps) {
             {error && (
               <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
                 <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
-                <p className="text-sm text-red-700">{error}</p>
+                <p className="body-sm text-red-700">{error}</p>
               </div>
             )}
 
@@ -236,7 +236,7 @@ export function FeedbackWidget({ page, task, onClose }: FeedbackWidgetProps) {
           <div className="flex flex-col items-center justify-center py-6">
             <CheckCircle className="w-12 h-12 text-green-600 mb-3" />
             <p className="text-center text-gray-900 font-medium">Thank you!</p>
-            <p className="text-center text-sm text-gray-600 mt-1">Your feedback helps us improve</p>
+            <p className="text-center body-sm text-gray-600 mt-1">Your feedback helps us improve</p>
           </div>
         )}
       </div>

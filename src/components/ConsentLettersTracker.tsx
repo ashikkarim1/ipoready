@@ -117,17 +117,17 @@ export function ConsentLettersTracker() {
         <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Entity Name</label>
+              <label className="block label font-medium text-slate-700 dark:text-slate-300 mb-2">Entity Name</label>
               <input
                 {...register('from_entity')}
                 className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
                 placeholder="e.g., Deloitte LLP"
               />
-              {errors.from_entity && <p className="text-red-500 text-sm mt-1">{errors.from_entity.message}</p>}
+              {errors.from_entity && <p className="text-red-500 body-sm mt-1">{errors.from_entity.message}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Entity Type</label>
+              <label className="block label font-medium text-slate-700 dark:text-slate-300 mb-2">Entity Type</label>
               <select
                 {...register('entity_type')}
                 className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
@@ -141,7 +141,7 @@ export function ConsentLettersTracker() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Consent Type</label>
+              <label className="block label font-medium text-slate-700 dark:text-slate-300 mb-2">Consent Type</label>
               <input
                 {...register('consent_type')}
                 className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
@@ -150,7 +150,7 @@ export function ConsentLettersTracker() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Expiry Date</label>
+              <label className="block label font-medium text-slate-700 dark:text-slate-300 mb-2">Expiry Date</label>
               <input
                 type="date"
                 {...register('expiry_date')}
@@ -211,15 +211,15 @@ export function ConsentLettersTracker() {
                 return (
                   <tr key={consent.id} className="border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50">
                     <td className="py-3 px-4 text-slate-900 dark:text-white font-medium">{consent.from_entity}</td>
-                    <td className="py-3 px-4 text-slate-600 dark:text-slate-400 text-sm">{consent.entity_type}</td>
-                    <td className="py-3 px-4 text-slate-600 dark:text-slate-400 text-sm">{consent.consent_type}</td>
+                    <td className="py-3 px-4 text-slate-600 dark:text-slate-400 body-sm">{consent.entity_type}</td>
+                    <td className="py-3 px-4 text-slate-600 dark:text-slate-400 body-sm">{consent.consent_type}</td>
                     <td className="py-3 px-4">
                       <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${statusConfig.bg} ${statusConfig.border} border`}>
                         <StatusIcon className="h-4 w-4" />
                         {consent.status}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-slate-600 dark:text-slate-400 text-sm">
+                    <td className="py-3 px-4 text-slate-600 dark:text-slate-400 body-sm">
                       {consent.expiry_date ? new Date(consent.expiry_date).toLocaleDateString() : '-'}
                     </td>
                   </tr>

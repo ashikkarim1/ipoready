@@ -37,7 +37,7 @@ export function ReadinessFactorsCard({
 
   return (
     <div className="rounded-lg border border-gray-200 p-6 bg-white">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Readiness Factors</h3>
+      <h3 className="h4 font-semibold text-gray-900 mb-4">Readiness Factors</h3>
 
       {/* Responsive grid: 1 col mobile, 2x2 tablet, 4 col desktop */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -51,24 +51,24 @@ export function ReadinessFactorsCard({
           </p>
           <p className={`text-xs ${getCashTextColor()}`}>months</p>
           {cashRunway < 3 && (
-            <p className="text-xs text-red-700 font-medium mt-2">⚠ Critical: Plan fundraising</p>
+            <p className="label-sm text-red-700 font-medium mt-2">⚠ Critical: Plan fundraising</p>
           )}
           {cashRunway >= 3 && cashRunway < 6 && (
-            <p className="text-xs text-yellow-700 font-medium mt-2">→ Monitor closely</p>
+            <p className="label-sm text-yellow-700 font-medium mt-2">→ Monitor closely</p>
           )}
         </div>
 
         {/* Hiring Progress */}
         <div className="rounded-lg border border-gray-200 p-4 bg-gray-50">
-          <p className="text-sm font-semibold text-gray-700 mb-3">Team Hiring</p>
+          <p className="label font-semibold text-gray-700 mb-3">Team Hiring</p>
           <div className="w-full bg-gray-300 rounded-full h-2 mb-2 overflow-hidden">
             <div
               className={`h-full ${getHiringProgressColor()} transition-all`}
               style={{ width: `${hiringProgress}%` }}
             />
           </div>
-          <p className="text-lg font-bold text-gray-900">{Math.round(hiringProgress)}%</p>
-          <p className="text-xs text-gray-600">of planned hires</p>
+          <p className="h4 font-bold text-gray-900">{Math.round(hiringProgress)}%</p>
+          <p className="caption-sm text-gray-600">of planned hires</p>
         </div>
 
         {/* Auditor Engagement */}
@@ -89,20 +89,20 @@ export function ReadinessFactorsCard({
             </span>
           </div>
           {auditorEngaged && (
-            <p className="text-xs text-green-700">CPAB-registered auditor</p>
+            <p className="caption-sm text-green-700">CPAB-registered auditor</p>
           )}
         </div>
 
         {/* Board Composition */}
         <div className="rounded-lg border border-gray-200 p-4 bg-gray-50">
-          <p className="text-sm font-semibold text-gray-700 mb-3">Board Composition</p>
+          <p className="label font-semibold text-gray-700 mb-3">Board Composition</p>
           <div className="mb-2">
-            <p className="text-lg font-bold text-gray-900">
+            <p className="h4 font-bold text-gray-900">
               {boardIndependentCount}/{boardSize}
             </p>
-            <p className="text-xs text-gray-600">independent directors</p>
+            <p className="caption-sm text-gray-600">independent directors</p>
           </div>
-          <div className="flex items-center gap-1 text-xs">
+          <div className="flex items-center gap-1 caption-sm">
             <span className={secondIndependent ? 'text-green-600 font-semibold' : 'text-gray-500'}>
               {secondIndependent ? '✓' : '○'}
             </span>

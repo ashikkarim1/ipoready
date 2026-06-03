@@ -76,7 +76,7 @@ export const TaskBadge = React.memo(function TaskBadge({
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold"
+            className="inline-flex items-center gap-1 px-2 py-1 rounded-full label-sm font-semibold"
             style={{
               backgroundColor: '#FEE2E2',
               color: '#DC2626',
@@ -92,7 +92,7 @@ export const TaskBadge = React.memo(function TaskBadge({
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold"
+            className="inline-flex items-center gap-1 px-2 py-1 rounded-full label-sm font-semibold"
             style={{
               backgroundColor: '#FEF3C7',
               color: '#B45309',

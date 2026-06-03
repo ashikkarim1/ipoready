@@ -75,7 +75,7 @@ export default function TemplatePreview({
           <div className="p-8 space-y-8">
             {/* Template Type Info */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-              <h3 className="text-lg font-bold text-blue-900 mb-2">What is this template?</h3>
+              <h3 className="h4 font-bold text-blue-900 mb-2">What is this template?</h3>
               <p className="text-blue-800">{TEMPLATE_TYPE_DESCRIPTIONS[template.type]}</p>
             </div>
 
@@ -104,7 +104,7 @@ export default function TemplatePreview({
                         <div className="flex-1">
                           <h4 className="font-bold text-gray-900 mb-1">{title}</h4>
                           {description && (
-                            <p className="text-sm text-gray-600">{description}</p>
+                            <p className="body-sm text-gray-600">{description}</p>
                           )}
                         </div>
                         <button
@@ -124,7 +124,7 @@ export default function TemplatePreview({
                 })}
               </div>
 
-              <p className="text-xs text-gray-500 mt-6 italic">
+              <p className="caption-sm text-gray-500 mt-6 italic">
                 Tip: Hover over any key term to copy it to your clipboard for use in other documents.
               </p>
             </div>
@@ -146,12 +146,12 @@ export default function TemplatePreview({
                     className="bg-green-50 border-2 border-green-200 rounded-lg p-4 text-center hover:shadow-md transition-shadow"
                   >
                     <div className="font-bold text-green-900">{exchange}</div>
-                    <div className="text-xs text-green-700 mt-1">Accepted</div>
+                    <div className="caption-sm text-green-700 mt-1">Accepted</div>
                   </motion.div>
                 ))}
               </div>
 
-              <p className="text-sm text-gray-600 mt-4">
+              <p className="body-sm text-gray-600 mt-4">
                 This template is commonly used by the exchanges listed above. However, always confirm specific
                 requirements with your underwriters and exchange regulators, as requirements may vary.
               </p>
@@ -160,7 +160,7 @@ export default function TemplatePreview({
             {/* Usage Info */}
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
               <h3 className="font-bold text-amber-900 mb-3">How to Use This Template</h3>
-              <ol className="space-y-2 text-sm text-amber-800 list-decimal list-inside">
+              <ol className="space-y-2 body-sm text-amber-800 list-decimal list-inside">
                 <li>Download the template in .docx format (Microsoft Word)</li>
                 <li>Review all key terms and adapt them to your specific transaction</li>
                 <li>Consult with your legal team and underwriting counsel</li>
@@ -174,7 +174,7 @@ export default function TemplatePreview({
             {/* Disclaimer */}
             <div className="bg-red-50 border border-red-200 rounded-lg p-6">
               <h3 className="font-bold text-red-900 mb-2">Important Disclaimer</h3>
-              <p className="text-sm text-red-800">
+              <p className="body-sm text-red-800">
                 These templates are provided for informational purposes only and should not be considered legal
                 advice. While based on realistic market practice, they are generic templates that must be customized
                 for your specific transaction. Always consult with qualified legal counsel before using any agreement
@@ -187,7 +187,7 @@ export default function TemplatePreview({
 
           {/* Footer */}
           <div className="sticky bottom-0 bg-gray-100 border-t border-gray-200 p-6 flex justify-between items-center gap-4">
-            <div className="text-sm text-gray-600">
+            <div className="body-sm text-gray-600">
               Last updated: {new Date(template.lastUpdated).toLocaleDateString()} | Format: {template.fileFormat.toUpperCase()}
             </div>
             <div className="flex gap-3">

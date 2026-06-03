@@ -50,10 +50,10 @@ export function ChatWidget() {
                   <Sparkles className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-white font-semibold text-sm">IPOReady Support</p>
+                  <p className="text-white font-semibold body-sm">IPOReady Support</p>
                   <div className="flex items-center gap-1.5 mt-0.5">
                     <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--color-success-bright)' }} />
-                    <p className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>Replies within 1 hour</p>
+                    <p className="caption-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>Replies within 1 hour</p>
                   </div>
                 </div>
               </div>
@@ -70,17 +70,17 @@ export function ChatWidget() {
             <div className="p-5" style={{ background: 'var(--color-surface-primary)' }}>
               {!sent ? (
                 <form onSubmit={handleSubmit} className="space-y-3">
-                  <p className="text-text-muted text-xs leading-relaxed">
+                  <p className="text-text-muted caption-sm leading-relaxed">
                     Have a question about your IPO journey? Message goes directly to our CEO.
                   </p>
-                  <input className="input-dark text-sm" placeholder="Your name"
+                  <input className="input-dark body-sm" placeholder="Your name"
                     value={name} onChange={e => setName(e.target.value)} />
-                  <input className="input-dark text-sm" placeholder="Your email"
+                  <input className="input-dark body-sm" placeholder="Your email"
                     type="email" value={email} onChange={e => setEmail(e.target.value)} />
-                  <textarea className="input-dark text-sm resize-none" placeholder="How can we help?"
+                  <textarea className="input-dark body-sm resize-none" placeholder="How can we help?"
                     rows={3} value={message} onChange={e => setMessage(e.target.value)} required />
                   <button type="submit" disabled={sending || !message.trim()}
-                    className="btn btn-primary w-full justify-center text-sm"
+                    className="btn btn-primary w-full justify-center body-sm"
                     style={{ paddingTop: '0.625rem', paddingBottom: '0.625rem' }}>
                     {sending ? (
                       <span className="flex items-center gap-2">
@@ -93,7 +93,7 @@ export function ChatWidget() {
                       </span>
                     )}
                   </button>
-                  <p className="text-text-light text-xs text-center flex items-center justify-center gap-1">
+                  <p className="text-text-light caption-sm text-center flex items-center justify-center gap-1">
                     <Mail className="w-3 h-3" /> ceo@theupcapital.com
                   </p>
                 </form>
@@ -105,13 +105,13 @@ export function ChatWidget() {
                     <CheckCircle2 className="w-6 h-6 text-green" />
                   </div>
                   <div>
-                    <p className="text-nav font-semibold text-sm">Message Sent!</p>
-                    <p className="text-text-muted text-xs mt-1">
+                    <p className="text-nav font-semibold body-sm">Message Sent!</p>
+                    <p className="text-text-muted caption-sm mt-1">
                       We&rsquo;ll get back to you shortly{email ? ` at ${email}` : ''}.
                     </p>
                   </div>
                   <button onClick={handleReset}
-                    className="text-xs text-text-muted hover:text-nav transition-colors px-4 py-1.5">
+                    className="caption-sm text-text-muted hover:text-nav transition-colors px-4 py-1.5">
                     Send another
                   </button>
                 </motion.div>

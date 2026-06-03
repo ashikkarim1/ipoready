@@ -34,12 +34,12 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
     >
       {/* Company Section */}
       <div>
-        <h3 className="text-lg font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">
+        <h3 className="h4 font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">
           Company Information
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Company Name</label>
+            <label className="block label font-semibold text-gray-700 mb-2">Company Name</label>
             <input
               type="text"
               name="companyName"
@@ -55,12 +55,12 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
 
       {/* Share Structure Section */}
       <div>
-        <h3 className="text-lg font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">
+        <h3 className="h4 font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">
           Share Structure
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block label font-semibold text-gray-700 mb-2">
               Total Authorized Shares
             </label>
             <input
@@ -74,7 +74,7 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block label font-semibold text-gray-700 mb-2">
               Total Issued Shares
             </label>
             <input
@@ -88,7 +88,7 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block label font-semibold text-gray-700 mb-2">
               Public Shares
             </label>
             <input
@@ -102,7 +102,7 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block label font-semibold text-gray-700 mb-2">
               Public Share Percentage (%)
             </label>
             <input
@@ -121,12 +121,12 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
 
       {/* Offering Section */}
       <div>
-        <h3 className="text-lg font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">
+        <h3 className="h4 font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">
           Offering Details
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block label font-semibold text-gray-700 mb-2">
               Proposed Offering Size (Millions)
             </label>
             <input
@@ -140,7 +140,7 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block label font-semibold text-gray-700 mb-2">
               Proposed Shares in Offering
             </label>
             <input
@@ -154,7 +154,7 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block label font-semibold text-gray-700 mb-2">
               Minimum Share Price
             </label>
             <input
@@ -169,7 +169,7 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block label font-semibold text-gray-700 mb-2">
               Proposed Share Price
             </label>
             <input
@@ -188,12 +188,12 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
 
       {/* Float Estimates Section */}
       <div>
-        <h3 className="text-lg font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">
+        <h3 className="h4 font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">
           Float Estimates (Optional)
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block label font-semibold text-gray-700 mb-2">
               Estimated Public Float (CAD Millions)
             </label>
             <input
@@ -207,7 +207,7 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block label font-semibold text-gray-700 mb-2">
               Estimated Public Float (USD Millions)
             </label>
             <input
@@ -225,12 +225,12 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
 
       {/* Financial History Section */}
       <div>
-        <h3 className="text-lg font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">
+        <h3 className="h4 font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">
           Financial & Governance
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block label font-semibold text-gray-700 mb-2">
               Years of Financial History
             </label>
             <input
@@ -257,7 +257,7 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
               disabled={isLoading}
               className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-sm font-semibold text-gray-700">Audit Committee Established</span>
+            <span className="label font-semibold text-gray-700">Audit Committee Established</span>
           </label>
           <label className="flex items-center gap-3 cursor-pointer">
             <input
@@ -268,7 +268,7 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
               disabled={isLoading}
               className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-sm font-semibold text-gray-700">Nomination Committee Established</span>
+            <span className="label font-semibold text-gray-700">Nomination Committee Established</span>
           </label>
           <label className="flex items-center gap-3 cursor-pointer">
             <input
@@ -279,7 +279,7 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
               disabled={isLoading}
               className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-sm font-semibold text-gray-700">Compensation Committee Established</span>
+            <span className="label font-semibold text-gray-700">Compensation Committee Established</span>
           </label>
           <label className="flex items-center gap-3 cursor-pointer">
             <input
@@ -290,7 +290,7 @@ export function InputForm({ formData, onFieldChange, onSubmit, isLoading }: Inpu
               disabled={isLoading}
               className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-sm font-semibold text-gray-700">Audited Financials Available</span>
+            <span className="label font-semibold text-gray-700">Audited Financials Available</span>
           </label>
         </div>
       </div>

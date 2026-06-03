@@ -125,10 +125,10 @@ export function PaceReadinessFactorsCard({
     >
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold text-gray-900">Readiness Factors</h3>
-          <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-medium">{readinessPercent}% Ready</span>
+          <h3 className="h4 font-semibold text-gray-900">Readiness Factors</h3>
+          <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 label font-medium">{readinessPercent}% Ready</span>
         </div>
-        <p className="text-sm text-gray-600">Track team, financial, and governance readiness for IPO</p>
+        <p className="body-sm text-gray-600">Track team, financial, and governance readiness for IPO</p>
         <div className="mt-3 w-full bg-gray-200 rounded-full h-2 overflow-hidden">
           <motion.div
             className="h-full bg-gradient-to-r from-blue-500 to-blue-600"
@@ -151,11 +151,11 @@ export function PaceReadinessFactorsCard({
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-lg">{factor.icon}</span>
+                  <span className="h4">{factor.icon}</span>
                   <h4 className="font-medium text-gray-900">{factor.label}</h4>
                 </div>
-                <p className="text-sm text-gray-600 mb-2">{factor.hint}</p>
-                <p className="text-sm font-semibold text-gray-900">{factor.value}</p>
+                <p className="body-sm text-gray-600 mb-2">{factor.hint}</p>
+                <p className="label font-semibold text-gray-900">{factor.value}</p>
               </div>
               <div className={`text-lg font-bold ${getStatusTextColor(factor.status)}`}>
                 {getStatusIcon(factor.status)}
@@ -166,7 +166,7 @@ export function PaceReadinessFactorsCard({
       </div>
 
       <div className="mt-6 p-4 rounded-lg bg-blue-50 border border-blue-200">
-        <p className="text-sm text-blue-900">
+        <p className="body-sm text-blue-900">
           <span className="font-semibold">Tip:</span> Complete all readiness factors to maximize PACE score accuracy. Update team size, cash runway, and governance details in Company Settings.
         </p>
       </div>

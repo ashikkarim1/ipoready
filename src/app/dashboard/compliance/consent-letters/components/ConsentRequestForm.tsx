@@ -122,7 +122,7 @@ export default function ConsentRequestForm({
             <h2 className="text-2xl font-bold text-slate-900">
               Request Consent
             </h2>
-            <p className="text-slate-600 text-sm mt-1">
+            <p className="text-slate-600 body-sm mt-1">
               Step {step === 'select' ? '1 of 3' : step === 'generate' ? '2 of 3' : '3 of 3'}
             </p>
           </div>
@@ -162,7 +162,7 @@ export default function ConsentRequestForm({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
             >
-              <h3 className="text-lg font-bold text-slate-900 mb-6">
+              <h3 className="h4 font-bold text-slate-900 mb-6">
                 Select Consent Type
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -177,14 +177,14 @@ export default function ConsentRequestForm({
                     <h4 className="font-bold text-slate-900 mb-2">
                       {template.title}
                     </h4>
-                    <p className="text-sm text-slate-600 mb-3">
+                    <p className="body-sm text-slate-600 mb-3">
                       {template.description}
                     </p>
                     <div className="flex gap-2 flex-wrap">
                       {template.exchanges.map((exchange) => (
                         <span
                           key={exchange}
-                          className="px-2 py-1 bg-slate-100 text-slate-700 rounded text-xs font-semibold"
+                          className="px-2 py-1 bg-slate-100 text-slate-700 rounded label-sm font-semibold"
                         >
                           {exchange}
                         </span>
@@ -205,7 +205,7 @@ export default function ConsentRequestForm({
               className="space-y-6"
             >
               <div>
-                <h3 className="text-lg font-bold text-slate-900 mb-4">
+                <h3 className="h4 font-bold text-slate-900 mb-4">
                   Letter Details
                 </h3>
                 <p className="text-slate-600 mb-6">
@@ -215,7 +215,7 @@ export default function ConsentRequestForm({
 
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  <label className="block label font-semibold text-slate-700 mb-2">
                     Company Name
                   </label>
                   <input
@@ -227,7 +227,7 @@ export default function ConsentRequestForm({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  <label className="block label font-semibold text-slate-700 mb-2">
                     Entity Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -241,7 +241,7 @@ export default function ConsentRequestForm({
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                <label className="block label font-semibold text-slate-700 mb-2">
                   Expiry Date (Optional)
                 </label>
                 <input
@@ -254,7 +254,7 @@ export default function ConsentRequestForm({
 
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <h4 className="font-semibold text-blue-900 mb-2">Key Terms</h4>
-                <ul className="space-y-1 text-sm text-blue-800">
+                <ul className="space-y-1 body-sm text-blue-800">
                   {selectedTemplate.keyTerms.slice(0, 5).map((term, idx) => (
                     <li key={idx} className="flex gap-2">
                       <span>•</span>
@@ -280,10 +280,10 @@ export default function ConsentRequestForm({
               className="space-y-6"
             >
               <div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">
+                <h3 className="h4 font-bold text-slate-900 mb-2">
                   Letter Preview
                 </h3>
-                <p className="text-slate-600 text-sm mb-4">
+                <p className="text-slate-600 body-sm mb-4">
                   From: {selectedTemplate.entityType} ({fromEntity})
                 </p>
               </div>
@@ -313,7 +313,7 @@ export default function ConsentRequestForm({
               </div>
 
               {/* Letter Preview */}
-              <div className="bg-slate-50 border border-slate-300 rounded-lg p-6 whitespace-pre-wrap font-mono text-sm max-h-96 overflow-y-auto">
+              <div className="bg-slate-50 border border-slate-300 rounded-lg p-6 whitespace-pre-wrap font-mono body-sm max-h-96 overflow-y-auto">
                 {generatedLetter}
               </div>
 

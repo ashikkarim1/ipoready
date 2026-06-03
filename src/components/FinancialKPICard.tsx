@@ -112,13 +112,13 @@ export function FinancialKPICard({
         )}
       </div>
 
-      <p className="text-sm text-gray-600 font-medium mb-1">{title}</p>
+      <p className="label text-gray-600 font-medium mb-1">{title}</p>
       <p className={`text-3xl font-bold ${getStatusTextColor()} mb-2`}>
         {formatValue()}
       </p>
 
       {description && (
-        <p className="text-xs text-gray-600">{description}</p>
+        <p className="caption-sm text-gray-600">{description}</p>
       )}
     </div>
   )

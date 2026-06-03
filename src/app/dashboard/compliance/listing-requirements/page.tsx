@@ -384,7 +384,7 @@ function CompletionTracker({ percentage }: { percentage: number }) {
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-slate-700">Completion</span>
+        <span className="label font-medium text-slate-700">Completion</span>
         <span className="text-2xl font-bold text-slate-900">{percentage}%</span>
       </div>
       <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
@@ -429,20 +429,20 @@ function RequirementCard({ requirement }: { requirement: Requirement }) {
             </div>
             <div>
               <h4 className="font-semibold text-slate-900">{requirement.name}</h4>
-              <p className="text-xs text-slate-600">{requirement.category}</p>
+              <p className="caption-sm text-slate-600">{requirement.category}</p>
             </div>
           </div>
-          <p className="text-sm text-slate-600 mb-3">{requirement.description}</p>
+          <p className="body-sm text-slate-600 mb-3">{requirement.description}</p>
 
           <div className="grid grid-cols-2 gap-3 mb-3">
             <div>
-              <span className="text-xs font-medium text-slate-600 block mb-1">Requirement</span>
-              <span className="text-sm font-semibold text-slate-900">{requirement.requirement}</span>
+              <span className="label-sm font-medium text-slate-600 block mb-1">Requirement</span>
+              <span className="label font-semibold text-slate-900">{requirement.requirement}</span>
             </div>
             {requirement.companyValue !== undefined && (
               <div>
-                <span className="text-xs font-medium text-slate-600 block mb-1">Company Value</span>
-                <span className="text-sm font-semibold text-slate-900">{requirement.companyValue}</span>
+                <span className="label-sm font-medium text-slate-600 block mb-1">Company Value</span>
+                <span className="label font-semibold text-slate-900">{requirement.companyValue}</span>
               </div>
             )}
           </div>
@@ -454,7 +454,7 @@ function RequirementCard({ requirement }: { requirement: Requirement }) {
           {requirement.deadline && (
             <div className="flex items-center gap-1 px-3 py-1 bg-orange-100 rounded-lg">
               <Clock className="w-4 h-4 text-orange-600" />
-              <span className="text-xs font-semibold text-orange-700">{requirement.deadline}</span>
+              <span className="label-sm font-semibold text-orange-700">{requirement.deadline}</span>
             </div>
           )}
           <ChevronDown
@@ -474,7 +474,7 @@ function RequirementCard({ requirement }: { requirement: Requirement }) {
           >
             {requirement.notes && (
               <div className="bg-white rounded p-3 border border-slate-200">
-                <p className="text-sm text-slate-700">
+                <p className="body-sm text-slate-700">
                   <span className="font-semibold text-slate-900">Notes: </span>
                   {requirement.notes}
                 </p>
@@ -483,10 +483,10 @@ function RequirementCard({ requirement }: { requirement: Requirement }) {
 
             {requirement.documents && requirement.documents.length > 0 && (
               <div>
-                <h5 className="text-xs font-semibold text-slate-600 mb-2">Related Documents</h5>
+                <h5 className="label-sm font-semibold text-slate-600 mb-2">Related Documents</h5>
                 <div className="flex flex-wrap gap-2">
                   {requirement.documents.map((doc, idx) => (
-                    <div key={idx} className="flex items-center gap-1 px-2 py-1 bg-white rounded border border-slate-200 text-xs text-slate-700">
+                    <div key={idx} className="flex items-center gap-1 px-2 py-1 bg-white rounded border border-slate-200 caption-sm text-slate-700">
                       <FileText className="w-3 h-3" />
                       {doc}
                     </div>
@@ -496,11 +496,11 @@ function RequirementCard({ requirement }: { requirement: Requirement }) {
             )}
 
             <div className="flex gap-2">
-              <button className="text-xs px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1">
+              <button className="caption-sm px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1">
                 <Download className="w-3 h-3" />
                 Download Details
               </button>
-              <button className="text-xs px-3 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition-colors flex items-center gap-1">
+              <button className="caption-sm px-3 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition-colors flex items-center gap-1">
                 <Share2 className="w-3 h-3" />
                 Share
               </button>
@@ -517,7 +517,7 @@ function ExchangeStats({ data }: { data: ExchangeRequirements }) {
     <div className="grid grid-cols-4 gap-4 mb-6">
       <motion.div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-lg p-4 border border-emerald-200">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-semibold text-slate-600">Completion</span>
+          <span className="label-sm font-semibold text-slate-600">Completion</span>
           <TrendingUp className="w-4 h-4 text-emerald-600" />
         </div>
         <p className="text-2xl font-bold text-emerald-700">{data.completionPercentage}%</p>
@@ -525,7 +525,7 @@ function ExchangeStats({ data }: { data: ExchangeRequirements }) {
 
       <motion.div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-lg p-4 border border-red-200">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-semibold text-slate-600">Critical</span>
+          <span className="label-sm font-semibold text-slate-600">Critical</span>
           <AlertCircle className="w-4 h-4 text-red-600" />
         </div>
         <p className="text-2xl font-bold text-red-700">{data.criticalCount}</p>
@@ -533,7 +533,7 @@ function ExchangeStats({ data }: { data: ExchangeRequirements }) {
 
       <motion.div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-lg p-4 border border-yellow-200">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-semibold text-slate-600">Warnings</span>
+          <span className="label-sm font-semibold text-slate-600">Warnings</span>
           <AlertCircle className="w-4 h-4 text-yellow-600" />
         </div>
         <p className="text-2xl font-bold text-yellow-700">{data.warningCount}</p>
@@ -541,7 +541,7 @@ function ExchangeStats({ data }: { data: ExchangeRequirements }) {
 
       <motion.div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg p-4 border border-orange-200">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-semibold text-slate-600">Deadline Soon</span>
+          <span className="label-sm font-semibold text-slate-600">Deadline Soon</span>
           <Clock className="w-4 h-4 text-orange-600" />
         </div>
         <p className="text-2xl font-bold text-orange-700">{data.deadlineSoon}d</p>
@@ -570,13 +570,13 @@ function CategorySection({ category, requirements }: { category: string; require
             </div>
             <div>
               <h3 className="font-semibold text-slate-900">{config.label}</h3>
-              <p className="text-xs text-slate-600">
+              <p className="caption-sm text-slate-600">
                 {compliantCount} of {totalCount} requirements met
               </p>
             </div>
           </div>
           <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center">
-            <span className="text-lg font-bold text-slate-900">
+            <span className="h4 font-bold text-slate-900">
               {Math.round((compliantCount / totalCount) * 100)}%
             </span>
           </div>
@@ -627,7 +627,7 @@ export default function ListingRequirementsPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-4xl font-bold text-slate-900 mb-2">Listing Requirements</h1>
-              <p className="text-sm text-slate-600 flex items-center gap-2">
+              <p className="body-sm text-slate-600 flex items-center gap-2">
                 <Info className="w-4 h-4" />
                 Track exchange-specific requirements and compliance status
               </p>
@@ -652,7 +652,7 @@ export default function ListingRequirementsPage() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm"
         >
-          <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <h2 className="h4 font-bold text-slate-900 mb-4 flex items-center gap-2">
             <Settings className="w-5 h-5" />
             Select Exchange
           </h2>
@@ -669,10 +669,10 @@ export default function ListingRequirementsPage() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="font-bold text-base text-slate-900">{exchange.name}</div>
-                <div className="text-xs text-slate-600 mt-1">{exchange.country} • {exchange.currency}</div>
+                <div className="font-bold body text-slate-900">{exchange.name}</div>
+                <div className="caption-sm text-slate-600 mt-1">{exchange.country} • {exchange.currency}</div>
                 {selectedExchange === exchange.id && (
-                  <div className="mt-2 flex items-center gap-1 text-blue-600 text-sm font-semibold">
+                  <div className="mt-2 flex items-center gap-1 text-blue-600 label font-semibold">
                     <CheckCircle2 className="w-4 h-4" />
                     Selected
                   </div>
@@ -789,8 +789,8 @@ export default function ListingRequirementsPage() {
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="font-semibold text-slate-900 mb-2">Document Management</h3>
-                <p className="text-sm text-slate-600 mb-4">Link and track required documents for each requirement</p>
-                <button className="text-sm px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2">
+                <p className="body-sm text-slate-600 mb-4">Link and track required documents for each requirement</p>
+                <button className="body-sm px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2">
                   <FileText className="w-4 h-4" />
                   Manage Documents
                 </button>
@@ -803,8 +803,8 @@ export default function ListingRequirementsPage() {
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="font-semibold text-slate-900 mb-2">Deadline Tracking</h3>
-                <p className="text-sm text-slate-600 mb-4">Set reminders and track critical compliance deadlines</p>
-                <button className="text-sm px-3 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors flex items-center gap-2">
+                <p className="body-sm text-slate-600 mb-4">Set reminders and track critical compliance deadlines</p>
+                <button className="body-sm px-3 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   Manage Deadlines
                 </button>

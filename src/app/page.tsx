@@ -757,14 +757,16 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <div style={{ marginTop: '1.5rem' }}>
-                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Listing Types</p>
-                <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                  {['IPO', 'Direct Listing', 'RTO', 'SPAC', 'Regulation A+'].map(t => (
-                    <li key={t}><span className="text-sm text-text-muted">{t}</span></li>
-                  ))}
-                </ul>
-              </div>
+            </div>
+
+            {/* Listing Types */}
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Listing Types</p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                {['IPO', 'Direct Listing', 'RTO', 'SPAC', 'Regulation A+'].map(t => (
+                  <li key={t}><span className="text-sm text-text-muted">{t}</span></li>
+                ))}
+              </ul>
             </div>
 
             {/* Legal & Support */}

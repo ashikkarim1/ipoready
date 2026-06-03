@@ -374,14 +374,14 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-900 dark:to-blue-800 px-6 py-4 border-b border-blue-700">
-          <h2 className="text-xl font-bold text-white">Create New Resolution</h2>
-          <p className="text-blue-100 text-sm">Step {step} of 3: {step === 1 ? 'Select Template' : step === 2 ? 'Configure Details' : 'Review & Approve'}</p>
+          <h2 className="h4 font-bold text-white">Create New Resolution</h2>
+          <p className="text-blue-100 body-sm">Step {step} of 3: {step === 1 ? 'Select Template' : step === 2 ? 'Configure Details' : 'Review & Approve'}</p>
         </div>
 
         <div className="p-6">
           {step === 1 && (
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Choose a Resolution Template</h3>
+              <h3 className="h4 font-semibold text-slate-900 dark:text-white mb-4">Choose a Resolution Template</h3>
               <div className="grid grid-cols-1 gap-3 max-h-96 overflow-y-auto">
                 {RESOLUTION_TEMPLATES.map(template => (
                   <button
@@ -392,11 +392,11 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <h4 className="font-semibold text-slate-900 dark:text-white">{template.name}</h4>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{template.description}</p>
+                        <p className="body-sm text-slate-600 dark:text-slate-400 mt-1">{template.description}</p>
                         {template.requiredForExchange && template.requiredForExchange.length > 0 && (
                           <div className="flex gap-2 mt-2 flex-wrap">
                             {template.requiredForExchange.map(exchange => (
-                              <span key={exchange} className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-900 dark:text-blue-200 px-2 py-1 rounded">
+                              <span key={exchange} className="caption-sm bg-blue-100 dark:bg-blue-900/30 text-blue-900 dark:text-blue-200 px-2 py-1 rounded">
                                 Required for {exchange}
                               </span>
                             ))}
@@ -419,37 +419,37 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
               className="space-y-6"
             >
               <div>
-                <label className="block text-sm font-semibold text-slate-900 dark:text-white mb-2">Template</label>
+                <label className="block label font-semibold text-slate-900 dark:text-white mb-2">Template</label>
                 <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                  <p className="text-sm font-medium text-slate-900 dark:text-white">{selectedTemplate.name}</p>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">{selectedTemplate.description}</p>
+                  <p className="label font-medium text-slate-900 dark:text-white">{selectedTemplate.name}</p>
+                  <p className="caption-sm text-slate-600 dark:text-slate-400 mt-1">{selectedTemplate.description}</p>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-900 dark:text-white mb-2">Resolution Title</label>
+                <label className="block label font-semibold text-slate-900 dark:text-white mb-2">Resolution Title</label>
                 <input
                   {...register('title')}
                   type="text"
                   placeholder="e.g., Authorization for 3:1 Share Split"
                   className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
-                {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
+                {errors.title && <p className="text-red-500 body-sm mt-1">{errors.title.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-900 dark:text-white mb-2">Description</label>
+                <label className="block label font-semibold text-slate-900 dark:text-white mb-2">Description</label>
                 <textarea
                   {...register('description')}
                   rows={4}
                   placeholder="Describe the purpose and rationale for this resolution..."
                   className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
-                {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
+                {errors.description && <p className="text-red-500 body-sm mt-1">{errors.description.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-900 dark:text-white mb-2">Effective Date (Optional)</label>
+                <label className="block label font-semibold text-slate-900 dark:text-white mb-2">Effective Date (Optional)</label>
                 <input
                   {...register('effectiveDate')}
                   type="date"
@@ -458,7 +458,7 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-900 dark:text-white mb-3">Board Members for Approval</label>
+                <label className="block label font-semibold text-slate-900 dark:text-white mb-3">Board Members for Approval</label>
                 <div className="flex gap-2 mb-3">
                   <input
                     type="text"
@@ -477,7 +477,7 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
                   <div className="flex flex-wrap gap-2">
                     {boardMembersInput.map((member, idx) => (
                       <div key={idx} className="bg-blue-100 dark:bg-blue-900/30 text-blue-900 dark:text-blue-100 px-3 py-1 rounded-full flex items-center gap-2">
-                        <span className="text-sm">{member}</span>
+                        <span className="body-sm">{member}</span>
                         <button
                           type="button"
                           onClick={() => removeBoardMember(idx)}
@@ -489,7 +489,7 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
                     ))}
                   </div>
                 )}
-                {errors.boardMembers && <p className="text-red-500 text-sm mt-1">{errors.boardMembers.message}</p>}
+                {errors.boardMembers && <p className="text-red-500 body-sm mt-1">{errors.boardMembers.message}</p>}
               </div>
 
               <div className="flex gap-3 pt-4">
@@ -516,22 +516,22 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
                 <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Review Resolution Details</h3>
                 <div className="space-y-4 bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase">Template</p>
+                    <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 uppercase">Template</p>
                     <p className="text-slate-900 dark:text-white font-medium">{selectedTemplate.name}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase">Title</p>
+                    <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 uppercase">Title</p>
                     <p className="text-slate-900 dark:text-white">{watch('title')}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase">Description</p>
-                    <p className="text-slate-900 dark:text-white text-sm">{watch('description')}</p>
+                    <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 uppercase">Description</p>
+                    <p className="text-slate-900 dark:text-white body-sm">{watch('description')}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase">Board Members</p>
+                    <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 uppercase">Board Members</p>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {boardMembersInput.map((member, idx) => (
-                        <span key={idx} className="text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-900 dark:text-blue-100 px-3 py-1 rounded-full">
+                        <span key={idx} className="body-sm bg-blue-100 dark:bg-blue-900/30 text-blue-900 dark:text-blue-100 px-3 py-1 rounded-full">
                           {member}
                         </span>
                       ))}
@@ -577,8 +577,8 @@ function ResolutionDetail({ resolution, onClose }: ResolutionDetailProps) {
         {/* Header */}
         <div className="sticky top-0 bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-700 dark:to-slate-800 px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">{resolution.title}</h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Created {resolution.createdDate}</p>
+            <h2 className="h4 font-bold text-slate-900 dark:text-white">{resolution.title}</h2>
+            <p className="body-sm text-slate-600 dark:text-slate-400 mt-1">Created {resolution.createdDate}</p>
           </div>
           <button
             onClick={onClose}
@@ -592,20 +592,20 @@ function ResolutionDetail({ resolution, onClose }: ResolutionDetailProps) {
           {/* Status & Stats */}
           <div className="grid grid-cols-3 gap-4">
             <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
-              <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase">Status</p>
+              <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 uppercase">Status</p>
               <div className="flex items-center gap-2 mt-2">
                 {STATUS_CONFIG[resolution.status].icon}
                 <span className="font-medium text-slate-900 dark:text-white">{STATUS_CONFIG[resolution.status].label}</span>
               </div>
             </div>
             <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
-              <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase">Approvals</p>
+              <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 uppercase">Approvals</p>
               <p className="text-2xl font-bold text-slate-900 dark:text-white mt-2">
                 {resolution.approvalCount}/{resolution.totalBoardMembers}
               </p>
             </div>
             <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
-              <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase">Effective Date</p>
+              <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 uppercase">Effective Date</p>
               <p className="text-slate-900 dark:text-white font-medium mt-2">
                 {resolution.effectiveDate ? new Date(resolution.effectiveDate).toLocaleDateString() : 'Pending'}
               </p>
@@ -622,7 +622,7 @@ function ResolutionDetail({ resolution, onClose }: ResolutionDetailProps) {
           <div>
             <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Resolution Text</h3>
             <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 max-h-64 overflow-y-auto">
-              <p className="text-sm text-slate-700 dark:text-slate-300 font-mono whitespace-pre-wrap">{resolution.content}</p>
+              <p className="body-sm text-slate-700 dark:text-slate-300 font-mono whitespace-pre-wrap">{resolution.content}</p>
             </div>
           </div>
 
@@ -634,18 +634,18 @@ function ResolutionDetail({ resolution, onClose }: ResolutionDetailProps) {
                 <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-700">
                   <div>
                     <p className="font-medium text-slate-900 dark:text-white">{member.name}</p>
-                    <p className="text-xs text-slate-600 dark:text-slate-400">{member.title}</p>
+                    <p className="caption-sm text-slate-600 dark:text-slate-400">{member.title}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     {member.approved ? (
                       <>
                         <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
-                        <span className="text-xs text-green-600 dark:text-green-400">{member.approvalDate}</span>
+                        <span className="caption-sm text-green-600 dark:text-green-400">{member.approvalDate}</span>
                       </>
                     ) : (
                       <>
                         <Clock className="w-5 h-5 text-slate-400" />
-                        <span className="text-xs text-slate-500">Pending</span>
+                        <span className="caption-sm text-slate-500">Pending</span>
                       </>
                     )}
                   </div>
@@ -761,19 +761,19 @@ export function ResolutionsManager2C1() {
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white rounded-lg p-4 border border-slate-200">
-            <p className="text-sm font-semibold text-slate-600">Total Resolutions</p>
+            <p className="label font-semibold text-slate-600">Total Resolutions</p>
             <p className="text-3xl font-bold text-slate-900 mt-2">{stats.total}</p>
           </div>
           <div className="bg-white rounded-lg p-4 border border-slate-200">
-            <p className="text-sm font-semibold text-slate-600">Draft</p>
+            <p className="label font-semibold text-slate-600">Draft</p>
             <p className="text-3xl font-bold text-slate-500 mt-2">{stats.draft}</p>
           </div>
           <div className="bg-white rounded-lg p-4 border border-slate-200">
-            <p className="text-sm font-semibold text-slate-600">Approved</p>
+            <p className="label font-semibold text-slate-600">Approved</p>
             <p className="text-3xl font-bold text-amber-600 mt-2">{stats.approved}</p>
           </div>
           <div className="bg-white rounded-lg p-4 border border-slate-200">
-            <p className="text-sm font-semibold text-slate-600">Executed</p>
+            <p className="label font-semibold text-slate-600">Executed</p>
             <p className="text-3xl font-bold text-green-600 mt-2">{stats.executed}</p>
           </div>
         </div>
@@ -812,7 +812,7 @@ export function ResolutionsManager2C1() {
         {filteredResolutions.length === 0 ? (
           <div className="bg-white rounded-lg p-12 text-center border border-slate-200">
             <FileText className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-            <p className="text-slate-600 text-lg">
+            <p className="text-slate-600 h4">
               {searchQuery || filterStatus !== 'all' ? 'No resolutions match your filters' : 'No resolutions yet. Create one to get started.'}
             </p>
           </div>
@@ -827,14 +827,14 @@ export function ResolutionsManager2C1() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-semibold text-slate-900 text-lg">{resolution.title}</h3>
+                      <h3 className="font-semibold text-slate-900 h4">{resolution.title}</h3>
                       <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${STATUS_CONFIG[resolution.status].color}`}>
                         {STATUS_CONFIG[resolution.status].icon}
                         {STATUS_CONFIG[resolution.status].label}
                       </span>
                     </div>
-                    <p className="text-slate-600 text-sm mb-2">{resolution.description}</p>
-                    <div className="flex items-center gap-4 text-xs text-slate-600">
+                    <p className="text-slate-600 body-sm mb-2">{resolution.description}</p>
+                    <div className="flex items-center gap-4 caption-sm text-slate-600">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         Created {resolution.createdDate}

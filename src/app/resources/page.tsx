@@ -619,7 +619,7 @@ export default function ResourcesPage() {
             <BookOpen className="w-5 h-5" style={{ color: '#E8312A' }} />
             <h1 className="text-nav font-bold text-2xl">Resource Centre</h1>
           </div>
-        <p className="text-text-muted text-sm">
+        <p className="text-text-muted body-sm">
           Recent filings, regulatory policies, and procedures across all major listing exchanges.
           For reference only — always verify directly with the exchange or your legal counsel.
         </p>
@@ -751,7 +751,7 @@ export default function ResourcesPage() {
           <div className="flex gap-1.5 flex-wrap" style={{ marginBottom: '1.25rem' }}>
             {EXCHANGES.map(ex => (
               <button key={ex.key} onClick={() => setActiveExchange(ex.key)}
-                className="flex items-center gap-1.5 rounded-full text-sm font-medium transition-all border"
+                className="flex items-center gap-1.5 rounded-full label font-medium transition-all border"
                 style={{
                   padding: '0.375rem 0.875rem',
                   ...(activeExchange === ex.key
@@ -768,10 +768,10 @@ export default function ResourcesPage() {
           <div className="rounded-xl border flex items-center gap-3" style={{ background: exchange.bg, borderColor: exchange.color + '33', padding: '0.75rem 1rem', marginBottom: '1.25rem' }}>
             <Building2 className="w-4 h-4 flex-shrink-0" style={{ color: exchange.color }} />
             <div className="flex-1 min-w-0">
-              <span className="font-semibold text-sm" style={{ color: exchange.color }}>{exchange.label}</span>
-              <span className="text-text-muted text-sm" style={{ marginLeft: '0.5rem' }}>{exchange.country}</span>
+              <span className="font-semibold body-sm" style={{ color: exchange.color }}>{exchange.label}</span>
+              <span className="text-text-muted body-sm" style={{ marginLeft: '0.5rem' }}>{exchange.country}</span>
             </div>
-            <span className="text-xs" style={{ color: '#9A9A9A' }}>{exchange.flag}</span>
+            <span className="caption-sm" style={{ color: '#9A9A9A' }}>{exchange.flag}</span>
           </div>
 
           {/* Tabs + Search */}
@@ -779,7 +779,7 @@ export default function ResourcesPage() {
             <div className="flex rounded-xl border overflow-hidden" style={{ borderColor: '#E5E4E0', background: '#F7F6F4' }}>
               {(['filings', 'policies'] as const).map(tab => (
                 <button key={tab} onClick={() => setActiveTab(tab)}
-                  className="flex items-center gap-1.5 text-sm font-medium transition-all capitalize"
+                  className="flex items-center gap-1.5 label font-medium transition-all capitalize"
                   style={{
                     padding: '0.5rem 1rem',
                     ...(activeTab === tab
@@ -797,7 +797,7 @@ export default function ResourcesPage() {
               <input
                 value={search} onChange={e => setSearch(e.target.value)}
                 placeholder={activeTab === 'filings' ? 'Search by company, ticker, or type…' : 'Search policies…'}
-                className="w-full rounded-xl border text-sm outline-none"
+                className="w-full rounded-xl border body-sm outline-none"
                 style={{ background: 'white', borderColor: '#E5E4E0', padding: '0.5rem 0.75rem 0.5rem 2rem', color: '#1A1A1A' }}
               />
             </div>
@@ -812,7 +812,7 @@ export default function ResourcesPage() {
                 style={{ background: 'white', borderColor: '#E5E4E0' }}>
 
                 {/* Table header */}
-                <div className="grid text-xs font-semibold uppercase tracking-wider"
+                <div className="grid label-sm font-semibold uppercase tracking-wider"
                   style={{ gridTemplateColumns: '90px 1fr 180px 90px', gap: '0', background: '#F7F6F4', borderBottom: '1px solid #E5E4E0', padding: '0.625rem 1.25rem', color: '#9A9A9A' }}>
                   <span>Date</span>
                   <span>Company / Description</span>
@@ -821,7 +821,7 @@ export default function ResourcesPage() {
                 </div>
 
                 {filings.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center text-text-light text-sm" style={{ padding: '2.5rem' }}>
+                  <div className="flex flex-col items-center justify-center text-text-light body-sm" style={{ padding: '2.5rem' }}>
                     <Search className="w-6 h-6 mb-2" />
                     No filings match your search
                   </div>
@@ -837,20 +837,20 @@ export default function ResourcesPage() {
                     onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                     <div className="flex items-center gap-1.5">
                       <Clock className="w-3 h-3 text-text-light flex-shrink-0" />
-                      <span className="text-xs text-text-muted whitespace-nowrap">{f.date.slice(5)}</span>
+                      <span className="caption-sm text-text-muted whitespace-nowrap">{f.date.slice(5)}</span>
                     </div>
                     <div style={{ paddingRight: '1rem' }}>
                       <div className="flex items-center gap-2" style={{ marginBottom: '0.2rem' }}>
-                        <span className="font-semibold text-sm text-nav">{f.company}</span>
-                        <span className="text-xs font-mono rounded px-1.5 py-0.5"
+                        <span className="font-semibold body-sm text-nav">{f.company}</span>
+                        <span className="caption-sm font-mono rounded px-1.5 py-0.5"
                           style={{ background: '#F7F6F4', color: '#717171' }}>{f.ticker}</span>
                       </div>
-                      <p className="text-xs text-text-muted leading-relaxed">{f.description}</p>
+                      <p className="caption-sm text-text-muted leading-relaxed">{f.description}</p>
                     </div>
                     <div><FilingBadge type={f.type} /></div>
                     <div style={{ textAlign: 'right' }}>
                       <a href={f.url} target="_blank" rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs font-medium transition-colors"
+                        className="inline-flex items-center gap-1 label-sm font-medium transition-colors"
                         style={{ color: exchange.color }}
                         onMouseEnter={e => (e.currentTarget.style.textDecoration = 'underline')}
                         onMouseLeave={e => (e.currentTarget.style.textDecoration = 'none')}>
@@ -861,8 +861,8 @@ export default function ResourcesPage() {
                 ))}
 
                 <div className="flex items-center justify-between" style={{ background: '#F7F6F4', borderTop: '1px solid #E5E4E0', padding: '0.625rem 1.25rem' }}>
-                  <span className="text-xs text-text-light">Showing 5 most recent filings for {exchange.label}</span>
-                  <a href="#" className="text-xs font-medium flex items-center gap-1" style={{ color: exchange.color }}>
+                  <span className="caption-sm text-text-light">Showing 5 most recent filings for {exchange.label}</span>
+                  <a href="#" className="label-sm font-medium flex items-center gap-1" style={{ color: exchange.color }}>
                     View all on SEDAR+ / EDGAR <ChevronRight className="w-3 h-3" />
                   </a>
                 </div>
@@ -873,7 +873,7 @@ export default function ResourcesPage() {
                 style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
 
                 {policies.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center text-text-light text-sm rounded-2xl border"
+                  <div className="flex flex-col items-center justify-center text-text-light body-sm rounded-2xl border"
                     style={{ padding: '2.5rem', background: 'white', borderColor: '#E5E4E0' }}>
                     <Search className="w-6 h-6 mb-2" />
                     No policies match your search
@@ -887,15 +887,15 @@ export default function ResourcesPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap" style={{ marginBottom: '0.3rem' }}>
                           <Scale className="w-3.5 h-3.5 flex-shrink-0" style={{ color: exchange.color }} />
-                          <span className="font-semibold text-sm text-nav">{p.title}</span>
-                          <span className="text-xs rounded-full px-2 py-0.5"
+                          <span className="font-semibold body-sm text-nav">{p.title}</span>
+                          <span className="caption-sm rounded-full px-2 py-0.5"
                             style={{ background: exchange.bg, color: exchange.color }}>{p.section}</span>
                         </div>
-                        <p className="text-xs text-text-muted leading-relaxed">{p.description}</p>
-                        <p className="text-xs mt-1.5" style={{ color: '#9A9A9A' }}>Last updated: {p.updated}</p>
+                        <p className="caption-sm text-text-muted leading-relaxed">{p.description}</p>
+                        <p className="caption-sm mt-1.5" style={{ color: '#9A9A9A' }}>Last updated: {p.updated}</p>
                       </div>
                       <a href={p.url} target="_blank" rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 rounded-lg border text-xs font-medium flex-shrink-0 transition-all"
+                        className="flex items-center gap-1.5 rounded-lg border label-sm font-medium flex-shrink-0 transition-all"
                         style={{ padding: '0.375rem 0.75rem', borderColor: '#E5E4E0', color: '#717171', background: '#F7F6F4' }}
                         onMouseEnter={e => { e.currentTarget.style.background = exchange.bg; e.currentTarget.style.color = exchange.color; e.currentTarget.style.borderColor = exchange.color + '66' }}
                         onMouseLeave={e => { e.currentTarget.style.background = '#F7F6F4'; e.currentTarget.style.color = '#717171'; e.currentTarget.style.borderColor = '#E5E4E0' }}>
@@ -907,7 +907,7 @@ export default function ResourcesPage() {
 
                 <div className="rounded-xl border flex items-start gap-3" style={{ background: '#FFFBEB', borderColor: '#FDE68A', padding: '0.875rem 1rem' }}>
                   <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#B45309' }} />
-                  <p className="text-xs leading-relaxed" style={{ color: '#92400E' }}>
+                  <p className="caption-sm leading-relaxed" style={{ color: '#92400E' }}>
                     Policy references are provided for informational purposes only and may not reflect the most current version.
                     Always verify directly with the exchange or your securities counsel before making compliance decisions.
                   </p>
@@ -924,8 +924,8 @@ export default function ResourcesPage() {
           <div className="rounded-2xl border overflow-hidden" style={{ background: 'white', borderColor: '#E5E4E0' }}>
             <div className="flex items-center gap-2" style={{ padding: '1rem 1.25rem', borderBottom: '1px solid #E5E4E0' }}>
               <Newspaper className="w-4 h-4" style={{ color: '#E8312A' }} />
-              <h3 className="font-semibold text-sm text-nav">Exchange News</h3>
-              <span className="ml-auto text-xs text-text-light">Latest</span>
+              <h3 className="font-semibold body-sm text-nav">Exchange News</h3>
+              <span className="ml-auto caption-sm text-text-light">Latest</span>
             </div>
 
             <div style={{ maxHeight: '480px', overflowY: 'auto' }}>
@@ -947,7 +947,7 @@ export default function ResourcesPage() {
                       )}
                       <span className="text-[10px] text-text-light ml-auto">{item.date}</span>
                     </div>
-                    <p className="text-xs text-nav leading-relaxed font-medium">{item.headline}</p>
+                    <p className="label-sm text-nav leading-relaxed font-medium">{item.headline}</p>
                     <p className="text-[10px] text-text-light">{item.source}</p>
                   </a>
                 )
@@ -959,7 +959,7 @@ export default function ResourcesPage() {
           <div className="rounded-2xl border" style={{ background: 'white', borderColor: '#E5E4E0', padding: '1rem 1.25rem' }}>
             <div className="flex items-center gap-2" style={{ marginBottom: '0.875rem' }}>
               <Globe className="w-4 h-4" style={{ color: '#1A1A1A' }} />
-              <h3 className="font-semibold text-sm text-nav">Official Portals</h3>
+              <h3 className="font-semibold body-sm text-nav">Official Portals</h3>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {[
@@ -975,8 +975,8 @@ export default function ResourcesPage() {
                   onMouseEnter={e => (e.currentTarget.style.background = '#F7F6F4')}
                   onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                   <div>
-                    <p className="text-sm font-medium text-nav">{link.label}</p>
-                    <p className="text-xs text-text-light">{link.sub}</p>
+                    <p className="label font-medium text-nav">{link.label}</p>
+                    <p className="caption-sm text-text-light">{link.sub}</p>
                   </div>
                   <ExternalLink className="w-3.5 h-3.5 text-text-light flex-shrink-0" />
                 </a>

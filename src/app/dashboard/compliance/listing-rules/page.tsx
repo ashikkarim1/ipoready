@@ -69,9 +69,9 @@ function ValidatorPanel({ exchange, metrics, status }: ValidatorPanelProps) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-xl shadow-lg p-6 border border-gray-200"
+      className="bg-white rounded-xl shadow-lg p-6 border border-slate-200"
     >
-      <h3 className="text-xl font-bold text-gray-900 mb-6">
+      <h3 className="h4 text-slate-900 mb-6">
         {config.name} - Current vs Required Metrics
       </h3>
 
@@ -86,12 +86,12 @@ function ValidatorPanel({ exchange, metrics, status }: ValidatorPanelProps) {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: idx * 0.1 }}
-              className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+              className="border border-slate-200 rounded-lg p-4 hover:shadow-md transition-shadow"
             >
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h4 className="font-semibold text-gray-900">{req.metric}</h4>
-                  <div className="flex gap-4 text-sm text-gray-600 mt-1">
+                  <h4 className="label text-slate-900">{req.metric}</h4>
+                  <div className="flex gap-4 body-sm text-slate-600 mt-1">
                     <span>Current: <span className="font-semibold">{req.current.toLocaleString()} {req.unit}</span></span>
                     <span>Required: <span className="font-semibold">{req.required.toLocaleString()} {req.unit}</span></span>
                   </div>
@@ -103,7 +103,7 @@ function ValidatorPanel({ exchange, metrics, status }: ValidatorPanelProps) {
                 </div>
               </div>
 
-              <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+              <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${percentage}%` }}
@@ -113,7 +113,7 @@ function ValidatorPanel({ exchange, metrics, status }: ValidatorPanelProps) {
               </div>
 
               {!isCompliant && (
-                <p className="text-xs text-red-600 mt-2">
+                <p className="caption-sm text-red-600 mt-2">
                   Gap: {Math.abs(req.gap).toLocaleString()} {req.unit} needed to meet requirement
                 </p>
               )}
@@ -143,25 +143,25 @@ function GapAnalysisTable({ gaps, violations }: GapAnalysisTableProps) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200"
+      className="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200"
     >
-      <div className="p-6 border-b border-gray-200">
-        <h3 className="text-xl font-bold text-gray-900">Gap Analysis & Action Items</h3>
+      <div className="p-6 border-b border-slate-200">
+        <h3 className="h4 text-slate-900">Gap Analysis & Action Items</h3>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-200">
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Metric</th>
-              <th className="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase">Current</th>
-              <th className="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase">Required</th>
-              <th className="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase">Gap</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Suggestion</th>
+            <tr className="bg-slate-50 border-b border-slate-200">
+              <th className="px-6 py-3 text-left label-sm font-semibold text-slate-700 uppercase">Metric</th>
+              <th className="px-6 py-3 text-center label-sm font-semibold text-slate-700 uppercase">Current</th>
+              <th className="px-6 py-3 text-center label-sm font-semibold text-slate-700 uppercase">Required</th>
+              <th className="px-6 py-3 text-center label-sm font-semibold text-slate-700 uppercase">Gap</th>
+              <th className="px-6 py-3 text-left label-sm font-semibold text-slate-700 uppercase">Status</th>
+              <th className="px-6 py-3 text-left label-sm font-semibold text-slate-700 uppercase">Suggestion</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-slate-200">
             {gaps.map((gap, idx) => {
               const isCompliant = gap.status === 'compliant'
               const statusColor = isCompliant ? 'bg-green-50' : gap.status === 'warning' ? 'bg-yellow-50' : 'bg-red-50'
@@ -175,11 +175,11 @@ function GapAnalysisTable({ gaps, violations }: GapAnalysisTableProps) {
                   transition={{ delay: idx * 0.05 }}
                   className={`hover:shadow-sm transition-all ${statusColor}`}
                 >
-                  <td className="px-6 py-4 font-semibold text-gray-900">{gap.metric}</td>
-                  <td className="px-6 py-4 text-center text-gray-700">{gap.current.toLocaleString()}</td>
-                  <td className="px-6 py-4 text-center text-gray-700">{gap.required.toLocaleString()}</td>
+                  <td className="px-6 py-4 font-semibold text-slate-900">{gap.metric}</td>
+                  <td className="px-6 py-4 text-center text-slate-700">{gap.current.toLocaleString()}</td>
+                  <td className="px-6 py-4 text-center text-slate-700">{gap.required.toLocaleString()}</td>
                   <td className="px-6 py-4 text-center">
-                    <span className="font-semibold text-gray-900">
+                    <span className="font-semibold text-slate-900">
                       {gap.gap > 0 ? '+' : ''}{gap.gap.toLocaleString()}
                     </span>
                   </td>
@@ -188,7 +188,7 @@ function GapAnalysisTable({ gaps, violations }: GapAnalysisTableProps) {
                       {gap.status.toUpperCase()}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">{gap.suggestion || 'On track'}</td>
+                  <td className="px-6 py-4 body-sm text-slate-700">{gap.suggestion || 'On track'}</td>
                 </motion.tr>
               )
             })}
@@ -197,17 +197,17 @@ function GapAnalysisTable({ gaps, violations }: GapAnalysisTableProps) {
       </div>
 
       {/* Summary Stats */}
-      <div className="bg-gray-50 p-6 border-t border-gray-200 grid grid-cols-3 gap-6">
+      <div className="bg-slate-50 p-6 border-t border-slate-200 grid grid-cols-3 gap-6">
         <div>
-          <p className="text-xs text-gray-600 uppercase font-semibold mb-1">Critical Issues</p>
+          <p className="label-sm text-slate-600 uppercase font-semibold mb-1">Critical Issues</p>
           <p className="text-3xl font-bold text-red-600">{allCritical.length}</p>
         </div>
         <div>
-          <p className="text-xs text-gray-600 uppercase font-semibold mb-1">Errors</p>
+          <p className="label-sm text-slate-600 uppercase font-semibold mb-1">Errors</p>
           <p className="text-3xl font-bold text-orange-600">{allErrors.length}</p>
         </div>
         <div>
-          <p className="text-xs text-gray-600 uppercase font-semibold mb-1">Warnings</p>
+          <p className="label-sm text-slate-600 uppercase font-semibold mb-1">Warnings</p>
           <p className="text-3xl font-bold text-yellow-600">{allWarnings.length}</p>
         </div>
       </div>
@@ -232,9 +232,9 @@ function ExchangeSelector({ selectedExchanges, onExchangeSelect, onExchangeRemov
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-xl shadow-lg p-6 border border-gray-200"
+      className="bg-white rounded-xl shadow-lg p-6 border border-slate-200"
     >
-      <h3 className="text-xl font-bold text-gray-900 mb-4">Select Exchanges to Compare</h3>
+      <h3 className="h4 text-slate-900 mb-4">Select Exchanges to Compare</h3>
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         {allExchanges.map(exchange => {
@@ -251,11 +251,11 @@ function ExchangeSelector({ selectedExchanges, onExchangeSelect, onExchangeRemov
               className={`p-4 rounded-lg font-semibold transition-all border-2 ${
                 isSelected
                   ? 'bg-blue-600 text-white border-blue-700'
-                  : 'bg-gray-50 text-gray-900 border-gray-200 hover:border-blue-400'
+                  : 'bg-slate-50 text-slate-900 border-slate-200 hover:border-blue-400'
               }`}
             >
-              <div className="text-sm">{exchange.toUpperCase()}</div>
-              <div className="text-xs opacity-75 mt-1">{config.country}</div>
+              <div className="body-sm">{exchange.toUpperCase()}</div>
+              <div className="caption-sm opacity-75 mt-1">{config.country}</div>
             </motion.button>
           )
         })}
@@ -263,7 +263,7 @@ function ExchangeSelector({ selectedExchanges, onExchangeSelect, onExchangeRemov
 
       {selectedExchanges.length > 0 && (
         <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-          <p className="text-sm text-blue-900">
+          <p className="body-sm text-blue-900">
             <span className="font-semibold">{selectedExchanges.length}</span> exchange(es) selected
             {selectedExchanges.length === 2 && ' - Ready for comparison'}
           </p>
@@ -349,8 +349,8 @@ export default function ListingRulesPage() {
         animate={{ opacity: 1, y: 0 }}
         className="pt-8"
       >
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">Listing Rules Compliance</h1>
-        <p className="text-lg text-gray-600">
+        <h1 className="text-4xl font-bold text-slate-900 mb-2">Listing Rules Compliance</h1>
+        <p className="h4 text-slate-600">
           Validate your company's readiness across multiple exchanges. Compare requirements and identify gaps.
         </p>
       </motion.div>
@@ -377,7 +377,7 @@ export default function ListingRulesPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="bg-white rounded-xl shadow-lg p-6 border border-gray-200"
+          className="bg-white rounded-xl shadow-lg p-6 border border-slate-200"
         >
           <div className="flex overflow-x-auto gap-2 mb-6 -mx-6 px-6">
             {selectedExchanges.map(exchange => {
@@ -391,7 +391,7 @@ export default function ListingRulesPage() {
                   className={`px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
                     isActive
                       ? 'bg-blue-600 text-white shadow-md'
-                      : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                      : 'bg-gray-100 text-slate-900 hover:bg-slate-100'
                   }`}
                   whileHover={{ scale: 1.05 }}
                 >

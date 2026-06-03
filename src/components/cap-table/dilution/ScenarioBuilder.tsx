@@ -91,7 +91,7 @@ export default function ScenarioBuilder({
         {/* Basic Info */}
         <div className="grid grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-slate-900 mb-2">
+            <label className="block label font-medium text-slate-900 mb-2">
               Scenario Name
             </label>
             <input
@@ -103,7 +103,7 @@ export default function ScenarioBuilder({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-900 mb-2">
+            <label className="block label font-medium text-slate-900 mb-2">
               Scenario Type
             </label>
             <select
@@ -134,7 +134,7 @@ export default function ScenarioBuilder({
                 onChange={() => setWarrantMode('percent')}
                 className="w-4 h-4"
               />
-              <span className="text-sm text-slate-700">By Percentage</span>
+              <span className="body-sm text-slate-700">By Percentage</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -143,12 +143,12 @@ export default function ScenarioBuilder({
                 onChange={() => setWarrantMode('shares')}
                 className="w-4 h-4"
               />
-              <span className="text-sm text-slate-700">By Share Count</span>
+              <span className="body-sm text-slate-700">By Share Count</span>
             </label>
           </div>
           {warrantMode === 'percent' && (
             <div>
-              <label className="block text-sm font-medium text-slate-900 mb-2">
+              <label className="block label font-medium text-slate-900 mb-2">
                 Warrants Exercised: {warrantsPercent}%
               </label>
               <input
@@ -163,7 +163,7 @@ export default function ScenarioBuilder({
           )}
           {warrantMode === 'shares' && (
             <div>
-              <label className="block text-sm font-medium text-slate-900 mb-2">
+              <label className="block label font-medium text-slate-900 mb-2">
                 Warrants Exercised (Shares)
               </label>
               <input
@@ -187,7 +187,7 @@ export default function ScenarioBuilder({
                 onChange={() => setFinancingMode('amount')}
                 className="w-4 h-4"
               />
-              <span className="text-sm text-slate-700">By Amount</span>
+              <span className="body-sm text-slate-700">By Amount</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -196,12 +196,12 @@ export default function ScenarioBuilder({
                 onChange={() => setFinancingMode('shares')}
                 className="w-4 h-4"
               />
-              <span className="text-sm text-slate-700">By Share Count</span>
+              <span className="body-sm text-slate-700">By Share Count</span>
             </label>
           </div>
           {financingMode === 'amount' && (
             <div>
-              <label className="block text-sm font-medium text-slate-900 mb-2">
+              <label className="block label font-medium text-slate-900 mb-2">
                 Financing Amount (USD)
               </label>
               <input
@@ -214,7 +214,7 @@ export default function ScenarioBuilder({
           )}
           {financingMode === 'shares' && (
             <div>
-              <label className="block text-sm font-medium text-slate-900 mb-2">
+              <label className="block label font-medium text-slate-900 mb-2">
                 New Shares Issued
               </label>
               <input
@@ -231,7 +231,7 @@ export default function ScenarioBuilder({
         <div className="border-t pt-6">
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-slate-900 mb-2">
+              <label className="block label font-medium text-slate-900 mb-2">
                 Employee Option Vesting (Shares)
               </label>
               <input
@@ -242,7 +242,7 @@ export default function ScenarioBuilder({
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-900 mb-2">
+              <label className="block label font-medium text-slate-900 mb-2">
                 Projected Valuation (USD)
               </label>
               <input

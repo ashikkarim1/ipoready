@@ -100,7 +100,7 @@ export function PushNotificationExample() {
             <h3 className="font-semibold text-yellow-900 dark:text-yellow-100">
               Push Notifications Not Supported
             </h3>
-            <p className="text-sm text-yellow-800 dark:text-yellow-200">
+            <p className="body-sm text-yellow-800 dark:text-yellow-200">
               Your browser doesn't support web push notifications.
             </p>
           </div>
@@ -112,20 +112,20 @@ export function PushNotificationExample() {
   return (
     <div className="space-y-6 p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg">
       <div>
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+        <h3 className="h4 font-semibold text-slate-900 dark:text-white mb-4">
           Push Notification Examples
         </h3>
 
         {/* Status Info */}
         <div className="space-y-2 mb-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
           <div className="flex justify-between items-center">
-            <span className="text-sm text-slate-600 dark:text-slate-400">Browser Support:</span>
-            <span className="text-sm font-medium text-green-600 dark:text-green-400">
+            <span className="body-sm text-slate-600 dark:text-slate-400">Browser Support:</span>
+            <span className="label font-medium text-green-600 dark:text-green-400">
               {isSupported ? 'Supported' : 'Not Supported'}
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-sm text-slate-600 dark:text-slate-400">Permission Status:</span>
+            <span className="body-sm text-slate-600 dark:text-slate-400">Permission Status:</span>
             <span className={`text-sm font-medium ${
               permission === 'granted'
                 ? 'text-green-600 dark:text-green-400'
@@ -137,7 +137,7 @@ export function PushNotificationExample() {
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-sm text-slate-600 dark:text-slate-400">Subscription Status:</span>
+            <span className="body-sm text-slate-600 dark:text-slate-400">Subscription Status:</span>
             <span className={`text-sm font-medium flex items-center gap-1 ${
               isSubscribed ? 'text-green-600 dark:text-green-400' : 'text-slate-600 dark:text-slate-400'
             }`}>
@@ -149,17 +149,17 @@ export function PushNotificationExample() {
 
         {/* Error/Success Messages */}
         {error && (
-          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded text-sm text-red-700 dark:text-red-200 mb-4">
+          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded body-sm text-red-700 dark:text-red-200 mb-4">
             {error}
           </div>
         )}
         {customError && (
-          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded text-sm text-red-700 dark:text-red-200 mb-4">
+          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded body-sm text-red-700 dark:text-red-200 mb-4">
             {customError}
           </div>
         )}
         {customSuccess && (
-          <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded text-sm text-green-700 dark:text-green-200 mb-4">
+          <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded body-sm text-green-700 dark:text-green-200 mb-4">
             {customSuccess}
           </div>
         )}
@@ -170,7 +170,7 @@ export function PushNotificationExample() {
           <button
             onClick={handleToggleNotifications}
             disabled={isLoading || permission === 'denied'}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed label font-medium"
           >
             {isLoading ? 'Loading...' : isSubscribed ? 'Disable Notifications' : 'Enable Notifications'}
           </button>
@@ -183,14 +183,14 @@ export function PushNotificationExample() {
             <button
               onClick={handleManualSubscribe}
               disabled={isSubscribed}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed label font-medium"
             >
               Subscribe Manually
             </button>
             <button
               onClick={handleManualUnsubscribe}
               disabled={!isSubscribed}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed label font-medium"
             >
               Unsubscribe Manually
             </button>
@@ -200,13 +200,13 @@ export function PushNotificationExample() {
         {/* Example 3: Send test notification */}
         <div className="space-y-3 mt-4">
           <h4 className="font-medium text-slate-900 dark:text-white">Example 3: Send Test Notification</h4>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <p className="body-sm text-slate-600 dark:text-slate-400">
             (Requires admin permissions and active subscription)
           </p>
           <button
             onClick={sendTestNotification}
             disabled={!isSubscribed || permission !== 'granted'}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium flex items-center gap-2"
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed label font-medium flex items-center gap-2"
           >
             <Bell className="h-4 w-4" />
             Send Test Notification
@@ -217,7 +217,7 @@ export function PushNotificationExample() {
         <div className="mt-6 space-y-4">
           <h4 className="font-medium text-slate-900 dark:text-white">Code Examples</h4>
 
-          <div className="bg-slate-800 text-slate-100 p-4 rounded-lg text-xs overflow-x-auto">
+          <div className="bg-slate-800 text-slate-100 p-4 rounded-lg caption-sm overflow-x-auto">
             <pre>{`// Example 1: Check notification support
 import { isPushSupported, getPushPermissionStatus } from '@/lib/push-service'
 
@@ -225,21 +225,21 @@ const isSupported = isPushSupported()
 const status = getPushPermissionStatus()`}</pre>
           </div>
 
-          <div className="bg-slate-800 text-slate-100 p-4 rounded-lg text-xs overflow-x-auto">
+          <div className="bg-slate-800 text-slate-100 p-4 rounded-lg caption-sm overflow-x-auto">
             <pre>{`// Example 2: Subscribe to push
 import { subscribeToPush } from '@/lib/push-subscription'
 
 await subscribeToPush()`}</pre>
           </div>
 
-          <div className="bg-slate-800 text-slate-100 p-4 rounded-lg text-xs overflow-x-auto">
+          <div className="bg-slate-800 text-slate-100 p-4 rounded-lg caption-sm overflow-x-auto">
             <pre>{`// Example 3: Use the hook
 import { usePushNotifications } from '@/hooks/usePushNotifications'
 
 const { isSubscribed, subscribe, unsubscribe } = usePushNotifications()`}</pre>
           </div>
 
-          <div className="bg-slate-800 text-slate-100 p-4 rounded-lg text-xs overflow-x-auto">
+          <div className="bg-slate-800 text-slate-100 p-4 rounded-lg caption-sm overflow-x-auto">
             <pre>{`// Example 4: Send push (server-side)
 import { sendPushToUser } from '@/lib/push-sender'
 

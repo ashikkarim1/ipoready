@@ -114,12 +114,12 @@ export function FinancialKPIDashboard({ data, companyName = 'Company' }: Financi
             <div key={idx} className={`${bgClass} border rounded-lg p-6`}>
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">{card.label}</p>
+                  <p className="label font-medium text-slate-600 dark:text-slate-400 mb-1">{card.label}</p>
                   <p className={`text-3xl font-bold ${textClass}`}>{card.value}</p>
                 </div>
                 <Icon className={`h-8 w-8 ${textClass} opacity-60`} />
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400">{card.description}</p>
+              <p className="caption-sm text-slate-600 dark:text-slate-400">{card.description}</p>
             </div>
           )
         })}
@@ -159,7 +159,7 @@ export function FinancialKPIDashboard({ data, companyName = 'Company' }: Financi
       {/* Board-Ready Summary */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-900 rounded-lg p-6 shadow-sm text-white">
         <h2 className="text-2xl font-bold mb-4">Board-Ready Summary</h2>
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-2 gap-4 body-sm">
           <div>
             <p className="opacity-90 mb-1">Budget Utilization</p>
             <p className="text-2xl font-bold">{kpis.actualSpentYTD > 0 ? Math.round((kpis.actualSpentYTD / kpis.estimatedTotalCost) * 100) : 0}%</p>

@@ -71,7 +71,7 @@ export default function ConsentDetailsModal({
               <span className="text-3xl">{getEntityIcon(consent.entity_type)}</span>
               <div>
                 <h2 className="text-2xl font-bold">{consent.from_entity}</h2>
-                <p className="text-blue-100 text-sm">{getEntityTypeLabel(consent.entity_type)}</p>
+                <p className="text-blue-100 body-sm">{getEntityTypeLabel(consent.entity_type)}</p>
               </div>
             </div>
             <button
@@ -89,12 +89,12 @@ export default function ConsentDetailsModal({
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-semibold text-gray-900">Status</h3>
                 {isExpiredConsent && (
-                  <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
+                  <span className="caption-sm bg-red-100 text-red-700 px-2 py-1 rounded">
                     ⚠️ Expired
                   </span>
                 )}
                 {isExpiringSoonConsent && consent.status !== 'signed' && (
-                  <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded">
+                  <span className="caption-sm bg-orange-100 text-orange-700 px-2 py-1 rounded">
                     ⚠️ Expiring Soon
                   </span>
                 )}
@@ -108,7 +108,7 @@ export default function ConsentDetailsModal({
                 {!isEditing ? (
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                    className="label text-blue-600 hover:text-blue-700 font-medium"
                   >
                     Change Status
                   </button>
@@ -117,7 +117,7 @@ export default function ConsentDetailsModal({
                     <select
                       value={editedStatus}
                       onChange={(e) => setEditedStatus(e.target.value as ConsentStatus)}
-                      className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="px-3 py-2 border border-gray-300 rounded-lg body-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       {CONSENT_STATUSES.map((status) => (
                         <option key={status} value={status}>
@@ -127,13 +127,13 @@ export default function ConsentDetailsModal({
                     </select>
                     <button
                       onClick={handleStatusChange}
-                      className="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition"
+                      className="px-3 py-2 bg-blue-600 text-white rounded-lg label font-medium hover:bg-blue-700 transition"
                     >
                       Save
                     </button>
                     <button
                       onClick={() => setIsEditing(false)}
-                      className="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-300 transition"
+                      className="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg label font-medium hover:bg-gray-300 transition"
                     >
                       Cancel
                     </button>
@@ -145,20 +145,20 @@ export default function ConsentDetailsModal({
             {/* Details Grid */}
             <div className="grid grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Entity Type</label>
+                <label className="block label font-medium text-gray-700 mb-2">Entity Type</label>
                 <div className="flex items-center gap-2 text-gray-900">
-                  <span className="text-xl">{getEntityIcon(consent.entity_type)}</span>
+                  <span className="h4">{getEntityIcon(consent.entity_type)}</span>
                   <span>{getEntityTypeLabel(consent.entity_type)}</span>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Consent Type</label>
+                <label className="block label font-medium text-gray-700 mb-2">Consent Type</label>
                 <div className="text-gray-900">{consent.consent_type}</div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Created Date</label>
+                <label className="block label font-medium text-gray-700 mb-2">Created Date</label>
                 <div className="text-gray-900">
                   {new Date(consent.created_at).toLocaleDateString('en-CA', {
                     year: 'numeric',
@@ -169,14 +169,14 @@ export default function ConsentDetailsModal({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Expiry Date</label>
+                <label className="block label font-medium text-gray-700 mb-2">Expiry Date</label>
                 <div className={`font-medium ${isExpiredConsent ? 'text-red-600' : 'text-gray-900'}`}>
                   {formatExpiryDate(consent.expiry_date)}
                 </div>
               </div>
 
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Document URL</label>
+                <label className="block label font-medium text-gray-700 mb-2">Document URL</label>
                 {consent.document_url ? (
                   <a
                     href={consent.document_url}
@@ -203,7 +203,7 @@ export default function ConsentDetailsModal({
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">Created</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="body-sm text-gray-500">
                       {new Date(consent.created_at).toLocaleString('en-CA')}
                     </p>
                   </div>
@@ -215,7 +215,7 @@ export default function ConsentDetailsModal({
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">Last Updated</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="body-sm text-gray-500">
                       {new Date(consent.updated_at).toLocaleString('en-CA')}
                     </p>
                   </div>
@@ -226,7 +226,7 @@ export default function ConsentDetailsModal({
             {/* Info Box */}
             {consent.status === 'pending' && (
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <p className="text-sm text-yellow-800">
+                <p className="body-sm text-yellow-800">
                   <strong>Next Step:</strong> Follow up with {consent.from_entity} to ensure consent is received
                   before the prospectus filing deadline.
                 </p>
@@ -235,7 +235,7 @@ export default function ConsentDetailsModal({
 
             {consent.status === 'rejected' && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <p className="text-sm text-red-800">
+                <p className="body-sm text-red-800">
                   <strong>Action Required:</strong> Consent from {consent.from_entity} was rejected. Please
                   address concerns and resubmit request.
                 </p>
@@ -244,7 +244,7 @@ export default function ConsentDetailsModal({
 
             {isExpiringSoonConsent && consent.status !== 'signed' && (
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-                <p className="text-sm text-orange-800">
+                <p className="body-sm text-orange-800">
                   <strong>Urgent:</strong> This consent expires {formatExpiryDate(consent.expiry_date)}. Please
                   follow up immediately.
                 </p>

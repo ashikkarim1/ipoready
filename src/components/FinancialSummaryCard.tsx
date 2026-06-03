@@ -45,13 +45,13 @@ export function FinancialSummaryCard({
       {/* Header with export button */}
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-slate-900">Executive Summary</h3>
-          <p className="text-sm text-slate-500 mt-1">Board-ready financial snapshot</p>
+          <h3 className="h4 font-semibold text-slate-900">Executive Summary</h3>
+          <p className="body-sm text-slate-500 mt-1">Board-ready financial snapshot</p>
         </div>
         <button
           onClick={onExportPDF}
           disabled={isExporting}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors label font-medium"
         >
           <Download className="w-4 h-4" />
           {isExporting ? 'Exporting...' : 'Export PDF'}
@@ -60,7 +60,7 @@ export function FinancialSummaryCard({
 
       {/* Company info and date */}
       <div className="mb-6 p-4 rounded-lg bg-slate-50 border border-slate-200">
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-2 gap-4 body-sm">
           <div>
             <p className="text-slate-600 font-medium">Company</p>
             <p className="text-slate-900 font-semibold">{companyName}</p>
@@ -106,27 +106,27 @@ export function FinancialSummaryCard({
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div className="p-4 rounded-lg bg-blue-50 border border-blue-200">
-          <p className="text-xs text-blue-700 font-semibold mb-1">Budget Estimate</p>
-          <p className="text-lg font-bold text-blue-900">{formatCurrency(data.estimated_cost)}</p>
-          <p className="text-xs text-blue-600 mt-1">Total IPO cost</p>
+          <p className="label-sm text-blue-700 font-semibold mb-1">Budget Estimate</p>
+          <p className="h4 font-bold text-blue-900">{formatCurrency(data.estimated_cost)}</p>
+          <p className="caption-sm text-blue-600 mt-1">Total IPO cost</p>
         </div>
 
         <div className="p-4 rounded-lg bg-red-50 border border-red-200">
-          <p className="text-xs text-red-700 font-semibold mb-1">Actual Spent</p>
-          <p className="text-lg font-bold text-red-900">{formatCurrency(data.actual_spent)}</p>
-          <p className="text-xs text-red-600 mt-1">To date</p>
+          <p className="label-sm text-red-700 font-semibold mb-1">Actual Spent</p>
+          <p className="h4 font-bold text-red-900">{formatCurrency(data.actual_spent)}</p>
+          <p className="caption-sm text-red-600 mt-1">To date</p>
         </div>
 
         <div className="p-4 rounded-lg bg-green-50 border border-green-200">
-          <p className="text-xs text-green-700 font-semibold mb-1">Remaining</p>
-          <p className="text-lg font-bold text-green-900">{formatCurrency(remaining)}</p>
-          <p className="text-xs text-green-600 mt-1">Available</p>
+          <p className="label-sm text-green-700 font-semibold mb-1">Remaining</p>
+          <p className="h4 font-bold text-green-900">{formatCurrency(remaining)}</p>
+          <p className="caption-sm text-green-600 mt-1">Available</p>
         </div>
 
         <div className="p-4 rounded-lg bg-amber-50 border border-amber-200">
-          <p className="text-xs text-amber-700 font-semibold mb-1">Monthly Burn</p>
-          <p className="text-lg font-bold text-amber-900">{formatCurrency(data.monthly_burn_rate)}</p>
-          <p className="text-xs text-amber-600 mt-1">Average spend</p>
+          <p className="label-sm text-amber-700 font-semibold mb-1">Monthly Burn</p>
+          <p className="h4 font-bold text-amber-900">{formatCurrency(data.monthly_burn_rate)}</p>
+          <p className="caption-sm text-amber-600 mt-1">Average spend</p>
         </div>
       </div>
 
@@ -138,18 +138,18 @@ export function FinancialSummaryCard({
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-slate-600 font-medium">Months Remaining</p>
+            <p className="label text-slate-600 font-medium">Months Remaining</p>
             <p className="text-3xl font-bold text-slate-900 mt-1">
               {Math.max(0, data.runway_months)}
             </p>
-            <p className="text-xs text-slate-500 mt-1">At current burn rate</p>
+            <p className="caption-sm text-slate-500 mt-1">At current burn rate</p>
           </div>
           <div>
-            <p className="text-sm text-slate-600 font-medium">Burn Rate</p>
-            <p className="text-lg font-bold text-slate-900 mt-1">
+            <p className="label text-slate-600 font-medium">Burn Rate</p>
+            <p className="h4 font-bold text-slate-900 mt-1">
               {formatCurrency(data.monthly_burn_rate)}
             </p>
-            <p className="text-xs text-slate-500 mt-1">Per month</p>
+            <p className="caption-sm text-slate-500 mt-1">Per month</p>
           </div>
         </div>
 
@@ -169,7 +169,7 @@ export function FinancialSummaryCard({
               }}
             />
           </div>
-          <span className="text-xs font-semibold text-slate-600 w-8">
+          <span className="label-sm font-semibold text-slate-600 w-8">
             {Math.round((data.runway_months / 24) * 100)}%
           </span>
         </div>
@@ -177,7 +177,7 @@ export function FinancialSummaryCard({
 
       {/* Footer Notes */}
       <div className="mt-6 p-4 rounded-lg bg-slate-50 border border-slate-200">
-        <p className="text-xs text-slate-600">
+        <p className="caption-sm text-slate-600">
           <span className="font-semibold text-slate-900">Note:</span> This summary is based on actual ipo_costs entries marked as 'incurred' or 'paid'. Financial forecasts assume linear burn rate. For detailed analysis and mitigation strategies, review the complete financial dashboard.
         </p>
       </div>

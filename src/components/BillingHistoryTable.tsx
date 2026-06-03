@@ -58,19 +58,19 @@ export function BillingHistoryTable({
         <table className="w-full">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Date</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Description</th>
-              <th className="px-6 py-3 text-right text-sm font-semibold text-gray-900">Amount</th>
-              <th className="px-6 py-3 text-center text-sm font-semibold text-gray-900">Status</th>
+              <th className="px-6 py-3 text-left label font-semibold text-gray-900">Date</th>
+              <th className="px-6 py-3 text-left label font-semibold text-gray-900">Description</th>
+              <th className="px-6 py-3 text-right label font-semibold text-gray-900">Amount</th>
+              <th className="px-6 py-3 text-center label font-semibold text-gray-900">Status</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {displayedTransactions.map((transaction) => (
               <tr key={transaction.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm text-gray-900">
+                <td className="px-6 py-4 body-sm text-gray-900">
                   {formatBillingDate(transaction.date)}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-700">{transaction.description}</td>
+                <td className="px-6 py-4 body-sm text-gray-700">{transaction.description}</td>
                 <td className={`px-6 py-4 text-right text-sm font-medium ${getAmountColor(
                   transaction.status
                 )}`}>
@@ -94,7 +94,7 @@ export function BillingHistoryTable({
         {displayedTransactions.map((transaction) => (
           <div key={transaction.id} className="p-4 hover:bg-gray-50">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-semibold text-gray-900">{transaction.description}</p>
+              <p className="label font-semibold text-gray-900">{transaction.description}</p>
               <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${getStatusBadgeColor(
                 transaction.status
               )}`}>
@@ -102,7 +102,7 @@ export function BillingHistoryTable({
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-600">{formatBillingDate(transaction.date)}</p>
+              <p className="body-sm text-gray-600">{formatBillingDate(transaction.date)}</p>
               <p className={`text-sm font-medium ${getAmountColor(transaction.status)}`}>
                 +${transaction.amount.toFixed(2)} {transaction.currency}
               </p>

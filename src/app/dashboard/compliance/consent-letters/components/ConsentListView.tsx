@@ -59,25 +59,25 @@ export default function ConsentListView({
       <table className="w-full">
         <thead className="bg-slate-50 border-b border-slate-200">
           <tr>
-            <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+            <th className="px-6 py-4 text-left label-xs font-bold text-slate-700 uppercase">
               From Entity
             </th>
-            <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+            <th className="px-6 py-4 text-left label-xs font-bold text-slate-700 uppercase">
               Type
             </th>
-            <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+            <th className="px-6 py-4 text-left label-xs font-bold text-slate-700 uppercase">
               Consent Type
             </th>
-            <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+            <th className="px-6 py-4 text-left label-xs font-bold text-slate-700 uppercase">
               Status
             </th>
-            <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+            <th className="px-6 py-4 text-left label-xs font-bold text-slate-700 uppercase">
               Expiry Date
             </th>
-            <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+            <th className="px-6 py-4 text-left label-xs font-bold text-slate-700 uppercase">
               Document
             </th>
-            <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+            <th className="px-6 py-4 text-left label-xs font-bold text-slate-700 uppercase">
               Created
             </th>
           </tr>
@@ -107,7 +107,7 @@ export default function ConsentListView({
                   {consent.entity_type.replace(/-/g, ' ')}
                 </span>
               </td>
-              <td className="px-6 py-4 text-sm text-slate-700">
+              <td className="px-6 py-4 body-sm text-slate-700">
                 {consent.consent_type.replace(/-/g, ' ')}
               </td>
               <td className="px-6 py-4">
@@ -120,19 +120,19 @@ export default function ConsentListView({
                   <span className="capitalize">{consent.status}</span>
                 </span>
               </td>
-              <td className="px-6 py-4 text-sm text-slate-700">
+              <td className="px-6 py-4 body-sm text-slate-700">
                 {consent.expiry_date ? (
                   <div>
                     <p>{format(new Date(consent.expiry_date), 'MMM d, yyyy')}</p>
                     {new Date(consent.expiry_date) < new Date() && (
-                      <p className="text-red-600 font-semibold text-xs mt-1">
+                      <p className="text-red-600 font-semibold caption-sm mt-1">
                         Expired
                       </p>
                     )}
                     {new Date(consent.expiry_date).getTime() -
                       Date.now() <
                       30 * 24 * 60 * 60 * 1000 && (
-                      <p className="text-orange-600 font-semibold text-xs mt-1">
+                      <p className="text-orange-600 font-semibold caption-sm mt-1">
                         Expiring soon
                       </p>
                     )}
@@ -141,7 +141,7 @@ export default function ConsentListView({
                   <p className="text-slate-400">N/A</p>
                 )}
               </td>
-              <td className="px-6 py-4 text-sm">
+              <td className="px-6 py-4 body-sm">
                 {consent.document_url ? (
                   <a
                     href={consent.document_url}
@@ -156,7 +156,7 @@ export default function ConsentListView({
                   <p className="text-slate-400">No document</p>
                 )}
               </td>
-              <td className="px-6 py-4 text-sm text-slate-600">
+              <td className="px-6 py-4 body-sm text-slate-600">
                 {format(new Date(consent.created_at), 'MMM d, yyyy')}
               </td>
             </motion.tr>

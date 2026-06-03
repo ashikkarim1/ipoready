@@ -308,10 +308,10 @@ export function PreferencesModal({
           {/* Header */}
           <div className="px-6 py-4 border-b flex items-center justify-between" style={{ borderColor: '#E5E4E0' }}>
             <div>
-              <h2 className="font-bold text-lg" style={{ color: '#1A1A1A' }}>
+              <h2 className="font-bold h4" style={{ color: '#1A1A1A' }}>
                 Notification Preferences
               </h2>
-              <p className="text-xs mt-1" style={{ color: '#9A9A9A' }}>
+              <p className="caption-sm mt-1" style={{ color: '#9A9A9A' }}>
                 Control how and when you receive notifications
               </p>
             </div>
@@ -331,7 +331,7 @@ export function PreferencesModal({
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className="px-4 py-4 font-medium text-sm border-b-2 transition-colors"
+                  className="px-4 py-4 font-medium body-sm border-b-2 transition-colors"
                   style={{
                     borderColor: activeTab === tab ? '#1A1A1A' : 'transparent',
                     color: activeTab === tab ? '#1A1A1A' : '#9A9A9A',
@@ -351,7 +351,7 @@ export function PreferencesModal({
               </div>
             ) : error ? (
               <div className="p-4 rounded-lg" style={{ background: '#FEE2E2', color: '#991B1B' }}>
-                <p className="text-sm">{error}</p>
+                <p className="body-sm">{error}</p>
               </div>
             ) : (
               <>
@@ -365,7 +365,7 @@ export function PreferencesModal({
                   >
                     {NOTIFICATION_GROUPS.map(group => (
                       <div key={group.title}>
-                        <h3 className="font-semibold text-sm mb-3" style={{ color: '#1A1A1A' }}>
+                        <h3 className="font-semibold body-sm mb-3" style={{ color: '#1A1A1A' }}>
                           {group.title}
                         </h3>
                         <div className="space-y-3">
@@ -418,7 +418,7 @@ export function PreferencesModal({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-sm font-medium"
+                className="label font-medium"
                 style={{ color: '#16A34A' }}
               >
                 Changes saved
@@ -428,7 +428,7 @@ export function PreferencesModal({
               <button
                 onClick={onClose}
                 disabled={saving}
-                className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
+                className="px-4 py-2 rounded-lg label font-medium transition-all"
                 style={{
                   background: '#F7F6F4',
                   color: '#1A1A1A',
@@ -442,7 +442,7 @@ export function PreferencesModal({
                 <button
                   onClick={savePreferences}
                   disabled={saving}
-                  className="px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-white"
+                  className="px-4 py-2 rounded-lg label font-medium transition-all flex items-center gap-2 text-white"
                   style={{
                     background: saving ? '#999' : '#1A1A1A',
                     cursor: saving ? 'not-allowed' : 'pointer',

@@ -88,7 +88,7 @@ export function CapTableWaterfallChart({
       >
         <p className="font-semibold text-gray-900 dark:text-white">{label}</p>
         {(payload as any[]).map((entry, idx) => (
-          <p key={idx} style={{ color: entry.color }} className="text-sm">
+          <p key={idx} style={{ color: entry.color }} className="body-sm">
             {entry.name.replace(/_/g, ' ')}: {entry.value?.toFixed(2)}%
           </p>
         ))}
@@ -110,10 +110,10 @@ export function CapTableWaterfallChart({
   return (
     <div className="w-full rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
       <div className="mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <h3 className="h4 font-semibold text-gray-900 dark:text-white">
           {showHistoricalRounds ? 'Cap Table Dilution Across Rounds' : 'Current Cap Table Ownership'}
         </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="body-sm text-gray-600 dark:text-gray-400">
           {showHistoricalRounds
             ? 'Historical breakdown showing dilution impact at each funding round'
             : 'Current ownership distribution across shareholders'}
@@ -172,7 +172,7 @@ export function CapTableWaterfallChart({
       </ResponsiveContainer>
 
       {!showHistoricalRounds && (
-        <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
+        <p className="mt-4 text-center body-sm text-gray-600 dark:text-gray-400">
           Upgrade to Starter plan to view historical dilution across funding rounds
         </p>
       )}

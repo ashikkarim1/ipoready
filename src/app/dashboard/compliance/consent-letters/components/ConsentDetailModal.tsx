@@ -135,7 +135,7 @@ export default function ConsentDetailModal({
                       e.target.value as ConsentLetter['status']
                     )
                   }
-                  className="px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                  className="px-3 py-2 border border-slate-300 rounded-lg body-sm"
                 >
                   <option value="pending">Pending</option>
                   <option value="received">Received</option>
@@ -150,7 +150,7 @@ export default function ConsentDetailModal({
           {/* Details Grid */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block label font-semibold text-slate-700 mb-2">
                 Entity Type
               </label>
               <p className="text-slate-900 capitalize">
@@ -158,7 +158,7 @@ export default function ConsentDetailModal({
               </p>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block label font-semibold text-slate-700 mb-2">
                 Consent Type
               </label>
               <p className="text-slate-900">
@@ -166,7 +166,7 @@ export default function ConsentDetailModal({
               </p>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block label font-semibold text-slate-700 mb-2">
                 Created Date
               </label>
               <p className="text-slate-900">
@@ -174,7 +174,7 @@ export default function ConsentDetailModal({
               </p>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block label font-semibold text-slate-700 mb-2">
                 Last Updated
               </label>
               <p className="text-slate-900">
@@ -185,7 +185,7 @@ export default function ConsentDetailModal({
 
           {/* Expiry Date */}
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">
+            <label className="block label font-semibold text-slate-700 mb-2">
               Expiry Date
             </label>
             {isEditing ? (
@@ -206,7 +206,7 @@ export default function ConsentDetailModal({
 
           {/* Document URL */}
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">
+            <label className="block label font-semibold text-slate-700 mb-2">
               Document URL
             </label>
             {isEditing ? (
@@ -215,7 +215,7 @@ export default function ConsentDetailModal({
                 value={editDocumentUrl}
                 onChange={(e) => setEditDocumentUrl(e.target.value)}
                 placeholder="https://..."
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm"
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg body-sm"
               />
             ) : (
               <div>
@@ -238,7 +238,7 @@ export default function ConsentDetailModal({
           {/* Notes */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <h3 className="font-semibold text-blue-900 mb-2">Information</h3>
-            <p className="text-sm text-blue-800">
+            <p className="body-sm text-blue-800">
               {consent.status === 'pending'
                 ? 'This consent is awaiting a response. Consider following up if no response is received within 2 weeks.'
                 : consent.status === 'received'

@@ -89,7 +89,7 @@ export default function DilutionResultsTable({
         <motion.div variants={itemVariants} className="bg-white rounded p-4">
           <div className="flex items-center gap-2 mb-2">
             <Users className="w-4 h-4 text-blue-600" />
-            <p className="text-xs font-medium text-slate-600">Shareholders</p>
+            <p className="label-sm font-medium text-slate-600">Shareholders</p>
           </div>
           <p className="text-2xl font-bold text-slate-900">
             {scenario.shareholderImpact.length}
@@ -99,7 +99,7 @@ export default function DilutionResultsTable({
         <motion.div variants={itemVariants} className="bg-white rounded p-4">
           <div className="flex items-center gap-2 mb-2">
             <TrendingDown className="w-4 h-4 text-orange-600" />
-            <p className="text-xs font-medium text-slate-600">Avg Dilution</p>
+            <p className="label-sm font-medium text-slate-600">Avg Dilution</p>
           </div>
           <p className="text-2xl font-bold text-slate-900">
             {(totalDilution / scenario.shareholderImpact.length).toFixed(2)}%
@@ -109,12 +109,12 @@ export default function DilutionResultsTable({
         <motion.div variants={itemVariants} className="bg-white rounded p-4">
           <div className="flex items-center gap-2 mb-2">
             <BarChart3 className="w-4 h-4 text-red-600" />
-            <p className="text-xs font-medium text-slate-600">Most Diluted</p>
+            <p className="label-sm font-medium text-slate-600">Most Diluted</p>
           </div>
           <p className="text-2xl font-bold text-slate-900">
             {mostDiluted ? Number(mostDiluted.dilutionPercentage).toFixed(2) : '0'}%
           </p>
-          <p className="text-xs text-slate-500">
+          <p className="caption-sm text-slate-500">
             {mostDiluted?.shareholderName}
           </p>
         </motion.div>
@@ -122,12 +122,12 @@ export default function DilutionResultsTable({
         <motion.div variants={itemVariants} className="bg-white rounded p-4">
           <div className="flex items-center gap-2 mb-2">
             <PieChart className="w-4 h-4 text-green-600" />
-            <p className="text-xs font-medium text-slate-600">Least Diluted</p>
+            <p className="label-sm font-medium text-slate-600">Least Diluted</p>
           </div>
           <p className="text-2xl font-bold text-slate-900">
             {leastDiluted ? Number(leastDiluted.dilutionPercentage).toFixed(2) : '0'}%
           </p>
-          <p className="text-xs text-slate-500">
+          <p className="caption-sm text-slate-500">
             {leastDiluted?.shareholderName}
           </p>
         </motion.div>
@@ -138,25 +138,25 @@ export default function DilutionResultsTable({
         <table className="w-full">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              <th className="text-left px-6 py-4 text-xs font-semibold text-slate-900">
+              <th className="text-left px-6 py-4 label-sm font-semibold text-slate-900">
                 Shareholder
               </th>
-              <th className="text-left px-6 py-4 text-xs font-semibold text-slate-900">
+              <th className="text-left px-6 py-4 label-sm font-semibold text-slate-900">
                 Type
               </th>
-              <th className="text-right px-6 py-4 text-xs font-semibold text-slate-900">
+              <th className="text-right px-6 py-4 label-sm font-semibold text-slate-900">
                 Current Shares
               </th>
-              <th className="text-right px-6 py-4 text-xs font-semibold text-slate-900">
+              <th className="text-right px-6 py-4 label-sm font-semibold text-slate-900">
                 Current %
               </th>
-              <th className="text-right px-6 py-4 text-xs font-semibold text-slate-900">
+              <th className="text-right px-6 py-4 label-sm font-semibold text-slate-900">
                 Post-Dilution Shares
               </th>
-              <th className="text-right px-6 py-4 text-xs font-semibold text-slate-900">
+              <th className="text-right px-6 py-4 label-sm font-semibold text-slate-900">
                 Post-Dilution %
               </th>
-              <th className="text-right px-6 py-4 text-xs font-semibold text-slate-900">
+              <th className="text-right px-6 py-4 label-sm font-semibold text-slate-900">
                 Dilution %
               </th>
             </tr>
@@ -179,21 +179,21 @@ export default function DilutionResultsTable({
                     <p className="font-medium text-slate-900">
                       {position.shareholderName}
                     </p>
-                    <p className="text-xs text-slate-500">{position.shareClass}</p>
+                    <p className="caption-sm text-slate-500">{position.shareClass}</p>
                   </td>
-                  <td className="px-6 py-4 text-sm text-slate-700">
+                  <td className="px-6 py-4 body-sm text-slate-700">
                     {position.shareholderType}
                   </td>
-                  <td className="px-6 py-4 text-right text-sm text-slate-900 font-medium">
+                  <td className="px-6 py-4 text-right label text-slate-900 font-medium">
                     {Number(position.currentShares).toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 text-right text-sm text-slate-900 font-medium">
+                  <td className="px-6 py-4 text-right label text-slate-900 font-medium">
                     {Number(position.currentOwnership).toFixed(2)}%
                   </td>
-                  <td className="px-6 py-4 text-right text-sm text-slate-900 font-medium">
+                  <td className="px-6 py-4 text-right label text-slate-900 font-medium">
                     {Number(position.postDilutionShares).toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 text-right text-sm text-slate-900 font-medium">
+                  <td className="px-6 py-4 text-right label text-slate-900 font-medium">
                     {Number(position.postDilutionOwnership).toFixed(2)}%
                   </td>
                   <td className="px-6 py-4 text-right">
@@ -217,7 +217,7 @@ export default function DilutionResultsTable({
       </div>
 
       {/* Footer Summary */}
-      <div className="p-6 bg-slate-50 border-t border-slate-200 grid grid-cols-2 gap-6 text-sm">
+      <div className="p-6 bg-slate-50 border-t border-slate-200 grid grid-cols-2 gap-6 body-sm">
         <div>
           <p className="text-slate-600 mb-1">Assumptions Applied</p>
           <div className="space-y-1 text-slate-900">

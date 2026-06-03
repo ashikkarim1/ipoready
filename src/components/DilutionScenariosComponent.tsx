@@ -231,14 +231,14 @@ function ScenarioCard({
  <h3 className="font-bold text-slate-900 mb-2">
  {scenario.name}
  </h3>
- <p className="text-sm text-slate-600 mb-3">
+ <p className="body-sm text-slate-600 mb-3">
  {scenario.description}
  </p>
  <div className="flex items-center justify-between pt-3 border-t border-slate-200">
- <span className="text-xs font-medium text-slate-700">
+ <span className="label-sm font-medium text-slate-700">
  Dilution: {scenario.metrics.totalDilution.toFixed(1)}%
  </span>
- <span className="text-xs font-medium text-blue-600">
+ <span className="label-sm font-medium text-blue-600">
  {(scenario.metrics.newShares / 1000000).toFixed(1)}M new shares
  </span>
  </div>
@@ -286,7 +286,7 @@ function ComparisonTable({
 
  return (
  <div className="overflow-x-auto">
- <table className="w-full text-sm">
+ <table className="w-full body-sm">
  <thead>
  <tr className="border-b border-slate-200">
  <th className="text-left py-3 px-4 font-semibold text-slate-700">
@@ -373,7 +373,7 @@ function OwnershipChart({
  return (
  <div className="grid grid-cols-2 gap-8">
  <div>
- <h3 className="text-lg font-bold text-slate-900 mb-4">
+ <h3 className="h4 font-bold text-slate-900 mb-4">
  Before Raise
  </h3>
  <ResponsiveContainer width="100%" height={300}>
@@ -403,7 +403,7 @@ function OwnershipChart({
  </div>
 
  <div>
- <h3 className="text-lg font-bold text-slate-900 mb-4">
+ <h3 className="h4 font-bold text-slate-900 mb-4">
  After Raise
  </h3>
  <ResponsiveContainer width="100%" height={300}>
@@ -465,7 +465,7 @@ function ShareCountChart({
 
  return (
  <div>
- <h3 className="text-lg font-bold text-slate-900 mb-4">
+ <h3 className="h4 font-bold text-slate-900 mb-4">
  Share Count Comparison
  </h3>
  <ResponsiveContainer width="100%" height={400}>
@@ -514,7 +514,7 @@ function OwnershipPercentageChart({
 
  return (
  <div>
- <h3 className="text-lg font-bold text-slate-900 mb-4">
+ <h3 className="h4 font-bold text-slate-900 mb-4">
  Ownership % Dilution
  </h3>
  <ResponsiveContainer width="100%" height={400}>
@@ -579,7 +579,7 @@ export function DilutionScenariosComponent() {
 
  {/* Scenario Selection */}
  <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
- <h2 className="text-xl font-bold text-slate-900 mb-4">
+ <h2 className="h4 font-bold text-slate-900 mb-4">
  Select Scenario
  </h2>
  <div className="grid grid-cols-3 gap-4">
@@ -598,7 +598,7 @@ export function DilutionScenariosComponent() {
  <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
  <div className="grid grid-cols-2 gap-4 mb-6">
  <div>
- <p className="text-sm text-slate-600 mb-1">
+ <p className="body-sm text-slate-600 mb-1">
  Raise Amount
  </p>
  <p className="text-2xl font-bold text-slate-900">
@@ -606,7 +606,7 @@ export function DilutionScenariosComponent() {
  </p>
  </div>
  <div>
- <p className="text-sm text-slate-600 mb-1">
+ <p className="body-sm text-slate-600 mb-1">
  Price per Share
  </p>
  <p className="text-2xl font-bold text-slate-900">
@@ -614,7 +614,7 @@ export function DilutionScenariosComponent() {
  </p>
  </div>
  <div>
- <p className="text-sm text-slate-600 mb-1">
+ <p className="body-sm text-slate-600 mb-1">
  New Options Pool
  </p>
  <p className="text-2xl font-bold text-slate-900">
@@ -622,7 +622,7 @@ export function DilutionScenariosComponent() {
  </p>
  </div>
  <div>
- <p className="text-sm text-slate-600 mb-1">
+ <p className="body-sm text-slate-600 mb-1">
  Total New Shares
  </p>
  <p className="text-2xl font-bold text-blue-600">
@@ -636,7 +636,7 @@ export function DilutionScenariosComponent() {
  <div className="grid grid-cols-3 gap-6">
  <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
  <div className="flex items-center justify-between mb-4">
- <h3 className="text-sm font-medium text-slate-600">
+ <h3 className="label font-medium text-slate-600">
  Total Dilution
  </h3>
  <TrendingDown className="h-5 w-5 text-orange-500" />
@@ -644,14 +644,14 @@ export function DilutionScenariosComponent() {
  <p className="text-3xl font-bold text-slate-900">
  {selectedScenario.metrics.totalDilution.toFixed(2)}%
  </p>
- <p className="text-xs text-slate-500 mt-2">
+ <p className="caption-sm text-slate-500 mt-2">
  New shares / total post-raise
  </p>
  </div>
 
  <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
  <div className="flex items-center justify-between mb-4">
- <h3 className="text-sm font-medium text-slate-600">
+ <h3 className="label font-medium text-slate-600">
  Avg Shareholder Dilution
  </h3>
  <Users className="h-5 w-5 text-blue-500" />
@@ -659,14 +659,14 @@ export function DilutionScenariosComponent() {
  <p className="text-3xl font-bold text-slate-900">
  {calculateAverageDilution().toFixed(2)}%
  </p>
- <p className="text-xs text-slate-500 mt-2">
+ <p className="caption-sm text-slate-500 mt-2">
  Per existing shareholder
  </p>
  </div>
 
  <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
  <div className="flex items-center justify-between mb-4">
- <h3 className="text-sm font-medium text-slate-600">
+ <h3 className="label font-medium text-slate-600">
  Post-Raise Cap
  </h3>
  <Zap className="h-5 w-5 text-green-500" />
@@ -674,7 +674,7 @@ export function DilutionScenariosComponent() {
  <p className="text-3xl font-bold text-slate-900">
  {(selectedScenario.metrics.totalSharesIssued / 1000000).toFixed(1)}M
  </p>
- <p className="text-xs text-slate-500 mt-2">
+ <p className="caption-sm text-slate-500 mt-2">
  Total shares issued
  </p>
  </div>
@@ -724,7 +724,7 @@ export function DilutionScenariosComponent() {
  <h3 className="font-bold text-blue-900 mb-3">
  Key Insights
  </h3>
- <ul className="space-y-2 text-sm text-blue-800">
+ <ul className="space-y-2 body-sm text-blue-800">
  <li className="flex items-start gap-2">
  <span className="font-bold">•</span>
  <span>

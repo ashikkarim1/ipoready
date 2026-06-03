@@ -279,19 +279,19 @@ export default function PricingPage() {
               <div className="flex-1 flex flex-col md:flex-row items-center justify-center gap-3">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4" style={{ color: '#B45309' }} />
-                  <p className="font-bold text-sm" style={{ color: '#92400E' }}>
+                  <p className="font-bold body-sm" style={{ color: '#92400E' }}>
                     {language === 'en' ? 'Launch Special — 50% Off for 90 Days' : 'Offre de lancement — 50% de réduction pendant 90 jours'}
                   </p>
                 </div>
                 <div className="flex items-center gap-1.5 px-3 py-1 rounded-lg"
                   style={{ background: 'rgba(180,83,9,0.1)', border: '1px solid rgba(180,83,9,0.2)' }}>
                   <Clock className="w-3.5 h-3.5" style={{ color: '#B45309' }} />
-                  <span className="font-semibold text-xs" style={{ color: '#B45309' }}>
+                  <span className="font-semibold caption-sm" style={{ color: '#B45309' }}>
                     {daysLeft} {language === 'en' ? 'days remaining' : 'jours restants'}
                   </span>
                 </div>
               </div>
-              <p className="hidden md:block text-xs max-w-xs text-center" style={{ color: '#92400E', opacity: 0.7 }}>
+              <p className="hidden md:block caption-sm max-w-xs text-center" style={{ color: '#92400E', opacity: 0.7 }}>
                 {language === 'en' ? 'Lock in founding-member pricing. Prices shown are 50% off regular.' : 'Bloquez le tarif membre fondateur.'}
               </p>
               <button onClick={() => setShowPromo(false)}
@@ -307,7 +307,7 @@ export default function PricingPage() {
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 text-xs font-semibold uppercase tracking-widest"
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 label-sm font-semibold uppercase tracking-widest"
             style={{ background: '#FDECEB', color: '#E8312A', border: '1px solid rgba(232,49,42,0.15)' }}>
             <Zap className="w-3 h-3" />
             {language === 'en' ? 'Pricing' : 'Tarification'}
@@ -323,7 +323,7 @@ export default function PricingPage() {
               ? 'A typical IPO costs $500K–$2M in professional fees. IPOReady helps you get organized, stay on track, and connect with experts — at a fraction of the cost.'
               : "Un PAPE typique coûte 500K$–2M$ en honoraires. IPOReady vous aide à vous organiser et rester sur la bonne voie."}
           </p>
-          <p className="text-sm font-semibold" style={{ color: '#B45309' }}>
+          <p className="label font-semibold" style={{ color: '#B45309' }}>
             {language === 'en'
               ? '⚡ Our AI and analytics expand weekly — lock in founder pricing now.'
               : "⚡ Notre IA s'améliore chaque semaine — bloquez le tarif fondateur maintenant."}
@@ -337,7 +337,7 @@ export default function PricingPage() {
                 <button
                   key={opt.key}
                   onClick={() => setBilling(opt.key)}
-                  className="relative rounded-xl text-sm font-semibold transition-all flex items-center gap-2"
+                  className="relative rounded-xl label font-semibold transition-all flex items-center gap-2"
                   style={{
                     padding: '0.625rem 1.25rem',
                     ...(billing === opt.key
@@ -363,19 +363,19 @@ export default function PricingPage() {
             <AnimatePresence mode="wait">
               {billing === 'monthly' && (
                 <motion.p key="monthly-note" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  className="text-text-light text-xs">
+                  className="text-text-light caption-sm">
                   {language === 'en' ? 'All auto-renew month-to-month after initial commitment · cancel anytime' : 'Tous se renouvellent automatiquement mensuellement · annulez à tout moment'}
                 </motion.p>
               )}
               {billing === 'sixmonth' && (
                 <motion.p key="sixmonth-note" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  className="text-xs font-medium text-text-muted">
+                  className="label-sm font-medium text-text-muted">
                   {language === 'en' ? 'Save 20% vs monthly · billed every 6 months' : "20% d'économies vs mensuel · facturé tous les 6 mois"}
                 </motion.p>
               )}
               {billing === 'annual' && (
                 <motion.p key="annual-note" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  className="text-xs font-medium text-text-muted">
+                  className="label-sm font-medium text-text-muted">
                   {language === 'en' ? 'Best value — save 33% vs monthly · billed annually' : "Meilleure valeur — 33% d'économies vs mensuel · facturé annuellement"}
                 </motion.p>
               )}
@@ -389,7 +389,7 @@ export default function PricingPage() {
               style={{ background: '#EFEFED', border: '1px solid #E5E4E0' }}>
               {(['USD', 'CAD'] as Currency[]).map(c => (
                 <button key={c} onClick={() => setCurrency(c)}
-                  className="px-3 py-1 rounded text-xs font-mono font-semibold transition-all"
+                  className="px-3 py-1 rounded label-sm font-mono font-semibold transition-all"
                   style={currency === c ? { background: '#1A1A1A', color: 'white' } : { color: '#9A9A9A' }}>
                   ${c}
                 </button>
@@ -442,7 +442,7 @@ export default function PricingPage() {
               }>
               {plan.badge && (
                 <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap' }}>
-                  <span className="text-xs font-bold"
+                  <span className="label-xs font-bold"
                     style={plan.isPopular
                       ? { background: '#1A1A1A', color: 'white', padding: '0.25rem 0.75rem', borderRadius: '9999px', display: 'inline-block' }
                       : { background: '#FEF3C7', color: '#B45309', border: '1px solid #FDE68A', padding: '0.25rem 0.75rem', borderRadius: '9999px', display: 'inline-block' }}>
@@ -455,38 +455,38 @@ export default function PricingPage() {
                 <h3 className="font-display text-xl font-bold text-nav mb-1">
                   {language === 'en' ? plan.nameEn : plan.nameFr}
                 </h3>
-                <p className="text-text-muted text-sm">
+                <p className="text-text-muted body-sm">
                   {language === 'en' ? plan.descriptionEn : plan.descriptionFr}
                 </p>
               </div>
 
               <div className="mb-5 pb-5" style={{ borderBottom: '1px solid #E5E4E0' }}>
                 <div className="flex items-center gap-2 flex-wrap mb-1.5">
-                  <span className="font-medium line-through text-text-light text-sm">
+                  <span className="font-medium line-through text-text-light body-sm">
                     {formatPrice(getOriginalPrice(plan))}
                   </span>
-                  <span className="text-xs px-2 py-0.5 rounded-full font-bold"
+                  <span className="label-xs px-2 py-0.5 rounded-full font-bold"
                     style={{ background: '#FDECEB', color: '#E8312A', border: '1px solid rgba(232,49,42,0.15)' }}>
                     50% OFF
                   </span>
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="font-display text-4xl font-black text-nav">{formatPrice(getPrice(plan))}</span>
-                  <span className="text-text-muted text-sm">/mo</span>
+                  <span className="text-text-muted body-sm">/mo</span>
                 </div>
-                <p className="text-xs mt-1.5 text-text-muted font-medium">{getBilledNote(plan)}</p>
+                <p className="label-sm mt-1.5 text-text-muted font-medium">{getBilledNote(plan)}</p>
               </div>
 
               <div className="mb-5">
                 <div className="flex flex-wrap gap-1 mb-2.5">
                   {plan.exchanges.map(ex => (
-                    <span key={ex} className="text-xs px-2 py-0.5 rounded-full font-medium"
+                    <span key={ex} className="label-sm px-2 py-0.5 rounded-full font-medium"
                       style={{ background: '#F7F6F4', color: '#717171', border: '1px solid #E5E4E0' }}>
                       {ex}
                     </span>
                   ))}
                 </div>
-                <p className="text-text-muted text-xs flex items-center gap-1">
+                <p className="text-text-muted caption-sm flex items-center gap-1">
                   <Users className="w-3 h-3" />
                   {plan.maxMembers === 999 ? 'Unlimited members' : `Up to ${plan.maxMembers} members`}
                 </p>
@@ -494,7 +494,7 @@ export default function PricingPage() {
 
               <ul className="space-y-2 mb-8 flex-1">
                 {plan.features.map((feature, j) => (
-                  <li key={j} className="flex items-start gap-2 text-sm">
+                  <li key={j} className="flex items-start gap-2 body-sm">
                     <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#2D7A5F' }} />
                     <span className="text-text-muted">{feature}</span>
                   </li>
@@ -507,7 +507,7 @@ export default function PricingPage() {
                 if (cta.isActive) {
                   return (
                     <div
-                      className="flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold text-sm mt-auto"
+                      className="flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold body-sm mt-auto"
                       style={{ background: '#F0FDF4', color: '#15803D', border: '1px solid #BBF7D0' }}>
                       {cta.label}
                     </div>
@@ -517,7 +517,7 @@ export default function PricingPage() {
                   <button
                     onClick={() => handleCheckout(plan.id)}
                     disabled={isLoading || !!checkoutLoading}
-                    className="flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold text-sm transition-all mt-auto disabled:opacity-60"
+                    className="flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold body-sm transition-all mt-auto disabled:opacity-60"
                     style={
                       cta.isUpgrade
                         ? { background: '#1A1A1A', color: 'white' }
@@ -549,7 +549,7 @@ export default function PricingPage() {
           <h2 className="serif text-2xl text-nav mb-2 text-center">
             {language === 'en' ? 'The Real Cost of Going Public' : "Le vrai coût d'une introduction en bourse"}
           </h2>
-          <p className="text-text-muted text-sm text-center mb-8">
+          <p className="text-text-muted body-sm text-center mb-8">
             {language === 'en'
               ? 'IPOReady does not replace professionals — it organizes your workflow so you use their time more efficiently.'
               : 'IPOReady ne remplace pas les professionnels — il organise votre flux de travail.'}
@@ -561,10 +561,10 @@ export default function PricingPage() {
               { label: 'Prospectus & S-1 Prep',   typical: '$20K–$60K',   ipoReady: 'AI-powered builder', savings: 'up to $60K' },
             ].map(({ label, typical, ipoReady, savings }) => (
               <div key={label} className="p-5 rounded-xl" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
-                <p className="font-semibold text-nav text-sm mb-3">{label}</p>
-                <p className="text-xs text-text-muted mb-1">Traditional: <span className="text-accent font-semibold">{typical}</span></p>
-                <p className="text-xs text-text-muted mb-2">IPOReady: <span className="font-semibold text-nav">{ipoReady}</span></p>
-                <p className="text-sm font-bold text-nav">Save {savings}</p>
+                <p className="font-semibold text-nav body-sm mb-3">{label}</p>
+                <p className="caption-sm text-text-muted mb-1">Traditional: <span className="text-accent font-semibold">{typical}</span></p>
+                <p className="caption-sm text-text-muted mb-2">IPOReady: <span className="font-semibold text-nav">{ipoReady}</span></p>
+                <p className="body-sm font-bold text-nav">Save {savings}</p>
               </div>
             ))}
           </div>
@@ -584,7 +584,7 @@ export default function PricingPage() {
                   style={{ background: openFaq === i ? '#F7F6F4' : 'white' }}
                   onMouseEnter={e => { if (openFaq !== i) (e.currentTarget as HTMLButtonElement).style.background = '#FAFAF9' }}
                   onMouseLeave={e => { if (openFaq !== i) (e.currentTarget as HTMLButtonElement).style.background = 'white' }}>
-                  <p className="text-nav font-medium text-sm pr-4">{faq.q}</p>
+                  <p className="text-nav font-medium body-sm pr-4">{faq.q}</p>
                   {openFaq === i
                     ? <ChevronUp className="w-4 h-4 text-text-muted flex-shrink-0" />
                     : <ChevronDown className="w-4 h-4 text-text-muted flex-shrink-0" />}
@@ -595,7 +595,7 @@ export default function PricingPage() {
                       initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.2 }} className="overflow-hidden">
                       <div className="px-5 pb-5 pt-1" style={{ borderTop: '1px solid #E5E4E0' }}>
-                        <p className="text-text-muted text-sm leading-relaxed">{faq.a}</p>
+                        <p className="text-text-muted body-sm leading-relaxed">{faq.a}</p>
                       </div>
                     </motion.div>
                   )}
@@ -615,20 +615,20 @@ export default function PricingPage() {
               <h2 className="serif text-3xl text-white mb-3">
                 {language === 'en' ? `You're all set on ${PLANS.find(p => p.id === userPlanId)?.nameEn} ✓` : `Vous êtes prêt sur ${PLANS.find(p => p.id === userPlanId)?.nameFr ?? PLANS.find(p => p.id === userPlanId)?.nameEn} ✓`}
               </h2>
-              <p className="mb-6 max-w-xl mx-auto text-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>
+              <p className="mb-6 max-w-xl mx-auto body-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>
                 {language === 'en'
                   ? 'Your subscription is active and your PACE™ engine is running. Head to your dashboard to track your IPO velocity.'
                   : "Votre abonnement est actif et votre moteur PACE™ fonctionne. Rendez-vous sur votre tableau de bord."}
               </p>
               <Link href="/dashboard"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-sm text-nav transition-all"
+                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold body-sm text-nav transition-all"
                 style={{ background: '#FFFFFF' }}
                 onMouseEnter={e => (e.currentTarget.style.background = '#F7F6F4')}
                 onMouseLeave={e => (e.currentTarget.style.background = '#FFFFFF')}>
                 {language === 'en' ? 'Go to Dashboard' : 'Aller au tableau de bord'}
                 <ArrowRight className="w-4 h-4" />
               </Link>
-              <p className="text-xs mt-3" style={{ color: 'rgba(255,255,255,0.25)' }}>
+              <p className="caption-sm mt-3" style={{ color: 'rgba(255,255,255,0.25)' }}>
                 {language === 'en' ? 'Need to upgrade or change your plan? Use the cards above.' : 'Besoin de changer de plan? Utilisez les cartes ci-dessus.'}
               </p>
             </>
@@ -637,20 +637,20 @@ export default function PricingPage() {
               <h2 className="serif text-3xl text-white mb-3">
                 {language === 'en' ? 'Ready to start your IPO journey?' : 'Prêt à commencer votre parcours IPO?'}
               </h2>
-              <p className="mb-6 max-w-xl mx-auto text-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>
+              <p className="mb-6 max-w-xl mx-auto body-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>
                 {language === 'en'
                   ? 'Join hundreds of companies using IPOReady to track, manage, and accelerate their path to public markets.'
                   : "Rejoignez des centaines d'entreprises qui utilisent IPOReady pour accélérer leur chemin vers les marchés publics."}
               </p>
               <Link href="/register"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-sm text-nav transition-all"
+                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold body-sm text-nav transition-all"
                 style={{ background: '#FFFFFF' }}
                 onMouseEnter={e => (e.currentTarget.style.background = '#F7F6F4')}
                 onMouseLeave={e => (e.currentTarget.style.background = '#FFFFFF')}>
                 {language === 'en' ? 'Get Started Free' : 'Commencer gratuitement'}
                 <ArrowRight className="w-4 h-4" />
               </Link>
-              <p className="text-xs mt-3" style={{ color: 'rgba(255,255,255,0.25)' }}>
+              <p className="caption-sm mt-3" style={{ color: 'rgba(255,255,255,0.25)' }}>
                 {language === 'en' ? 'No credit card required for trial · Cancel anytime after 3 months' : "Aucune carte de crédit requise pour l'essai"}
               </p>
             </>
@@ -660,8 +660,8 @@ export default function PricingPage() {
         {/* Legal Disclaimer */}
         <div className="max-w-4xl mx-auto">
           <div className="rounded-xl px-5 py-4" style={{ background: '#FEF3C7', border: '1px solid #FDE68A' }}>
-            <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: '#B45309' }}>Important Disclosure</p>
-            <p className="text-xs leading-relaxed" style={{ color: '#92400E', opacity: 0.8 }}>
+            <p className="label-sm font-semibold uppercase tracking-wider mb-2" style={{ color: '#B45309' }}>Important Disclosure</p>
+            <p className="caption-sm leading-relaxed" style={{ color: '#92400E', opacity: 0.8 }}>
               IPOReady is a technology platform designed to help companies track and manage their IPO readiness workflow. It is not a replacement for — and does not constitute — legal counsel, audit or assurance services, securities advice, exchange advisory services, SEC, OSC, SEDAR/EDGAR filing services, or any other regulated professional or regulatory services required to complete a public listing. All users must engage qualified legal counsel, auditors, underwriters, and applicable regulatory advisors independently. Nothing on this platform constitutes a solicitation, recommendation, or offer to buy or sell securities. Subscription fees cover access to the technology platform only.
             </p>
           </div>
@@ -684,7 +684,7 @@ export default function PricingPage() {
                     IPO<span style={{ color: '#E8312A' }}>Ready</span>
                   </span>
                 </Link>
-                <p className="text-text-muted text-sm leading-relaxed" style={{ marginBottom: '1.25rem', maxWidth: '260px' }}>
+                <p className="text-text-muted body-sm leading-relaxed" style={{ marginBottom: '1.25rem', maxWidth: '260px' }}>
                   The world's first central hub for IPO readiness workflow management — from first board resolution to exchange approval.
                 </p>
                 {/* Social */}
@@ -713,7 +713,7 @@ export default function PricingPage() {
                 </div>
                 {/* auditus.ai */}
                 <a href="https://auditus.ai" target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors"
+                  className="inline-flex items-center gap-1.5 label-sm font-medium transition-colors"
                   style={{ color: '#717171' }}>
                   <Zap className="w-3 h-3" />
                   Powered by auditus.ai
@@ -723,7 +723,7 @@ export default function PricingPage() {
 
               {/* Product */}
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Product</p>
+                <p className="label-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Product</p>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                   {[
                     { label: 'IPO Checklist',     href: '/checklist' },
@@ -736,7 +736,7 @@ export default function PricingPage() {
                   ].map(({ label, href }) => (
                     <li key={label}>
                       <Link href={href}
-                        className="text-sm text-text-muted transition-colors hover:text-nav">
+                        className="body-sm text-text-muted transition-colors hover:text-nav">
                         {label}
                       </Link>
                     </li>
@@ -746,7 +746,7 @@ export default function PricingPage() {
 
               {/* Company */}
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Company</p>
+                <p className="label-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Company</p>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                   {[
                     { label: 'Pricing',          href: '/pricing' },
@@ -759,7 +759,7 @@ export default function PricingPage() {
                   ].map(({ label, href }) => (
                     <li key={label}>
                       <Link href={href}
-                        className="text-sm text-text-muted transition-colors hover:text-nav">
+                        className="body-sm text-text-muted transition-colors hover:text-nav">
                         {label}
                       </Link>
                     </li>
@@ -769,21 +769,21 @@ export default function PricingPage() {
 
               {/* Exchanges */}
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Exchanges</p>
+                <p className="label-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Exchanges</p>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                   {[
                     'TSX', 'TSXV', 'CSE', 'NASDAQ', 'NYSE', 'OTC Markets', 'Cboe Canada',
                   ].map(ex => (
                     <li key={ex}>
-                      <span className="text-sm text-text-muted">{ex}</span>
+                      <span className="body-sm text-text-muted">{ex}</span>
                     </li>
                   ))}
                 </ul>
                 <div style={{ marginTop: '1.5rem' }}>
-                  <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Listing Types</p>
+                  <p className="label-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Listing Types</p>
                   <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                     {['IPO', 'Direct Listing', 'RTO', 'SPAC', 'Regulation A+'].map(t => (
-                      <li key={t}><span className="text-sm text-text-muted">{t}</span></li>
+                      <li key={t}><span className="body-sm text-text-muted">{t}</span></li>
                     ))}
                   </ul>
                 </div>
@@ -791,7 +791,7 @@ export default function PricingPage() {
 
               {/* Legal & Support */}
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Legal</p>
+                <p className="label-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Legal</p>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                   {[
                     { label: 'Privacy Policy',   href: '/privacy' },
@@ -801,14 +801,14 @@ export default function PricingPage() {
                   ].map(({ label, href }) => (
                     <li key={label}>
                       <Link href={href}
-                        className="text-sm text-text-muted transition-colors hover:text-nav">
+                        className="body-sm text-text-muted transition-colors hover:text-nav">
                         {label}
                       </Link>
                     </li>
                   ))}
                 </ul>
                 <div style={{ marginTop: '1.5rem' }}>
-                  <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Support</p>
+                  <p className="label-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Support</p>
                   <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                     {[
                       { label: 'Contact Us',    href: 'mailto:hello@ipoready.com' },
@@ -817,7 +817,7 @@ export default function PricingPage() {
                     ].map(({ label, href }) => (
                       <li key={label}>
                         <a href={href}
-                          className="text-sm text-text-muted transition-colors hover:text-nav">
+                          className="body-sm text-text-muted transition-colors hover:text-nav">
                           {label}
                         </a>
                       </li>
@@ -832,16 +832,16 @@ export default function PricingPage() {
           <div style={{ borderTop: '1px solid #E5E4E0', background: '#F7F6F4' }}>
             <div className="max-w-7xl mx-auto" style={{ paddingTop: '1.25rem', paddingBottom: '1.25rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-                <p className="text-xs leading-relaxed text-text-light" style={{ maxWidth: '680px' }}>
+                <p className="caption-sm leading-relaxed text-text-light" style={{ maxWidth: '680px' }}>
                   <span className="font-semibold text-text-muted">Important:</span>{' '}
                   IPOReady is a workflow management and project tracking platform only. It does not provide legal, compliance, accounting, securities, or investment banking services, and does not act on your behalf in any regulatory or professional capacity.
                   All regulatory filings, legal opinions, and compliance determinations must be executed by licensed professionals. Nothing on this platform constitutes legal advice, financial advice, or an offer to buy or sell securities.
                 </p>
                 <div className="flex items-center gap-4 flex-shrink-0 self-end md:self-auto">
-                  <p className="text-xs text-text-light">© {new Date().getFullYear()} IPOReady. All rights reserved.</p>
+                  <p className="caption-sm text-text-light">© {new Date().getFullYear()} IPOReady. All rights reserved.</p>
                   <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: '#EFEFED', border: '1px solid #E5E4E0' }}>
                     {(['EN', 'FR'] as const).map(l => (
-                      <span key={l} className="text-xs px-2 py-0.5 rounded font-mono font-medium cursor-default"
+                      <span key={l} className="label-sm px-2 py-0.5 rounded font-mono font-medium cursor-default"
                         style={{ color: '#9A9A9A' }}>{l}</span>
                     ))}
                   </div>

@@ -157,7 +157,7 @@ export function CorporateResolutions() {
         <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Resolution Type</label>
+              <label className="block label font-medium text-slate-700 dark:text-slate-300 mb-2">Resolution Type</label>
               <select
                 {...register('resolution_type')}
                 className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
@@ -177,24 +177,24 @@ export function CorporateResolutions() {
             </div>
 
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Title</label>
+              <label className="block label font-medium text-slate-700 dark:text-slate-300 mb-2">Title</label>
               <input
                 {...register('title')}
                 className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
                 placeholder="e.g., Authorization for IPO Prospectus"
               />
-              {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
+              {errors.title && <p className="text-red-500 body-sm mt-1">{errors.title.message}</p>}
             </div>
 
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Content</label>
+              <label className="block label font-medium text-slate-700 dark:text-slate-300 mb-2">Content</label>
               <textarea
                 {...register('content')}
                 rows={6}
                 className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
                 placeholder="Enter resolution text..."
               />
-              {errors.content && <p className="text-red-500 text-sm mt-1">{errors.content.message}</p>}
+              {errors.content && <p className="text-red-500 body-sm mt-1">{errors.content.message}</p>}
             </div>
           </div>
 
@@ -245,14 +245,14 @@ export function CorporateResolutions() {
             <tbody>
               {resolutions.map(res => (
                 <tr key={res.id} className="border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400 text-sm">{res.resolution_type}</td>
+                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400 body-sm">{res.resolution_type}</td>
                   <td className="py-3 px-4 text-slate-900 dark:text-white font-medium">{res.title}</td>
                   <td className="py-3 px-4">
                     <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${STATUS_COLORS[res.status]}`}>
                       {res.status}
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400 text-sm">
+                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400 body-sm">
                     {new Date(res.created_at).toLocaleDateString()}
                   </td>
                 </tr>

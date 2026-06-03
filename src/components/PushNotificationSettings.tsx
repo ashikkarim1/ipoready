@@ -37,7 +37,7 @@ export function PushNotificationSettings() {
             <h3 className="font-semibold text-yellow-900 dark:text-yellow-200">
               Push Notifications Not Supported
             </h3>
-            <p className="mt-1 text-sm text-yellow-800 dark:text-yellow-300">
+            <p className="mt-1 body-sm text-yellow-800 dark:text-yellow-300">
               Your browser doesn't support web push notifications. Please use a modern browser like Chrome, Firefox, or Safari.
             </p>
           </div>
@@ -71,10 +71,10 @@ export function PushNotificationSettings() {
           </div>
 
           <div className="flex-1 min-w-0">
-            <h3 className="text-base font-semibold text-slate-900 dark:text-white">
+            <h3 className="body font-semibold text-slate-900 dark:text-white">
               Push Notifications
             </h3>
-            <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+            <p className="mt-1 body-sm text-slate-600 dark:text-slate-400">
               {permission === 'denied'
                 ? 'Notifications are blocked for this site. Please enable them in your browser settings.'
                 : isSubscribed
@@ -83,14 +83,14 @@ export function PushNotificationSettings() {
             </p>
 
             {error && (
-              <div className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-2">
+              <div className="mt-2 body-sm text-red-600 dark:text-red-400 flex items-center gap-2">
                 <AlertCircle className="h-4 w-4" />
                 {error}
               </div>
             )}
 
             {permission === 'denied' && (
-              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+              <p className="mt-2 caption-sm text-slate-500 dark:text-slate-400">
                 <button
                   onClick={() => {
                     if ('requestPermission' in Notification) {
@@ -108,7 +108,7 @@ export function PushNotificationSettings() {
 
         <div className="flex items-center gap-3 flex-shrink-0">
           {isSubscribed && (
-            <div className="flex items-center gap-1 text-sm text-green-600 dark:text-green-400">
+            <div className="flex items-center gap-1 body-sm text-green-600 dark:text-green-400">
               <CheckCircle2 className="h-4 w-4" />
               <span>Enabled</span>
             </div>
@@ -131,7 +131,7 @@ export function PushNotificationSettings() {
 
       {permission === 'default' && !isSubscribed && (
         <div className="mt-4 p-3 rounded bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
-          <p className="text-xs text-blue-900 dark:text-blue-200">
+          <p className="caption-sm text-blue-900 dark:text-blue-200">
             We respect your privacy. Notifications require your permission and can be disabled anytime.
           </p>
         </div>

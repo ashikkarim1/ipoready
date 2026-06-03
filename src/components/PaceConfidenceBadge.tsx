@@ -56,19 +56,19 @@ export function PaceConfidenceBadge({
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-xl">{current.icon}</span>
+            <span className="h4">{current.icon}</span>
             <span className={`px-3 py-1 rounded-full text-xs font-semibold ${current.badge}`}>
               {current.label}
             </span>
           </div>
 
-          <p className="text-sm text-gray-700 mb-3">{current.description}</p>
+          <p className="body-sm text-gray-700 mb-3">{current.description}</p>
 
           {/* Data Completeness Progress */}
           <div className="mb-3">
             <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-medium text-gray-600">Data Completeness</label>
-              <span className="text-xs font-semibold text-gray-900">{dataCompleteness}%</span>
+              <label className="label-sm font-medium text-gray-600">Data Completeness</label>
+              <span className="label-sm font-semibold text-gray-900">{dataCompleteness}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
               <motion.div
@@ -87,7 +87,7 @@ export function PaceConfidenceBadge({
           </div>
 
           {/* Contributing Factors */}
-          <div className="text-xs text-gray-600 space-y-1">
+          <div className="caption-sm text-gray-600 space-y-1">
             <div className="flex items-center gap-2">
               <span>✓</span>
               <span>Team readiness factors populated</span>
@@ -127,7 +127,7 @@ export function PaceConfidenceBadge({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="absolute right-12 top-0 w-64 bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg z-10 pointer-events-none"
+              className="absolute right-12 top-0 w-64 bg-gray-900 text-white caption-sm rounded-lg p-3 shadow-lg z-10 pointer-events-none"
             >
               {explanation}
               <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full w-0 h-0 border-4 border-transparent border-l-gray-900" />
@@ -137,7 +137,7 @@ export function PaceConfidenceBadge({
       </div>
 
       {/* Action Hint */}
-      <div className="mt-3 pt-3 border-t border-gray-200 text-xs text-gray-600">
+      <div className="mt-3 pt-3 border-t border-gray-200 caption-sm text-gray-600">
         {confidenceLevel === 'low' && (
           <span>💡 Complete team size, cash runway, and auditor selection to improve confidence</span>
         )}

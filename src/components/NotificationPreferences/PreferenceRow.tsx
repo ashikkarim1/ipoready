@@ -59,8 +59,8 @@ export function PreferenceRow({
       {/* Header with title and frequency dropdown */}
       <div className="flex items-start justify-between p-4" style={{ background: '#FAFAFA', borderBottom: '1px solid #F0EFED' }}>
         <div className="flex-1">
-          <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>{label}</p>
-          <p className="text-xs mt-1" style={{ color: '#9A9A9A' }}>{description}</p>
+          <p className="font-semibold body-sm" style={{ color: '#1A1A1A' }}>{label}</p>
+          <p className="caption-sm mt-1" style={{ color: '#9A9A9A' }}>{description}</p>
         </div>
 
         {/* Frequency Dropdown */}
@@ -68,7 +68,7 @@ export function PreferenceRow({
           <button
             onClick={() => setShowFrequencyDropdown(!showFrequencyDropdown)}
             disabled={onSaving}
-            className="px-3 py-2 rounded-lg text-xs font-medium border transition-all"
+            className="px-3 py-2 rounded-lg label-sm font-medium border transition-all"
             style={{
               borderColor: '#E5E4E0',
               background: '#FAFAFA',
@@ -101,8 +101,8 @@ export function PreferenceRow({
                     color: '#1A1A1A',
                   }}
                 >
-                  <p className="text-sm font-medium">{freqLabel}</p>
-                  <p className="text-xs" style={{ color: '#9A9A9A' }}>{desc}</p>
+                  <p className="label font-medium">{freqLabel}</p>
+                  <p className="caption-sm" style={{ color: '#9A9A9A' }}>{desc}</p>
                 </button>
               ))}
             </div>
@@ -134,7 +134,7 @@ export function PreferenceRow({
             }}
           >
             <Icon className="w-4 h-4" />
-            <span className="text-xs font-medium">{channelLabel}</span>
+            <span className="label-sm font-medium">{channelLabel}</span>
           </button>
         ))}
       </div>

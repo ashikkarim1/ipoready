@@ -170,26 +170,26 @@ export default function ResolutionDetailPage() {
       <div className="grid grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-6">
-            <p className="text-gray-500 text-sm">Approval Date</p>
-            <p className="text-lg font-semibold">{new Date(resolution.approval_date).toLocaleDateString()}</p>
+            <p className="text-gray-500 body-sm">Approval Date</p>
+            <p className="h4 font-semibold">{new Date(resolution.approval_date).toLocaleDateString()}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <p className="text-gray-500 text-sm">Board Members</p>
-            <p className="text-lg font-semibold">{resolution.board_members.length}</p>
+            <p className="text-gray-500 body-sm">Board Members</p>
+            <p className="h4 font-semibold">{resolution.board_members.length}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <p className="text-gray-500 text-sm">Approvals</p>
-            <p className="text-lg font-semibold">{resolution.approval_count} / {resolution.board_members.length}</p>
+            <p className="text-gray-500 body-sm">Approvals</p>
+            <p className="h4 font-semibold">{resolution.approval_count} / {resolution.board_members.length}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <p className="text-gray-500 text-sm">Status %</p>
-            <p className="text-lg font-semibold">{approvalPercentage}%</p>
+            <p className="text-gray-500 body-sm">Status %</p>
+            <p className="h4 font-semibold">{approvalPercentage}%</p>
           </CardContent>
         </Card>
       </div>
@@ -251,7 +251,7 @@ export default function ResolutionDetailPage() {
                       <div>
                         <p className="font-medium">{approval.board_member_name}</p>
                         {approval.approval_date && (
-                          <p className="text-sm text-gray-500">
+                          <p className="body-sm text-gray-500">
                             {approval.approval_status === 'approved' ? 'Approved' : 'Pending'} {' '}
                             {new Date(approval.approval_date).toLocaleDateString()}
                           </p>
@@ -279,27 +279,27 @@ export default function ResolutionDetailPage() {
             <CardContent className="space-y-6">
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <p className="text-gray-500 text-sm mb-1">Company Name</p>
+                  <p className="text-gray-500 body-sm mb-1">Company Name</p>
                   <p className="font-medium">{resolution.company_name}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm mb-1">Resolution Type</p>
+                  <p className="text-gray-500 body-sm mb-1">Resolution Type</p>
                   <p className="font-medium">{resolution.resolution_type.replace(/_/g, ' ').toUpperCase()}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm mb-1">Approval Date</p>
+                  <p className="text-gray-500 body-sm mb-1">Approval Date</p>
                   <p className="font-medium">{new Date(resolution.approval_date).toLocaleDateString()}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm mb-1">Current Status</p>
+                  <p className="text-gray-500 body-sm mb-1">Current Status</p>
                   <p className="font-medium capitalize">{resolution.status}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm mb-1">Created</p>
+                  <p className="text-gray-500 body-sm mb-1">Created</p>
                   <p className="font-medium">{new Date(resolution.created_at).toLocaleDateString()}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm mb-1">Last Updated</p>
+                  <p className="text-gray-500 body-sm mb-1">Last Updated</p>
                   <p className="font-medium">{new Date(resolution.updated_at).toLocaleDateString()}</p>
                 </div>
               </div>

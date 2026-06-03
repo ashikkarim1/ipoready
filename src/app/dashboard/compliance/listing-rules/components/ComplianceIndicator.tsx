@@ -94,7 +94,7 @@ export function ComplianceIndicator({ score, status, config }: ComplianceIndicat
               {score}
             </motion.div>
             <div
-              className="text-lg font-semibold mt-1"
+              className="h4 font-semibold mt-1"
               style={{ color: current.color }}
             >
               {current.icon}
@@ -114,19 +114,19 @@ export function ComplianceIndicator({ score, status, config }: ComplianceIndicat
 
         {/* Key Requirements Summary */}
         <div className="w-full bg-white rounded-lg p-4 space-y-3">
-          <div className="flex justify-between items-center text-sm">
+          <div className="flex justify-between items-center body-sm">
             <span className="text-gray-700 font-medium">Public Float Requirement</span>
             <span className="font-bold text-gray-900">{config.minPublicFloat}%</span>
           </div>
-          <div className="flex justify-between items-center text-sm">
+          <div className="flex justify-between items-center body-sm">
             <span className="text-gray-700 font-medium">Minimum Shares</span>
             <span className="font-bold text-gray-900">{config.minShares.toLocaleString()}</span>
           </div>
-          <div className="flex justify-between items-center text-sm">
+          <div className="flex justify-between items-center body-sm">
             <span className="text-gray-700 font-medium">Min Share Price</span>
             <span className="font-bold text-gray-900">${config.minSharePrice?.toFixed(2)}</span>
           </div>
-          <div className="flex justify-between items-center text-sm">
+          <div className="flex justify-between items-center body-sm">
             <span className="text-gray-700 font-medium">Audit Committee</span>
             <span className="font-bold text-gray-900">
               {config.requiresAuditCommittee ? 'Required' : 'Optional'}
@@ -178,7 +178,7 @@ export function ComplianceProgressBar({ current, required, label }: CompliancePr
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center">
-        <span className="text-sm font-semibold text-gray-700">{label}</span>
+        <span className="label font-semibold text-gray-700">{label}</span>
         <span className={`text-sm font-bold ${isComplete ? 'text-green-600' : 'text-orange-600'}`}>
           {current.toLocaleString()} / {required.toLocaleString()}
         </span>

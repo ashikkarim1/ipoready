@@ -141,7 +141,7 @@ export function ProspectusDocumentUpload({
               <Loader className="w-8 h-8 text-blue-500 animate-spin" />
               <div className="text-center">
                 <p className="font-medium text-gray-900">Extracting content...</p>
-                <p className="text-sm text-gray-600">
+                <p className="body-sm text-gray-600">
                   This may take a moment
                 </p>
               </div>
@@ -153,7 +153,7 @@ export function ProspectusDocumentUpload({
                 <p className="font-medium text-gray-900">
                   Drag documents here or click to browse
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="body-sm text-gray-600">
                   Supports PDF, DOCX, CSV, and TXT files
                 </p>
               </div>
@@ -168,7 +168,7 @@ export function ProspectusDocumentUpload({
           <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
           <div>
             <p className="font-medium text-red-900">Extraction failed</p>
-            <p className="text-sm text-red-700">{uploadError}</p>
+            <p className="body-sm text-red-700">{uploadError}</p>
           </div>
         </div>
       )}
@@ -182,7 +182,7 @@ export function ProspectusDocumentUpload({
             </h3>
             <button
               onClick={handleApplyExtractions}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md label font-medium hover:bg-blue-700"
             >
               Apply Extractions
             </button>
@@ -200,7 +200,7 @@ export function ProspectusDocumentUpload({
                   </h4>
                   <div className="flex items-center gap-2">
                     <div className="bg-blue-100 rounded-full px-3 py-1">
-                      <span className="text-sm font-medium text-blue-700">
+                      <span className="label font-medium text-blue-700">
                         {Math.round(section.confidence * 100)}%
                       </span>
                     </div>
@@ -210,11 +210,11 @@ export function ProspectusDocumentUpload({
                   </div>
                 </div>
 
-                <p className="text-sm text-gray-600 line-clamp-2">
+                <p className="body-sm text-gray-600 line-clamp-2">
                   {section.sourceContent}
                 </p>
 
-                <div className="mt-2 flex items-center gap-2 text-xs text-gray-500">
+                <div className="mt-2 flex items-center gap-2 caption-sm text-gray-500">
                   <span>
                     {section.endIndex - section.startIndex} characters
                   </span>
@@ -233,7 +233,7 @@ export function ProspectusDocumentUpload({
           </div>
 
           <div className="p-3 rounded-lg bg-blue-50 border border-blue-200">
-            <p className="text-sm text-blue-900">
+            <p className="body-sm text-blue-900">
               ℹ️ Review each extracted section. You can edit content directly in the
               editor after applying. High confidence matches (70%+) are more likely
               to be accurate.
@@ -246,7 +246,7 @@ export function ProspectusDocumentUpload({
       <div className="space-y-2">
         <h3 className="font-semibold text-gray-900">Document Library</h3>
         <div className="rounded-lg border border-gray-200 p-4 text-center text-gray-500">
-          <p className="text-sm">
+          <p className="body-sm">
             Previously uploaded documents will appear here
           </p>
         </div>

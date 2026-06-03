@@ -134,11 +134,11 @@ export function FeedbackDashboard() {
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-lg border border-gray-200">
-            <p className="text-sm text-gray-600">Total Feedback</p>
+            <p className="body-sm text-gray-600">Total Feedback</p>
             <p className="text-3xl font-bold text-gray-900 mt-1">{stats.totalFeedback}</p>
           </div>
           <div className="bg-white p-4 rounded-lg border border-gray-200">
-            <p className="text-sm text-gray-600">Average Rating</p>
+            <p className="body-sm text-gray-600">Average Rating</p>
             <div className="flex items-center gap-2 mt-1">
               <p className="text-3xl font-bold text-gray-900">{stats.averageRating}</p>
               <div className="flex gap-1">
@@ -153,21 +153,21 @@ export function FeedbackDashboard() {
             </div>
           </div>
           <div className="bg-white p-4 rounded-lg border border-gray-200">
-            <p className="text-sm text-gray-600">Sentiment</p>
+            <p className="body-sm text-gray-600">Sentiment</p>
             <div className="space-y-1 mt-2">
-              <p className="text-xs">Positive: {stats.sentimentBreakdown.positive}</p>
-              <p className="text-xs">Neutral: {stats.sentimentBreakdown.neutral}</p>
-              <p className="text-xs">Negative: {stats.sentimentBreakdown.negative}</p>
+              <p className="caption-sm">Positive: {stats.sentimentBreakdown.positive}</p>
+              <p className="caption-sm">Neutral: {stats.sentimentBreakdown.neutral}</p>
+              <p className="caption-sm">Negative: {stats.sentimentBreakdown.negative}</p>
             </div>
           </div>
           <div className="bg-white p-4 rounded-lg border border-gray-200">
-            <p className="text-sm text-gray-600">Top Confusion Points</p>
+            <p className="body-sm text-gray-600">Top Confusion Points</p>
             <div className="space-y-1 mt-2">
               {Object.entries(stats.topConfusionPoints)
                 .sort(([, a], [, b]) => b - a)
                 .slice(0, 3)
                 .map(([point, count]) => (
-                  <p key={point} className="text-xs">
+                  <p key={point} className="caption-sm">
                     {point}: {count}
                   </p>
                 ))}
@@ -183,7 +183,7 @@ export function FeedbackDashboard() {
           <select
             value={filters.status}
             onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-            className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            className="px-3 py-2 border border-gray-300 rounded-lg body-sm"
           >
             <option value="">All Statuses</option>
             <option value="new">New</option>
@@ -196,7 +196,7 @@ export function FeedbackDashboard() {
           <select
             value={filters.sentiment}
             onChange={(e) => setFilters({ ...filters, sentiment: e.target.value })}
-            className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            className="px-3 py-2 border border-gray-300 rounded-lg body-sm"
           >
             <option value="">All Sentiments</option>
             <option value="positive">Positive</option>
@@ -208,7 +208,7 @@ export function FeedbackDashboard() {
           <select
             value={filters.page}
             onChange={(e) => setFilters({ ...filters, page: e.target.value })}
-            className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            className="px-3 py-2 border border-gray-300 rounded-lg body-sm"
           >
             <option value="">All Pages</option>
             <option value="/dashboard">Dashboard</option>
@@ -219,7 +219,7 @@ export function FeedbackDashboard() {
           <select
             value={filters.limit}
             onChange={(e) => setFilters({ ...filters, limit: e.target.value })}
-            className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            className="px-3 py-2 border border-gray-300 rounded-lg body-sm"
           >
             <option value="25">25 per page</option>
             <option value="50">50 per page</option>
@@ -231,7 +231,7 @@ export function FeedbackDashboard() {
       {/* Feedback List */}
       <div className="space-y-3">
         {error && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">{error}</div>
+          <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 body-sm">{error}</div>
         )}
 
         {loading ? (
@@ -249,11 +249,11 @@ export function FeedbackDashboard() {
                     <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs border ${sentimentColor(item.sentiment)}`}>
                       {item.sentiment}
                     </span>
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs">
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full caption-sm">
                       {item.rating}/{5}⭐
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="body-sm text-gray-600 mt-1">
                     From {item.user_name || item.user_email || 'Unknown'} • {item.page}{item.task && ` • ${item.task}`}
                   </p>
                 </div>
@@ -266,13 +266,13 @@ export function FeedbackDashboard() {
               </div>
 
               {/* Content */}
-              <p className="text-gray-700 text-sm">{item.feedback_text}</p>
+              <p className="text-gray-700 body-sm">{item.feedback_text}</p>
 
               {/* Confusion Points */}
               {item.confusion_points && item.confusion_points.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {item.confusion_points.map((point, idx) => (
-                    <span key={idx} className="px-2 py-1 bg-orange-50 text-orange-700 rounded text-xs border border-orange-200">
+                    <span key={idx} className="px-2 py-1 bg-orange-50 text-orange-700 rounded caption-sm border border-orange-200">
                       {point}
                     </span>
                   ))}
@@ -284,7 +284,7 @@ export function FeedbackDashboard() {
                 <select
                   value={item.status}
                   onChange={(e) => handleStatusUpdate(item.id, e.target.value)}
-                  className="flex items-center gap-2 px-3 py-1 border border-gray-300 rounded-lg text-sm"
+                  className="flex items-center gap-2 px-3 py-1 border border-gray-300 rounded-lg body-sm"
                 >
                   <option value="new">New</option>
                   <option value="acknowledged">Acknowledged</option>
@@ -293,20 +293,20 @@ export function FeedbackDashboard() {
                   <option value="wontfix">Won't Fix</option>
                 </select>
 
-                <p className="text-xs text-gray-500">{new Date(item.created_at).toLocaleDateString()}</p>
+                <p className="caption-sm text-gray-500">{new Date(item.created_at).toLocaleDateString()}</p>
 
                 {deleteConfirm === item.id && (
                   <div className="flex items-center gap-2">
-                    <p className="text-sm text-red-700">Delete this feedback?</p>
+                    <p className="body-sm text-red-700">Delete this feedback?</p>
                     <button
                       onClick={() => handleDelete(item.id)}
-                      className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
+                      className="px-3 py-1 bg-red-600 text-white rounded body-sm hover:bg-red-700"
                     >
                       Yes
                     </button>
                     <button
                       onClick={() => setDeleteConfirm(null)}
-                      className="px-3 py-1 bg-gray-300 text-gray-700 rounded text-sm hover:bg-gray-400"
+                      className="px-3 py-1 bg-gray-300 text-gray-700 rounded body-sm hover:bg-gray-400"
                     >
                       No
                     </button>

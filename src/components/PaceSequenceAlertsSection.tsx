@@ -88,14 +88,14 @@ export function PaceSequenceAlertsSection({
     >
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold text-gray-900">Milestone Sequence Alerts</h3>
+          <h3 className="h4 font-semibold text-gray-900">Milestone Sequence Alerts</h3>
           {hasAlerts && (
-            <span className="px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm font-medium">
+            <span className="px-3 py-1 rounded-full bg-red-100 text-red-700 label font-medium">
               {errors.length} Critical, {warnings.length} Warning
             </span>
           )}
         </div>
-        <p className="text-sm text-gray-600">
+        <p className="body-sm text-gray-600">
           Ensure tasks follow optimal IPO sequence for {exchange}. Out-of-order milestones may delay your timeline.
         </p>
       </div>
@@ -104,7 +104,7 @@ export function PaceSequenceAlertsSection({
         <div className="text-center py-8">
           <div className="text-4xl mb-3">✓</div>
           <p className="text-gray-600 font-medium">All milestones in optimal sequence</p>
-          <p className="text-sm text-gray-500 mt-1">Your tasks are properly sequenced for IPO readiness</p>
+          <p className="body-sm text-gray-500 mt-1">Your tasks are properly sequenced for IPO readiness</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -115,7 +115,7 @@ export function PaceSequenceAlertsSection({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.9 }}
             >
-              <h4 className="text-sm font-semibold text-red-700 mb-3 flex items-center gap-2">
+              <h4 className="label font-semibold text-red-700 mb-3 flex items-center gap-2">
                 <span>🚨</span> Critical Issues ({errors.length})
               </h4>
               <div className="space-y-3">
@@ -128,7 +128,7 @@ export function PaceSequenceAlertsSection({
                     className={`rounded-lg border p-4 ${getSeverityColor(alert.severity)}`}
                   >
                     <div className="flex gap-3">
-                      <div className="text-xl mt-1">{getSeverityIcon(alert.severity)}</div>
+                      <div className="h4 mt-1">{getSeverityIcon(alert.severity)}</div>
                       <div className="flex-1">
                         <div className="flex items-start justify-between gap-2 mb-1">
                           <h5 className="font-medium text-gray-900">{alert.rule}</h5>
@@ -136,14 +136,14 @@ export function PaceSequenceAlertsSection({
                             {getSeverityLabel(alert.severity)}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-700 mb-2">{alert.description}</p>
+                        <p className="body-sm text-gray-700 mb-2">{alert.description}</p>
                         <div className="mb-3">
-                          <p className="text-xs font-semibold text-gray-600 mb-1">Remediation:</p>
-                          <p className="text-sm text-gray-700 italic">{alert.remediation}</p>
+                          <p className="label-sm font-semibold text-gray-600 mb-1">Remediation:</p>
+                          <p className="body-sm text-gray-700 italic">{alert.remediation}</p>
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {alert.tasksInvolved.map((task) => (
-                            <span key={task} className="px-2 py-1 rounded-full bg-white/50 text-xs text-gray-700 border border-red-200">
+                            <span key={task} className="px-2 py-1 rounded-full bg-white/50 caption-sm text-gray-700 border border-red-200">
                               {task}
                             </span>
                           ))}
@@ -163,7 +163,7 @@ export function PaceSequenceAlertsSection({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 1 }}
             >
-              <h4 className="text-sm font-semibold text-amber-700 mb-3 flex items-center gap-2">
+              <h4 className="label font-semibold text-amber-700 mb-3 flex items-center gap-2">
                 <span>⚡</span> Recommendations ({warnings.length})
               </h4>
               <div className="space-y-3">
@@ -176,7 +176,7 @@ export function PaceSequenceAlertsSection({
                     className={`rounded-lg border p-4 ${getSeverityColor(alert.severity)}`}
                   >
                     <div className="flex gap-3">
-                      <div className="text-xl mt-1">{getSeverityIcon(alert.severity)}</div>
+                      <div className="h4 mt-1">{getSeverityIcon(alert.severity)}</div>
                       <div className="flex-1">
                         <div className="flex items-start justify-between gap-2 mb-1">
                           <h5 className="font-medium text-gray-900">{alert.rule}</h5>
@@ -184,14 +184,14 @@ export function PaceSequenceAlertsSection({
                             {getSeverityLabel(alert.severity)}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-700 mb-2">{alert.description}</p>
+                        <p className="body-sm text-gray-700 mb-2">{alert.description}</p>
                         <div className="mb-3">
-                          <p className="text-xs font-semibold text-gray-600 mb-1">Recommended Action:</p>
-                          <p className="text-sm text-gray-700 italic">{alert.remediation}</p>
+                          <p className="label-sm font-semibold text-gray-600 mb-1">Recommended Action:</p>
+                          <p className="body-sm text-gray-700 italic">{alert.remediation}</p>
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {alert.tasksInvolved.map((task) => (
-                            <span key={task} className="px-2 py-1 rounded-full bg-white/50 text-xs text-gray-700 border border-amber-200">
+                            <span key={task} className="px-2 py-1 rounded-full bg-white/50 caption-sm text-gray-700 border border-amber-200">
                               {task}
                             </span>
                           ))}
@@ -207,7 +207,7 @@ export function PaceSequenceAlertsSection({
       )}
 
       <div className="mt-6 p-4 rounded-lg bg-blue-50 border border-blue-200">
-        <p className="text-sm text-blue-900">
+        <p className="body-sm text-blue-900">
           <span className="font-semibold">Info:</span> IPO sequencing rules are exchange-specific. These are optimized for {exchange}. Contact your advisor for custom guidance.
         </p>
       </div>

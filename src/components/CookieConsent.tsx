@@ -123,7 +123,7 @@ export function CookieConsent() {
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900 mb-2">Cookie Preferences</h3>
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="body-sm text-gray-600 mb-4">
                   We use cookies to enhance your experience. Essential cookies are always on. You can
                   choose to accept analytics and marketing cookies.{' '}
                   <a href="/privacy" target="_blank" className="text-blue-600 hover:underline">
@@ -158,7 +158,7 @@ export function CookieConsent() {
                     <label htmlFor="essential" className="font-medium text-gray-900 cursor-not-allowed">
                       Essential Cookies
                     </label>
-                    <p className="text-xs text-gray-600">
+                    <p className="caption-sm text-gray-600">
                       Required for authentication, security, and basic functionality. Always enabled.
                     </p>
                   </div>
@@ -179,7 +179,7 @@ export function CookieConsent() {
                     <label htmlFor="analytics" className="font-medium text-gray-900">
                       Analytics Cookies
                     </label>
-                    <p className="text-xs text-gray-600">
+                    <p className="caption-sm text-gray-600">
                       Help us understand how you use IPOReady to improve our service.
                     </p>
                   </div>
@@ -200,7 +200,7 @@ export function CookieConsent() {
                     <label htmlFor="marketing" className="font-medium text-gray-900">
                       Marketing Cookies
                     </label>
-                    <p className="text-xs text-gray-600">
+                    <p className="caption-sm text-gray-600">
                       Used to track marketing effectiveness and show relevant ads.
                     </p>
                   </div>
@@ -221,7 +221,7 @@ export function CookieConsent() {
                     <label htmlFor="preferences" className="font-medium text-gray-900">
                       Preference Cookies
                     </label>
-                    <p className="text-xs text-gray-600">
+                    <p className="caption-sm text-gray-600">
                       Remember your settings like theme, language, and UI preferences.
                     </p>
                   </div>
@@ -236,19 +236,19 @@ export function CookieConsent() {
               <>
                 <button
                   onClick={handleRejectAll}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+                  className="px-4 py-2 label font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
                 >
                   Reject All
                 </button>
                 <button
                   onClick={() => setShowDetails(true)}
-                  className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100"
+                  className="px-4 py-2 label font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100"
                 >
                   Customize
                 </button>
                 <button
                   onClick={handleAcceptAll}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                  className="px-4 py-2 label font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
                 >
                   Accept All
                 </button>
@@ -257,19 +257,19 @@ export function CookieConsent() {
               <>
                 <button
                   onClick={handleRejectAll}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+                  className="px-4 py-2 label font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
                 >
                   Reject All
                 </button>
                 <button
                   onClick={handleSavePreferences}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                  className="px-4 py-2 label font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
                 >
                   Save Preferences
                 </button>
                 <button
                   onClick={handleAcceptAll}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                  className="px-4 py-2 label font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
                 >
                   Accept All
                 </button>
@@ -280,7 +280,7 @@ export function CookieConsent() {
       </div>
 
       {/* Cookie Policy Link Footer */}
-      <div className="fixed bottom-0 right-0 p-2 text-xs text-gray-500 z-40">
+      <div className="fixed bottom-0 right-0 p-2 caption-sm text-gray-500 z-40">
         <a href="/privacy#11-cookies--tracking" className="hover:text-gray-700">
           Cookie Policy
         </a>

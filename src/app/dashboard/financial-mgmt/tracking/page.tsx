@@ -217,7 +217,7 @@ export default async function FinancialTrackingPage() {
             <p className="text-red-700 mb-4">
               We encountered an error loading your financial tracking dashboard. Please ensure you have set up IPO costs and financial tracking data.
             </p>
-            <p className="text-sm text-red-600">
+            <p className="body-sm text-red-600">
               Error details have been logged. Contact support if this issue persists.
             </p>
           </div>

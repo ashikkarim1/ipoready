@@ -188,10 +188,10 @@ export function PaceDocumentReadinessCard({
     >
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold text-gray-900">Document Readiness</h3>
-          <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-medium">{overallCompletion}% Complete</span>
+          <h3 className="h4 font-semibold text-gray-900">Document Readiness</h3>
+          <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 label font-medium">{overallCompletion}% Complete</span>
         </div>
-        <p className="text-sm text-gray-600">Track all required prospectus documents across phases</p>
+        <p className="body-sm text-gray-600">Track all required prospectus documents across phases</p>
         <div className="mt-3 w-full bg-gray-200 rounded-full h-2 overflow-hidden">
           <motion.div
             className="h-full bg-gradient-to-r from-blue-500 to-blue-600"
@@ -217,8 +217,8 @@ export function PaceDocumentReadinessCard({
             transition={{ duration: 0.3, delay: 1.15 }}
             className={`rounded-lg p-3 text-center ${stat.color}`}
           >
-            <div className="text-xl font-bold">{stat.count}</div>
-            <div className="text-xs font-medium">{stat.label}</div>
+            <div className="h4 font-bold">{stat.count}</div>
+            <div className="label-sm font-medium">{stat.label}</div>
           </motion.div>
         ))}
       </div>
@@ -238,14 +238,14 @@ export function PaceDocumentReadinessCard({
               <div className="flex items-start justify-between gap-3 mb-2">
                 <div className="flex-1">
                   <h5 className="font-medium text-gray-900">{doc.name}</h5>
-                  <p className="text-xs text-gray-600">{doc.phase}</p>
+                  <p className="caption-sm text-gray-600">{doc.phase}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-1 rounded text-xs font-medium ${badge.bg} ${badge.text}`}>
                     {badge.label}
                   </span>
                   {doc.refreshNeeded && (
-                    <span className="px-2 py-1 rounded text-xs font-medium bg-orange-100 text-orange-700">
+                    <span className="px-2 py-1 rounded label-sm font-medium bg-orange-100 text-orange-700">
                       🔄 Refresh
                     </span>
                   )}
@@ -255,7 +255,7 @@ export function PaceDocumentReadinessCard({
               <div className="flex items-end gap-3">
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-medium text-gray-600">{doc.completionPercent}%</span>
+                    <span className="label-sm font-medium text-gray-600">{doc.completionPercent}%</span>
                   </div>
                   <div className="w-full bg-gray-300/50 rounded-full h-1.5 overflow-hidden">
                     <motion.div
@@ -275,7 +275,7 @@ export function PaceDocumentReadinessCard({
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs text-gray-600">
+                  <p className="caption-sm text-gray-600">
                     {doc.lastUpdated ? `Updated ${formatDate(doc.lastUpdated)}` : 'Not started'}
                   </p>
                 </div>
@@ -286,7 +286,7 @@ export function PaceDocumentReadinessCard({
       </div>
 
       <div className="mt-6 p-4 rounded-lg bg-amber-50 border border-amber-200">
-        <p className="text-sm text-amber-900">
+        <p className="body-sm text-amber-900">
           <span className="font-semibold">⚠️ Action Needed:</span> {needsRefresh} documents need updates (last modified {'>'}30 days ago). Review and update to ensure prospectus accuracy.
         </p>
       </div>

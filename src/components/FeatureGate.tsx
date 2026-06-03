@@ -168,13 +168,13 @@ const DefaultUpgradePrompt = ({ feature, suggestedTier }: DefaultUpgradePromptPr
         </div>
         <div className="flex-1">
           <h3 className="font-semibold text-amber-900">Feature Not Available</h3>
-          <p className="mt-1 text-sm text-amber-800">
+          <p className="mt-1 body-sm text-amber-800">
             <strong>{featureLabel}</strong> is available in the{' '}
             <strong>{tierLabels[suggestedTier]}</strong> plan and above.
           </p>
           <a
             href={`/app/checkout?upgrade_to=${suggestedTier}`}
-            className="mt-3 inline-flex items-center gap-2 rounded-md bg-amber-600 px-3 py-2 text-sm font-medium text-white hover:bg-amber-700 transition-colors"
+            className="mt-3 inline-flex items-center gap-2 rounded-md bg-amber-600 px-3 py-2 label font-medium text-white hover:bg-amber-700 transition-colors"
           >
             Upgrade Now
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

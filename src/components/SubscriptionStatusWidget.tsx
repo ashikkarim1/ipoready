@@ -51,19 +51,19 @@ export function SubscriptionStatusWidget({
               {plan.charAt(0).toUpperCase() + plan.slice(1)} Plan
             </span>
             {isTrialing && (
-              <span className="px-2 py-1 bg-amber-100 text-amber-800 text-xs font-medium rounded">
+              <span className="px-2 py-1 bg-amber-100 text-amber-800 label-sm font-medium rounded">
                 Trial
               </span>
             )}
             {isPastDue && (
-              <span className="px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded">
+              <span className="px-2 py-1 bg-red-100 text-red-800 label-sm font-medium rounded">
                 Past Due
               </span>
             )}
           </div>
 
           {nextBillingDate && daysUntilBilling !== null && (
-            <p className="text-sm text-gray-600 mb-3">
+            <p className="body-sm text-gray-600 mb-3">
               {isTrialing
                 ? `Trial ends ${formatBillingDate(nextBillingDate)}`
                 : `Next billing: ${formatBillingDate(nextBillingDate)} (${daysUntilBilling} days)`}
@@ -71,7 +71,7 @@ export function SubscriptionStatusWidget({
           )}
 
           {isPastDue && (
-            <p className="text-sm text-red-700 font-medium mb-3">
+            <p className="label text-red-700 font-medium mb-3">
               Your payment failed. Please update your payment method.
             </p>
           )}
@@ -79,7 +79,7 @@ export function SubscriptionStatusWidget({
 
         <button
           onClick={onManageClick}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors whitespace-nowrap"
+          className="px-4 py-2 bg-blue-600 text-white rounded-md label font-medium hover:bg-blue-700 transition-colors whitespace-nowrap"
         >
           Manage
         </button>

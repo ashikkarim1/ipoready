@@ -97,8 +97,8 @@ export function ScenarioSimulator({ currentCapTable, totalCurrentShares }: Simul
           <div className="flex flex-col items-center gap-4">
             <Lock className="w-12 h-12 text-slate-400" />
             <div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">Scenario Modeling Locked</h3>
-              <p className="text-sm text-slate-600 mb-4">{upgradeMessage}</p>
+              <h3 className="h4 font-bold text-slate-900 mb-2">Scenario Modeling Locked</h3>
+              <p className="body-sm text-slate-600 mb-4">{upgradeMessage}</p>
               <a
                 href="/pricing"
                 className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
@@ -113,7 +113,7 @@ export function ScenarioSimulator({ currentCapTable, totalCurrentShares }: Simul
         <div className="opacity-50 pointer-events-none space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block label font-medium text-slate-700 mb-2">
                 Future Valuation (USD)
               </label>
               <input
@@ -124,7 +124,7 @@ export function ScenarioSimulator({ currentCapTable, totalCurrentShares }: Simul
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block label font-medium text-slate-700 mb-2">
                 Amount Raised (USD)
               </label>
               <input
@@ -165,7 +165,7 @@ export function ScenarioSimulator({ currentCapTable, totalCurrentShares }: Simul
       <div className="space-y-6 mb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block label font-medium text-slate-700 mb-2">
               Future Valuation (USD) <span className="text-red-500">*</span>
             </label>
             <input
@@ -177,13 +177,13 @@ export function ScenarioSimulator({ currentCapTable, totalCurrentShares }: Simul
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="50000000"
             />
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="caption-sm text-slate-500 mt-1">
               ${(futureValuation / 1000000).toFixed(1)}M valuation
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block label font-medium text-slate-700 mb-2">
               Amount Raised (USD) <span className="text-red-500">*</span>
             </label>
             <input
@@ -195,7 +195,7 @@ export function ScenarioSimulator({ currentCapTable, totalCurrentShares }: Simul
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="10000000"
             />
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="caption-sm text-slate-500 mt-1">
               ${(amountRaised / 1000000).toFixed(1)}M raised
             </p>
           </div>
@@ -223,7 +223,7 @@ export function ScenarioSimulator({ currentCapTable, totalCurrentShares }: Simul
             <h3 className="font-bold text-slate-900 mb-4">Current vs. Simulated Ownership</h3>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full body-sm">
                 <thead>
                   <tr className="border-b-2 border-blue-300">
                     <th className="text-left py-2 px-3 font-semibold text-slate-900">Shareholder</th>
@@ -269,20 +269,20 @@ export function ScenarioSimulator({ currentCapTable, totalCurrentShares }: Simul
           {/* Summary Stats */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4 bg-white rounded-lg border border-blue-200">
             <div>
-              <p className="text-xs text-slate-600 uppercase mb-1">New Shares Issued</p>
-              <p className="text-lg font-bold text-slate-900">
+              <p className="caption-sm text-slate-600 uppercase mb-1">New Shares Issued</p>
+              <p className="h4 font-bold text-slate-900">
                 {(simulationResults.newShares / 1000000).toFixed(2)}M
               </p>
             </div>
             <div>
-              <p className="text-xs text-slate-600 uppercase mb-1">New Total</p>
-              <p className="text-lg font-bold text-slate-900">
+              <p className="caption-sm text-slate-600 uppercase mb-1">New Total</p>
+              <p className="h4 font-bold text-slate-900">
                 {(simulationResults.newTotalShares / 1000000).toFixed(2)}M
               </p>
             </div>
             <div>
-              <p className="text-xs text-slate-600 uppercase mb-1">Avg Dilution</p>
-              <p className="text-lg font-bold text-slate-900">
+              <p className="caption-sm text-slate-600 uppercase mb-1">Avg Dilution</p>
+              <p className="h4 font-bold text-slate-900">
                 {simulationResults.averageDilution.toFixed(2)}%
               </p>
             </div>
@@ -301,10 +301,10 @@ export function ScenarioSimulator({ currentCapTable, totalCurrentShares }: Simul
 
           {savedScenarios.length > 0 && (
             <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-sm font-semibold text-green-900 mb-2">Saved Scenarios ({savedScenarios.length})</p>
+              <p className="label font-semibold text-green-900 mb-2">Saved Scenarios ({savedScenarios.length})</p>
               <div className="space-y-1">
                 {savedScenarios.map((scenario, idx) => (
-                  <p key={idx} className="text-xs text-green-800">
+                  <p key={idx} className="caption-sm text-green-800">
                     {scenario.name} - {scenario.date}
                   </p>
                 ))}

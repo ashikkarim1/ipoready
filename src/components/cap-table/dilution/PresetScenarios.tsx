@@ -106,7 +106,7 @@ export default function PresetScenarios({
               <h3 className="font-bold text-slate-900">
                 {scenario.scenarioName}
               </h3>
-              <p className="text-xs text-slate-600">{description}</p>
+              <p className="caption-sm text-slate-600">{description}</p>
             </div>
           </div>
         </div>
@@ -114,22 +114,22 @@ export default function PresetScenarios({
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <p className="text-xs text-slate-600">Dilution Rate</p>
-              <p className="text-lg font-bold text-slate-900">
+              <p className="caption-sm text-slate-600">Dilution Rate</p>
+              <p className="h4 font-bold text-slate-900">
                 {dilutionRate}%
               </p>
             </div>
             <div>
-              <p className="text-xs text-slate-600">Avg Shareholder Dilution</p>
-              <p className="text-lg font-bold text-slate-900">
+              <p className="caption-sm text-slate-600">Avg Shareholder Dilution</p>
+              <p className="h4 font-bold text-slate-900">
                 {avgDilution}%
               </p>
             </div>
           </div>
 
           <div>
-            <p className="text-xs text-slate-600 mb-2">Key Assumptions</p>
-            <div className="space-y-1 text-xs text-slate-700 bg-white bg-opacity-50 rounded p-2">
+            <p className="caption-sm text-slate-600 mb-2">Key Assumptions</p>
+            <div className="space-y-1 caption-sm text-slate-700 bg-white bg-opacity-50 rounded p-2">
               {!!scenario.assumptions.warrantsExercisedPercent && (
                 <p>
                   Warrants: {String(scenario.assumptions.warrantsExercisedPercent)}%
@@ -149,7 +149,7 @@ export default function PresetScenarios({
           </div>
         </div>
 
-        <button className="w-full mt-4 px-4 py-2 bg-white text-slate-900 rounded font-medium text-sm hover:bg-slate-50 transition">
+        <button className="w-full mt-4 px-4 py-2 bg-white text-slate-900 rounded font-medium body-sm hover:bg-slate-50 transition">
           View Details
         </button>
       </motion.div>

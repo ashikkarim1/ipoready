@@ -60,9 +60,9 @@ export function QuietHoursSettings({
       <div className="px-4 py-4" style={{ background: '#FAFAFA', borderBottom: '1px solid #F0EFED' }}>
         <div className="flex items-center gap-2 mb-1">
           <Clock className="w-4 h-4" style={{ color: '#9A9A9A' }} />
-          <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Do Not Disturb Hours</p>
+          <p className="font-semibold body-sm" style={{ color: '#1A1A1A' }}>Do Not Disturb Hours</p>
         </div>
-        <p className="text-xs mt-1" style={{ color: '#9A9A9A' }}>
+        <p className="caption-sm mt-1" style={{ color: '#9A9A9A' }}>
           No real-time notifications during these hours
         </p>
       </div>
@@ -71,14 +71,14 @@ export function QuietHoursSettings({
       <div className="p-4 space-y-4">
         {/* Timezone Selector */}
         <div>
-          <label className="text-xs font-medium mb-2 block" style={{ color: '#717171' }}>
+          <label className="label-sm font-medium mb-2 block" style={{ color: '#717171' }}>
             Timezone
           </label>
           <div className="relative">
             <button
               onClick={() => setShowTimezoneDropdown(!showTimezoneDropdown)}
               disabled={isSaving}
-              className="w-full px-4 py-2.5 rounded-lg text-sm border text-left transition-all flex items-center justify-between"
+              className="w-full px-4 py-2.5 rounded-lg body-sm border text-left transition-all flex items-center justify-between"
               style={{
                 borderColor: '#E5E4E0',
                 background: '#FAFAFA',
@@ -121,8 +121,8 @@ export function QuietHoursSettings({
                       color: '#1A1A1A',
                     }}
                   >
-                    <p className="text-sm font-medium">{tz.name}</p>
-                    <p className="text-xs" style={{ color: '#9A9A9A' }}>{tz.code}</p>
+                    <p className="label font-medium">{tz.name}</p>
+                    <p className="caption-sm" style={{ color: '#9A9A9A' }}>{tz.code}</p>
                   </button>
                 ))}
               </div>
@@ -133,7 +133,7 @@ export function QuietHoursSettings({
         {/* Time Range */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-medium mb-2 block" style={{ color: '#717171' }}>
+            <label className="label-sm font-medium mb-2 block" style={{ color: '#717171' }}>
               Start Time
             </label>
             <input
@@ -141,7 +141,7 @@ export function QuietHoursSettings({
               value={settings.doNotDisturbStart}
               onChange={e => handleTimeChange('doNotDisturbStart', e.target.value)}
               disabled={isSaving}
-              className="w-full px-4 py-2.5 rounded-lg text-sm border outline-none transition-all"
+              className="w-full px-4 py-2.5 rounded-lg body-sm border outline-none transition-all"
               style={{
                 borderColor: '#E5E4E0',
                 background: '#FAFAFA',
@@ -153,7 +153,7 @@ export function QuietHoursSettings({
           </div>
 
           <div>
-            <label className="text-xs font-medium mb-2 block" style={{ color: '#717171' }}>
+            <label className="label-sm font-medium mb-2 block" style={{ color: '#717171' }}>
               End Time
             </label>
             <input
@@ -161,7 +161,7 @@ export function QuietHoursSettings({
               value={settings.doNotDisturbEnd}
               onChange={e => handleTimeChange('doNotDisturbEnd', e.target.value)}
               disabled={isSaving}
-              className="w-full px-4 py-2.5 rounded-lg text-sm border outline-none transition-all"
+              className="w-full px-4 py-2.5 rounded-lg body-sm border outline-none transition-all"
               style={{
                 borderColor: '#E5E4E0',
                 background: '#FAFAFA',
@@ -175,7 +175,7 @@ export function QuietHoursSettings({
 
         {/* Info */}
         <div
-          className="p-3 rounded-lg text-xs"
+          className="p-3 rounded-lg caption-sm"
           style={{
             background: '#F7F6F4',
             color: '#717171',

@@ -151,7 +151,7 @@ export function DilutionScenariosAnalysis() {
 
       {/* Preset Scenarios */}
       <div className="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Quick Scenarios</h2>
+        <h2 className="h4 font-bold text-slate-900 dark:text-white mb-4">Quick Scenarios</h2>
         <div className="grid grid-cols-3 gap-4">
           {Object.entries(PRESET_SCENARIOS).map(([key, preset]) => (
             <button
@@ -164,7 +164,7 @@ export function DilutionScenariosAnalysis() {
               }`}
             >
               <p className="font-semibold text-slate-900 dark:text-white">{preset.label}</p>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">
+              <p className="caption-sm text-slate-600 dark:text-slate-400 mt-2">
                 {(
                   (preset.warrant_exercise_shares +
                     preset.new_financing_shares +
@@ -182,7 +182,7 @@ export function DilutionScenariosAnalysis() {
       <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-slate-800 rounded-lg p-8 shadow-sm border border-slate-200 dark:border-slate-700 space-y-6">
         <div className="grid grid-cols-3 gap-6">
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            <label className="block label font-medium text-slate-700 dark:text-slate-300 mb-2">
               Warrant Exercise Shares
             </label>
             <input
@@ -191,11 +191,11 @@ export function DilutionScenariosAnalysis() {
               className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
               placeholder="5000000"
             />
-            {errors.warrant_exercise_shares && <p className="text-red-500 text-sm mt-1">{errors.warrant_exercise_shares.message}</p>}
+            {errors.warrant_exercise_shares && <p className="text-red-500 body-sm mt-1">{errors.warrant_exercise_shares.message}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            <label className="block label font-medium text-slate-700 dark:text-slate-300 mb-2">
               New Financing Shares
             </label>
             <input
@@ -204,11 +204,11 @@ export function DilutionScenariosAnalysis() {
               className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
               placeholder="8000000"
             />
-            {errors.new_financing_shares && <p className="text-red-500 text-sm mt-1">{errors.new_financing_shares.message}</p>}
+            {errors.new_financing_shares && <p className="text-red-500 body-sm mt-1">{errors.new_financing_shares.message}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            <label className="block label font-medium text-slate-700 dark:text-slate-300 mb-2">
               Employee Vesting Shares
             </label>
             <input
@@ -217,7 +217,7 @@ export function DilutionScenariosAnalysis() {
               className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
               placeholder="2000000"
             />
-            {errors.employee_vesting_shares && <p className="text-red-500 text-sm mt-1">{errors.employee_vesting_shares.message}</p>}
+            {errors.employee_vesting_shares && <p className="text-red-500 body-sm mt-1">{errors.employee_vesting_shares.message}</p>}
           </div>
         </div>
 
@@ -243,22 +243,22 @@ export function DilutionScenariosAnalysis() {
           {/* Summary Cards */}
           <div className="grid grid-cols-3 gap-6">
             <div className="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Current Total Shares</p>
+              <p className="body-sm text-slate-600 dark:text-slate-400 mb-1">Current Total Shares</p>
               <p className="text-3xl font-bold text-slate-900 dark:text-white">{(result.currentTotalShares / 1000000).toFixed(1)}M</p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">New Shares</p>
+              <p className="body-sm text-slate-600 dark:text-slate-400 mb-1">New Shares</p>
               <p className="text-3xl font-bold text-slate-900 dark:text-white">{(result.newShares.total / 1000000).toFixed(1)}M</p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Post-IPO Total</p>
+              <p className="body-sm text-slate-600 dark:text-slate-400 mb-1">Post-IPO Total</p>
               <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{(result.postIPOTotalShares / 1000000).toFixed(1)}M</p>
             </div>
           </div>
 
           {/* Dilution Percentage */}
           <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-8 text-white">
-            <p className="text-lg opacity-90 mb-2">Total Dilution</p>
+            <p className="h4 opacity-90 mb-2">Total Dilution</p>
             <p className="text-5xl font-bold">{result.dilutionPercentage.toFixed(2)}%</p>
           </div>
 
@@ -266,7 +266,7 @@ export function DilutionScenariosAnalysis() {
           <div className="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-sm border border-slate-200 dark:border-slate-700">
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Ownership Impact</h2>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full body-sm">
                 <thead>
                   <tr className="border-b border-slate-200 dark:border-slate-700">
                     <th className="text-left py-3 px-4 font-semibold text-slate-700 dark:text-slate-300">Shareholder</th>

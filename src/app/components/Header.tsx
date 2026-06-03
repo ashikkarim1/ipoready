@@ -1,14 +1,21 @@
 'use client'
 
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import { Rocket, HelpCircle } from 'lucide-react'
 import { FeaturesMegaMenu } from './FeaturesMegaMenu'
 
 /**
  * Header component for public pages (pricing, resources, etc.)
  * Includes sticky positioning, proper z-index, and logo
+ * Only shown when user is NOT authenticated
  */
 export function Header() {
+  const { data: session } = useSession()
+  
+  // Don't show header on dashboard pages when authenticated
+  if (session) return null
+
   return (
     <header
       className="sticky top-0 w-full z-50 border-b border-gray-200 bg-white"

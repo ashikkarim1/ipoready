@@ -35,7 +35,7 @@ export function SequencingAlertsCard({ alerts }: SequencingAlertsCardProps) {
           <span className="text-2xl">✓</span>
           <div>
             <h3 className="font-semibold text-green-900">No Sequencing Issues</h3>
-            <p className="text-sm text-green-700">Your IPO workflow is on track</p>
+            <p className="body-sm text-green-700">Your IPO workflow is on track</p>
           </div>
         </div>
       </div>
@@ -48,8 +48,8 @@ export function SequencingAlertsCard({ alerts }: SequencingAlertsCardProps) {
   return (
     <div className="rounded-lg border border-gray-200 p-6 bg-white">
       <div className="mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Sequencing Alerts</h3>
-        <div className="flex gap-4 text-sm">
+        <h3 className="h4 font-semibold text-gray-900 mb-2">Sequencing Alerts</h3>
+        <div className="flex gap-4 body-sm">
           {errorCount > 0 && (
             <span className="text-red-700 font-medium">
               🔴 {errorCount} Critical {errorCount === 1 ? 'Issue' : 'Issues'}
@@ -97,7 +97,7 @@ export function SequencingAlertsCard({ alerts }: SequencingAlertsCardProps) {
 
               <button
                 onClick={() => toggleExpanded(alert.taskId)}
-                className="text-blue-600 hover:text-blue-700 font-medium text-sm whitespace-nowrap"
+                className="text-blue-600 hover:text-blue-700 font-medium body-sm whitespace-nowrap"
               >
                 {expandedAlerts.has(alert.taskId) ? 'Hide' : 'View Task'}
               </button>

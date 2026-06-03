@@ -233,7 +233,7 @@ export default function ContractsMapPage() {
             <h1 className="text-4xl font-bold text-slate-900 mb-2">
               Material Contracts Network
             </h1>
-            <p className="text-sm text-slate-600 max-w-2xl">
+            <p className="body-sm text-slate-600 max-w-2xl">
               Interactive visualization of your prospectus relationships. Click any document
               node to view details, upload, or manage. Missing required documents are highlighted
               in pulsing red.
@@ -243,15 +243,15 @@ export default function ContractsMapPage() {
             <div className="bg-red-50 border border-red-200 rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
                 <AlertCircle className="w-5 h-5 text-red-600" />
-                <p className="font-bold text-base text-red-900">Action Required</p>
+                <p className="font-bold body text-red-900">Action Required</p>
               </div>
-              <p className="text-xs font-semibold text-red-700">
+              <p className="label-sm font-semibold text-red-700">
                 {requiredMissing.length} required document{
                   requiredMissing.length > 1 ? 's' : ''
                 }{' '}
                 missing
               </p>
-              <p className="text-xs text-red-600 mt-1">{riskAssessment}</p>
+              <p className="caption-sm text-red-600 mt-1">{riskAssessment}</p>
             </div>
           )}
         </div>
@@ -277,10 +277,10 @@ export default function ContractsMapPage() {
                   <div className="inline-block">
                     <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600"></div>
                   </div>
-                  <h3 className="mt-4 text-lg font-semibold text-gray-900">
+                  <h3 className="mt-4 h4 font-semibold text-gray-900">
                     Uploading Document
                   </h3>
-                  <p className="text-sm text-gray-600 mt-2">
+                  <p className="body-sm text-gray-600 mt-2">
                     {uploadingNode.name}
                   </p>
                 </>
@@ -302,13 +302,13 @@ export default function ContractsMapPage() {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="h4 font-semibold text-gray-900">
                     Upload Successful
                   </h3>
-                  <p className="text-sm text-gray-600 mt-2">
+                  <p className="body-sm text-gray-600 mt-2">
                     {uploadingNode.name} has been uploaded and saved.
                   </p>
-                  <p className="text-xs text-gray-500 mt-3">
+                  <p className="caption-sm text-gray-500 mt-3">
                     The graph will update automatically
                   </p>
                 </>

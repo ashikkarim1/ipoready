@@ -87,7 +87,7 @@ export function ListingRulesValidator() {
       <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-slate-800 rounded-lg p-8 shadow-sm border border-slate-200 dark:border-slate-700 space-y-6">
         <div className="grid grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Exchange</label>
+            <label className="block label font-medium text-slate-700 dark:text-slate-300 mb-2">Exchange</label>
             <select
               {...register('exchange')}
               className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
@@ -101,18 +101,18 @@ export function ListingRulesValidator() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Current Share Count</label>
+            <label className="block label font-medium text-slate-700 dark:text-slate-300 mb-2">Current Share Count</label>
             <input
               type="number"
               {...register('current_share_count')}
               className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
               placeholder="50000000"
             />
-            {errors.current_share_count && <p className="text-red-500 text-sm mt-1">{errors.current_share_count.message}</p>}
+            {errors.current_share_count && <p className="text-red-500 body-sm mt-1">{errors.current_share_count.message}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Public Float %</label>
+            <label className="block label font-medium text-slate-700 dark:text-slate-300 mb-2">Public Float %</label>
             <input
               type="number"
               step="0.1"
@@ -120,18 +120,18 @@ export function ListingRulesValidator() {
               className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
               placeholder="8.0"
             />
-            {errors.current_public_float_pct && <p className="text-red-500 text-sm mt-1">{errors.current_public_float_pct.message}</p>}
+            {errors.current_public_float_pct && <p className="text-red-500 body-sm mt-1">{errors.current_public_float_pct.message}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Board Lot Size</label>
+            <label className="block label font-medium text-slate-700 dark:text-slate-300 mb-2">Board Lot Size</label>
             <input
               type="number"
               {...register('current_board_lot_size')}
               className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white"
               placeholder="100"
             />
-            {errors.current_board_lot_size && <p className="text-red-500 text-sm mt-1">{errors.current_board_lot_size.message}</p>}
+            {errors.current_board_lot_size && <p className="text-red-500 body-sm mt-1">{errors.current_board_lot_size.message}</p>}
           </div>
         </div>
 
@@ -189,7 +189,7 @@ export function ListingRulesValidator() {
                       <p className={`font-semibold ${gap.status === 'met' ? 'text-green-900 dark:text-green-100' : 'text-red-900 dark:text-red-100'}`}>
                         {gap.requirement}
                       </p>
-                      <div className="mt-2 text-sm space-y-1">
+                      <div className="mt-2 body-sm space-y-1">
                         <p className={`${gap.status === 'met' ? 'text-green-800 dark:text-green-200' : 'text-red-800 dark:text-red-200'}`}>
                           Current: <span className="font-semibold">{gap.current.toLocaleString()}</span> | Required: <span className="font-semibold">{gap.required.toLocaleString()}</span>
                         </p>
@@ -216,7 +216,7 @@ export function ListingRulesValidator() {
               <ul className="space-y-2">
                 {result.next_steps.map((step, idx) => (
                   <li key={idx} className="flex items-start gap-3 text-slate-700 dark:text-slate-300">
-                    <span className="inline-block w-6 h-6 rounded-full bg-blue-600 dark:bg-blue-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="inline-block w-6 h-6 rounded-full bg-blue-600 dark:bg-blue-500 text-white label-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
                       {idx + 1}
                     </span>
                     {step}

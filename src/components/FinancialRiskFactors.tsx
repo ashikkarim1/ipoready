@@ -79,11 +79,11 @@ export function FinancialRiskFactors({
   return (
     <div className="rounded-lg border border-slate-200 bg-white p-6">
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+        <h3 className="h4 font-semibold text-slate-900 flex items-center gap-2">
           <AlertTriangle className="w-5 h-5 text-amber-500" />
           Risk Factor Analysis
         </h3>
-        <p className="text-sm text-slate-500 mt-1">
+        <p className="body-sm text-slate-500 mt-1">
           Financial risks that could impact IPO timeline and budget
         </p>
       </div>
@@ -92,59 +92,59 @@ export function FinancialRiskFactors({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="p-4 rounded-lg bg-red-50 border border-red-200">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-red-700">Critical Risks</span>
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-600 text-white text-xs font-bold">
+            <span className="label font-medium text-red-700">Critical Risks</span>
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-600 text-white label-xs font-bold">
               {criticalCount}
             </span>
           </div>
-          <p className="text-xs text-red-600">Requires immediate action</p>
+          <p className="caption-sm text-red-600">Requires immediate action</p>
         </div>
 
         <div className="p-4 rounded-lg bg-yellow-50 border border-yellow-200">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-yellow-700">Warnings</span>
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-600 text-white text-xs font-bold">
+            <span className="label font-medium text-yellow-700">Warnings</span>
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-600 text-white label-xs font-bold">
               {warningCount}
             </span>
           </div>
-          <p className="text-xs text-yellow-600">Monitor and prepare mitigation</p>
+          <p className="caption-sm text-yellow-600">Monitor and prepare mitigation</p>
         </div>
 
         <div className="p-4 rounded-lg bg-blue-50 border border-blue-200">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-blue-700">Total Exposure</span>
-            <span className="text-xs font-bold text-blue-900">{formatCurrency(totalRiskExposure)}</span>
+            <span className="label font-medium text-blue-700">Total Exposure</span>
+            <span className="label-xs font-bold text-blue-900">{formatCurrency(totalRiskExposure)}</span>
           </div>
-          <p className="text-xs text-blue-600">Financial risk at current pace</p>
+          <p className="caption-sm text-blue-600">Financial risk at current pace</p>
         </div>
       </div>
 
       {/* Delay Cost Calculation */}
       <div className="mb-6 p-4 rounded-lg bg-orange-50 border border-orange-200">
-        <h4 className="text-sm font-semibold text-orange-900 mb-3">Delay Cost Impact</h4>
-        <div className="grid grid-cols-3 gap-4 text-sm">
+        <h4 className="label font-semibold text-orange-900 mb-3">Delay Cost Impact</h4>
+        <div className="grid grid-cols-3 gap-4 body-sm">
           <div>
             <p className="text-orange-700 font-semibold">{formatCurrency(delayRiskPerDay)}</p>
-            <p className="text-xs text-orange-600">Cost per day of delay</p>
+            <p className="caption-sm text-orange-600">Cost per day of delay</p>
           </div>
           <div>
             <p className="text-orange-700 font-semibold">{estimatedDaysDelay} days</p>
-            <p className="text-xs text-orange-600">Estimated schedule delay</p>
+            <p className="caption-sm text-orange-600">Estimated schedule delay</p>
           </div>
           <div>
             <p className="text-orange-700 font-semibold">{formatCurrency(totalRiskExposure)}</p>
-            <p className="text-xs text-orange-600">Total exposure</p>
+            <p className="caption-sm text-orange-600">Total exposure</p>
           </div>
         </div>
       </div>
 
       {/* Individual Risk Factors */}
       <div className="space-y-3">
-        <h4 className="text-sm font-semibold text-slate-900 mb-4">Key Risk Factors</h4>
+        <h4 className="label font-semibold text-slate-900 mb-4">Key Risk Factors</h4>
         {risks.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-sm text-slate-500">No risk factors identified at this time</p>
-            <p className="text-xs text-slate-400 mt-1">Continue monitoring financial metrics</p>
+            <p className="body-sm text-slate-500">No risk factors identified at this time</p>
+            <p className="caption-sm text-slate-400 mt-1">Continue monitoring financial metrics</p>
           </div>
         ) : (
           risks.map((risk, index) => (
@@ -160,10 +160,10 @@ export function FinancialRiskFactors({
                       {risk.impact.charAt(0).toUpperCase() + risk.impact.slice(1)}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-700 mb-2">{risk.description}</p>
+                  <p className="body-sm text-gray-700 mb-2">{risk.description}</p>
                   <div className="flex items-center gap-2">
                     <DollarSign className="w-4 h-4 text-gray-600" />
-                    <span className="text-sm font-semibold text-gray-900">
+                    <span className="label font-semibold text-gray-900">
                       {formatCurrency(risk.value)} at risk
                     </span>
                   </div>
@@ -176,8 +176,8 @@ export function FinancialRiskFactors({
 
       {/* Mitigation Recommendations */}
       <div className="mt-6 p-4 rounded-lg bg-slate-50 border border-slate-200">
-        <h4 className="text-sm font-semibold text-slate-900 mb-2">Mitigation Steps</h4>
-        <ul className="text-sm text-slate-700 space-y-1 list-disc list-inside">
+        <h4 className="label font-semibold text-slate-900 mb-2">Mitigation Steps</h4>
+        <ul className="body-sm text-slate-700 space-y-1 list-disc list-inside">
           <li>Review budget allocations monthly and adjust forecasts</li>
           <li>Identify cost overruns early and implement corrective actions</li>
           <li>Maintain contingency reserve of 10-15% of total IPO budget</li>

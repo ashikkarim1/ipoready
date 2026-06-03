@@ -65,7 +65,7 @@ export const NotificationBadge = React.memo(function NotificationBadge({
               }}
             >
               <div
-                className="flex items-center justify-center w-full h-full rounded-full text-xs font-bold text-white"
+                className="flex items-center justify-center w-full h-full rounded-full label-xs font-bold text-white"
                 style={{ backgroundColor: '#E8312A' }}
               >
                 {displayCount}
@@ -96,7 +96,7 @@ export const NotificationBadge = React.memo(function NotificationBadge({
         <motion.span
           initial={{ opacity: 0, x: -4 }}
           animate={{ opacity: 1, x: 0 }}
-          className="ml-2 text-xs font-semibold text-gray-600 dark:text-gray-400"
+          className="ml-2 label-sm font-semibold text-gray-600 dark:text-gray-400"
         >
           {displayCount} new
         </motion.span>

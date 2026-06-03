@@ -126,7 +126,7 @@ function NavSectionHeader({ section, isExpanded, onToggle }: NavSectionHeaderPro
   if (!section.collapsible) {
     return (
       <div className="px-4 py-3 flex items-center justify-between">
-        <h3 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-secondary)' }}>
+        <h3 className="label-xs font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-secondary)' }}>
           {section.section}
         </h3>
       </div>
@@ -139,7 +139,7 @@ function NavSectionHeader({ section, isExpanded, onToggle }: NavSectionHeaderPro
       className="w-full px-4 py-3 flex items-center justify-between hover:bg-surface-light transition-colors"
       style={{ background: 'transparent' }}
     >
-      <h3 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-secondary)' }}>
+      <h3 className="label-xs font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-secondary)' }}>
         {section.section}
       </h3>
       <motion.div
@@ -176,7 +176,7 @@ function NavItemComponent({ item, isActive, hasDescription }: NavItemComponentPr
       >
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <IconComponent size={18} />
-          <span className="text-sm font-medium truncate">{item.label}</span>
+          <span className="label font-medium truncate">{item.label}</span>
           {item.badge && <BadgeChip badge={item.badge} />}
         </div>
         {hasDescription && (
@@ -339,7 +339,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <>
             {/* Logo Section */}
             <div className="px-6 py-6 border-b" style={{ borderColor: 'var(--color-border-light)' }}>
-              <h1 className="text-xl font-bold">IPOReady</h1>
+              <h1 className="h4 font-bold">IPOReady</h1>
             </div>
 
             {/* Navigation */}
@@ -347,13 +347,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
             {/* Footer */}
             <div className="p-4 border-t space-y-2" style={{ borderColor: 'var(--color-border-light)' }}>
-              <button className="w-full flex items-center gap-2 px-3 py-2 rounded text-sm hover:bg-surface-light transition-colors">
+              <button className="w-full flex items-center gap-2 px-3 py-2 rounded body-sm hover:bg-surface-light transition-colors">
                 <HelpCircle size={16} />
                 Help
               </button>
               <button
                 onClick={() => signOut({ redirect: true, callbackUrl: '/' })}
-                className="w-full flex items-center gap-2 px-3 py-2 rounded text-sm hover:bg-surface-light transition-colors text-error"
+                className="w-full flex items-center gap-2 px-3 py-2 rounded body-sm hover:bg-surface-light transition-colors text-error"
               >
                 <LogOut size={16} />
                 Sign out
@@ -381,7 +381,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             >
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
-            {company && <span className="text-sm font-medium hidden sm:inline">{typeof company === 'string' ? company : company.name}</span>}
+            {company && <span className="label font-medium hidden sm:inline">{typeof company === 'string' ? company : company.name}</span>}
           </div>
 
           {/* Right: Notifications + User Menu */}
@@ -414,18 +414,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 >
                   <div className="p-4 space-y-2 max-h-96 overflow-y-auto">
                     {dbNotifications.length === 0 ? (
-                      <p className="text-sm text-center text-text-tertiary py-4">No notifications</p>
+                      <p className="body-sm text-center text-text-tertiary py-4">No notifications</p>
                     ) : (
                       dbNotifications.map(notif => (
                         <div
                           key={notif.id}
-                          className="p-3 rounded text-sm hover:bg-bg-secondary transition-colors cursor-pointer"
+                          className="p-3 rounded body-sm hover:bg-bg-secondary transition-colors cursor-pointer"
                           style={{
                             background: notif.read ? 'transparent' : 'var(--color-bg-secondary)',
                           }}
                         >
                           <p className="font-medium">{notif.title}</p>
-                          <p className="text-xs text-text-tertiary">{notif.message}</p>
+                          <p className="caption-sm text-text-tertiary">{notif.message}</p>
                         </div>
                       ))
                     )}
@@ -440,7 +440,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               className="flex items-center gap-3 px-3 py-2 rounded hover:bg-surface-light transition-colors"
             >
               <div
-                className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
+                className="w-8 h-8 rounded-full flex items-center justify-center body-sm font-bold"
                 style={{
                   background: 'var(--color-accent)',
                   color: 'white',
@@ -449,8 +449,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 {getInitials(session?.user?.name)}
               </div>
               <div className="hidden sm:flex flex-col items-start">
-                <span className="text-sm font-medium">{session?.user?.name || 'User'}</span>
-                <span className="text-xs text-text-tertiary">{formatRole(session?.user?.role)}</span>
+                <span className="label font-medium">{session?.user?.name || 'User'}</span>
+                <span className="caption-sm text-text-tertiary">{formatRole(session?.user?.role)}</span>
               </div>
               <ChevronDown size={16} />
             </button>

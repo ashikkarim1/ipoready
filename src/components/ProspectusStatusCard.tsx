@@ -94,7 +94,7 @@ export function ProspectusStatusCard({ section }: ProspectusStatusCardProps) {
             <span className={`text-2xl ${getStatusColor()}`}>{getStatusIcon()}</span>
             <div>
               <h4 className="font-semibold text-gray-900">{section.name}</h4>
-              <p className="text-xs text-gray-600">
+              <p className="caption-sm text-gray-600">
                 Last updated: {getTimeAgoText(section.lastUpdated)}
               </p>
             </div>
@@ -115,10 +115,10 @@ export function ProspectusStatusCard({ section }: ProspectusStatusCardProps) {
       </div>
 
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-600">
+        <p className="body-sm text-gray-600">
           {section.status === 'not_started' ? 'Not started' : `${Math.round(section.completionPercent)}% complete`}
         </p>
-        <span className="text-xs font-medium text-gray-700">
+        <span className="label-sm font-medium text-gray-700">
           {section.status === 'final' ? 'Complete' : 'In progress'}
         </span>
       </div>

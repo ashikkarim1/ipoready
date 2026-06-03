@@ -22,7 +22,7 @@ export function ScenarioSelector({
 
   return (
     <div className="border border-gray-200 rounded-lg p-6 bg-white">
-      <h3 className="text-lg font-semibold mb-4">Scenario Analysis</h3>
+      <h3 className="h4 font-semibold mb-4">Scenario Analysis</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
         {availableScenarios.map(scenario => (
           <button
@@ -34,7 +34,7 @@ export function ScenarioSelector({
                 : 'border-gray-200 hover:border-gray-300'
             }`}
           >
-            <p className="font-medium text-sm">
+            <p className="font-medium body-sm">
               {scenarioLabels[scenario] || scenario}
             </p>
           </button>

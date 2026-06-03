@@ -35,7 +35,7 @@ export function FinancialMonthlyChart({
   if (!data || data.length === 0) {
     return (
       <div className="flex items-center justify-center w-full h-full min-h-[350px] bg-slate-50 rounded-lg border border-slate-200">
-        <p className="text-slate-500 text-sm">No data available</p>
+        <p className="text-slate-500 body-sm">No data available</p>
       </div>
     )
   }
@@ -58,16 +58,16 @@ export function FinancialMonthlyChart({
 
     return (
       <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-lg">
-        <p className="text-sm font-semibold text-gray-900">
+        <p className="label font-semibold text-gray-900">
           Month {props.payload[0]?.payload?.month}
         </p>
         {props.payload.map((entry: any, index: number) => (
-          <p key={index} className="text-sm" style={{ color: entry.color }}>
+          <p key={index} className="body-sm" style={{ color: entry.color }}>
             {entry.name}: {formatYAxis(entry.value)}
           </p>
         ))}
         {props.payload[0]?.payload?.variance_pct !== undefined && (
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="body-sm text-gray-600 mt-2">
             Variance: {props.payload[0].payload.variance_pct}%
           </p>
         )}
@@ -78,8 +78,8 @@ export function FinancialMonthlyChart({
   return (
     <div className="w-full rounded-lg border border-slate-200 bg-white p-6">
       <div className="mb-4">
-        <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
-        <p className="text-sm text-slate-500 mt-1">
+        <h3 className="h4 font-semibold text-slate-900">{title}</h3>
+        <p className="body-sm text-slate-500 mt-1">
           Budget allocation vs actual spending over time
         </p>
       </div>
@@ -137,7 +137,7 @@ export function FinancialMonthlyChart({
         </ComposedChart>
       </ResponsiveContainer>
 
-      <div className="mt-6 grid grid-cols-3 gap-4 text-center text-sm">
+      <div className="mt-6 grid grid-cols-3 gap-4 text-center body-sm">
         <div className="p-3 rounded-lg bg-blue-50">
           <p className="text-blue-700 font-semibold">Budget</p>
           <p className="text-blue-600">Planning</p>

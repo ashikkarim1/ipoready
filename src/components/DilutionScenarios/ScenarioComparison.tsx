@@ -35,12 +35,12 @@ export function ScenarioComparison({ scenarios, onSelectScenario }: ScenarioComp
       className="space-y-6 rounded-lg border border-gray-200 bg-white p-6"
     >
       <div>
-        <h2 className="text-xl font-bold text-gray-900">Scenario Comparison</h2>
-        <p className="mt-2 text-sm text-gray-600">Compare ownership percentages across scenarios</p>
+        <h2 className="h4 font-bold text-gray-900">Scenario Comparison</h2>
+        <p className="mt-2 body-sm text-gray-600">Compare ownership percentages across scenarios</p>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full body-sm">
           <thead>
             <tr className="border-b border-gray-200">
               <th className="px-4 py-3 text-left font-semibold text-gray-900">Shareholder</th>
@@ -51,7 +51,7 @@ export function ScenarioComparison({ scenarios, onSelectScenario }: ScenarioComp
                     className="flex flex-col items-center gap-1 transition-colors hover:text-blue-600"
                   >
                     <span>{scenario.scenarioName}</span>
-                    <span className="text-xs text-gray-600">Ownership %</span>
+                    <span className="caption-sm text-gray-600">Ownership %</span>
                   </button>
                 </th>
               ))}
@@ -78,7 +78,7 @@ export function ScenarioComparison({ scenarios, onSelectScenario }: ScenarioComp
                 <tr key={shareholder.id} className="border-b border-gray-100 transition-colors hover:bg-gray-50">
                   <td className="px-4 py-3">
                     <div className="font-medium text-gray-900">{shareholder.name}</div>
-                    <div className="text-xs text-gray-600">{shareholder.type}</div>
+                    <div className="caption-sm text-gray-600">{shareholder.type}</div>
                   </td>
                   {ownerships.map((ownership, idx) => (
                     <td key={idx} className="px-4 py-3 text-center">
@@ -114,7 +114,7 @@ export function ScenarioComparison({ scenarios, onSelectScenario }: ScenarioComp
           return (
             <div key={scenario.scenarioId} className="rounded-lg bg-gray-50 p-4">
               <h3 className="font-semibold text-gray-900">{scenario.scenarioName}</h3>
-              <div className="mt-3 space-y-2 text-sm">
+              <div className="mt-3 space-y-2 body-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Avg. Dilution:</span>
                   <span className="font-medium text-gray-900">{avgDilution.toFixed(2)}%</span>
@@ -139,7 +139,7 @@ function TrendIcon({ variance }: { variance: number }) {
   return variance > 2 ? (
     <div className="flex items-center gap-1">
       <ArrowUpRight className="h-4 w-4 text-orange-600" />
-      <span className="text-xs text-orange-600">High variance</span>
+      <span className="caption-sm text-orange-600">High variance</span>
     </div>
   ) : (
     <ArrowDownRight className="h-4 w-4 text-green-600" />

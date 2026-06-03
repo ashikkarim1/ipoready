@@ -360,7 +360,7 @@ specific transaction requirements.
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Agreement Type */}
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block label font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Agreement Type
                 </label>
                 <select
@@ -374,13 +374,13 @@ specific transaction requirements.
                   ))}
                 </select>
                 {errors.agreement_type && (
-                  <p className="text-red-600 text-sm mt-1">{errors.agreement_type.message}</p>
+                  <p className="text-red-600 body-sm mt-1">{errors.agreement_type.message}</p>
                 )}
               </div>
 
               {/* Agreement Name */}
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block label font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Template Name
                 </label>
                 <input
@@ -390,13 +390,13 @@ specific transaction requirements.
                   className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                 />
                 {errors.agreement_name && (
-                  <p className="text-red-600 text-sm mt-1">{errors.agreement_name.message}</p>
+                  <p className="text-red-600 body-sm mt-1">{errors.agreement_name.message}</p>
                 )}
               </div>
 
               {/* Lead Underwriter */}
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block label font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Lead Underwriter
                 </label>
                 <input
@@ -406,13 +406,13 @@ specific transaction requirements.
                   className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                 />
                 {errors.lead_underwriter && (
-                  <p className="text-red-600 text-sm mt-1">{errors.lead_underwriter.message}</p>
+                  <p className="text-red-600 body-sm mt-1">{errors.lead_underwriter.message}</p>
                 )}
               </div>
 
               {/* Member Count */}
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block label font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Syndicate Size (# Members)
                 </label>
                 <input
@@ -425,7 +425,7 @@ specific transaction requirements.
 
               {/* Gross Spread */}
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block label font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Gross Spread (basis points)
                 </label>
                 <input
@@ -439,7 +439,7 @@ specific transaction requirements.
 
               {/* Lockup Period */}
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block label font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Lockup Period (days)
                 </label>
                 <input
@@ -453,7 +453,7 @@ specific transaction requirements.
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+              <label className="block label font-semibold text-slate-700 dark:text-slate-300 mb-2">
                 Description
               </label>
               <textarea
@@ -466,16 +466,16 @@ specific transaction requirements.
 
             {/* Allocation Structure */}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+              <label className="block label font-semibold text-slate-700 dark:text-slate-300 mb-2">
                 Member Allocation Structure (JSON)
               </label>
               <textarea
                 {...register('allocation_structure')}
                 rows={5}
-                className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-mono text-sm"
+                className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-mono body-sm"
                 placeholder={'{\n  "Goldman Sachs": 4000,\n  "Morgan Stanley": 3000,\n  "JP Morgan": 2500\n}'}
               />
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">
+              <p className="caption-sm text-slate-600 dark:text-slate-400 mt-2">
                 Format: Member names as keys, basis points as values (e.g., 4000 = 40%)
               </p>
             </div>
@@ -517,7 +517,7 @@ specific transaction requirements.
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">{template.agreement_name}</h3>
+                  <h3 className="h4 font-bold text-slate-900 dark:text-white">{template.agreement_name}</h3>
                   <span
                     className={`inline-flex items-center px-2 py-1 rounded text-xs font-semibold ${
                       AGREEMENT_TYPES[template.agreement_type as keyof typeof AGREEMENT_TYPES]?.color
@@ -526,7 +526,7 @@ specific transaction requirements.
                     {AGREEMENT_TYPES[template.agreement_type as keyof typeof AGREEMENT_TYPES]?.label}
                   </span>
                 </div>
-                <p className="text-slate-600 dark:text-slate-400 text-sm">{template.description}</p>
+                <p className="text-slate-600 dark:text-slate-400 body-sm">{template.description}</p>
               </div>
               <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${STATUS_COLORS[template.status]}`}>
                 {template.status}
@@ -538,22 +538,22 @@ specific transaction requirements.
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-slate-400" />
                 <div>
-                  <p className="text-xs text-slate-600 dark:text-slate-400">Lead Underwriter</p>
-                  <p className="text-sm font-semibold text-slate-900 dark:text-white">{template.lead_underwriter}</p>
+                  <p className="caption-sm text-slate-600 dark:text-slate-400">Lead Underwriter</p>
+                  <p className="label font-semibold text-slate-900 dark:text-white">{template.lead_underwriter}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-slate-400" />
                 <div>
-                  <p className="text-xs text-slate-600 dark:text-slate-400">Syndicate Size</p>
-                  <p className="text-sm font-semibold text-slate-900 dark:text-white">{template.member_count}</p>
+                  <p className="caption-sm text-slate-600 dark:text-slate-400">Syndicate Size</p>
+                  <p className="label font-semibold text-slate-900 dark:text-white">{template.member_count}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4 text-slate-400" />
                 <div>
-                  <p className="text-xs text-slate-600 dark:text-slate-400">Gross Spread</p>
-                  <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                  <p className="caption-sm text-slate-600 dark:text-slate-400">Gross Spread</p>
+                  <p className="label font-semibold text-slate-900 dark:text-white">
                     {template.gross_spread_bps} bps
                   </p>
                 </div>
@@ -561,26 +561,26 @@ specific transaction requirements.
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-slate-400" />
                 <div>
-                  <p className="text-xs text-slate-600 dark:text-slate-400">Lockup Period</p>
-                  <p className="text-sm font-semibold text-slate-900 dark:text-white">{template.lockup_period_days}d</p>
+                  <p className="caption-sm text-slate-600 dark:text-slate-400">Lockup Period</p>
+                  <p className="label font-semibold text-slate-900 dark:text-white">{template.lockup_period_days}d</p>
                 </div>
               </div>
             </div>
 
             {/* Allocation Preview */}
             <div className="mb-6">
-              <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2">TOP MEMBERS:</p>
+              <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 mb-2">TOP MEMBERS:</p>
               <div className="space-y-1">
                 {Object.entries(template.allocation_structure)
                   .slice(0, 3)
                   .map(([member, alloc]) => (
-                    <div key={member} className="flex justify-between text-sm">
+                    <div key={member} className="flex justify-between body-sm">
                       <span className="text-slate-700 dark:text-slate-300">{member}</span>
                       <span className="font-semibold text-slate-900 dark:text-white">{alloc} bps</span>
                     </div>
                   ))}
                 {Object.entries(template.allocation_structure).length > 3 && (
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">
+                  <p className="caption-sm text-slate-600 dark:text-slate-400 mt-2">
                     +{Object.entries(template.allocation_structure).length - 3} more members
                   </p>
                 )}
@@ -588,7 +588,7 @@ specific transaction requirements.
             </div>
 
             {/* Version Info */}
-            <div className="text-xs text-slate-600 dark:text-slate-400 mb-6">
+            <div className="caption-sm text-slate-600 dark:text-slate-400 mb-6">
               <p>Version {template.version} • Updated {new Date(template.updated_at).toLocaleDateString()}</p>
             </div>
 
@@ -662,7 +662,7 @@ specific transaction requirements.
               </button>
             </div>
 
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 font-mono text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap overflow-auto max-h-[60vh]">
+            <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 font-mono body-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap overflow-auto max-h-[60vh]">
               {generateAgreementDocument(selectedTemplate)}
             </div>
 
@@ -708,12 +708,12 @@ specific transaction requirements.
                   <div key={version.id} className="border border-slate-200 dark:border-slate-700 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-semibold text-slate-900 dark:text-white">Version {version.version}</h3>
-                      <p className="text-xs text-slate-600 dark:text-slate-400">
+                      <p className="caption-sm text-slate-600 dark:text-slate-400">
                         {new Date(version.created_at).toLocaleDateString()}
                       </p>
                     </div>
-                    <p className="text-sm text-slate-700 dark:text-slate-300">By {version.created_by}</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">{version.changes}</p>
+                    <p className="body-sm text-slate-700 dark:text-slate-300">By {version.created_by}</p>
+                    <p className="body-sm text-slate-600 dark:text-slate-400 mt-2">{version.changes}</p>
                   </div>
                 ))
               ) : (

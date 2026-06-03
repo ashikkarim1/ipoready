@@ -217,8 +217,8 @@ function ConsentDetailsModal({ consent, onClose, onStatusChange }: ConsentDetail
           {/* Header */}
           <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">{consent.stakeholder}</h2>
-              <p className="text-sm text-gray-600 mt-1">{consent.consentType}</p>
+              <h2 className="h4 font-semibold text-gray-900">{consent.stakeholder}</h2>
+              <p className="body-sm text-gray-600 mt-1">{consent.consentType}</p>
             </div>
             <button
               onClick={onClose}
@@ -250,7 +250,7 @@ function ConsentDetailsModal({ consent, onClose, onStatusChange }: ConsentDetail
                       onStatusChange(consent.id, 'signed')
                       onClose()
                     }}
-                    className="flex-1 px-4 py-2 bg-green-50 text-green-600 hover:bg-green-100 rounded-lg transition-colors text-sm font-medium"
+                    className="flex-1 px-4 py-2 bg-green-50 text-green-600 hover:bg-green-100 rounded-lg transition-colors label font-medium"
                   >
                     <span className="flex items-center justify-center gap-2">
                       <CheckCircle2 className="w-4 h-4" />
@@ -264,7 +264,7 @@ function ConsentDetailsModal({ consent, onClose, onStatusChange }: ConsentDetail
                       onStatusChange(consent.id, 'rejected')
                       onClose()
                     }}
-                    className="flex-1 px-4 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors text-sm font-medium"
+                    className="flex-1 px-4 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors label font-medium"
                   >
                     <span className="flex items-center justify-center gap-2">
                       <XCircle className="w-4 h-4" />
@@ -278,22 +278,22 @@ function ConsentDetailsModal({ consent, onClose, onStatusChange }: ConsentDetail
             {/* Details Grid */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-600 mb-1">Entity Type</p>
+                <p className="body-sm text-gray-600 mb-1">Entity Type</p>
                 <p className="font-medium text-gray-900 flex items-center gap-2">
                   {getEntityIcon(consent.entityType)}
                   {getEntityLabel(consent.entityType)}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-600 mb-1">Created Date</p>
+                <p className="body-sm text-gray-600 mb-1">Created Date</p>
                 <p className="font-medium text-gray-900">{formatDate(consent.createdDate)}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600 mb-1">Deadline</p>
+                <p className="body-sm text-gray-600 mb-1">Deadline</p>
                 <p className="font-medium text-gray-900">{formatDate(consent.deadline)}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600 mb-1">Days Until Deadline</p>
+                <p className="body-sm text-gray-600 mb-1">Days Until Deadline</p>
                 <p className={`font-medium ${isExpiringSoon(consent.deadline) ? 'text-amber-600' : 'text-gray-900'}`}>
                   {getDaysUntilDeadline(consent.deadline)} days
                 </p>
@@ -310,7 +310,7 @@ function ConsentDetailsModal({ consent, onClose, onStatusChange }: ConsentDetail
                       <FileText className="w-5 h-5 text-gray-600" />
                       <div>
                         <p className="font-medium text-gray-900">Signed Document</p>
-                        <p className="text-xs text-gray-600 mt-1">Signed on {formatDate(consent.signatureDate || '')}</p>
+                        <p className="caption-sm text-gray-600 mt-1">Signed on {formatDate(consent.signatureDate || '')}</p>
                       </div>
                     </div>
                     <a
@@ -325,7 +325,7 @@ function ConsentDetailsModal({ consent, onClose, onStatusChange }: ConsentDetail
                   <div className="text-center py-8">
                     <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                     <p className="text-gray-600 mb-3">No document uploaded yet</p>
-                    <button className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+                    <button className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors label font-medium">
                       Upload Document
                     </button>
                   </div>
@@ -339,7 +339,7 @@ function ConsentDetailsModal({ consent, onClose, onStatusChange }: ConsentDetail
               <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                 <Signature className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                 <p className="text-gray-600 mb-4">DocuSign Integration (Placeholder)</p>
-                <p className="text-sm text-gray-500 mb-4">
+                <p className="body-sm text-gray-500 mb-4">
                   This space will integrate with DocuSign for secure e-signature capture. For now, signatures can be uploaded manually.
                 </p>
                 <button className="px-6 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors font-medium">
@@ -358,7 +358,7 @@ function ConsentDetailsModal({ consent, onClose, onStatusChange }: ConsentDetail
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">Consent request created</p>
-                    <p className="text-sm text-gray-600">{formatDate(consent.createdDate)}</p>
+                    <p className="body-sm text-gray-600">{formatDate(consent.createdDate)}</p>
                   </div>
                 </div>
                 {consent.signatureDate && (
@@ -368,7 +368,7 @@ function ConsentDetailsModal({ consent, onClose, onStatusChange }: ConsentDetail
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">Consent signed</p>
-                      <p className="text-sm text-gray-600">{formatDate(consent.signatureDate)}</p>
+                      <p className="body-sm text-gray-600">{formatDate(consent.signatureDate)}</p>
                     </div>
                   </div>
                 )}
@@ -417,7 +417,7 @@ function NewConsentForm({ onClose, onSubmit }: NewConsentFormProps) {
         >
           {/* Header */}
           <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-900">New Consent Request</h2>
+            <h2 className="h4 font-semibold text-gray-900">New Consent Request</h2>
             <button
               onClick={onClose}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -437,7 +437,7 @@ function NewConsentForm({ onClose, onSubmit }: NewConsentFormProps) {
           >
             {/* Stakeholder Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-900 mb-1">
+              <label className="block label font-medium text-gray-900 mb-1">
                 Stakeholder/Entity Name
               </label>
               <input
@@ -452,7 +452,7 @@ function NewConsentForm({ onClose, onSubmit }: NewConsentFormProps) {
 
             {/* Entity Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-900 mb-1">Entity Type</label>
+              <label className="block label font-medium text-gray-900 mb-1">Entity Type</label>
               <select
                 value={formData.entityType}
                 onChange={(e) => {
@@ -475,19 +475,19 @@ function NewConsentForm({ onClose, onSubmit }: NewConsentFormProps) {
 
             {/* Consent Type (Auto-filled) */}
             <div>
-              <label className="block text-sm font-medium text-gray-900 mb-1">Consent Type</label>
+              <label className="block label font-medium text-gray-900 mb-1">Consent Type</label>
               <input
                 type="text"
                 value={formData.consentType}
                 disabled
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
               />
-              <p className="text-xs text-gray-500 mt-1">Auto-filled based on entity type</p>
+              <p className="caption-sm text-gray-500 mt-1">Auto-filled based on entity type</p>
             </div>
 
             {/* Deadline */}
             <div>
-              <label className="block text-sm font-medium text-gray-900 mb-1">Deadline</label>
+              <label className="block label font-medium text-gray-900 mb-1">Deadline</label>
               <input
                 type="date"
                 value={formData.deadline}
@@ -608,7 +608,7 @@ export function ConsentWorkflow() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Compliance</p>
+              <p className="body-sm text-gray-600 mb-1">Compliance</p>
               <p className="text-3xl font-bold text-green-600">{complianceMetrics.compliancePercentage}%</p>
             </div>
             <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">
@@ -626,7 +626,7 @@ export function ConsentWorkflow() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Signed</p>
+              <p className="body-sm text-gray-600 mb-1">Signed</p>
               <p className="text-3xl font-bold text-green-600">{complianceMetrics.signed}</p>
             </div>
             <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">
@@ -644,7 +644,7 @@ export function ConsentWorkflow() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Pending</p>
+              <p className="body-sm text-gray-600 mb-1">Pending</p>
               <p className="text-3xl font-bold text-amber-600">{complianceMetrics.pending}</p>
             </div>
             <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center">
@@ -662,7 +662,7 @@ export function ConsentWorkflow() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Expiring Soon</p>
+              <p className="body-sm text-gray-600 mb-1">Expiring Soon</p>
               <p className="text-3xl font-bold text-orange-600">{complianceMetrics.expiringoon}</p>
             </div>
             <div className="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center">
@@ -680,7 +680,7 @@ export function ConsentWorkflow() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Total</p>
+              <p className="body-sm text-gray-600 mb-1">Total</p>
               <p className="text-3xl font-bold text-gray-900">{complianceMetrics.total}</p>
             </div>
             <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center">
@@ -766,14 +766,14 @@ export function ConsentWorkflow() {
                       </div>
                       <div className="min-w-0">
                         <h3 className="font-semibold text-gray-900 truncate">{consent.stakeholder}</h3>
-                        <p className="text-sm text-gray-600 truncate">{getEntityLabel(consent.entityType)}</p>
+                        <p className="body-sm text-gray-600 truncate">{getEntityLabel(consent.entityType)}</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Middle: Consent Type */}
                   <div className="hidden md:block flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{consent.consentType}</p>
+                    <p className="label font-medium text-gray-900 truncate">{consent.consentType}</p>
                   </div>
 
                   {/* Status Badge */}
