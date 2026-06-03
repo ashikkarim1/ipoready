@@ -71,7 +71,7 @@ export function DilutionScenariosAnalysis() {
     setValue,
     watch,
   } = useForm<FormData>({
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(FormSchema) as any,
     defaultValues: {
       warrant_exercise_shares: 5000000,
       new_financing_shares: 8000000,

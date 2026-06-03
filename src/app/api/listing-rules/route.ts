@@ -11,7 +11,7 @@ import {
   compareExchangeReadiness,
   CapTableData,
 } from '@/lib/listing-rules'
-import { ExchangeCode, getExchangeConfig, compareExchanges } from '@/lib/exchange-config'
+import { ExchangeCode, getExchangeConfig } from '@/lib/exchange-config'
 
 // ============================================================================
 // POST Handler - Generate Listing Report
@@ -138,13 +138,28 @@ export async function GET(request: NextRequest) {
         config: getExchangeConfig(ex as ExchangeCode),
       }))
 
+      // Create minimal capTable for structural comparison
+      const minimalCapTable: CapTableData = {
+        companyName: 'Unknown',
+        totalAuthorizedShares: 0,
+        totalIssuedShares: 0,
+        publicShares: 0,
+        publicSharePercentage: 0,
+        minSharePrice: 0,
+        proposedOfferingSize: 0,
+        proposedSharesOffering: 0,
+        proposedSharePrice: 0,
+      }
+
+      const comparison = compareExchangeReadiness(
+        exchanges as ExchangeCode[],
+        minimalCapTable
+      )
+
       return NextResponse.json(
         {
           exchanges: comparisonData,
-          comparison: compareExchanges(
-            exchanges[0] as ExchangeCode,
-            exchanges[1] as ExchangeCode
-          ),
+          comparison,
         },
         { status: 200 }
       )

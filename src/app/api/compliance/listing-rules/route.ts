@@ -55,6 +55,13 @@ export async function POST(req: NextRequest) {
     const exchange = validatedData.exchange
     const config = getExchangeConfig(exchange)
 
+    if (!config) {
+      return NextResponse.json(
+        { error: 'Invalid exchange specified' },
+        { status: 400 }
+      )
+    }
+
     // Calculate compliance metrics
     const floatCompliant = validatedData.publicSharePercentage >= config.minPublicFloat
     const sharesCompliant = validatedData.publicShares >= config.minShares
@@ -166,7 +173,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid request parameters', details: error.errors },
+        { error: 'Invalid request parameters', details: error.issues },
         { status: 400 }
       )
     }

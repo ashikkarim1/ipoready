@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import PDFDocument from 'pdfkit'
+
+const PDFDocument = require('pdfkit')
 
 export const dynamic = 'force-dynamic'
 
@@ -65,7 +66,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     // Collect PDF data
     const chunks: Buffer[] = []
-    doc.on('data', chunk => chunks.push(chunk))
+    doc.on('data', (chunk: Buffer) => chunks.push(chunk))
 
     // Title
     doc.fontSize(24).font('Helvetica-Bold').text('IPO Cost Calculator Report', { align: 'center' })

@@ -52,8 +52,8 @@ export interface ResolutionGeneratorResult {
 
 interface DocxParagraph {
   text?: string
-  heading?: HeadingLevel
-  alignment?: AlignmentType
+  heading?: typeof HeadingLevel
+  alignment?: typeof AlignmentType
   children?: DocxParagraph[]
   spacing?: { before?: number; after?: number }
 }
@@ -78,7 +78,7 @@ export async function generateBoardResolution(
 
     // 2. Generate resolution text
     const resolutionText = generateResolutionText(formData)
-    if (!resolutionText.success) {
+    if (!resolutionText.success || !resolutionText.content) {
       return {
         success: false,
         errors: resolutionText.errors,
@@ -100,28 +100,26 @@ export async function generateBoardResolution(
         html_content,
         document_title
       ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8
+        ${companyId},
+        ${userId},
+        ${formData.resolutionType},
+        ${formData.companyName},
+        ${formData.approvalDate},
+        ${JSON.stringify(formData.boardMembers)},
+        ${htmlContent},
+        ${generateDocumentTitle(formData)}
       )
       RETURNING id, created_at
-    `(
-      companyId,
-      userId,
-      formData.resolutionType,
-      formData.companyName,
-      formData.approvalDate,
-      formData.boardMembers,
-      htmlContent,
-      generateDocumentTitle(formData)
-    )
+    `
 
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       return {
         success: false,
         errors: ['Failed to store resolution in database'],
       }
     }
 
-    const resolutionId = result.rows[0].id
+    const resolutionId = result[0].id
 
     // 5. Create approval tracking records
     await createApprovalRecords(resolutionId, formData.boardMembers)
@@ -404,8 +402,8 @@ async function createApprovalRecords(resolutionId: string, boardMembers: string[
   for (const memberName of boardMembers) {
     await sql`
       INSERT INTO resolution_approvals (resolution_id, board_member_name, approval_status)
-      VALUES ($1, $2, 'pending')
-    `(resolutionId, memberName)
+      VALUES (${resolutionId}, ${memberName}, 'pending')
+    `
   }
 }
 
@@ -519,8 +517,8 @@ export async function getRequiredResolutions(exchange: string): Promise<Resoluti
   const result = await sql`
     SELECT resolution_type
     FROM exchange_resolution_requirements
-    WHERE exchange = $1 AND is_required = true
-  `(exchange)
+    WHERE exchange = ${exchange} AND is_required = true
+  `
 
-  return result.rows.map(row => row.resolution_type as ResolutionType)
+  return result.map(row => row.resolution_type as ResolutionType)
 }

@@ -268,7 +268,7 @@ export function CostCalculator2A1() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
-    category: 'capex' as const,
+    category: 'capex' as 'capex' | 'opex',
     subcategory: 'Equipment',
     amount: 0,
     timeline: 'pre-ipo' as const,
@@ -476,7 +476,7 @@ export function CostCalculator2A1() {
               <XAxis dataKey="phase" tick={{ fontSize: 12 }} stroke="#6b7280" />
               <YAxis tick={{ fontSize: 12 }} stroke="#6b7280" />
               <Tooltip
-                formatter={(value) => `$${(value / 1000000).toFixed(1)}M`}
+                formatter={(value: any) => `$${(Number(value) / 1000000).toFixed(1)}M`}
                 contentStyle={{
                   backgroundColor: '#1f2937',
                   border: '1px solid #374151',
@@ -504,7 +504,7 @@ export function CostCalculator2A1() {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percentage }) => `${percentage}%`}
+                label={({ name, percent }: any) => `${((percent as number) * 100).toFixed(0)}%`}
                 outerRadius={100}
                 fill="#8884d8"
                 dataKey="value"
@@ -513,7 +513,7 @@ export function CostCalculator2A1() {
                   <Cell key={`cell-${index}`} fill={COLORS_PALETTE[index % COLORS_PALETTE.length]} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value) => `$${(value / 1000000).toFixed(1)}M`} />
+              <Tooltip formatter={(value: any) => `$${(Number(value) / 1000000).toFixed(1)}M`} />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -530,7 +530,7 @@ export function CostCalculator2A1() {
             <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="#6b7280" />
             <YAxis tick={{ fontSize: 12 }} stroke="#6b7280" />
             <Tooltip
-              formatter={(value) => `$${(value / 1000000).toFixed(1)}M`}
+              formatter={(value: any) => `$${(Number(value) / 1000000).toFixed(1)}M`}
               contentStyle={{
                 backgroundColor: '#1f2937',
                 border: '1px solid #374151',
@@ -607,14 +607,15 @@ export function CostCalculator2A1() {
 
             <select
               value={formData.category}
-              onChange={(e) =>
+              onChange={(e) => {
+                const value = e.target.value as string
                 setFormData({
                   ...formData,
-                  category: e.target.value as 'capex' | 'opex',
+                  category: value as 'capex' | 'opex',
                   subcategory:
-                    e.target.value === 'capex' ? 'Equipment' : 'Personnel',
+                    value === 'capex' ? 'Equipment' : 'Personnel',
                 })
-              }
+              }}
               className="px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="capex">CAPEX</option>

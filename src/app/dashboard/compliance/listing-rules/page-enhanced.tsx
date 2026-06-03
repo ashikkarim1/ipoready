@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ExchangeCode, getExchangeConfig, getAllExchangeCodes } from '@/lib/exchange-config'
+import { ExchangeCode, getExchangeConfig } from '@/lib/exchange-config'
 import { useListingRulesForm, useListingRules } from '@/lib/hooks/useListingRules'
 import { InputForm } from './components/InputForm'
 import { ComplianceIndicator, ComplianceBadge, ComplianceProgressBar } from './components/ComplianceIndicator'
@@ -101,6 +101,7 @@ export default function ListingRulesPageEnhanced() {
             >
               {EXCHANGES.map((code) => {
                 const config = getExchangeConfig(code)
+                if (!config) return null
                 return (
                   <option key={code} value={code}>
                     {config.name}
@@ -119,6 +120,7 @@ export default function ListingRulesPageEnhanced() {
               <div className="flex flex-wrap gap-2">
                 {EXCHANGES.filter((code) => code !== selectedExchange).map((code) => {
                   const config = getExchangeConfig(code)
+                  if (!config) return null
                   const isSelected = compareExchanges.includes(code)
                   return (
                     <button

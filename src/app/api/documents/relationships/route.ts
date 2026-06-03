@@ -1,5 +1,5 @@
 import { getServerSession } from 'next-auth'
-import { query } from '@/lib/db'
+import { sql } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
@@ -26,12 +26,11 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify user has access to this company
-    const accessCheck = await query(
-      `SELECT id FROM companies WHERE id = $1 AND user_id = (SELECT id FROM users WHERE email = $2)`,
-      [companyId, session.user.email]
-    )
+    const accessCheck = await sql`
+      SELECT id FROM companies WHERE id = ${companyId} AND user_id = (SELECT id FROM users WHERE email = ${session.user.email})
+    ` as any[]
 
-    if (accessCheck.rows.length === 0) {
+    if (accessCheck.length === 0) {
       return NextResponse.json(
         { error: 'Company not found or access denied' },
         { status: 403 }
@@ -39,7 +38,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch document relationships with enhanced data including descriptions
-    let relationshipQuery = `
+    const relResult = await sql`
       SELECT 
         dr.id,
         dr.source_document_id,
@@ -62,19 +61,16 @@ export async function GET(request: NextRequest) {
         dr.sort_order
       FROM document_relationships dr
       JOIN document_types dt ON dr.target_document_type_id = dt.id
-      WHERE dr.company_id = $1
-      AND (dr.exchange IS NULL OR dr.exchange = $2 OR $2 IS NULL)
+      WHERE dr.company_id = ${companyId}
+      AND (dr.exchange IS NULL OR dr.exchange = ${exchange} OR ${exchange} IS NULL)
       ORDER BY 
         CASE WHEN dr.is_required THEN 0 ELSE 1 END,
         CASE WHEN dr.status = 'submitted' THEN 0 ELSE 1 END,
         dt.display_name ASC
-    `
-
-    const relResult = await query(relationshipQuery, [companyId, exchange || null])
+    ` as any[]
 
     // Fetch graph nodes if they exist
-    const nodesResult = await query(
-      `
+    const nodesResult = await sql`
       SELECT 
         dgn.id,
         dgn.document_type_id,
@@ -88,15 +84,12 @@ export async function GET(request: NextRequest) {
         dgn.position_y
       FROM document_graph_nodes dgn
       JOIN document_types dt ON dgn.document_type_id = dt.id
-      WHERE dgn.company_id = $1
+      WHERE dgn.company_id = ${companyId}
       ORDER BY dt.display_name ASC
-      `,
-      [companyId]
-    )
+    ` as any[]
 
     // Fetch graph edges if they exist
-    const edgesResult = await query(
-      `
+    const edgesResult = await sql`
       SELECT 
         dge.id,
         dge.source_node_id,
@@ -105,23 +98,21 @@ export async function GET(request: NextRequest) {
         dge.edge_type,
         dge.weight
       FROM document_graph_edges dge
-      WHERE dge.company_id = $1
-      `,
-      [companyId]
-    )
+      WHERE dge.company_id = ${companyId}
+    ` as any[]
 
     return NextResponse.json({
-      relationships: relResult.rows,
-      nodes: nodesResult.rows,
-      edges: edgesResult.rows,
+      relationships: relResult,
+      nodes: nodesResult,
+      edges: edgesResult,
       company_id: companyId,
       exchange: exchange || null,
       summary: {
-        total: relResult.rows.length,
-        required: relResult.rows.filter(r => r.is_required).length,
-        submitted: relResult.rows.filter(r => r.status === 'submitted').length,
-        missing: relResult.rows.filter(r => r.is_required && r.status !== 'submitted').length,
-        recommended: relResult.rows.filter(r => !r.is_required).length,
+        total: relResult.length,
+        required: relResult.filter(r => r.is_required).length,
+        submitted: relResult.filter(r => r.status === 'submitted').length,
+        missing: relResult.filter(r => r.is_required && r.status !== 'submitted').length,
+        recommended: relResult.filter(r => !r.is_required).length,
       }
     })
   } catch (error) {
@@ -157,12 +148,11 @@ export async function POST(request: NextRequest) {
     } = body
 
     // Verify user has access to this company
-    const accessCheck = await query(
-      `SELECT id FROM companies WHERE id = $1 AND user_id = (SELECT id FROM users WHERE email = $2)`,
-      [companyId, session.user.email]
-    )
+    const accessCheck = await sql`
+      SELECT id FROM companies WHERE id = ${companyId} AND user_id = (SELECT id FROM users WHERE email = ${session.user.email})
+    ` as any[]
 
-    if (accessCheck.rows.length === 0) {
+    if (accessCheck.length === 0) {
       return NextResponse.json(
         { error: 'Company not found or access denied' },
         { status: 403 }
@@ -170,55 +160,36 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if relationship already exists
-    const existingQuery = `
+    const existing = await sql`
       SELECT id FROM document_relationships 
-      WHERE company_id = $1 
-      AND target_document_type_id = $2
-      AND COALESCE(exchange, '') = COALESCE($3, '')
-    `
-    const existing = await query(existingQuery, [
-      companyId,
-      targetDocumentTypeId,
-      exchange || null,
-    ])
+      WHERE company_id = ${companyId}
+      AND target_document_type_id = ${targetDocumentTypeId}
+      AND COALESCE(exchange, '') = COALESCE(${exchange}, '')
+    ` as any[]
 
-    if (existing.rows.length > 0) {
+    if (existing.length > 0) {
       // Update existing relationship
-      const updateResult = await query(
-        `
+      const updateResult = await sql`
         UPDATE document_relationships
-        SET relationship_type = $1, is_required = $2, filing_category = $3, 
-            status = $4, notes = $5, updated_at = NOW()
-        WHERE id = $6
+        SET relationship_type = ${relationshipType}, is_required = ${isRequired}, filing_category = ${filingCategory}, 
+            status = ${status}, notes = ${notes}, updated_at = NOW()
+        WHERE id = ${existing[0].id}
         RETURNING *
-        `,
-        [relationshipType, isRequired, filingCategory, status, notes, existing.rows[0].id]
-      )
+      ` as any[]
 
-      return NextResponse.json(updateResult.rows[0])
+      return NextResponse.json(updateResult[0])
     } else {
       // Create new relationship
-      const insertResult = await query(
-        `
+      const insertResult = await sql`
         INSERT INTO document_relationships 
         (company_id, target_document_type_id, relationship_type, is_required, 
          exchange, filing_category, status, notes)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        VALUES (${companyId}, ${targetDocumentTypeId}, ${relationshipType}, ${isRequired},
+                ${exchange || null}, ${filingCategory || null}, ${status}, ${notes || null})
         RETURNING *
-        `,
-        [
-          companyId,
-          targetDocumentTypeId,
-          relationshipType,
-          isRequired,
-          exchange || null,
-          filingCategory || null,
-          status,
-          notes || null,
-        ]
-      )
+      ` as any[]
 
-      return NextResponse.json(insertResult.rows[0], { status: 201 })
+      return NextResponse.json(insertResult[0], { status: 201 })
     }
   } catch (error) {
     console.error('Error creating/updating document relationship:', error)
@@ -244,36 +215,32 @@ export async function PUT(request: NextRequest) {
     const { relationshipId, status, uploadedAt, submittedAt, approvedAt, rejectionReason } = body
 
     // Verify relationship exists and user has access
-    const checkQuery = `
+    const check = await sql`
       SELECT dr.id FROM document_relationships dr
       JOIN companies c ON dr.company_id = c.id
-      WHERE dr.id = $1 AND c.user_id = (SELECT id FROM users WHERE email = $2)
-    `
-    const check = await query(checkQuery, [relationshipId, session.user.email])
+      WHERE dr.id = ${relationshipId} AND c.user_id = (SELECT id FROM users WHERE email = ${session.user.email})
+    ` as any[]
 
-    if (check.rows.length === 0) {
+    if (check.length === 0) {
       return NextResponse.json(
         { error: 'Relationship not found or access denied' },
         { status: 403 }
       )
     }
 
-    const updateResult = await query(
-      `
+    const updateResult = await sql`
       UPDATE document_relationships
-      SET status = COALESCE($1, status),
-          uploaded_at = COALESCE($2, uploaded_at),
-          submitted_at = COALESCE($3, submitted_at),
-          approved_at = COALESCE($4, approved_at),
-          rejection_reason = $5,
+      SET status = COALESCE(${status || null}, status),
+          uploaded_at = COALESCE(${uploadedAt || null}, uploaded_at),
+          submitted_at = COALESCE(${submittedAt || null}, submitted_at),
+          approved_at = COALESCE(${approvedAt || null}, approved_at),
+          rejection_reason = ${rejectionReason || null},
           updated_at = NOW()
-      WHERE id = $6
+      WHERE id = ${relationshipId}
       RETURNING *
-      `,
-      [status || null, uploadedAt || null, submittedAt || null, approvedAt || null, rejectionReason || null, relationshipId]
-    )
+    ` as any[]
 
-    return NextResponse.json(updateResult.rows[0])
+    return NextResponse.json(updateResult[0])
   } catch (error) {
     console.error('Error updating document relationship:', error)
     return NextResponse.json(

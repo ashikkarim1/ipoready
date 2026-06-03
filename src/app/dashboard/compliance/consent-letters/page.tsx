@@ -20,15 +20,14 @@ import { getExchangeConfig, ExchangeCode } from '@/lib/exchange-config'
 // Component Styles & Constants
 // ============================================================================
 
-const ENTITY_TYPES: EntityType[] = ['auditor', 'lawyer', 'valuation-expert', 'environmental-expert', 'other-expert']
-const CONSENT_STATUSES: ConsentStatus[] = ['pending', 'received', 'rejected', 'expired', 'withdrawn']
+const ENTITY_TYPES: EntityType[] = ['auditor', 'lawyer', 'valuation_expert', 'environmental_expert', 'other_expert']
+const CONSENT_STATUSES: ConsentStatus[] = ['pending', 'signed', 'rejected', 'expired']
 
 const severityBgMap: Record<ConsentStatus, string> = {
   pending: 'bg-yellow-50 border-yellow-200',
-  received: 'bg-green-50 border-green-200',
+  signed: 'bg-green-50 border-green-200',
   rejected: 'bg-red-50 border-red-200',
   expired: 'bg-gray-50 border-gray-200',
-  withdrawn: 'bg-gray-50 border-gray-200',
 }
 
 // ============================================================================
@@ -262,7 +261,7 @@ export default function ConsentLettersPage() {
                 <div className="text-sm text-gray-600 mb-1">Compliance</div>
                 <div className="text-3xl font-bold text-blue-600">{compliance.compliance_percentage}%</div>
                 <div className="text-xs text-gray-500 mt-2">
-                  {compliance.received} of {compliance.total} received
+                  {compliance.signed} of {compliance.total} signed
                 </div>
               </motion.div>
 
@@ -493,7 +492,7 @@ export default function ConsentLettersPage() {
                       </div>
                     </div>
 
-                    {isExpiringSoon(consent.expiry_date) && consent.status !== 'received' && (
+                    {isExpiringSoon(consent.expiry_date) && consent.status !== 'signed' && (
                       <div className="text-xs text-orange-700 bg-orange-50 px-2 py-1 rounded inline-block">
                         ⚠️ Expiring soon - action required
                       </div>

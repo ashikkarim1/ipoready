@@ -84,6 +84,7 @@
     "@types/jest": "^30.0.0",
     "@types/jszip": "^3.4.1",
     "@types/pdfkit": "^0.17.6",
+    "@types/uuid": "^10.0.0",
     "@types/web-push": "^3.6.4",
     "jest": "^30.4.2",
     "neonctl": "^2.22.0",

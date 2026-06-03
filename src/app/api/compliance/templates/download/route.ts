@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { Document, Packer, Paragraph, HeadingLevel, TextRun, PageBreak } from 'docx'
+import { Document, Packer, Paragraph, HeadingLevel, TextRun } from 'docx'
 
 export const dynamic = 'force-dynamic'
 
@@ -371,11 +371,10 @@ function createDocumentFromContent(title: string, content: string): Document {
         })
       )
     } else if (line.includes('IN WITNESS WHEREOF')) {
-      paragraphs.push(new PageBreak())
       paragraphs.push(
         new Paragraph({
           text: line,
-          spacing: { before: 120, after: 120 },
+          spacing: { before: 240, after: 240 },
         })
       )
     } else {
@@ -416,8 +415,9 @@ export async function GET(req: NextRequest) {
     const template = templateContent[templateId]
     const doc = createDocumentFromContent(template.title, template.content)
     const buffer = await Packer.toBuffer(doc)
+    const uint8 = new Uint8Array(buffer)
 
-    return new NextResponse(buffer, {
+    return new NextResponse(uint8, {
       headers: {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'Content-Disposition': `attachment; filename="${template.filename}"`,

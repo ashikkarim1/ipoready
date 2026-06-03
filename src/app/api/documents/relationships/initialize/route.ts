@@ -1,5 +1,5 @@
 import { getServerSession } from 'next-auth'
-import { query } from '@/lib/db'
+import { sql } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 import { getExchangeConfig, ExchangeCode } from '@/lib/exchange-config'
 
@@ -26,12 +26,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify user has access to this company
-    const accessCheck = await query(
-      `SELECT id FROM companies WHERE id = $1 AND user_id = (SELECT id FROM users WHERE email = $2)`,
-      [companyId, session.user.email]
-    )
+    const accessCheck = await sql`
+      SELECT id FROM companies WHERE id = ${companyId} AND user_id = (SELECT id FROM users WHERE email = ${session.user.email})
+    ` as any[]
 
-    if (accessCheck.rows.length === 0) {
+    if (accessCheck.length === 0) {
       return NextResponse.json(
         { error: 'Company not found or access denied' },
         { status: 403 }
@@ -69,8 +68,8 @@ export async function POST(request: NextRequest) {
       },
       {
         code: 'auditor_report',
-        required: exchangeConfig?.minFinancialHistory ? true : false,
-        allExchanges: false,
+        required: true,
+        allExchanges: true,
       },
       {
         code: 'service_contract',
@@ -115,13 +114,13 @@ export async function POST(request: NextRequest) {
     ]
 
     // Get document types
-    const docTypesResult = await query(
-      `SELECT id, code FROM document_types WHERE code = ANY($1)`,
-      [documentRequirements.map(d => d.code)]
-    )
+    const codes = documentRequirements.map(d => `'${d.code}'`).join(',')
+    const docTypesResult = await sql`
+      SELECT id, code FROM document_types WHERE code IN (${codes})
+    ` as any[]
 
     const docTypeMap: Record<string, string> = {}
-    docTypesResult.rows.forEach((row: any) => {
+    docTypesResult.forEach((row: any) => {
       docTypeMap[row.code] = row.id
     })
 
@@ -132,29 +131,22 @@ export async function POST(request: NextRequest) {
       if (!docTypeId) continue
 
       // Check if relationship already exists
-      const existing = await query(
-        `SELECT id FROM document_relationships 
-         WHERE company_id = $1 AND target_document_type_id = $2 AND exchange = $3`,
-        [companyId, docTypeId, exchange]
-      )
+      const existing = await sql`
+        SELECT id FROM document_relationships 
+        WHERE company_id = ${companyId} AND target_document_type_id = ${docTypeId} AND exchange = ${exchange}
+      ` as any[]
 
-      if (existing.rows.length === 0) {
+      if (existing.length === 0) {
         // Insert new relationship
-        const result = await query(
-          `INSERT INTO document_relationships 
-           (company_id, target_document_type_id, relationship_type, is_required, exchange, status)
-           VALUES ($1, $2, $3, $4, $5, $6)
-           RETURNING *`,
-          [
-            companyId,
-            docTypeId,
-            'supports',
-            docReq.required,
-            exchange,
-            'missing',
-          ]
-        )
-        relationships.push(result.rows[0])
+        const result = await sql`
+          INSERT INTO document_relationships 
+          (company_id, target_document_type_id, relationship_type, is_required, exchange, status)
+          VALUES (${companyId}, ${docTypeId}, 'supports', ${docReq.required}, ${exchange}, 'missing')
+          RETURNING *
+        ` as any[]
+        if (result.length > 0) {
+          relationships.push(result[0])
+        }
       }
     }
 

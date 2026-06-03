@@ -50,7 +50,7 @@ const ContractsMap: React.FC<ContractsMapProps> = ({
   const [selectedNode, setSelectedNode] = useState<ContractNode | null>(null)
   const [hoveredNode, setHoveredNode] = useState<string | null>(null)
   const [isAnimating, setIsAnimating] = useState(true)
-  const animationRef = useRef<number>()
+  const animationRef = useRef<number>(0)
 
   // Find prospectus node (should be central)
   const prospectusNode = useMemo(

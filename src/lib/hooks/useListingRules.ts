@@ -98,7 +98,7 @@ export function useListingRules(options?: UseListingRulesOptions): UseListingRul
  * Hook for managing multiple exchange validations
  */
 export function useMultiExchangeValidation() {
-  const [reports, setReports] = useState<Record<ExchangeCode, ListingReadinessReport>>({})
+  const [reports, setReports] = useState<Record<ExchangeCode, ListingReadinessReport>>({} as Record<ExchangeCode, ListingReadinessReport>)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -108,7 +108,7 @@ export function useMultiExchangeValidation() {
         setLoading(true)
         setError(null)
 
-        const results: Record<ExchangeCode, ListingReadinessReport> = {}
+        const results: Record<ExchangeCode, ListingReadinessReport> = {} as Record<ExchangeCode, ListingReadinessReport>
 
         for (const exchange of exchanges) {
           const requestBody = {
@@ -146,7 +146,7 @@ export function useMultiExchangeValidation() {
   )
 
   const reset = useCallback(() => {
-    setReports({})
+    setReports({} as Record<ExchangeCode, ListingReadinessReport>)
     setLoading(false)
     setError(null)
   }, [])

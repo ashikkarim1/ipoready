@@ -136,9 +136,61 @@ export function ComplianceIndicator({ score, status, config }: ComplianceIndicat
 
         {/* Regulatory Body */}
         <p className={`text-xs mt-4 ${current.textColor} opacity-60`}>
-          Regulated by {config.regulatoryBody}
+          Regulated by {config.regulator}
         </p>
       </div>
     </motion.div>
+  )
+}
+
+interface ComplianceBadgeProps {
+  status: 'ready' | 'at-risk' | 'not-ready' | 'critical' | 'warning'
+}
+
+export function ComplianceBadge({ status }: ComplianceBadgeProps) {
+  const statusConfig: Record<string, { bg: string; text: string; label: string }> = {
+    ready: { bg: 'bg-green-100', text: 'text-green-800', label: 'Ready' },
+    'at-risk': { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'At Risk' },
+    'not-ready': { bg: 'bg-red-100', text: 'text-red-800', label: 'Not Ready' },
+    critical: { bg: 'bg-red-100', text: 'text-red-800', label: 'Critical' },
+    warning: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Warning' },
+  }
+
+  const config = statusConfig[status] || statusConfig['not-ready']
+
+  return (
+    <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${config.bg} ${config.text}`}>
+      {config.label}
+    </span>
+  )
+}
+
+interface ComplianceProgressBarProps {
+  current: number
+  required: number
+  label: string
+}
+
+export function ComplianceProgressBar({ current, required, label }: ComplianceProgressBarProps) {
+  const percentage = (current / required) * 100
+  const isComplete = percentage >= 100
+
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between items-center">
+        <span className="text-sm font-semibold text-gray-700">{label}</span>
+        <span className={`text-sm font-bold ${isComplete ? 'text-green-600' : 'text-orange-600'}`}>
+          {current.toLocaleString()} / {required.toLocaleString()}
+        </span>
+      </div>
+      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${Math.min(percentage, 100)}%` }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className={`h-full ${isComplete ? 'bg-green-500' : 'bg-orange-500'}`}
+        />
+      </div>
+    </div>
   )
 }

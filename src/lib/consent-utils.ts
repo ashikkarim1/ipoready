@@ -5,7 +5,7 @@
 
 export type ConsentStatus = 'pending' | 'signed' | 'rejected' | 'expired'
 export type EntityType = 'auditor' | 'lawyer' | 'valuation_expert' | 'environmental_expert' | 'other_expert'
-export type ExchangeCode = 'tsx' | 'nasdaq' | 'nyse' | 'tsxv' | 'cse'
+export type ExchangeCode = 'tsx' | 'nasdaq' | 'nyse' | 'tsxv' | 'cse' | 'cboe' | 'otc'
 
 export interface ConsentRecord {
   id: string
@@ -134,6 +134,14 @@ export function getEntityTypeInfo(type: EntityType): EntityTypeInfo {
   }
 
   return info[type]
+}
+
+export function getEntityTypeLabel(type: EntityType): string {
+  return getEntityTypeInfo(type).label
+}
+
+export function getEntityIcon(type: EntityType): string {
+  return getEntityTypeInfo(type).icon
 }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -278,6 +286,40 @@ export function getRequiredConsentsForExchange(exchange: ExchangeCode): Exchange
         consent_type: 'Legal Counsel Opinion',
         required: true,
         description: 'Legal counsel opinion on compliance and corporate matters',
+      },
+    ],
+    cboe: [
+      {
+        entity_type: 'auditor',
+        consent_type: 'Independent Audit Opinion',
+        required: true,
+        description: 'Auditor consent for audited financial statements',
+      },
+      {
+        entity_type: 'lawyer',
+        consent_type: 'Legal Counsel Opinion',
+        required: true,
+        description: 'Underwriters counsel and company counsel opinions',
+      },
+      {
+        entity_type: 'valuation_expert',
+        consent_type: 'Fairness Opinion',
+        required: false,
+        description: 'Fairness opinion from independent valuation firm',
+      },
+    ],
+    otc: [
+      {
+        entity_type: 'auditor',
+        consent_type: 'Independent Audit Opinion',
+        required: false,
+        description: 'Auditor consent for audited financial statements if available',
+      },
+      {
+        entity_type: 'lawyer',
+        consent_type: 'Legal Counsel Opinion',
+        required: true,
+        description: 'Legal counsel opinion on corporate matters',
       },
     ],
   }

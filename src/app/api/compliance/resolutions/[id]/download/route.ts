@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { sql } from '@/lib/db'
-import { generateResolutionDocx, generateResolutionPdf, generateResolutionText } from '@/lib/resolution-generator'
+import { generateResolutionDocx, generateResolutionPdf } from '@/lib/resolution-generator'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,17 +34,17 @@ export async function GET(
     // Fetch resolution
     const result = await sql`
       SELECT * FROM board_resolutions 
-      WHERE id = $1 AND company_id = $2
-    `(params.id, user.companyId)
+      WHERE id = ${params.id} AND company_id = ${user.companyId}
+    `
 
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       return NextResponse.json(
         { error: 'Resolution not found' },
         { status: 404 }
       )
     }
 
-    const resolution = result.rows[0]
+    const resolution = result[0]
     const resolutionText = getResolutionTextFromHtml(resolution.html_content)
 
     let buffer: Buffer
@@ -69,13 +69,21 @@ export async function GET(
     }
 
     // Update file size in database
-    await sql`
-      UPDATE board_resolutions 
-      SET ${format}_file_size = $1, ${format}_filename = $2
-      WHERE id = $3
-    `(buffer.length, filename, params.id)
+    if (format === 'docx') {
+      await sql`
+        UPDATE board_resolutions 
+        SET docx_file_size = ${buffer.length}, docx_filename = ${filename}
+        WHERE id = ${params.id}
+      `
+    } else {
+      await sql`
+        UPDATE board_resolutions 
+        SET pdf_file_size = ${buffer.length}, pdf_filename = ${filename}
+        WHERE id = ${params.id}
+      `
+    }
 
-    return new Response(buffer, {
+    return new Response(new Uint8Array(buffer), {
       status: 200,
       headers: {
         'Content-Type': mimeType,

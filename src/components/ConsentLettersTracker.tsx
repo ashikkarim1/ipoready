@@ -47,7 +47,7 @@ export function ConsentLettersTracker() {
     formState: { errors },
     reset,
   } = useForm<ConsentFormData>({
-    resolver: zodResolver(ConsentSchema),
+    resolver: zodResolver(ConsentSchema) as any,
   })
 
   useEffect(() => {

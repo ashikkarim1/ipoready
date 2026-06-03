@@ -6,6 +6,11 @@
  */
 
 /**
+ * Exchange identifier codes
+ */
+export type ExchangeCode = 'tsx' | 'nasdaq' | 'nyse' | 'tsxv' | 'cse' | 'cboe' | 'otc';
+
+/**
  * Prospectus format types supported by exchanges
  */
 export type ProspectusFormat = 'S-1' | 'SB-2' | 'S-3' | 'F-1' | 'F-3' | 'F-10' | 'NI 41-101';
@@ -67,8 +72,20 @@ export interface ExchangeConfig {
   /** Minimum number of shares outstanding */
   minShares: number;
   
+  /** Minimum share price required */
+  minSharePrice?: number;
+  
   /** Greenshoe option maximum (% of offering) */
   greenShoe: number;
+  
+  /** Requires an audit committee */
+  requiresAuditCommittee?: boolean;
+  
+  /** Requires a nomination committee */
+  requiresNominationCommittee?: boolean;
+  
+  /** Requires a compensation committee */
+  requiresCompensationCommittee?: boolean;
   
   /** Prospectus format(s) accepted */
   prospectusFormat: ProspectusFormat[];

@@ -381,7 +381,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             >
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
-            {company && <span className="text-sm font-medium hidden sm:inline">{company}</span>}
+            {company && <span className="text-sm font-medium hidden sm:inline">{typeof company === 'string' ? company : company.name}</span>}
           </div>
 
           {/* Right: Notifications + User Menu */}

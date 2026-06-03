@@ -1,65 +1,56 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import { Loader2, AlertCircle, TrendingDown, DollarSign, Zap, Calendar } from 'lucide-react'
+import { AlertCircle, TrendingDown, DollarSign, Zap, Calendar } from 'lucide-react'
 
-interface KPIs {
-  estimatedTotalCost: number
-  actualSpentYTD: number
-  monthlyBurnRate: number
-  runwayMonths: number
+interface RiskFactor {
+  label: string
+  value: number | string
+  impact: 'critical' | 'warning' | 'info'
+  description: string
+  icon: 'alert' | 'clock' | 'trending'
 }
 
-interface TrackingData {
+interface MonthlyData {
   month: string
-  budgeted: number
+  budget: number
   actual: number
-  status: string
+  variance_pct: number
 }
 
-export function FinancialKPIDashboard() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [kpis, setKpis] = useState<KPIs | null>(null)
-  const [tracking, setTracking] = useState<TrackingData[]>([])
-  const [riskFactors, setRiskFactors] = useState<string[]>([])
+interface FinancialKPIDashboardProps {
+  data: {
+    estimatedCost: number
+    actualSpent: number
+    budget: number
+    currencyCode: string
+    ipoDate: Date | string
+    monthlyData: MonthlyData[]
+    costPerDay: number
+    runwayDays: number
+    riskFactors: RiskFactor[]
+    delayRiskPerDay: number
+    estimatedDaysDelay: number
+  }
+  companyName?: string
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/financial-tracking')
-        if (!response.ok) throw new Error('Failed to fetch data')
-        const data = await response.json()
-        setKpis(data.kpis)
-        setTracking(data.tracking)
-        setRiskFactors(data.riskFactors)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [])
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center p-12">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-      </div>
-    )
+export function FinancialKPIDashboard({ data, companyName = 'Company' }: FinancialKPIDashboardProps) {
+  const kpis = {
+    estimatedTotalCost: data.estimatedCost,
+    actualSpentYTD: data.actualSpent,
+    monthlyBurnRate: data.costPerDay * 30,
+    runwayMonths: data.runwayDays / 30,
   }
 
-  if (error || !kpis) {
-    return (
-      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 flex items-start gap-3">
-        <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5" />
-        <p className="text-red-800 dark:text-red-300">{error || 'Failed to load KPI data'}</p>
-      </div>
-    )
-  }
+  const tracking = data.monthlyData.map(m => ({
+    month: m.month,
+    budgeted: m.budget,
+    actual: m.actual,
+    status: m.variance_pct > 10 ? 'warning' : 'normal'
+  }))
+
+  const riskFactors = data.riskFactors.map(rf => rf.description)
 
   const kpiCards = [
     {

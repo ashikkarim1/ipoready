@@ -147,7 +147,6 @@ export default function SyndicationTemplatesPage() {
                 border: '1px solid',
                 background: '#F0EFED',
                 color: '#1A1A1A',
-                focusRingColor: '#E8312A'
               }}
             />
           </div>

@@ -31,6 +31,8 @@ if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL environment variable is not set')
 }
 
+import { query } from '@/lib/db'
+
 const sql = neon(process.env.DATABASE_URL)
 
 // ─────────────────────── HELPER FUNCTIONS ───────────────────────
@@ -107,8 +109,7 @@ async function seedCompanies(): Promise<Map<string, string>> {
   for (const company of companies) {
     try {
       const id = generateUUID()
-      const result = await sql(
-        `
+      const result = await sql`
         INSERT INTO companies (
           id, 
           name, 
@@ -118,12 +119,10 @@ async function seedCompanies(): Promise<Map<string, string>> {
           country_code, 
           industry,
           created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
+        ) VALUES (${id}, ${company.name}, ${company.exchange}, ${company.sector}, ${company.stage}, ${company.country_code}, ${company.industry}, NOW())
         ON CONFLICT (name) DO UPDATE SET updated_at = NOW()
         RETURNING id
-      `,
-        [id, company.name, company.exchange, company.sector, company.stage, company.country_code, company.industry]
-      )
+      `
 
       const returnedId = result[0]?.id || id
       companyMap.set(company.name, returnedId)
@@ -150,156 +149,66 @@ async function seedIPOCosts(companyMap: Map<string, string>): Promise<void> {
 
     try {
       // Underwriting fees
-      await sql(
-        `
+      await sql`
         INSERT INTO ipo_costs (
           id, company_id, cost_category, cost_type, description,
           hard_cost_usd, cost_date, vendor_name, phase_id, milestone_name,
           status, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())
+        ) VALUES (${generateUUID()}, ${companyId}, ${'underwriting'}, ${'hard_cost'}, ${estimate.costs.underwriting.description}, ${estimate.costs.underwriting.fee}, ${estimate.estimatedDate}, ${'Goldman Sachs / Morgan Stanley / Jefferies'}, ${3}, ${generateUUID()}0, ${generateUUID()}1, NOW())
         ON CONFLICT (id) DO UPDATE SET updated_at = NOW()
-      `,
-        [
-          generateUUID(),
-          companyId,
-          'underwriting',
-          'hard_cost',
-          estimate.costs.underwriting.description,
-          estimate.costs.underwriting.fee,
-          estimate.estimatedDate,
-          'Goldman Sachs / Morgan Stanley / Jefferies',
-          3,
-          'Underwriting Agreement Execution',
-          'estimated',
-        ]
-      )
+      `
 
       // Legal fees
-      await sql(
-        `
+      await sql`
         INSERT INTO ipo_costs (
           id, company_id, cost_category, cost_type, description,
           hard_cost_usd, cost_date, vendor_name, phase_id, milestone_name,
           status, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())
+        ) VALUES (${generateUUID()}, ${companyId}, ${'legal'}, ${'hard_cost'}, ${'Legal fees: Company}, ${Underwriter}, ${and Auditor counsel'}, ${estimate.costs.legalFees.total}, ${estimate.estimatedDate}, ${generateUUID()}0, ${generateUUID()}1, NOW())
         ON CONFLICT (id) DO UPDATE SET updated_at = NOW()
-      `,
-        [
-          generateUUID(),
-          companyId,
-          'legal',
-          'hard_cost',
-          'Legal fees: Company, Underwriter, and Auditor counsel',
-          estimate.costs.legalFees.total,
-          estimate.estimatedDate,
-          'WilmerHale / Cooley / Morrison Foerster',
-          3,
-          'SEC Filing Review',
-          'estimated',
-        ]
-      )
+      `
 
       // Audit and accounting fees
-      await sql(
-        `
+      await sql`
         INSERT INTO ipo_costs (
           id, company_id, cost_category, cost_type, description,
           hard_cost_usd, cost_date, vendor_name, phase_id, milestone_name,
           status, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())
+        ) VALUES (${generateUUID()}, ${companyId}, ${'audit'}, ${'hard_cost'}, ${'Audit preparation}, ${attestation}, ${and SOX consulting'}, ${estimate.costs.accountingFees.total}, ${estimate.estimatedDate}, ${generateUUID()}0, ${generateUUID()}1, NOW())
         ON CONFLICT (id) DO UPDATE SET updated_at = NOW()
-      `,
-        [
-          generateUUID(),
-          companyId,
-          'audit',
-          'hard_cost',
-          'Audit preparation, attestation, and SOX consulting',
-          estimate.costs.accountingFees.total,
-          estimate.estimatedDate,
-          estimate.companyName.includes('Biotech') ? 'Deloitte' : 'EY',
-          2,
-          'Auditor Sign-Off on 10-K/A',
-          'estimated',
-        ]
-      )
+      `
 
       // Printing and postage
-      await sql(
-        `
+      await sql`
         INSERT INTO ipo_costs (
           id, company_id, cost_category, cost_type, description,
           hard_cost_usd, cost_date, vendor_name, phase_id, milestone_name,
           status, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())
+        ) VALUES (${generateUUID()}, ${companyId}, ${'printing'}, ${'hard_cost'}, ${'Prospectus}, ${regulatory}, ${and marketing materials printing'}, ${estimate.costs.printingAndPostage.total}, ${estimate.estimatedDate}, ${generateUUID()}0, ${generateUUID()}1, NOW())
         ON CONFLICT (id) DO UPDATE SET updated_at = NOW()
-      `,
-        [
-          generateUUID(),
-          companyId,
-          'printing',
-          'hard_cost',
-          'Prospectus, regulatory, and marketing materials printing',
-          estimate.costs.printingAndPostage.total,
-          estimate.estimatedDate,
-          'Printing.com / RR Donnelley',
-          4,
-          'Final Prospectus Printing',
-          'estimated',
-        ]
-      )
+      `
 
       // Roadshow and marketing
-      await sql(
-        `
+      await sql`
         INSERT INTO ipo_costs (
           id, company_id, cost_category, cost_type, description,
           hard_cost_usd, cost_date, vendor_name, phase_id, milestone_name,
           status, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())
+        ) VALUES (${generateUUID()}, ${companyId}, ${'consulting'}, ${'hard_cost'}, ${'Investor roadshow}, ${media relations}, ${and digital marketing'}, ${estimate.costs.roadshowAndMarketing.total}, ${estimate.estimatedDate}, ${generateUUID()}0, ${generateUUID()}1, NOW())
         ON CONFLICT (id) DO UPDATE SET updated_at = NOW()
-      `,
-        [
-          generateUUID(),
-          companyId,
-          'consulting',
-          'hard_cost',
-          'Investor roadshow, media relations, and digital marketing',
-          estimate.costs.roadshowAndMarketing.total,
-          estimate.estimatedDate,
-          'Investor Relations firm / Media agencies',
-          5,
-          'Roadshow Completion',
-          'estimated',
-        ]
-      )
+      `
 
       // Exchange listing fees
-      await sql(
-        `
+      await sql`
         INSERT INTO ipo_costs (
           id, company_id, cost_category, cost_type, description,
           hard_cost_usd, cost_date, vendor_name, phase_id, milestone_name,
           status, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())
-        ON CONFLICT (id) DO UPDATE SET updated_at = NOW()
-      `,
-        [
-          generateUUID(),
-          companyId,
-          'listing_fees',
-          'hard_cost',
-          estimate.targetExchange.toUpperCase() + ' listing application and annual fees',
-          estimate.costs.exchangeListing.applicationFee +
+        ) VALUES (${generateUUID()}, ${companyId}, ${'listing_fees'}, ${'hard_cost'}, ${estimate.targetExchange.toUpperCase() + ' listing application and annual fees'}, ${estimate.costs.exchangeListing.applicationFee +
             estimate.costs.exchangeListing.reviewFee +
-            estimate.costs.exchangeListing.annualFee,
-          estimate.estimatedDate,
-          estimate.targetExchange.toUpperCase(),
-          6,
-          'Listing Clearance',
-          'estimated',
-        ]
-      )
+            estimate.costs.exchangeListing.annualFee}, ${estimate.estimatedDate}, ${estimate.targetExchange.toUpperCase()}, ${6}, ${generateUUID()}0, ${generateUUID()}1, NOW())
+        ON CONFLICT (id) DO UPDATE SET updated_at = NOW()
+      `
 
       log(`✓ IPO costs created for ${estimate.companyName}`)
     } catch (error) {
@@ -322,29 +231,16 @@ async function seedFinancialTracking(companyMap: Map<string, string>): Promise<v
 
     try {
       // Create summary record for Month 6
-      await sql(
-        `
+      await sql`
         INSERT INTO financial_tracking (
           id, company_id, fiscal_month, fiscal_year,
           total_budget_usd, total_actual_usd, total_variance_usd,
           variance_percentage, variance_status, forecast_completion,
           created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW())
+        ) VALUES (${generateUUID()}, ${companyId}, ${6}, ${// June (last month in history)
+          2026}, ${history.budgetTotal}, ${history.actualTotal}, ${history.varianceTotal}, ${history.variancePercentTotal}, ${history.actualTotal > history.budgetTotal ? 'over_budget' : 'under_budget'}, ${generateUUID()}0, NOW())
         ON CONFLICT (company_id, fiscal_year, fiscal_month) DO UPDATE SET updated_at = NOW()
-      `,
-        [
-          generateUUID(),
-          companyId,
-          6, // June (last month in history)
-          2026,
-          history.budgetTotal,
-          history.actualTotal,
-          history.varianceTotal,
-          history.variancePercentTotal,
-          history.actualTotal > history.budgetTotal ? 'over_budget' : 'under_budget',
-          true, // forecast_completion
-        ]
-      )
+      `
 
       // Create monthly breakdown
       const monthMap = new Map([
@@ -358,29 +254,16 @@ async function seedFinancialTracking(companyMap: Map<string, string>): Promise<v
 
       for (const entry of history.entries) {
         const month = monthMap.get(entry.month) || 1
-        await sql(
-          `
+        await sql`
           INSERT INTO financial_tracking (
             id, company_id, fiscal_month, fiscal_year,
             total_budget_usd, total_actual_usd, total_variance_usd,
             variance_percentage, variance_status, notes,
             created_at
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW())
+          ) VALUES (${generateUUID()}, ${companyId}, ${month}, ${2026}, ${600000}, ${// Simplified monthly budget
+            entry.actual}, ${entry.variance}, ${entry.variancePercent}, ${entry.variance > 0 ? 'over_budget' : 'under_budget'}, ${generateUUID()}0, NOW())
           ON CONFLICT (company_id, fiscal_year, fiscal_month) DO UPDATE SET updated_at = NOW()
-        `,
-          [
-            generateUUID(),
-            companyId,
-            month,
-            2026,
-            600000, // Simplified monthly budget
-            entry.actual,
-            entry.variance,
-            entry.variancePercent,
-            entry.variance > 0 ? 'over_budget' : 'under_budget',
-            entry.notes,
-          ]
-        )
+        `
       }
 
       log(`✓ Financial tracking created for ${history.companyName} (6 months)`)
@@ -414,8 +297,7 @@ async function seedDilutionScenarios(companyMap: Map<string, string>): Promise<v
         dilution_pct: sh.dilution,
       }))
 
-      await sql(
-        `
+      await sql`
         INSERT INTO dilution_scenarios (
           id, company_id, scenario_name, scenario_type,
           new_shares_issued, issue_price_usd, total_raise_usd,
@@ -423,26 +305,9 @@ async function seedDilutionScenarios(companyMap: Map<string, string>): Promise<v
           post_transaction_fully_diluted_shares,
           founder_dilution_pct, employee_dilution_pct, series_a_dilution_pct,
           cap_table_snapshot, status, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, NOW())
+        ) VALUES (${generateUUID()}, ${companyId}, ${scenario.scenarioName}, ${scenario.roundDetails.roundType.toLowerCase().replace(/\s+/g, '_')}, ${scenario.roundDetails.sharesIssued}, ${scenario.roundDetails.pricePerShare}, ${scenario.roundDetails.fundingAmount}, ${scenario.beforeScenario.totalShares}, ${generateUUID()}0, ${generateUUID()}1, ${generateUUID()}2, ${generateUUID()}3, ${generateUUID()}4, NOW())
         ON CONFLICT (id) DO UPDATE SET updated_at = NOW()
-      `,
-        [
-          generateUUID(),
-          companyId,
-          scenario.scenarioName,
-          scenario.roundDetails.roundType.toLowerCase().replace(/\s+/g, '_'),
-          scenario.roundDetails.sharesIssued,
-          scenario.roundDetails.pricePerShare,
-          scenario.roundDetails.fundingAmount,
-          scenario.beforeScenario.totalShares,
-          scenario.afterScenario.fullyDilutedShares || scenario.afterScenario.totalShares,
-          6.67, // Founder dilution
-          0, // Employee dilution
-          4.17, // Series A dilution
-          JSON.stringify(capTableSnapshot),
-          'approved',
-        ]
-      )
+      `
 
       log(`✓ Dilution scenario created: ${scenario.scenarioName} for ${scenario.companyName}`)
     } catch (error) {
@@ -465,33 +330,15 @@ async function seedListingRequirements(companyMap: Map<string, string>): Promise
 
     try {
       for (const req of validation.requirements) {
-        await sql(
-          `
+        await sql`
           INSERT INTO listing_requirements (
             id, company_id, exchange_code, requirement_code, requirement_name,
             category, requirement_type, status, completion_pct,
             validation_method, validation_date, is_compliant, notes,
             deadline_date, created_at
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, NOW())
+          ) VALUES (${generateUUID()}, ${companyId}, ${validation.exchange.toUpperCase()}, ${req.requirementId}, ${req.requirement}, ${req.category}, ${req.requirementId.includes('Financial') ? 'must_have' : 'must_have'}, ${req.status}, ${req.status === 'met' ? 100 : 60}, ${generateUUID()}0, ${generateUUID()}1, ${generateUUID()}2, ${generateUUID()}3, ${generateUUID()}4, NOW())
           ON CONFLICT (company_id, exchange_code, requirement_code) DO UPDATE SET updated_at = NOW()
-        `,
-          [
-            generateUUID(),
-            companyId,
-            validation.exchange.toUpperCase(),
-            req.requirementId,
-            req.requirement,
-            req.category,
-            req.requirementId.includes('Financial') ? 'must_have' : 'must_have',
-            req.status,
-            req.status === 'met' ? 100 : 60,
-            'Documentation review and audit trail',
-            validation.validationDate,
-            req.status === 'met' || req.status === 'waived',
-            req.notes,
-            '2026-09-15',
-          ]
-        )
+        `
       }
 
       log(
@@ -516,34 +363,20 @@ async function seedCorporateResolutions(companyMap: Map<string, string>): Promis
     }
 
     try {
-      await sql(
-        `
+      await sql`
         INSERT INTO corporate_resolutions (
           id, company_id, resolution_type, resolution_title,
           resolution_date, approval_status, approved_by_board,
           status, resolution_document_url, notes, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW())
-        ON CONFLICT (id) DO UPDATE SET updated_at = NOW()
-      `,
-        [
-          generateUUID(),
-          companyId,
-          resolution.type === 'prospectus'
+        ) VALUES (${generateUUID()}, ${companyId}, ${resolution.type === 'prospectus'
             ? 'board_authorization'
             : resolution.type === 'listing'
               ? 'director_appointment'
               : resolution.type === 'underwriting'
                 ? 'stock_option_plan'
-                : 'other',
-          resolution.title,
-          resolution.resolutionDate,
-          resolution.status === 'executed' ? 'approved' : 'pending',
-          resolution.status === 'executed',
-          resolution.status,
-          `s3://ipoready-docs/${resolution.document?.fileName || 'resolution.pdf'}`,
-          `${resolution.description} - Key provisions: ${resolution.keyProvisions.slice(0, 2).join('; ')}`,
-        ]
-      )
+                : 'other'}, ${resolution.title}, ${resolution.resolutionDate}, ${resolution.status === 'executed' ? 'approved' : 'pending'}, ${resolution.status === 'executed'}, ${resolution.status}, ${`s3://ipoready-docs/${resolution.document?.fileName || 'resolution.pdf'}`}, ${generateUUID()}0, NOW())
+        ON CONFLICT (id) DO UPDATE SET updated_at = NOW()
+      `
 
       log(`✓ Corporate resolution created: ${resolution.title}`)
     } catch (error) {
@@ -565,42 +398,21 @@ async function seedConsentLetters(companyMap: Map<string, string>): Promise<void
     }
 
     try {
-      await sql(
-        `
+      await sql`
         INSERT INTO consent_letters (
           id, company_id, consent_type, from_entity_name, from_entity_type,
           consent_topic, status, sent_date, signed_date, expiry_date,
           consent_template_url, signed_document_url, signature_method,
           accepted, notes, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, NOW())
-        ON CONFLICT (id) DO UPDATE SET updated_at = NOW()
-      `,
-        [
-          generateUUID(),
-          companyId,
-          consent.consentType,
-          consent.fromParty,
-          consent.fromPartyType === 'auditor'
+        ) VALUES (${generateUUID()}, ${companyId}, ${consent.consentType}, ${consent.fromParty}, ${consent.fromPartyType === 'auditor'
             ? 'corporation'
             : consent.fromPartyType === 'lawyer'
               ? 'corporation'
               : consent.fromPartyType === 'advisor'
                 ? 'corporation'
-                : 'corporation',
-          consent.title,
-          consent.status,
-          consent.issuedDate,
-          consent.status === 'received' ? consent.issuedDate : null,
-          consent.expiryDate,
-          `s3://ipoready-docs/${consent.document?.fileName || 'consent.pdf'}`,
-          consent.status === 'received'
-            ? `s3://ipoready-docs/${consent.document?.fileName || 'consent-signed.pdf'}`
-            : null,
-          'esign',
-          consent.status === 'received',
-          `${consent.description} - Scope: ${consent.scopeOfConsent.slice(0, 2).join('; ')}`,
-        ]
-      )
+                : 'corporation'}, ${consent.title}, ${consent.status}, ${consent.issuedDate}, ${consent.status === 'received' ? consent.issuedDate : null}, ${generateUUID()}0, ${generateUUID()}1, ${generateUUID()}2, ${generateUUID()}3, ${generateUUID()}4, ${generateUUID()}5, NOW())
+        ON CONFLICT (id) DO UPDATE SET updated_at = NOW()
+      `
 
       log(`✓ Consent letter created: ${consent.title}`)
     } catch (error) {
@@ -655,7 +467,7 @@ async function main() {
     process.exit(0)
   } catch (error) {
     log(`\n✗ Fatal error during seed: ${error}`)
-    log('Stack:', error instanceof Error ? error.stack : 'N/A')
+    log(`Stack: ${error instanceof Error ? error.stack : 'N/A'}`)
     process.exit(1)
   }
 }

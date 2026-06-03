@@ -44,7 +44,7 @@ export function ListingRulesValidator() {
     formState: { errors },
     watch,
   } = useForm<ValidationFormData>({
-    resolver: zodResolver(ValidationSchema),
+    resolver: zodResolver(ValidationSchema) as any,
     defaultValues: {
       exchange: 'NASDAQ',
       current_share_count: 50000000,

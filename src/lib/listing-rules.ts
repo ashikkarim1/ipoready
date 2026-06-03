@@ -117,7 +117,7 @@ export class ListingRulesEngine {
 
   constructor(exchangeCode: ExchangeCode, capTable: CapTableData) {
     this.exchangeCode = exchangeCode
-    this.exchange = getExchangeConfig(exchangeCode)
+    this.exchange = getExchangeConfig(exchangeCode)!
     this.capTable = capTable
     this.violations = []
   }
@@ -299,6 +299,10 @@ export class ListingRulesEngine {
     const sharePrice = this.capTable.proposedSharePrice
     const minPrice = this.exchange.minSharePrice
 
+    if (!minPrice) {
+      return
+    }
+
     if (sharePrice < minPrice) {
       this.violations.push({
         id: 'share-price-minimum',
@@ -334,9 +338,13 @@ export class ListingRulesEngine {
    */
   private validateOfferingSize(): void {
     const offeringSize = this.capTable.proposedOfferingSize
-    const minOfferingCAD = this.exchange.minOfferingCAD
-    const minOfferingUSD = this.exchange.minOfferingUSD
-    const minOffering = this.exchange.country === 'Canada' ? minOfferingCAD : minOfferingUSD
+    const minOfferingCAD = (this.exchange as any).minOfferingCAD
+    const minOfferingUSD = (this.exchange as any).minOfferingUSD
+    const minOffering = this.exchange.country === 'CA' ? minOfferingCAD : minOfferingUSD
+
+    if (!minOffering) {
+      return
+    }
 
     if (offeringSize < minOffering) {
       this.violations.push({
@@ -349,9 +357,9 @@ export class ListingRulesEngine {
           proposed: offeringSize,
           minimum: minOffering,
           shortfall: minOffering - offeringSize,
-          currency: this.exchange.currency,
+          currency: (this.exchange as any).currency || 'USD',
         },
-        suggestion: `Increase offering size to at least $${minOffering}M ${this.exchange.currency}`,
+        suggestion: `Increase offering size to at least $${minOffering}M ${ (this.exchange as any).currency || 'USD'}`,
       })
     } else {
       this.violations.push({
@@ -364,7 +372,7 @@ export class ListingRulesEngine {
           proposed: offeringSize,
           minimum: minOffering,
           surplus: offeringSize - minOffering,
-          currency: this.exchange.currency,
+          currency: (this.exchange as any).currency || 'USD',
         },
       })
     }
@@ -375,19 +383,19 @@ export class ListingRulesEngine {
    */
   private validateCommitteeRequirements(): void {
     const requiredCommittees = []
-    if (this.exchange.requiresAuditCommittee) requiredCommittees.push('Audit')
-    if (this.exchange.requiresNominationCommittee) requiredCommittees.push('Nomination')
-    if (this.exchange.requiresCompensationCommittee) requiredCommittees.push('Compensation')
+    if ((this.exchange as any).requiresAuditCommittee) requiredCommittees.push('Audit')
+    if ((this.exchange as any).requiresNominationCommittee) requiredCommittees.push('Nomination')
+    if ((this.exchange as any).requiresCompensationCommittee) requiredCommittees.push('Compensation')
 
     if (requiredCommittees.length > 0) {
       const missingCommittees = []
-      if (this.exchange.requiresAuditCommittee && !this.capTable.hasAuditCommittee) {
+      if ((this.exchange as any).requiresAuditCommittee && !this.capTable.hasAuditCommittee) {
         missingCommittees.push('Audit Committee')
       }
-      if (this.exchange.requiresNominationCommittee && !this.capTable.hasNominationCommittee) {
+      if ((this.exchange as any).requiresNominationCommittee && !this.capTable.hasNominationCommittee) {
         missingCommittees.push('Nomination Committee')
       }
-      if (this.exchange.requiresCompensationCommittee && !this.capTable.hasCompensationCommittee) {
+      if ((this.exchange as any).requiresCompensationCommittee && !this.capTable.hasCompensationCommittee) {
         missingCommittees.push('Compensation Committee')
       }
 
@@ -424,7 +432,7 @@ export class ListingRulesEngine {
    * Validate financial history requirements
    */
   private validateFinancialHistory(): void {
-    const yearsRequired = this.exchange.minFinancialHistory
+    const yearsRequired = (this.exchange as any).minFinancialHistory || 2
     const yearsAvailable = this.capTable.yearsOfFinancialHistory || 0
 
     if (yearsAvailable < yearsRequired) {
@@ -543,28 +551,35 @@ export class ListingRulesEngine {
     })
 
     // Share price gap
-    const priceGap = this.capTable.proposedSharePrice - this.exchange.minSharePrice
-    gaps.push({
-      metric: 'Share Price',
-      current: Math.round(this.capTable.proposedSharePrice * 100) / 100,
-      required: this.exchange.minSharePrice,
-      gap: Math.round(priceGap * 100) / 100,
-      gapPercentage: priceGap < 0 ? (Math.abs(priceGap) / this.exchange.minSharePrice) * 100 : 0,
-      status: priceGap >= 0 ? 'compliant' : priceGap > this.exchange.minSharePrice * -0.1 ? 'warning' : 'critical',
-    })
+    const minSharePrice = this.exchange.minSharePrice
+    if (minSharePrice) {
+      const priceGap = this.capTable.proposedSharePrice - minSharePrice
+      gaps.push({
+        metric: 'Share Price',
+        current: Math.round(this.capTable.proposedSharePrice * 100) / 100,
+        required: minSharePrice,
+        gap: Math.round(priceGap * 100) / 100,
+        gapPercentage: priceGap < 0 ? (Math.abs(priceGap) / minSharePrice) * 100 : 0,
+        status: priceGap >= 0 ? 'compliant' : priceGap > minSharePrice * -0.1 ? 'warning' : 'critical',
+      })
+    }
 
     // Offering size gap
-    const minOffering =
-      this.exchange.country === 'Canada' ? this.exchange.minOfferingCAD : this.exchange.minOfferingUSD
-    const offeringGap = this.capTable.proposedOfferingSize - minOffering
-    gaps.push({
-      metric: `Offering Size (${this.exchange.currency}M)`,
-      current: this.capTable.proposedOfferingSize,
-      required: minOffering,
-      gap: offeringGap,
-      gapPercentage: offeringGap < 0 ? (Math.abs(offeringGap) / minOffering) * 100 : 0,
-      status: offeringGap >= 0 ? 'compliant' : 'critical',
-    })
+    const minOfferingCAD = (this.exchange as any).minOfferingCAD
+    const minOfferingUSD = (this.exchange as any).minOfferingUSD
+    const minOffering = this.exchange.country === 'CA' ? minOfferingCAD : minOfferingUSD
+    if (minOffering) {
+      const offeringGap = this.capTable.proposedOfferingSize - minOffering
+      const currency = (this.exchange as any).currency || 'USD'
+      gaps.push({
+        metric: `Offering Size (${currency}M)`,
+        current: this.capTable.proposedOfferingSize,
+        required: minOffering,
+        gap: offeringGap,
+        gapPercentage: offeringGap < 0 ? (Math.abs(offeringGap) / minOffering) * 100 : 0,
+        status: offeringGap >= 0 ? 'compliant' : 'critical',
+      })
+    }
 
     return gaps
   }

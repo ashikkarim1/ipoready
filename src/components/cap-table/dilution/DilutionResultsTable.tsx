@@ -221,15 +221,15 @@ export default function DilutionResultsTable({
         <div>
           <p className="text-slate-600 mb-1">Assumptions Applied</p>
           <div className="space-y-1 text-slate-900">
-            {scenario.assumptions.warrantsExercisedPercent && (
-              <p>Warrants: {scenario.assumptions.warrantsExercisedPercent}%</p>
+            {!!scenario.assumptions.warrantsExercisedPercent && (
+              <p>Warrants: {String(scenario.assumptions.warrantsExercisedPercent)}%</p>
             )}
-            {scenario.assumptions.newFinancingAmount && (
+            {!!scenario.assumptions.newFinancingAmount && (
               <p>
                 New Financing: ${Number(scenario.assumptions.newFinancingAmount).toLocaleString()}
               </p>
             )}
-            {scenario.assumptions.employeeOptionVestingShares && (
+            {!!scenario.assumptions.employeeOptionVestingShares && (
               <p>
                 Options: {Number(scenario.assumptions.employeeOptionVestingShares).toLocaleString()} shares
               </p>
@@ -239,7 +239,7 @@ export default function DilutionResultsTable({
         <div>
           <p className="text-slate-600 mb-1">Valuation Impact</p>
           <div className="space-y-1 text-slate-900">
-            {scenario.assumptions.projectedValuation && (
+            {!!scenario.assumptions.projectedValuation && (
               <p>
                 Valuation: ${Number(scenario.assumptions.projectedValuation).toLocaleString()}
               </p>

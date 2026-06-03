@@ -49,7 +49,7 @@ export function CostCalculatorForm() {
     watch,
     reset,
   } = useForm<FormData>({
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(FormSchema) as any,
     defaultValues: {
       companyRevenue: 50000000,
       selectedExchange: 'NASDAQ',

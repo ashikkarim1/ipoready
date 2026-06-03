@@ -55,7 +55,7 @@ export function CorporateResolutions() {
     formState: { errors },
     reset,
   } = useForm<ResolutionFormData>({
-    resolver: zodResolver(ResolutionSchema),
+    resolver: zodResolver(ResolutionSchema) as any,
   })
 
   useEffect(() => {

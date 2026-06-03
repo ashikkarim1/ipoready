@@ -2,7 +2,7 @@
 // Consent Letter Templates & Exchange Requirements
 // ============================================================================
 
-export type EntityType = 'auditor' | 'lawyer' | 'valuation-expert' | 'environmental-expert' | 'other-expert'
+export type EntityType = 'auditor' | 'lawyer' | 'valuation_expert' | 'environmental_expert' | 'other_expert'
 export type ExchangeCode = 'NYSE' | 'NASDAQ' | 'TSX' | 'TSXV' | 'CSE'
 
 export interface ConsentTemplate {
@@ -13,6 +13,7 @@ export interface ConsentTemplate {
   required: boolean
   description: string
   template: string
+  keyTerms: string[]
 }
 
 // ============================================================================
@@ -28,6 +29,13 @@ export const CONSENT_TEMPLATES: Record<string, ConsentTemplate> = {
     required: true,
     description:
       'Written consent from the independent auditor allowing the company to include the audited financial statements and audit report in the prospectus',
+    keyTerms: [
+      'PCAOB Auditing Standards',
+      'Financial Statement Audit',
+      'Audit Report Inclusion',
+      'Professional Standards Compliance',
+      'Auditor Independence'
+    ],
     template: `CONSENT OF INDEPENDENT AUDITORS
 
 [COMPANY NAME]
@@ -52,6 +60,13 @@ We have also consented to the references to our Firm contained in the prospectus
     required: false,
     description:
       'Auditor consent for internal controls over financial reporting attestation (SOX 404 related)',
+    keyTerms: [
+      'SOX 404 Compliance',
+      'Internal Controls Assessment',
+      'COSO Framework',
+      'Control Deficiencies',
+      'Management Certification'
+    ],
     template: `CONSENT OF INDEPENDENT AUDITORS - INTERNAL CONTROLS OVER FINANCIAL REPORTING
 
 [COMPANY NAME]
@@ -76,6 +91,13 @@ The effectiveness of internal control over financial reporting as of [DATE] has 
     required: true,
     description:
       'Counsel opinion letter covering corporate matters, capitalization, litigation, and regulatory compliance',
+    keyTerms: [
+      'Corporate Organization',
+      'Share Capitalization',
+      'Litigation Status',
+      'Regulatory Compliance',
+      'Authority Representations'
+    ],
     template: `LEGAL OPINION OF COUNSEL
 
 [COMPANY NAME]
@@ -108,6 +130,13 @@ Based upon and subject to the qualifications, limitations, and assumptions set f
     required: true,
     description:
       'Legal opinion from counsel to the underwriter regarding the registration statement and prospectus validity',
+    keyTerms: [
+      'Registration Statement Validity',
+      'Prospectus Compliance',
+      'Securities Law Compliance',
+      'Underwriter Protections',
+      'Legal Enforceability'
+    ],
     template: `LEGAL OPINION OF UNDERWRITER'S COUNSEL
 
 [COMPANY NAME]
@@ -131,11 +160,18 @@ In such capacity, we have examined and relied upon certain documents and have ma
   'valuation-expert-appraisal': {
     id: 'valuation-expert-appraisal',
     title: 'Valuation Expert Consent and Report',
-    entityType: 'valuation-expert',
+    entityType: 'valuation_expert',
     exchanges: ['TSX', 'TSXV', 'CSE'],
     required: false,
     description:
       'Consent from valuation experts for inclusion of valuation reports and opinions',
+    keyTerms: [
+      'Fair Value Assessment',
+      'Industry Standards Compliance',
+      'Valuation Methodology',
+      'Expert Opinion',
+      'Professional Independence'
+    ],
     template: `CONSENT OF VALUATION EXPERT
 
 [COMPANY NAME]
@@ -155,11 +191,18 @@ The valuation and analysis are subject to the assumptions, qualifications, and l
   'environmental-expert-report': {
     id: 'environmental-expert-report',
     title: 'Environmental Expert Report Consent',
-    entityType: 'environmental-expert',
+    entityType: 'environmental_expert',
     exchanges: ['NYSE', 'NASDAQ', 'TSX', 'TSXV', 'CSE'],
     required: false,
     description:
       'Consent from environmental experts for Phase I/II environmental assessments',
+    keyTerms: [
+      'Phase I/II Assessment',
+      'ASTM Standards Compliance',
+      'Environmental Liabilities',
+      'Remediation Status',
+      'Regulatory Approvals'
+    ],
     template: `CONSENT OF ENVIRONMENTAL EXPERT
 
 [COMPANY NAME]

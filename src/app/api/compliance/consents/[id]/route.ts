@@ -51,55 +51,69 @@ export async function PATCH(
       )
     }
 
-    // Build update query
-    const updates: string[] = []
-    const values: unknown[] = []
-
-    if (status) {
-      updates.push(`status = $${updates.length + 1}`)
-      values.push(status)
-    }
-
-    if (document_url !== undefined) {
-      updates.push(`document_url = $${updates.length + 1}`)
-      values.push(document_url || null)
-    }
-
-    if (expiry_date !== undefined) {
-      updates.push(`expiry_date = $${updates.length + 1}`)
-      values.push(expiry_date || null)
-    }
-
-    if (updates.length === 0) {
+    // Check if any fields are being updated
+    const hasUpdates = status || document_url !== undefined || expiry_date !== undefined
+    
+    if (!hasUpdates) {
       return NextResponse.json(
         { error: 'No fields to update' },
         { status: 400 }
       )
     }
 
-    updates.push(`updated_at = CURRENT_TIMESTAMP`)
-
-    // Update the consent
-    const query = `
-      UPDATE consent_letters
-      SET ${updates.join(', ')}
-      WHERE id = $${values.length + 1}
-      RETURNING 
-        id,
-        company_id,
-        from_entity,
-        entity_type,
-        consent_type,
-        status,
-        document_url,
-        expiry_date,
-        created_at,
-        updated_at
-    `
-
-    values.push(id)
-
-    const updatedConsent = await sql.unsafe(query, values)
+    // Update the consent using conditionaltemplate literal approach
+    let updatedConsent: any
+    
+    if (status && document_url !== undefined && expiry_date !== undefined) {
+      updatedConsent = await sql`
+        UPDATE consent_letters
+        SET status = ${status}, document_url = ${document_url}, expiry_date = ${expiry_date}, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${id}
+        RETURNING *
+      `
+    } else if (status && document_url !== undefined) {
+      updatedConsent = await sql`
+        UPDATE consent_letters
+        SET status = ${status}, document_url = ${document_url}, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${id}
+        RETURNING *
+      `
+    } else if (status && expiry_date !== undefined) {
+      updatedConsent = await sql`
+        UPDATE consent_letters
+        SET status = ${status}, expiry_date = ${expiry_date}, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${id}
+        RETURNING *
+      `
+    } else if (document_url !== undefined && expiry_date !== undefined) {
+      updatedConsent = await sql`
+        UPDATE consent_letters
+        SET document_url = ${document_url}, expiry_date = ${expiry_date}, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${id}
+        RETURNING *
+      `
+    } else if (status) {
+      updatedConsent = await sql`
+        UPDATE consent_letters
+        SET status = ${status}, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${id}
+        RETURNING *
+      `
+    } else if (document_url !== undefined) {
+      updatedConsent = await sql`
+        UPDATE consent_letters
+        SET document_url = ${document_url}, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${id}
+        RETURNING *
+      `
+    } else if (expiry_date !== undefined) {
+      updatedConsent = await sql`
+        UPDATE consent_letters
+        SET expiry_date = ${expiry_date}, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${id}
+        RETURNING *
+      `
+    }
 
     // Log audit event
     await sql`

@@ -88,7 +88,7 @@ async function getFinancialData(companyId: string) {
     
     // Monthly cost average (for daily rate)
     const avgMonthlySpend = totalActualSpent > 0 && sortedTracking.length > 0 
-      ? totalActualSpend / sortedTracking.length
+      ? totalActualSpent / sortedTracking.length
       : estimatedTotal / 12
 
     const costPerDay = avgMonthlySpend / 30

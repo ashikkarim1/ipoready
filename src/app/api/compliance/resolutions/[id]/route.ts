@@ -17,29 +17,29 @@ export async function GET(request: NextRequest, context: RouteContext) {
 
     // Fetch resolution
     const resolutionResult = await sql`
-      SELECT * FROM board_resolutions WHERE id = $1
-    `(id)
+      SELECT * FROM board_resolutions WHERE id = ${id}
+    `
 
-    if (resolutionResult.rows.length === 0) {
+    if (resolutionResult.length === 0) {
       return NextResponse.json(
         { success: false, error: 'Resolution not found' },
         { status: 404 }
       )
     }
 
-    const resolution = resolutionResult.rows[0]
+    const resolution = resolutionResult[0]
 
     // Fetch approvals
     const approvalsResult = await sql`
-      SELECT * FROM resolution_approvals WHERE resolution_id = $1
+      SELECT * FROM resolution_approvals WHERE resolution_id = ${id}
       ORDER BY created_at ASC
-    `(id)
+    `
 
     return NextResponse.json({
       success: true,
       resolution: {
         ...resolution,
-        approvals: approvalsResult.rows,
+        approvals: approvalsResult,
       },
     })
   } catch (error) {
@@ -70,46 +70,67 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       )
     }
 
-    // Build update query
-    const updateFields: string[] = []
-    const updateValues: any[] = []
-    let paramCounter = 1
-
-    if (status) {
-      updateFields.push(`status = $${paramCounter++}`)
-      updateValues.push(status)
-    }
-
-    if (effectiveDate) {
-      updateFields.push(`execution_date = $${paramCounter++}`)
-      updateValues.push(new Date(effectiveDate))
-    }
-
-    if (htmlContent) {
-      updateFields.push(`html_content = $${paramCounter++}`)
-      updateValues.push(htmlContent)
-    }
-
-    if (updateFields.length === 0) {
+    // Update resolution based on provided fields
+    if (!status && !effectiveDate && !htmlContent) {
       return NextResponse.json(
         { success: false, error: 'No fields to update' },
         { status: 400 }
       )
     }
 
-    updateFields.push(`updated_at = NOW()`)
-    updateValues.push(id)
+    let result
+    if (status && effectiveDate && htmlContent) {
+      result = await sql`
+        UPDATE board_resolutions
+        SET status = ${status}, execution_date = ${new Date(effectiveDate)}, html_content = ${htmlContent}, updated_at = NOW()
+        WHERE id = ${id}
+        RETURNING id, status, updated_at
+      `
+    } else if (status && effectiveDate) {
+      result = await sql`
+        UPDATE board_resolutions
+        SET status = ${status}, execution_date = ${new Date(effectiveDate)}, updated_at = NOW()
+        WHERE id = ${id}
+        RETURNING id, status, updated_at
+      `
+    } else if (status && htmlContent) {
+      result = await sql`
+        UPDATE board_resolutions
+        SET status = ${status}, html_content = ${htmlContent}, updated_at = NOW()
+        WHERE id = ${id}
+        RETURNING id, status, updated_at
+      `
+    } else if (effectiveDate && htmlContent) {
+      result = await sql`
+        UPDATE board_resolutions
+        SET execution_date = ${new Date(effectiveDate)}, html_content = ${htmlContent}, updated_at = NOW()
+        WHERE id = ${id}
+        RETURNING id, status, updated_at
+      `
+    } else if (status) {
+      result = await sql`
+        UPDATE board_resolutions
+        SET status = ${status}, updated_at = NOW()
+        WHERE id = ${id}
+        RETURNING id, status, updated_at
+      `
+    } else if (effectiveDate) {
+      result = await sql`
+        UPDATE board_resolutions
+        SET execution_date = ${new Date(effectiveDate)}, updated_at = NOW()
+        WHERE id = ${id}
+        RETURNING id, status, updated_at
+      `
+    } else if (htmlContent) {
+      result = await sql`
+        UPDATE board_resolutions
+        SET html_content = ${htmlContent}, updated_at = NOW()
+        WHERE id = ${id}
+        RETURNING id, status, updated_at
+      `
+    }
 
-    const query = `
-      UPDATE board_resolutions
-      SET ${updateFields.join(', ')}
-      WHERE id = $${paramCounter}
-      RETURNING id, status, updated_at
-    `
-
-    const result = await sql(query, updateValues as any[])
-
-    if (result.rows.length === 0) {
+    if (!result || result.length === 0) {
       return NextResponse.json(
         { success: false, error: 'Resolution not found' },
         { status: 404 }
@@ -118,7 +139,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
     return NextResponse.json({
       success: true,
-      resolution: result.rows[0],
+      resolution: result[0],
     })
   } catch (error) {
     console.error('Error updating resolution:', error)
@@ -140,11 +161,11 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
     const result = await sql`
       UPDATE board_resolutions
       SET status = 'archived', archived_at = NOW()
-      WHERE id = $1
+      WHERE id = ${id}
       RETURNING id, status
-    `(id)
+    `
 
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       return NextResponse.json(
         { success: false, error: 'Resolution not found' },
         { status: 404 }

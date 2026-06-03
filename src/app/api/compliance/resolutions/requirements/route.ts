@@ -33,19 +33,19 @@ export async function GET(request: NextRequest) {
         required_by_date,
         notes
       FROM exchange_resolution_requirements
-      WHERE exchange = $1
+      WHERE exchange = ${exchange}
       ORDER BY is_required DESC, resolution_type ASC
-    `(exchange)
+    `
 
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       return NextResponse.json(
         { error: 'Exchange not found' },
         { status: 404 }
       )
     }
 
-    const required = result.rows.filter(r => r.is_required)
-    const optional = result.rows.filter(r => !r.is_required)
+    const required = result.filter(r => r.is_required)
+    const optional = result.filter(r => !r.is_required)
 
     return NextResponse.json({
       success: true,
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
         requiredByDate: r.required_by_date,
         notes: r.notes,
       })),
-      total: result.rows.length,
+      total: result.length,
     })
   } catch (error) {
     console.error('Error fetching requirements:', error)

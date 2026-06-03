@@ -29,6 +29,15 @@ interface ValidatorPanelProps {
 function ValidatorPanel({ exchange, metrics, status }: ValidatorPanelProps) {
   const config = getExchangeConfig(exchange)
 
+  // Guard clause for undefined config
+  if (!config) {
+    return (
+      <div className="bg-white rounded-lg shadow p-6">
+        <p className="text-red-600 font-semibold">Unable to load exchange configuration</p>
+      </div>
+    )
+  }
+
   const requirements = [
     {
       metric: 'Minimum Public Float',
@@ -230,6 +239,7 @@ function ExchangeSelector({ selectedExchanges, onExchangeSelect, onExchangeRemov
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         {allExchanges.map(exchange => {
           const config = getExchangeConfig(exchange)
+          if (!config) return null
           const isSelected = selectedExchanges.includes(exchange)
 
           return (
@@ -298,6 +308,8 @@ export default function ListingRulesPage() {
     nasdaq: null,
     nyse: null,
     cse: null,
+    cboe: null,
+    otc: null,
   })
 
   // Generate reports for all selected exchanges
@@ -306,7 +318,7 @@ export default function ListingRulesPage() {
       setIsLoading(true)
       const newReports = { ...reports }
       selectedExchanges.forEach(exchange => {
-        newReports[exchange] = generateListingReport(formData, exchange)
+        newReports[exchange] = generateListingReport(exchange, formData)
       })
       setReports(newReports)
       setIsLoading(false)
@@ -400,26 +412,34 @@ export default function ListingRulesPage() {
                 className="space-y-6"
               >
                 {/* Compliance Indicator */}
-                <ComplianceIndicator
-                  score={currentReport.complianceScore}
-                  status={currentReport.overallStatus}
-                  config={getExchangeConfig(activeExchange)}
-                />
+                {getExchangeConfig(activeExchange) && (
+                  <ComplianceIndicator
+                    score={currentReport.complianceScore}
+                    status={currentReport.overallStatus}
+                    config={getExchangeConfig(activeExchange)!}
+                  />
+                )}
 
                 {/* Validator Panel */}
-                <ValidatorPanel
-                  exchange={activeExchange}
-                  metrics={{
-                    minFloatPct: formData.publicSharePercentage,
-                    boardLotSize: 100,
-                    minShares: formData.publicShares,
-                  }}
-                  status={{
-                    floatOk: formData.publicSharePercentage >= getExchangeConfig(activeExchange).minPublicFloat,
-                    boardLotOk: true,
-                    sharesOk: formData.publicShares >= getExchangeConfig(activeExchange).minShares,
-                  }}
-                />
+                {(() => {
+                  const config = getExchangeConfig(activeExchange)
+                  if (!config) return null
+                  return (
+                    <ValidatorPanel
+                      exchange={activeExchange}
+                      metrics={{
+                        minFloatPct: formData.publicSharePercentage,
+                        boardLotSize: 100,
+                        minShares: formData.publicShares,
+                      }}
+                      status={{
+                        floatOk: formData.publicSharePercentage >= config.minPublicFloat,
+                        boardLotOk: true,
+                        sharesOk: formData.publicShares >= config.minShares,
+                      }}
+                    />
+                  )
+                })()}
 
                 {/* Gap Analysis Table */}
                 <GapAnalysisTable

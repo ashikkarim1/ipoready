@@ -7,8 +7,10 @@
  * - IPO readiness dashboard
  */
 
+import * as dotenv from 'dotenv'
+dotenv.config()
+
 import { sql } from '@/lib/db'
-import * as bcrypt from 'bcryptjs'
 import { nanoid } from 'nanoid'
 
 // Color coding for contract status
@@ -165,32 +167,18 @@ async function seedProductionDemo() {
   console.log('🚀 Starting IPOReady Production Demo Data Seed...\n')
 
   try {
-    // Step 1: Create/Update test user
-    console.log('📝 Setting up test user...')
-    const hashedPassword = await bcrypt.hash('TestPassword123!', 10)
-    const userId = nanoid()
+    // Step 1: Get existing test user (assumes user already exists from production)
+    console.log('📝 Fetching test user...')
+    const userResult = await sql`SELECT id, email FROM users WHERE email = 'test@ipoready.com' LIMIT 1` as any[]
+    
+    if (!userResult || userResult.length === 0) {
+      console.error('❌ Test user not found. Please create test@ipoready.com first.')
+      process.exit(1)
+    }
+    
+    const userId = userResult[0].id
     const companyId = nanoid()
-
-    // Upsert user
-    await sql`
-      INSERT INTO users (
-        id, email, password, name, role, company_id, created_at, updated_at
-      ) VALUES (
-        ${userId}, 
-        'test@ipoready.com',
-        ${hashedPassword},
-        'Demo Account',
-        'admin',
-        ${companyId},
-        NOW(),
-        NOW()
-      )
-      ON CONFLICT (email) DO UPDATE SET
-        password = ${hashedPassword},
-        company_id = ${companyId},
-        updated_at = NOW()
-    `
-    console.log('✅ Test user created/updated: test@ipoready.com')
+    console.log(`✅ Test user found: ${userResult[0].email} (ID: ${userId})`)
 
     // Step 2: Create company profile
     console.log('\n🏢 Setting up company profile...')

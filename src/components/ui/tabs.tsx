@@ -7,7 +7,7 @@ interface TabsContextType {
 
 const TabsContext = React.createContext<TabsContextType | undefined>(undefined)
 
-interface TabsProps {
+interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: string
   defaultValue?: string
   onValueChange?: (value: string) => void

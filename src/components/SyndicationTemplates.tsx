@@ -98,7 +98,7 @@ export function SyndicationTemplates() {
     reset,
     setValue,
   } = useForm<TemplateFormData>({
-    resolver: zodResolver(TemplateSchema),
+    resolver: zodResolver(TemplateSchema) as any,
   })
 
   useEffect(() => {
@@ -299,8 +299,8 @@ specific transaction requirements.
   }
 
   const handleDownloadAgreement = (template: SyndicationTemplate) => {
-    const document = generateAgreementDocument(template)
-    const blob = new Blob([document], { type: 'text/plain' })
+    const documentContent = generateAgreementDocument(template)
+    const blob = new Blob([documentContent], { type: 'text/plain' })
     const url = window.URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url

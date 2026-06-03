@@ -21,6 +21,15 @@ export function SideBySideComparison({
   const config1 = getExchangeConfig(exchange1)
   const config2 = getExchangeConfig(exchange2)
 
+  // Guard clause to ensure both configs are available
+  if (!config1 || !config2) {
+    return (
+      <div className="bg-white rounded-xl shadow-lg p-6 text-center">
+        <p className="text-red-600 font-semibold">Unable to load exchange configurations</p>
+      </div>
+    )
+  }
+
   const renderComplianceIcon = (compliant: boolean) => {
     return compliant ? (
       <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">

@@ -342,7 +342,7 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
     watch,
     setValue,
   } = useForm<ResolutionFormData>({
-    resolver: zodResolver(ResolutionSchema),
+    resolver: zodResolver(ResolutionSchema) as any,
     defaultValues: {
       boardMembers: [],
     },
@@ -393,7 +393,7 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
                       <div className="flex-1">
                         <h4 className="font-semibold text-slate-900 dark:text-white">{template.name}</h4>
                         <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{template.description}</p>
-                        {template.requiredForExchange?.length > 0 && (
+                        {template.requiredForExchange && template.requiredForExchange.length > 0 && (
                           <div className="flex gap-2 mt-2 flex-wrap">
                             {template.requiredForExchange.map(exchange => (
                               <span key={exchange} className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-900 dark:text-blue-200 px-2 py-1 rounded">
@@ -688,7 +688,7 @@ export function ResolutionsManager2C1() {
     formState: { errors },
     reset,
   } = useForm<ResolutionFormData>({
-    resolver: zodResolver(ResolutionSchema),
+    resolver: zodResolver(ResolutionSchema) as any,
   })
 
   const handleCreateResolution = async (data: ResolutionFormData) => {
@@ -864,7 +864,7 @@ export function ResolutionsManager2C1() {
       {showWizard && (
         <ResolutionWizard
           onClose={() => setShowWizard(false)}
-          onSubmit={handleSubmit(handleCreateResolution)}
+          onSubmit={(data) => handleCreateResolution(data)}
           isSubmitting={isSubmitting}
         />
       )}

@@ -21,7 +21,7 @@ interface ConsentDetailsModalProps {
   onDelete: () => void
 }
 
-const CONSENT_STATUSES: ConsentStatus[] = ['pending', 'received', 'rejected', 'expired', 'withdrawn']
+const CONSENT_STATUSES: ConsentStatus[] = ['pending', 'signed', 'rejected', 'expired']
 
 export default function ConsentDetailsModal({
   consent,
@@ -93,7 +93,7 @@ export default function ConsentDetailsModal({
                     ⚠️ Expired
                   </span>
                 )}
-                {isExpiringSoonConsent && consent.status !== 'received' && (
+                {isExpiringSoonConsent && consent.status !== 'signed' && (
                   <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded">
                     ⚠️ Expiring Soon
                   </span>
@@ -211,7 +211,7 @@ export default function ConsentDetailsModal({
 
                 <div className="flex gap-3">
                   <div className="flex flex-col items-center">
-                    <div className={`w-2 h-2 rounded-full ${consent.status === 'received' ? 'bg-green-500' : 'bg-gray-300'}`} />
+                    <div className={`w-2 h-2 rounded-full ${consent.status === 'signed' ? 'bg-green-500' : 'bg-gray-300'}`} />
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">Last Updated</p>
@@ -242,7 +242,7 @@ export default function ConsentDetailsModal({
               </div>
             )}
 
-            {isExpiringSoonConsent && consent.status !== 'received' && (
+            {isExpiringSoonConsent && consent.status !== 'signed' && (
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
                 <p className="text-sm text-orange-800">
                   <strong>Urgent:</strong> This consent expires {formatExpiryDate(consent.expiry_date)}. Please
@@ -263,12 +263,12 @@ export default function ConsentDetailsModal({
               Close
             </motion.button>
 
-            {consent.status !== 'received' && (
+            {consent.status !== 'signed' && (
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => {
-                  onStatusChange('received')
+                  onStatusChange('signed')
                   onClose()
                 }}
                 className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition"

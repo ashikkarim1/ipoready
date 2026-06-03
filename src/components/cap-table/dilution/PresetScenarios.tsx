@@ -130,17 +130,17 @@ export default function PresetScenarios({
           <div>
             <p className="text-xs text-slate-600 mb-2">Key Assumptions</p>
             <div className="space-y-1 text-xs text-slate-700 bg-white bg-opacity-50 rounded p-2">
-              {scenario.assumptions.warrantsExercisedPercent && (
+              {!!scenario.assumptions.warrantsExercisedPercent && (
                 <p>
-                  Warrants: {scenario.assumptions.warrantsExercisedPercent}%
+                  Warrants: {String(scenario.assumptions.warrantsExercisedPercent)}%
                 </p>
               )}
-              {scenario.assumptions.newFinancingAmount && (
+              {!!scenario.assumptions.newFinancingAmount && (
                 <p>
                   Financing: ${Number(scenario.assumptions.newFinancingAmount).toLocaleString()}
                 </p>
               )}
-              {scenario.assumptions.projectedValuation && (
+              {!!scenario.assumptions.projectedValuation && (
                 <p>
                   Valuation: ${Number(scenario.assumptions.projectedValuation).toLocaleString()}
                 </p>

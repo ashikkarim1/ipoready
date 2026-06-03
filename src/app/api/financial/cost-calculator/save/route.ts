@@ -7,14 +7,14 @@ import { z } from 'zod'
 export const dynamic = 'force-dynamic'
 
 const SaveSchema = z.object({
-  calculationData: z.record(z.any()),
+  calculationData: z.record(z.string(), z.any()),
   companyRevenue: z.number(),
   selectedExchange: z.string(),
   complexityLevel: z.string(),
   timelineMonths: z.number(),
   totalCost: z.number(),
-  costBreakdown: z.record(z.number()),
-  benchmarks: z.record(z.any()),
+  costBreakdown: z.record(z.string(), z.number()),
+  benchmarks: z.record(z.string(), z.any()),
   notes: z.string().optional(),
 })
 
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid request data', details: error.errors },
+        { error: 'Invalid request data', details: error.issues },
         { status: 400 }
       )
     }
