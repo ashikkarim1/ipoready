@@ -23,6 +23,11 @@ export default function ListingRulesPage() {
       exchange: 'TSX Venture Exchange',
       rules: ['Venture-specific requirements', 'Minimum share price rules', 'Escrow provisions'],
     },
+    {
+      name: 'CSE',
+      exchange: 'Canadian Securities Exchange',
+      rules: ['Flexible disclosure standards', 'Lower minimum shareholder requirements', 'Streamlined compliance framework'],
+    },
   ]
 
   return (
