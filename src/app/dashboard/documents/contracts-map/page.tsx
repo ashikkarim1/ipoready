@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { motion } from 'framer-motion'
 import ContractsMap, { ContractNode } from './ContractsMap'
 import {
   FileText,
@@ -13,6 +14,8 @@ import {
   AlertCircle,
   Loader,
   CheckCircle as CheckCircleIcon,
+  Network,
+  ArrowRight,
 } from 'lucide-react'
 
 // Icon mapping for document types
@@ -215,47 +218,81 @@ export default function ContractsMapPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+      <div style={{ background: '#F7F6F4', minHeight: '100vh' }} className="flex items-center justify-center">
         <div className="text-center">
-          <Loader className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Loading contracts network...</p>
+          <div className="inline-block mb-4">
+            <Loader className="w-12 h-12 animate-spin" style={{ color: '#E8312A' }} />
+          </div>
+          <p className="text-text-muted">Loading contracts network...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex flex-col">
-      {/* Page header with context */}
-      <div className="bg-white border-b border-slate-200 px-8 py-6 shadow-sm">
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-4xl font-bold text-slate-900 mb-2">
-              Material Contracts Network
-            </h1>
-            <p className="body-sm text-slate-600 max-w-2xl">
-              Interactive visualization of your prospectus relationships. Click any document
-              node to view details, upload, or manage. Missing required documents are highlighted
-              in pulsing red.
-            </p>
-          </div>
+    <div style={{ background: '#F7F6F4', minHeight: '100vh' }} className="flex flex-col">
+      {/* Hero Section */}
+      <section className="max-w-7xl mx-auto w-full" style={{ paddingTop: '3rem', paddingBottom: '2rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}>
+          
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex items-center gap-2 mb-4">
+            <span className="pill text-xs font-bold uppercase tracking-wider"
+              style={{ background: '#FDECEB', color: '#E8312A' }}>
+              <Network className="w-3.5 h-3.5 inline mr-1.5" />
+              Contract Network
+            </span>
+          </motion.div>
+
+          {/* Heading */}
+          <motion.h1
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.06 }}
+            className="serif text-nav"
+            style={{ fontSize: '2.5rem', lineHeight: '1.2', marginBottom: '1rem' }}>
+            Material Contracts<br />
+            <span style={{ color: '#E8312A' }}>Network Visualization</span>
+          </motion.h1>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.12 }}
+            className="text-text-muted text-lg leading-relaxed" style={{ maxWidth: '620px', marginBottom: requiredMissing.length > 0 ? '1.5rem' : '0' }}>
+            Interactive graph of all prospectus relationships and document dependencies. Click any node to upload, review, or manage documents.
+          </motion.p>
+
+          {/* Alert if docs missing */}
           {requiredMissing.length > 0 && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <AlertCircle className="w-5 h-5 text-red-600" />
-                <p className="font-bold body text-red-900">Action Required</p>
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.18 }}
+              className="card p-6" style={{ background: '#FDECEB', border: '1px solid #F5E5E1', marginTop: '1.5rem' }}>
+              <div className="flex items-start gap-4">
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#FFD4CE' }}>
+                  <AlertCircle className="w-5 h-5" style={{ color: '#E8312A' }} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-nav mb-1">Action Required</h3>
+                  <p className="text-sm text-text-muted">
+                    {requiredMissing.length} required document{requiredMissing.length > 1 ? 's' : ''} missing. {riskAssessment}.
+                  </p>
+                </div>
               </div>
-              <p className="label-sm font-semibold text-red-700">
-                {requiredMissing.length} required document{
-                  requiredMissing.length > 1 ? 's' : ''
-                }{' '}
-                missing
-              </p>
-              <p className="caption-sm text-red-600 mt-1">{riskAssessment}</p>
-            </div>
+            </motion.div>
           )}
-        </div>
-      </div>
+        </motion.div>
+      </section>
 
       {/* Main graph area */}
       <div className="flex-1 overflow-hidden">
@@ -269,53 +306,48 @@ export default function ContractsMapPage() {
 
       {/* Upload status modal */}
       {uploadingNode && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full mx-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="card p-8 max-w-md w-full mx-4">
             <div className="text-center">
               {uploadStatus === 'uploading' && (
                 <>
-                  <div className="inline-block">
-                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600"></div>
+                  <div className="inline-block mb-4">
+                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-200" style={{ borderTopColor: '#E8312A' }}></div>
                   </div>
-                  <h3 className="mt-4 h4 font-semibold text-gray-900">
+                  <h3 className="h4 font-semibold text-nav mb-2">
                     Uploading Document
                   </h3>
-                  <p className="body-sm text-gray-600 mt-2">
+                  <p className="text-sm text-text-muted">
                     {uploadingNode.name}
                   </p>
                 </>
               )}
               {uploadStatus === 'success' && (
                 <>
-                  <div className="inline-block p-3 bg-green-100 rounded-full mb-4">
-                    <svg
-                      className="w-6 h-6 text-green-600"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
+                  <div className="inline-block p-3 rounded-full mb-4" style={{ background: '#EAF5F0' }}>
+                    <CheckCircleIcon className="w-6 h-6" style={{ color: '#2D7A5F' }} />
                   </div>
-                  <h3 className="h4 font-semibold text-gray-900">
+                  <h3 className="h4 font-semibold text-nav mb-2">
                     Upload Successful
                   </h3>
-                  <p className="body-sm text-gray-600 mt-2">
+                  <p className="text-sm text-text-muted mb-2">
                     {uploadingNode.name} has been uploaded and saved.
                   </p>
-                  <p className="caption-sm text-gray-500 mt-3">
+                  <p className="caption-sm text-text-muted">
                     The graph will update automatically
                   </p>
                 </>
               )}
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
     </div>
   )
