@@ -1,12 +1,12 @@
-import { Metadata } from 'next'
-import { Shield, BookOpen, CheckCircle } from 'lucide-react'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Listing Rules - IPOReady',
-  description: 'Exchange-specific listing requirements and compliance rules',
-}
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Shield, BookOpen, CheckCircle, ArrowRight } from 'lucide-react'
 
 export default function ListingRulesPage() {
+  const router = useRouter()
+  const [hoveredExchange, setHoveredExchange] = useState<string | null>(null)
   const exchanges = [
     {
       name: 'TSX',
@@ -72,10 +72,19 @@ export default function ListingRulesPage() {
               </div>
 
               <button
-                className="mt-6 px-6 py-2 rounded-lg font-medium transition-all hover:opacity-90 active:scale-95"
-                style={{ background: '#E8312A', color: 'white' }}
+                onClick={() => router.push(`/dashboard/compliance/listing-requirements?exchange=${exchange.name.toLowerCase()}`)}
+                onMouseEnter={() => setHoveredExchange(exchange.name)}
+                onMouseLeave={() => setHoveredExchange(null)}
+                className="mt-6 px-6 py-3 rounded-lg font-semibold transition-all hover:shadow-lg active:scale-95 flex items-center gap-2 text-base"
+                style={{ 
+                  background: '#E8312A', 
+                  color: 'white',
+                  transform: hoveredExchange === exchange.name ? 'translateX(4px)' : 'translateX(0)',
+                  transitionProperty: 'all'
+                }}
               >
                 View Full Requirements
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           ))}
