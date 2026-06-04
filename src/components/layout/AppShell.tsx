@@ -34,6 +34,7 @@ const NAV_GROUPS = [
       { href: '/documents',                              icon: FileText,        label: 'Documents',          badge: null,   key: 'documents'        },
       { href: '/dashboard/documents/contracts-map',      icon: FileText,        label: 'Prospectus Map',     badge: null,   key: 'prospectus-map'   },
       { href: '/prospectus',                             icon: FileText,        label: 'Prospectus Builder', badge: '✨',   key: 'prospectus'       },
+      { href: '/dashboard/work/directors-officers',      icon: Users,           label: 'Board & Talent',     badge: '💎',   key: 'directors'        },
       { href: '/templates',                              icon: Award,           label: 'Templates & Forms',  badge: null,   key: 'templates'        },
     ],
   },
@@ -451,7 +452,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                               // Check if this route is active
                               // Prefer exact match; only use startsWith if no other route is more specific
                               const isExactMatch = pathname === href
-                              const isChildMatch = pathname.startsWith(href + '/') && href !== '/dashboard'
+                              // Only consider as child if href doesn't have /new or /status (sibling routes)
+                              const isChildMatch = pathname.startsWith(href + '/') && href !== '/dashboard' && !href.includes('/new') && !href.includes('/status')
                               const isActive = isExactMatch || isChildMatch
 
                               // Derive dynamic badge overrides
