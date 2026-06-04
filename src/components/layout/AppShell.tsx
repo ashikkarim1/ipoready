@@ -34,6 +34,7 @@ const NAV_GROUPS = [
       { href: '/documents',                              icon: FileText,        label: 'Documents',          badge: null,   key: 'documents'        },
       { href: '/dashboard/documents/contracts-map',      icon: FileText,        label: 'Prospectus Map',     badge: null,   key: 'prospectus-map'   },
       { href: '/prospectus',                             icon: FileText,        label: 'Prospectus Builder', badge: '✨',   key: 'prospectus'       },
+      { href: '/dashboard/work/prospectus-validator',    icon: CheckSquare,     label: 'Prospectus Validator', badge: null,  key: 'validator'        },
       { href: '/dashboard/work/directors-officers',      icon: Users,           label: 'Board & Talent',     badge: '💎',   key: 'directors'        },
       { href: '/templates',                              icon: Award,           label: 'Templates & Forms',  badge: null,   key: 'templates'        },
     ],
@@ -43,8 +44,9 @@ const NAV_GROUPS = [
     collapsible: true,
     items: [
       { href: '/dashboard/financial-mgmt/cost-calculator',    icon: Calculator,  label: 'Cost Calculator',      badge: null,   key: 'cost-calc'      },
-      { href: '/financial/budget-tracking',    icon: BarChart3,   label: 'Budget Tracking',      badge: null,   key: 'budget-tracking'},
-      { href: '/dilution-demo',                icon: Percent,     label: 'Dilution Scenarios',   badge: null,   key: 'dilution'       },
+      { href: '/dashboard/financial-mgmt/true-cost',          icon: DollarSign,  label: 'True Cost of Going Public', badge: '💎', key: 'true-cost' },
+      { href: '/dashboard/cap-table/dilution-scenarios',      icon: Percent,     label: 'Dilution Scenarios',   badge: null,   key: 'dilution'       },
+      { href: '/financial/budget-tracking',                   icon: BarChart3,   label: 'Budget Tracking',      badge: null,   key: 'budget-tracking'},
     ],
   },
   {
