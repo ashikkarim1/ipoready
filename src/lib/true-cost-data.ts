@@ -19,6 +19,20 @@ export type CostCategory =
   | 'governance-services'
   | 'listing-agent'
 
+// Helper to create empty cost breakdown
+export const createEmptyBreakdown = (): Record<CostCategory, number> => ({
+  'external-audit': 0,
+  'ir-pr-services': 0,
+  'legal-compliance': 0,
+  'insider-trading': 0,
+  'dno-insurance': 0,
+  'eno-insurance': 0,
+  'cyber-insurance': 0,
+  'ir-additional': 0,
+  'governance-services': 0,
+  'listing-agent': 0,
+})
+
 export interface CostComponent {
   id: CostCategory
   name: string
@@ -297,11 +311,12 @@ export function calculateAnnualCost(
   options: CostCalculationOptions = {}
 ): { breakdown: Record<CostCategory, number>; total: number } {
   const profile = EXCHANGE_COST_PROFILES[exchangeId.toLowerCase()]
-  if (!profile) {
-    return { breakdown: {}, total: 0 }
-  }
 
-  const breakdown: Record<CostCategory, number> = {}
+  const breakdown = createEmptyBreakdown()
+
+  if (!profile) {
+    return { breakdown, total: 0 }
+  }
 
   // Calculate each component
   for (const categoryId of profile.components) {
@@ -384,7 +399,7 @@ export function getYear1MonthlyBreakdown(
     const annualCosts = calculateAnnualCost(exchangeId, 1, options)
 
     // Scale annual costs by month ramp
-    const monthlyBreakdown: Record<CostCategory, number> = {}
+    const monthlyBreakdown = createEmptyBreakdown()
     for (const [key, cost] of Object.entries(annualCosts.breakdown)) {
       monthlyBreakdown[key as CostCategory] = Math.round(cost * rampup / 12)
     }

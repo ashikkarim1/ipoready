@@ -337,7 +337,7 @@ export function TrueCostDashboard() {
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip
-                formatter={(value: number) => formatCurrency(value, company.currency)}
+                formatter={(value: any) => formatCurrency(value as number, company.currency)}
                 contentStyle={{ background: '#FFF', border: '1px solid #E5E7EB', borderRadius: '8px' }}
               />
               <Legend />
@@ -357,7 +357,7 @@ export function TrueCostDashboard() {
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip
-                formatter={(value: number) => formatCurrency(value, company.currency)}
+                formatter={(value: any) => formatCurrency(value as number, company.currency)}
                 contentStyle={{ background: '#FFF', border: '1px solid #E5E7EB', borderRadius: '8px' }}
               />
               <Line

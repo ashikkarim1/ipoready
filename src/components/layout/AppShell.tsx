@@ -69,6 +69,7 @@ const NAV_GROUPS = [
     section: 'LEARNING & COMPLIANCE',
     collapsible: true,
     items: [
+      { href: '/learning-compliance/insurances', icon: Shield,      label: 'Insurances',         badge: null,   key: 'insurances'  },
       { href: '/resources',       icon: BookOpen,        label: 'Resource Centre',    badge: null,   key: 'resources'   },
       { href: '/checklist-guide', icon: FileSearch,      label: 'Compliance Guide',   badge: null,   key: 'guide'       },
       { href: '/marketplace',     icon: ShoppingBag,     label: 'Expert Network',     badge: null,   key: 'marketplace' },

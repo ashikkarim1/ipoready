@@ -208,7 +208,7 @@ export function AddPersonModal({
                         <select
                           id="role"
                           value={formData.role}
-                          onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                          onChange={(e) => setFormData({ ...formData, role: e.target.value as DirectorRole | OfficerRole })}
                           className="mt-1 w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500"
                           required
                         >
