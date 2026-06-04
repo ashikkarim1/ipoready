@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Header } from '@/app/components/Header'
 import { ArrowRight, BookOpen, Clock, CheckCircle2, Bookmark } from 'lucide-react'
 
 // Guide data - placeholder content ready for real writing
@@ -275,7 +274,21 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
 
   return (
     <div style={{ background: '#F7F6F4', minHeight: '100vh' }}>
-      <Header />
+      <header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid #E5E4E0', background: '#FFFFFF', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/" style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1A1A1A', textDecoration: 'none' }}>
+            IPOReady
+          </Link>
+          <div className="flex gap-6">
+            <Link href="/resources" style={{ color: '#1A1A1A', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>
+              Resources
+            </Link>
+            <Link href="/register" style={{ color: '#FFFFFF', background: '#E8312A', padding: '0.5rem 1rem', borderRadius: '9999px', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 600 }}>
+              Get Started
+            </Link>
+          </div>
+        </div>
+      </header>
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto" style={{ paddingTop: '5rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
