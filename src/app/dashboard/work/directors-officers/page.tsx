@@ -13,8 +13,6 @@ import {
   Trash2,
   RefreshCcw,
 } from 'lucide-react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 
 interface BoardMember {
   id: string
@@ -451,13 +449,13 @@ export default function DirectorsOfficersWorkflowPage() {
               </div>
             </div>
 
-            <Button
+            <button
               onClick={handleAddMember}
-              className="btn btn-accent gap-2 font-semibold px-6 py-2.5 rounded-full w-full"
+              className="btn btn-accent gap-2 font-semibold px-6 py-2.5 rounded-full w-full flex items-center justify-center"
             >
               <Plus className="w-4 h-4" />
               Add Member
-            </Button>
+            </button>
           </div>
         </div>
       </motion.div>
@@ -547,14 +545,14 @@ export default function DirectorsOfficersWorkflowPage() {
               </div>
             </div>
 
-            <Button
+            <button
               onClick={handleRevert}
               className="btn btn-secondary w-full text-xs"
               style={{ borderColor: '#E5E4E0', color: '#717171' }}
             >
               <RefreshCcw className="w-3 h-3" />
               Revert to {prospectusVersion}
-            </Button>
+            </button>
           </div>
         </div>
 
@@ -583,20 +581,20 @@ export default function DirectorsOfficersWorkflowPage() {
         )}
 
         <div className="flex gap-3">
-          <Button
+          <button
             onClick={() => setCurrentStep(3)}
             className="btn btn-secondary flex-1"
             style={{ borderColor: '#E5E4E0', color: '#1A1A1A' }}
           >
             Back to Edit
-          </Button>
-          <Button
+          </button>
+          <button
             onClick={handleConfirmSync}
             disabled={loading}
             className="btn btn-accent flex-1 font-semibold px-6 py-2.5 rounded-full"
           >
             {loading ? 'Syncing...' : 'Confirm & Sync'}
-          </Button>
+          </button>
         </div>
       </motion.div>
     )
@@ -673,32 +671,37 @@ export default function DirectorsOfficersWorkflowPage() {
         </div>
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="flex items-center justify-between pt-6 border-t" style={{ borderColor: '#E5E4E0' }}>
-          <Button
+          <button
             onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
             disabled={currentStep === 1}
-            className="btn btn-secondary"
+            className="btn btn-secondary flex items-center gap-2 px-4 py-2.5 rounded-full"
             style={{
               borderColor: '#E5E4E0',
               color: currentStep === 1 ? '#C9C7C4' : '#1A1A1A',
+              cursor: currentStep === 1 ? 'not-allowed' : 'pointer',
+              opacity: currentStep === 1 ? 0.5 : 1,
             }}
           >
             <ChevronLeft className="w-4 h-4" />
             Back
-          </Button>
+          </button>
 
           <div className="text-xs font-semibold text-center text-text-muted">
             Step {currentStep} of 4
           </div>
 
-          <Button
+          <button
             onClick={() => setCurrentStep(Math.min(4, currentStep + 1))}
             disabled={currentStep === 4}
-            className="btn btn-accent font-semibold px-6 py-2.5 rounded-full"
-            style={{ opacity: currentStep === 4 ? '0.5' : '1' }}
+            className="btn btn-accent font-semibold px-6 py-2.5 rounded-full flex items-center gap-2"
+            style={{
+              opacity: currentStep === 4 ? '0.5' : '1',
+              cursor: currentStep === 4 ? 'not-allowed' : 'pointer',
+            }}
           >
             Next
             <ChevronRight className="w-4 h-4" />
-          </Button>
+          </button>
         </motion.div>
       </div>
     </div>
