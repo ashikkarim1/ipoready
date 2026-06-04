@@ -409,7 +409,7 @@ export default function LandingPage() {
           viewport={{ once: true }} transition={{ delay: 0.35 }}
           className="text-center"
           style={{ marginTop: '1.75rem' }}>
-          <div className="inline-flex flex-wrap items-center justify-center gap-4 px-6 py-4 rounded-2xl"
+          <div className="flex flex-wrap items-center justify-center gap-4 px-6 py-4 rounded-2xl w-full"
             style={{ background: 'var(--color-surface-primary)', border: '1px solid #E5E4E0', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
             {[
               { icon: UserCheck, text: 'No credit card to start' },
