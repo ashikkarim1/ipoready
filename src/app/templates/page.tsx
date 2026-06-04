@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   FileText, Download, CheckCircle2, Search,
@@ -117,6 +117,17 @@ export default function TemplatesPage() {
   function removeDoc(id: string) { setDocs(d => d.filter(doc => doc.id !== id)) }
   function saveNote(id: string) { if (!docNoteEdit) return; setDocs(d => d.map(doc => doc.id === id ? { ...doc, notes: docNoteEdit.value } : doc)); setDocNoteEdit(null) }
   function closeModal() { setModalStep(null); setSelectedTemplate(null) }
+
+  // Handle ESC key to close modal
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && modalStep) {
+        closeModal()
+      }
+    }
+    window.addEventListener('keydown', handleEscape)
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [modalStep])
   function getTemplateById(id: string) { return TEMPLATES.find(t => t.id === id) }
 
   const prefillCount = selectedTemplate?.aiFields.filter(f => f.status === 'prefilled').length ?? 0
@@ -475,7 +486,7 @@ export default function TemplatesPage() {
                     <span className="font-mono">{selectedTemplate.citation}</span>
                   </div>
                 </div>
-                <button onClick={closeModal} style={{ color: '#9A9A9A' }}>
+                <button onClick={closeModal} style={{ color: '#9A9A9A' }} className="hover:bg-gray-100 p-1 rounded transition-colors" title="Close (ESC)">
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -583,7 +594,7 @@ export default function TemplatesPage() {
                     <p className="text-xs" style={{ color: '#9A9A9A' }}>"{docName}"</p>
                   </div>
                 </div>
-                <button onClick={closeModal} style={{ color: '#9A9A9A' }}>
+                <button onClick={closeModal} style={{ color: '#9A9A9A' }} className="hover:bg-gray-100 p-1 rounded transition-colors" title="Close (ESC)">
                   <X className="w-5 h-5" />
                 </button>
               </div>

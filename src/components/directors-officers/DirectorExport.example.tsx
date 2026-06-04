@@ -171,12 +171,12 @@ export function Example3_MultipleExchanges() {
     },
   ]
 
-  const exchanges = [
+  const exchanges: Array<{ id: 'tsx' | 'tsxv' | 'nasdaq' | 'nyse'; label: string }> = [
     { id: 'tsx', label: 'TSX (Toronto Stock Exchange)' },
     { id: 'tsxv', label: 'TSX Venture' },
     { id: 'nasdaq', label: 'NASDAQ' },
     { id: 'nyse', label: 'NYSE' },
-  ] as const
+  ]
 
   return (
     <div className="w-full p-6 bg-gray-50 space-y-8">
@@ -244,9 +244,9 @@ export function Example5_LargeBoard() {
       id: `dir-${i + 1}`,
       name: `Director ${String.fromCharCode(65 + (i % 26))}${Math.floor(i / 26) || ''}`,
       role: i === 0 ? 'CEO' : i < 3 ? 'Management' : 'Independent',
-      independence: (i === 0 || i < 3 ? 'management' : 'independent') as const,
+      independence: (i === 0 || i < 3 ? 'management' : 'independent') as 'management' | 'independent',
       experience: 10 + i * 2,
-      status: 'complete' as const,
+      status: 'complete' as 'complete' | 'pending',
       principalOccupation: `Director ${i + 1}'s Professional Title`,
       compensation: 100000 + i * 10000,
       education: `Advanced Degree, University ${i}`,
