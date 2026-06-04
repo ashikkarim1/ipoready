@@ -37,7 +37,7 @@
  * - Malaysia (Bursa): https://www.bursamalaysia.com/
  */
 
-import { BaseFilingAdapter, FilingError } from '../BaseFilingAdapter';
+import { BaseFilingAdapter, FilingError, DocumentType } from '../BaseFilingAdapter';
 import type {
   DocumentMetadata,
   ValidationResult,
@@ -45,7 +45,6 @@ import type {
   FilingStatus,
   StatusUpdate,
   AuthCredentials,
-  DocumentType,
   FilingMetadata,
 } from '../BaseFilingAdapter';
 import crypto from 'crypto';
@@ -221,10 +220,10 @@ export class RestfulAdapterTemplate extends BaseFilingAdapter {
 
   // Required documents that must be present
   private readonly requiredDocuments: DocumentType[] = [
-    'prospectus',
-    'financial_statements',
-    'auditor_report',
-    'legal_opinion',
+    DocumentType.PROSPECTUS,
+    DocumentType.FINANCIAL_STATEMENTS,
+    DocumentType.AUDITOR_REPORT,
+    DocumentType.LEGAL_OPINION,
   ];
 
   // ========================================================================
@@ -293,7 +292,7 @@ export class RestfulAdapterTemplate extends BaseFilingAdapter {
         if (error instanceof FilingError) {
           errors.push({
             documentId: '',
-            documentType: 'prospectus',
+            documentType: DocumentType.PROSPECTUS,
             code: error.code,
             message: error.message,
             severity: 'error',
@@ -308,12 +307,12 @@ export class RestfulAdapterTemplate extends BaseFilingAdapter {
 
           // TODO: CUSTOMIZE - Add country-specific validation
           // Example: Check if prospectus contains required disclosures
-          if (doc.type === 'prospectus') {
+          if (doc.type === DocumentType.PROSPECTUS) {
             await this.validateProspectusContent(doc);
           }
 
           // Example: Validate financial statements format
-          if (doc.type === 'financial_statements') {
+          if (doc.type === DocumentType.FINANCIAL_STATEMENTS) {
             await this.validateFinancialStatementsFormat(doc);
           }
 
@@ -422,7 +421,7 @@ export class RestfulAdapterTemplate extends BaseFilingAdapter {
 
     // Singapore (SGX): Check for SGX-specific disclosures
     if (this.countryConfig?.jurisdiction === 'SG') {
-      const hasGovernanceDoc = documents.some(d => d.type === 'corporate_governance');
+      const hasGovernanceDoc = documents.some(d => d.type === DocumentType.CORPORATE_GOVERNANCE);
       if (!hasGovernanceDoc) {
         warnings.push('Singapore requires corporate governance disclosures');
       }
@@ -430,7 +429,7 @@ export class RestfulAdapterTemplate extends BaseFilingAdapter {
 
     // Australia (ASX): Check ASX corporate governance disclosures
     if (this.countryConfig?.jurisdiction === 'AU') {
-      const hasExecutiveCompDoc = documents.some(d => d.type === 'executive_compensation');
+      const hasExecutiveCompDoc = documents.some(d => d.type === DocumentType.EXECUTIVE_COMPENSATION);
       if (!hasExecutiveCompDoc) {
         warnings.push('Australia (ASX) requires executive compensation disclosure');
       }
@@ -895,22 +894,17 @@ export class RestfulAdapterTemplate extends BaseFilingAdapter {
     body: any,
     headers: Record<string, string>
   ): Promise<Response> {
-    // Use dynamic import to avoid hard dependency
-    const fetchFn = typeof fetch === 'undefined'
-      ? (await import('node-fetch')).default
-      : fetch;
-
+    // Use native fetch (available in Node.js 18+)
     const options: any = {
       method,
       headers,
-      timeout: 30000, // 30 second timeout
     };
 
     if (body && method !== 'GET') {
       options.body = JSON.stringify(body);
     }
 
-    return fetchFn(url, options);
+    return fetch(url, options);
   }
 
   /**

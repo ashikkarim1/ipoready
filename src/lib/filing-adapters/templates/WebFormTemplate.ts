@@ -34,7 +34,7 @@
  * [ ] 10. Add to CI/CD pipeline with test environment
  */
 
-import { BaseFilingAdapter, FilingError } from '../BaseFilingAdapter';
+import { BaseFilingAdapter, FilingError, DocumentType } from '../BaseFilingAdapter';
 import type {
   DocumentMetadata,
   ValidationResult,
@@ -42,7 +42,6 @@ import type {
   FilingStatus,
   StatusUpdate,
   AuthCredentials,
-  DocumentType,
   FilingMetadata,
 } from '../BaseFilingAdapter';
 
@@ -145,10 +144,10 @@ export class WebFormTemplate extends BaseFilingAdapter {
   };
 
   private requiredDocuments: DocumentType[] = [
-    'prospectus',
-    'financial_statements',
-    'auditor_report',
-    'legal_opinion',
+    DocumentType.PROSPECTUS,
+    DocumentType.FINANCIAL_STATEMENTS,
+    DocumentType.AUDITOR_REPORT,
+    DocumentType.LEGAL_OPINION,
   ];
 
   private activeSessions: Map<string, FormSession> = new Map();

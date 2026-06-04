@@ -41,7 +41,7 @@
  * - Acknowledgment: Received file written to outbound directory
  */
 
-import { BaseFilingAdapter, FilingError } from '../BaseFilingAdapter';
+import { BaseFilingAdapter, FilingError, DocumentType } from '../BaseFilingAdapter';
 import type {
   DocumentMetadata,
   ValidationResult,
@@ -49,7 +49,6 @@ import type {
   FilingStatus,
   StatusUpdate,
   AuthCredentials,
-  DocumentType,
   FilingMetadata,
 } from '../BaseFilingAdapter';
 import fs from 'fs';
@@ -219,10 +218,10 @@ export class XmlFileUploadTemplate extends BaseFilingAdapter {
 
   // Required documents
   private readonly requiredDocuments: DocumentType[] = [
-    'prospectus',
-    'financial_statements',
-    'auditor_report',
-    'legal_opinion',
+    DocumentType.PROSPECTUS,
+    DocumentType.FINANCIAL_STATEMENTS,
+    DocumentType.AUDITOR_REPORT,
+    DocumentType.LEGAL_OPINION,
   ];
 
   // Supported submission types
@@ -327,7 +326,7 @@ export class XmlFileUploadTemplate extends BaseFilingAdapter {
         if (error instanceof FilingError) {
           errors.push({
             documentId: '',
-            documentType: 'prospectus',
+            documentType: DocumentType.PROSPECTUS,
             code: error.code,
             message: error.message,
             severity: 'error',
@@ -452,13 +451,13 @@ export class XmlFileUploadTemplate extends BaseFilingAdapter {
       ];
 
       // Add document content based on type
-      if (doc.type === 'prospectus') {
+      if (doc.type === DocumentType.PROSPECTUS) {
         xmlParts.push(this.generateProspectusXml(doc));
-      } else if (doc.type === 'financial_statements') {
+      } else if (doc.type === DocumentType.FINANCIAL_STATEMENTS) {
         xmlParts.push(this.generateFinancialStatementsXml(doc));
-      } else if (doc.type === 'auditor_report') {
+      } else if (doc.type === DocumentType.AUDITOR_REPORT) {
         xmlParts.push(this.generateAuditorReportXml(doc));
-      } else if (doc.type === 'legal_opinion') {
+      } else if (doc.type === DocumentType.LEGAL_OPINION) {
         xmlParts.push(this.generateLegalOpinionXml(doc));
       }
 

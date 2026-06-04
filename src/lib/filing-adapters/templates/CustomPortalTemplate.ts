@@ -542,7 +542,7 @@ export class CustomPortalTemplate extends BaseFilingAdapter {
         break;
 
       case 'upload_prospectus':
-        const prospectus = documents.find(d => d.type === 'prospectus');
+        const prospectus = documents.find(d => d.type === DocumentType.PROSPECTUS);
         if (prospectus) {
           payload.documentContent = prospectus.content;
           payload.documentId = prospectus.id;
@@ -550,8 +550,8 @@ export class CustomPortalTemplate extends BaseFilingAdapter {
         break;
 
       case 'upload_financials':
-        const financials = documents.find(d => d.type === 'financial_statements');
-        const audit = documents.find(d => d.type === 'auditor_report');
+        const financials = documents.find(d => d.type === DocumentType.FINANCIAL_STATEMENTS);
+        const audit = documents.find(d => d.type === DocumentType.AUDITOR_REPORT);
         if (financials) {
           payload.financialContent = financials.content;
           payload.financialDocumentId = financials.id;
@@ -605,7 +605,6 @@ export class CustomPortalTemplate extends BaseFilingAdapter {
     const options: any = {
       method,
       headers,
-      timeout: 60000,
     };
 
     if (body && method !== 'GET') {

@@ -510,7 +510,7 @@ export class BatchRetryHandler {
     // Process in batches
     for (let i = 0; i < operations.length; i += concurrency) {
       const batch = operations.slice(i, i + concurrency)
-      const batchResults = await Promise.all(batch.map((op) => RetryWrapper.retryWithBackoff(op as any, options)))
+      const batchResults = await Promise.all(batch.map((op) => RetryWrapper.retryWithBackoff(op, options))) as RetryResult<T>[]
 
       results.push(...batchResults)
     }

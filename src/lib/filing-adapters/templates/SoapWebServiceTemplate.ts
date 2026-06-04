@@ -33,7 +33,7 @@
  * [ ] 10. Document WSDL service operations
  */
 
-import { BaseFilingAdapter, FilingError } from '../BaseFilingAdapter';
+import { BaseFilingAdapter, FilingError, DocumentType } from '../BaseFilingAdapter';
 import type {
   DocumentMetadata,
   ValidationResult,
@@ -41,7 +41,6 @@ import type {
   FilingStatus,
   StatusUpdate,
   AuthCredentials,
-  DocumentType,
   FilingMetadata,
 } from '../BaseFilingAdapter';
 import crypto from 'crypto';
@@ -143,10 +142,10 @@ export class SoapWebServiceTemplate extends BaseFilingAdapter {
   };
 
   private requiredDocuments: DocumentType[] = [
-    'prospectus',
-    'financial_statements',
-    'auditor_report',
-    'legal_opinion',
+    DocumentType.PROSPECTUS,
+    DocumentType.FINANCIAL_STATEMENTS,
+    DocumentType.AUDITOR_REPORT,
+    DocumentType.LEGAL_OPINION,
   ];
 
   // ========================================================================
@@ -461,7 +460,7 @@ export class SoapWebServiceTemplate extends BaseFilingAdapter {
    * Build SOAP request headers
    */
   private buildSoapHeaders(): Record<string, string> {
-    const headers = {
+    const headers: Record<string, string> = {
       'Content-Type': 'text/xml; charset=UTF-8',
       'SOAPAction': 'http://example-regulator.com/submitFiling', // TODO: CUSTOMIZE
       'User-Agent': 'IPOReady/1.0',
@@ -487,18 +486,13 @@ export class SoapWebServiceTemplate extends BaseFilingAdapter {
     headers: Record<string, string>
   ): Promise<string> {
     try {
-      const fetchFn = typeof fetch === 'undefined'
-        ? (await import('node-fetch')).default
-        : fetch;
-
-      const response = await fetchFn(endpoint, {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           ...headers,
           ...this.buildAuthHeaders(),
         },
         body: soapBody,
-        timeout: this.wsdlConfig.timeoutMs,
       });
 
       if (!response.ok) {
