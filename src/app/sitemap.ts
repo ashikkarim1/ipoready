@@ -75,6 +75,33 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ]
 
+  // Exchange pages
+  const exchangePages: MetadataRoute.Sitemap = [
+    { url: `${baseUrl}/exchanges/tsx`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/exchanges/tsxv`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/exchanges/cse`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/exchanges/nasdaq`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/exchanges/nyse`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/exchanges/otc`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.75 },
+    { url: `${baseUrl}/exchanges/cboe`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.75 },
+  ]
+
+  // Guide pages (pillar content)
+  const guidePages: MetadataRoute.Sitemap = [
+    { url: `${baseUrl}/guides/ipo-checklist-canada`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${baseUrl}/guides/ipo-vs-direct-listing-vs-spac-vs-rto`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${baseUrl}/guides/ipo-cost-breakdown`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${baseUrl}/guides/spac-merger-guide`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/guides/tsx-vs-nasdaq-listing`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/guides/rto-guide`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/guides/ipo-timeline`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/guides/ipo-readiness-assessment`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.75 },
+    { url: `${baseUrl}/guides/sedar-2-filing`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.75 },
+    { url: `${baseUrl}/guides/cse-listing-guide`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.75 },
+    { url: `${baseUrl}/guides/direct-listing-guide`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.75 },
+    { url: `${baseUrl}/guides/ipo-due-diligence`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.75 },
+  ]
+
   // Legal pages
   const legalPages: MetadataRoute.Sitemap = [
     {
@@ -97,5 +124,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ]
 
-  return [...marketingPages, ...featurePages, ...partnerPages, ...legalPages]
+  return [...marketingPages, ...featurePages, ...partnerPages, ...exchangePages, ...guidePages, ...legalPages]
 }

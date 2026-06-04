@@ -1,0 +1,180 @@
+{
+  "metadata": {
+    "title": "Capital Instruments for IPO: Raising Capital Guide",
+    "description": "Explore 12+ capital instruments (equity, debt, hybrid) for pre-IPO fundraising. Match your stage, timeline, and burn rate to find the right funding path.",
+    "keywords": [
+      "fundraising for IPO",
+      "capital raise",
+      "pre-IPO funding",
+      "venture capital",
+      "SAFE notes",
+      "convertible notes",
+      "venture debt",
+      "private placement",
+      "IPO funding strategy",
+      "series A B funding",
+      "RTO funding",
+      "SPAC capital",
+      "equity vs debt financing",
+      "startup capital instruments"
+    ],
+    "ogTitle": "Capital Instruments for IPO: Raising Capital Guide",
+    "ogDescription": "Understand 12+ capital instruments for pre-IPO fundraising. Match your company profile (stage, raise amount, timeline) to find the right financing path.",
+    "ogImage": "https://www.ipoready.ai/og-raising-capital.png",
+    "ogUrl": "https://www.ipoready.ai/raising-capital",
+    "twitterCard": "summary_large_image",
+    "twitterTitle": "Capital Instruments for IPO Funding",
+    "twitterDescription": "Guide to equity, debt, hybrid, and non-dilutive financing options for companies on the path to public listing.",
+    "canonical": "https://www.ipoready.ai/raising-capital"
+  },
+  "faqSchema": {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the difference between equity and debt financing for pre-IPO companies?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Equity financing (common shares, preferred shares) means selling ownership stakes — diluting existing shareholders but creating no repayment obligation. Debt financing (venture debt, bank loans, convertible notes) requires repayment but preserves equity. For IPO-stage companies, equity is common because it signals investor confidence; debt is often layered on top to extend runway. The choice depends on your cash flow predictability and growth stage."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a SAFE note and how does it help pre-IPO startups?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A SAFE (Simple Agreement for Future Equity) is a contract giving investors the right to equity in a future priced round, typically at a discount or with a valuation cap. It's not a loan — no interest accrues and there's no maturity date. SAFEs are ideal for early-stage companies because they're fast (~1–6 weeks), low-cost, and don't require a valuation negotiation immediately. Founders get capital quickly; dilution is deferred to a Series A or later round."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much dilution should we expect in a Series A or Series B round?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Series A rounds typically dilute founders 15–30%, and Series B rounds another 10–25%. Dilution depends on the investor's desired ownership stake, the company's post-money valuation, and negotiating power. For example, a $10M post-money Series A with a $2M check = 20% dilution. By the time you approach IPO, founders often own 15–35% of the company. Understanding dilution is critical because it affects control, voting power, and eventual IPO proceeds."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is venture debt and when should a pre-IPO company use it?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Venture debt is non-dilutive debt offered by specialized lenders (Silicon Valley Bank, Gold Hill Capital, etc.) to venture-backed companies. It's typically 20–35% of your most recent equity round and carries 8–14% annual interest plus warrants (~0.5–1% dilution). Use venture debt if: (1) you have strong equity investors on your cap table, (2) you're 18–24 months from IPO or the next equity round, (3) you have predictable revenue or SaaS metrics. It extends runway without proportionate dilution."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What financial documents do investors require for a pre-IPO funding round?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Institutional investors (VCs, private equity) typically require: (1) 2–3 years of audited or reviewed financial statements (GAAP-compliant), (2) detailed cap table with all outstanding securities, (3) 12–24 month financial projections with conservative assumptions, (4) clean corporate records (articles, bylaws, shareholder agreements), (5) evidence of material contracts and customer concentration, (6) intellectual property ownership proof, (7) legal opinions on compliance. For IPO-stage companies, add prospectus-ready financials and board-ready governance documentation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long does a typical Series A or Series B fundraising round take?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Series A rounds: 3–6 months from first investor meeting to close. Series B rounds: 4–8 months (often longer if multiple investors). The timeline includes: initial conversations (2–4 weeks), due diligence (6–12 weeks), legal documentation (2–4 weeks), investor approvals and board votes (1–2 weeks). Factors affecting timeline: market conditions, investor availability, quality of due diligence materials, negotiation complexity, and multiple-investor coordination. For IPO-stage companies, allow 9–18 months total for a Series C or pre-IPO round with added complexity."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a convertible note and how does it differ from a SAFE?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A convertible note is a debt instrument that converts to equity at a future event (Series A, IPO, acquisition) or at maturity. Key differences from SAFEs: (1) Convertible notes carry interest (5–8% annually), (2) they have a maturity date (18–24 months), (3) if not converted by maturity, the company must repay principal + interest, (4) they can be traded (though rarely). SAFEs have no interest, no maturity, and no repayment obligation. Convertible notes are useful as bridge financing when a Series A is 6–12 months away; SAFEs suit very early stage where a round is 12+ months out."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are the key terms VCs negotiate in a preferred share investment?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "VCs typically negotiate: (1) **Liquidation preferences** (1x, 2x, 3x) — how much a VC gets back before common shareholders, (2) **Protective provisions** — veto rights on major decisions (acquisitions, new debt, executive changes), (3) **Board seats** — typically 1 per major investor, (4) **Anti-dilution provisions** (broad-based, narrow-based) — protection if future rounds are priced lower, (5) **Information rights** — quarterly/annual financial statements, (6) **Drag-along rights** — VCs can force you to sell in an acquisition. For IPO-track companies, VCs focus on anti-dilution and drag-along; anti-dilution is especially important to avoid down-round penalties."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can a pre-IPO company use revenue-based financing or must it be traditional equity?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Pre-IPO companies with consistent revenue (typically SaaS, recurring revenue >$500K MRR) can absolutely use revenue-based financing (RBF) as a complement to equity. RBF platforms (Clearco, Lighter Capital, Pipe) advance capital in exchange for 3–8% of monthly revenue until the repayment cap is reached (typically 1.3x–2.5x the advance). It's non-dilutive and faster than equity rounds. However, IPO-stage companies typically prefer equity or venture debt because RBF may create issues with public company disclosures and revenue covenants. RBF is best used in growth stages ($2–10M ARR) to extend runway before a Series B or C."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What role does a private placement play in IPO preparation?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A private placement is a securities offering to accredited or institutional investors (under exemptions like Regulation D in the US or NI 45-106 in Canada) that raises significant capital without a full prospectus. For IPO-stage companies, private placements are often the final large equity round (Series C, growth round, or pre-IPO round) before listing. Advantages: (1) raises $10M–$100M+ without public disclosure, (2) faster than IPO (3–5 months vs. 9–18 months), (3) allows validation of valuation and exit strategy before going public. Investors expect a liquidity event (IPO, acquisition) within 3–7 years. Private placements are ideal for proving traction before committing to the IPO process."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do cap table and control impact shape pre-IPO financing decisions?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Cap table (ownership structure) and control (voting power, board seats) are tightly linked. With each equity round, ownership dilutes but investors demand governance rights. By IPO, founders often own 15–40%, employees own 10–20% (via options), and investors own the remainder. Control impacts are: (1) **Board composition** — early rounds: 3 members (founder, investor, independent); later rounds: 5–7 members (founders may lose majority), (2) **Protective provisions** — investors can veto major decisions, (3) **Drag-along rights** — investors can force a sale you don't want. For IPO, public shareholders require independent board majorities and board committees (audit, compensation). Plan cap table to retain founder control early, then accept dilution in later stages as professional investors add credibility."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the IPO / RTO / SPAC path and which is best for capital-intensive businesses?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Three public listing paths exist: (1) **Traditional IPO** — underwriter-led public offering on NYSE, NASDAQ, TSX. Best for: profitable or high-growth companies ($10M+ ARR), established market presence, 9–18 month timeline, $500K–$2M+ in costs. (2) **RTO (Reverse Takeover)** — private company merges with a public shell company. Best for: faster timeline (4–8 months), lower costs ($200K–$500K), companies near profitability, TSXV/CSE markets. (3) **SPAC (Special Purpose Acquisition Company)** — blank-check company merges with your company. Best for: high-growth tech/biotech, $500M+ valuations, fast access to capital, but increased investor scrutiny and lock-up periods. Capital-intensive businesses (industrial, infrastructure) typically use Traditional IPO because SPAC investors expect high growth rates; capital-lite SaaS companies may use RTO or SPAC for speed."
+        }
+      }
+    ]
+  },
+  "structuredDataSchemas": {
+    "breadcrumb": {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.ipoready.ai"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Resources",
+          "item": "https://www.ipoready.ai/resources"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Capital Instruments for IPO",
+          "item": "https://www.ipoready.ai/raising-capital"
+        }
+      ]
+    },
+    "educationalContent": {
+      "@context": "https://schema.org",
+      "@type": "EducationalResource",
+      "name": "Capital Instruments Guide for IPO-Track Companies",
+      "description": "Comprehensive guide to 12+ capital instruments (equity, debt, hybrid, non-dilutive, public market) for pre-IPO and IPO-stage companies.",
+      "educationalLevel": "Post-Secondary",
+      "url": "https://www.ipoready.ai/raising-capital",
+      "author": {
+        "@type": "Organization",
+        "name": "IPOReady"
+      },
+      "inLanguage": "en",
+      "keywords": "capital instruments, equity financing, debt financing, venture capital, IPO funding, Series A, Series B, SAFE notes, convertible notes, venture debt, private placement, RTO, SPAC"
+    }
+  },
+  "implementation": {
+    "notes": "Add the following to src/app/raising-capital/layout.tsx or create a generateMetadata function in src/app/raising-capital/page.tsx",
+    "nextJsMetadataExample": {
+      "file": "src/app/raising-capital/layout.tsx",
+      "content": "import type { Metadata } from 'next'\n\nexport const metadata: Metadata = {\n  title: 'Capital Instruments for IPO: Raising Capital Guide',\n  description: 'Explore 12+ capital instruments (equity, debt, hybrid) for pre-IPO fundraising. Match your stage, timeline, and burn rate to find the right funding path.',\n  keywords: [\n    'fundraising for IPO',\n    'capital raise',\n    'pre-IPO funding',\n    'venture capital',\n    'SAFE notes',\n    'convertible notes',\n    'venture debt',\n    'private placement',\n    'IPO funding strategy',\n    'series A B funding',\n    'RTO funding',\n    'SPAC capital',\n    'equity vs debt financing',\n    'startup capital instruments'\n  ],\n  openGraph: {\n    title: 'Capital Instruments for IPO: Raising Capital Guide',\n    description: 'Understand 12+ capital instruments for pre-IPO fundraising. Match your company profile (stage, raise amount, timeline) to find the right financing path.',\n    url: 'https://www.ipoready.ai/raising-capital',\n    siteName: 'IPOReady',\n    type: 'website',\n    images: [\n      {\n        url: 'https://www.ipoready.ai/og-raising-capital.png',\n        width: 1200,\n        height: 630,\n        alt: 'Capital Instruments for IPO Funding'\n      }\n    ]\n  },\n  twitter: {\n    card: 'summary_large_image',\n    title: 'Capital Instruments for IPO Funding',\n    description: 'Guide to equity, debt, hybrid, and non-dilutive financing options for companies on the path to public listing.',\n    creator: '@IPOReady',\n    images: ['https://www.ipoready.ai/og-raising-capital.png']\n  },\n  alternates: {\n    canonical: 'https://www.ipoready.ai/raising-capital'\n  }\n}"
+    },
+    "jsonLdPlacement": "Add the FAQSchema and breadcrumb schema to the page's <head> via script tags in layout.tsx or page component. For best practices, embed in _document.tsx or root layout.tsx."
+  }
+}

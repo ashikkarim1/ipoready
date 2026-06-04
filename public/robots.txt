@@ -3,6 +3,10 @@
 
 User-agent: *
 Allow: /
+# Explicitly allow SEO-critical pages
+Allow: /guides/
+Allow: /exchanges/
+# Disallow private/protected areas
 Disallow: /admin/
 Disallow: /api/
 Disallow: /account/
