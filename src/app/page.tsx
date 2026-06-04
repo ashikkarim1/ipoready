@@ -691,7 +691,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── CTA banner ──────────────────────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto" style={{ paddingTop: '2rem', paddingBottom: '2rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '4rem', paddingBottom: '2rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         <div className="card p-10 md:p-14 text-center" style={{ background: '#FFFFFF', borderColor: '#E5E4E0', border: '1px solid #E5E4E0' }}>
           <div className="text-xs uppercase tracking-widest font-semibold" style={{ color: '#717171', marginBottom: '1.25rem' }}>
             Get started today
