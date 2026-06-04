@@ -916,8 +916,11 @@ export class RestfulAdapterTemplate extends BaseFilingAdapter {
   /**
    * Log helper method (uses base class logger)
    */
-  private logDebug(message: string, context?: Record<string, any>): void {
-    this.logDebug(message, context);
+  protected logDebug(message: string, context?: Record<string, any>): void {
+    // Debug logging implementation
+    if (process.env.DEBUG) {
+      console.debug(`[RestfulAdapter] ${message}`, context);
+    }
   }
 }
 
