@@ -1,0 +1,457 @@
+{
+  "exchange": {
+    "id": "sec-001",
+    "code": "sec",
+    "name": "Securities and Exchange Commission (EDGAR)",
+    "country": "US",
+    "regulatorName": "Securities and Exchange Commission",
+    "regulatorUrl": "https://www.sec.gov",
+    "apiEndpoint": "https://www.sec.gov/cgi-bin/browse-edgar",
+    "apiDocumentationUrl": "https://www.sec.gov/info/edgar.shtml",
+    "isActive": true,
+    "configuration": {
+      "listingTier": "standard",
+      "minPublicFloat": 10,
+      "minSharePrice": 5.00,
+      "minShares": 2000000,
+      "boardLot": 100,
+      "greenShoe": 15,
+      "requiresEDGARFiling": true
+    },
+    "createdAt": "2026-01-01T00:00:00Z",
+    "updatedAt": "2026-06-04T00:00:00Z"
+  },
+
+  "requirements": [
+    {
+      "id": "sec-req-001",
+      "exchangeId": "sec-001",
+      "category": "financial_disclosure",
+      "subcategory": "audited_financials",
+      "requirementKey": "sarbanes_oxley_audit",
+      "requirementText": "IPO prospectus must include audited financial statements for 2 years (balance sheet) and 2 years (income statement/cash flow) certified under Sarbanes-Oxley Section 302",
+      "isMandatory": true,
+      "minItems": 2,
+      "examplesUrl": "https://www.sec.gov/divisions/corpfin/guidance/regtips.htm",
+      "guidanceText": "Auditor must be registered with PCAOB. Audit must follow PCAOB standards. Management must assess internal controls over financial reporting (ICFR).",
+      "validationRuleConfig": {
+        "requiresExternalAudit": true,
+        "auditStandard": "PCAOB"
+      },
+      "regulatoryReference": "Securities Act Rule 424(b)(4), Sarbanes-Oxley Section 302",
+      "effectiveDate": "2023-01-01",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "sec-req-002",
+      "exchangeId": "sec-001",
+      "category": "financial_disclosure",
+      "subcategory": "internal_controls",
+      "requirementKey": "icfr_assessment",
+      "requirementText": "Management must assess effectiveness of internal control over financial reporting (ICFR) per SOX Section 302",
+      "isMandatory": true,
+      "examplesUrl": "https://www.sec.gov/rules/final/2021-06/tsfa.htm",
+      "guidanceText": "Includes document and test ICFR, issue management assessment report. Auditor must also assess ICFR effectiveness.",
+      "regulatoryReference": "Sarbanes-Oxley Section 302",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "sec-req-003",
+      "exchangeId": "sec-001",
+      "category": "governance",
+      "subcategory": "committees",
+      "requirementKey": "audit_committee_expert",
+      "requirementText": "Issuer must establish Audit Committee with at least one 'audit committee financial expert' per SOX Section 407",
+      "isMandatory": true,
+      "examplesUrl": "https://www.sec.gov/rules/final/33-8173.htm",
+      "guidanceText": "Financial expert must have professional accounting background and current financial reporting experience. If no expert available, must disclose and explain.",
+      "regulatoryReference": "Securities Act Rule 407, SOX Section 407",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "sec-req-004",
+      "exchangeId": "sec-001",
+      "category": "documents",
+      "subcategory": "prospectus",
+      "requirementKey": "form_s1_registration",
+      "requirementText": "IPO prospectus must be filed as Form S-1 or equivalent (F-1 for foreign issuers)",
+      "isMandatory": true,
+      "examplesUrl": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&company_type=include&CIK=&type=S-1&dateb=&owner=exclude&count=100",
+      "guidanceText": "Form S-1 is comprehensive registration statement for IPOs. Must include all required disclosure items. Foreign issuers may use F-1 form.",
+      "regulatoryReference": "Securities Act, Form S-1 Instructions",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "sec-req-005",
+      "exchangeId": "sec-001",
+      "category": "disclosure",
+      "subcategory": "executive_compensation",
+      "requirementKey": "executive_compensation_disclosure",
+      "requirementText": "Disclose compensation for CEO, CFO, and 3 most highly compensated executive officers per Item 402(a)",
+      "isMandatory": true,
+      "minItems": 5,
+      "examplesUrl": "https://www.sec.gov/divisions/corpfin/guidance/item402_regfx.htm",
+      "guidanceText": "Include named executive officers' base salary, bonus, equity awards, change-of-control benefits, and pension benefits. Include Compensation Discussion & Analysis (CD&A).",
+      "regulatoryReference": "Securities Act, Item 402",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "sec-req-006",
+      "exchangeId": "sec-001",
+      "category": "disclosure",
+      "subcategory": "md_and_a",
+      "requirementKey": "md_a_disclosure",
+      "requirementText": "Provide detailed Management Discussion & Analysis (MD&A) covering 2 fiscal years and any subsequent interim period",
+      "isMandatory": true,
+      "examplesUrl": "https://www.sec.gov/rules/final/33-10751.htm",
+      "guidanceText": "MD&A must discuss liquidity, capital resources, results of operations, and trends. Must be plain English and focused on material items.",
+      "regulatoryReference": "Securities Act Item 303, Regulation S-K",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "validationRules": [
+    {
+      "id": "sec-rule-001",
+      "exchangeId": "sec-001",
+      "ruleName": "EDGAR XML File Format",
+      "ruleCategory": "file_format",
+      "appliesToDocumentTypes": ["prospectus", "financial_statements"],
+      "ruleType": "file_format",
+      "ruleConfig": {
+        "allowedFormats": ["pdf", "htm", "xml"]
+      },
+      "isCritical": true,
+      "severity": "critical",
+      "errorMessageTemplate": "EDGAR requires PDF, HTML, or XML format. Got {format}",
+      "remediationGuidance": "Convert document to PDF or HTML format acceptable to SEC EDGAR system",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "sec-rule-002",
+      "exchangeId": "sec-001",
+      "ruleName": "SEC File Size Limit",
+      "ruleCategory": "file_format",
+      "ruleType": "max_file_size",
+      "ruleConfig": {
+        "maxBytes": 104857600
+      },
+      "isCritical": true,
+      "severity": "critical",
+      "errorMessageTemplate": "File size {actual} bytes exceeds SEC EDGAR limit of {max} bytes",
+      "remediationGuidance": "Reduce file size or split into multiple documents for EDGAR submission",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "sec-rule-003",
+      "exchangeId": "sec-001",
+      "ruleName": "Risk Factors SEC Requirement",
+      "ruleCategory": "structure",
+      "appliesToField": "sections.risk_factors",
+      "ruleType": "required_sections",
+      "ruleConfig": {
+        "requiredSections": [
+          "business_risk",
+          "financial_risk",
+          "market_risk",
+          "regulatory_risk",
+          "investment_risk"
+        ]
+      },
+      "isCritical": true,
+      "severity": "critical",
+      "errorMessageTemplate": "Missing required risk factor subsection: {section}",
+      "remediationGuidance": "Add all required risk factor subsections per SEC Item 503",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "sec-rule-004",
+      "exchangeId": "sec-001",
+      "ruleName": "Plain English Requirement",
+      "ruleCategory": "content",
+      "appliesToField": "document.content",
+      "ruleType": "max_word_count",
+      "ruleConfig": {
+        "maxWordCount": 5000,
+        "patternDescription": "Paragraphs should be under 500 words, sentences under 75 words"
+      },
+      "isCritical": false,
+      "severity": "warning",
+      "errorMessageTemplate": "Document may not comply with SEC plain English requirements",
+      "remediationGuidance": "Simplify language, break long paragraphs into shorter ones, use active voice",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "checklists": [
+    {
+      "id": "sec-checklist-001",
+      "exchangeId": "sec-001",
+      "checklistName": "SEC EDGAR IPO Filing Checklist (Form S-1)",
+      "checklistType": "ipo",
+      "items": [
+        {
+          "id": "item_1",
+          "section": "Registration Statement",
+          "priority": "critical",
+          "text": "Form S-1 Cover Page with CIK assignment",
+          "isRequired": true,
+          "guidance": "Must be signed by authorized officers. Include CIK number from prior EDGAR registrations or SEC assignment letter."
+        },
+        {
+          "id": "item_2",
+          "section": "Financial Statements",
+          "priority": "critical",
+          "text": "Audited Balance Sheets (2 years) - Form 10-K compliant",
+          "isRequired": true,
+          "guidance": "Auditor must be PCAOB-registered. Must include comparative balance sheets and notes."
+        },
+        {
+          "id": "item_3",
+          "section": "Financial Statements",
+          "priority": "critical",
+          "text": "Audited Statements of Operations (2 years)",
+          "isRequired": true,
+          "guidance": "Include comparative income statements and notes to financial statements."
+        },
+        {
+          "id": "item_4",
+          "section": "Financial Statements",
+          "priority": "critical",
+          "text": "Audited Statements of Cash Flows (2 years)",
+          "isRequired": true,
+          "guidance": "Show operating, investing, and financing activities."
+        },
+        {
+          "id": "item_5",
+          "section": "Financial Statements",
+          "priority": "critical",
+          "text": "Auditor Consent & Report",
+          "isRequired": true,
+          "guidance": "Must be dated and from PCAOB-registered auditor. Audit opinion required."
+        },
+        {
+          "id": "item_6",
+          "section": "Management Certification",
+          "priority": "critical",
+          "text": "SOX Section 302 Certification (CEO & CFO)",
+          "isRequired": true,
+          "guidance": "Required certifications by CEO and CFO. Must follow exact SOX language."
+        },
+        {
+          "id": "item_7",
+          "section": "Internal Controls",
+          "priority": "critical",
+          "text": "Management Assessment of ICFR",
+          "isRequired": true,
+          "guidance": "Management's assessment of internal control over financial reporting effectiveness."
+        },
+        {
+          "id": "item_8",
+          "section": "Internal Controls",
+          "priority": "critical",
+          "text": "Auditor Assessment of ICFR",
+          "isRequired": true,
+          "guidance": "Auditor's report on management's assessment of ICFR. Attestation audit required for large accelerated filers."
+        },
+        {
+          "id": "item_9",
+          "section": "Disclosure",
+          "priority": "critical",
+          "text": "Management Discussion & Analysis (MD&A)",
+          "isRequired": true,
+          "guidance": "Comprehensive MD&A covering 2 fiscal years plus interim period if applicable."
+        },
+        {
+          "id": "item_10",
+          "section": "Disclosure",
+          "priority": "critical",
+          "text": "Risk Factors Disclosure",
+          "isRequired": true,
+          "guidance": "Detailed risk factors covering all material risks to the business and investment."
+        },
+        {
+          "id": "item_11",
+          "section": "Disclosure",
+          "priority": "critical",
+          "text": "Executive Compensation Disclosure (CD&A)",
+          "isRequired": true,
+          "guidance": "Detailed compensation disclosure for Named Executive Officers including change-of-control provisions."
+        },
+        {
+          "id": "item_12",
+          "section": "Disclosure",
+          "priority": "critical",
+          "text": "Related Party Transaction Disclosure",
+          "isRequired": true,
+          "guidance": "Disclosure of all material related party transactions."
+        },
+        {
+          "id": "item_13",
+          "section": "Legal Opinions",
+          "priority": "critical",
+          "text": "Legal Opinion on Corporate Authority",
+          "isRequired": true,
+          "guidance": "Opinion from counsel re: valid organization, authority to issue securities, capitalization."
+        },
+        {
+          "id": "item_14",
+          "section": "Legal Opinions",
+          "priority": "critical",
+          "text": "Underwriter Consent & Engagement Letter",
+          "isRequired": true,
+          "guidance": "Lead underwriter letter confirming engagement and commitment to underwriting."
+        },
+        {
+          "id": "item_15",
+          "section": "Corporate Governance",
+          "priority": "high",
+          "text": "Board & Committee Independence Certification",
+          "isRequired": true,
+          "guidance": "Audit Committee must include at least one financial expert."
+        }
+      ],
+      "description": "Complete checklist for SEC EDGAR IPO filing via Form S-1",
+      "totalItems": 15,
+      "criticalItems": 14,
+      "optionalItems": 1,
+      "isSequential": false,
+      "dependencies": {},
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "documentRequirements": [
+    {
+      "id": "sec-doc-001",
+      "exchangeId": "sec-001",
+      "filingType": "ipo",
+      "documentType": "form_s1",
+      "isRequired": true,
+      "minimumCount": 1,
+      "allowedFormats": ["pdf", "htm", "xml"],
+      "maxFileSizeMb": 100,
+      "requiredIfCondition": null,
+      "requiredForJurisdictions": null,
+      "validationRules": ["sec-rule-001", "sec-rule-002"],
+      "description": "Form S-1 Registration Statement",
+      "examplesUrl": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&type=S-1&count=100",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "sec-doc-002",
+      "exchangeId": "sec-001",
+      "filingType": "ipo",
+      "documentType": "audited_financial_statements",
+      "isRequired": true,
+      "minimumCount": 2,
+      "allowedFormats": ["pdf"],
+      "maxFileSizeMb": 50,
+      "requiredIfCondition": null,
+      "requiredForJurisdictions": null,
+      "validationRules": [],
+      "description": "Audited Financial Statements (Balance Sheet, Income Statement, Cash Flow)",
+      "examplesUrl": "https://www.sec.gov/cgi-bin/viewer",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "riskFactorRequirements": [
+    {
+      "id": "sec-risk-001",
+      "exchangeId": "sec-001",
+      "riskCategory": "business_risk",
+      "riskSubcategory": "competition",
+      "isMandatory": true,
+      "minWordCount": 200,
+      "description": "Risks relating to competition in the issuer's industry",
+      "examplesUrl": "https://www.sec.gov/rules/final/33-10751.htm",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "sec-risk-002",
+      "exchangeId": "sec-001",
+      "riskCategory": "financial_risk",
+      "riskSubcategory": "liquidity",
+      "isMandatory": true,
+      "minWordCount": 200,
+      "description": "Risks relating to liquidity, capital resources, and financial condition",
+      "examplesUrl": "https://www.sec.gov/rules/final/33-10751.htm",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "auditorRequirements": [
+    {
+      "id": "sec-audit-001",
+      "exchangeId": "sec-001",
+      "requirementName": "PCAOB Registered Auditor Required",
+      "requirementDescription": "Auditor must be registered with the Public Company Accounting Oversight Board (PCAOB)",
+      "isMandatory": true,
+      "isJurisdictional": false,
+      "applicableJurisdictions": null,
+      "allowedAuditFirms": ["Big 4", "mid_tier", "pcaob_registered"],
+      "minAuditorExperienceYears": 15,
+      "auditFrequency": "annual",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "guidanceTemplates": [
+    {
+      "id": "sec-guidance-001",
+      "exchangeId": "sec-001",
+      "sectionName": "Risk Factors",
+      "category": "disclosure",
+      "guidanceText": "Risk factors are most effective when they are specific to an issuer rather than generic boilerplate. Each risk factor should address a substantial concern that could impact the investment decision.",
+      "weakExample": "We face competition. The industry is competitive and other companies compete with us.",
+      "weakExampleExplanation": "Completely generic and boilerplate. Provides no specific information about actual competitive threats.",
+      "strongExample": "Our business model depends on maintaining gross margins above 40% through premium product positioning. We compete directly with three larger competitors who have 50% combined market share. If these competitors reduce pricing by 15%, our gross margins could drop to 32%, materially reducing profitability and our ability to fund R&D investments.",
+      "strongExampleExplanation": "Specific about competitive landscape, quantifies the threat, and explains financial impact.",
+      "qualityBenchmarks": {
+        "minWordCount": 800,
+        "maxWordCount": 3000,
+        "requiredSubsections": [
+          "business_and_operations",
+          "financial",
+          "market",
+          "regulatory",
+          "management"
+        ],
+        "readabilityScore": 45
+      },
+      "tips": [
+        "Avoid boilerplate - focus on issuer-specific risks",
+        "Rank risks by materiality and likelihood",
+        "Quantify financial impact when possible",
+        "Cross-reference to MD&A discussions",
+        "Update based on current market conditions"
+      ],
+      "isActive": true,
+      "sourceUrl": "https://www.sec.gov/divisions/corpfin/guidance/regtips.htm",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ]
+}

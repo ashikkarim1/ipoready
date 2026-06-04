@@ -1,0 +1,145 @@
+{
+  "exchange": {
+    "id": "lse-001",
+    "code": "lse",
+    "name": "London Stock Exchange",
+    "country": "GB",
+    "regulatorName": "Financial Conduct Authority (FCA)",
+    "regulatorUrl": "https://www.fca.org.uk",
+    "apiEndpoint": "https://www.londonstockexchange.com",
+    "apiDocumentationUrl": "https://www.londonstockexchange.com/listing/listing-resources",
+    "isActive": false,
+    "configuration": {
+      "listingTier": "standard",
+      "minPublicFloat": 25,
+      "minSharePrice": 0.50,
+      "minShares": 5000000,
+      "boardLot": 100,
+      "greenShoe": 15
+    },
+    "createdAt": "2026-06-04T00:00:00Z",
+    "updatedAt": "2026-06-04T00:00:00Z"
+  },
+
+  "requirements": [
+    {
+      "id": "lse-req-001",
+      "exchangeId": "lse-001",
+      "category": "financial_disclosure",
+      "subcategory": "audited_financials",
+      "requirementKey": "isa_audited_financials",
+      "requirementText": "Prospectus must include financial statements audited in accordance with ISA (International Standards on Auditing) for at least 2 years",
+      "isMandatory": true,
+      "minItems": 2,
+      "examplesUrl": "https://www.fca.org.uk/news/news-stories/guidance-on-prospectus-requirements",
+      "guidanceText": "Financial statements must follow IFRS or equivalent. Auditor must be approved by FCA. Independent audit report required with unqualified opinion.",
+      "regulatoryReference": "FCA Handbook MIPRU 1, Prospectus Regulation 2017/1129",
+      "effectiveDate": "2023-01-01",
+      "createdAt": "2026-06-04T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "lse-req-002",
+      "exchangeId": "lse-001",
+      "category": "governance",
+      "subcategory": "committees",
+      "requirementKey": "audit_committee_required",
+      "requirementText": "Issuer must establish an Audit Committee in compliance with UK Corporate Governance Code",
+      "isMandatory": true,
+      "examplesUrl": "https://www.fca.org.uk/publication/corporate-governance",
+      "guidanceText": "Audit Committee must comprise at least 3 independent directors. At least one member must have recent and relevant financial experience.",
+      "regulatoryReference": "UK Corporate Governance Code 2018, FCA Handbook DTR",
+      "createdAt": "2026-06-04T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "lse-req-003",
+      "exchangeId": "lse-001",
+      "category": "documents",
+      "subcategory": "prospectus",
+      "requirementKey": "prospectus_regulation_2017",
+      "requirementText": "Prospectus must comply with EU Prospectus Regulation 2017/1129 or equivalent post-Brexit FCA requirements",
+      "isMandatory": true,
+      "examplesUrl": "https://www.fca.org.uk/news/news-stories/prospectus-regulation-2017-1129",
+      "guidanceText": "Prospectus must include Summary, Registration Document, Securities Note. Must be clear, accurate, and not misleading.",
+      "regulatoryReference": "Prospectus Regulation 2017/1129, FCA Handbook COBS",
+      "createdAt": "2026-06-04T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "validationRules": [
+    {
+      "id": "lse-rule-001",
+      "exchangeId": "lse-001",
+      "ruleName": "Prospectus PDF Format",
+      "ruleCategory": "file_format",
+      "appliesToDocumentTypes": ["prospectus"],
+      "ruleType": "file_format",
+      "ruleConfig": {
+        "allowedFormats": ["pdf"]
+      },
+      "isCritical": true,
+      "severity": "critical",
+      "errorMessageTemplate": "LSE prospectus must be in PDF format, got {format}",
+      "remediationGuidance": "Convert prospectus to PDF format",
+      "isActive": true,
+      "createdAt": "2026-06-04T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "checklists": [
+    {
+      "id": "lse-checklist-001",
+      "exchangeId": "lse-001",
+      "checklistName": "LSE Main Market IPO Filing Checklist",
+      "checklistType": "ipo",
+      "items": [
+        {
+          "id": "item_1",
+          "section": "Documents",
+          "priority": "critical",
+          "text": "Prospectus (including Summary, Registration Document, Securities Note)",
+          "isRequired": true
+        },
+        {
+          "id": "item_2",
+          "section": "Documents",
+          "priority": "critical",
+          "text": "Audited Financial Statements (2 years, ISA audited)",
+          "isRequired": true
+        }
+      ],
+      "description": "Checklist for LSE Main Market IPO listing",
+      "totalItems": 2,
+      "criticalItems": 2,
+      "optionalItems": 0,
+      "isSequential": false,
+      "dependencies": {},
+      "isActive": false,
+      "createdAt": "2026-06-04T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "documentRequirements": [
+    {
+      "id": "lse-doc-001",
+      "exchangeId": "lse-001",
+      "filingType": "ipo",
+      "documentType": "prospectus",
+      "isRequired": true,
+      "minimumCount": 1,
+      "allowedFormats": ["pdf"],
+      "maxFileSizeMb": 100,
+      "description": "LSE Prospectus per Prospectus Regulation 2017/1129",
+      "createdAt": "2026-06-04T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "riskFactorRequirements": [],
+  "auditorRequirements": [],
+  "guidanceTemplates": []
+}

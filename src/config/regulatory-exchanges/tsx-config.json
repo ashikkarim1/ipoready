@@ -1,0 +1,484 @@
+{
+  "exchange": {
+    "id": "tsx-001",
+    "code": "tsx",
+    "name": "Toronto Stock Exchange",
+    "country": "CA",
+    "regulatorName": "Ontario Securities Commission (OSC)",
+    "regulatorUrl": "https://www.osc.ca",
+    "apiEndpoint": "https://www.tsx.com",
+    "apiDocumentationUrl": "https://www.tsx.com/listings",
+    "isActive": true,
+    "configuration": {
+      "listingTier": "standard",
+      "minPublicFloat": 15,
+      "minSharePrice": 4.00,
+      "minShares": 3000000,
+      "boardLot": 100,
+      "greenShoe": 15
+    },
+    "createdAt": "2026-01-01T00:00:00Z",
+    "updatedAt": "2026-06-04T00:00:00Z"
+  },
+
+  "requirements": [
+    {
+      "id": "tsx-req-001",
+      "exchangeId": "tsx-001",
+      "category": "financial_disclosure",
+      "subcategory": "audited_financials",
+      "requirementKey": "min_years_audited_financial_statements",
+      "requirementText": "Issuer must provide audited financial statements for at least 2 years prior to IPO",
+      "isMandatory": true,
+      "minItems": 2,
+      "examplesUrl": "https://www.tsx.com/listings/listings-requirements",
+      "guidanceText": "Financial statements must be audited by a Canadian or US GAAP auditor. Statements must be no older than 120 days at filing.",
+      "regulatoryReference": "TSX Policy 2.1, Section 2.5",
+      "effectiveDate": "2023-01-01",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "tsx-req-002",
+      "exchangeId": "tsx-001",
+      "category": "governance",
+      "subcategory": "committees",
+      "requirementKey": "audit_committee_required",
+      "requirementText": "Issuer must establish an Audit Committee with at least 3 independent directors",
+      "isMandatory": true,
+      "examplesUrl": "https://www.tsx.com/listings/policies",
+      "guidanceText": "All members of Audit Committee must be independent per Instrument 52-110. At least one member must be a financial expert.",
+      "regulatoryReference": "TSX Policy 2.1, National Instrument 52-110",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "tsx-req-003",
+      "exchangeId": "tsx-001",
+      "category": "governance",
+      "subcategory": "committees",
+      "requirementKey": "compensation_committee_required",
+      "requirementText": "Issuer must establish a Compensation Committee with majority independent directors",
+      "isMandatory": false,
+      "examplesUrl": "https://www.tsx.com/listings/policies",
+      "guidanceText": "Recommended best practice. Committee should oversee executive compensation and incentive plans.",
+      "regulatoryReference": "TSX Policy 2.1",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "tsx-req-004",
+      "exchangeId": "tsx-001",
+      "category": "documents",
+      "subcategory": "prospectus",
+      "requirementKey": "prospectus_format_ni41101f1",
+      "requirementText": "IPO prospectus must follow Form NI 41-101F1 format as prescribed by Canadian securities regulators",
+      "isMandatory": true,
+      "examplesUrl": "https://www.osc.ca/en/securities-law/rules-policies/forms-instructions/form-ni-41-101f1",
+      "guidanceText": "Form NI 41-101F1 is the standard form for prospectuses in most Canadian provinces. Must include mandatory disclosure about executive compensation, risk factors, use of proceeds, and corporate structure.",
+      "regulatoryReference": "National Instrument 41-101, Appendix F1",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "tsx-req-005",
+      "exchangeId": "tsx-001",
+      "category": "risk_factors",
+      "subcategory": "disclosure",
+      "requirementKey": "currency_risk_disclosure",
+      "requirementText": "If issuer has material exposure to foreign currencies, must disclose currency risks explicitly",
+      "isMandatory": true,
+      "minItems": 1,
+      "examplesUrl": "https://www.tsx.com/listings/guidelines",
+      "guidanceText": "Disclose % revenue exposure by currency, hedging strategies, and potential impact of currency fluctuations.",
+      "regulatoryReference": "TSX Policy 2.1",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "tsx-req-006",
+      "exchangeId": "tsx-001",
+      "category": "consents",
+      "subcategory": "professional_consents",
+      "requirementKey": "legal_counsel_consent_required",
+      "requirementText": "Legal counsel and auditor must provide formal consents to be named in prospectus",
+      "isMandatory": true,
+      "examplesUrl": "https://www.tsx.com/listings/requirements",
+      "guidanceText": "Consents must be in writing and accompany the prospectus filing. Professional advisors cannot issue 'negative' opinions.",
+      "regulatoryReference": "National Instrument 41-101",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "validationRules": [
+    {
+      "id": "tsx-rule-001",
+      "exchangeId": "tsx-001",
+      "ruleName": "Prospectus File Format",
+      "ruleCategory": "file_format",
+      "appliesToDocumentTypes": ["prospectus"],
+      "ruleType": "file_format",
+      "ruleConfig": {
+        "allowedFormats": ["pdf"]
+      },
+      "isCritical": true,
+      "severity": "critical",
+      "errorMessageTemplate": "Prospectus must be in PDF format, got {format}",
+      "remediationGuidance": "Convert prospectus to PDF format using standard tools",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "tsx-rule-002",
+      "exchangeId": "tsx-001",
+      "ruleName": "Prospectus Max File Size",
+      "ruleCategory": "file_format",
+      "appliesToDocumentTypes": ["prospectus"],
+      "ruleType": "max_file_size",
+      "ruleConfig": {
+        "maxBytes": 52428800
+      },
+      "isCritical": true,
+      "severity": "error",
+      "errorMessageTemplate": "Prospectus file size ({actual} bytes) exceeds maximum ({max} bytes)",
+      "remediationGuidance": "Compress prospectus or split into multiple documents",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "tsx-rule-003",
+      "exchangeId": "tsx-001",
+      "ruleName": "Risk Factors Minimum Length",
+      "ruleCategory": "content",
+      "appliesToDocumentTypes": ["prospectus"],
+      "appliesToField": "sections.risk_factors",
+      "ruleType": "min_word_count",
+      "ruleConfig": {
+        "minWordCount": 500
+      },
+      "isCritical": false,
+      "severity": "warning",
+      "errorMessageTemplate": "Risk Factors section contains only {actual} words, minimum recommended is {min}",
+      "remediationGuidance": "Expand Risk Factors section with specific, material risks relevant to your business",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "tsx-rule-004",
+      "exchangeId": "tsx-001",
+      "ruleName": "Required Sections Check",
+      "ruleCategory": "structure",
+      "appliesToDocumentTypes": ["prospectus"],
+      "ruleType": "required_sections",
+      "ruleConfig": {
+        "requiredSections": [
+          "business",
+          "risk_factors",
+          "use_of_proceeds",
+          "executive_compensation",
+          "management_discussion_analysis"
+        ]
+      },
+      "isCritical": true,
+      "severity": "critical",
+      "errorMessageTemplate": "Missing required section: {section}",
+      "remediationGuidance": "Add all required sections to prospectus per Form NI 41-101F1",
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "checklists": [
+    {
+      "id": "tsx-checklist-001",
+      "exchangeId": "tsx-001",
+      "checklistName": "TSX IPO Filing Checklist",
+      "checklistType": "ipo",
+      "items": [
+        {
+          "id": "item_1",
+          "section": "Documents",
+          "priority": "critical",
+          "text": "Form NI 41-101F1 Prospectus (PDF, signed by CEO/CFO)",
+          "isRequired": true,
+          "guidance": "Must be executed and contain all required signatures and dates",
+          "examples": []
+        },
+        {
+          "id": "item_2",
+          "section": "Documents",
+          "priority": "critical",
+          "text": "Audited Financial Statements (2 years minimum)",
+          "isRequired": true,
+          "guidance": "Must be prepared in GAAP format and audited by approved firm",
+          "examples": []
+        },
+        {
+          "id": "item_3",
+          "section": "Documents",
+          "priority": "critical",
+          "text": "Management Discussion & Analysis (MD&A)",
+          "isRequired": true,
+          "guidance": "Cover at least 2 years of financial history with forward-looking statements",
+          "examples": []
+        },
+        {
+          "id": "item_4",
+          "section": "Governance",
+          "priority": "critical",
+          "text": "Audit Committee Charter",
+          "isRequired": true,
+          "guidance": "Document establishing Audit Committee with at least 3 independent members",
+          "examples": []
+        },
+        {
+          "id": "item_5",
+          "section": "Governance",
+          "priority": "critical",
+          "text": "Board & Committee Resolutions",
+          "isRequired": true,
+          "guidance": "Board approval of IPO, appointment of audit committee, authorization of share issuance",
+          "examples": []
+        },
+        {
+          "id": "item_6",
+          "section": "Governance",
+          "priority": "critical",
+          "text": "Corporate Governance & Compensation Disclosure",
+          "isRequired": true,
+          "guidance": "Form 51-102F6 (or equivalent) with executive compensation and governance structure",
+          "examples": []
+        },
+        {
+          "id": "item_7",
+          "section": "Consents",
+          "priority": "critical",
+          "text": "Auditor Consent Letter",
+          "isRequired": true,
+          "guidance": "Written consent from auditors to be named in prospectus",
+          "examples": []
+        },
+        {
+          "id": "item_8",
+          "section": "Consents",
+          "priority": "critical",
+          "text": "Legal Counsel Consent Letter",
+          "isRequired": true,
+          "guidance": "Written consent from legal counsel to be named in prospectus",
+          "examples": []
+        },
+        {
+          "id": "item_9",
+          "section": "Consents",
+          "priority": "critical",
+          "text": "Underwriter Commitment Letter",
+          "isRequired": true,
+          "guidance": "Letter from lead underwriter committing to IPO underwriting",
+          "examples": []
+        },
+        {
+          "id": "item_10",
+          "section": "Legal",
+          "priority": "critical",
+          "text": "Legal Opinion on Corporate Status",
+          "isRequired": true,
+          "guidance": "Opinion from Canadian legal counsel on corporate authority and capitalization",
+          "examples": []
+        },
+        {
+          "id": "item_11",
+          "section": "Legal",
+          "priority": "high",
+          "text": "Certificate of Incorporation & Articles",
+          "isRequired": true,
+          "guidance": "Current certified copies of incorporation documents and bylaws",
+          "examples": []
+        },
+        {
+          "id": "item_12",
+          "section": "Capitalization",
+          "priority": "critical",
+          "text": "Cap Table & Share Certificate Register",
+          "isRequired": true,
+          "guidance": "Complete record of all issued shares, warrants, options, and convertible securities",
+          "examples": []
+        }
+      ],
+      "description": "Comprehensive checklist for TSX IPO filing to ensure all regulatory requirements are met",
+      "totalItems": 12,
+      "criticalItems": 11,
+      "optionalItems": 1,
+      "isSequential": true,
+      "dependencies": {
+        "item_10": ["item_5"]
+      },
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "documentRequirements": [
+    {
+      "id": "tsx-doc-001",
+      "exchangeId": "tsx-001",
+      "filingType": "ipo",
+      "documentType": "prospectus",
+      "isRequired": true,
+      "minimumCount": 1,
+      "allowedFormats": ["pdf"],
+      "maxFileSizeMb": 50,
+      "requiredIfCondition": null,
+      "requiredForJurisdictions": null,
+      "validationRules": ["tsx-rule-001", "tsx-rule-002", "tsx-rule-004"],
+      "description": "Form NI 41-101F1 prospectus document",
+      "examplesUrl": "https://www.osc.ca/en/securities-law/rules-policies/forms-instructions/form-ni-41-101f1",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "tsx-doc-002",
+      "exchangeId": "tsx-001",
+      "filingType": "ipo",
+      "documentType": "financial_statements",
+      "isRequired": true,
+      "minimumCount": 2,
+      "allowedFormats": ["pdf", "docx", "xlsx"],
+      "maxFileSizeMb": 100,
+      "requiredIfCondition": null,
+      "requiredForJurisdictions": null,
+      "validationRules": [],
+      "description": "Audited financial statements for past 2 fiscal years",
+      "examplesUrl": "https://www.tsx.com/listings",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "tsx-doc-003",
+      "exchangeId": "tsx-001",
+      "filingType": "ipo",
+      "documentType": "legal_opinion",
+      "isRequired": true,
+      "minimumCount": 1,
+      "allowedFormats": ["pdf"],
+      "maxFileSizeMb": 10,
+      "requiredIfCondition": null,
+      "requiredForJurisdictions": null,
+      "validationRules": [],
+      "description": "Legal opinion on corporate status and authority to issue shares",
+      "examplesUrl": "https://www.tsx.com/listings",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "riskFactorRequirements": [
+    {
+      "id": "tsx-risk-001",
+      "exchangeId": "tsx-001",
+      "riskCategory": "market_risk",
+      "riskSubcategory": "currency_risk",
+      "isMandatory": true,
+      "minWordCount": 100,
+      "description": "Disclosure of foreign currency exposure and exchange rate risks if applicable",
+      "examplesUrl": "https://www.tsx.com/listings",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "tsx-risk-002",
+      "exchangeId": "tsx-001",
+      "riskCategory": "operational_risk",
+      "riskSubcategory": "regulatory_risk",
+      "isMandatory": true,
+      "minWordCount": 150,
+      "description": "Disclosure of regulatory, environmental, and compliance risks",
+      "examplesUrl": "https://www.tsx.com/listings",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "auditorRequirements": [
+    {
+      "id": "tsx-audit-001",
+      "exchangeId": "tsx-001",
+      "requirementName": "Canadian or US GAAP Auditor Required",
+      "requirementDescription": "Financial statements must be audited by firm experienced in Canadian or US GAAP",
+      "isMandatory": true,
+      "isJurisdictional": false,
+      "applicableJurisdictions": null,
+      "allowedAuditFirms": ["Big 4", "mid_tier", "local"],
+      "minAuditorExperienceYears": 10,
+      "auditFrequency": "annual",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ],
+
+  "guidanceTemplates": [
+    {
+      "id": "tsx-guidance-001",
+      "exchangeId": "tsx-001",
+      "sectionName": "Risk Factors",
+      "category": "content_quality",
+      "guidanceText": "Risk factors should clearly articulate material risks specific to the issuer's business. Each risk should explain what could go wrong and the potential impact on shareholders. Avoid generic, boilerplate language.",
+      "weakExample": "We operate in a competitive industry and may face competition from other companies.",
+      "weakExampleExplanation": "Too vague and generic. Doesn't specify actual competitive threats or financial impact.",
+      "strongExample": "The market for renewable energy equipment is dominated by three large players (Company A, B, C) who together control 75% of market share. Our lack of established relationships with major utilities and limited capital may prevent us from competing on price or features, potentially limiting our revenue growth to 5-10% annually versus industry average of 20%.",
+      "strongExampleExplanation": "Specific, quantified, identifies actual competitors and financial impact. Shows deep understanding of market dynamics.",
+      "qualityBenchmarks": {
+        "minWordCount": 500,
+        "maxWordCount": 2000,
+        "minSentenceLength": 5,
+        "maxSentenceLength": 30,
+        "requiredSubsections": ["competitive", "operational", "regulatory", "financial"],
+        "readabilityScore": 50
+      },
+      "tips": [
+        "Be specific - identify actual competitors and specific risks",
+        "Quantify when possible - use percentages, years, dollars",
+        "Focus on risks material to investment decision",
+        "Avoid speculation - base on actual business experience",
+        "Keep sentences short and clear for readability"
+      ],
+      "isActive": true,
+      "sourceUrl": "https://www.tsx.com/listings/guidelines",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    },
+    {
+      "id": "tsx-guidance-002",
+      "exchangeId": "tsx-001",
+      "sectionName": "Use of Proceeds",
+      "category": "content_quality",
+      "guidanceText": "Clearly allocate proceeds to specific uses with estimated amounts and timing. Explain how proceeds will be invested and expected benefits. TSX expects conservative estimates.",
+      "weakExample": "We will use proceeds for general corporate purposes and growth initiatives.",
+      "weakExampleExplanation": "Too vague. Doesn't specify actual uses or allocation.",
+      "strongExample": "We will use net proceeds of approximately $50 million as follows: $25 million (50%) for manufacturing facility expansion in Ontario (12-month timeline), $15 million (30%) for working capital and inventory, $7 million (14%) for R&D of next-generation products (ongoing through 2028), and $3 million (6%) for transaction fees and expenses.",
+      "strongExampleExplanation": "Specific allocation with percentages, timing, and strategic purpose. Shows disciplined capital deployment.",
+      "qualityBenchmarks": {
+        "minWordCount": 300,
+        "maxWordCount": 1000,
+        "requiredSubsections": ["allocation_table", "capital_deployment", "timeline"],
+        "readabilityScore": 60
+      },
+      "tips": [
+        "Create detailed allocation table with percentages",
+        "Include realistic timelines for deployment",
+        "Explain strategic rationale for each use",
+        "Be conservative in growth projections",
+        "Reference business plan and market opportunity"
+      ],
+      "isActive": true,
+      "sourceUrl": "https://www.tsx.com/listings/guidelines",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-04T00:00:00Z"
+    }
+  ]
+}
