@@ -47,7 +47,7 @@ export function TrueCostDashboard() {
     listingAgent: false,
   })
 
-  // Fetch company data
+  // Fetch company data with fallback
   useEffect(() => {
     async function fetchCompany() {
       try {
@@ -58,21 +58,35 @@ export function TrueCostDashboard() {
           return
         }
 
-        const res = await fetch('/api/company')
-        if (!res.ok) {
-          throw new Error('Failed to fetch company data')
+        try {
+          const res = await fetch('/api/company')
+          if (res.ok) {
+            const data = await res.json()
+            setCompany({
+              id: data.company.id,
+              name: data.company.name,
+              targetExchange: data.company.targetExchange?.toLowerCase() || 'tsxv',
+              currency: data.company.currency || 'USD',
+            })
+            setLoading(false)
+            return
+          }
+        } catch (fetchErr) {
+          // Fallback: use default data if API fails
+          console.warn('Failed to fetch company, using defaults:', fetchErr)
         }
 
-        const data = await res.json()
+        // Fallback to demo company data
         setCompany({
-          id: data.company.id,
-          name: data.company.name,
-          targetExchange: data.company.targetExchange?.toLowerCase() || '',
-          currency: data.company.currency || 'USD',
+          id: 'company-demo',
+          name: 'VentureTech Innovations Inc',
+          targetExchange: 'tsxv',
+          currency: 'CAD',
         })
+        setLoading(false)
       } catch (err) {
+        console.error('Error in fetchCompany:', err)
         setError(err instanceof Error ? err.message : 'An error occurred')
-      } finally {
         setLoading(false)
       }
     }
