@@ -1,0 +1,218 @@
+name: Filing System Tests
+
+on:
+  push:
+    branches: [main, develop, staging]
+    paths:
+      - 'src/lib/filing-adapters/**'
+      - 'src/app/api/filing/**'
+      - 'src/app/api/filings/**'
+      - 'src/__tests__/filing-adapters.test.ts'
+      - 'package.json'
+      - '.github/workflows/filing-system-tests.yml'
+  pull_request:
+    branches: [main, develop, staging]
+    paths:
+      - 'src/lib/filing-adapters/**'
+      - 'src/app/api/filing/**'
+      - 'src/app/api/filings/**'
+      - 'src/__tests__/filing-adapters.test.ts'
+      - 'package.json'
+  workflow_dispatch:
+
+concurrency:
+  group: filing-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit-tests:
+    name: Filing Adapter Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run filing tests
+        run: npm run test:filing
+
+      - name: Generate coverage report
+        run: npm run test:filing:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/coverage-final.json
+          flags: filing
+          name: filing-coverage
+        continue-on-error: true
+
+  type-check:
+    name: TypeScript Type Checking
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check filing adapter syntax
+        run: npx tsc --noEmit src/lib/filing-adapters/**/*.ts
+
+      - name: Run full type check
+        run: npm run build
+
+  lint:
+    name: Linting
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint filing adapters
+        run: npm run lint -- src/lib/filing-adapters
+
+      - name: Lint filing API routes
+        run: npm run lint -- src/app/api/filing src/app/api/filings
+
+  smoke-tests:
+    name: Pre-Deployment Smoke Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [unit-tests, type-check]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start server
+        run: |
+          npm start > /tmp/server.log 2>&1 &
+          echo $! > /tmp/server.pid
+          sleep 10
+
+      - name: Wait for server to be healthy
+        run: |
+          for i in {1..30}; do
+            if curl -s http://localhost:3000 > /dev/null; then
+              echo "Server is healthy"
+              exit 0
+            fi
+            echo "Waiting for server... ($i/30)"
+            sleep 1
+          done
+          echo "Server failed to start"
+          cat /tmp/server.log
+          exit 1
+
+      - name: Run smoke tests
+        run: bash ./scripts/test-filing-endpoints.sh http://localhost:3000 30
+
+      - name: Stop server
+        if: always()
+        run: |
+          if [ -f /tmp/server.pid ]; then
+            kill $(cat /tmp/server.pid) || true
+          fi
+
+      - name: Upload server logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: server-logs
+          path: /tmp/server.log
+
+  results:
+    name: Test Results Summary
+    runs-on: ubuntu-latest
+    needs: [unit-tests, type-check, lint, smoke-tests]
+    if: always()
+
+    steps:
+      - name: Check test results
+        run: |
+          if [ "${{ needs.unit-tests.result }}" = "failure" ]; then
+            echo "❌ Unit tests failed"
+            exit 1
+          fi
+          if [ "${{ needs.type-check.result }}" = "failure" ]; then
+            echo "❌ Type checking failed"
+            exit 1
+          fi
+          if [ "${{ needs.lint.result }}" = "failure" ]; then
+            echo "❌ Linting failed"
+            exit 1
+          fi
+          if [ "${{ needs.smoke-tests.result }}" = "failure" ]; then
+            echo "❌ Smoke tests failed"
+            exit 1
+          fi
+          echo "✅ All tests passed"
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const unitTests = '${{ needs.unit-tests.result }}' === 'success' ? '✅' : '❌';
+            const typeCheck = '${{ needs.type-check.result }}' === 'success' ? '✅' : '❌';
+            const linting = '${{ needs.lint.result }}' === 'success' ? '✅' : '❌';
+            const smokeTests = '${{ needs.smoke-tests.result }}' === 'success' ? '✅' : '❌';
+
+            const comment = `## Filing System Tests
+
+${unitTests} Unit Tests
+${typeCheck} Type Checking
+${linting} Linting
+${smokeTests} Smoke Tests
+
+[View workflow run](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID})`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

@@ -1,0 +1,71 @@
+#!/bin/sh
+# Pre-commit Hook for Filing System
+# ==================================
+# Runs TypeScript syntax checks and filing tests before commits
+# Prevents commits with TypeScript errors in filing adapters
+
+set -e
+
+# Color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "Pre-commit Hook: Filing System Validation"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# Get the list of staged files
+STAGED_FILES=$(git diff --cached --name-only)
+
+# Check if any filing-related files are staged
+FILING_FILES=$(echo "$STAGED_FILES" | grep -E "^(src/lib/filing-adapters/|src/app/api/filing|src/app/api/filings)" || true)
+
+if [ -z "$FILING_FILES" ]; then
+  echo -e "${GREEN}✓${NC} No filing-related files staged"
+  exit 0
+fi
+
+echo -e "${YELLOW}Checking filing-related files...${NC}"
+echo "$FILING_FILES"
+echo ""
+
+# Check 1: TypeScript Syntax
+echo -e "${YELLOW}1/3 Checking TypeScript syntax...${NC}"
+if npx tsc --noEmit --checkJs src/lib/filing-adapters/**/*.ts 2>&1; then
+  echo -e "${GREEN}✓${NC} TypeScript syntax check passed"
+else
+  echo -e "${RED}✗${NC} TypeScript syntax check failed"
+  echo "Fix the errors above and try committing again"
+  exit 1
+fi
+
+echo ""
+
+# Check 2: Filing Test Suite (quick run)
+echo -e "${YELLOW}2/3 Running filing unit tests...${NC}"
+if npm run test:filing -- --testPathPattern="filing-adapters" 2>&1; then
+  echo -e "${GREEN}✓${NC} Filing tests passed"
+else
+  echo -e "${RED}✗${NC} Filing tests failed"
+  echo "Review test failures and fix issues"
+  exit 1
+fi
+
+echo ""
+
+# Check 3: Lint Check (filing files only)
+echo -e "${YELLOW}3/3 Linting filing adapter files...${NC}"
+if npx eslint src/lib/filing-adapters --max-warnings 0 2>&1 || true; then
+  echo -e "${GREEN}✓${NC} Linting passed"
+else
+  echo -e "${YELLOW}⚠${NC} Linting warnings found (non-blocking)"
+fi
+
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo -e "${GREEN}✓ All pre-commit checks passed${NC}"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+exit 0

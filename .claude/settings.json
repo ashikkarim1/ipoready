@@ -13,5 +13,18 @@
       "WebFetch(http://localhost:4400/*)",
       "WebFetch(http://127.0.0.1:4400/*)"
     ]
+  },
+  "hooks": {
+    "pre-commit": {
+      "commands": [
+        {
+          "name": "Filing adapters syntax check",
+          "command": "npm run test:filing:check",
+          "timeout": 10000,
+          "failOnError": true,
+          "description": "Validate TypeScript syntax and run filing adapter tests before commit"
+        }
+      ]
+    }
   }
 }

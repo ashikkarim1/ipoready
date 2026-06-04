@@ -489,7 +489,7 @@ export class SEDARAdapter extends BaseFilingAdapter {
         fileName: doc.fileName,
         type: this.mapDocumentTypeToSEDARType(doc.type),
         mimeType: doc.mimeType,
-        content: this.encodeToBase64(doc.content),
+        content: doc.content ? this.encodeToBase64(doc.content) : '',
         sequence: index + 1,
         language: doc.language === 'fr' ? 'fr' : 'en',
       })),
@@ -619,7 +619,7 @@ export class SEDARAdapter extends BaseFilingAdapter {
   /**
    * Sleep utility for retry delays
    */
-  private sleep(ms: number): Promise<void> {
+  protected sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
 
