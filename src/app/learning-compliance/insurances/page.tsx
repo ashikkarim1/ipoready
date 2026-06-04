@@ -588,28 +588,29 @@ export default function InsurancesPage() {
   }, [recommendations, quizResponse.marketCap])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 suppressHydrationWarning">
+    <div className="min-h-screen suppressHydrationWarning" style={{ background: '#F7F6F4' }}>
       {/* Hero Section */}
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="relative overflow-hidden bg-gradient-to-r from-red-50 to-orange-50 border-b border-slate-200 py-12 px-6"
+        className="relative overflow-hidden border-b"
+        style={{ borderColor: '#E5E4E0', background: '#FFFFFF' }}
       >
-        <div className="max-w-6xl mx-auto">
-          <div className="space-y-6">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 lg:py-28">
+          <div className="space-y-10">
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <h1 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight">
+              <h1 className="serif text-5xl lg:text-6xl font-bold text-nav leading-tight">
                 Protect Your Board, Officers & Company
               </h1>
-              <h2 className="text-xl text-slate-700 mt-3">
+              <h2 className="text-2xl text-text-muted mt-6 font-semibold">
                 The Complete Insurance Guide for IPO-Ready Companies
               </h2>
-              <p className="text-slate-600 mt-3 max-w-3xl">
+              <p className="text-base text-text-muted mt-6 max-w-3xl leading-relaxed">
                 Understanding insurance requirements before and after your IPO is critical to protecting your leadership, your company, and your investors. This guide walks you through every insurance type, calculates your needs, and connects you with top providers.
               </p>
             </motion.div>
@@ -619,7 +620,7 @@ export default function InsurancesPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8"
+              className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mt-12"
             >
               <InsightCard
                 icon={<ShieldAlert className="w-5 h-5 text-red-600" />}
@@ -646,24 +647,24 @@ export default function InsurancesPage() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="py-12 px-6"
+        className="py-20 lg:py-28 px-6 lg:px-12"
       >
-        <div className="max-w-6xl mx-auto space-y-6">
+        <div className="max-w-7xl mx-auto space-y-12">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-              <Shield className="w-8 h-8 text-red-500" />
+            <h2 className="h2 text-nav mb-4 flex items-center gap-3">
+              <Shield className="w-8 h-8" style={{ color: '#E8312A' }} />
               Insurance Types Guide
             </h2>
-            <p className="text-slate-600">
+            <p className="text-base text-text-muted leading-relaxed">
               Comprehensive breakdown of each insurance type, why it matters, and when you need it.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-6 lg:gap-8">
             {INSURANCE_TYPES.map((insurance) => (
               <InsuranceTypeCard
                 key={insurance.id}
@@ -681,19 +682,20 @@ export default function InsurancesPage() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="py-12 px-6 bg-white border-y border-slate-200"
+        className="py-20 lg:py-28 px-6 lg:px-12"
+        style={{ borderTop: '1px solid #E5E4E0', borderBottom: '1px solid #E5E4E0', background: '#FFFFFF' }}
       >
-        <div className="max-w-4xl mx-auto space-y-8">
+        <div className="max-w-4xl mx-auto space-y-12">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-              <Lightbulb className="w-8 h-8 text-amber-500" />
+            <h2 className="h2 text-nav mb-4 flex items-center gap-3">
+              <Lightbulb className="w-8 h-8" style={{ color: '#B45309' }} />
               What Insurance Do YOU Need?
             </h2>
-            <p className="text-slate-600">
+            <p className="text-base text-text-muted leading-relaxed">
               Answer a few quick questions to see personalized recommendations.
             </p>
           </motion.div>
@@ -702,7 +704,7 @@ export default function InsurancesPage() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="space-y-6"
+            className="space-y-8"
           >
             <div>
               <label className="block text-sm font-semibold text-slate-900 mb-3">
@@ -870,19 +872,19 @@ export default function InsurancesPage() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
-          className="py-12 px-6"
+          className="py-20 lg:py-28 px-6 lg:px-12"
         >
-          <div className="max-w-6xl mx-auto space-y-8">
+          <div className="max-w-7xl mx-auto space-y-12">
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-                <TrendingUp className="w-8 h-8 text-blue-500" />
+              <h2 className="h2 text-nav mb-4 flex items-center gap-3">
+                <TrendingUp className="w-8 h-8" style={{ color: '#1D4ED8' }} />
                 Top Provider Recommendations
               </h2>
-              <p className="text-slate-600">
+              <p className="text-base text-text-muted leading-relaxed">
                 Based on your profile, here are the best-fit providers for each insurance type you need.
               </p>
             </motion.div>
@@ -919,19 +921,20 @@ export default function InsurancesPage() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="py-12 px-6 bg-white border-y border-slate-200"
+        className="py-20 lg:py-28 px-6 lg:px-12"
+        style={{ borderTop: '1px solid #E5E4E0', borderBottom: '1px solid #E5E4E0', background: '#FFFFFF' }}
       >
-        <div className="max-w-4xl mx-auto space-y-8">
+        <div className="max-w-4xl mx-auto space-y-12">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-              <Calendar className="w-8 h-8 text-orange-500" />
+            <h2 className="h2 text-nav mb-4 flex items-center gap-3">
+              <Calendar className="w-8 h-8" style={{ color: '#B45309' }} />
               Insurance Timeline & Roadmap
             </h2>
-            <p className="text-slate-600">
+            <p className="text-base text-text-muted leading-relaxed">
               When to get each type of insurance and what to do at each stage of your IPO journey.
             </p>
           </motion.div>
