@@ -3,7 +3,7 @@
  * Generates sample prospectuses, financial statements, and edge-case documents
  */
 
-import { DocumentType } from '../types'
+import { DocumentType } from '../BaseFilingAdapter'
 
 export interface GeneratedDocument {
   filename: string
