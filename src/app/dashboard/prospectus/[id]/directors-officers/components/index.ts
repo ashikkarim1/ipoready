@@ -1,0 +1,6 @@
+export { BoardCompositionOverview } from './BoardCompositionOverview'
+export { DirectorsTable } from './DirectorsTable'
+export { OfficersTable } from './OfficersTable'
+export { SignificantShareholdersTable } from './SignificantShareholdersTable'
+export { RegulatoryChecklist } from './RegulatoryChecklist'
+export { AddPersonModal } from './AddPersonModal'
