@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { ArrowRight, BookOpen, Clock, CheckCircle2, Bookmark } from 'lucide-react'
 
 // Guide data - placeholder content ready for real writing
@@ -292,7 +291,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto" style={{ paddingTop: '5rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
+        <div>
           <div className="flex items-center gap-2 mb-4">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#EFF6FF' }}>
               <BookOpen className="w-5 h-5" style={{ color: '#1D4ED8' }} />
@@ -323,14 +322,14 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
               <span className="body-sm" style={{ color: '#9A9A9A' }}>Updated {new Date(guide.updated).toLocaleDateString()}</span>
             </div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Two Column Layout: TOC + Content */}
       <section className="max-w-7xl mx-auto" style={{ paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Table of Contents - Fixed on Desktop */}
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="lg:col-span-1">
+          <div className="lg:col-span-1">
             <div className="sticky top-24" style={{ background: '#FFFFFF', borderRadius: '12px', border: '1px solid #E5E4E0', padding: '1.5rem' }}>
               <h3 className="font-bold mb-4" style={{ color: '#1A1A1A', fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 In This Guide
@@ -348,10 +347,10 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
                 ))}
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Main Content - Wider */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="lg:col-span-3">
+          <div className="lg:col-span-3">
             <div className="space-y-8">
               {guide.sections && guide.sections.map((section: any, idx: number) => (
                 <div key={idx} id={`section-${idx}`} className="scroll-mt-24">
@@ -397,14 +396,14 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
                 </div>
               </div>
             )}
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* CTA Section */}
       <section style={{ background: '#FFFFFF', borderTop: '1px solid #E5E4E0', paddingTop: '3rem', paddingBottom: '3rem' }}>
         <div className="max-w-2xl mx-auto px-6 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
+          <div>
             <h2 className="h2 mb-3" style={{ color: '#1A1A1A' }}>
               {guide.cta.title}
             </h2>
@@ -419,7 +418,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
               {guide.cta.buttonText}
               <ArrowRight className="w-4 h-4" />
             </Link>
-          </motion.div>
+          </div>
         </div>
       </section>
     </div>

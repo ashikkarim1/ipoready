@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { ArrowRight, CheckCircle2, Globe, Clock, DollarSign, TrendingUp, BookOpen } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Globe, Clock, DollarSign, TrendingUp } from 'lucide-react'
 
 // Exchange data
 const EXCHANGES: Record<string, any> = {
@@ -157,7 +156,7 @@ export default function ExchangePage({ params }: { params: { code: string } }) {
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto" style={{ paddingTop: '5rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
+        <div>
           <div className="flex items-center gap-2 mb-4">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#EFF6FF' }}>
               <Globe className="w-5 h-5" style={{ color: '#1D4ED8' }} />
@@ -209,12 +208,12 @@ export default function ExchangePage({ params }: { params: { code: string } }) {
               <p className="body-sm" style={{ color: '#78350F' }}>{exchange.bestFor}</p>
             </div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Content Sections */}
       <section className="max-w-7xl mx-auto" style={{ paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+        <div>
           <div className="space-y-8">
             {exchange.sections && exchange.sections.map((section: any, idx: number) => (
               <div key={idx}>
@@ -253,13 +252,13 @@ export default function ExchangePage({ params }: { params: { code: string } }) {
               </div>
             </div>
           )}
-        </motion.div>
+        </div>
       </section>
 
       {/* CTA Section */}
       <section style={{ background: '#FFFFFF', borderTop: '1px solid #E5E4E0', paddingTop: '3rem', paddingBottom: '3rem' }}>
         <div className="max-w-2xl mx-auto px-6 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
+          <div>
             <h2 className="h2 mb-3" style={{ color: '#1A1A1A' }}>
               Ready to List on {exchange.name}?
             </h2>
@@ -274,7 +273,7 @@ export default function ExchangePage({ params }: { params: { code: string } }) {
               Start Your {exchange.name} Journey
               <ArrowRight className="w-4 h-4" />
             </Link>
-          </motion.div>
+          </div>
         </div>
       </section>
     </div>
