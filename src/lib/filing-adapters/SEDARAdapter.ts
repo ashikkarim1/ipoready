@@ -30,6 +30,7 @@ import {
   SubmissionResult,
   StatusUpdate,
 } from './BaseFilingAdapter'
+import { OAuth2AuthManager, getOAuth2Manager, type OAuth2Credentials, type OAuth2RequestOptions, OAuth2Error } from './utils/oauth2-auth'
 
 /**
  * SEDAR-specific form types for Canadian prospectus filings
@@ -112,6 +113,8 @@ export class SEDARAdapter extends BaseFilingAdapter {
   private readonly language: 'en' | 'fr'
   private readonly apiKey: string
   private readonly apiEndpoint: string
+  private readonly oauth2Manager: OAuth2AuthManager
+  private readonly oauth2Credentials: OAuth2Credentials
 
   /**
    * Common SEDAR rejection codes and meanings
@@ -129,10 +132,6 @@ export class SEDARAdapter extends BaseFilingAdapter {
     AUDITOR_REPORT_INVALID: 'Auditor report does not meet SEDAR standards',
   }
 
-  private cachedAccessToken: string | null = null
-  private tokenExpiresAt: number | null = null
-  private readonly tokenRefreshBuffer = 300 // Refresh 5min before expiry
-
   constructor(apiKey: string, sandboxMode: boolean = true, language: 'en' | 'fr' = 'en') {
     super()
     this.apiKey = apiKey
@@ -141,45 +140,70 @@ export class SEDARAdapter extends BaseFilingAdapter {
     this.apiEndpoint = sandboxMode
       ? 'https://sandbox-api.sedar.ca/v1'
       : 'https://sedar.ca/api/v1'
+
+    // Initialize OAuth2 manager with SEDAR credentials
+    this.oauth2Manager = getOAuth2Manager()
+    this.oauth2Credentials = {
+      clientId: process.env.SEDAR2_CLIENT_ID || apiKey,
+      clientSecret: process.env.SEDAR2_CLIENT_SECRET || '',
+      tokenUrl: `${this.apiEndpoint}/oauth/token`,
+    }
   }
 
   /**
    * Get valid OAuth2 access token (with caching and auto-refresh)
+   *
+   * Uses OAuth2AuthManager for comprehensive token handling:
+   * - Automatic caching with TTL
+   * - Automatic refresh before expiry
+   * - Exponential backoff retry logic
+   * - Request deduplication for concurrent requests
+   * - Credential validation
    */
   private async getAccessToken(): Promise<string> {
-    // Return cached token if still valid
-    if (this.cachedAccessToken && this.tokenExpiresAt && Date.now() < this.tokenExpiresAt) {
-      return this.cachedAccessToken
-    }
-
     try {
-      const clientId = process.env.SEDAR2_CLIENT_ID || this.apiKey
-      const clientSecret = process.env.SEDAR2_CLIENT_SECRET || ''
-      const tokenUrl = `${this.apiEndpoint}/oauth/token`
+      // Validate credentials before requesting
+      this.oauth2Manager.validateCredentials(this.oauth2Credentials)
 
-      const response = await fetch(tokenUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          grant_type: 'client_credentials',
-          client_id: clientId,
-          client_secret: clientSecret,
+      // Get token with automatic caching and refresh
+      const accessToken = await this.oauth2Manager.getAccessToken(
+        this.oauth2Credentials,
+        {
+          grantType: 'client_credentials',
           scope: 'filing.submit filing.status',
-        }).toString(),
-      })
+        }
+      )
 
-      if (!response.ok) {
-        throw new FilingError('AUTH_FAILED', `SEDAR OAuth2 failed: ${response.statusText}`, true, response.status)
+      console.info('[SEDAR] OAuth2 token acquired successfully')
+      return accessToken
+    } catch (error) {
+      // Handle OAuth2-specific errors
+      if (error instanceof OAuth2Error) {
+        // Non-retryable errors require user action
+        if (!error.isRetryable) {
+          throw new FilingError(
+            'AUTH_FAILED',
+            `SEDAR OAuth2 authentication failed (non-retryable): ${error.message}`,
+            false,
+            error.statusCode
+          )
+        }
+
+        // Retryable errors can be retried by caller
+        throw new FilingError(
+          'AUTH_ERROR',
+          `SEDAR OAuth2 temporary failure: ${error.message}`,
+          true,
+          error.statusCode
+        )
       }
 
-      const data = await response.json() as { access_token: string; expires_in: number }
-      this.cachedAccessToken = data.access_token
-      this.tokenExpiresAt = Date.now() + (data.expires_in - this.tokenRefreshBuffer) * 1000
-
-      console.info('SEDAR OAuth2 token acquired', { expiresIn: data.expires_in })
-      return this.cachedAccessToken
-    } catch (error) {
-      throw new FilingError('AUTH_ERROR', `Failed to obtain SEDAR token: ${error instanceof Error ? error.message : 'Unknown error'}`, true)
+      // Unexpected errors
+      throw new FilingError(
+        'AUTH_ERROR',
+        `Failed to obtain SEDAR token: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        true
+      )
     }
   }
 
@@ -694,6 +718,7 @@ export class SEDARAdapter extends BaseFilingAdapter {
    * Implementation of abstract method: Get adapter config
    */
   getAdapterConfig(): Record<string, any> {
+    const cacheStats = this.oauth2Manager.getCacheStats()
     return {
       adapterId: this.adapterId,
       sandboxMode: this.sandboxMode,
@@ -701,6 +726,65 @@ export class SEDARAdapter extends BaseFilingAdapter {
       apiEndpoint: this.apiEndpoint,
       supportedForms: this.getSupportedForms(),
       supportedDocuments: this.getSupportedDocumentTypes(),
+      oauth2: {
+        credentialsConfigured: !!this.oauth2Credentials.clientId && !!this.oauth2Credentials.clientSecret,
+        cacheStats,
+      },
+    }
+  }
+
+  /**
+   * Clear OAuth2 token cache
+   *
+   * Useful for forcing re-authentication or testing
+   */
+  clearOAuth2Cache(): void {
+    this.oauth2Manager.clearCache()
+    console.info('[SEDAR] OAuth2 token cache cleared')
+  }
+
+  /**
+   * Get OAuth2 cache statistics
+   *
+   * @returns Cache statistics (total cached, valid, expired tokens)
+   */
+  getOAuth2CacheStats(): { totalCached: number; validTokens: number; expiredTokens: number } {
+    return this.oauth2Manager.getCacheStats()
+  }
+
+  /**
+   * Validate OAuth2 credentials configuration
+   *
+   * @returns Validation result with any errors
+   */
+  validateOAuth2Credentials(): { isValid: boolean; errors: string[] } {
+    const errors: string[] = []
+
+    if (!this.oauth2Credentials.clientId) {
+      errors.push('SEDAR2_CLIENT_ID environment variable or apiKey is required')
+    }
+
+    if (!this.oauth2Credentials.clientSecret) {
+      errors.push('SEDAR2_CLIENT_SECRET environment variable is required')
+    }
+
+    if (!this.oauth2Credentials.tokenUrl) {
+      errors.push('Token URL is not configured')
+    }
+
+    try {
+      this.oauth2Manager.validateCredentials(this.oauth2Credentials)
+    } catch (error) {
+      if (error instanceof OAuth2Error) {
+        errors.push(error.message)
+      } else if (error instanceof Error) {
+        errors.push(error.message)
+      }
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
     }
   }
 }
