@@ -1,10 +1,9 @@
 /**
- * QuickBooks Integration Service
+ * Xero Integration Service
  * OAuth2 auth, financial data sync (accounts, invoices, bills, transactions)
  * Balance sheet aggregation and PACE™ input mapping
  */
 
-import { Decimal } from 'decimal.js'
 import { sql } from '../db'
 import {
   AccountingIntegration,
@@ -22,64 +21,62 @@ import {
   AccountingError,
 } from '../types/accounting-integration'
 
-export interface QuickBooksConfig {
+export interface XeroConfig {
   clientId: string
   clientSecret: string
   redirectUri: string
 }
 
-// QuickBooks OAuth endpoints
-const QB_OAUTH_BASE_URL = 'https://appcenter.intuit.com'
-const QB_API_BASE_URL = 'https://quickbooks.api.intuit.com'
+// Xero OAuth endpoints
+const XERO_OAUTH_BASE_URL = 'https://login.xero.com/identity/connect'
+const XERO_API_BASE_URL = 'https://api.xero.com/api.xro/2.0'
 
 /**
- * QuickBooks Integration Service
+ * Xero Integration Service
  * Handles OAuth, token management, data sync, and PACE mapping
  */
-export class QuickBooksIntegrationService {
-  private config: QuickBooksConfig
+export class XeroIntegrationService {
+  private config: XeroConfig
 
-  constructor(config: QuickBooksConfig) {
+  constructor(config: XeroConfig) {
     this.config = config
   }
 
   /**
-   * Generate QuickBooks OAuth authorization URL
+   * Generate Xero OAuth authorization URL
    */
   generateAuthUrl(state: string): string {
     const params = new URLSearchParams({
-      client_id: this.config.clientId,
       response_type: 'code',
-      scope: [
-        'com.intuit.quickbooks.accounting',
-      ].join(' '),
+      client_id: this.config.clientId,
       redirect_uri: this.config.redirectUri,
+      scope: [
+        'accounting',
+        'email',
+        'profile',
+      ].join(' '),
       state,
     })
 
-    return `${QB_OAUTH_BASE_URL}/connect/oauth2?${params.toString()}`
+    return `${XERO_OAUTH_BASE_URL}/authorize?${params.toString()}`
   }
 
   /**
    * Exchange OAuth code for access tokens
    */
-  async exchangeCodeForTokens(
-    code: string,
-    realmId: string
-  ): Promise<OAuthTokens & { realmId: string }> {
+  async exchangeCodeForTokens(code: string): Promise<OAuthTokens & { tenantId: string }> {
     const params = new URLSearchParams({
       grant_type: 'authorization_code',
       code,
       redirect_uri: this.config.redirectUri,
+      client_id: this.config.clientId,
+      client_secret: this.config.clientSecret,
     })
 
-    const response = await fetch(`${QB_OAUTH_BASE_URL}/oauth2/tokens`, {
+    const response = await fetch(`${XERO_OAUTH_BASE_URL}/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${Buffer.from(
-          `${this.config.clientId}:${this.config.clientSecret}`
-        ).toString('base64')}`,
       },
       body: params.toString(),
     })
@@ -90,12 +87,15 @@ export class QuickBooksIntegrationService {
 
     const data = await response.json()
 
+    // Get tenant ID from connections endpoint
+    const tenantId = await this.getTenantId(data.access_token)
+
     return {
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
       expiresIn: data.expires_in,
       tokenType: data.token_type || 'Bearer',
-      realmId,
+      tenantId,
     }
   }
 
@@ -106,15 +106,14 @@ export class QuickBooksIntegrationService {
     const params = new URLSearchParams({
       grant_type: 'refresh_token',
       refresh_token: refreshToken,
+      client_id: this.config.clientId,
+      client_secret: this.config.clientSecret,
     })
 
-    const response = await fetch(`${QB_OAUTH_BASE_URL}/oauth2/tokens`, {
+    const response = await fetch(`${XERO_OAUTH_BASE_URL}/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${Buffer.from(
-          `${this.config.clientId}:${this.config.clientSecret}`
-        ).toString('base64')}`,
       },
       body: params.toString(),
     })
@@ -138,16 +137,15 @@ export class QuickBooksIntegrationService {
    */
   async handleOAuthCallback(
     code: string,
-    realmId: string,
     companyId: string
   ): Promise<AccountingIntegration> {
     try {
-      const tokens = await this.exchangeCodeForTokens(code, realmId)
+      const tokens = await this.exchangeCodeForTokens(code)
 
       const tokenExpiresAt = new Date(Date.now() + tokens.expiresIn * 1000)
 
-      // Fetch company info to get organization name
-      const companyInfo = await this.fetchCompanyInfo(tokens.accessToken, realmId)
+      // Fetch organization name
+      const orgInfo = await this.fetchOrganisationInfo(tokens.accessToken, tokens.tenantId)
 
       const result = await sql`
         INSERT INTO accounting_integrations (
@@ -164,23 +162,23 @@ export class QuickBooksIntegrationService {
         )
         VALUES (
           ${companyId},
-          'quickbooks',
+          'xero',
           ${tokens.accessToken},
           ${tokens.refreshToken},
           ${tokenExpiresAt.toISOString()},
-          ${realmId},
-          ${companyInfo.name},
+          ${tokens.tenantId},
+          ${orgInfo.name},
           'daily',
           true,
-          ${{ oauth_token_type: tokens.tokenType }}
+          ${{ oauth_token_type: tokens.tokenType, tenant_id: tokens.tenantId }}
         )
         ON CONFLICT (company_id, platform)
         DO UPDATE SET
           access_token_encrypted = ${tokens.accessToken},
           refresh_token_encrypted = ${tokens.refreshToken},
           token_expires_at = ${tokenExpiresAt.toISOString()},
-          realm_id = ${realmId},
-          organization_name = ${companyInfo.name},
+          realm_id = ${tokens.tenantId},
+          organization_name = ${orgInfo.name},
           is_active = true,
           updated_at = CURRENT_TIMESTAMP
         RETURNING *
@@ -214,8 +212,6 @@ export class QuickBooksIntegrationService {
       if (!integrations.length) {
         throw this.createError('ACCOUNT_NOT_FOUND', 404, false, 'Integration not found')
       }
-
-      const integration = integrations[0]
 
       // Check for in-progress syncs
       const inProgressSyncs = await sql`
@@ -262,12 +258,12 @@ export class QuickBooksIntegrationService {
   }
 
   /**
-   * Fetch financial data from QuickBooks
+   * Fetch financial data from Xero
    */
   async fetchFinancialData(
     integrationId: string,
     accessToken: string,
-    realmId: string,
+    tenantId: string,
     syncType: 'full' | 'incremental' | 'balance_sheet_only' | 'invoices_only'
   ): Promise<RawAccountingData> {
     try {
@@ -280,19 +276,19 @@ export class QuickBooksIntegrationService {
 
       // Fetch based on sync type
       if (syncType === 'full' || syncType === 'balance_sheet_only') {
-        data.accounts = await this.fetchAccounts(accessToken, realmId)
-        data.balanceSheet = await this.fetchBalanceSheet(accessToken, realmId)
-        data.profitAndLoss = await this.fetchProfitAndLoss(accessToken, realmId)
-        data.bankAccounts = await this.fetchBankAccounts(accessToken, realmId)
+        data.accounts = await this.fetchAccounts(accessToken, tenantId)
+        data.balanceSheet = await this.fetchBalanceSheet(accessToken, tenantId)
+        data.profitAndLoss = await this.fetchProfitAndLoss(accessToken, tenantId)
+        data.bankAccounts = await this.fetchBankAccounts(accessToken, tenantId)
       }
 
       if (syncType === 'full' || syncType === 'invoices_only') {
-        data.invoices = await this.fetchInvoices(accessToken, realmId)
-        data.bills = await this.fetchBills(accessToken, realmId)
+        data.invoices = await this.fetchInvoices(accessToken, tenantId)
+        data.bills = await this.fetchBills(accessToken, tenantId)
       }
 
       if (syncType === 'full' || syncType === 'incremental') {
-        data.transactions = await this.fetchTransactions(accessToken, realmId)
+        data.transactions = await this.fetchJournalEntries(accessToken, tenantId)
       }
 
       return data
@@ -392,130 +388,195 @@ export class QuickBooksIntegrationService {
   }
 
   // ============================================================
-  // Private Methods - QuickBooks API Calls
+  // Private Methods - Xero API Calls
   // ============================================================
 
-  private async fetchCompanyInfo(
+  private async getTenantId(accessToken: string): Promise<string> {
+    const response = await fetch('https://api.xero.com/connections', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Accept': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch tenant ID')
+    }
+
+    const connections = await response.json()
+    if (!connections.length) {
+      throw new Error('No Xero connections found')
+    }
+
+    return connections[0].tenantId
+  }
+
+  private async fetchOrganisationInfo(
     accessToken: string,
-    realmId: string
+    tenantId: string
   ): Promise<{ name: string }> {
+    const response = await fetch(`${XERO_API_BASE_URL}/Organisations`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Xero-tenant-id': tenantId,
+        'Accept': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch organization info')
+    }
+
+    const data = await response.json()
+    const org = data.Organisations?.[0]
+
+    return { name: org?.Name || 'Xero Organization' }
+  }
+
+  private async fetchAccounts(
+    accessToken: string,
+    tenantId: string
+  ): Promise<AccountingAccount[]> {
+    const response = await fetch(`${XERO_API_BASE_URL}/Accounts`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Xero-tenant-id': tenantId,
+        'Accept': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch accounts')
+    }
+
+    const data = await response.json()
+
+    return (data.Accounts || []).map((acc: any) => ({
+      id: acc.AccountID,
+      name: acc.Name,
+      accountType: (acc.Type || 'asset').toLowerCase(),
+      balance: parseFloat(acc.UpdatedUTCDate) ? 0 : parseFloat(acc.Balance || 0),
+      currency: acc.CurrencyCode || 'USD',
+      status: acc.Status === 'ACTIVE' ? 'active' : 'inactive',
+      metadata: { xeroType: acc.Type, taxType: acc.TaxType },
+    }))
+  }
+
+  private async fetchInvoices(
+    accessToken: string,
+    tenantId: string
+  ): Promise<AccountingInvoice[]> {
+    const response = await fetch(`${XERO_API_BASE_URL}/Invoices`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Xero-tenant-id': tenantId,
+        'Accept': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch invoices')
+    }
+
+    const data = await response.json()
+
+    return (data.Invoices || []).map((inv: any) => ({
+      id: inv.InvoiceID,
+      invoiceNumber: inv.InvoiceNumber,
+      vendorId: inv.ContactID,
+      vendorName: inv.Contact?.Name || 'Unknown',
+      issueDate: inv.DateString,
+      dueDate: inv.DueDateString || inv.DateString,
+      amount: parseFloat(inv.Total || 0),
+      currency: inv.CurrencyCode || 'USD',
+      status: inv.Status?.toLowerCase() || 'draft',
+      metadata: { xeroId: inv.InvoiceID },
+    }))
+  }
+
+  private async fetchBills(
+    accessToken: string,
+    tenantId: string
+  ): Promise<AccountingBill[]> {
+    // Xero uses Invoices for bills, but with Type = 'ACCRECPAY'
     const response = await fetch(
-      `${QB_API_BASE_URL}/v2/company/${realmId}`,
+      `${XERO_API_BASE_URL}/Invoices?where=Type=="ACCRECPAY"`,
       {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
+          'Xero-tenant-id': tenantId,
           'Accept': 'application/json',
         },
       }
     )
 
     if (!response.ok) {
-      throw new Error('Failed to fetch company info')
+      throw new Error('Failed to fetch bills')
     }
 
     const data = await response.json()
-    return { name: data.CompanyInfo?.CompanyName || 'QuickBooks Company' }
-  }
 
-  private async fetchAccounts(
-    accessToken: string,
-    realmId: string
-  ): Promise<AccountingAccount[]> {
-    const query = "SELECT * FROM Account WHERE Active = true"
-    const accounts = await this.queryQuickBooks(accessToken, realmId, query)
-
-    return accounts.map((acc: any) => ({
-      id: acc.Id,
-      name: acc.Name,
-      accountType: (acc.AccountType || 'asset').toLowerCase(),
-      balance: parseFloat(acc.CurrentBalance || 0),
-      currency: 'USD',
-      status: acc.Active ? 'active' : 'inactive',
-      metadata: { qbType: acc.AccountType },
+    return (data.Invoices || []).map((bill: any) => ({
+      id: bill.InvoiceID,
+      billNumber: bill.InvoiceNumber,
+      vendorId: bill.ContactID,
+      vendorName: bill.Contact?.Name || 'Unknown',
+      issueDate: bill.DateString,
+      dueDate: bill.DueDateString || bill.DateString,
+      amount: parseFloat(bill.Total || 0),
+      currency: bill.CurrencyCode || 'USD',
+      status: bill.Status?.toLowerCase() || 'draft',
+      metadata: { xeroId: bill.InvoiceID },
     }))
   }
 
-  private async fetchInvoices(
+  private async fetchJournalEntries(
     accessToken: string,
-    realmId: string
-  ): Promise<AccountingInvoice[]> {
-    const query = "SELECT * FROM Invoice"
-    const invoices = await this.queryQuickBooks(accessToken, realmId, query)
-
-    return invoices.map((inv: any) => ({
-      id: inv.Id,
-      invoiceNumber: inv.DocNumber,
-      vendorId: inv.CustomerRef?.value || '',
-      vendorName: inv.Line?.[0]?.Description || 'Unknown',
-      issueDate: inv.TxnDate,
-      dueDate: inv.DueDate || inv.TxnDate,
-      amount: parseFloat(inv.TotalAmt || 0),
-      currency: 'USD',
-      status: inv.DocStatus?.toLowerCase() || 'draft',
-      metadata: { qbId: inv.Id },
-    }))
-  }
-
-  private async fetchBills(
-    accessToken: string,
-    realmId: string
-  ): Promise<AccountingBill[]> {
-    const query = "SELECT * FROM Bill"
-    const bills = await this.queryQuickBooks(accessToken, realmId, query)
-
-    return bills.map((bill: any) => ({
-      id: bill.Id,
-      billNumber: bill.DocNumber,
-      vendorId: bill.VendorRef?.value || '',
-      vendorName: bill.VendorRef?.name || 'Unknown',
-      issueDate: bill.TxnDate,
-      dueDate: bill.DueDate || bill.TxnDate,
-      amount: parseFloat(bill.TotalAmt || 0),
-      currency: 'USD',
-      status: bill.DocStatus?.toLowerCase() || 'draft',
-      metadata: { qbId: bill.Id },
-    }))
-  }
-
-  private async fetchTransactions(
-    accessToken: string,
-    realmId: string
+    tenantId: string
   ): Promise<AccountingTransaction[]> {
-    const query = "SELECT * FROM JournalEntry"
-    const entries = await this.queryQuickBooks(accessToken, realmId, query)
+    const response = await fetch(`${XERO_API_BASE_URL}/JournalEntries`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Xero-tenant-id': tenantId,
+        'Accept': 'application/json',
+      },
+    })
 
-    return entries.flatMap((entry: any) =>
-      (entry.Line || []).map((line: any) => ({
-        id: `${entry.Id}-${line.Id}`,
-        date: entry.TxnDate,
-        description: entry.DocNumber || 'Journal Entry',
-        amount: parseFloat(line.Amount || 0),
-        currency: 'USD',
-        accountId: line.DetailType === 'JournalEntryLineDetail'
-          ? line.JournalEntryLineDetail?.AccountRef?.value || ''
-          : '',
-        accountName: line.JournalEntryLineDetail?.AccountRef?.name || 'Unknown',
+    if (!response.ok) {
+      throw new Error('Failed to fetch journal entries')
+    }
+
+    const data = await response.json()
+
+    return (data.JournalEntries || []).flatMap((entry: any) =>
+      (entry.JournalLines || []).map((line: any) => ({
+        id: `${entry.JournalEntryID}-${line.LineItemID}`,
+        date: entry.JournalDate,
+        description: entry.Reference || 'Journal Entry',
+        amount: parseFloat(line.LineAmount || 0),
+        currency: entry.Currency?.Code || 'USD',
+        accountId: line.AccountID,
+        accountName: line.AccountCode || 'Unknown',
         type: 'journal',
-        referenceId: entry.Id,
-        metadata: { qbId: entry.Id, lineId: line.Id },
+        referenceId: entry.JournalEntryID,
+        metadata: { xeroId: entry.JournalEntryID },
       }))
     )
   }
 
   private async fetchBalanceSheet(
     accessToken: string,
-    realmId: string
+    tenantId: string
   ): Promise<BalanceSheetData> {
-    const query = "SELECT * FROM Account WHERE Active = true"
-    const accounts = await this.queryQuickBooks(accessToken, realmId, query)
+    const accounts = await this.fetchAccounts(accessToken, tenantId)
 
     let assets = 0
     let liabilities = 0
     let equity = 0
 
-    accounts.forEach((acc: any) => {
-      const balance = parseFloat(acc.CurrentBalance || 0)
-      const type = (acc.AccountType || '').toUpperCase()
+    accounts.forEach((acc) => {
+      const balance = acc.balance
+      const type = acc.accountType.toUpperCase()
 
       if (type.includes('ASSET')) assets += balance
       else if (type.includes('LIABILITY')) liabilities += balance
@@ -528,37 +589,28 @@ export class QuickBooksIntegrationService {
       liabilities,
       equity,
       currency: 'USD',
-      accounts: accounts.map((acc: any) => ({
-        id: acc.Id,
-        name: acc.Name,
-        accountType: (acc.AccountType || 'asset').toLowerCase(),
-        balance: parseFloat(acc.CurrentBalance || 0),
-        currency: 'USD',
-        status: acc.Active ? 'active' : 'inactive',
-      })),
+      accounts,
     }
   }
 
   private async fetchProfitAndLoss(
     accessToken: string,
-    realmId: string
+    tenantId: string
   ): Promise<ProfitAndLossData> {
-    // QB doesn't have a direct P&L query, so we aggregate from accounts
-    const query = "SELECT * FROM Account WHERE Active = true"
-    const accounts = await this.queryQuickBooks(accessToken, realmId, query)
+    const accounts = await this.fetchAccounts(accessToken, tenantId)
 
     let revenue = 0
     let costOfRevenue = 0
     let operatingExpenses = 0
     let netIncome = 0
 
-    accounts.forEach((acc: any) => {
-      const balance = parseFloat(acc.CurrentBalance || 0)
-      const type = (acc.AccountType || '').toUpperCase()
+    accounts.forEach((acc) => {
+      const balance = acc.balance
+      const type = acc.accountType.toUpperCase()
 
-      if (type.includes('REVENUE')) revenue -= balance // Revenue is negative in QB
+      if (type.includes('REVENUE')) revenue -= balance
       else if (type.includes('COGS') || type.includes('COST')) costOfRevenue += balance
-      else if (type.includes('EXPENSE')) operatingExpenses += balance
+      else if (type.includes('EXPENSE') && !type.includes('OTHER')) operatingExpenses += balance
     })
 
     const grossProfit = revenue - costOfRevenue
@@ -583,47 +635,20 @@ export class QuickBooksIntegrationService {
 
   private async fetchBankAccounts(
     accessToken: string,
-    realmId: string
+    tenantId: string
   ): Promise<any[]> {
-    const query = "SELECT * FROM Account WHERE AccountType = 'Bank' AND Active = true"
-    const accounts = await this.queryQuickBooks(accessToken, realmId, query)
+    const accounts = await this.fetchAccounts(accessToken, tenantId)
 
-    return accounts.map((acc: any) => ({
-      id: acc.Id,
-      name: acc.Name,
-      accountNumber: acc.AccountNumber || '',
-      balance: parseFloat(acc.CurrentBalance || 0),
-      currency: 'USD',
-      asOfDate: new Date().toISOString().split('T')[0],
-    }))
-  }
-
-  private async queryQuickBooks(
-    accessToken: string,
-    realmId: string,
-    query: string
-  ): Promise<any[]> {
-    const params = new URLSearchParams({ query })
-
-    const response = await fetch(
-      `${QB_API_BASE_URL}/v2/company/${realmId}/query?${params.toString()}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Accept': 'application/json',
-        },
-      }
-    )
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        throw this.createError('TOKEN_EXPIRED', 401, true, 'Access token expired')
-      }
-      throw new Error(`QuickBooks API error: ${response.status}`)
-    }
-
-    const data = await response.json()
-    return data.QueryResponse?.[Object.keys(data.QueryResponse)[0]] || []
+    return accounts
+      .filter((acc) => acc.accountType.toUpperCase().includes('BANK'))
+      .map((acc) => ({
+        id: acc.id,
+        name: acc.name,
+        accountNumber: '',
+        balance: acc.balance,
+        currency: acc.currency,
+        asOfDate: new Date().toISOString().split('T')[0],
+      }))
   }
 
   private createError(
@@ -639,7 +664,7 @@ export class QuickBooksIntegrationService {
           ? originalError.message
           : 'Unknown error'
 
-    const error = new Error(`QuickBooks error: ${code}. ${message}`) as AccountingError
+    const error = new Error(`Xero error: ${code}. ${message}`) as AccountingError
 
     error.code = code
     error.statusCode = statusCode
@@ -647,126 +672,5 @@ export class QuickBooksIntegrationService {
     error.timestamp = new Date()
 
     return error
-  }
-}
-
-/**
- * Get QuickBooks connection for company (convenience function)
- */
-export async function getQuickBooksConnection(
-  companyId: string
-): Promise<{
-  success: boolean
-  connection?: AccountingIntegration
-  error?: string
-}> {
-  try {
-    const result = (await sql`
-      SELECT *
-      FROM accounting_integrations
-      WHERE company_id = ${companyId}
-        AND provider = 'quickbooks'
-        AND is_active = TRUE
-      LIMIT 1
-    `) as any[]
-
-    if (result.length === 0) {
-      return { success: false, error: 'No QuickBooks connection found' }
-    }
-
-    const row = result[0]
-    return {
-      success: true,
-      connection: {
-        id: row.id,
-        company_id: row.company_id,
-        provider: row.provider,
-        provider_account_id: row.provider_account_id,
-        access_token: row.access_token,
-        refresh_token: row.refresh_token,
-        token_expires_at: new Date(row.token_expires_at),
-        sync_status: row.sync_status,
-        last_synced_at: row.last_synced_at ? new Date(row.last_synced_at) : null,
-        metadata: row.metadata,
-      },
-    }
-  } catch (err) {
-    return {
-      success: false,
-      error: err instanceof Error ? err.message : 'Failed to get connection',
-    }
-  }
-}
-
-/**
- * Sync prospectus data to QuickBooks (PACE mapping)
- */
-export async function syncProspectusDataToQB(
-  connection: AccountingIntegration,
-  prospectusData: {
-    prospectusId: string
-    companyId: string
-    submittedAt: string
-    prospectusStatus: string
-  }
-): Promise<{
-  success: boolean
-  syncId?: string
-  error?: string
-}> {
-  try {
-    // Create accounting sync record
-    const syncResult = (await sql`
-      INSERT INTO accounting_syncs (
-        integration_id,
-        company_id,
-        sync_type,
-        sync_status,
-        data_synced,
-        sync_metadata,
-        created_at,
-        updated_at
-      ) VALUES (
-        ${connection.id},
-        ${prospectusData.companyId},
-        'prospectus_submission',
-        'completed',
-        ${JSON.stringify({
-          prospectusId: prospectusData.prospectusId,
-          submittedAt: prospectusData.submittedAt,
-          status: prospectusData.prospectusStatus,
-        })},
-        ${JSON.stringify({
-          provider: 'quickbooks',
-          sync_reason: 'prospectus_submitted',
-          timestamp: new Date().toISOString(),
-        })},
-        NOW(),
-        NOW()
-      )
-      RETURNING id
-    `) as any[]
-
-    if (syncResult.length === 0) {
-      return { success: false, error: 'Failed to create sync record' }
-    }
-
-    // Update integration last sync time
-    await sql`
-      UPDATE accounting_integrations
-      SET last_synced_at = NOW()
-      WHERE id = ${connection.id}
-    `
-
-    return {
-      success: true,
-      syncId: syncResult[0].id,
-    }
-  } catch (err) {
-    console.error('Error syncing to QuickBooks:', err)
-    return {
-      success: false,
-      error: err instanceof Error ? err.message : 'Sync failed',
-    }
   }
 }

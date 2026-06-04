@@ -604,28 +604,478 @@ export async function testSlackBotConnection(
 }
 
 /**
+ * List available Slack channels for workspace
+ */
+export async function listSlackChannels(
+  botToken: string
+): Promise<{
+  success: boolean
+  channels?: Array<{
+    id: string
+    name: string
+    is_member: boolean
+  }>
+  error?: string
+}> {
+  try {
+    const response = await fetch(`${SLACK_API_BASE}/conversations.list?exclude_archived=true&limit=100`, {
+      headers: {
+        Authorization: `Bearer ${botToken}`,
+      },
+    })
+
+    const data = await response.json()
+
+    if (!data.ok) {
+      return {
+        success: false,
+        error: data.error || 'Failed to list channels',
+      }
+    }
+
+    return {
+      success: true,
+      channels: (data.channels || []).map((channel: any) => ({
+        id: channel.id,
+        name: channel.name,
+        is_member: channel.is_member,
+      })),
+    }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error('[slack.ts] Error listing channels:', errorMsg)
+    return {
+      success: false,
+      error: errorMsg,
+    }
+  }
+}
+
+/**
+ * Update monitored channels for a company
+ */
+export async function updateMonitoredChannels(
+  companyId: string,
+  channelIds: string[]
+): Promise<{
+  success: boolean
+  error?: string
+}> {
+  try {
+    await sql`
+      UPDATE slack_connections
+      SET channel_ids = ${JSON.stringify(channelIds)},
+          updated_at = NOW()
+      WHERE company_id = ${companyId}
+    `
+
+    return { success: true }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error('[slack.ts] Failed to update channels:', errorMsg)
+    return {
+      success: false,
+      error: errorMsg,
+    }
+  }
+}
+
+/**
+ * Log Slack notification sent
+ */
+export async function logSlackNotificationSent(
+  companyId: string,
+  data: {
+    eventType: string
+    recipientType: 'user' | 'channel'
+    recipientId: string
+    templateId: string
+    success: boolean
+    slackTs?: string
+    error?: string
+  }
+): Promise<void> {
+  try {
+    await sql`
+      INSERT INTO slack_notifications_sent (
+        company_id,
+        event_type,
+        recipient_type,
+        recipient_id,
+        template_id,
+        success,
+        slack_ts,
+        error_message,
+        sent_at
+      ) VALUES (
+        ${companyId},
+        ${data.eventType},
+        ${data.recipientType},
+        ${data.recipientId},
+        ${data.templateId},
+        ${data.success},
+        ${data.slackTs || null},
+        ${data.error || null},
+        NOW()
+      )
+    `
+  } catch (err) {
+    console.error('[slack.ts] Failed to log notification:', err)
+  }
+}
+
+/**
+ * Get notification preferences for a company
+ */
+export async function getSlackPreferences(
+  companyId: string
+): Promise<{
+  success: boolean
+  preferences?: {
+    notifyOnFilingSubmitted: boolean
+    notifyOnPaceMilestone: boolean
+    notifyOnTaskAssigned: boolean
+    notifyOnDocumentUpload: boolean
+    notifyOnComplianceDeadline: boolean
+    notificationChannel?: string
+    quietHoursStart?: string
+    quietHoursEnd?: string
+  }
+  error?: string
+}> {
+  try {
+    const result = await sql`
+      SELECT preferences FROM slack_connections
+      WHERE company_id = ${companyId}
+      AND is_active = true
+      LIMIT 1
+    `
+
+    if (result.length === 0) {
+      return {
+        success: false,
+        error: 'No Slack connection found',
+      }
+    }
+
+    const preferences = (result[0] as any).preferences || {}
+
+    return {
+      success: true,
+      preferences: {
+        notifyOnFilingSubmitted: preferences.notifyOnFilingSubmitted ?? true,
+        notifyOnPaceMilestone: preferences.notifyOnPaceMilestone ?? true,
+        notifyOnTaskAssigned: preferences.notifyOnTaskAssigned ?? true,
+        notifyOnDocumentUpload: preferences.notifyOnDocumentUpload ?? true,
+        notifyOnComplianceDeadline: preferences.notifyOnComplianceDeadline ?? true,
+        notificationChannel: preferences.notificationChannel,
+        quietHoursStart: preferences.quietHoursStart,
+        quietHoursEnd: preferences.quietHoursEnd,
+      },
+    }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error('[slack.ts] Failed to get preferences:', errorMsg)
+    return {
+      success: false,
+      error: errorMsg,
+    }
+  }
+}
+
+/**
+ * Update Slack notification preferences
+ */
+export async function updateSlackPreferences(
+  companyId: string,
+  preferences: {
+    notifyOnFilingSubmitted?: boolean
+    notifyOnPaceMilestone?: boolean
+    notifyOnTaskAssigned?: boolean
+    notifyOnDocumentUpload?: boolean
+    notifyOnComplianceDeadline?: boolean
+    notificationChannel?: string
+    quietHoursStart?: string
+    quietHoursEnd?: string
+  }
+): Promise<{
+  success: boolean
+  error?: string
+}> {
+  try {
+    const result = await sql`
+      SELECT preferences FROM slack_connections
+      WHERE company_id = ${companyId}
+      AND is_active = true
+      LIMIT 1
+    `
+
+    if (result.length === 0) {
+      return {
+        success: false,
+        error: 'No Slack connection found',
+      }
+    }
+
+    const existingPrefs = (result[0] as any).preferences || {}
+    const updatedPreferences = {
+      ...existingPrefs,
+      ...preferences,
+    }
+
+    await sql`
+      UPDATE slack_connections
+      SET preferences = ${updatedPreferences},
+          updated_at = NOW()
+      WHERE company_id = ${companyId}
+    `
+
+    return { success: true }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error('[slack.ts] Failed to update preferences:', errorMsg)
+    return {
+      success: false,
+      error: errorMsg,
+    }
+  }
+}
+
+/**
+ * Check if notification should be sent based on quiet hours
+ */
+export function isWithinQuietHours(
+  quietHoursStart?: string,
+  quietHoursEnd?: string
+): boolean {
+  if (!quietHoursStart || !quietHoursEnd) {
+    return false
+  }
+
+  const now = new Date()
+  const currentHour = now.getHours()
+  const [startHour] = quietHoursStart.split(':').map(Number)
+  const [endHour] = quietHoursEnd.split(':').map(Number)
+
+  if (startHour < endHour) {
+    return currentHour >= startHour && currentHour < endHour
+  } else {
+    // Overnight quiet hours
+    return currentHour >= startHour || currentHour < endHour
+  }
+}
+
+/**
  * Handle Slack slash commands
  */
 export const slackCommandHandlers: Record<string, SlackCommandHandler> = {
   '/ipo-status': async (payload) => {
     try {
-      // Get company info from user context
-      // This would typically look up the company from the user
+      // Get company from user workspace
+      const result = await sql`
+        SELECT sc.company_id FROM slack_connections sc
+        WHERE sc.team_id = ${payload.team_id}
+        AND sc.is_active = true
+        LIMIT 1
+      `
+
+      if (result.length === 0) {
+        return {
+          response_type: 'ephemeral',
+          text: 'Company not found for this workspace',
+        }
+      }
+
+      const companyId = (result[0] as any).company_id
+
+      // Get company PACE data
+      const companyResult = await sql`
+        SELECT
+          c.name,
+          c.ipo_status,
+          p.pace_score,
+          p.filing_readiness_pct,
+          p.financial_readiness_pct,
+          p.governance_readiness_pct,
+          p.legal_readiness_pct
+        FROM companies c
+        LEFT JOIN pace_scores p ON c.id = p.company_id
+        WHERE c.id = ${companyId}
+        LIMIT 1
+      `
+
+      if (companyResult.length === 0) {
+        return {
+          response_type: 'ephemeral',
+          text: 'Company data not found',
+        }
+      }
+
+      const company = companyResult[0] as any
+
       return {
         response_type: 'ephemeral',
-        text: 'IPO Status command would be implemented with your business logic',
         blocks: [
           {
-            type: 'section',
+            type: 'header',
             text: {
-              type: 'mrkdwn',
-              text: '*IPO Readiness Status*\n\nCommand handler is ready for integration with your dashboard.',
+              type: 'plain_text',
+              text: `IPO Status: ${company.name}`,
+              emoji: true,
             },
+          },
+          {
+            type: 'section',
+            fields: [
+              {
+                type: 'mrkdwn',
+                text: `*Status*\n${company.ipo_status || 'Not Set'}`,
+              },
+              {
+                type: 'mrkdwn',
+                text: `*PACE Score*\n${company.pace_score || 'N/A'}`,
+              },
+              {
+                type: 'mrkdwn',
+                text: `*Filing Ready*\n${company.filing_readiness_pct || 0}%`,
+              },
+              {
+                type: 'mrkdwn',
+                text: `*Financial Ready*\n${company.financial_readiness_pct || 0}%`,
+              },
+              {
+                type: 'mrkdwn',
+                text: `*Governance Ready*\n${company.governance_readiness_pct || 0}%`,
+              },
+              {
+                type: 'mrkdwn',
+                text: `*Legal Ready*\n${company.legal_readiness_pct || 0}%`,
+              },
+            ],
+          },
+          {
+            type: 'actions',
+            elements: [
+              {
+                type: 'button',
+                text: {
+                  type: 'plain_text',
+                  text: 'View Dashboard',
+                  emoji: true,
+                },
+                url: 'https://app.ipoready.com/dashboard',
+                style: 'primary',
+              },
+            ],
           },
         ],
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+      console.error('[slack.ts] /ipo-status error:', errorMsg)
+      return {
+        response_type: 'ephemeral',
+        text: `Error: ${errorMsg}`,
+      }
+    }
+  },
+
+  '/filing-status': async (payload) => {
+    try {
+      const result = await sql`
+        SELECT sc.company_id FROM slack_connections sc
+        WHERE sc.team_id = ${payload.team_id}
+        AND sc.is_active = true
+        LIMIT 1
+      `
+
+      if (result.length === 0) {
+        return {
+          response_type: 'ephemeral',
+          text: 'Company not found',
+        }
+      }
+
+      const companyId = (result[0] as any).company_id
+
+      // Get recent filings
+      const filingResult = await sql`
+        SELECT
+          id,
+          filing_type,
+          filing_system,
+          status,
+          submitted_at,
+          document_count
+        FROM filings
+        WHERE company_id = ${companyId}
+        ORDER BY submitted_at DESC
+        LIMIT 5
+      `
+
+      const filings = filingResult as any[]
+
+      if (filings.length === 0) {
+        return {
+          response_type: 'ephemeral',
+          text: 'No recent filings found',
+        }
+      }
+
+      const filingBlocks = filings.map((filing) => ({
+        type: 'section',
+        fields: [
+          {
+            type: 'mrkdwn',
+            text: `*${filing.filing_type}*\n${filing.filing_system.toUpperCase()}`,
+          },
+          {
+            type: 'mrkdwn',
+            text: `*Status*\n${filing.status}`,
+          },
+          {
+            type: 'mrkdwn',
+            text: `*Submitted*\n${new Date(filing.submitted_at).toLocaleDateString()}`,
+          },
+          {
+            type: 'mrkdwn',
+            text: `*Documents*\n${filing.document_count || 0}`,
+          },
+        ],
+      }))
+
+      return {
+        response_type: 'ephemeral',
+        blocks: [
+          {
+            type: 'header',
+            text: {
+              type: 'plain_text',
+              text: 'Recent Filings',
+              emoji: true,
+            },
+          },
+          ...filingBlocks,
+          {
+            type: 'actions',
+            elements: [
+              {
+                type: 'button',
+                text: {
+                  type: 'plain_text',
+                  text: 'View All Filings',
+                  emoji: true,
+                },
+                url: 'https://app.ipoready.com/dashboard/filings',
+                style: 'primary',
+              },
+            ],
+          },
+        ],
+      }
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+      console.error('[slack.ts] /filing-status error:', errorMsg)
       return {
         response_type: 'ephemeral',
         text: `Error: ${errorMsg}`,
@@ -705,6 +1155,108 @@ export async function unlinkSlackIntegration(
   } catch (err) {
     const errorMsg = err instanceof Error ? err.message : 'Unknown error'
     console.error('[slack.ts] Failed to unlink integration:', errorMsg)
+    return {
+      success: false,
+      error: errorMsg,
+    }
+  }
+}
+
+/**
+ * Post message to Slack channel (for prospectus notifications)
+ */
+export async function postMessage(
+  botToken: string,
+  options: {
+    channel: string
+    text: string
+    blocks?: any[]
+  }
+): Promise<{
+  success: boolean
+  messageTs?: string
+  error?: string
+}> {
+  try {
+    const response = await fetch(`${SLACK_API_BASE}/chat.postMessage`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${botToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        channel: options.channel,
+        text: options.text,
+        blocks: options.blocks,
+      }),
+    })
+
+    const data = (await response.json()) as any
+
+    if (!data.ok) {
+      return {
+        success: false,
+        error: data.error || 'Failed to post message',
+      }
+    }
+
+    return {
+      success: true,
+      messageTs: data.ts,
+    }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error('[slack.ts] Failed to post message:', errorMsg)
+    return {
+      success: false,
+      error: errorMsg,
+    }
+  }
+}
+
+/**
+ * Update Slack message
+ */
+export async function updateMessage(
+  botToken: string,
+  options: {
+    channel: string
+    ts: string
+    text: string
+    blocks?: any[]
+  }
+): Promise<{
+  success: boolean
+  error?: string
+}> {
+  try {
+    const response = await fetch(`${SLACK_API_BASE}/chat.update`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${botToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        channel: options.channel,
+        ts: options.ts,
+        text: options.text,
+        blocks: options.blocks,
+      }),
+    })
+
+    const data = (await response.json()) as any
+
+    if (!data.ok) {
+      return {
+        success: false,
+        error: data.error || 'Failed to update message',
+      }
+    }
+
+    return { success: true }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+    console.error('[slack.ts] Failed to update message:', errorMsg)
     return {
       success: false,
       error: errorMsg,

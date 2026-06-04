@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import {
   Link2, CheckCircle2, Clock, Wifi, WifiOff, RefreshCcw,
   ExternalLink, Send, Shield, AlertCircle, Zap
@@ -405,13 +406,25 @@ export default function IntegrationsPage() {
     }
   }, [])
 
+  const router = useRouter()
+
   const handleConnect = useCallback((id: string) => {
+    // Special handling for Slack - redirect to dedicated integration page
+    if (id === 'slack') {
+      router.push('/integrations/slack')
+      return
+    }
     patchIntegration(id, 'connected')
-  }, [patchIntegration])
+  }, [patchIntegration, router])
 
   const handleDisconnect = useCallback((id: string) => {
+    // Special handling for Slack - redirect to dedicated integration page
+    if (id === 'slack') {
+      router.push('/integrations/slack')
+      return
+    }
     patchIntegration(id, 'available')
-  }, [patchIntegration])
+  }, [patchIntegration, router])
 
   const connectedCount = ALL_DEFAULTS.filter(i => statusMap[i.id] === 'connected').length
   const availableCount = ALL_DEFAULTS.filter(i => statusMap[i.id] === 'available').length
