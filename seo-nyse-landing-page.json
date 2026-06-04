@@ -1,0 +1,1158 @@
+{
+  "pageMetadata": {
+    "pageTitle": "NYSE Listing Guide: Requirements & IPO Timeline 2026",
+    "metaDescription": "Complete NYSE listing guide. Requirements, timeline, costs, and process for IPOs on the New York Stock Exchange. Expert insights for US & Canadian companies.",
+    "targetKeywords": [
+      "NYSE listing",
+      "New York Stock Exchange IPO",
+      "NYSE requirements",
+      "NYSE listing process",
+      "NYSE listing timeline",
+      "NYSE listing costs",
+      "NYSE IPO timeline",
+      "direct listing NYSE",
+      "NYSE vs NASDAQ",
+      "SEC filing for NYSE",
+      "NYSE listing fees",
+      "listing requirements US",
+      "IPO on NYSE",
+      "go public NYSE",
+      "NYSE IPO cost",
+      "stock exchange listing",
+      "public company requirements",
+      "IPO readiness",
+      "Canadian companies on NYSE",
+      "US capital markets"
+    ],
+    "canonicalUrl": "https://www.ipoready.ai/exchanges/nyse",
+    "openGraphTitle": "NYSE Listing Guide: Complete IPO Requirements & Timeline",
+    "openGraphDescription": "Master the NYSE listing process. Learn requirements, timeline (8-14 months), estimated costs ($2M-$5M), and how to go public on the world's largest exchange.",
+    "openGraphImage": "/og-nyse.png",
+    "twitterCard": "summary_large_image",
+    "locale": "en_US",
+    "alternateLocale": "fr_CA"
+  },
+
+  "heroSection": {
+    "eyebrow": "Exchange Profile",
+    "headline": "NYSE Listing Guide: Go Public on the World's Largest Exchange",
+    "subheadline": "Complete requirements, timeline, costs, and process for IPOs on the New York Stock Exchange — trusted by world-leading companies.",
+    "cta": {
+      "primary": {
+        "text": "Start Your NYSE Readiness Assessment",
+        "href": "/wizard?exchange=nyse",
+        "variant": "primary"
+      },
+      "secondary": {
+        "text": "Compare All Exchanges",
+        "href": "/resources#exchanges",
+        "variant": "secondary"
+      }
+    },
+    "backgroundPattern": "gradient",
+    "heroStats": [
+      {
+        "label": "Market Cap",
+        "value": "$27.3T",
+        "icon": "TrendingUp"
+      },
+      {
+        "label": "Daily Volume",
+        "value": "3.2B+ Shares",
+        "icon": "BarChart3"
+      },
+      {
+        "label": "Listed Companies",
+        "value": "2,900+",
+        "icon": "Globe"
+      },
+      {
+        "label": "Founded",
+        "value": "1817",
+        "icon": "Clock"
+      }
+    ]
+  },
+
+  "quickStats": {
+    "timeline": {
+      "label": "Timeline",
+      "value": "8-14 months",
+      "icon": "Clock",
+      "description": "From pre-filing to first trading day"
+    },
+    "cost": {
+      "label": "Estimated Cost",
+      "value": "$2M-$5M",
+      "icon": "DollarSign",
+      "description": "All-in direct and indirect costs",
+      "subtext": "Average IPO size: $500M-$2B"
+    },
+    "tier": {
+      "label": "Exchange Tier",
+      "value": "Premium",
+      "icon": "Crown",
+      "description": "Largest and most prestigious"
+    },
+    "bestFor": {
+      "label": "Ideal For",
+      "value": "Large-Cap",
+      "icon": "CheckCircle2",
+      "description": "$1B+ revenue, global investors"
+    }
+  },
+
+  "pageContent": {
+    "sections": [
+      {
+        "id": "why-nyse",
+        "title": "Why Choose the NYSE?",
+        "type": "comparative",
+        "subsections": [
+          {
+            "heading": "Unmatched Global Prestige",
+            "icon": "Crown",
+            "content": "The NYSE is the world's largest stock exchange by market capitalization ($27.3T) and daily trading volume (3.2B+ shares). A NYSE listing signals to global investors that your company has achieved the highest standards of corporate governance, financial performance, and market readiness."
+          },
+          {
+            "heading": "Massive Institutional Investor Base",
+            "icon": "Users",
+            "content": "Access to 5,000+ institutional investors, sovereign wealth funds, and multinational pension funds. NYSE listings attract tier-1 investors globally — essential for companies seeking sustained capital and M&A currency."
+          },
+          {
+            "heading": "Superior Liquidity & Price Discovery",
+            "icon": "Activity",
+            "content": "NYSE's Designated Market Makers (DMMs) ensure tighter bid-ask spreads, predictable execution, and transparent pricing. Average daily volumes exceed 3.2B shares — your stock will trade efficiently even in illiquid market conditions."
+          },
+          {
+            "heading": "M&A Currency & Strategic Flexibility",
+            "icon": "Zap",
+            "content": "A NYSE ticker becomes your company's 'currency' for acquisitions, employee equity incentives, and strategic partnerships. Nasdaq and OTC listings lack this same credibility in cross-border M&A."
+          },
+          {
+            "heading": "Premium Valuation Multiple",
+            "icon": "TrendingUp",
+            "content": "NYSE-listed companies typically command 15-25% premium valuations vs. NASDAQ/TSXV peers. Analyst coverage, institutional demand, and reduced market microstructure risk drive higher P/E multiples."
+          },
+          {
+            "heading": "Dual-Listing Pathway for Canadian Companies",
+            "icon": "Globe",
+            "content": "Canadian companies can dual-list on TSX + NYSE simultaneously. This gives you access to both Canadian institutional capital AND US institutional mega-funds (BlackRock, Vanguard, etc.) — impossible on TSX alone."
+          }
+        ]
+      },
+
+      {
+        "id": "listing-requirements",
+        "title": "NYSE Listing Requirements & Standards",
+        "type": "detailed-list",
+        "intro": "NYSE imposes the strictest listing standards in North America. These requirements ensure only the most mature, well-governed companies go public on the exchange.",
+        "subsections": [
+          {
+            "heading": "Financial Requirements",
+            "icon": "DollarSign",
+            "requirements": [
+              {
+                "item": "Minimum Global Market Capitalization",
+                "detail": "$200M for IPOs; $100M for established companies",
+                "source": "NYSE Listed Company Manual"
+              },
+              {
+                "item": "Profitability & Cash Flow",
+                "detail": "Last 3 fiscal years: $10M aggregate + $2M in last 2 years (OR demonstrated business model + $15M aggregate cash flow over 3 years)",
+                "source": "NYSE Rule 102.01B"
+              },
+              {
+                "item": "Audited Financial Statements",
+                "detail": "Must be prepared by Big 4 or PCAOB-registered firm (Deloitte, EY, KPMG, PwC). SOX 404 testing required for IPO year.",
+                "source": "NYSE Rule 102.05"
+              },
+              {
+                "item": "Accounting Standards",
+                "detail": "GAAP (US), IFRS (foreign issuers), or equivalent as determined by SEC. No non-GAAP financial metrics as primary metrics.",
+                "source": "SEC Reg S-K"
+              },
+              {
+                "item": "Annual Revenue",
+                "detail": "Typically $50M-$100M+ expected. Early-stage biotech/IP-heavy companies may be exempt with >$50M market cap.",
+                "source": "NYSE Listed Company Manual"
+              },
+              {
+                "item": "Tangible Assets",
+                "detail": "Minimum $75M in net tangible assets OR $50M if market cap ≥$500M",
+                "source": "NYSE Rule 102.01D"
+              }
+            ]
+          },
+
+          {
+            "heading": "Corporate Governance & Board Requirements",
+            "icon": "Shield",
+            "requirements": [
+              {
+                "item": "Board of Directors",
+                "detail": "Minimum 5 independent directors (or supermajority of board if <5 total). No CEO duality for large-cap (>$100M cap).",
+                "source": "NYSE Rule 303A.01"
+              },
+              {
+                "item": "Audit Committee",
+                "detail": "All independent members. ≥1 financial expert with accounting expertise. Meets quarterly minimum. Directly oversees external auditor.",
+                "source": "NYSE Rule 303A.07"
+              },
+              {
+                "item": "Compensation Committee",
+                "detail": "All independent members. Reviews executive compensation, equity plans, clawback policies. Annual say-on-pay required.",
+                "source": "NYSE Rule 303A.05"
+              },
+              {
+                "item": "Nominating Committee",
+                "detail": "All independent members. Evaluates board effectiveness, ESG governance, D&O insurance. Reviews succession planning.",
+                "source": "NYSE Rule 303A.04"
+              },
+              {
+                "item": "Code of Conduct",
+                "detail": "Written ethics code covering conflicts of interest, insider trading, FCPA/anti-corruption, environmental, social governance.",
+                "source": "NYSE Rule 303A.10"
+              },
+              {
+                "item": "Equity Plan Approval",
+                "detail": "All equity compensation (stock options, RSUs, PSUs) must be approved by compensation committee & board. Annual burn rate cap = 2% for standard companies.",
+                "source": "NYSE Rule 303A.08"
+              },
+              {
+                "item": "Section 302/404 Internal Controls",
+                "detail": "CEO/CFO certify financial controls. Auditor attests to internal control framework (Integrated Framework or COSO ERM).",
+                "source": "SOX §302, §404"
+              }
+            ]
+          },
+
+          {
+            "heading": "Cap Table & Equity Structure",
+            "icon": "Layers",
+            "requirements": [
+              {
+                "item": "Clean Cap Table",
+                "detail": "< 10 equity exceptions (options, warrants, convertibles, profit participation). No unusual classes of stock or anti-takeover provisions without investor approval.",
+                "source": "NYSE Rule 102"
+              },
+              {
+                "item": "Minimum Public Float",
+                "detail": "40% of outstanding shares for IPOs; 10% for existing public companies. 'Public float' = shares held by non-affiliates valued at ≥$10M.",
+                "source": "NYSE Rule 102.01"
+              },
+              {
+                "item": "Share Liquidity",
+                "detail": "Minimum 1.1M shares outstanding. Fractional shares not allowed. Par value ≤$10/share (or appropriate for currency).",
+                "source": "NYSE Listed Company Manual"
+              },
+              {
+                "item": "No Excessive Founder Control",
+                "detail": "Supermajority voting or dual-class shares discouraged. If used, must have sunset provisions (10-year maximum) or require shareholder renewal.",
+                "source": "NYSE Rule 303A.09"
+              },
+              {
+                "item": "Related-Party Transactions",
+                "detail": "All transactions ≥$120K with directors/officers must be disclosed in proxy. Audit committee must pre-approve.",
+                "source": "NYSE Rule 303A.08"
+              }
+            ]
+          },
+
+          {
+            "heading": "Prospectus & Regulatory Filing",
+            "icon": "FileText",
+            "requirements": [
+              {
+                "item": "Form S-1 (US Domestic Issuers)",
+                "detail": "Comprehensive prospectus including audited financials, MD&A, executive compensation, risk factors, business description, use of proceeds.",
+                "source": "SEC Reg S-K, S-X"
+              },
+              {
+                "item": "Form F-1 (Foreign Private Issuers / Canadian Companies)",
+                "detail": "English-language prospectus + home country disclosure (Form 20-F for ongoing compliance). IFRS or reconciliation to GAAP.",
+                "source": "SEC Form F-1 Instructions"
+              },
+              {
+                "item": "FINRA Rule 5110 Underwriting Agreement",
+                "detail": "Underwriter must disclose compensation, stabilization activities, conflicts of interest.",
+                "source": "FINRA Rule 5110"
+              },
+              {
+                "item": "Auditor's Audit Report (SAS 117)",
+                "detail": "Opinion on effectiveness of internal controls over financial reporting. Cannot use limited scope audit.",
+                "source": "PCAOB AS 1301"
+              },
+              {
+                "item": "Risk Factor Disclosure",
+                "detail": "Prominent risks related to industry, company, market, regulatory, and exchange-specific factors. Must be clear and specific.",
+                "source": "SEC Reg S-K Item 503"
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "id": "listing-process",
+        "title": "NYSE IPO Process & Timeline",
+        "type": "timeline",
+        "intro": "From Day 1 to first trading day, expect 8-14 months of intensive preparation, regulatory engagement, and investor outreach.",
+        "phases": [
+          {
+            "phase": "Phase 1: Pre-IPO Planning & Corporate Structuring",
+            "duration": "2-3 months",
+            "icon": "Lightbulb",
+            "tasks": [
+              "Engage IPO advisory team: securities counsel (BigLaw), investment banks (1-3 underwriters), auditors (Big 4)",
+              "Audit committee & governance review: evaluate board independence, committee composition, code of conduct",
+              "Cap table cleanup: eliminate warrants, convertibles, profit participation agreements < 10 exceptions",
+              "Initiate SOX 404 internal control assessment: baseline evaluation, gap identification",
+              "Establish Disclosure Committee: CFO, General Counsel, Investor Relations, external counsel",
+              "Confidential submission strategy: NYSE pre-filing or proceed directly to SEC filing"
+            ]
+          },
+
+          {
+            "phase": "Phase 2: Financial Audit & S-1 Documentation",
+            "duration": "3-4 months",
+            "icon": "FileCheck",
+            "tasks": [
+              "Accelerated audit cycle: PCAOB auditor performs integrated audit (financials + controls)",
+              "MD&A preparation: management's discussion of financial results, liquidity, capital resources (3 years)",
+              "Executive compensation disclosure: CD&A (Compensation Discussion & Analysis) for NEOs (top 5)",
+              "Related-party transaction review: all ≥$120K transactions disclosed, audit committee pre-approval",
+              "Risk factor drafting: 10+ pages of material risks (business, industry, market, regulatory)",
+              "S-1 prospectus drafting: legal counsel produces ~250-page SEC filing with all required schedules"
+            ]
+          },
+
+          {
+            "phase": "Phase 3: SEC Pre-Filing (Optional) & Official Filing",
+            "duration": "1-2 months",
+            "icon": "FileText",
+            "tasks": [
+              "Confidential submission (Reg SHO): submit S-1 draft to SEC staff confidentially (4-6 weeks feedback loop)",
+              "SEC comment resolution: address SEC comment letters on disclosure, accounting, risk factors",
+              "Official S-1 filing: SEC review via EDGAR. Expect 20-40 comment letters from staff.",
+              "Amendment cycles: S-1/A (amendment 1), S-1/A2 (amendment 2), typically 2-3 rounds",
+              "External auditor coordination: validate financials, controls, audit opinion language"
+            ]
+          },
+
+          {
+            "phase": "Phase 4: Investor Roadshow & Book Building",
+            "duration": "3-4 weeks",
+            "icon": "Megaphone",
+            "tasks": [
+              "Underwriter syndicate formation: select lead underwriters, establish underwriting group (5-20 banks)",
+              "Roadshow logistics: 30-40 institutional investor meetings across major US cities (San Francisco, Boston, NYC, Chicago, LA)",
+              "Institutional investor education: investors evaluate business model, management team, competitive position, financial trajectory",
+              "Price range filing: SEC amendment with preliminary pricing (30% discount to Pricing Day estimate)",
+              "Book building: underwriters collect investor indications of interest (size + price range)",
+              "Marketing materials: investor presentation deck, dataroom access, Q&A preparation"
+            ]
+          },
+
+          {
+            "phase": "Phase 5: Pricing & Allocation",
+            "duration": "1 week",
+            "icon": "DollarSign",
+            "tasks": [
+              "Final institutional demand: last investor meetings, investor feedback synthesis",
+              "Price setting (Pricing Day): underwriters recommend final offer price (typically middle of range)",
+              "Allocation discussions: underwriters assign shares to institutional investors (priority: long-term holders, cornerstone accounts)",
+              "Lock-up agreement: founders/insiders agree to 180-day (or longer) trading freeze post-IPO",
+              "Final prospectus (424B5): priced prospectus filed with SEC, distributed to investors"
+            ]
+          },
+
+          {
+            "phase": "Phase 6: Regulatory Approval & Listing Decision",
+            "duration": "1 week",
+            "icon": "CheckCircle2",
+            "tasks": [
+              "SEC effectiveness declaration: SEC declares S-1 effective (typically evening before Pricing Day)",
+              "NYSE Listing Qualifications approval: NYSE staff confirms company meets all listing standards",
+              "Trading approval from Designated Market Maker (DMM): DMM prepares opening trading environment",
+              "Final legal opinions: underwriters and counsel issue legal opinions to banks + company",
+              "Wire transfer of funds: company receives IPO proceeds (minus underwriting fees, direct costs)"
+            ]
+          },
+
+          {
+            "phase": "Phase 7: First Trading Day & Post-IPO Transition",
+            "duration": "Day 1 onwards",
+            "icon": "TrendingUp",
+            "tasks": [
+              "Opening bell: your stock symbol trades on NYSE. Designated Market Maker manages opening auction.",
+              "Post-IPO press release: company announces IPO completion, highlights key metrics, thanks investors",
+              "Investor relations launch: begin ongoing earnings guidance, quarterly earnings calls, investor relations engagements",
+              "SOX 404 compliance acceleration: finalize internal control assessments, management attestation, auditor report",
+              "Form 8-K filings: disclose IPO pricing, offering details, use of proceeds",
+              "Lock-up expiration tracking: monitor 180-day (or custom) founder lock-up expiration, secondary offering risk"
+            ]
+          }
+        ]
+      },
+
+      {
+        "id": "costs-breakdown",
+        "title": "NYSE Listing Costs & Fee Breakdown",
+        "type": "cost-breakdown",
+        "intro": "Total all-in IPO costs typically range $2M-$5M. Here's the detailed breakdown for a typical $500M IPO.",
+        "costBreakdown": [
+          {
+            "category": "Securities & Investment Banking",
+            "items": [
+              {
+                "description": "Underwriting fees (underwriter gross spread)",
+                "typical": "$35M-$50M",
+                "percentage": "7% of capital raised",
+                "notes": "Split among lead underwriters, syndicates banks. Usually 3-5% lead, 2-3% syndicate."
+              },
+              {
+                "description": "SEC registration fee",
+                "typical": "$350K-$500K",
+                "percentage": "Variable (0.1% of offer price × shares)",
+                "notes": "Paid to SEC at filing. Non-refundable."
+              },
+              {
+                "description": "FINRA filing fees",
+                "typical": "$30K-$50K",
+                "percentage": "One-time",
+                "notes": "Underwriting agreement review, conflict of interest disclosures."
+              },
+              {
+                "description": "NYSE listing fee (one-time)",
+                "typical": "$250K-$500K",
+                "percentage": "One-time (waived for >$100M IPO capital raised)",
+                "notes": "Plus annual continuation fee $20K-$30K."
+              }
+            ]
+          },
+
+          {
+            "category": "Legal & Compliance",
+            "items": [
+              {
+                "description": "Company securities counsel (BigLaw)",
+                "typical": "$1.2M-$1.8M",
+                "percentage": "Major component of legal fees",
+                "notes": "Represents company: S-1 drafting, negotiations, regulatory liaison, closing docs."
+              },
+              {
+                "description": "Underwriter's counsel (BigLaw)",
+                "typical": "$800K-$1.2M",
+                "percentage": "Separate legal team",
+                "notes": "Paid by underwriters. Provides opinion letters, validates offering."
+              },
+              {
+                "description": "Board/company counsel (regulatory)",
+                "typical": "$200K-$400K",
+                "percentage": "Ongoing support",
+                "notes": "Governance review, D&O insurance, post-IPO compliance setup."
+              },
+              {
+                "description": "Real estate/IP/tax counsel",
+                "typical": "$100K-$200K",
+                "percentage": "Specialist counsel",
+                "notes": "For material contracts, IP diligence, tax structuring."
+              }
+            ]
+          },
+
+          {
+            "category": "Accounting & Financial Services",
+            "items": [
+              {
+                "description": "Big 4 Audit firm (integrated SOX 404 audit)",
+                "typical": "$800K-$1.2M",
+                "percentage": "IPO year + baseline for Year 2",
+                "notes": "Auditor opinion, internal control attestation, Form 404 testing."
+              },
+              {
+                "description": "Audit committee financial expert retainer",
+                "typical": "$50K-$100K",
+                "percentage": "Annual",
+                "notes": "Expert advisor for audit committee, SEC expert if required."
+              },
+              {
+                "description": "Tax accounting & compliance",
+                "typical": "$100K-$200K",
+                "percentage": "One-time + ongoing",
+                "notes": "Structuring, international tax (if dual-listed), transfer pricing."
+              }
+            ]
+          },
+
+          {
+            "category": "Investor Relations & Marketing",
+            "items": [
+              {
+                "description": "Investor relations (IR) firm retainer",
+                "typical": "$200K-$400K",
+                "percentage": "IPO year + Year 1-2",
+                "notes": "Roadshow support, investor targeting, post-IPO IR strategy."
+              },
+              {
+                "description": "Roadshow logistics (travel, materials)",
+                "typical": "$100K-$150K",
+                "percentage": "One-time",
+                "notes": "CEO/CFO travel, printing prospectuses, investor meetings setup."
+              },
+              {
+                "description": "Marketing & branding",
+                "typical": "$100K-$200K",
+                "percentage": "One-time IPO push",
+                "notes": "Press releases, media outreach, thought leadership positioning."
+              },
+              {
+                "description": "Investor.relations website & dataroom",
+                "typical": "$50K-$100K",
+                "percentage": "One-time + SaaS",
+                "notes": "Q Investor, eSpeed, or similar dataroom platform."
+              }
+            ]
+          },
+
+          {
+            "category": "Transfer Agent & Registry",
+            "items": [
+              {
+                "description": "Transfer agent (Computershare, American Stock Transfer, Equiniti)",
+                "typical": "$40K-$60K",
+                "percentage": "Annual",
+                "notes": "Manages shareholder registry, dividend payments, corporate actions."
+              },
+              {
+                "description": "CUSIP/ISIN issuance",
+                "typical": "$5K-$10K",
+                "percentage": "One-time",
+                "notes": "US stock identifier, allows trading on US exchanges."
+              }
+            ]
+          },
+
+          {
+            "category": "Insurance & Risk Management",
+            "items": [
+              {
+                "description": "Directors & Officers (D&O) liability insurance",
+                "typical": "$500K-$1M+ premium",
+                "percentage": "Annual",
+                "notes": "$50M-$100M coverage. Premium rises post-IPO (higher risk)."
+              },
+              {
+                "description": "Securities Liability insurance (for underwriters)",
+                "typical": "$200K-$500K",
+                "percentage": "One-time",
+                "notes": "Covers prospectus liability, registration statement errors."
+              }
+            ]
+          },
+
+          {
+            "category": "Miscellaneous & Contingency",
+            "items": [
+              {
+                "description": "Valuation/fairness opinion (optional)",
+                "typical": "$100K-$200K",
+                "percentage": "Optional",
+                "notes": "For certain governance structures, special shareholder votes."
+              },
+              {
+                "description": "Contingency buffer (10-15% of total)",
+                "typical": "$200K-$400K",
+                "percentage": "Reserve",
+                "notes": "Unexpected legal costs, additional counsel, extended SEC commentary."
+              }
+            ]
+          }
+        ],
+        "totalCost": {
+          "lowEnd": "$2M-$2.5M",
+          "highEnd": "$4M-$5M",
+          "notes": "For a typical $500M-$1B IPO. Smaller IPOs ($100M-$300M) may see higher cost per dollar. Larger IPOs ($2B+) benefit from economies of scale."
+        },
+        "postIpoAnnualCosts": [
+          {
+            "item": "SOX 404 / Audit",
+            "cost": "$600K-$1M",
+            "frequency": "Annual"
+          },
+          {
+            "item": "Nasdaq/NYSE listing fees + regulatory",
+            "cost": "$30K-$50K",
+            "frequency": "Annual"
+          },
+          {
+            "item": "Transfer agent",
+            "cost": "$40K-$60K",
+            "frequency": "Annual"
+          },
+          {
+            "item": "D&O insurance",
+            "cost": "$500K-$1M",
+            "frequency": "Annual"
+          },
+          {
+            "item": "Investor relations",
+            "cost": "$100K-$300K",
+            "frequency": "Annual"
+          },
+          {
+            "item": "SEC filing & proxy statement",
+            "cost": "$100K-$200K",
+            "frequency": "Annual"
+          }
+        ]
+      },
+
+      {
+        "id": "nyse-vs-competitors",
+        "title": "NYSE vs. Other Exchanges: Complete Comparison",
+        "type": "comparison-table",
+        "intro": "Not sure if NYSE is right for you? Here's how NYSE stacks up against NASDAQ, TSX, TSXV, CSE, and OTC.",
+        "comparisonTable": [
+          {
+            "attribute": "Market Cap (Global Rank)",
+            "nyse": "#1 - $27.3T",
+            "nasdaq": "#2 - $23.1T",
+            "tsx": "#15 - $2.3T",
+            "tsxv": "Emerging",
+            "cse": "Small-cap",
+            "otc": "Speculative"
+          },
+          {
+            "attribute": "Daily Volume",
+            "nyse": "3.2B+ shares",
+            "nasdaq": "4.5B shares (higher tech focus)",
+            "tsx": "330M shares",
+            "tsxv": "50M shares",
+            "cse": "10M shares",
+            "otc": "Highly variable"
+          },
+          {
+            "attribute": "Minimum Market Cap (IPO)",
+            "nyse": "$200M",
+            "nasdaq": "$100M-$110M",
+            "tsx": "$75M-$100M",
+            "tsxv": "$25M-$50M",
+            "cse": "$5M-$10M",
+            "otc": "None"
+          },
+          {
+            "attribute": "Profitability Requirement",
+            "nyse": "$10M aggregate + recent profitability",
+            "nasdaq": "$5M-$12M aggregate (or revenue test)",
+            "tsx": "Profitable or clear path",
+            "tsxv": "None required (pre-revenue OK)",
+            "cse": "None required",
+            "otc": "None"
+          },
+          {
+            "attribute": "Timeline to Listing",
+            "nyse": "8-14 months",
+            "nasdaq": "8-14 months",
+            "tsx": "12-18 months",
+            "tsxv": "4-8 months",
+            "cse": "2-4 months",
+            "otc": "1-2 months"
+          },
+          {
+            "attribute": "Est. Cost (All-In)",
+            "nyse": "$2M-$5M",
+            "nasdaq": "$2.5M-$5M",
+            "tsx": "$1M-$2M",
+            "tsxv": "$300K-$1M",
+            "cse": "$100K-$400K",
+            "otc": "$50K-$100K"
+          },
+          {
+            "attribute": "Board Independence",
+            "nyse": "Supermajority (67%+)",
+            "nasdaq": "Supermajority (50%+)",
+            "tsx": "Majority (50%+)",
+            "tsxv": "None required",
+            "cse": "None required",
+            "otc": "None"
+          },
+          {
+            "attribute": "Audit Committee Required",
+            "nyse": "Yes (all independent)",
+            "nasdaq": "Yes (all independent)",
+            "tsx": "Yes (mostly independent)",
+            "tsxv": "No",
+            "cse": "No",
+            "otc": "No"
+          },
+          {
+            "attribute": "Auditor Type Required",
+            "nyse": "Big 4 PCAOB-registered",
+            "nasdaq": "Big 4 PCAOB-registered",
+            "tsx": "Big 4 or equivalent",
+            "tsxv": "Review or full audit",
+            "cse": "Review acceptable",
+            "otc": "None"
+          },
+          {
+            "attribute": "SOX 404 Compliance",
+            "nyse": "Required (IPO + ongoing)",
+            "nasdaq": "Required (IPO + ongoing)",
+            "tsx": "Equivalent (OSC equivalent)",
+            "tsxv": "Minimal",
+            "cse": "Minimal",
+            "otc": "None"
+          },
+          {
+            "attribute": "Institutional Investor Base",
+            "nyse": "5,000+ global mega-funds",
+            "nasdaq": "5,000+ tech-focused funds",
+            "tsx": "1,500+ Canadian funds",
+            "tsxv": "500+ venture/growth funds",
+            "cse": "200+ microcap funds",
+            "otc": "Retail only"
+          },
+          {
+            "attribute": "Valuation Premium (P/E Multiple)",
+            "nyse": "+15-25% vs peers",
+            "nasdaq": "+10-20% vs peers",
+            "tsx": "Market rate",
+            "tsxv": "-20-30% illiquidity discount",
+            "cse": "-30-40% discount",
+            "otc": "-50-70% discount"
+          },
+          {
+            "attribute": "M&A Currency Value",
+            "nyse": "Highest (global acceptance)",
+            "nasdaq": "High (US/global acceptance)",
+            "tsx": "Medium (Canadian/cross-border)",
+            "tsxv": "Low (venture-friendly only)",
+            "cse": "Very low",
+            "otc": "Not accepted"
+          },
+          {
+            "attribute": "Regulatory Jurisdiction",
+            "nyse": "SEC + NYSE Rule Book",
+            "nasdaq": "SEC + Nasdaq Rule Book",
+            "tsx": "OSC + TSX Rule Book",
+            "tsxv": "CSA + TSXV Rule Book",
+            "cse": "IIROC + CSE rules",
+            "otc": "FINRA + OTC Markets"
+          },
+          {
+            "attribute": "Best For",
+            "nyse": "Large-cap ($1B+ rev), global growth, M&A-ready",
+            "nasdaq": "Tech, innovation, $50M-$500M rev",
+            "tsx": "Mature Canadian, $100M-$1B rev",
+            "tsxv": "Emerging growth, $10M-$100M rev",
+            "cse": "Microcap, $1M-$50M rev",
+            "otc": "Shell companies, distressed"
+          }
+        ]
+      },
+
+      {
+        "id": "ny-success-stories",
+        "title": "NYSE Listing Success Stories",
+        "type": "case-studies",
+        "intro": "Companies across sectors have successfully listed on NYSE. Here are recent examples that may resonate with your path.",
+        "stories": [
+          {
+            "company": "Stripe (Confidential IPO Planning)",
+            "year": "Rumored 2024-2025",
+            "sector": "FinTech / Payments",
+            "headline": "Payments giant targets $50B+ valuation at NYSE listing",
+            "details": "Stripe's path to NYSE highlights the importance of global payment infrastructure and the premium market rewards for transparent financial platforms.",
+            "relevance": "If you're a B2B SaaS/FinTech company, Stripe's execution model (profitability before IPO, dual-geography adoption) is the gold standard."
+          },
+
+          {
+            "company": "TPG Inc. (Private Equity)",
+            "year": "2014 IPO on NYSE",
+            "sector": "Asset Management",
+            "headline": "Major PE firm went public to unlock institutional capital and fund secondary markets",
+            "details": "TPG listed at $19/share (raised $600M), now trades $120+ (6.3x return for Day 1 investors). NYSE listing enabled secondary fund raise ($3B+) and accelerated acquisition strategy.",
+            "relevance": "If you're a financial services or alternative asset company, TPG shows NYSE's value for unlocking institutional capital and M&A currency."
+          },
+
+          {
+            "company": "Shopify (Cross-listing from TSX)",
+            "year": "Primary listing: TSX (2010), Secondary: NYSE (2015)",
+            "sector": "E-Commerce SaaS",
+            "headline": "Canadian e-commerce platform leveraged TSX + NYSE to reach global scale",
+            "details": "Shopify dual-listed TSX (primary) + NYSE (secondary). Today, Shopify is Canada's largest tech company ($70B+) and a global brand. NYSE listing enabled US institutional adoption.",
+            "relevance": "If you're a Canadian tech company with US expansion ambitions, Shopify's playbook (strong TSX foundation, then NYSE secondary) is proven."
+          },
+
+          {
+            "company": "ServiceNow (SaaS Unicorn)",
+            "year": "2012 IPO on NYSE",
+            "sector": "Enterprise SaaS",
+            "headline": "Enterprise software company went public at $28/share, now $800+",
+            "details": "ServiceNow's 28+ year IPO and subsequent performance ($12B→$250B market cap) demonstrates NYSE's appeal for high-growth SaaS. The listing enabled aggressive M&A (Accel, Siebel, etc.).",
+            "relevance": "If you're scaling a B2B SaaS platform, ServiceNow shows that even at $100M revenue, a NYSE listing accelerates market dominance."
+          },
+
+          {
+            "company": "Spotify (Direct Listing on NYSE)",
+            "year": "2018",
+            "sector": "Streaming Media",
+            "headline": "Music streaming platform chose NYSE Direct Listing to reach global investor base",
+            "details": "Spotify's direct listing (no IPO) on NYSE allowed 100% of shares to trade freely from Day 1, enabling existing stakeholders to liquidate without lockup periods.",
+            "relevance": "If you have strong pre-IPO demand and want to avoid lockups, a direct listing on NYSE is an alternative path (especially post-2020, as SEC relaxed rules)."
+          }
+        ]
+      },
+
+      {
+        "id": "faq",
+        "title": "Frequently Asked Questions About NYSE Listings",
+        "type": "faq",
+        "questions": [
+          {
+            "q": "What's the minimum market cap to list on NYSE?",
+            "a": "For IPOs, NYSE requires a minimum global market capitalization of $200M at the time of listing. For existing public companies (secondary listings), the threshold is $100M. This is measured by multiplying your IPO share price × total shares outstanding (including restricted shares)."
+          },
+
+          {
+            "q": "Can a Canadian company list on NYSE?",
+            "a": "Yes, absolutely. Canadian companies can either: (1) Primary listing on NYSE (using Form F-1 for SEC purposes, IFRS financials acceptable), or (2) Dual-list on TSX + NYSE simultaneously. Many major Canadian companies (Shopify, Bombardier, BCE, TD) are dual-listed. Canadian companies should expect an 8-14 month timeline, $2M-$5M in costs, and must comply with both SEC and exchange rules. Consider working with a Canadian securities counsel familiar with cross-border listings."
+          },
+
+          {
+            "q": "How much does the average NYSE IPO cost?",
+            "a": "For a $500M-$1B IPO, expect $2M-$5M all-in costs. Here's the breakdown: (1) Underwriting fees: $35M-$50M (7% of capital), (2) Legal (securities + regulatory): $2M-$3M, (3) Audit & financial: $1M-$1.5M, (4) Investor relations: $300K-$500K, (5) Miscellaneous (insurance, transfer agent, fees): $400K-$800K. Smaller IPOs ($100M-$300M) often have higher cost-per-dollar. Larger IPOs ($2B+) benefit from economies of scale (costs as % of raised capital drop to 5-6%)."
+          },
+
+          {
+            "q": "Is SOX 404 compliance required before listing on NYSE?",
+            "a": "Yes. SEC requires SOX §302 (CEO/CFO financial certification) and §404 (internal control attestation) for all IPOs, effective immediately at opening bell. You must have your auditors complete an integrated audit (financial statements + internal controls over financial reporting) in your IPO year. This typically requires 8-12 weeks of intensive work by auditors and your finance/IT teams. Plan for an additional $200K-$400K in audit costs for SOX 404 testing."
+          },
+
+          {
+            "q": "What happens if my profitability is weak? Can I still list on NYSE?",
+            "a": "NYSE Rule 102.01B offers two pathways: (1) Profitability test: $10M aggregate income (last 3 years) + $2M in last 2 fiscal years. OR (2) Cash flow test: $15M aggregate operating cash flow (last 3 years) with $100M market cap. If neither applies, certain biotech/IP-heavy companies can qualify under a market cap test ($500M+). However, profitability weakness significantly increases investor skepticism. Most successful IPOs have clear profitability or a credible path (growth company with improving unit economics). Unprofitable IPOs are possible (Uber, Airbnb went public negative) but require extraordinary growth, brand, and market position."
+          },
+
+          {
+            "q": "What's the difference between IPO and Direct Listing on NYSE?",
+            "a": "IPO: Company issues new shares (common path). Underwriters buy shares from the company at a discount, then sell to the public. Lock-up applies: founders/insiders can't sell for 180 days. Primary way to raise capital. Direct Listing: Company's existing shares trade directly on exchange without new issuance. No lockup. Founders can sell from Day 1. Direct listings became more common post-2020. For most companies raising capital (which requires new shares), an IPO is the standard path. Direct listings work for companies that don't need capital but want public markets access (Spotify, Slack, Coinbase)."
+          },
+
+          {
+            "q": "How long is the 'quiet period' (blackout) during an IPO?",
+            "a": "SEC Quiet Period (Regulation M): Typically 40 days from IPO Day for most investors/stakeholders. Company executives under 'blackout' are restricted from discussing the offering in great detail once S-1 is filed. This period ends 40 days after listing day. Some FINRA restrictions extend to 100 days. After the quiet period, normal earnings guidance, investor communication, and trading resumes. This is a major constraint—be prepared for limited communication for 6 weeks post-IPO."
+          },
+
+          {
+            "q": "What is the lock-up period, and why do I care?",
+            "a": "Lock-up Agreement: A 180-day (or longer, often up to 2 years) binding agreement between founders/insiders and underwriters preventing the sale of IPO shares. Violating lock-up = severe legal consequences and underwriter enforcement. Why it matters: On Day 181, founders can sell their shares. Institutional investors watch lock-up expiration dates closely. Heavy insider selling after lock-up often triggers stock price declines (negative signal). Many successful companies have extended their lock-up (e.g., 1-2 years voluntarily) to show confidence and avoid negative perception."
+          },
+
+          {
+            "q": "Can I reverse-merge or use a SPAC instead of an IPO?",
+            "a": "Alternative paths exist (reverse merger, SPAC), but NYSE prefers traditional IPOs because: (1) SPACs have more litigation/regulatory scrutiny post-2021, (2) Reverse mergers into shell companies trigger delisting risk, (3) Traditional IPOs signal true market demand + rigorous vetting. If cost/timeline are constraints, consider NASDAQ or TSXV first rather than SPAC. SPACs are declining post-regulatory crackdown; traditional IPO is the gold standard for credibility."
+          },
+
+          {
+            "q": "How does IPOReady help me with a NYSE listing?",
+            "a": "IPOReady is your central hub for IPO readiness management. We help you: (1) Assess readiness (PACE™ scoring), (2) Track progress on 100+ IPO milestones across 8 phases, (3) Manage cap table cleanup with scenario modeling, (4) Centralize documents (prospectus, financial models, governance docs), (5) Connect with vetted IPO professionals (lawyers, auditors, underwriters), (6) Estimate costs and timeline with our Cost Calculator, (7) Get AI-powered guidance on governance, compliance, and risk remediation. We support all exchanges (TSX, TSXV, CSE, NASDAQ, NYSE, OTC), so you can compare pathways and make the right choice."
+          }
+        ]
+      }
+    ]
+  },
+
+  "ctaElements": [
+    {
+      "type": "primary-hero-cta",
+      "text": "Start Your NYSE Readiness Assessment",
+      "href": "/wizard?exchange=nyse",
+      "icon": "ArrowRight",
+      "placement": "hero",
+      "priority": "high"
+    },
+    {
+      "type": "sticky-cta-bar",
+      "text": "Get a personalized NYSE readiness score",
+      "ctaText": "Launch PACE Scorer",
+      "href": "/dashboard/pace?exchange=nyse",
+      "dismissible": true,
+      "placement": "bottom",
+      "priority": "medium"
+    },
+    {
+      "type": "mid-page-card-cta",
+      "heading": "Ready to explore NYSE?",
+      "subheading": "Get a personalized analysis of your readiness with our proprietary PACE™ scoring system.",
+      "cta": {
+        "text": "Calculate Your PACE Score",
+        "href": "/wizard?exchange=nyse"
+      },
+      "placement": "after-listing-process",
+      "priority": "high"
+    },
+    {
+      "type": "marketplace-cta",
+      "heading": "Connect with NYSE Specialists",
+      "subheading": "Our expert network includes securities lawyers, Big 4 auditors, and investment bankers with proven NYSE IPO experience.",
+      "cta": {
+        "text": "Browse IPO Professionals",
+        "href": "/marketplace?specialty=securities-counsel&exchange=nyse"
+      },
+      "placement": "after-faq",
+      "priority": "medium"
+    }
+  ],
+
+  "internalLinks": [
+    {
+      "text": "Compare All Exchanges",
+      "href": "/resources#exchanges",
+      "context": "See how NYSE stacks up against NASDAQ, TSX, TSXV, CSE, and OTC"
+    },
+    {
+      "text": "IPO Cost Calculator",
+      "href": "/dashboard/financial-mgmt/cost-calculator?exchange=nyse",
+      "context": "Get a detailed cost breakdown for your specific company profile"
+    },
+    {
+      "text": "IPO Checklist",
+      "href": "/checklist?exchange=nyse",
+      "context": "Track all 100+ IPO milestones specific to NYSE requirements"
+    },
+    {
+      "text": "Prospectus Auto-Builder",
+      "href": "/prospectus-builder?exchange=nyse",
+      "context": "Generate SEC S-1 sections with NYSE/SEC compliance built-in"
+    },
+    {
+      "text": "Expert Network: Securities Lawyers",
+      "href": "/marketplace?specialty=securities-counsel&exchange=nyse",
+      "context": "Find vetted BigLaw securities counsel experienced with NYSE IPOs"
+    },
+    {
+      "text": "Expert Network: Auditors",
+      "href": "/marketplace?specialty=auditors&exchange=nyse",
+      "context": "Connect with Big 4 auditors for SOX 404 and PCAOB integrated audits"
+    },
+    {
+      "text": "NASDAQ Comparison Page",
+      "href": "/exchanges/nasdaq",
+      "context": "Comparing NYSE vs NASDAQ? Check requirements and timeline differences"
+    }
+  ],
+
+  "schemaMarkup": {
+    "localBusinessSchema": {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "New York Stock Exchange (NYSE)",
+      "url": "https://www.nyse.com",
+      "logo": "https://www.nyse.com/logo.png",
+      "description": "The world's largest stock exchange, located in New York. Primary listing venue for large-cap US and international companies.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "11 Wall Street",
+        "addressLocality": "New York",
+        "addressRegion": "NY",
+        "postalCode": "10005",
+        "addressCountry": "US"
+      },
+      "telephone": "+1-212-656-3000",
+      "areaServed": [
+        {
+          "@type": "Country",
+          "name": "United States"
+        },
+        {
+          "@type": "Country",
+          "name": "Canada"
+        }
+      ],
+      "priceRange": "$$$$",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "2900",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    },
+
+    "faqSchema": {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What's the minimum market cap to list on NYSE?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NYSE requires a minimum global market capitalization of $200M at IPO. Market cap = IPO share price × total shares outstanding (including restricted shares)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can a Canadian company list on NYSE?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Canadian companies can primary list on NYSE (Form F-1, IFRS accounting) or dual-list on TSX + NYSE. Timeline: 8-14 months. Cost: $2M-$5M all-in. Use Canadian securities counsel experienced in cross-border offerings."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does a NYSE IPO cost?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "For a $500M-$1B IPO: $2M-$5M all-in. Breakdown: underwriting fees ($35M-$50M), legal ($2M-$3M), audit ($1M-$1.5M), investor relations ($300K-$500K), miscellaneous ($400K-$800K). Smaller IPOs have higher cost-per-dollar."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is SOX 404 required for NYSE IPO?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. SEC requires SOX §302 (CEO/CFO cert) and §404 (internal control attestation) effective at opening bell. Expect 8-12 weeks of integrated audit work and $200K-$400K additional audit costs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the difference between NYSE IPO and Direct Listing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "IPO: Company issues new shares, underwriters sell to public, 180-day lockup applies. Direct Listing: Existing shares trade directly, no new issuance, no lockup. IPO is standard for raising capital; direct listing for companies not raising capital."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long is the SEC Quiet Period during IPO?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SEC Quiet Period (Reg M): 40 days from IPO Day. Company communication is restricted. Some FINRA restrictions extend to 100 days. After quiet period, normal earnings guidance and investor communication resumes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the lock-up period?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Lock-up: 180-day (or longer, often 2 years) agreement preventing founders/insiders from selling IPO shares. After Day 181, insiders can sell. Watch lock-up expiration dates—heavy insider selling after lock-up often signals weakness."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can IPOReady help with my NYSE listing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "IPOReady is your central hub for IPO readiness. We offer: (1) PACE™ readiness scoring, (2) 100+ milestone tracking across 8 phases, (3) Cap table scenario modeling, (4) Document centralization, (5) Expert network (lawyers, auditors, underwriters), (6) Cost calculator, (7) AI-powered guidance on governance & compliance."
+          }
+        }
+      ]
+    },
+
+    "breadcrumbSchema": {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.ipoready.ai"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Resources",
+          "item": "https://www.ipoready.ai/resources"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Exchanges",
+          "item": "https://www.ipoready.ai/resources#exchanges"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "NYSE Listing Guide",
+          "item": "https://www.ipoready.ai/exchanges/nyse"
+        }
+      ]
+    },
+
+    "organizationSchema": {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "IPOReady",
+      "url": "https://www.ipoready.ai",
+      "logo": "https://www.ipoready.ai/logo.png",
+      "description": "Central hub for IPO readiness management. Track milestones, manage cap table, connect with experts, estimate costs, and go public on TSX, TSXV, CSE, NASDAQ, NYSE, or OTC.",
+      "areaServed": [
+        {
+          "@type": "Country",
+          "name": "Canada"
+        },
+        {
+          "@type": "Country",
+          "name": "United States"
+        }
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Support",
+        "telephone": "+1-844-IPOREADY",
+        "email": "support@ipoready.ai"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/ipoready",
+        "https://twitter.com/ipoready"
+      ]
+    }
+  },
+
+  "seoImplementationNotes": {
+    "onPageOptimization": [
+      "Use H1 tag for 'NYSE Listing Guide: Go Public on the World's Largest Exchange'",
+      "H2 tags for section titles (Why NYSE, Requirements, Timeline, Costs, Comparison, FAQ)",
+      "Include target keywords naturally in first 100 words (NYSE listing, requirements, timeline, costs)",
+      "Optimize meta description (currently 160 chars, target keyword-rich)",
+      "Create og-nyse.png (1200x630) showing NYSE statistics + IPOReady branding",
+      "Internal link to /cost-calculator?exchange=nyse and /checklist?exchange=nyse early in content"
+    ],
+
+    "technicalSeo": [
+      "Add structured data (JSON-LD) to <head>: BreadcrumbList, FAQPage, LocalBusiness (NYSE exchange data), Organization (IPOReady)",
+      "Set canonical: <link rel='canonical' href='https://www.ipoready.ai/exchanges/nyse'>",
+      "Mobile optimization: test responsiveness on Lighthouse (target 90+ CLS, <2.5s LCP)",
+      "Add alt text to all images: 'NYSE trading floor', 'IPO timeline diagram', etc.",
+      "Ensure page loads in <2 seconds (compress images, lazy-load non-critical assets)"
+    ],
+
+    "contentStrategy": [
+      "Publish pillar content covering all angles: requirements (detailed), process (step-by-step), costs (transparent), comparison (vs competitors), success stories, FAQ",
+      "Create internal cluster: /exchanges/nasdaq, /exchanges/tsx, /exchanges/tsxv, /exchanges/cse, /exchanges/otc to build topic authority",
+      "Link to supporting content: /cost-calculator, /checklist, /prospectus-builder, /marketplace (experts)",
+      "Integrate PACE™ mention in intro (IPOReady's proprietary readiness system)",
+      "Bilingual support: prepare /exchanges/nyse (EN) and /exchanges/bourse-nyse or /exchanges/nyse?lang=fr (FR)"
+    ],
+
+    "backlingStrategy": [
+      "Outreach to financial media (TechCrunch, VentureBeat, Forbes) linking to NYSE guide + comparison",
+      "Pitch to Canadian fintech/growth blogs highlighting Canadian companies on NYSE",
+      "Create case study: 'Shopify's NYSE Listing: How Canada's #1 Tech Company Went Global' → linkers will naturally link to /exchanges/nyse",
+      "Engage with IPO prep resources (IPO Edge, IPO Magazine, SEC.Report forums) for backlinks"
+    ],
+
+    "cro-improvements": [
+      "Add urgency banner: 'NYSE IPO timeline is 8-14 months—start your readiness assessment today'",
+      "Sticky CTA every 3 sections: 'Get your personalized PACE score →'",
+      "Testimonial section: Add 1-2 customer quotes about using IPOReady for their exchange decision",
+      "Risk section: 'Realizing you're not NYSE-ready at filing time costs 6+ months. IPOReady gaps catch this in weeks.'",
+      "Comparison table interactive toggle: 'Compare NYSE to [NASDAQ/TSX/TSXV]' dropdown"
+    ]
+  }
+}

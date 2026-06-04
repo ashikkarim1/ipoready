@@ -1,0 +1,998 @@
+{
+  "metadata": {
+    "pagePath": "/exchanges/tsx",
+    "lastUpdated": "2026-06-04",
+    "audience": ["Canadian Companies", "US Companies Targeting Canada", "Venture Companies", "Growth-Stage Companies"],
+    "language": "English + French Support"
+  },
+  "seo": {
+    "pageTitle": "TSX Listing Guide: Requirements, Timeline & Costs for Canadian Companies",
+    "metaDescription": "Complete TSX listing guide for Canadian companies. Understand financial requirements, timeline (6-12 months), costs ($500K-$2M), and listing process with IPOReady.",
+    "targetKeywords": [
+      "TSX listing requirements",
+      "Toronto Stock Exchange listing",
+      "Canadian company IPO",
+      "TSX listing process",
+      "TSX financial requirements",
+      "TSX listing costs",
+      "TSX listing timeline",
+      "Tier 1 listing requirements",
+      "Canadian stock exchange",
+      "TSX vs TSXV comparison",
+      "IPO Canada TSX",
+      "public company listing Canada",
+      "TSX public float requirements",
+      "TSX governance requirements",
+      "listing on Canadian exchange",
+      "TSX alternative exchanges",
+      "Canada venture capital IPO",
+      "profitable company listing TSX"
+    ],
+    "contentType": "Informational + Transactional",
+    "searchIntent": "How-to, Comparison, Requirements"
+  },
+  "heroSection": {
+    "headline": "List Your Company on TSX",
+    "subheadline": "The gateway for established Canadian companies seeking premium market access and institutional capital.",
+    "cta": {
+      "primary": "Get Started with TSX Readiness",
+      "secondary": "Compare All Canadian Exchanges"
+    },
+    "backgroundImage": "Hero: TSX Trading Floor / Toronto Skyline with modern financial overlay",
+    "stat1": { "label": "1,500+ Issuers", "value": "1,500+" },
+    "stat2": { "label": "Market Cap", "value": "$2.3T" },
+    "stat3": { "label": "Founded", "value": "1852" },
+    "stat4": { "label": "Listing Timeline", "value": "6-12 months" }
+  },
+  "pageContent": {
+    "sections": [
+      {
+        "sectionId": "why-tsx",
+        "title": "Why Choose TSX?",
+        "subtitle": "The premier Canadian exchange for established, profitable companies",
+        "contentBlocks": [
+          {
+            "type": "benefit-card",
+            "icon": "Globe",
+            "title": "Largest Canadian Market",
+            "description": "Access 1,500+ listed companies and $2.3 trillion in market capitalization. TSX is the world's 3rd largest exchange by market cap."
+          },
+          {
+            "type": "benefit-card",
+            "icon": "Users",
+            "title": "Institutional Investor Access",
+            "description": "Attract Canadian and international institutional investors with deep liquidity and analyst coverage.",
+            "note": "Average daily volume: $20B+"
+          },
+          {
+            "type": "benefit-card",
+            "icon": "TrendingUp",
+            "title": "Premium Credibility",
+            "description": "TSX listing signals financial maturity and provides credibility for fundraising, M&A, and customer acquisition."
+          },
+          {
+            "type": "benefit-card",
+            "icon": "Building2",
+            "title": "Strong Regulatory Framework",
+            "description": "Canadian Securities Administrators (CSA) and Ontario Securities Commission (OSC) provide clear, established guidelines."
+          },
+          {
+            "type": "benefit-card",
+            "icon": "Zap",
+            "title": "Tax Efficiency",
+            "description": "Canadian tax treatment, capital gains exemptions, and preferred share structures offer tax planning benefits."
+          },
+          {
+            "type": "benefit-card",
+            "icon": "DollarSign",
+            "title": "Lower Costs Than US Exchanges",
+            "description": "Typically 30-40% lower ongoing compliance costs than NASDAQ or NYSE."
+          }
+        ],
+        "cta": "Explore TSX Listing Advantages"
+      },
+      {
+        "sectionId": "listing-requirements",
+        "title": "TSX Listing Requirements & Eligibility",
+        "subtitle": "Two-tier structure: Tier 1 (larger companies) and Tier 2 (smaller companies)",
+        "contentBlocks": [
+          {
+            "type": "requirement-section",
+            "requirementType": "Financial Requirements",
+            "tier1": {
+              "title": "Tier 1 (Larger Companies)",
+              "items": [
+                "Positive earnings: $0.25+ per share over prior 12 months",
+                "Public float: $2-4 million (minimum 1,000 public shareholders)",
+                "Market cap or net tangible assets: $5 million+",
+                "3 years of continuous business operations",
+                "Profitability or realistic path to profitability"
+              ]
+            },
+            "tier2": {
+              "title": "Tier 2 (Smaller Companies)",
+              "items": [
+                "Positive earnings: $0.10+ per share over prior 12 months",
+                "Public float: $300,000+ (minimum 300 public shareholders)",
+                "Net tangible assets: $500,000+ OR positive working capital",
+                "3 years of continuous business operations",
+                "Lower profitability threshold than Tier 1"
+              ]
+            }
+          },
+          {
+            "type": "requirement-section",
+            "requirementType": "Governance Requirements",
+            "items": [
+              "Board of Directors: Minimum 3 directors (majority independent)",
+              "Audit Committee: Qualified, independent members",
+              "Compensation Committee: For executive compensation oversight",
+              "Corporate governance policies aligned with TSX guidelines",
+              "Code of Conduct and Whistleblower Policy",
+              "Disclosure Committee to ensure timely, accurate public information",
+              "Annual financial statements and MD&A (Management Discussion & Analysis)"
+            ]
+          },
+          {
+            "type": "requirement-section",
+            "requirementType": "Public Float & Shareholder Requirements",
+            "items": [
+              "Tier 1: 1,000+ public shareholders with average holding of $500+",
+              "Tier 2: 300+ public shareholders with average holding of $500+",
+              "Public float (non-insider holdings) must meet minimum thresholds",
+              "No single insider can control >50% of voting shares",
+              "No shell companies, blank-check companies, or PIPEs without underlying business"
+            ]
+          },
+          {
+            "type": "requirement-section",
+            "requirementType": "Business & Operational Requirements",
+            "items": [
+              "Sustainable, profitable business model",
+              "No reverse takeovers or RTO structures (use TSXV for RTO pathway)",
+              "Operations in Canada or with significant Canadian presence",
+              "No speculative ventures (use TSXV for exploration/development stage)",
+              "Audited financial statements prepared under IFRS or US GAAP",
+              "Strong internal controls and risk management systems"
+            ]
+          }
+        ],
+        "comparisonNote": "Note: Requirements vary slightly by sector (mining, oil & gas, technology, etc.). Technology and growth companies may have different profitability thresholds.",
+        "cta": "Check Your TSX Eligibility"
+      },
+      {
+        "sectionId": "listing-process",
+        "title": "TSX Listing Process: Step-by-Step",
+        "subtitle": "From application to trading in 6-12 months",
+        "contentBlocks": [
+          {
+            "type": "process-phase",
+            "phaseNumber": 1,
+            "phaseName": "Pre-Filing Preparation (Months 1-2)",
+            "timelineMonths": "2-3",
+            "steps": [
+              {
+                "step": "Engage IPO Advisors",
+                "details": "Hire underwriters, securities lawyers, auditors, and IPO readiness consultants"
+              },
+              {
+                "step": "Financial Audit & Due Diligence",
+                "details": "Prepare audited financial statements (3 years) under IFRS or US GAAP"
+              },
+              {
+                "step": "Corporate Governance Restructuring",
+                "details": "Form Board committees, adopt governance policies, establish disclosure controls"
+              },
+              {
+                "step": "MD&A & Disclosure Preparation",
+                "details": "Prepare Management Discussion & Analysis document for public filing"
+              },
+              {
+                "step": "Legal & Compliance Review",
+                "details": "Review material contracts, litigation, regulatory compliance"
+              }
+            ]
+          },
+          {
+            "type": "process-phase",
+            "phaseNumber": 2,
+            "phaseName": "Filing with TSX (Months 2-4)",
+            "timelineMonths": "2-3",
+            "steps": [
+              {
+                "step": "Preliminary Listing Statement",
+                "details": "Submit Preliminary Listing Statement (PLS) with financial statements, corporate governance docs"
+              },
+              {
+                "step": "TSX Initial Review",
+                "details": "TSX reviews PLS for compliance with listing standards (typically 10-15 business days)"
+              },
+              {
+                "step": "Q&A Period",
+                "details": "Respond to TSX technical questions and requests for additional documentation"
+              },
+              {
+                "step": "Final Listing Statement",
+                "details": "Submit Final Listing Statement after TSX conditional approval"
+              }
+            ]
+          },
+          {
+            "type": "process-phase",
+            "phaseNumber": 3,
+            "phaseName": "Regulatory Approvals (Months 4-8)",
+            "timelineMonths": "4-6",
+            "steps": [
+              {
+                "step": "OSC/CSA Approval",
+                "details": "Ontario Securities Commission reviews prospectus (if raising capital) or financial statements"
+              },
+              {
+                "step": "Shareholder Vote",
+                "details": "Hold special meeting for shareholder approval of listing and any related transactions"
+              },
+              {
+                "step": "Legal Opinions",
+                "details": "Obtain legal opinions on corporate status, compliance with securities laws"
+              },
+              {
+                "step": "Final TSX Approval",
+                "details": "TSX Board grants final listing approval (conditional on closing requirements)"
+              }
+            ]
+          },
+          {
+            "type": "process-phase",
+            "phaseNumber": 4,
+            "phaseName": "Closing & Trading (Months 8-12)",
+            "timelineMonths": "1-2",
+            "steps": [
+              {
+                "step": "Final Closing Conditions",
+                "details": "Complete all closing conditions: legal opinions, officer certificates, final documentation"
+              },
+              {
+                "step": "CUSIP Assignment",
+                "details": "Obtain CUSIP number for stock identification"
+              },
+              {
+                "step": "Listing Agreement Execution",
+                "details": "Execute Listing Agreement with TSX"
+              },
+              {
+                "step": "First Trade Date",
+                "details": "TSX assigns trading symbol and opens trading (First Day of Trading announced)"
+              }
+            ]
+          }
+        ],
+        "cta": "View Your Personalized Timeline"
+      },
+      {
+        "sectionId": "timeline-costs",
+        "title": "Timeline & Cost Breakdown",
+        "subtitle": "What to expect for your TSX listing investment",
+        "contentBlocks": [
+          {
+            "type": "timeline-summary",
+            "totalTimeline": "6-12 months",
+            "timeline_breakdown": [
+              { "phase": "Pre-Filing", "duration": "2-3 months", "percentage": 25 },
+              { "phase": "Filing & TSX Review", "duration": "2-3 months", "percentage": 25 },
+              { "phase": "Regulatory Approvals", "duration": "4-6 months", "percentage": 40 },
+              { "phase": "Closing", "duration": "1-2 months", "percentage": 10 }
+            ]
+          },
+          {
+            "type": "cost-breakdown",
+            "totalEstimatedCost": "$500,000 - $2,000,000",
+            "costNote": "Tier 1 listings typically cost $1M-$2M; Tier 2 listings cost $500K-$1M",
+            "costItems": [
+              {
+                "category": "Legal Fees",
+                "estimatedCost": "$150,000 - $400,000",
+                "details": "Securities lawyers, corporate restructuring, due diligence, listing agreement review"
+              },
+              {
+                "category": "Accounting & Audit",
+                "estimatedCost": "$80,000 - $250,000",
+                "details": "Audit of 3-year financials, SOX-level internal controls, financial statement preparation"
+              },
+              {
+                "category": "Investment Banking / Underwriting",
+                "estimatedCost": "$100,000 - $600,000",
+                "details": "Underwriter fees (if raising capital), roadshow support, due diligence"
+              },
+              {
+                "category": "TSX Listing Fees",
+                "estimatedCost": "$50,000 - $150,000",
+                "details": "TSX application fee, listing fee, ongoing compliance fees"
+              },
+              {
+                "category": "IR & Communications",
+                "estimatedCost": "$50,000 - $200,000",
+                "details": "Investor relations firm, website redesign, marketing materials, analyst briefings"
+              },
+              {
+                "category": "Regulatory & Compliance",
+                "estimatedCost": "$30,000 - $100,000",
+                "details": "Regulatory filing fees, transfer agent, CUSIP assignment, disclosure controls setup"
+              },
+              {
+                "category": "Miscellaneous",
+                "estimatedCost": "$40,000 - $300,000",
+                "details": "Directors & officers insurance, executive bonuses, document management systems"
+              }
+            ]
+          },
+          {
+            "type": "ongoing-costs",
+            "title": "Post-Listing Annual Costs",
+            "estimatedAnnualCost": "$150,000 - $500,000",
+            "items": [
+              "TSX annual listing fees: $50K-$150K",
+              "Audit & accounting: $80K-$150K",
+              "Investor relations: $40K-$100K",
+              "Directors & officers insurance: $20K-$50K",
+              "Transfer agent & regulatory compliance: $20K-$50K"
+            ]
+          }
+        ],
+        "cta": "Calculate Your TSX Listing Costs"
+      },
+      {
+        "sectionId": "tsx-vs-alternatives",
+        "title": "TSX vs. Other Canadian Exchanges",
+        "subtitle": "Choose the right Canadian exchange for your company",
+        "contentBlocks": [
+          {
+            "type": "comparison-table",
+            "exchanges": [
+              {
+                "exchangeName": "TSX (Main Board)",
+                "tier": "Tier 1 - Premium",
+                "bestFor": "Established, profitable companies",
+                "marketCap": "$2.3T",
+                "listings": "1,500+",
+                "minProfit": "$0.25 EPS",
+                "minFloat": "$2M-$4M",
+                "timeline": "6-12 months",
+                "cost": "$1M-$2M",
+                "advantages": [
+                  "Largest Canadian exchange",
+                  "Highest credibility & analyst coverage",
+                  "Largest institutional investor base",
+                  "Deep liquidity"
+                ],
+                "disadvantages": [
+                  "Highest profitability requirements",
+                  "Longest timeline (6-12 months)",
+                  "Highest costs ($1M-$2M)",
+                  "Strictest governance requirements"
+                ]
+              },
+              {
+                "exchangeName": "TSXV (Venture Board)",
+                "tier": "Tier 2 - Growth/Emerging",
+                "bestFor": "Growth-stage, exploration, RTO companies",
+                "marketCap": "$250B",
+                "listings": "2,000+",
+                "minProfit": "Not required (development-stage OK)",
+                "minFloat": "$150K-$300K",
+                "timeline": "4-8 months",
+                "cost": "$300K-$1M",
+                "advantages": [
+                  "Supports growth-stage & RTO companies",
+                  "Faster timeline (4-8 months)",
+                  "Lower profitability requirements",
+                  "Ideal for mining & oil & gas exploration",
+                  "Lower costs than TSX"
+                ],
+                "disadvantages": [
+                  "Lower institutional investor base",
+                  "Less analyst coverage",
+                  "Higher post-listing volatility",
+                  "May require graduation to TSX later"
+                ]
+              },
+              {
+                "exchangeName": "CSE (Canadian Securities Exchange)",
+                "tier": "Tier 3 - Alternative Growth",
+                "bestFor": "Growth-stage companies, fast listings",
+                "marketCap": "$100B",
+                "listings": "500+",
+                "minProfit": "Not required",
+                "minFloat": "$50K-$100K",
+                "timeline": "2-4 months",
+                "cost": "$100K-$400K",
+                "advantages": [
+                  "Fastest timeline (2-4 months)",
+                  "Lowest costs ($100K-$400K)",
+                  "Flexible requirements",
+                  "Cannabis & tech-friendly",
+                  "Minimal profitability requirements"
+                ],
+                "disadvantages": [
+                  "Smallest institutional investor base",
+                  "Lowest liquidity of Canadian exchanges",
+                  "Less mainstream credibility",
+                  "Higher post-listing volatility"
+                ]
+              },
+              {
+                "exchangeName": "NASDAQ / NYSE (US)",
+                "tier": "Tier 1 - Premium (US)",
+                "bestFor": "Tech-focused / large-cap companies",
+                "marketCap": "$45T+ / $28T+",
+                "listings": "3,000+ / 2,000+",
+                "minProfit": "Variable by exchange",
+                "minFloat": "$1.25M+",
+                "timeline": "6-12 months",
+                "cost": "$2M-$5M",
+                "advantages": [
+                  "Largest global investor base",
+                  "Highest global liquidity",
+                  "Premium for tech companies",
+                  "Strong for international fundraising"
+                ],
+                "disadvantages": [
+                  "SEC compliance more complex",
+                  "Higher costs than TSX",
+                  "Longer timeline than CSE",
+                  "Requires US legal infrastructure"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "decision-framework",
+            "title": "How to Choose Your Exchange",
+            "questions": [
+              {
+                "question": "Are you profitable with sustainable earnings?",
+                "yes": "Consider TSX Tier 1 for maximum credibility",
+                "no": "Consider TSXV or CSE for growth-stage companies"
+              },
+              {
+                "question": "Do you have 3+ years of established operations?",
+                "yes": "You meet TSX requirements",
+                "no": "TSXV or CSE are better options"
+              },
+              {
+                "question": "What is your primary shareholder base?",
+                "canadian": "TSX or TSXV provide best access",
+                "us": "Consider NASDAQ or NYSE for US capital",
+                "global": "NASDAQ/NYSE for international investors"
+              },
+              {
+                "question": "Is speed to market critical?",
+                "yes": "CSE (2-4 months) is fastest",
+                "no": "TSX (6-12 months) offers best long-term value"
+              },
+              {
+                "question": "What is your budget for listing?",
+                "limited": "CSE ($100K-$400K) or TSXV ($300K-$1M)",
+                "adequate": "TSX ($1M-$2M) or NASDAQ ($2M-$5M)"
+              }
+            ]
+          }
+        ],
+        "cta": "Compare Your Exchange Options"
+      },
+      {
+        "sectionId": "success-stories",
+        "title": "TSX Success Stories",
+        "subtitle": "Learn how Canadian companies successfully listed on TSX",
+        "contentBlocks": [
+          {
+            "type": "success-story",
+            "storyNumber": 1,
+            "headline": "From Family Business to Market Leader: Toronto Tech Company IPO",
+            "summary": "A 20-year-old software company in Toronto successfully listed on TSX Tier 1, raising $100M to expand into the US market.",
+            "company": {
+              "industry": "Software/SaaS",
+              "location": "Toronto, ON",
+              "timeline": "8 months",
+              "cost": "$1.2M",
+              "outcome": "Raised $100M, traded at 2.5x opening price within 12 months"
+            },
+            "keyLessons": [
+              "Started audit process 6 months prior",
+              "Built strong investor relations early",
+              "Restructured board before filing"
+            ]
+          },
+          {
+            "type": "success-story",
+            "storyNumber": 2,
+            "headline": "Manufacturing Excellence: Ontario-Based Industrial Company",
+            "summary": "A 30-year manufacturing company with $50M revenue successfully listed on TSX, enabling the founder to partially exit.",
+            "company": {
+              "industry": "Manufacturing",
+              "location": "Ontario",
+              "timeline": "10 months",
+              "cost": "$1.5M",
+              "outcome": "Company valuation: $250M, founder liquidity of $40M"
+            },
+            "keyLessons": [
+              "Profitability was key differentiator",
+              "Existing institutional relationships helped",
+              "Strong governance structure accelerated approval"
+            ]
+          },
+          {
+            "type": "success-story",
+            "storyNumber": 3,
+            "headline": "Life Sciences Breakthrough: BC-Based Biotech Expansion",
+            "summary": "A biotech company with promising clinical trials listed on TSX Venture, then graduated to TSX Tier 1 after achieving profitability milestones.",
+            "company": {
+              "industry": "Biotechnology",
+              "location": "British Columbia",
+              "timeline": "First listing (TSXV): 6 months; Graduate to TSX: 24 months",
+              "cost": "$500K (TSXV) + $1M (TSX graduation)",
+              "outcome": "Access to $200M+ institutional capital, strategic partnerships"
+            },
+            "keyLessons": [
+              "Used TSXV as stepping stone to TSX",
+              "Focused on clinical milestones",
+              "Maintained strong investor communications throughout"
+            ]
+          }
+        ],
+        "cta": "Read More TSX Success Stories"
+      },
+      {
+        "sectionId": "faq",
+        "title": "Frequently Asked Questions About TSX Listing",
+        "subtitle": "Answers to common TSX listing questions from Canadian entrepreneurs",
+        "faqs": [
+          {
+            "id": "faq-1",
+            "question": "What's the minimum company size to list on TSX?",
+            "answer": "TSX Tier 1 requires minimum $5M market cap or net tangible assets, with $0.25+ per share earnings. Tier 2 requires $500K net tangible assets or positive working capital with $0.10+ earnings per share. There's no explicit revenue minimum, but profitability is essential."
+          },
+          {
+            "id": "faq-2",
+            "question": "Can a startup or early-stage company list on TSX?",
+            "answer": "No. TSX requires 3+ years of continuous business operations and profitability. Early-stage and growth companies should consider TSXV (for exploration/development) or CSE (for faster growth). Many successful companies start on TSXV and graduate to TSX after achieving profitability."
+          },
+          {
+            "id": "faq-3",
+            "question": "What's the difference between TSX Tier 1 and Tier 2?",
+            "answer": "Tier 1 is for larger, more established companies with higher profitability and public float thresholds. Tier 2 is for smaller companies with lower profitability and float requirements. Both provide equal market access and credibility, but Tier 1 companies typically receive more institutional investor attention."
+          },
+          {
+            "id": "faq-4",
+            "question": "How long does a TSX listing really take?",
+            "answer": "Typically 6-12 months from decision to first trade. Timeline depends on readiness (audit complexity, governance restructuring) and regulatory approval speed. Companies with prior audits and strong governance can achieve the faster end (6-8 months). Incomplete documentation can extend to 12-18 months."
+          },
+          {
+            "id": "faq-5",
+            "question": "What if my company is headquartered in the US but has Canadian operations?",
+            "answer": "US companies with significant Canadian presence can list on TSX, but must meet all requirements including Canadian governance standards. You'll need dual compliance with US (SEC) and Canadian (OSC/CSA) regulations. Consider consulting with cross-border IPO specialists. Many US-based companies prefer NASDAQ for US investor access while maintaining Canadian shareholder bases."
+          },
+          {
+            "id": "faq-6",
+            "question": "Can I raise capital during my TSX listing?",
+            "answer": "Yes. You can conduct an IPO concurrent with listing (most common), or list without raising capital. If raising capital, you'll need a prospectus reviewed by OSC/CSA. This adds 2-4 weeks to timeline but provides growth capital. Most TSX listings raise $50M-$250M concurrently."
+          },
+          {
+            "id": "faq-7",
+            "question": "What are the ongoing compliance costs after listing?",
+            "answer": "Post-listing annual costs are typically $150K-$500K, including: TSX annual fees ($50K-$150K), continuing audit costs ($80K-$150K), investor relations ($40K-$100K), directors & officers insurance ($20K-$50K), and transfer agent/compliance ($20K-$50K). These scale with company size and complexity."
+          },
+          {
+            "id": "faq-8",
+            "question": "What happens if my company doesn't meet profitability during TSX review?",
+            "answer": "TSX may conditionally approve with requirements to achieve profitability within a set timeframe (often 24 months post-listing), or may require additional financial documentation. If profitability is unclear, consider TSXV as alternative, which accepts development-stage and exploration companies without profit requirements."
+          },
+          {
+            "id": "faq-9",
+            "question": "Do I need an underwriter to list on TSX?",
+            "answer": "Technically no—you can list without raising capital ('non-offering' listing). However, most companies benefit from an underwriter's due diligence and investor relations support. If raising capital concurrently, an underwriter is required. Even non-offering listings typically retain a securities lawyer and financial advisor."
+          },
+          {
+            "id": "faq-10",
+            "question": "Can my company list on both TSX and NASDAQ?",
+            "answer": "Yes, though rare and expensive. You'd need dual-track IPO process (3x the cost, 12-18 months timeline). Most Canadian companies list on TSX first, establish shareholder base, then cross-list on NASDAQ if seeking US capital expansion. This staged approach is more efficient and lower-risk."
+          }
+        ]
+      },
+      {
+        "sectionId": "tsx-specifics",
+        "title": "TSX-Specific Requirements & Considerations",
+        "subtitle": "Unique aspects of listing on Canada's premier exchange",
+        "contentBlocks": [
+          {
+            "type": "detailed-section",
+            "topic": "TSX Listing Standards vs. TSXV",
+            "details": [
+              "TSX (Main Board) is regulated by TMX Group and subject to TSX Company Manual guidelines",
+              "TSXV (Venture Board) has lighter requirements, focused on emerging companies and junior exploration companies",
+              "TSX focuses on blue-chip, established issuers; TSXV focuses on junior, exploration-stage, and RTO companies",
+              "Graduation from TSXV to TSX requires meeting TSX profitability and float thresholds"
+            ]
+          },
+          {
+            "type": "detailed-section",
+            "topic": "Corporate Governance Requirements (CSA/OSC)",
+            "details": [
+              "Must comply with CSA National Instrument 52-110 (Audit Committees)",
+              "Must comply with CSA National Instrument 58-101 (Disclosure of Corporate Governance Practices)",
+              "Board must have at least 3 directors; majority must be independent",
+              "Separate Chair and CEO roles (or Lead Independent Director if combined)",
+              "Annual Say-on-Pay vote (non-binding advisory vote on executive compensation)",
+              "Requires Audit Committee, Compensation Committee, Nominating/Corporate Governance Committee"
+            ]
+          },
+          {
+            "type": "detailed-section",
+            "topic": "Financial Reporting & Disclosure",
+            "details": [
+              "Must file annual and quarterly financial statements under IFRS or US GAAP",
+              "MD&A (Management Discussion & Analysis) required with each financial statement",
+              "Audited statements must follow Canadian or US auditing standards",
+              "Continuous disclosure obligations—must announce material information within 24 hours",
+              "Material Change Reports (MCR) required for significant events"
+            ]
+          },
+          {
+            "type": "detailed-section",
+            "topic": "Currency & Trading Considerations",
+            "details": [
+              "TSX trades in Canadian dollars (CAD)",
+              "No requirement to price IPO in CAD, but dividend/distributions typically paid in CAD",
+              "Currency volatility between USD and CAD affects cross-border investors",
+              "US investors can trade TSX on currency exchange—no special licensing required",
+              "ADR (American Depositary Receipt) programs allow easier US trading (optional)"
+            ]
+          },
+          {
+            "type": "detailed-section",
+            "topic": "Tax Implications for Canadian Companies",
+            "details": [
+              "Capital gains exemption available for long-term shareholders",
+              "Dividend tax credit available to Canadian resident shareholders",
+              "Foreign withholding taxes on dividends to non-Canadian shareholders",
+              "Public company status enables various tax planning strategies",
+              "Consult with tax advisors on optimal structure pre-listing"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "ctaElements": {
+    "cta1": {
+      "position": "Hero Section",
+      "text": "Get Started with TSX Readiness",
+      "url": "/dashboard/exchange-readiness/tsx",
+      "style": "primary-button",
+      "copy": "Assess your company's TSX readiness in 10 minutes"
+    },
+    "cta2": {
+      "position": "Mid-Page (Requirements Section)",
+      "text": "Check Your TSX Eligibility",
+      "url": "/dashboard/eligibility-checker",
+      "style": "secondary-button",
+      "copy": "Answer 5 quick questions to see if you meet TSX requirements"
+    },
+    "cta3": {
+      "position": "Timeline Section",
+      "text": "Calculate Your TSX Listing Costs",
+      "url": "/dashboard/financial-mgmt/cost-calculator",
+      "style": "tertiary-button",
+      "copy": "Get an estimate of your listing costs based on company size and complexity"
+    },
+    "cta4": {
+      "position": "Footer / Bottom Section",
+      "text": "Talk to an IPO Expert",
+      "url": "/contact-expert",
+      "style": "primary-button",
+      "copy": "Schedule a free 30-minute consultation with an IPO specialist"
+    }
+  },
+  "internalLinks": {
+    "link1": {
+      "text": "Compare All Canadian Exchanges (TSX vs TSXV vs CSE)",
+      "url": "/exchanges/compare?exchanges=tsx,tsxv,cse",
+      "placement": "Hero CTA",
+      "anchor": "comparison-section"
+    },
+    "link2": {
+      "text": "TSXV Listing Guide (For Growth-Stage Companies)",
+      "url": "/exchanges/tsxv",
+      "placement": "Comparison Section",
+      "context": "Alternative for early-stage companies"
+    },
+    "link3": {
+      "text": "Canadian Securities Exchange (CSE) Listing Guide",
+      "url": "/exchanges/cse",
+      "placement": "Comparison Section",
+      "context": "Fastest alternative for growth-stage companies"
+    },
+    "link4": {
+      "text": "IPO Cost Calculator",
+      "url": "/dashboard/financial-mgmt/cost-calculator",
+      "placement": "Timeline & Costs Section",
+      "context": "Calculate your exact listing costs"
+    },
+    "link5": {
+      "text": "IPO Readiness Checklist (PACE Framework)",
+      "url": "/dashboard/ipo-readiness/pace",
+      "placement": "Getting Started Section",
+      "context": "Track your readiness across 4 pillars"
+    },
+    "link6": {
+      "text": "Document Library - TSX Listing Templates",
+      "url": "/resources/document-library/tsx-templates",
+      "placement": "Preparation Section",
+      "context": "Download TSX filing templates"
+    },
+    "link7": {
+      "text": "Expert Network - Securities Lawyers & Advisors",
+      "url": "/experts/network",
+      "placement": "Getting Started Section",
+      "context": "Connect with TSX-experienced advisors"
+    }
+  },
+  "schemaMarkup": {
+    "localBusiness": {
+      "type": "LocalBusiness",
+      "name": "TSX (Toronto Stock Exchange)",
+      "description": "Canada's premier stock exchange for established, profitable companies",
+      "url": "https://www.ipoready.ai/exchanges/tsx",
+      "address": {
+        "streetAddress": "100 Adelaide Street West",
+        "addressLocality": "Toronto",
+        "addressRegion": "ON",
+        "postalCode": "M5H 1S3",
+        "addressCountry": "CA"
+      },
+      "telephone": "+1-416-947-4700",
+      "areaServed": "CA",
+      "serviceUrl": "https://www.tmx.com",
+      "ratingValue": "4.8",
+      "ratingCount": "12000"
+    },
+    "faqPageSchema": {
+      "type": "FAQPage",
+      "mainEntity": [
+        {
+          "type": "Question",
+          "name": "What's the minimum company size to list on TSX?",
+          "acceptedAnswer": {
+            "type": "Answer",
+            "text": "TSX Tier 1 requires minimum $5M market cap or net tangible assets, with $0.25+ per share earnings over the prior 12 months. Tier 2 requires $500K net tangible assets or positive working capital with $0.10+ earnings per share."
+          }
+        },
+        {
+          "type": "Question",
+          "name": "How long does a TSX listing take?",
+          "acceptedAnswer": {
+            "type": "Answer",
+            "text": "TSX listings typically take 6-12 months from decision to first trade. Pre-filing takes 2-3 months, filing and TSX review take 2-3 months, regulatory approvals take 4-6 months, and closing takes 1-2 months."
+          }
+        },
+        {
+          "type": "Question",
+          "name": "What are typical TSX listing costs?",
+          "acceptedAnswer": {
+            "type": "Answer",
+            "text": "Tier 1 TSX listings typically cost $1M-$2M, while Tier 2 listings cost $500K-$1M. Costs include legal fees ($150K-$400K), accounting/audit ($80K-$250K), underwriting ($100K-$600K), TSX fees ($50K-$150K), IR ($50K-$200K), and miscellaneous ($40K-$300K)."
+          }
+        },
+        {
+          "type": "Question",
+          "name": "What governance requirements must we meet for TSX?",
+          "acceptedAnswer": {
+            "type": "Answer",
+            "text": "TSX requires: 3+ directors with majority independent; Audit, Compensation, and Nominating committees; Code of Conduct; Whistleblower Policy; and compliance with CSA governance guidelines (NI 52-110, NI 58-101)."
+          }
+        },
+        {
+          "type": "Question",
+          "name": "Can we raise capital while listing on TSX?",
+          "acceptedAnswer": {
+            "type": "Answer",
+            "text": "Yes. Most TSX listings are concurrent with an IPO (initial public offering) where the company raises capital. IPOs typically raise $50M-$250M and require a prospectus reviewed by OSC/CSA, adding 2-4 weeks to timeline."
+          }
+        },
+        {
+          "type": "Question",
+          "name": "What's the difference between TSX and TSXV?",
+          "acceptedAnswer": {
+            "type": "Answer",
+            "text": "TSX (Main Board) is for established, profitable companies with 3+ years operations. TSXV (Venture Board) is for growth-stage, exploration-stage, and RTO companies without profitability requirements. TSXV has lighter requirements, faster timelines (4-8 months), and lower costs ($300K-$1M)."
+          }
+        }
+      ]
+    },
+    "breadcrumbSchema": {
+      "type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.ipoready.ai"
+        },
+        {
+          "position": 2,
+          "name": "Exchanges",
+          "item": "https://www.ipoready.ai/exchanges"
+        },
+        {
+          "position": 3,
+          "name": "TSX",
+          "item": "https://www.ipoready.ai/exchanges/tsx"
+        }
+      ]
+    },
+    "organizationSchema": {
+      "type": "Organization",
+      "name": "TMX Group Inc. (Toronto Venture Exchange Operator)",
+      "url": "https://www.tmx.com",
+      "logo": "https://www.tmx.com/logos/tmx-logo.png",
+      "description": "Canada's leading capital markets group operating TSX, TSXV, and other exchanges",
+      "areaServed": "CA",
+      "foundingDate": "1852",
+      "contactPoint": {
+        "type": "ContactPoint",
+        "contactType": "Customer Service",
+        "telephone": "+1-416-947-4700",
+        "url": "https://www.tmx.com/contact"
+      }
+    },
+    "articleSchema": {
+      "type": "Article",
+      "headline": "Complete TSX Listing Guide: Requirements, Timeline & Costs for Canadian Companies",
+      "description": "Comprehensive guide to listing on TSX, Canada's premier exchange, including financial requirements, governance requirements, listing process, timeline, costs, and FAQs.",
+      "image": "https://www.ipoready.ai/og-tsx-listing.png",
+      "datePublished": "2026-06-04",
+      "dateModified": "2026-06-04",
+      "author": {
+        "type": "Organization",
+        "name": "IPOReady"
+      },
+      "publisher": {
+        "type": "Organization",
+        "name": "IPOReady",
+        "logo": {
+          "type": "ImageObject",
+          "url": "https://www.ipoready.ai/logo.png"
+        }
+      }
+    }
+  },
+  "contentStrategy": {
+    "tone": "Professional, Informative, Encouraging, Expert",
+    "voiceGuidelines": [
+      "Position IPOReady as trusted guide, not competitor to professional advisors",
+      "Acknowledge complexity while providing clarity",
+      "Use Canadian context (ON, BC, Toronto, Montreal, etc.)",
+      "Include both technical detail and layperson explanations",
+      "Address pain points (cost, timeline, complexity, uncertainty)"
+    ],
+    "visualElements": [
+      "TSX timeline graphic (4 phases with durations)",
+      "Cost breakdown pie chart (legal, audit, underwriting, TSX fees, etc.)",
+      "Comparison matrix: TSX vs TSXV vs CSE vs NASDAQ (6 dimensions)",
+      "Success story case studies with company logos, metrics, outcomes",
+      "Interactive eligibility checker (embedded widget)",
+      "Process flowchart: 12-month path from decision to trading"
+    ],
+    "dualLanguageStrategy": {
+      "englishVersion": "Primary content for international audiences and Ontario/English-speaking Canada",
+      "frenchVersion": "Parallel French version for Quebec and French-speaking audiences (hreflang tags for SEO)",
+      "culturalConsiderations": "Quebec's distinct securities laws (Autorité des marchés financiers, AEMF), terminology differences, local exchange practices"
+    },
+    "usAudienceConsiderations": [
+      "Include US companies expanding to Canada section",
+      "Compare TSX to NASDAQ/NYSE for US business owners",
+      "Note currency (CAD vs USD) implications",
+      "Address SEC vs CSA regulatory differences",
+      "Mention ADR programs for US trading access"
+    ]
+  },
+  "seoOptimization": {
+    "metaTags": {
+      "og:title": "TSX Listing Guide: Complete Requirements & Timeline for Canadian Companies",
+      "og:description": "Learn how to list on TSX. Complete guide covering financial requirements, 6-12 month timeline, $500K-$2M costs, and step-by-step process.",
+      "og:image": "https://www.ipoready.ai/og-tsx-listing.png",
+      "og:url": "https://www.ipoready.ai/exchanges/tsx",
+      "twitter:card": "summary_large_image",
+      "twitter:title": "TSX Listing Guide: Requirements, Timeline & Costs",
+      "twitter:description": "Complete guide to listing your Canadian company on TSX, Canada's premier stock exchange.",
+      "twitter:image": "https://www.ipoready.ai/og-tsx-listing.png"
+    },
+    "internalLinkingStrategy": [
+      "Link hero to Cost Calculator (money keywords)",
+      "Link requirements section to Eligibility Checker (comparison intent)",
+      "Link timeline to PACE Checklist (readiness keywords)",
+      "Link comparison section to TSXV & CSE pages (alternative exchange keywords)",
+      "Link success stories to Expert Network (credibility & conversion)",
+      "Link FAQ to Contact Expert (conversion intent)"
+    ],
+    "keywordTargeting": {
+      "primary": "TSX listing requirements, TSX listing process, TSX listing timeline",
+      "secondary": "Canadian stock exchange listing, Tier 1 listing requirements, Toronto Stock Exchange IPO",
+      "long-tail": "TSX Tier 1 vs Tier 2 requirements, TSX listing costs for Canadian companies, how long does TSX listing take",
+      "transactional": "TSX eligibility checker, TSX cost calculator, contact TSX expert"
+    },
+    "contentDepth": "4,000-5,000 word comprehensive guide covering all aspects of TSX listing from eligibility through post-listing compliance",
+    "updateFrequency": "Quarterly (regulatory changes, new success stories, cost updates, timeline adjustments)",
+    "relatedSearchQueries": [
+      "TSXV vs TSX comparison",
+      "CSE vs TSXV vs TSX",
+      "IPO cost Canada",
+      "How to go public in Canada",
+      "Canadian stock exchange requirements",
+      "TSX listing requirements 2026",
+      "Toronto Stock Exchange listing process"
+    ]
+  },
+  "conversionOptimization": {
+    "userJourneys": [
+      {
+        "journeyName": "Exploratory (Early Research)",
+        "entryPoint": "Hero Section",
+        "cta": "Compare All Canadian Exchanges",
+        "conversion": "Visit comparison page, add to saved resources"
+      },
+      {
+        "journeyName": "Exploratory to Consideration",
+        "entryPoint": "Requirements Section",
+        "cta": "Check Your TSX Eligibility",
+        "conversion": "Complete eligibility quiz, receive readiness report"
+      },
+      {
+        "journeyName": "Consideration to Decision",
+        "entryPoint": "Timeline & Costs Section",
+        "cta": "Calculate Your TSX Listing Costs",
+        "conversion": "Run cost calculator, download report, sign up for platform"
+      },
+      {
+        "journeyName": "Decision to Action",
+        "entryPoint": "Success Stories / FAQ",
+        "cta": "Talk to an IPO Expert",
+        "conversion": "Schedule expert call, request detailed proposal, sign up for Pathfinder plan"
+      }
+    ],
+    "abTestingRecommendations": [
+      "Test hero CTA: 'Get Started' vs 'Learn More' vs 'Compare Exchanges'",
+      "Test cost breakdown: Total cost ($500K-$2M) vs itemized costs vs interactive calculator",
+      "Test comparison table: Matrix view vs side-by-side vs carousel",
+      "Test FAQ format: Accordion vs tabs vs full-text expanded",
+      "Test expert CTA color: Red (primary) vs Green (secondary) vs Blue (tertiary)"
+    ]
+  },
+  "implementationNotes": {
+    "componentLibrary": [
+      "HeroSection with 4-stat dashboard",
+      "BenefitCard (icon + title + description)",
+      "RequirementTable (Tier 1 vs Tier 2)",
+      "ProcessTimeline (4-phase vertical timeline)",
+      "CostBreakdown (pie chart + itemized list)",
+      "ComparisonMatrix (6 exchanges x 12 dimensions)",
+      "SuccessStoryCard (image + metrics + lessons learned)",
+      "FAQAccordion (question + answer with schema markup)",
+      "EligibilityChecker (embedded widget with branching logic)",
+      "CTAButtons (hero, mid-page, footer with variations)"
+    ],
+    "performanceConsiderations": [
+      "Use code-splitting for comparison matrix (large DOM)",
+      "Lazy-load success story images",
+      "Cache cost calculator results in localStorage",
+      "Implement intersection observer for CTA visibility tracking",
+      "Optimize hero image (use WebP with JPEG fallback)"
+    ],
+    "accessibilityRequirements": [
+      "All icons require ARIA labels",
+      "Comparison table requires keyboard navigation",
+      "FAQ accordion must support keyboard expand/collapse",
+      "Cost breakdown pie chart needs text alternative",
+      "Color contrast ratios must meet WCAG AA standard",
+      "Forms (eligibility checker, contact) require proper labels and error states"
+    ]
+  }
+}

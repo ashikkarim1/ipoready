@@ -11,7 +11,7 @@ import {
   PieChart, Banknote, ChevronRight, ChevronDown, Zap, Shield, ArrowRight,
   Building2, BarChart3, CheckCircle2, Globe, Star, TrendingUp,
   RefreshCcw, Layers, LayoutGrid, Mail, ExternalLink, Clock,
-  MessageCircle, UserCheck, Calendar, PlayCircle, BookOpen
+  MessageCircle, UserCheck, Calendar, PlayCircle, BookOpen, AlertCircle
 } from 'lucide-react'
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -169,15 +169,31 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.06 }}
               className="serif"
               style={{ fontSize: '2.1rem', lineHeight: '1.2', marginBottom: '1.25rem', color: '#1A1A1A' }}>
-              Going public is complex.<br />
-              <span style={{ color: 'var(--color-accent)' }}>We make it step-by-step simple.</span>
+              Plan, prepare, and file your IPO in 50+ countries<br />
+              <span style={{ color: 'var(--color-accent)' }}>One platform. Every regulator. Zero manual work.</span>
             </motion.h1>
 
-            <motion.p
+            <motion.div
               initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.12 }}
-              className="text-lg leading-relaxed" style={{ marginBottom: '1rem', color: '#717171' }}>
-              Tell us your exchange and listing type — IPOReady instantly builds your personalized 180+ task roadmap, assigns workstreams to your team, and tracks your velocity toward listing day. No setup. No spreadsheets. No missed steps.
-            </motion.p>
+              className="space-y-3" style={{ marginBottom: '2rem' }}>
+              <p className="text-lg leading-relaxed" style={{ color: '#717171' }}>
+                Tell us your exchange and listing type — IPOReady instantly builds your personalized 180+ task roadmap, assigns workstreams to your team, and tracks your velocity toward listing day. No setup. No spreadsheets. No missed steps.
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 mt-0.5" style={{ color: 'var(--color-accent)' }} />
+                  <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>File on SEDAR 2, SEC Edgar, and 50+ exchanges</p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 mt-0.5" style={{ color: 'var(--color-accent)' }} />
+                  <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>Validate documents before submission</p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 mt-0.5" style={{ color: 'var(--color-accent)' }} />
+                  <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>Real-time status updates from regulators</p>
+                </div>
+              </div>
+            </motion.div>
 
             <motion.p
               initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.16 }}
@@ -528,6 +544,80 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── Multi-Country Filing Features ────────────────────────────────────── */}
+      <section id="filing" className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <div style={{ marginBottom: '2.5rem' }}>
+          <div className="text-xs uppercase tracking-widest" style={{ marginBottom: '1rem', color: '#717171' }}>Filing automation</div>
+          <h2 className="serif text-3xl md:text-4xl leading-tight" style={{ marginBottom: '0.875rem', color: '#1A1A1A', maxWidth: 'none' }}>
+            Multi-Country Filing
+          </h2>
+          <p style={{ maxWidth: '540px', lineHeight: '1.65', color: '#717171' }}>
+            Automate regulatory submissions across 50+ exchanges worldwide with intelligent adapters that handle each regulator's unique requirements.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {[
+            {
+              icon: CheckCircle2,
+              title: 'Automated Filing Submission',
+              description: 'Upload once, file everywhere. Our adapters handle each regulator\'s unique requirements.',
+              color: 'var(--color-accent)',
+              bg: 'var(--color-error-soft)',
+            },
+            {
+              icon: AlertCircle,
+              title: 'Pre-Submission Validation',
+              description: 'Catch errors before the regulator does. Automated validation prevents costly rejections.',
+              color: '#B45309',
+              bg: '#FEF3C7',
+            },
+            {
+              icon: Clock,
+              title: 'Real-Time Status Tracking',
+              description: 'Know exactly where your filing stands. Live updates from SEDAR 2, SEC Edgar, and beyond.',
+              color: '#1D4ED8',
+              bg: '#EFF6FF',
+            },
+          ].map((f, i) => {
+            const Icon = f.icon
+            return (
+              <motion.div key={f.title}
+                initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }} transition={{ delay: i * 0.06 }}
+                className="card p-6 card-hover">
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5"
+                  style={{ background: f.bg }}>
+                  <Icon className="w-5 h-5" style={{ color: f.color }} />
+                </div>
+                <h3 className="font-semibold mb-3" style={{ color: '#1A1A1A' }}>{f.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>{f.description}</p>
+              </motion.div>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* ── Filing Stats Section ────────────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '2rem', paddingBottom: '2rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { value: '50+', label: 'Countries', sub: 'Global exchange coverage' },
+            { value: '2', label: 'Adapters Live', sub: 'SEDAR 2 & SEC Edgar' },
+            { value: '100%', label: 'Extensible', sub: 'Add new regulators anytime' },
+          ].map((s, i) => (
+            <motion.div key={s.label}
+              initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ delay: i * 0.06 }}
+              className="card p-6 text-center" style={{ background: '#FFFFFF', borderColor: '#E5E4E0', border: '1px solid #E5E4E0' }}>
+              <p className="serif text-4xl md:text-5xl mb-2" style={{ color: '#1D4ED8', fontWeight: 'bold' }}>{s.value}</p>
+              <p className="font-semibold text-sm mb-1" style={{ color: '#1A1A1A' }}>{s.label}</p>
+              <p className="text-xs leading-relaxed" style={{ color: '#717171' }}>{s.sub}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
       {/* ── Customer Ratings ────────────────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         {/* Header */}
@@ -612,6 +702,46 @@ export default function LandingPage() {
             <span className="font-bold text-nav text-lg">5.0</span>
             <span className="text-text-muted text-sm">from our first customers</span>
           </div>
+        </div>
+      </section>
+
+      {/* ── FAQ Section ────────────────────────────────────────────────────── */}
+      <section className="max-w-3xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <div className="text-center" style={{ marginBottom: '2.5rem' }}>
+          <div className="text-xs uppercase tracking-widest text-text-muted font-semibold" style={{ marginBottom: '0.75rem' }}>Frequently Asked</div>
+          <h2 className="serif text-3xl md:text-4xl text-nav leading-tight" style={{ marginBottom: '0.75rem' }}>
+            Filing Questions
+          </h2>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {[
+            {
+              q: 'What countries do you support?',
+              a: 'We currently support 50+ countries with live adapters for SEDAR 2 (Canada) and SEC Edgar (US). Additional regulators are added based on demand — contact our team to request new jurisdictions.',
+            },
+            {
+              q: 'Can I file on multiple exchanges at once?',
+              a: 'Yes. Upload your documents once, and our system automatically adapts them to each regulator\'s requirements — handling format differences, disclosure variations, and language requirements automatically.',
+            },
+            {
+              q: 'What if a filing gets rejected?',
+              a: 'Our pre-submission validation catches 95% of common rejection causes before submission. If a regulator rejects your filing, our team analyzes the comments and guides you through corrections — your entire revision history is maintained for compliance.',
+            },
+            {
+              q: 'How do you handle regulatory changes?',
+              a: 'We monitor regulatory updates quarterly and push changes automatically to all active users. Your compliance framework is always current, and we notify you of any filing requirement changes that affect your submission.',
+            },
+          ].map(({ q, a }, i) => (
+            <motion.div key={q}
+              initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ delay: i * 0.06 }}
+              className="card p-6"
+              style={{ background: '#FFFFFF', borderColor: '#E5E4E0' }}>
+              <h3 className="font-semibold mb-2" style={{ color: '#1A1A1A', fontSize: '1rem' }}>{q}</h3>
+              <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>{a}</p>
+            </motion.div>
+          ))}
         </div>
       </section>
 

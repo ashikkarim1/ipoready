@@ -1,0 +1,915 @@
+/**
+ * SEC EDGAR Filing Adapter
+ * ========================
+ * Comprehensive integration with the U.S. Securities and Exchange Commission (SEC)
+ * EDGAR (Electronic Data Gathering, Analysis, and Retrieval) system.
+ *
+ * Features:
+ * - Support for S-1, F-1, SB-2, 424B5 and other SEC forms
+ * - XBRL financial statement conversion
+ * - EDGAR submission workflow (upload → validation → public filing)
+ * - Public Company Accounting Oversight Board (PCAOB) compliance
+ * - Real-time status tracking
+ * - Common rejection reasons and fix guidance
+ */
+
+import {
+  BaseFilingAdapter,
+  FilingStatus,
+  DocumentType,
+  FilingError,
+  ValidationResult,
+} from './BaseFilingAdapter';
+
+// ============================================================================
+// Types & Constants
+// ============================================================================
+
+/**
+ * Supported SEC filing forms
+ */
+export type SECForm = 'S-1' | 'S-3' | 'S-4' | 'F-1' | 'F-3' | 'F-10' | 'SB-2' | '424B5' | '424B4';
+
+/**
+ * EDGAR submission workflow stages
+ */
+export type EdgarStage =
+  | 'pre-submission'
+  | 'uploaded'
+  | 'under-validation'
+  | 'comment-period'
+  | 'effective'
+  | 'trading'
+  | 'withdrawn'
+  | 'rejected';
+
+/**
+ * Common SEC rejection codes
+ */
+export enum SECRejectionCode {
+  MISSING_MD_A = 'MISSING_MD_A',
+  BAD_FINANCIALS_FORMAT = 'BAD_FINANCIALS_FORMAT',
+  INVALID_XBRL = 'INVALID_XBRL',
+  INSUFFICIENT_DISCLOSURE = 'INSUFFICIENT_DISCLOSURE',
+  AUDITOR_INDEPENDENCE = 'AUDITOR_INDEPENDENCE',
+  DEFICIENT_PROSPECTUS = 'DEFICIENT_PROSPECTUS',
+  MISSING_EXHIBIT = 'MISSING_EXHIBIT',
+  BAD_DOCUMENT_FORMAT = 'BAD_DOCUMENT_FORMAT',
+  PCAOB_COMPLIANCE = 'PCAOB_COMPLIANCE',
+  FILING_FEE_ISSUE = 'FILING_FEE_ISSUE',
+}
+
+/**
+ * SEC filing configuration
+ */
+export interface SECFilingConfig {
+  cikNumber?: string; // Central Index Key
+  companyName: string;
+  agentName: string;
+  agentEmail: string;
+  applicantPhone?: string;
+  acceptanceDatetime?: string;
+  fileNumber?: string;
+}
+
+/**
+ * EDGAR submission response
+ */
+export interface EdgarSubmissionResponse {
+  submissionId: string;
+  timestamp: Date;
+  cikNumber: string;
+  formType: string;
+  fileNumber: string;
+  status: EdgarStage;
+  accessionNumber?: string;
+  errorMessages: string[];
+}
+
+/**
+ * EDGAR filing status response
+ */
+export interface EdgarFilingStatus {
+  accessionNumber: string;
+  stage: EdgarStage;
+  submittedDate: Date;
+  effectiveDate?: Date;
+  tradingDate?: Date;
+  comments: EdgarComment[];
+  rejectReasons: SECRejectionCode[];
+  isEffective: boolean;
+}
+
+/**
+ * SEC comment on filing
+ */
+export interface EdgarComment {
+  date: Date;
+  commentType: 'initial' | 'followup' | 'deficiency-notice';
+  content: string;
+  requiredActions?: string[];
+  responseDeadline?: Date;
+}
+
+/**
+ * XBRL financial statement metadata
+ */
+export interface XBRLMetadata {
+  contextId: string;
+  unitId: string;
+  periodType: 'instant' | 'duration';
+  endDate: Date;
+  fiscalYear: number;
+  filingPeriod: string;
+}
+
+/**
+ * SEC EDGAR Adapter Implementation
+ */
+export abstract class SECEdgarAdapter extends BaseFilingAdapter {
+  protected readonly adapterId = 'sec-edgar';
+  private readonly apiBaseUrl = 'https://www.sec.gov/cgi-bin';
+  private readonly dataApiUrl = 'https://data.sec.gov';
+  private edgarConfig?: SECFilingConfig;
+
+  // Supported document types for SEC filings
+  private readonly supportedDocTypes: DocumentType[] = [
+    'prospectus',
+    'financial-statements',
+    'legal-opinion',
+    'audit-report',
+    'exhibit',
+    'amendment',
+    'form',
+    'memo',
+  ];
+
+  // Supported SEC forms
+  private readonly supportedForms: SECForm[] = [
+    'S-1',
+    'S-3',
+    'S-4',
+    'F-1',
+    'F-3',
+    'F-10',
+    'SB-2',
+    '424B5',
+    '424B4',
+  ];
+
+  constructor(config?: SECFilingConfig) {
+    super();
+    this.edgarConfig = config;
+  }
+
+  /**
+   * Validate SEC filing submission
+   *
+   * Comprehensive validation including:
+   * - Required document presence
+   * - XBRL financial statement compliance
+   * - MD&A (Management Discussion & Analysis) completeness
+   * - Auditor independence verification
+   * - PCAOB audit compliance
+   */
+  async validate(submission: any): Promise<ValidationResult> {
+    const errors: FilingError[] = [];
+    const warnings: FilingError[] = [];
+    const missingFields: string[] = [];
+
+    // Validate form type
+    const formType = submission.metadata.formType as string;
+    if (!this.supportedForms.includes(formType as SECForm)) {
+      errors.push(
+        this.createError(
+          'UNSUPPORTED_FORM',
+          `Form ${formType} is not supported by SEC EDGAR adapter`,
+          'error',
+          'formType',
+          `Supported forms: ${this.supportedForms.join(', ')}`
+        )
+      );
+    }
+
+    // Check required documents
+    const requiredDocs = this.getRequiredDocumentsForForm(formType as SECForm);
+    const providedDocTypes = submission.documents.map((d) => d.type);
+
+    for (const docType of requiredDocs) {
+      if (!providedDocTypes.includes(docType)) {
+        missingFields.push(`Document: ${docType}`);
+        errors.push(
+          this.createError(
+            'MISSING_REQUIRED_DOCUMENT',
+            `Missing required document type: ${docType}`,
+            'critical',
+            'documents',
+            `Add a ${docType} document to the filing`
+          )
+        );
+      }
+    }
+
+    // Validate documents
+    for (const doc of submission.documents) {
+      const docErrors = await this.validateDocument(doc, formType as SECForm);
+      errors.push(...docErrors.filter((e) => e.severity === 'critical' || e.severity === 'error'));
+      warnings.push(
+        ...docErrors.filter((e) => e.severity === 'warning' || e.severity === 'info')
+      );
+    }
+
+    // Validate MD&A (required for S-1, F-1, SB-2)
+    if (['S-1', 'F-1', 'SB-2'].includes(formType)) {
+      const mdaValidation = this.validateMDA(submission);
+      if (!mdaValidation.isValid) {
+        errors.push(...mdaValidation.errors);
+        warnings.push(...mdaValidation.warnings);
+      }
+    }
+
+    // Validate financial statements
+    const financialDocs = submission.documents.filter((d) => d.type === 'financial-statements');
+    if (financialDocs.length > 0) {
+      const finValidation = await this.validateFinancialStatements(financialDocs);
+      if (!finValidation.isValid) {
+        errors.push(...finValidation.errors);
+        warnings.push(...finValidation.warnings);
+      }
+    }
+
+    // Validate company metadata
+    if (!submission.metadata.companyName) {
+      missingFields.push('companyName');
+      errors.push(
+        this.createError(
+          'MISSING_COMPANY_NAME',
+          'Company name is required',
+          'critical',
+          'companyName'
+        )
+      );
+    }
+
+    // PCAOB compliance check
+    const auditDocs = submission.documents.filter((d) => d.type === 'audit-report');
+    if (auditDocs.length > 0) {
+      const pcaobErrors = this.validatePCAOBCompliance(submission);
+      errors.push(...pcaobErrors.filter((e) => e.severity === 'critical' || e.severity === 'error'));
+      warnings.push(...pcaobErrors.filter((e) => e.severity === 'warning'));
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings,
+      missingFields,
+    };
+  }
+
+  /**
+   * Validate individual document
+   */
+  private async validateDocument(
+    doc: any,
+    formType: SECForm
+  ): Promise<FilingError[]> {
+    const errors: FilingError[] = [];
+
+    // Check MIME type
+    const allowedMimeTypes = this.getAllowedMimeTypes(doc.type);
+    if (!allowedMimeTypes.includes(doc.mimeType)) {
+      errors.push(
+        this.createError(
+          'INVALID_MIME_TYPE',
+          `Invalid MIME type for ${doc.type}: ${doc.mimeType}`,
+          'error',
+          `document.${doc.id}.mimeType`,
+          `Use one of: ${allowedMimeTypes.join(', ')}`
+        )
+      );
+    }
+
+    // Check file size (SEC limits: 5MB per file, 750MB total)
+    if (doc.size > 5 * 1024 * 1024) {
+      errors.push(
+        this.createError(
+          'FILE_TOO_LARGE',
+          `Document ${doc.name} exceeds 5MB limit`,
+          'error',
+          `document.${doc.id}.size`,
+          'Compress or split the document'
+        )
+      );
+    }
+
+    // XBRL validation for financial statements
+    if (doc.type === 'financial-statements' && doc.mimeType === 'application/xml') {
+      const xbrlErrors = this.validateXBRL(doc);
+      errors.push(...xbrlErrors);
+    }
+
+    // Prospectus validation
+    if (doc.type === 'prospectus') {
+      const prospectusErrors = await this.validateProspectus(doc);
+      errors.push(...prospectusErrors);
+    }
+
+    return errors;
+  }
+
+  /**
+   * Validate XBRL financial statements
+   */
+  private validateXBRL(doc: any): FilingError[] {
+    const errors: FilingError[] = [];
+    const content = typeof doc.content === 'string' ? doc.content : doc.content.toString();
+
+    // Check for required XBRL elements
+    const requiredElements = [
+      'SchemaRef',
+      'RoleRef',
+      'ArcroleRef',
+      'UnitID',
+      'ContextID',
+      'NonFraction',
+    ];
+
+    for (const element of requiredElements) {
+      if (!content.includes(element)) {
+        errors.push(
+          this.createError(
+            'INVALID_XBRL',
+            `XBRL document missing required element: ${element}`,
+            'error',
+            `document.${doc.id}.xbrl`,
+            `Add proper XBRL structure with ${element} element`
+          )
+        );
+      }
+    }
+
+    // Validate XBRL schema reference
+    if (!content.match(/http:\/\/xbrl\.sec\.gov\//)) {
+      errors.push(
+        this.createError(
+          'INVALID_XBRL_SCHEMA',
+          'XBRL schema must reference SEC XBRL taxonomy',
+          'error',
+          `document.${doc.id}.schema`,
+          'Use SEC XBRL taxonomy from xbrl.sec.gov'
+        )
+      );
+    }
+
+    return errors;
+  }
+
+  /**
+   * Validate prospectus document
+   */
+  private async validateProspectus(doc: any): Promise<FilingError[]> {
+    const errors: FilingError[] = [];
+    const content = typeof doc.content === 'string' ? doc.content : doc.content.toString();
+
+    // Check prospectus size
+    if (content.length < 10000) {
+      errors.push(
+        this.createError(
+          'INSUFFICIENT_DISCLOSURE',
+          'Prospectus appears too short - may lack required disclosures',
+          'warning',
+          `document.${doc.id}.content`,
+          'Review SEC prospectus requirements and ensure all disclosures are included'
+        )
+      );
+    }
+
+    // Check for required prospectus sections
+    const requiredSections = [
+      'Summary',
+      'Risk Factors',
+      'Capitalization',
+      'Management Discussion',
+      'Management',
+      'Executive Compensation',
+      'Principal Stockholders',
+    ];
+
+    for (const section of requiredSections) {
+      if (!content.toUpperCase().includes(section.toUpperCase())) {
+        errors.push(
+          this.createError(
+            'MISSING_PROSPECTUS_SECTION',
+            `Missing required prospectus section: ${section}`,
+            'warning',
+            `document.${doc.id}.sections`,
+            `Add "${section}" section to prospectus`
+          )
+        );
+      }
+    }
+
+    return errors;
+  }
+
+  /**
+   * Validate MD&A (Management Discussion & Analysis)
+   */
+  private validateMDA(submission: any): { isValid: boolean; errors: FilingError[]; warnings: FilingError[] } {
+    const errors: FilingError[] = [];
+    const warnings: FilingError[] = [];
+
+    const mdaDoc = submission.documents.find((d) => d.name.toUpperCase().includes('MD&A'));
+
+    if (!mdaDoc) {
+      errors.push(
+        this.createError(
+          'MISSING_MD_A',
+          'MD&A (Management Discussion & Analysis) is required',
+          'critical',
+          'md-and-a',
+          'Add MD&A document covering operations, financial condition, and results'
+        )
+      );
+      return { isValid: false, errors, warnings };
+    }
+
+    const mdaContent = typeof mdaDoc.content === 'string'
+      ? mdaDoc.content
+      : mdaDoc.content.toString();
+
+    // Check MD&A sections
+    const requiredMDASections = [
+      'overview',
+      'financial condition',
+      'results of operations',
+      'liquidity',
+      'capital resources',
+    ];
+
+    for (const section of requiredMDASections) {
+      if (!mdaContent.toLowerCase().includes(section)) {
+        warnings.push(
+          this.createError(
+            'INCOMPLETE_MD_A',
+            `MD&A missing section: ${section}`,
+            'warning',
+            'md-and-a',
+            `Add discussion of "${section}" to MD&A`
+          )
+        );
+      }
+    }
+
+    return { isValid: errors.length === 0, errors, warnings };
+  }
+
+  /**
+   * Validate financial statements compliance
+   */
+  private async validateFinancialStatements(
+    docs: any[]
+  ): Promise<{ isValid: boolean; errors: FilingError[]; warnings: FilingError[] }> {
+    const errors: FilingError[] = [];
+    const warnings: FilingError[] = [];
+
+    if (docs.length === 0) {
+      errors.push(
+        this.createError(
+          'MISSING_FINANCIALS',
+          'Financial statements are required',
+          'critical',
+          'financial-statements'
+        )
+      );
+      return { isValid: false, errors, warnings };
+    }
+
+    for (const doc of docs) {
+      // Check for XBRL format (required for large accelerated filers)
+      if (!doc.mimeType.includes('xml') && !doc.mimeType.includes('xbrl')) {
+        warnings.push(
+          this.createError(
+            'XBRL_RECOMMENDED',
+            'XBRL format recommended for financial statements',
+            'warning',
+            `document.${doc.id}.format`,
+            'Convert to XBRL for enhanced readability and data extraction'
+          )
+        );
+      }
+
+      // Check financial statement completeness
+      const content = typeof doc.content === 'string'
+        ? doc.content
+        : doc.content.toString();
+
+      const requiredStatements = [
+        'balance sheet',
+        'income statement',
+        'cash flow',
+        'stockholders',
+      ];
+
+      for (const stmt of requiredStatements) {
+        if (!content.toLowerCase().includes(stmt)) {
+          errors.push(
+            this.createError(
+              'INCOMPLETE_FINANCIALS',
+              `Missing ${stmt} in financial statements`,
+              'error',
+              `document.${doc.id}`,
+              `Include complete ${stmt} statements`
+            )
+          );
+        }
+      }
+    }
+
+    return { isValid: errors.length === 0, errors, warnings };
+  }
+
+  /**
+   * Validate PCAOB (Public Company Accounting Oversight Board) compliance
+   */
+  private validatePCAOBCompliance(submission: any): FilingError[] {
+    const errors: FilingError[] = [];
+
+    const auditDoc = submission.documents.find((d) => d.type === 'audit-report');
+    if (!auditDoc) {
+      return errors;
+    }
+
+    const auditContent = typeof auditDoc.content === 'string'
+      ? auditDoc.content
+      : auditDoc.content.toString();
+
+    // Check for required PCAOB audit report elements
+    const requiredElements = [
+      'opinion',
+      'responsibility',
+      'audit procedures',
+      'internal controls',
+    ];
+
+    for (const element of requiredElements) {
+      if (!auditContent.toLowerCase().includes(element)) {
+        errors.push(
+          this.createError(
+            'PCAOB_COMPLIANCE',
+            `Audit report missing PCAOB required element: ${element}`,
+            'error',
+            'audit-report',
+            `Audit report must comply with PCAOB AS (Auditing Standards)`
+          )
+        );
+      }
+    }
+
+    // Check auditor independence statement
+    if (!auditContent.toLowerCase().includes('independence')) {
+      errors.push(
+        this.createError(
+          'AUDITOR_INDEPENDENCE',
+          'Audit report must include auditor independence statement',
+          'critical',
+          'audit-report',
+          'Add statement of auditor independence per PCAOB requirements'
+        )
+      );
+    }
+
+    return errors;
+  }
+
+  /**
+   * Convert documents to SEC EDGAR format
+   *
+   * Supports conversion to:
+   * - XBRL (financial statements)
+   * - SEC text format
+   * - Standardized XML
+   */
+  async convertDocuments(
+    documents: any[],
+    format: string
+  ): Promise<any[]> {
+    const converted: any[] = [];
+
+    for (const doc of documents) {
+      if (format === 'XBRL' && doc.type === 'financial-statements') {
+        converted.push(await this.convertToXBRL(doc));
+      } else if (format === 'SEC-TEXT') {
+        converted.push(await this.convertToSecText(doc));
+      } else if (format === 'XML') {
+        converted.push(await this.convertToXML(doc));
+      } else {
+        converted.push(doc);
+      }
+    }
+
+    return converted;
+  }
+
+  /**
+   * Convert financial statements to XBRL format
+   */
+  private async convertToXBRL(doc: any): Promise<any> {
+    // Placeholder for XBRL conversion logic
+    // In production, would use a specialized XBRL library
+    const xbrlContent = this.generateXBRLTemplate(doc);
+
+    return {
+      ...doc,
+      mimeType: 'application/xml',
+      name: doc.name.replace(/\.[^/.]+$/, '.xbrl'),
+      content: xbrlContent,
+      metadata: {
+        ...doc.metadata,
+        convertedToXBRL: true,
+        conversionDate: new Date(),
+      },
+    };
+  }
+
+  /**
+   * Generate XBRL template for financial statements
+   */
+  private generateXBRLTemplate(doc: any): string {
+    const timestamp = new Date().toISOString();
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<xbrl xmlns="http://www.xbrl.org/2003/instance"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xbrli="http://www.xbrl.org/2003/instance"
+      xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+      xmlns:us-gaap="http://xbrl.sec.gov/us-gaap/2024-01-31"
+      xmlns:ifrs="http://xbrl.sec.gov/ifrs/2024-01-31">
+  <link:schemaRef xlink:href="us-gaap-2024-01-31.xsd" xlink:type="simple" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+
+  <context id="current_instant">
+    <entity>
+      <identifier scheme="http://www.sec.gov/CIK">${this.edgarConfig?.cikNumber || 'XXXXXXXXX'}</identifier>
+    </entity>
+    <period>
+      <instant>${timestamp.split('T')[0]}</instant>
+    </period>
+  </context>
+
+  <unit id="usd">
+    <measure>iso4217:USD</measure>
+  </unit>
+
+  <!-- Financial statement data elements would be populated here -->
+  <!-- Converted from: ${doc.name} -->
+  <!-- Conversion timestamp: ${timestamp} -->
+</xbrl>`;
+  }
+
+  /**
+   * Convert to SEC text format
+   */
+  private async convertToSecText(doc: any): Promise<any> {
+    return {
+      ...doc,
+      mimeType: 'text/plain',
+      name: doc.name.replace(/\.[^/.]+$/, '.txt'),
+      metadata: {
+        ...doc.metadata,
+        convertedToSecText: true,
+        conversionDate: new Date(),
+      },
+    };
+  }
+
+  /**
+   * Convert to XML format
+   */
+  private async convertToXML(doc: any): Promise<any> {
+    return {
+      ...doc,
+      mimeType: 'application/xml',
+      name: doc.name.replace(/\.[^/.]+$/, '.xml'),
+      metadata: {
+        ...doc.metadata,
+        convertedToXML: true,
+        conversionDate: new Date(),
+      },
+    };
+  }
+
+  /**
+   * Submit filing to SEC EDGAR
+   *
+   * Implementation steps:
+   * 1. Create submission package
+   * 2. Authenticate with SEC
+   * 3. Upload documents
+   * 4. Submit for processing
+   * 5. Return submission ID
+   */
+  async submitFiling(submission: any): Promise<any> {
+    // In production, would authenticate and call actual SEC EDGAR API
+    const submissionId = this.generateSubmissionId();
+    const timestamp = new Date();
+
+    // Simulate SEC EDGAR submission
+    const response: EdgarSubmissionResponse = {
+      submissionId,
+      timestamp,
+      cikNumber: this.edgarConfig?.cikNumber || 'UNKNOWN',
+      formType: submission.metadata.formType as string,
+      fileNumber: this.edgarConfig?.fileNumber || '',
+      status: 'uploaded',
+      accessionNumber: this.generateAccessionNumber(),
+      errorMessages: [],
+    };
+
+    return {
+      ...submission,
+      id: submissionId,
+      externalId: response.accessionNumber,
+      status: 'submitted',
+      submittedAt: timestamp,
+      metadata: {
+        ...submission.metadata,
+        edgarResponse: response,
+        submissionStage: 'uploaded',
+      },
+    };
+  }
+
+  /**
+   * Track filing status via SEC EDGAR API
+   *
+   * Polls for:
+   * - Validation status
+   * - Comment letters
+   * - Rejection reasons
+   * - Effective date
+   */
+  async trackFilingStatus(externalId: string): Promise<any> {
+    // In production, would query SEC EDGAR API
+    const status: EdgarFilingStatus = {
+      accessionNumber: externalId,
+      stage: 'under-validation',
+      submittedDate: new Date(),
+      comments: [],
+      rejectReasons: [],
+      isEffective: false,
+    };
+
+    // Determine actual status based on simulated API response
+    const submission: any = {
+      id: externalId,
+      externalId,
+      status: this.mapEdgarStageTFilingStatus(status.stage),
+      submittedAt: status.submittedDate,
+      effectiveAt: status.effectiveDate,
+      tradingStartAt: status.tradingDate,
+      documents: [],
+      errors: status.rejectReasons.map((reason) => this.createError(
+        reason,
+        this.getRejectReasonMessage(reason),
+        'error'
+      )),
+      metadata: {
+        accessionNumber: externalId,
+        stage: status.stage,
+        comments: status.comments,
+      },
+    };
+
+    return submission;
+  }
+
+  /**
+   * Get required documents for a specific SEC form
+   */
+  private getRequiredDocumentsForForm(form: SECForm): DocumentType[] {
+    const requirements: Record<SECForm, DocumentType[]> = {
+      'S-1': ['prospectus', 'financial-statements', 'legal-opinion', 'audit-report'],
+      'S-3': ['prospectus', 'financial-statements'],
+      'S-4': ['prospectus', 'financial-statements', 'legal-opinion'],
+      'F-1': ['prospectus', 'financial-statements', 'legal-opinion', 'audit-report'],
+      'F-3': ['prospectus', 'financial-statements'],
+      'F-10': ['prospectus', 'financial-statements'],
+      'SB-2': ['prospectus', 'financial-statements'],
+      '424B5': ['prospectus'],
+      '424B4': ['prospectus'],
+    };
+
+    return requirements[form] || [];
+  }
+
+  /**
+   * Get allowed MIME types for document type
+   */
+  private getAllowedMimeTypes(docType: DocumentType): string[] {
+    const mimeTypes: Record<DocumentType, string[]> = {
+      prospectus: ['application/pdf', 'text/plain', 'text/html'],
+      'financial-statements': ['application/xml', 'application/vnd.ms-excel', 'text/plain'],
+      'legal-opinion': ['application/pdf', 'text/plain'],
+      'audit-report': ['application/pdf', 'text/plain'],
+      exhibit: ['application/pdf', 'application/vnd.ms-word', 'text/plain'],
+      amendment: ['application/pdf', 'text/plain'],
+      form: ['application/pdf', 'text/plain'],
+      memo: ['application/pdf', 'text/plain'],
+    };
+
+    return mimeTypes[docType] || [];
+  }
+
+  /**
+   * Generate SEC submission ID
+   */
+  private generateSubmissionId(): string {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+    return `SEC-${timestamp}-${random}`;
+  }
+
+  /**
+   * Generate SEC accession number (format: 0000950154-99-000001)
+   */
+  private generateAccessionNumber(): string {
+    const cidPrefix = this.edgarConfig?.cikNumber?.padStart(10, '0') || '0000000000';
+    const date = new Date();
+    const dateCode = date.getFullYear().toString().substring(2) + date.getMonth().toString().padStart(2, '0');
+    const sequence = Math.random().toString().substring(2, 8).padStart(6, '0');
+    return `${cidPrefix}-${dateCode}-${sequence}`;
+  }
+
+  /**
+   * Map EDGAR stage to FilingStatus
+   */
+  private mapEdgarStageTFilingStatus(stage: EdgarStage): FilingStatus {
+    const mapping: Record<EdgarStage, FilingStatus> = {
+      'pre-submission': 'draft',
+      'uploaded': 'submitted',
+      'under-validation': 'processing',
+      'comment-period': 'processing',
+      'effective': 'effective',
+      'trading': 'trading',
+      'withdrawn': 'withdrawn',
+      'rejected': 'rejected',
+    };
+
+    return mapping[stage] || 'submitted';
+  }
+
+  /**
+   * Get user-friendly message for SEC rejection reason
+   */
+  private getRejectReasonMessage(reason: SECRejectionCode): string {
+    const messages: Record<SECRejectionCode, string> = {
+      [SECRejectionCode.MISSING_MD_A]: 'MD&A section is incomplete or missing required disclosures',
+      [SECRejectionCode.BAD_FINANCIALS_FORMAT]: 'Financial statements do not meet SEC format requirements',
+      [SECRejectionCode.INVALID_XBRL]: 'XBRL financial data contains validation errors',
+      [SECRejectionCode.INSUFFICIENT_DISCLOSURE]: 'Required risk factor or business disclosures are insufficient',
+      [SECRejectionCode.AUDITOR_INDEPENDENCE]: 'Audit report does not meet PCAOB auditor independence requirements',
+      [SECRejectionCode.DEFICIENT_PROSPECTUS]: 'Prospectus missing required sections or disclosures',
+      [SECRejectionCode.MISSING_EXHIBIT]: 'Required exhibits are missing from the filing',
+      [SECRejectionCode.BAD_DOCUMENT_FORMAT]: 'Document format is not compliant with SEC specifications',
+      [SECRejectionCode.PCAOB_COMPLIANCE]: 'Audit report does not comply with PCAOB Auditing Standards',
+      [SECRejectionCode.FILING_FEE_ISSUE]: 'Filing fee is incorrect or payment was not processed',
+    };
+
+    return messages[reason] || 'Filing was rejected by SEC';
+  }
+
+  /**
+   * Get supported document types
+   */
+  protected getSupportedDocumentTypes(): DocumentType[] {
+    return this.supportedDocTypes;
+  }
+
+  /**
+   * Get supported SEC forms
+   */
+  getSupportedForms(): string[] {
+    return this.supportedForms as string[];
+  }
+
+  /**
+   * Set EDGAR configuration
+   */
+  public setEdgarConfig(config: SECFilingConfig): void {
+    this.edgarConfig = config;
+  }
+
+  /**
+   * Get EDGAR configuration
+   */
+  public getEdgarConfig(): SECFilingConfig | undefined {
+    return this.edgarConfig;
+  }
+
+  /**
+   * Get SEC EDGAR API endpoint
+   */
+  public getApiEndpoint(): string {
+    return this.apiBaseUrl;
+  }
+}

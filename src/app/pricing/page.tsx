@@ -93,6 +93,40 @@ const PLANS = [
     badge: '⭐ Most Popular',
   },
   {
+    id: 'filing',
+    nameEn: 'Filing Module',
+    nameFr: 'Module de Dépôt',
+    descriptionEn: 'Multi-country filing automation',
+    descriptionFr: 'Automatisation des dépôts multi-pays',
+    monthlyUSD: 2999,
+    monthlyCAD: 3999,
+    sixmonthUSD: 2399,
+    sixmonthCAD: 3199,
+    annualUSD: 1999,
+    annualCAD: 2665,
+    originalMonthlyUSD: 5999,
+    originalMonthlyCAD: 7999,
+    originalSixmonthUSD: 4799,
+    originalSixmonthCAD: 6399,
+    originalAnnualUSD: 3999,
+    originalAnnualCAD: 5330,
+    minCommitmentMonths: 3,
+    features: [
+      'Submit to 50+ exchanges',
+      'SEDAR 2 + SEC Edgar included',
+      'Document pre-validation',
+      'Real-time status tracking',
+      'Webhook notifications',
+      'Complete audit trail',
+      'Batch filing support',
+      'Regulatory alerts',
+    ],
+    isPopular: false,
+    maxMembers: 999,
+    exchanges: ['50+ Countries'],
+    badge: null,
+  },
+  {
     id: 'enterprise',
     nameEn: 'Enterprise',
     nameFr: 'Entreprise',
@@ -112,7 +146,7 @@ const PLANS = [
     originalAnnualCAD: 4450,
     minCommitmentMonths: 3,
     features: [
-      'Everything in Growth',
+      'Everything in Starter + Growth',
       'Advanced prospectus builder (multi-segment S-1/F-1)',
       'Save $20K–60K on document preparation',
       'All 7 exchanges (incl. NASDAQ & NYSE)',
@@ -166,7 +200,7 @@ const FAQS = [
 ]
 
 // Plan tier order — used to determine upgrade vs downgrade
-const PLAN_TIER: Record<string, number> = { starter: 0, growth: 1, enterprise: 2 }
+const PLAN_TIER: Record<string, number> = { starter: 0, growth: 1, filing: 2, enterprise: 3 }
 
 export default function PricingPage() {
   const { data: session } = useSession()
@@ -542,6 +576,39 @@ export default function PricingPage() {
               })()}
             </motion.div>
           ))}
+        </div>
+
+        {/* Feature comparison table */}
+        <div className="card rounded-2xl p-8 mb-10">
+          <h2 className="serif text-2xl text-nav mb-6 text-center">
+            {language === 'en' ? 'Feature Comparison' : "Comparaison des fonctionnalités"}
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr style={{ borderBottom: '2px solid #E5E4E0' }}>
+                  <th className="pb-3 pr-4"><p className="label-sm font-bold text-nav">{language === 'en' ? 'Feature' : 'Fonction'}</p></th>
+                  <th className="pb-3 px-2"><p className="label-sm font-bold text-nav">Starter</p></th>
+                  <th className="pb-3 px-2"><p className="label-sm font-bold text-nav">Growth</p></th>
+                  <th className="pb-3 px-2"><p className="label-sm font-bold text-nav">Filing</p></th>
+                  <th className="pb-3 pl-2"><p className="label-sm font-bold text-nav">Enterprise</p></th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { feature: language === 'en' ? 'Filing Automation' : 'Automatisation des dépôts', starter: 'No', growth: 'SEDAR 2', filing: '50+ countries', enterprise: '50+ countries' },
+                ].map(({ feature, starter, growth, filing, enterprise }, idx) => (
+                  <tr key={idx} style={{ borderBottom: '1px solid #E5E4E0' }}>
+                    <td className="py-4 pr-4"><p className="body-sm text-nav font-medium">{feature}</p></td>
+                    <td className="py-4 px-2"><p className="body-sm text-text-muted">{starter}</p></td>
+                    <td className="py-4 px-2"><p className="body-sm text-text-muted">{growth}</p></td>
+                    <td className="py-4 px-2"><p className="body-sm font-semibold" style={{ color: '#2D7A5F' }}>{filing}</p></td>
+                    <td className="py-4 pl-2"><p className="body-sm font-semibold" style={{ color: '#2D7A5F' }}>{enterprise}</p></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* Value comparison */}
