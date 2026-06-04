@@ -177,10 +177,14 @@ export class SECEdgarAdapter extends BaseFilingAdapter {
         headers['Content-Type'] = 'multipart/form-data'
       }
 
+      const fetchBody = method === 'POST' && body
+        ? (Buffer.isBuffer(body) ? new Uint8Array(body) : body)
+        : undefined
+
       const response = await fetch(url, {
         method,
         headers,
-        body: method === 'POST' ? body : undefined,
+        body: fetchBody,
       })
 
       // Handle response based on content type
@@ -289,7 +293,7 @@ export class SECEdgarAdapter extends BaseFilingAdapter {
 
       // Validate XBRL for financial statements
       if (doc.type === DocumentType.FINANCIAL_STATEMENTS && doc.mimeType === 'text/xml') {
-        if (!this.validateXBRL(doc.content)) {
+        if (!doc.content || !this.validateXBRL(doc.content)) {
           docErrors.push({
             documentId: doc.id,
             documentType: doc.type,
@@ -465,6 +469,7 @@ export class SECEdgarAdapter extends BaseFilingAdapter {
     // Add documents in order
     for (const doc of documents) {
       const docType = this.mapDocumentTypeToSECType(doc.type)
+      if (!doc.content) continue
       const buffer = this.contentToBuffer(doc.content)
 
       parts.push(
@@ -674,7 +679,7 @@ export class SECEdgarAdapter extends BaseFilingAdapter {
   /**
    * Sleep utility for retries
    */
-  private sleep(ms: number): Promise<void> {
+  protected sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
 

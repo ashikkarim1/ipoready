@@ -95,17 +95,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const { filingId, system } = validation
+    const { filingId: id, system } = validation
 
     console.info('Filing status query', {
-      filingId,
+      filingId: id,
       system,
       timestamp: new Date().toISOString(),
     })
 
     // Get filing status
     const filingService = getFilingService()
-    const status = await filingService.getFilingStatus(filingId, system!)
+    const status = await filingService.getFilingStatus(id!, system!)
 
     // Return formatted response
     return NextResponse.json(
