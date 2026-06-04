@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Header } from '@/app/components/Header'
-import { ArrowRight, BookOpen, Clock, CheckCircle2 } from 'lucide-react'
+import { ArrowRight, BookOpen, Clock, CheckCircle2, Bookmark } from 'lucide-react'
 
 // Guide data - placeholder content ready for real writing
 const GUIDES: Record<string, any> = {
@@ -49,103 +49,103 @@ const GUIDES: Record<string, any> = {
     cta: { title: 'Find Your Path to Public Markets', description: 'IPOReady helps you compare and execute any path.', buttonText: 'Analyze Your Options', buttonLink: '/dashboard' }
   },
   'ipo-cost-breakdown': {
-    title: 'IPO Cost Breakdown 2024 | Legal, Audit, Underwriting & Filing',
-    description: 'Detailed breakdown of all IPO costs. Understanding legal fees, accounting, underwriting, and filing expenses.',
+    title: 'IPO Cost Breakdown: What You\'ll Actually Pay',
+    description: 'Complete breakdown of IPO costs. Understand all fees and costs for Canadian and US IPOs.',
     readTime: 15,
     published: '2024-06-01',
     updated: '2024-06-04',
     author: 'IPOReady Team',
     category: 'Guide',
     sections: [
-      { title: 'Legal Fees', content: 'Securities lawyers typically charge $150K-$800K depending on exchange and complexity...' },
-      { title: 'Accounting & Audit', content: 'CPAB auditors and accounting firms charge $80K-$300K for IPO audit and financial statement preparation...' },
-      { title: 'Underwriting Fees', content: 'Underwriters typically take 3-7% of gross IPO proceeds as their commission...' },
-      { title: 'Filing & Exchange Fees', content: 'TSX, NASDAQ, and other exchanges charge filing fees ranging from $20K-$100K...' },
-      { title: 'Other Costs', content: 'Printing, investor relations, stock transfer agent, and miscellaneous expenses...' },
+      { title: 'Underwriting Fees', content: 'Underwriter discount, management fees, and selling concessions...' },
+      { title: 'Legal & Professional Fees', content: 'Securities lawyers, accountants, auditors, financial advisors...' },
+      { title: 'Regulatory & Filing Fees', content: 'Exchange fees, securities commission fees, printing and filing costs...' },
+      { title: 'Marketing & Roadshow Costs', content: 'Investor presentations, marketing materials, travel and logistics...' },
+      { title: 'Total Cost Analysis', content: 'Typical total cost range by exchange and company size...' },
     ],
-    toc: ['Legal Fees', 'Accounting & Audit', 'Underwriting Fees', 'Filing & Exchange Fees', 'Other Costs'],
+    toc: ['Underwriting Fees', 'Legal Fees', 'Regulatory Fees', 'Marketing Costs', 'Total Cost Analysis'],
     relatedGuides: [{ title: 'IPO Timeline', slug: 'ipo-timeline' }],
-    cta: { title: 'Budget for Your IPO', description: 'Use our cost calculator to estimate your specific IPO costs.', buttonText: 'Go to Cost Calculator', buttonLink: '/dashboard/financial-mgmt/cost-calculator' }
+    cta: { title: 'Budget Your IPO', description: 'Use IPOReady to forecast and track all IPO costs.', buttonText: 'Cost Calculator', buttonLink: '/dashboard' }
   },
   'spac-merger-guide': {
-    title: 'SPAC Merger Complete Guide: Process, Timeline & Costs',
-    description: 'Everything you need to know about merging with a SPAC. Process, timeline (9-12 months), costs, and evaluation criteria.',
-    readTime: 20,
-    published: '2024-06-01',
-    updated: '2024-06-04',
-    author: 'IPOReady Team',
-    category: 'Guide',
-    sections: [
-      { title: 'What is a SPAC?', content: 'A Special Purpose Acquisition Company is a shell company raised to acquire an operating business...' },
-      { title: 'Finding a SPAC Partner', content: 'Identifying and evaluating potential SPAC sponsors and targets for your company...' },
-      { title: 'Merger Process', content: 'Step-by-step process from LOI through shareholder vote and listing...' },
-      { title: 'SPAC Fees & Costs', content: 'Understanding sponsor promote, underwriting fees, and other SPAC-specific costs...' },
-      { title: 'Risk & Considerations', content: 'Market risk, shareholder redemptions, and post-merger integration challenges...' },
-    ],
-    toc: ['What is a SPAC?', 'Finding a SPAC Partner', 'Merger Process', 'SPAC Fees & Costs', 'Risk & Considerations'],
-    relatedGuides: [{ title: 'IPO vs Direct Listing vs SPAC', slug: 'ipo-vs-direct-listing-vs-spac-vs-rto' }],
-    cta: { title: 'Evaluate SPAC Opportunities', description: 'IPOReady helps you track SPAC negotiations and merger milestones.', buttonText: 'Get Started', buttonLink: '/register' }
-  },
-  'tsx-vs-nasdaq-listing': {
-    title: 'TSX vs NASDAQ: Listing Requirements & Comparison',
-    description: 'Compare Canadian TSX and US NASDAQ listings. Requirements, costs, timeline, and strategic fit.',
-    readTime: 16,
-    published: '2024-06-01',
-    updated: '2024-06-04',
-    author: 'IPOReady Team',
-    category: 'Guide',
-    sections: [
-      { title: 'TSX Overview', content: 'The primary exchange for Canadian companies. Requirements, investor base, and strategic fit...' },
-      { title: 'NASDAQ Overview', content: 'The tech-focused US exchange. Requirements for Canadian companies, regulatory considerations...' },
-      { title: 'Financial Requirements', content: 'Comparing minimum shareholder equity, public float requirements, and profitability expectations...' },
-      { title: 'Timeline Comparison', content: 'TSX typically 6-12 months, NASDAQ 6-12 months, with different review timelines...' },
-      { title: 'Cost Analysis', content: 'TSX costs typically lower than NASDAQ due to domestic vs. cross-border dynamics...' },
-    ],
-    toc: ['TSX Overview', 'NASDAQ Overview', 'Financial Requirements', 'Timeline Comparison', 'Cost Analysis'],
-    relatedGuides: [{ title: 'IPO Checklist Canada', slug: 'ipo-checklist-canada' }],
-    cta: { title: 'Choose Your Exchange', description: 'Let IPOReady help you evaluate the best listing strategy.', buttonText: 'Explore Options', buttonLink: '/dashboard' }
-  },
-  'rto-guide': {
-    title: 'Reverse Takeover (RTO) Complete Guide',
-    description: 'Master the RTO process. Find shell companies, negotiate, merge, and become public.',
+    title: 'SPAC Merger Guide: Complete Process & Timeline',
+    description: 'Everything you need to know about SPAC mergers. Process, timeline (9-12 months), costs, and benefits.',
     readTime: 19,
     published: '2024-06-01',
     updated: '2024-06-04',
     author: 'IPOReady Team',
     category: 'Guide',
     sections: [
-      { title: 'What is an RTO?', content: 'A reverse takeover is when a private company acquires a publicly-listed shell company...' },
-      { title: 'Finding Shell Companies', content: 'Where to find RTO candidates, evaluating their regulatory status and trading history...' },
-      { title: 'RTO Process', content: 'Due diligence, negotiation, shareholder approvals, regulatory filings, and closing...' },
-      { title: 'RTO vs IPO', content: 'Comparing costs, timeline, dilution, and regulatory burden between RTO and IPO paths...' },
-      { title: 'Post-Merger Considerations', content: 'Name change, governance, disclosure obligations, and investor communication...' },
+      { title: 'What is a SPAC?', content: 'Special Purpose Acquisition Company, blank-check companies, and why they exist...' },
+      { title: 'SPAC Merge vs IPO', content: 'Comparison of SPAC merger vs traditional IPO route...' },
+      { title: 'Finding and Evaluating SPACs', content: 'How to find potential SPAC partners and assess their quality...' },
+      { title: 'Merger Process & Timeline', content: '9-12 month process from target identification to public trading...' },
+      { title: 'SPAC Risks and Considerations', content: 'Dilution, redemptions, regulatory scrutiny, and success rates...' },
     ],
-    toc: ['What is an RTO?', 'Finding Shell Companies', 'RTO Process', 'RTO vs IPO', 'Post-Merger Considerations'],
+    toc: ['What is a SPAC?', 'SPAC vs IPO', 'Finding SPACs', 'Merger Process', 'Risks & Considerations'],
     relatedGuides: [{ title: 'IPO vs Direct Listing vs SPAC', slug: 'ipo-vs-direct-listing-vs-spac-vs-rto' }],
-    cta: { title: 'Execute Your RTO', description: 'IPOReady tracks every RTO milestone and compliance requirement.', buttonText: 'Start Your RTO', buttonLink: '/register' }
+    cta: { title: 'Explore SPAC Option', description: 'Track your SPAC merger journey with IPOReady.', buttonText: 'Start SPAC Track', buttonLink: '/register' }
+  },
+  'tsx-vs-nasdaq-listing': {
+    title: 'TSX vs NASDAQ: Which Exchange is Right for You?',
+    description: 'Compare TSX and NASDAQ. Understand requirements, costs, timeline, and strategic fit.',
+    readTime: 14,
+    published: '2024-06-01',
+    updated: '2024-06-04',
+    author: 'IPOReady Team',
+    category: 'Guide',
+    sections: [
+      { title: 'TSX Overview', content: 'Tier 1 Canadian exchange for established, profitable companies...' },
+      { title: 'NASDAQ Overview', content: 'US tech-focused exchange with 40% of global trading volume...' },
+      { title: 'Financial Requirements Comparison', content: 'Revenue, profitability, public float, and market cap requirements...' },
+      { title: 'Cost & Timeline Comparison', content: 'Total IPO costs and timeline comparison between exchanges...' },
+      { title: 'Strategic Considerations', content: 'Investor base, trading volume, capital access, and market positioning...' },
+    ],
+    toc: ['TSX Overview', 'NASDAQ Overview', 'Financial Requirements', 'Cost & Timeline', 'Strategic Fit'],
+    relatedGuides: [{ title: 'TSX Listing Guide', slug: 'tsx-vs-nasdaq-listing' }],
+    cta: { title: 'Compare Exchanges', description: 'IPOReady helps you evaluate exchange options.', buttonText: 'Exchange Comparison', buttonLink: '/dashboard' }
+  },
+  'rto-guide': {
+    title: 'Reverse Takeover (RTO) Complete Guide',
+    description: 'Everything about reverse takeovers. Process, timeline, costs, and when to choose RTO vs IPO.',
+    readTime: 16,
+    published: '2024-06-01',
+    updated: '2024-06-04',
+    author: 'IPOReady Team',
+    category: 'Guide',
+    sections: [
+      { title: 'What is an RTO?', content: 'Definition, structure, and how it differs from traditional IPO and SPAC...' },
+      { title: 'Finding Shell Companies', content: 'How to identify suitable shell candidates, valuation, and due diligence...' },
+      { title: 'RTO Process & Timeline', content: '4-8 month process from shell identification to public trading...' },
+      { title: 'RTO Costs & Financing', content: 'Acquisition costs, regulatory costs, and financing considerations...' },
+      { title: 'RTO Advantages & Disadvantages', content: 'When RTO is right vs IPO, SPAC, or direct listing...' },
+    ],
+    toc: ['What is an RTO?', 'Finding Shells', 'Process & Timeline', 'Costs', 'Advantages & Disadvantages'],
+    relatedGuides: [{ title: 'IPO vs Direct Listing vs SPAC vs RTO', slug: 'ipo-vs-direct-listing-vs-spac-vs-rto' }],
+    cta: { title: 'Explore RTO Path', description: 'Is RTO right for your company? Evaluate with IPOReady.', buttonText: 'Assess RTO Option', buttonLink: '/dashboard' }
   },
   'ipo-timeline': {
-    title: 'IPO Timeline: How Long Does IPO Take?',
-    description: 'Complete breakdown of IPO timeline by phase. Typical duration 6-12 months with acceleration strategies.',
+    title: 'IPO Timeline: How Long Does an IPO Take?',
+    description: 'Complete IPO timeline breakdown. Understand each phase, duration (6-12 months), and how to accelerate.',
     readTime: 12,
     published: '2024-06-01',
     updated: '2024-06-04',
     author: 'IPOReady Team',
     category: 'Guide',
     sections: [
-      { title: 'Phase 1: Planning & Preparation (2-4 months)', content: 'Assemble team, prepare financials, conduct readiness assessment...' },
-      { title: 'Phase 2: Filing & Due Diligence (2-4 months)', content: 'Prepare prospectus, file with exchange, conduct underwriter due diligence...' },
-      { title: 'Phase 3: Marketing (4-8 weeks)', content: 'Roadshow, investor presentations, price building...' },
-      { title: 'Phase 4: Closing (1-2 weeks)', content: 'Final regulatory approvals, price setting, trading commencement...' },
-      { title: 'Timeline Acceleration Strategies', content: 'Tips for expediting your IPO without compromising readiness...' },
+      { title: 'Phase 1: Preparation', content: '2-3 months of team assembly, advisor selection, and readiness assessment...' },
+      { title: 'Phase 2: Documentation', content: '2-3 months of prospectus drafting, financial statement preparation, and audit...' },
+      { title: 'Phase 3: Filing & Review', content: '2-4 months of securities commission review and comment responses...' },
+      { title: 'Phase 4: Marketing & Pricing', content: '1-2 weeks of investor presentations, pricing, and allocation...' },
+      { title: 'Accelerating the Timeline', content: 'Strategies to compress timeline and factors that cause delays...' },
     ],
-    toc: ['Phase 1: Planning', 'Phase 2: Filing', 'Phase 3: Marketing', 'Phase 4: Closing', 'Acceleration Strategies'],
+    toc: ['Preparation Phase', 'Documentation Phase', 'Filing & Review', 'Marketing & Pricing', 'Acceleration Strategies'],
     relatedGuides: [{ title: 'IPO Checklist Canada', slug: 'ipo-checklist-canada' }],
-    cta: { title: 'Plan Your Timeline', description: 'IPOReady tracks all IPO phases with realistic deadline management.', buttonText: 'Create Timeline', buttonLink: '/dashboard' }
+    cta: { title: 'Track Your Timeline', description: 'IPOReady shows you your realistic IPO timeline.', buttonText: 'Start Timeline', buttonLink: '/register' }
   },
   'ipo-readiness-assessment': {
-    title: 'IPO Readiness Assessment: Are You Ready to Go Public?',
-    description: 'Self-assessment checklist for IPO readiness. Financial, governance, operational, and strategic criteria.',
+    title: 'IPO Readiness Assessment: Are You Ready?',
+    description: 'Self-assessment checklist to determine if your company is ready for an IPO.',
     readTime: 14,
     published: '2024-06-01',
     updated: '2024-06-04',
@@ -262,10 +262,10 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
 
   if (!guide) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#F7F6F4' }}>
         <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">Guide not found</h1>
-          <Link href="/resources" className="text-accent hover:underline">
+          <h1 className="h1 text-nav mb-4">Guide not found</h1>
+          <Link href="/resources" className="text-accent hover:underline font-medium">
             Back to Resources →
           </Link>
         </div>
@@ -274,139 +274,141 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#F7F6F4' }}>
+    <div style={{ background: '#F7F6F4', minHeight: '100vh' }}>
       <Header />
 
-      {/* Hero */}
-      <section className="max-w-4xl mx-auto px-6 py-12 md:py-16">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      {/* Hero Section */}
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '5rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
           <div className="flex items-center gap-2 mb-4">
-            <BookOpen className="w-4 h-4" style={{ color: '#E8312A' }} />
-            <span className="label-sm font-semibold" style={{ color: '#E8312A' }}>
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#EFF6FF' }}>
+              <BookOpen className="w-5 h-5" style={{ color: '#1D4ED8' }} />
+            </div>
+            <span className="pill text-xs font-bold uppercase tracking-wider" style={{ background: '#FDECEB', color: '#E8312A' }}>
               {guide.category}
             </span>
           </div>
 
-          <h1 className="serif text-4xl md:text-5xl mb-4 leading-tight" style={{ color: '#1A1A1A' }}>
+          <h1 className="serif" style={{ fontSize: '2.8rem', fontWeight: 700, lineHeight: '1.2', marginBottom: '1.25rem', color: '#1A1A1A' }}>
             {guide.title}
           </h1>
 
-          <p className="text-lg mb-6" style={{ color: '#666666' }}>
+          <p className="text-lg leading-relaxed" style={{ marginBottom: '2.5rem', color: '#666666', maxWidth: '750px' }}>
             {guide.description}
           </p>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm" style={{ color: '#9A9A9A' }}>
-            <div className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4" />
-              <span>{guide.readTime} min read</span>
+          {/* Meta Information */}
+          <div className="flex flex-wrap items-center gap-6 mb-6" style={{ borderBottom: '1px solid #E5E4E0', paddingBottom: '1.5rem' }}>
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4" style={{ color: '#9A9A9A' }} />
+              <span className="body-sm" style={{ color: '#666666' }}>{guide.readTime} min read</span>
             </div>
-            <span>•</span>
-            <span>Updated {guide.updated}</span>
-            <span>•</span>
-            <span>By {guide.author}</span>
+            <div className="flex items-center gap-2">
+              <span className="body-sm" style={{ color: '#666666' }}>By {guide.author}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="body-sm" style={{ color: '#9A9A9A' }}>Updated {new Date(guide.updated).toLocaleDateString()}</span>
+            </div>
           </div>
         </motion.div>
       </section>
 
-      {/* Content */}
-      <section className="max-w-4xl mx-auto px-6 mb-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Main content */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className="md:col-span-3"
-          >
-            <div className="prose prose-lg max-w-none" style={{ color: '#333333' }}>
-              {guide.sections.map((section: any, idx: number) => (
-                <div key={idx} className="mb-12">
-                  <h2 className="serif text-2xl font-bold mb-4" style={{ color: '#1A1A1A' }}>
+      {/* Two Column Layout: TOC + Content */}
+      <section className="max-w-7xl mx-auto" style={{ paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Table of Contents - Fixed on Desktop */}
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="lg:col-span-1">
+            <div className="sticky top-24" style={{ background: '#FFFFFF', borderRadius: '12px', border: '1px solid #E5E4E0', padding: '1.5rem' }}>
+              <h3 className="font-bold mb-4" style={{ color: '#1A1A1A', fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                In This Guide
+              </h3>
+              <div className="space-y-3">
+                {guide.toc && guide.toc.map((item: string, idx: number) => (
+                  <a
+                    key={idx}
+                    href={`#section-${idx}`}
+                    className="block body-sm hover:opacity-75 transition"
+                    style={{ color: '#1D4ED8', textDecoration: 'none' }}
+                  >
+                    {item}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Main Content - Wider */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="lg:col-span-3">
+            <div className="space-y-8">
+              {guide.sections && guide.sections.map((section: any, idx: number) => (
+                <div key={idx} id={`section-${idx}`} className="scroll-mt-24">
+                  <h2 className="h3" style={{ marginBottom: '1.25rem', color: '#1A1A1A' }}>
                     {section.title}
                   </h2>
-                  <p style={{ color: '#666666', lineHeight: 1.7 }}>
-                    {section.content}
-                  </p>
+                  <div className="rounded-xl p-8" style={{ background: '#FFFFFF', border: '1px solid #E5E4E0' }}>
+                    <p className="body" style={{ color: '#1A1A1A', lineHeight: '1.8' }}>
+                      {section.content}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
 
-            {/* Related guides */}
-            {guide.relatedGuides.length > 0 && (
-              <div className="mt-16 pt-12 border-t border-gray-200">
-                <h3 className="font-bold text-lg mb-6" style={{ color: '#1A1A1A' }}>
+            {/* Related Guides */}
+            {guide.relatedGuides && guide.relatedGuides.length > 0 && (
+              <div style={{ marginTop: '3rem' }}>
+                <h2 className="h3 mb-6" style={{ color: '#1A1A1A' }}>
                   Related Guides
-                </h3>
-                <div className="space-y-3">
-                  {guide.relatedGuides.map((related: any) => (
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {guide.relatedGuides.map((related: any, idx: number) => (
                     <Link
-                      key={related.slug}
+                      key={idx}
                       href={`/guides/${related.slug}`}
-                      className="flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition"
+                      className="group rounded-lg p-6 transition hover:shadow-md"
+                      style={{ background: '#FFFFFF', border: '1px solid #E5E4E0' }}
                     >
-                      <span style={{ color: '#1A1A1A' }}>{related.title}</span>
-                      <ArrowRight className="w-4 h-4" style={{ color: '#E8312A' }} />
+                      <div className="flex items-start gap-3">
+                        <Bookmark className="w-5 h-5 mt-0.5 flex-shrink-0 transition group-hover:scale-110" style={{ color: '#1D4ED8' }} />
+                        <div>
+                          <h4 className="font-bold mb-1" style={{ color: '#1A1A1A' }}>
+                            {related.title}
+                          </h4>
+                          <p className="body-sm" style={{ color: '#666666' }}>
+                            Read related content
+                          </p>
+                        </div>
+                      </div>
                     </Link>
                   ))}
                 </div>
               </div>
             )}
           </motion.div>
-
-          {/* Sidebar TOC */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="hidden md:block"
-          >
-            <div className="sticky top-20 bg-white rounded-lg p-6 border border-gray-200">
-              <h3 className="font-bold mb-4" style={{ color: '#1A1A1A' }}>
-                Table of Contents
-              </h3>
-              <ul className="space-y-2">
-                {guide.toc.map((item: string) => (
-                  <li key={item}>
-                    <a
-                      href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="text-sm hover:underline"
-                      style={{ color: '#666666' }}
-                    >
-                      {item}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
         </div>
       </section>
 
       {/* CTA Section */}
-      {guide.cta && (
-        <section className="bg-white border-t border-gray-200 py-16">
-          <div className="max-w-2xl mx-auto px-6 text-center">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
-              <h2 className="serif text-3xl font-bold mb-3" style={{ color: '#1A1A1A' }}>
-                {guide.cta.title}
-              </h2>
-              <p className="text-lg mb-6" style={{ color: '#666666' }}>
-                {guide.cta.description}
-              </p>
-              <Link
-                href={guide.cta.buttonLink}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-white transition"
-                style={{ background: '#E8312A' }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = '#D62518')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = '#E8312A')}
-              >
-                {guide.cta.buttonText}
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </motion.div>
-          </div>
-        </section>
-      )}
+      <section style={{ background: '#FFFFFF', borderTop: '1px solid #E5E4E0', paddingTop: '3rem', paddingBottom: '3rem' }}>
+        <div className="max-w-2xl mx-auto px-6 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
+            <h2 className="h2 mb-3" style={{ color: '#1A1A1A' }}>
+              {guide.cta.title}
+            </h2>
+            <p className="body text-lg mb-6" style={{ color: '#666666' }}>
+              {guide.cta.description}
+            </p>
+            <Link
+              href={guide.cta.buttonLink}
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-white transition hover:opacity-90"
+              style={{ background: '#E8312A' }}
+            >
+              {guide.cta.buttonText}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Header } from '@/app/components/Header'
-import { ArrowRight, CheckCircle2, Globe, Clock, DollarSign, TrendingUp } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Globe, Clock, DollarSign, TrendingUp, BookOpen } from 'lucide-react'
 
 // Exchange data
 const EXCHANGES: Record<string, any> = {
@@ -44,6 +44,10 @@ const EXCHANGES: Record<string, any> = {
     timeline: '4-8 months',
     estimatedCost: '$300K-$1M',
     bestFor: 'Early-stage, growth, and emerging companies',
+    sections: [
+      { title: 'Listing Requirements', subsections: ['Financial requirements', 'Governance requirements', 'Public float requirements'] },
+      { title: 'TSXV Listing Process', subsections: ['Application', 'Review', 'Approval', 'Trading'] },
+    ],
   },
   cse: {
     name: 'CSE',
@@ -53,6 +57,10 @@ const EXCHANGES: Record<string, any> = {
     timeline: '2-4 months',
     estimatedCost: '$100K-$400K',
     bestFor: 'Growth-stage companies seeking faster listing',
+    sections: [
+      { title: 'Listing Requirements', subsections: ['Financial requirements', 'Governance requirements', 'Public float requirements'] },
+      { title: 'CSE Listing Process', subsections: ['Application', 'Review', 'Approval', 'Trading'] },
+    ],
   },
   nasdaq: {
     name: 'NASDAQ',
@@ -62,6 +70,10 @@ const EXCHANGES: Record<string, any> = {
     timeline: '6-12 months',
     estimatedCost: '$1M-$3M',
     bestFor: 'Technology and growth companies seeking US capital',
+    sections: [
+      { title: 'Listing Requirements', subsections: ['Financial requirements', 'Governance requirements', 'Public float requirements'] },
+      { title: 'NASDAQ Listing Process', subsections: ['SEC filing', 'Underwriter review', 'Marketing', 'Listing'] },
+    ],
   },
   nyse: {
     name: 'NYSE',
@@ -71,6 +83,10 @@ const EXCHANGES: Record<string, any> = {
     timeline: '8-14 months',
     estimatedCost: '$2M-$5M',
     bestFor: 'Large-cap, established companies',
+    sections: [
+      { title: 'Listing Requirements', subsections: ['Financial requirements', 'Governance requirements', 'Public float requirements'] },
+      { title: 'NYSE Listing Process', subsections: ['SEC filing', 'Underwriter review', 'Marketing', 'Listing'] },
+    ],
   },
   otc: {
     name: 'OTC Markets',
@@ -80,6 +96,23 @@ const EXCHANGES: Record<string, any> = {
     timeline: '1-2 months',
     estimatedCost: '$10K-$100K',
     bestFor: 'Small-cap companies or SPAC shells',
+    sections: [
+      { title: 'Listing Requirements', subsections: ['Financial requirements', 'Governance requirements', 'Public float requirements'] },
+      { title: 'OTC Listing Process', subsections: ['Registration', 'Approval', 'Trading'] },
+    ],
+  },
+  cboe: {
+    name: 'Cboe Canada',
+    fullName: 'Cboe Canada Exchange',
+    description: 'Canadian exchange for growth companies.',
+    tier: 'Growth',
+    timeline: '4-6 months',
+    estimatedCost: '$250K-$800K',
+    bestFor: 'Canadian growth companies',
+    sections: [
+      { title: 'Listing Requirements', subsections: ['Financial requirements', 'Governance requirements', 'Public float requirements'] },
+      { title: 'Cboe Listing Process', subsections: ['Application', 'Review', 'Approval', 'Trading'] },
+    ],
   },
 }
 
@@ -94,11 +127,11 @@ export default function ExchangePage({ params }: { params: { code: string } }) {
 
   if (!exchange) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#F7F6F4' }}>
         <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">Exchange not found</h1>
-          <Link href="/dashboard" className="text-accent hover:underline">
-            Back to IPOReady →
+          <h1 className="h1 text-nav mb-4">Exchange not found</h1>
+          <Link href="/resources" className="text-accent hover:underline font-medium">
+            Back to Resources →
           </Link>
         </div>
       </div>
@@ -106,79 +139,81 @@ export default function ExchangePage({ params }: { params: { code: string } }) {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#F7F6F4' }}>
+    <div style={{ background: '#F7F6F4', minHeight: '100vh' }}>
       <Header />
 
-      {/* Hero */}
-      <section className="max-w-6xl mx-auto px-6 py-12 md:py-16">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      {/* Hero Section */}
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '5rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
           <div className="flex items-center gap-2 mb-4">
-            <Globe className="w-4 h-4" style={{ color: '#E8312A' }} />
-            <span className="label-sm font-semibold" style={{ color: '#E8312A' }}>
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#EFF6FF' }}>
+              <Globe className="w-5 h-5" style={{ color: '#1D4ED8' }} />
+            </div>
+            <span className="pill text-xs font-bold uppercase tracking-wider" style={{ background: '#FDECEB', color: '#E8312A' }}>
               Exchange Profile
             </span>
           </div>
 
-          <h1 className="serif text-5xl mb-4 leading-tight" style={{ color: '#1A1A1A' }}>
+          <h1 className="serif" style={{ fontSize: '2.8rem', fontWeight: 700, lineHeight: '1.2', marginBottom: '1.25rem', color: '#1A1A1A' }}>
             {exchange.name} Listing Guide
           </h1>
 
-          <p className="text-xl mb-8" style={{ color: '#666666' }}>
+          <p className="text-lg leading-relaxed" style={{ marginBottom: '2.5rem', color: '#666666', maxWidth: '700px' }}>
             {exchange.description}
           </p>
 
-          {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-white rounded-lg p-6 border border-gray-200">
-              <div className="flex items-center gap-2 mb-2">
+          {/* Quick Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="rounded-xl p-6" style={{ background: '#FDECEB', border: '1px solid #FECACA' }}>
+              <div className="flex items-center gap-2 mb-3">
                 <Clock className="w-4 h-4" style={{ color: '#E8312A' }} />
-                <span className="text-sm font-medium" style={{ color: '#666666' }}>Timeline</span>
+                <span className="label-sm font-semibold text-amber-700">Timeline</span>
               </div>
-              <p className="text-2xl font-bold" style={{ color: '#1A1A1A' }}>{exchange.timeline}</p>
+              <p className="h3" style={{ color: '#E8312A' }}>{exchange.timeline}</p>
             </div>
 
-            <div className="bg-white rounded-lg p-6 border border-gray-200">
-              <div className="flex items-center gap-2 mb-2">
+            <div className="rounded-xl p-6" style={{ background: '#EAF5F0', border: '1px solid #BBEAD4' }}>
+              <div className="flex items-center gap-2 mb-3">
                 <DollarSign className="w-4 h-4" style={{ color: '#2D7A5F' }} />
-                <span className="text-sm font-medium" style={{ color: '#666666' }}>Est. Cost</span>
+                <span className="label-sm font-semibold text-green-700">Est. Cost</span>
               </div>
-              <p className="text-2xl font-bold" style={{ color: '#1A1A1A' }}>{exchange.estimatedCost}</p>
+              <p className="h3" style={{ color: '#2D7A5F' }}>{exchange.estimatedCost}</p>
             </div>
 
-            <div className="bg-white rounded-lg p-6 border border-gray-200">
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-4 h-4" style={{ color: '#0066CC' }} />
-                <span className="text-sm font-medium" style={{ color: '#666666' }}>Tier</span>
+            <div className="rounded-xl p-6" style={{ background: '#EFF6FF', border: '1px solid #BFDBFE' }}>
+              <div className="flex items-center gap-2 mb-3">
+                <TrendingUp className="w-4 h-4" style={{ color: '#1D4ED8' }} />
+                <span className="label-sm font-semibold text-blue-700">Tier</span>
               </div>
-              <p className="text-2xl font-bold" style={{ color: '#1A1A1A' }}>{exchange.tier}</p>
+              <p className="h3" style={{ color: '#1D4ED8' }}>{exchange.tier}</p>
             </div>
 
-            <div className="bg-white rounded-lg p-6 border border-gray-200">
-              <div className="flex items-center gap-2 mb-2">
-                <CheckCircle2 className="w-4 h-4" style={{ color: '#2D7A5F' }} />
-                <span className="text-sm font-medium" style={{ color: '#666666' }}>Best For</span>
+            <div className="rounded-xl p-6" style={{ background: '#FEF3C7', border: '1px solid #FCD34D' }}>
+              <div className="flex items-center gap-2 mb-3">
+                <CheckCircle2 className="w-4 h-4" style={{ color: '#B45309' }} />
+                <span className="label-sm font-semibold text-amber-900">Best For</span>
               </div>
-              <p className="text-sm font-bold" style={{ color: '#1A1A1A' }}>{exchange.bestFor}</p>
+              <p className="body-sm" style={{ color: '#78350F' }}>{exchange.bestFor}</p>
             </div>
           </div>
         </motion.div>
       </section>
 
-      {/* Content */}
-      <section className="max-w-6xl mx-auto px-6 mb-16">
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
-          <div className="space-y-12">
+      {/* Content Sections */}
+      <section className="max-w-7xl mx-auto" style={{ paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+          <div className="space-y-8">
             {exchange.sections && exchange.sections.map((section: any, idx: number) => (
               <div key={idx}>
-                <h2 className="serif text-2xl font-bold mb-6" style={{ color: '#1A1A1A' }}>
+                <h2 className="h2" style={{ marginBottom: '1.5rem', color: '#1A1A1A' }}>
                   {section.title}
                 </h2>
-                <div className="bg-white rounded-lg p-8 border border-gray-200">
+                <div className="rounded-xl p-8" style={{ background: '#FFFFFF', border: '1px solid #E5E4E0' }}>
                   <div className="space-y-4">
-                    {section.subsections && section.subsections.map((subsection: string) => (
-                      <div key={subsection} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-5 h-5 mt-0.5" style={{ color: '#2D7A5F', flexShrink: 0 }} />
-                        <p style={{ color: '#1A1A1A' }}>{subsection}</p>
+                    {section.subsections && section.subsections.map((subsection: string, sidx: number) => (
+                      <div key={sidx} className="flex items-start gap-3">
+                        <CheckCircle2 className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#2D7A5F' }} />
+                        <p className="body-sm" style={{ color: '#1A1A1A' }}>{subsection}</p>
                       </div>
                     ))}
                   </div>
@@ -187,19 +222,19 @@ export default function ExchangePage({ params }: { params: { code: string } }) {
             ))}
           </div>
 
-          {/* FAQ */}
+          {/* FAQ Section */}
           {exchange.faq && (
-            <div className="mt-16">
-              <h2 className="serif text-2xl font-bold mb-6" style={{ color: '#1A1A1A' }}>
+            <div style={{ marginTop: '3rem' }}>
+              <h2 className="h2" style={{ marginBottom: '1.5rem', color: '#1A1A1A' }}>
                 Frequently Asked Questions
               </h2>
               <div className="space-y-4">
                 {exchange.faq.map((faq: any, idx: number) => (
-                  <div key={idx} className="bg-white rounded-lg p-6 border border-gray-200">
+                  <div key={idx} className="rounded-lg p-6" style={{ background: '#FFFFFF', border: '1px solid #E5E4E0' }}>
                     <h3 className="font-bold mb-2" style={{ color: '#1A1A1A' }}>
                       {faq.q}
                     </h3>
-                    <p style={{ color: '#666666' }}>{faq.a}</p>
+                    <p className="body-sm" style={{ color: '#666666' }}>{faq.a}</p>
                   </div>
                 ))}
               </div>
@@ -208,22 +243,20 @@ export default function ExchangePage({ params }: { params: { code: string } }) {
         </motion.div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-white border-t border-gray-200 py-16">
+      {/* CTA Section */}
+      <section style={{ background: '#FFFFFF', borderTop: '1px solid #E5E4E0', paddingTop: '3rem', paddingBottom: '3rem' }}>
         <div className="max-w-2xl mx-auto px-6 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
-            <h2 className="serif text-3xl font-bold mb-3" style={{ color: '#1A1A1A' }}>
+            <h2 className="h2 mb-3" style={{ color: '#1A1A1A' }}>
               Ready to List on {exchange.name}?
             </h2>
-            <p className="text-lg mb-6" style={{ color: '#666666' }}>
+            <p className="body text-lg mb-6" style={{ color: '#666666' }}>
               Track your entire {exchange.name} listing journey with IPOReady.
             </p>
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-white transition"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-white transition hover:opacity-90"
               style={{ background: '#E8312A' }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = '#D62518')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = '#E8312A')}
             >
               Start Your {exchange.name} Journey
               <ArrowRight className="w-4 h-4" />
