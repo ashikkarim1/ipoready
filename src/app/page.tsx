@@ -725,7 +725,7 @@ export default function LandingPage() {
 
         {/* Main grid */}
         <div className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6" style={{ minWidth: 0 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-4" style={{ minWidth: 0 }}>
 
             {/* Brand column */}
             <div>
@@ -737,11 +737,11 @@ export default function LandingPage() {
                   IPO<span style={{ color: 'var(--color-accent)' }}>Ready</span>
                 </span>
               </Link>
-              <p className="text-text-muted text-sm leading-relaxed" style={{ marginBottom: '1.25rem', maxWidth: '260px' }}>
+              <p className="text-text-muted text-sm leading-relaxed" style={{ marginBottom: '0.875rem', maxWidth: '260px' }}>
                 The world's first central hub for IPO readiness workflow management — from first board resolution to exchange approval.
               </p>
               {/* Social */}
-              <div className="flex items-center gap-2" style={{ marginBottom: '1.25rem' }}>
+              <div className="flex items-center gap-2" style={{ marginBottom: '0.875rem' }}>
                 {/* LinkedIn */}
                 <a href="https://linkedin.com/company/ipoready" target="_blank" rel="noopener noreferrer"
                   aria-label="LinkedIn"
@@ -776,7 +776,7 @@ export default function LandingPage() {
 
             {/* Product */}
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Product</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '0.75rem' }}>Product</p>
               <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                 {[
                   { label: 'IPO Checklist',     href: '/checklist' },
@@ -793,8 +793,8 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <div style={{ marginTop: '1.5rem' }}>
-                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Company</p>
+              <div style={{ marginTop: '1rem' }}>
+                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '0.75rem' }}>Company</p>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                   {[
                     { label: 'Pricing',      href: '/pricing' },
@@ -815,7 +815,7 @@ export default function LandingPage() {
 
             {/* Exchanges & Listing Types */}
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Exchanges</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '0.75rem' }}>Exchanges</p>
               <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                 {['TSX', 'TSXV', 'CSE', 'NASDAQ', 'NYSE', 'OTC Markets'].map(ex => (
                   <li key={ex}>
@@ -823,8 +823,8 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <div style={{ marginTop: '1.5rem' }}>
-                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Listing Types</p>
+              <div style={{ marginTop: '1rem' }}>
+                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '0.75rem' }}>Listing Types</p>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                   {['IPO', 'Direct Listing', 'RTO', 'SPAC'].map(t => (
                     <li key={t}><span className="text-sm text-text-muted">{t}</span></li>
@@ -835,7 +835,7 @@ export default function LandingPage() {
 
             {/* Legal & Support */}
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Legal</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '0.75rem' }}>Legal</p>
               <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                 {[
                   { label: 'Privacy Policy',   href: '/privacy' },
@@ -851,8 +851,8 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <div style={{ marginTop: '1.5rem' }}>
-                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Support</p>
+              <div style={{ marginTop: '1rem' }}>
+                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '0.75rem' }}>Support</p>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                   {[
                     { label: 'Contact Us',    href: 'mailto:hello@ipoready.com' },
