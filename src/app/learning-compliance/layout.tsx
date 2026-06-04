@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+import { AppShell } from '@/components/layout/AppShell'
 
 export const metadata = {
   title: 'Learning & Compliance | IPOReady',
@@ -10,5 +11,5 @@ export default function LearningComplianceLayout({
 }: {
   children: ReactNode
 }) {
-  return <>{children}</>
+  return <AppShell>{children}</AppShell>
 }
