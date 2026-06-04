@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "ipoready-dev",
+      "name": "dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--port", "3800"],
-      "port": 3800,
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000,
       "autoPort": false
     }
   ]

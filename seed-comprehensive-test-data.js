@@ -112,6 +112,769 @@ async function seedComprehensiveTestData() {
     }
 
     // ============================================================
+    // 2.5. PROFESSIONALS & DIRECTOR DATA
+    // ============================================================
+    console.log('📋 Step 2.5: Seeding professionals (board members with resumes & LinkedIn)...');
+
+    try {
+      // Clear existing professionals and related data
+      await sql`DELETE FROM professionals WHERE email IN ('jennifer.wong@ipoadvisors.com', 'sarah.chen@ipoready.com', 'michael.rodriguez@techleaders.com', 'james.porter@equity.com', 'victoria.lee@governance.com')`;
+
+      // Insert board member professionals
+      const professionals = [
+        {
+          id: '550e8400-e29b-41d4-a716-446655440001',
+          name: 'Jennifer Wong',
+          email: 'jennifer.wong@ipoadvisors.com',
+          phone: '+1-415-555-0101',
+          linkedin_url: 'https://www.linkedin.com/in/jennifer-wong-tech/',
+          professional_title: 'Independent Director & Board Advisor',
+          years_public_experience: 15,
+          industries: ['technology', 'software', 'venture'],
+          regions: ['San Francisco', 'Toronto', 'Seattle'],
+          rate_expectations_annual: 85000,
+          certifications: ['CFA', 'Board Governance', 'Technology Audit Committee'],
+          years_of_experience: 18,
+          bio: 'Jennifer Wong is an accomplished technology executive with 15+ years of public company board experience. She holds an MBA from Stanford and serves on multiple technology company boards. Expert in tech strategy, digital transformation, and audit committee governance.'
+        },
+        {
+          id: '550e8400-e29b-41d4-a716-446655440002',
+          name: 'Sarah Chen',
+          email: 'sarah.chen@ipoready.com',
+          phone: '+1-416-555-0102',
+          linkedin_url: 'https://www.linkedin.com/in/sarah-chen-cfo/',
+          professional_title: 'CFO & Finance Director',
+          years_public_experience: 12,
+          industries: ['finance', 'software', 'healthcare'],
+          regions: ['Toronto', 'New York', 'Boston'],
+          rate_expectations_annual: 95000,
+          certifications: ['CPA', 'CFA', 'Audit Committee Financial Expert'],
+          years_of_experience: 16,
+          bio: 'Sarah Chen is an experienced CFO with expertise in financial reporting, audit committee leadership, and public company finance. She has led two prior TSXV listings and specializes in SaaS financial models. CFA charterholder and registered public accountant.'
+        },
+        {
+          id: '550e8400-e29b-41d4-a716-446655440003',
+          name: 'Michael Rodriguez',
+          email: 'michael.rodriguez@techleaders.com',
+          phone: '+1-650-555-0103',
+          linkedin_url: 'https://www.linkedin.com/in/michael-rodriguez-architect/',
+          professional_title: 'CTO & Technology Board Member',
+          years_public_experience: 18,
+          industries: ['technology', 'software', 'cloud'],
+          regions: ['San Francisco', 'Seattle', 'Austin'],
+          rate_expectations_annual: 80000,
+          certifications: ['Cloud Architecture', 'Technology Leadership', 'Security'],
+          years_of_experience: 22,
+          bio: 'Michael Rodriguez brings 18+ years of experience in enterprise software and cloud architecture. He has led technology teams at Fortune 500 companies and startups. Expert in infrastructure scaling, cybersecurity, and technical due diligence for IPOs.'
+        },
+        {
+          id: '550e8400-e29b-41d4-a716-446655440004',
+          name: 'James Porter',
+          email: 'james.porter@equity.com',
+          phone: '+1-212-555-0104',
+          linkedin_url: 'https://www.linkedin.com/in/james-porter-equity/',
+          professional_title: 'Independent Director & Compensation Committee Chair',
+          years_public_experience: 20,
+          industries: ['finance', 'equity', 'corporate governance'],
+          regions: ['New York', 'Toronto', 'London'],
+          rate_expectations_annual: 100000,
+          certifications: ['CPA', 'Compensation Committee Expertise', 'Executive Compensation'],
+          years_of_experience: 25,
+          bio: 'James Porter is a seasoned compensation and governance expert with 20+ years on public company boards. He chairs compensation committees and specializes in equity incentive plan design. Extensive experience with equity-heavy tech companies.'
+        },
+        {
+          id: '550e8400-e29b-41d4-a716-446655440005',
+          name: 'Victoria Lee',
+          email: 'victoria.lee@governance.com',
+          phone: '+1-604-555-0105',
+          linkedin_url: 'https://www.linkedin.com/in/victoria-lee-governance/',
+          professional_title: 'Board Chair & Governance Expert',
+          years_public_experience: 22,
+          industries: ['technology', 'governance', 'venture capital'],
+          regions: ['Vancouver', 'Toronto', 'San Francisco'],
+          rate_expectations_annual: 120000,
+          certifications: ['CPA', 'Board Chair Certification', 'Corporate Governance'],
+          years_of_experience: 28,
+          bio: 'Victoria Lee is an accomplished board chair with 22+ years of public company experience. She specializes in corporate governance, board composition, and stakeholder relations. Has chaired boards through multiple M&A transactions and growth phases.'
+        }
+      ];
+
+      let professionalIds = {};
+      for (const prof of professionals) {
+        try {
+          const result = await sql`
+            INSERT INTO professionals
+              (id, name, email, phone, linkedin_url, professional_title, years_public_experience,
+               industries, regions, rate_expectations_annual, certifications, years_of_experience, bio,
+               verification_status, linkedin_verified, linkedin_verified_at)
+            VALUES
+              (${prof.id}, ${prof.name}, ${prof.email}, ${prof.phone}, ${prof.linkedin_url},
+               ${prof.professional_title}, ${prof.years_public_experience},
+               ${JSON.stringify(prof.industries)}, ${JSON.stringify(prof.regions)},
+               ${prof.rate_expectations_annual}, ${JSON.stringify(prof.certifications)},
+               ${prof.years_of_experience}, ${prof.bio}, 'verified', true, NOW())
+            ON CONFLICT(email) DO UPDATE SET
+              professional_title = EXCLUDED.professional_title,
+              years_public_experience = EXCLUDED.years_public_experience,
+              verification_status = 'verified'
+            RETURNING id
+          `;
+          professionalIds[prof.name] = prof.id;
+        } catch (e) {
+          console.log(`   ⚠️  Could not insert professional ${prof.name}: ${e.message}`);
+        }
+      }
+
+      console.log('   ✅ Added 5 board member professionals:');
+      console.log('      - Jennifer Wong (15 yrs, CFA, Tech Audit)');
+      console.log('      - Sarah Chen (12 yrs, CPA/CFA, Audit Committee Expert)');
+      console.log('      - Michael Rodriguez (18 yrs, Tech Architecture)');
+      console.log('      - James Porter (20 yrs, Compensation Committee)');
+      console.log('      - Victoria Lee (22 yrs, Board Chair)\n');
+
+      // ============================================================
+      // 2.6. DIRECTOR RESUMES
+      // ============================================================
+      console.log('📋 Step 2.6: Seeding director resumes...');
+
+      const resumes = [
+        {
+          professionalId: professionalIds['Jennifer Wong'],
+          name: 'Jennifer Wong',
+          fileName: 'Jennifer_Wong_Resume_2025.pdf',
+          textExtract: `JENNIFER WONG
+San Francisco, CA | (415) 555-0101 | jennifer.wong@ipoadvisors.com | LinkedIn.com/in/jennifer-wong-tech
+
+EXECUTIVE PROFILE
+Independent Director and Board Advisor with 18+ years in technology leadership and public company governance.
+Expertise in digital transformation, SaaS scaling, and audit committee oversight. CFA charterholder with Stanford MBA.
+
+EDUCATION
+Stanford Graduate School of Business - MBA, Technology Management (2011)
+University of California, Berkeley - BS, Computer Science (2007)
+
+PROFESSIONAL CERTIFICATIONS
+Chartered Financial Analyst (CFA) Level III, CFA Institute (2018)
+Board Governance Certification, National Association of Corporate Directors (2016)
+Technology Audit Committee Certification (2014)
+
+BOARD POSITIONS & DIRECTORSHIPS
+• Board Member, TechVenture Inc (NASDAQ: TVEN) - 2019-Present
+  - Member, Audit Committee | Compensation Committee Chair
+  - Oversight of $200M+ in technical infrastructure investments
+
+• Board Member, CloudScale Corp (TSXV: SCAL) - 2018-Present
+  - Chair, Technology Committee | Member, Risk Committee
+  - Led successful IPO process; guided $50M capital raise
+
+• Board Member, DataSecure Solutions LLC - 2020-Present
+  - Member, Audit Committee | Compliance oversight
+
+EXECUTIVE EXPERIENCE
+Vice President, Technology Strategy | Silicon Valley Tech Consortium (2018-2021)
+- Led strategic initiatives for 15+ portfolio companies
+- Managed $150M technology investment portfolio
+- Expertise in infrastructure scaling and cost optimization
+
+Senior Director, Enterprise Architecture | Google Cloud (2014-2018)
+- Managed team of 25+ engineers across three continents
+- Architected cloud solutions for Fortune 100 customers
+- Revenue impact: $80M+ annually
+
+SKILLS & EXPERTISE
+• Board Governance & Committee Management
+• Technology Due Diligence & Risk Assessment
+• SaaS & Cloud Business Models
+• Financial Reporting & Audit Oversight
+• Regulatory Compliance (SOX, GDPR, PIPEDA)
+• Equity Incentive Planning
+• Investor Relations & Communications`
+        },
+        {
+          professionalId: professionalIds['Sarah Chen'],
+          name: 'Sarah Chen',
+          fileName: 'Sarah_Chen_CFO_Resume_2025.pdf',
+          textExtract: `SARAH CHEN, CPA, CFA
+Toronto, ON | (416) 555-0102 | sarah.chen@ipoready.com | LinkedIn.com/in/sarah-chen-cfo
+
+EXECUTIVE PROFILE
+Chief Financial Officer and Finance Director with 16+ years of public company financial leadership.
+Expert in IPO preparation, public company accounting, and audit committee governance.
+CPA and CFA charterholder with proven track record leading two TSXV listings.
+
+EDUCATION
+Ivey Business School, University of Western Ontario - MBA, Finance (2010)
+University of Toronto - BComm, Accounting (2006)
+
+PROFESSIONAL CERTIFICATIONS
+Chartered Professional Accountant (CPA), CPA Ontario (2014)
+Chartered Financial Analyst (CFA) Level III, CFA Institute (2016)
+Audit Committee Financial Expert Designation (2018)
+Sarbanes-Oxley (SOX) Compliance Specialist (2019)
+
+FINANCIAL LEADERSHIP EXPERIENCE
+Chief Financial Officer | VentureTech Growth Partners (2021-Present)
+- Oversee financial operations for $500M+ diversified portfolio
+- Led audit committee of board; managed $50M+ annual audit budget
+- Implemented SOX-compliant financial reporting infrastructure
+- Year-over-year revenue growth: +65%
+
+Chief Financial Officer | TechScale Corp (TSXV: TSCL) - IPO (2018-2021)
+- Led full IPO process from pre-prospectus planning through post-listing
+- Managed $30M+ in securities issuance; secured $45M Series C funding
+- Implemented TSXV-compliant financial systems and controls
+- Achieved 94% audit committee effectiveness rating
+
+Vice President, Finance | HealthTech Solutions (2015-2018)
+- Oversaw financial planning, accounting, and investor relations
+- Prepared audited financial statements (IFRS and GAAP)
+- Managed relationships with Big 4 auditors (Deloitte, PwC, EY)
+
+BOARD POSITIONS
+• Audit Committee Member, InnovateTech Inc (TSXV) - 2022-Present
+• Finance Committee Chair, Educational Tech Foundation - 2020-Present
+
+SKILLS & EXPERTISE
+• Financial Reporting & IFRS/GAAP Compliance
+• IPO Preparation & Prospectus Development
+• Audit Committee Oversight & SOX Implementation
+• Capital Raise Execution & Securities Management
+• Budgeting & Financial Planning
+• Risk Management & Internal Controls
+• Investor Relations & Communications`
+        },
+        {
+          professionalId: professionalIds['Michael Rodriguez'],
+          name: 'Michael Rodriguez',
+          fileName: 'Michael_Rodriguez_CTO_Resume_2025.pdf',
+          textExtract: `MICHAEL RODRIGUEZ
+Seattle, WA | (650) 555-0103 | michael.rodriguez@techleaders.com | LinkedIn.com/in/michael-rodriguez-architect
+
+EXECUTIVE PROFILE
+Chief Technology Officer with 22+ years of enterprise software architecture and technology leadership.
+Proven expertise in cloud infrastructure scaling, cybersecurity, and technical due diligence for IPOs.
+Successfully architected systems for 100M+ users and $1B+ in transaction volume.
+
+EDUCATION
+Carnegie Mellon University - MS, Computer Science (Systems) (2003)
+University of Washington - BS, Computer Engineering (2001)
+
+PROFESSIONAL CERTIFICATIONS
+AWS Solutions Architect Professional (2020)
+Google Cloud Architect (2019)
+Certified Information Systems Security Professional (CISSP) - ISC² (2018)
+
+TECHNOLOGY LEADERSHIP EXPERIENCE
+Chief Technology Officer | CloudArchitect Inc (2019-Present)
+- Lead technology strategy and architecture for 150+ engineering team
+- Oversee infrastructure supporting 100M+ monthly active users
+- Managed successful SOC 2 Type II and ISO 27001 certifications
+- Designed architecture supporting 99.99% uptime SLA
+- Cost optimization initiatives: $15M+ annual savings
+
+Vice President, Infrastructure | TechScale Corp (TSXV IPO, 2018-2021)
+- Built engineering organization from 20 to 120 engineers
+- Architected cloud infrastructure for TSXV compliance
+- Led technical due diligence during $45M capital raise
+- Implemented CI/CD pipeline; 40% deployment time reduction
+
+Senior Director, Cloud Architecture | Google (2014-2019)
+- Managed cloud solutions for Fortune 500 customers
+- Led security initiatives affecting 10,000+ employees
+- Technical mentor for 25+ engineers across three offices
+
+BOARD & ADVISORY POSITIONS
+• Technology Committee Member, TechVenture Inc (NASDAQ) - 2019-Present
+• Technical Advisor, Venture Capital Fund (2020-Present)
+
+SKILLS & EXPERTISE
+• Cloud Architecture & Infrastructure Scaling
+• Cybersecurity & Compliance (SOC 2, ISO 27001, HIPAA)
+• DevOps & CI/CD Pipeline Design
+• Technology Due Diligence for M&A/IPO
+• Team Building & Technical Leadership
+• Cost Optimization & Resource Management`
+        },
+        {
+          professionalId: professionalIds['James Porter'],
+          name: 'James Porter',
+          fileName: 'James_Porter_Compensation_Expert_Resume_2025.pdf',
+          textExtract: `JAMES PORTER, CPA
+New York, NY | (212) 555-0104 | james.porter@equity.com | LinkedIn.com/in/james-porter-equity
+
+EXECUTIVE PROFILE
+Compensation and Governance Specialist with 25+ years of public company board experience.
+Expert in equity incentive plan design, executive compensation disclosure, and governance.
+Compensation Committee Chair at multiple Fortune 500 and TSXV-listed companies.
+
+EDUCATION
+Harvard Business School - MBA, Finance & Governance (1999)
+University of Pennsylvania - BS, Business Administration (1995)
+
+PROFESSIONAL CERTIFICATIONS
+Certified Public Accountant (CPA), New York Board of Accountancy (1999)
+Compensation Committee Expert Designation (2012)
+Executive Compensation Specialist (ISS Academy, 2015)
+
+GOVERNANCE & COMPENSATION LEADERSHIP
+Compensation Committee Chair | EquityTech Corp (NYSE) - 2018-Present
+- Oversee $500M+ equity compensation program
+- Lead proxy statement executive compensation disclosure
+- Manage Say-on-Pay initiatives; 87% average shareholder approval
+
+Board Member & Compensation Chair | TechScale Corp (TSXV IPO, 2018-2021)
+- Designed equity package for IPO and post-listing retention
+- Implemented performance-based stock option plans
+- Created management incentive plan (MIP) for 50+ executives
+- Advised on Section 16 and Insider Trading compliance
+
+Compensation Committee Member | HealthVenture Inc (NASDAQ) - 2015-Present
+- Oversee executive compensation and equity awards
+- Lead annual say-on-pay shareholder votes
+
+ADVISORY & CONSULTING EXPERIENCE
+Senior Advisor | Willis Towers Watson - Executive Compensation (2012-2018)
+- Advised 100+ public companies on compensation strategy
+- Expertise in technology, healthcare, and financial services sectors
+- Supported multiple IPO compensation planning initiatives
+
+SKILLS & EXPERTISE
+• Executive Compensation Planning & Design
+• Equity Incentive Plan Architecture
+• Say-on-Pay & Proxy Statement Disclosure
+• Section 16 & Insider Trading Compliance
+• Performance Metrics & Clawback Provisions
+• Shareholder Value Alignment
+• Board Governance & Committee Management`
+        },
+        {
+          professionalId: professionalIds['Victoria Lee'],
+          name: 'Victoria Lee',
+          fileName: 'Victoria_Lee_Board_Chair_Resume_2025.pdf',
+          textExtract: `VICTORIA LEE, CPA
+Vancouver, BC | (604) 555-0105 | victoria.lee@governance.com | LinkedIn.com/in/victoria-lee-governance
+
+EXECUTIVE PROFILE
+Board Chair and Corporate Governance Expert with 28+ years of board-level experience.
+Specializes in corporate governance, board composition, and stakeholder relations.
+Successfully chaired boards through multiple M&A transactions and growth phases.
+
+EDUCATION
+University of British Columbia - MBA, Corporate Governance (1997)
+University of British Columbia - BComm, Accounting (1993)
+
+PROFESSIONAL CERTIFICATIONS
+Chartered Professional Accountant (CPA), CPA British Columbia (2000)
+Board Chair Certification, National Association of Corporate Directors (2015)
+Corporate Governance Specialist (2016)
+
+BOARD CHAIR EXPERIENCE
+Board Chair & CEO | GrowthTech Inc (Private equity backed) - 2020-Present
+- Lead 9-member board; oversee quarterly governance reviews
+- Managed $200M acquisition; created post-acquisition integration roadmap
+- Improved board effectiveness: 92% board satisfaction rating
+
+Board Chair | TechVenture Corp (NASDAQ: TVEN) - 2015-2022
+- Led board of 10 directors through successful IPO (2017)
+- Managed $150M+ capital raise; 99% institutional investor participation
+- Implemented ESG governance framework; received top-quartile ratings
+- Negotiated $500M strategic acquisition (2021)
+
+Board Chair | InnovateLabs TSXV (TSXV: INNV) - 2012-2018
+- Guided company through IPO process; $75M successful offering
+- Established board committees: Audit, Compensation, Technology
+- Improved governance maturity from Level 2 to Level 4 (4/5 scale)
+
+SKILLS & EXPERTISE
+• Strategic Board Leadership & Governance
+• Board Composition & Committee Structure
+• Stakeholder Relations & Communications
+• M&A Transaction Oversight
+• Risk Management & Compliance
+• Investor Relations & Capital Markets
+• Executive Search & Succession Planning`
+        }
+      ];
+
+      for (const resume of resumes) {
+        try {
+          await sql`
+            INSERT INTO director_resumes
+              (professional_id, file_name, file_size, file_mime_type, version, is_current,
+               uploaded_at, verified_at, verification_status, is_readable, text_extract,
+               page_count, created_at, updated_at)
+            VALUES
+              (${resume.professionalId}, ${resume.fileName}, 245000, 'application/pdf', 1, true,
+               NOW() - INTERVAL '30 days', NOW() - INTERVAL '25 days', 'verified', true,
+               ${resume.textExtract}, 2, NOW() - INTERVAL '30 days', NOW() - INTERVAL '25 days')
+            ON CONFLICT DO NOTHING
+          `;
+        } catch (e) {
+          console.log(`   ⚠️  Could not insert resume for ${resume.name}: ${e.message}`);
+        }
+      }
+
+      console.log('   ✅ Added 5 director resumes:');
+      console.log('      - Jennifer Wong: Stanford MBA, 15+ yrs tech, Board of TechVenture');
+      console.log('      - Sarah Chen: MBA Finance, 12+ yrs CFO, 2 TSXV listings');
+      console.log('      - Michael Rodriguez: MS CS, 22+ yrs architecture, CTO at scale');
+      console.log('      - James Porter: Harvard MBA, 25+ yrs compensation expert');
+      console.log('      - Victoria Lee: UBC MBA, 28+ yrs board chair, 3 IPOs\n');
+
+      // ============================================================
+      // 2.7. DIRECTOR LINKEDIN VERIFICATION
+      // ============================================================
+      console.log('📋 Step 2.7: Seeding LinkedIn verification data...');
+
+      const linkedinVerifications = [
+        {
+          professionalId: professionalIds['Jennifer Wong'],
+          linkedinUrl: 'https://www.linkedin.com/in/jennifer-wong-tech/',
+          education: [
+            {
+              school: 'Stanford Graduate School of Business',
+              degree: 'MBA',
+              field_of_study: 'Technology Management',
+              start_date: '2009-09-01',
+              end_date: '2011-06-01'
+            },
+            {
+              school: 'University of California, Berkeley',
+              degree: 'BS',
+              field_of_study: 'Computer Science',
+              start_date: '2003-08-01',
+              end_date: '2007-05-01'
+            }
+          ],
+          experience: [
+            {
+              title: 'Board Member',
+              company: 'TechVenture Inc',
+              location: 'San Francisco, CA',
+              start_date: '2019-06-01',
+              end_date: null,
+              description: 'Audit Committee and Compensation Committee Member'
+            },
+            {
+              title: 'Board Member',
+              company: 'CloudScale Corp',
+              location: 'Toronto, ON',
+              start_date: '2018-04-01',
+              end_date: null,
+              description: 'Technology Committee Chair, Risk Committee Member'
+            },
+            {
+              title: 'Vice President, Technology Strategy',
+              company: 'Silicon Valley Tech Consortium',
+              location: 'San Francisco, CA',
+              start_date: '2018-01-01',
+              end_date: '2021-12-01',
+              description: 'Portfolio company oversight, investment management'
+            }
+          ],
+          certifications: [
+            { name: 'CFA Level III', issuer: 'CFA Institute', issued_date: '2018-08-01' },
+            { name: 'Board Governance Certification', issuer: 'NACD', issued_date: '2016-11-01' },
+            { name: 'Technology Audit Committee Certification', issuer: 'NACD', issued_date: '2014-03-01' }
+          ],
+          confidenceScore: 0.94
+        },
+        {
+          professionalId: professionalIds['Sarah Chen'],
+          linkedinUrl: 'https://www.linkedin.com/in/sarah-chen-cfo/',
+          education: [
+            {
+              school: 'Ivey Business School, University of Western Ontario',
+              degree: 'MBA',
+              field_of_study: 'Finance',
+              start_date: '2008-09-01',
+              end_date: '2010-05-01'
+            },
+            {
+              school: 'University of Toronto',
+              degree: 'BComm',
+              field_of_study: 'Accounting',
+              start_date: '2002-09-01',
+              end_date: '2006-05-01'
+            }
+          ],
+          experience: [
+            {
+              title: 'Chief Financial Officer',
+              company: 'VentureTech Growth Partners',
+              location: 'Toronto, ON',
+              start_date: '2021-03-01',
+              end_date: null,
+              description: 'Financial operations, audit oversight, $500M portfolio'
+            },
+            {
+              title: 'Chief Financial Officer',
+              company: 'TechScale Corp',
+              location: 'Toronto, ON',
+              start_date: '2018-06-01',
+              end_date: '2021-02-01',
+              description: 'IPO preparation and execution, $45M capital raise'
+            }
+          ],
+          certifications: [
+            { name: 'CPA', issuer: 'CPA Ontario', issued_date: '2014-06-01' },
+            { name: 'CFA Level III', issuer: 'CFA Institute', issued_date: '2016-08-01' },
+            { name: 'Audit Committee Financial Expert', issuer: 'PCAOB', issued_date: '2018-09-01' }
+          ],
+          confidenceScore: 0.92
+        },
+        {
+          professionalId: professionalIds['Michael Rodriguez'],
+          linkedinUrl: 'https://www.linkedin.com/in/michael-rodriguez-architect/',
+          education: [
+            {
+              school: 'Carnegie Mellon University',
+              degree: 'MS',
+              field_of_study: 'Computer Science (Systems)',
+              start_date: '2001-09-01',
+              end_date: '2003-05-01'
+            },
+            {
+              school: 'University of Washington',
+              degree: 'BS',
+              field_of_study: 'Computer Engineering',
+              start_date: '1997-09-01',
+              end_date: '2001-05-01'
+            }
+          ],
+          experience: [
+            {
+              title: 'Chief Technology Officer',
+              company: 'CloudArchitect Inc',
+              location: 'Seattle, WA',
+              start_date: '2019-04-01',
+              end_date: null,
+              description: 'Cloud infrastructure, 150+ engineering team, 100M+ users'
+            },
+            {
+              title: 'Vice President, Infrastructure',
+              company: 'TechScale Corp',
+              location: 'Seattle, WA',
+              start_date: '2018-06-01',
+              end_date: '2019-03-01',
+              description: 'Infrastructure scaling, IPO support'
+            },
+            {
+              title: 'Senior Director, Cloud Architecture',
+              company: 'Google',
+              location: 'San Francisco, CA',
+              start_date: '2014-01-01',
+              end_date: '2019-03-01',
+              description: 'Fortune 500 solutions, team leadership'
+            }
+          ],
+          certifications: [
+            { name: 'AWS Solutions Architect Professional', issuer: 'AWS', issued_date: '2020-06-01' },
+            { name: 'Google Cloud Architect', issuer: 'Google Cloud', issued_date: '2019-12-01' },
+            { name: 'CISSP', issuer: 'ISC²', issued_date: '2018-09-01' }
+          ],
+          confidenceScore: 0.91
+        },
+        {
+          professionalId: professionalIds['James Porter'],
+          linkedinUrl: 'https://www.linkedin.com/in/james-porter-equity/',
+          education: [
+            {
+              school: 'Harvard Business School',
+              degree: 'MBA',
+              field_of_study: 'Finance & Governance',
+              start_date: '1997-09-01',
+              end_date: '1999-05-01'
+            },
+            {
+              school: 'University of Pennsylvania',
+              degree: 'BS',
+              field_of_study: 'Business Administration',
+              start_date: '1991-09-01',
+              end_date: '1995-05-01'
+            }
+          ],
+          experience: [
+            {
+              title: 'Compensation Committee Chair',
+              company: 'EquityTech Corp',
+              location: 'New York, NY',
+              start_date: '2018-02-01',
+              end_date: null,
+              description: 'NYSE listed, $500M equity compensation oversight'
+            },
+            {
+              title: 'Board Member & Compensation Chair',
+              company: 'TechScale Corp',
+              location: 'Toronto, ON',
+              start_date: '2018-06-01',
+              end_date: '2021-02-01',
+              description: 'IPO preparation, equity plan design'
+            },
+            {
+              title: 'Senior Advisor',
+              company: 'Willis Towers Watson',
+              location: 'New York, NY',
+              start_date: '2012-01-01',
+              end_date: '2018-12-01',
+              description: 'Executive compensation consulting, 100+ clients'
+            }
+          ],
+          certifications: [
+            { name: 'CPA', issuer: 'New York Board of Accountancy', issued_date: '1999-06-01' },
+            { name: 'Compensation Committee Expert', issuer: 'ISS Academy', issued_date: '2012-10-01' },
+            { name: 'Executive Compensation Specialist', issuer: 'ISS Academy', issued_date: '2015-06-01' }
+          ],
+          confidenceScore: 0.89
+        },
+        {
+          professionalId: professionalIds['Victoria Lee'],
+          linkedinUrl: 'https://www.linkedin.com/in/victoria-lee-governance/',
+          education: [
+            {
+              school: 'University of British Columbia',
+              degree: 'MBA',
+              field_of_study: 'Corporate Governance',
+              start_date: '1995-09-01',
+              end_date: '1997-05-01'
+            },
+            {
+              school: 'University of British Columbia',
+              degree: 'BComm',
+              field_of_study: 'Accounting',
+              start_date: '1989-09-01',
+              end_date: '1993-05-01'
+            }
+          ],
+          experience: [
+            {
+              title: 'Board Chair & CEO',
+              company: 'GrowthTech Inc',
+              location: 'Vancouver, BC',
+              start_date: '2020-05-01',
+              end_date: null,
+              description: '9-member board, $200M acquisition management'
+            },
+            {
+              title: 'Board Chair',
+              company: 'TechVenture Corp',
+              location: 'San Francisco, CA',
+              start_date: '2015-01-01',
+              end_date: '2022-12-01',
+              description: 'NASDAQ listed, IPO and $500M acquisition oversight'
+            },
+            {
+              title: 'Board Chair',
+              company: 'InnovateLabs',
+              location: 'Toronto, ON',
+              start_date: '2012-06-01',
+              end_date: '2018-12-01',
+              description: 'TSXV listed, $75M IPO governance'
+            }
+          ],
+          certifications: [
+            { name: 'CPA', issuer: 'CPA British Columbia', issued_date: '2000-06-01' },
+            { name: 'Board Chair Certification', issuer: 'NACD', issued_date: '2015-11-01' },
+            { name: 'Corporate Governance Specialist', issuer: 'NACD', issued_date: '2016-03-01' }
+          ],
+          confidenceScore: 0.95
+        }
+      ];
+
+      for (const linkedin of linkedinVerifications) {
+        try {
+          await sql`
+            INSERT INTO director_linkedin_verification
+              (professional_id, linkedin_url, verification_status, verified_at, verification_method,
+               verification_provider, extracted_education, extracted_experience, extracted_certifications,
+               confidence_score, data_completeness_score, profile_headline, created_at, updated_at)
+            VALUES
+              (${linkedin.professionalId}, ${linkedin.linkedinUrl}, 'verified', NOW() - INTERVAL '20 days',
+               'automated_scrape', 'manual_review', ${JSON.stringify(linkedin.education)},
+               ${JSON.stringify(linkedin.experience)}, ${JSON.stringify(linkedin.certifications)},
+               ${linkedin.confidenceScore}, 0.88, 'Board Member & Technology Executive', NOW() - INTERVAL '20 days', NOW() - INTERVAL '20 days')
+            ON CONFLICT DO NOTHING
+          `;
+        } catch (e) {
+          console.log(`   ⚠️  Could not insert LinkedIn verification: ${e.message}`);
+        }
+      }
+
+      console.log('   ✅ Added 5 LinkedIn verification records:');
+      console.log('      Confidence scores: 0.89-0.95 (high confidence)');
+      console.log('      Education: All MBA holders verified');
+      console.log('      Experience: Board positions verified');
+      console.log('      Certifications: CFA/CPA verified\n');
+
+      // ============================================================
+      // 2.8. DIRECTOR PROSPECTUS SYNC
+      // ============================================================
+      console.log('📋 Step 2.8: Seeding director prospectus sync...');
+
+      // Get prospectus document ID if it exists
+      const prospectusDoc = await sql`
+        SELECT id FROM prospectuses WHERE company_id = ${TEST_COMPANY_ID} LIMIT 1
+      `;
+
+      if (prospectusDoc.length > 0) {
+        const syncConfigs = [
+          {
+            professionalId: professionalIds['Jennifer Wong'],
+            syncKey: 'independent_director_1',
+            sectionType: 'board_of_directors'
+          },
+          {
+            professionalId: professionalIds['Sarah Chen'],
+            syncKey: 'audit_committee_expert',
+            sectionType: 'audit_committee'
+          },
+          {
+            professionalId: professionalIds['Michael Rodriguez'],
+            syncKey: 'technology_committee_member',
+            sectionType: 'board_of_directors'
+          },
+          {
+            professionalId: professionalIds['James Porter'],
+            syncKey: 'compensation_committee_chair',
+            sectionType: 'compensation_committee'
+          },
+          {
+            professionalId: professionalIds['Victoria Lee'],
+            syncKey: 'board_chair',
+            sectionType: 'board_of_directors'
+          }
+        ];
+
+        for (const sync of syncConfigs) {
+          try {
+            await sql`
+              INSERT INTO director_prospectus_sync
+                (professional_id, prospectus_document_id, sync_key, section_type, sync_status,
+                 sync_confidence, created_at, updated_at)
+              VALUES
+                (${sync.professionalId}, ${prospectusDoc[0].id}, ${sync.syncKey}, ${sync.sectionType},
+                 'pending', 0.75, NOW(), NOW())
+              ON CONFLICT DO NOTHING
+            `;
+          } catch (e) {
+            console.log(`   ⚠️  Could not insert prospectus sync: ${e.message}`);
+          }
+        }
+
+        console.log('   ✅ Added 5 prospectus sync records:');
+        console.log('      - Jennifer Wong -> Board of Directors (pending)');
+        console.log('      - Sarah Chen -> Audit Committee (pending)');
+        console.log('      - Michael Rodriguez -> Board of Directors (pending)');
+        console.log('      - James Porter -> Compensation Committee (pending)');
+        console.log('      - Victoria Lee -> Board Chair (pending)\n');
+      } else {
+        console.log('   ⚠️  No prospectus document found, skipping prospectus sync\n');
+      }
+    } catch (e) {
+      console.log(`   ⚠️  Error seeding professionals: ${e.message}\n`);
+    }
+
+    // ============================================================
     // 3. CAP TABLE - SHAREHOLDERS (using cap_table_holders)
     // ============================================================
     console.log('📋 Step 3: Seeding cap table...');
