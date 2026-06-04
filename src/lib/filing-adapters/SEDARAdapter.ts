@@ -129,6 +129,10 @@ export class SEDARAdapter extends BaseFilingAdapter {
     AUDITOR_REPORT_INVALID: 'Auditor report does not meet SEDAR standards',
   }
 
+  private cachedAccessToken: string | null = null
+  private tokenExpiresAt: number | null = null
+  private readonly tokenRefreshBuffer = 300 // Refresh 5min before expiry
+
   constructor(apiKey: string, sandboxMode: boolean = true, language: 'en' | 'fr' = 'en') {
     super()
     this.apiKey = apiKey
@@ -137,6 +141,46 @@ export class SEDARAdapter extends BaseFilingAdapter {
     this.apiEndpoint = sandboxMode
       ? 'https://sandbox-api.sedar.ca/v1'
       : 'https://sedar.ca/api/v1'
+  }
+
+  /**
+   * Get valid OAuth2 access token (with caching and auto-refresh)
+   */
+  private async getAccessToken(): Promise<string> {
+    // Return cached token if still valid
+    if (this.cachedAccessToken && this.tokenExpiresAt && Date.now() < this.tokenExpiresAt) {
+      return this.cachedAccessToken
+    }
+
+    try {
+      const clientId = process.env.SEDAR2_CLIENT_ID || this.apiKey
+      const clientSecret = process.env.SEDAR2_CLIENT_SECRET || ''
+      const tokenUrl = `${this.apiEndpoint}/oauth/token`
+
+      const response = await fetch(tokenUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          grant_type: 'client_credentials',
+          client_id: clientId,
+          client_secret: clientSecret,
+          scope: 'filing.submit filing.status',
+        }).toString(),
+      })
+
+      if (!response.ok) {
+        throw new FilingError('AUTH_FAILED', `SEDAR OAuth2 failed: ${response.statusText}`, true, response.status)
+      }
+
+      const data = await response.json() as { access_token: string; expires_in: number }
+      this.cachedAccessToken = data.access_token
+      this.tokenExpiresAt = Date.now() + (data.expires_in - this.tokenRefreshBuffer) * 1000
+
+      console.info('SEDAR OAuth2 token acquired', { expiresIn: data.expires_in })
+      return this.cachedAccessToken
+    } catch (error) {
+      throw new FilingError('AUTH_ERROR', `Failed to obtain SEDAR token: ${error instanceof Error ? error.message : 'Unknown error'}`, true)
+    }
   }
 
   /**
@@ -421,58 +465,124 @@ export class SEDARAdapter extends BaseFilingAdapter {
    * Stub: Submit payload to SEDAR API
    */
   private async submitToSEDARAPI(payload: Record<string, any>): Promise<SEDARSubmissionResponse> {
-    // Stub for type compatibility
-    return {
-      filingId: 'stub',
-      trackingNumber: 'stub',
-      status: 'submitted',
-      submittedAt: new Date().toISOString(),
-      estimatedReviewDays: 5,
-      messages: [],
+    try {
+      const token = await this.getAccessToken()
+      const url = `${this.apiEndpoint}/filings/submit`
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept-Language': this.language === 'fr' ? 'fr-CA' : 'en-CA',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({})) as any
+        const errorMessage = errorData.error_description || errorData.message || response.statusText
+        throw new FilingError(
+          'SUBMISSION_FAILED',
+          `SEDAR API submission failed: ${errorMessage}`,
+          response.status === 429 || response.status === 503, // Retryable if rate limited or service unavailable
+          response.status
+        )
+      }
+
+      const result = await response.json() as SEDARSubmissionResponse
+      console.info('SEDAR filing submitted successfully', { filingId: result.filingId, trackingNumber: result.trackingNumber })
+      return result
+    } catch (error) {
+      if (error instanceof FilingError) throw error
+      throw new FilingError(
+        'API_ERROR',
+        `Failed to submit to SEDAR: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        true
+      )
     }
   }
 
   /**
-   * Stub: Query filing status from SEDAR API
+   * Query real filing status from SEDAR API
    */
   private async queryFilingStatus(filingId: string): Promise<SEDARStatusResponse> {
-    // Stub for type compatibility
-    return {
-      filingId: filingId,
-      trackingNumber: 'stub',
-      status: 'pending_review',
-      submittedAt: new Date().toISOString(),
-      lastUpdatedAt: new Date().toISOString(),
-      reviewComments: [],
-      rejectionReasons: [],
-      nextSteps: [],
+    try {
+      const token = await this.getAccessToken()
+      const url = `${this.apiEndpoint}/filings/${filingId}/status`
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept-Language': this.language === 'fr' ? 'fr-CA' : 'en-CA',
+        },
+      })
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new FilingError('FILING_NOT_FOUND', `Filing ${filingId} not found on SEDAR`, false, 404)
+        }
+        throw new FilingError('STATUS_QUERY_FAILED', `Failed to query SEDAR status: ${response.statusText}`, response.status === 429 || response.status === 503, response.status)
+      }
+
+      const result = await response.json() as SEDARStatusResponse
+      console.info('SEDAR filing status retrieved', { filingId, status: result.status })
+      return result
+    } catch (error) {
+      if (error instanceof FilingError) throw error
+      throw new FilingError('STATUS_ERROR', `Failed to get SEDAR filing status: ${error instanceof Error ? error.message : 'Unknown error'}`, true)
     }
   }
 
   /**
-   * Stub: Map SEDAR API status to internal FilingStatus
+   * Map SEDAR API status to internal FilingStatus
    */
   private mapSEDARStatus(sedarStatus: string): 'submitted' | 'processing' | 'accepted' | 'rejected' | 'withdrawn' {
-    // Stub for type compatibility
-    return 'submitted'
+    const statusMap: Record<string, 'submitted' | 'processing' | 'accepted' | 'rejected' | 'withdrawn'> = {
+      'submitted': 'submitted',
+      'pending_review': 'processing',
+      'reviewing': 'processing',
+      'approved': 'accepted',
+      'rejected': 'rejected',
+      'withdrawn': 'withdrawn',
+    }
+    return statusMap[sedarStatus] || 'submitted'
   }
 
   /**
-   * Stub: Map SEDAR rejection reasons to FilingError objects
+   * Map SEDAR rejection reasons to FilingError objects with user-friendly messages
    */
   private mapSEDARRejectionReasons(
     rejectionReasons: Array<{ field: string; code: string; description: string }>
   ): FilingError[] {
-    // Stub for type compatibility
-    return []
+    return rejectionReasons.map(reason => {
+      const suggestion = this.getSuggestionForRejection(reason.code)
+      return new FilingError(
+        `SEDAR_${reason.code}`,
+        `${reason.field}: ${SEDARAdapter.REJECTION_CODES[reason.code] || reason.description}. ${suggestion}`,
+        false // Not retryable - requires user action
+      )
+    })
   }
 
   /**
-   * Stub: Get user-friendly suggestion for rejection code
+   * Get user-friendly suggestion for rejection code
    */
   private getSuggestionForRejection(code: string): string {
-    // Stub for type compatibility
-    return 'Review SEDAR requirements and resubmit'
+    const suggestions: Record<string, string> = {
+      'MISSING_SIGNATURE': 'Ensure all signatures are present and properly digitally signed according to SEDAR standards.',
+      'INVALID_IFRS_FORMAT': 'Convert financial statements to IFRS format using your auditor.',
+      'CONSENT_NOT_SIGNED': 'Obtain properly signed consents from all officers and directors.',
+      'DOCUMENT_FORMAT_ERROR': 'Verify PDF/document format meets SEDAR technical specifications.',
+      'LANGUAGE_MISMATCH': 'Provide properly formatted bilingual documents (English and French).',
+      'PROSPECTUS_INCOMPLETE': 'Complete all mandatory prospectus sections per SEDAR checklist.',
+      'FINANCIAL_DATA_MISSING': 'Provide complete financial statements for required periods.',
+      'EXECUTIVE_COMPENSATION_MISSING': 'Include complete executive compensation disclosure.',
+      'MD_A_MISSING': 'Provide Management Discussion & Analysis section.',
+      'AUDITOR_REPORT_INVALID': 'Ensure auditor report meets SEDAR standards and is current.',
+    }
+    return suggestions[code] || 'Please review SEDAR requirements and correct the filing.'
   }
 
   /**
