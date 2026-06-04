@@ -24,6 +24,18 @@ interface BoardMember {
   source?: 'ipoready' | 'manual'
   compensation?: number
   findersFee?: number
+  // Prospectus-required fields
+  email?: string
+  phone?: string
+  linkedIn?: string
+  resume?: string
+  // Prospectus disclosure fields
+  principalOccupation?: string
+  education?: string
+  certifications?: string
+  boardExperience?: string
+  stockOwnership?: number
+  relatedPartyTransactions?: boolean
 }
 
 interface Gap {
@@ -73,7 +85,19 @@ export default function DirectorsOfficersWorkflowPage() {
   const [boardMembers, setBoardMembers] = useState<BoardMember[]>(MOCK_BOARD_MEMBERS)
   const [gaps, setGaps] = useState<Gap[]>([])
   const [changes, setChanges] = useState<Change[]>([])
-  const [newMemberForm, setNewMemberForm] = useState({ name: '', role: '', independence: 'independent' as 'independent' | 'management', experience: 0 })
+  const [newMemberForm, setNewMemberForm] = useState({
+    name: '',
+    role: '',
+    independence: 'independent' as 'independent' | 'management',
+    experience: 0,
+    email: '',
+    phone: '',
+    linkedIn: '',
+    principalOccupation: '',
+    education: '',
+    certifications: '',
+    boardExperience: '',
+  })
   const [loading, setLoading] = useState(false)
   const [prospectusVersion, setProspectusVersion] = useState('v1.2.4')
 
@@ -133,7 +157,19 @@ export default function DirectorsOfficersWorkflowPage() {
 
     setBoardMembers([...boardMembers, newMember])
     setChanges([...changes, { type: 'added', member: newMember }])
-    setNewMemberForm({ name: '', role: '', independence: 'independent', experience: 0 })
+    setNewMemberForm({
+      name: '',
+      role: '',
+      independence: 'independent',
+      experience: 0,
+      email: '',
+      phone: '',
+      linkedIn: '',
+      principalOccupation: '',
+      education: '',
+      certifications: '',
+      boardExperience: '',
+    })
   }
 
   const handleRemoveMember = (memberId: string) => {
@@ -392,60 +428,144 @@ export default function DirectorsOfficersWorkflowPage() {
 
         <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
           <h3 className="text-base font-semibold text-nav mb-6">Add Board Member</h3>
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold mb-2 text-nav">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  value={newMemberForm.name}
-                  onChange={e => setNewMemberForm({ ...newMemberForm, name: e.target.value })}
-                  placeholder="Full name"
-                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
-                  style={{ borderColor: '#E5E4E0' }}
-                />
+          <div className="space-y-6">
+            {/* Basic Information */}
+            <div>
+              <div className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-4" style={{ color: '#717171' }}>
+                Basic Information
               </div>
-              <div>
-                <label className="block text-xs font-semibold mb-2 text-nav">
-                  Role
-                </label>
-                <input
-                  type="text"
-                  value={newMemberForm.role}
-                  onChange={e => setNewMemberForm({ ...newMemberForm, role: e.target.value })}
-                  placeholder="e.g., Independent Director"
-                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
-                  style={{ borderColor: '#E5E4E0' }}
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold mb-2 text-nav">Name *</label>
+                  <input
+                    type="text"
+                    value={newMemberForm.name}
+                    onChange={e => setNewMemberForm({ ...newMemberForm, name: e.target.value })}
+                    placeholder="Full legal name"
+                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                    style={{ borderColor: '#E5E4E0' }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-2 text-nav">Role *</label>
+                  <input
+                    type="text"
+                    value={newMemberForm.role}
+                    onChange={e => setNewMemberForm({ ...newMemberForm, role: e.target.value })}
+                    placeholder="e.g., Independent Director"
+                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                    style={{ borderColor: '#E5E4E0' }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-2 text-nav">Email</label>
+                  <input
+                    type="email"
+                    value={newMemberForm.email || ''}
+                    onChange={e => setNewMemberForm({ ...newMemberForm, email: e.target.value })}
+                    placeholder="Email address"
+                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                    style={{ borderColor: '#E5E4E0' }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-2 text-nav">Phone</label>
+                  <input
+                    type="tel"
+                    value={newMemberForm.phone || ''}
+                    onChange={e => setNewMemberForm({ ...newMemberForm, phone: e.target.value })}
+                    placeholder="Phone number"
+                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                    style={{ borderColor: '#E5E4E0' }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-2 text-nav">LinkedIn</label>
+                  <input
+                    type="url"
+                    value={newMemberForm.linkedIn || ''}
+                    onChange={e => setNewMemberForm({ ...newMemberForm, linkedIn: e.target.value })}
+                    placeholder="LinkedIn profile URL"
+                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                    style={{ borderColor: '#E5E4E0' }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-2 text-nav">Independence</label>
+                  <select
+                    value={newMemberForm.independence || ''}
+                    onChange={(e) => setNewMemberForm({ ...newMemberForm, independence: e.target.value as 'independent' | 'management' })}
+                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none text-nav"
+                    style={{ borderColor: '#E5E4E0' }}
+                  >
+                    <option value="independent">Independent</option>
+                    <option value="management">Management</option>
+                  </select>
+                </div>
               </div>
-              <div>
-                <label className="block text-xs font-semibold mb-2 text-nav">
-                  Independence
-                </label>
-                <select
-                  value={newMemberForm.independence || ''}
-                  onChange={(e) => setNewMemberForm({ ...newMemberForm, independence: e.target.value as 'independent' | 'management' })}
-                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none text-nav"
-                  style={{ borderColor: '#E5E4E0' }}
-                >
-                  <option value="independent">Independent</option>
-                  <option value="management">Management</option>
-                </select>
+            </div>
+
+            {/* Prospectus-Required Information */}
+            <div style={{ paddingTop: '0.5rem', borderTop: '1px solid #E5E4E0' }}>
+              <div className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-4" style={{ color: '#717171' }}>
+                Prospectus Information (Regulatory Disclosure)
               </div>
-              <div>
-                <label className="block text-xs font-semibold mb-2 text-nav">
-                  Years Experience
-                </label>
-                <input
-                  type="number"
-                  value={newMemberForm.experience}
-                  onChange={e => setNewMemberForm({ ...newMemberForm, experience: parseInt(e.target.value) || 0 })}
-                  placeholder="e.g., 15"
-                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
-                  style={{ borderColor: '#E5E4E0' }}
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold mb-2 text-nav">Principal Occupation</label>
+                  <input
+                    type="text"
+                    value={newMemberForm.principalOccupation || ''}
+                    onChange={e => setNewMemberForm({ ...newMemberForm, principalOccupation: e.target.value })}
+                    placeholder="Current occupation / title"
+                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                    style={{ borderColor: '#E5E4E0' }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-2 text-nav">Years Experience</label>
+                  <input
+                    type="number"
+                    value={newMemberForm.experience}
+                    onChange={e => setNewMemberForm({ ...newMemberForm, experience: parseInt(e.target.value) || 0 })}
+                    placeholder="e.g., 15"
+                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                    style={{ borderColor: '#E5E4E0' }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-2 text-nav">Education</label>
+                  <input
+                    type="text"
+                    value={newMemberForm.education || ''}
+                    onChange={e => setNewMemberForm({ ...newMemberForm, education: e.target.value })}
+                    placeholder="e.g., MBA, Stanford University"
+                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                    style={{ borderColor: '#E5E4E0' }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-2 text-nav">Professional Certifications</label>
+                  <input
+                    type="text"
+                    value={newMemberForm.certifications || ''}
+                    onChange={e => setNewMemberForm({ ...newMemberForm, certifications: e.target.value })}
+                    placeholder="e.g., CPA, CFA"
+                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                    style={{ borderColor: '#E5E4E0' }}
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-semibold mb-2 text-nav">Board/Committee Experience</label>
+                  <textarea
+                    value={newMemberForm.boardExperience || ''}
+                    onChange={e => setNewMemberForm({ ...newMemberForm, boardExperience: e.target.value })}
+                    placeholder="e.g., Board member at ABC Corp (5 years), Audit Committee Chair at XYZ Inc (3 years)"
+                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                    style={{ borderColor: '#E5E4E0' }}
+                    rows={3}
+                  />
+                </div>
               </div>
             </div>
 
