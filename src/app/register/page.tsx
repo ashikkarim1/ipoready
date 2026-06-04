@@ -440,6 +440,35 @@ export default function RegisterPage() {
                       </div>
                     ))}
                   </div>
+
+                  {/* Password Fields for Verification */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', paddingTop: '0.5rem', borderTop: '1px solid #E5E4E0' }}>
+                    <label className="text-nav text-sm font-medium">Verify Your Password</label>
+                    <div>
+                      <label className="text-text-muted text-xs block" style={{ marginBottom: '0.375rem' }}>Password</label>
+                      <div className="relative">
+                        <input type={showPassword ? 'text' : 'password'} value={form.password}
+                          onChange={e => update('password', e.target.value)}
+                          className={inputCls} style={{ ...inputStyle, paddingRight: '2.5rem' }}
+                          onFocus={focusStyle} onBlur={blurStyle}
+                          placeholder="Min. 8 characters" />
+                        <button type="button" onClick={() => setShowPassword(v => !v)}
+                          className="absolute text-text-light hover:text-text-muted transition-colors"
+                          style={{ right: '0.75rem', top: '50%', transform: 'translateY(-50%)' }}>
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-text-muted text-xs block" style={{ marginBottom: '0.375rem' }}>Confirm Password</label>
+                      <input type="password" value={form.confirmPassword}
+                        onChange={e => update('confirmPassword', e.target.value)}
+                        className={inputCls} style={inputStyle}
+                        onFocus={focusStyle} onBlur={blurStyle}
+                        placeholder="Repeat password" />
+                    </div>
+                  </div>
+
                   <div className="rounded-xl border" style={{ background: '#F7F6F4', borderColor: '#E5E4E0', padding: '0.875rem' }}>
                     <p className="text-text-muted text-sm">
                       ✅ Your profile will be reviewed by our team within <strong className="text-nav">24 hours</strong>. You'll receive an email with access instructions.
