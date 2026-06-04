@@ -18,13 +18,11 @@ export async function GET(request: NextRequest) {
 
   try {
     // Fetch current cap table
-    const capTableSnapshot = await fetchCurrentCapTable(companyId)
+    let capTableSnapshot = await fetchCurrentCapTable(companyId)
 
+    // Use mock data if no cap table exists
     if (!capTableSnapshot || !capTableSnapshot.shareholders) {
-      return NextResponse.json(
-        { error: 'No cap table data available' },
-        { status: 400 }
-      )
+      capTableSnapshot = getMockCapTable()
     }
 
     // Generate preset scenarios
@@ -149,4 +147,57 @@ async function storeScenario(companyId: string, scenario: any): Promise<string> 
     console.error('Error storing scenario:', error)
   }
   return scenarioId
+}
+
+function getMockCapTable(): CapTableSnapshot {
+  return {
+    shareholders: [
+      {
+        id: 'founder-1',
+        name: 'Founder & CEO',
+        type: 'founder',
+        shareClass: 'Common',
+        quantity: 3000000,
+        warrants: 0,
+        options: 0,
+      },
+      {
+        id: 'founder-2',
+        name: 'Co-Founder & CTO',
+        type: 'founder',
+        shareClass: 'Common',
+        quantity: 1500000,
+        warrants: 0,
+        options: 0,
+      },
+      {
+        id: 'investor-1',
+        name: 'Series A Investor',
+        type: 'investor',
+        shareClass: 'Preferred A',
+        quantity: 2000000,
+        warrants: 200000,
+        options: 0,
+      },
+      {
+        id: 'investor-2',
+        name: 'Series B Investor',
+        type: 'investor',
+        shareClass: 'Preferred B',
+        quantity: 1500000,
+        warrants: 150000,
+        options: 0,
+      },
+      {
+        id: 'employee-pool',
+        name: 'Employee Option Pool',
+        type: 'employee',
+        shareClass: 'Common',
+        quantity: 500000,
+        warrants: 0,
+        options: 500000,
+      },
+    ],
+    postMoneyValuation: 50000000,
+  }
 }

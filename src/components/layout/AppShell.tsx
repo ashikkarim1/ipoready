@@ -44,7 +44,7 @@ const NAV_GROUPS = [
     collapsible: true,
     items: [
       { href: '/dashboard/financial-mgmt/cost-calculator',    icon: Calculator,  label: 'Cost Calculator',      badge: null,   key: 'cost-calc'      },
-      { href: '/dashboard/financial-mgmt/true-cost',          icon: DollarSign,  label: 'True Cost of Going Public', badge: '💎', key: 'true-cost' },
+      { href: '/dashboard/financial-mgmt/true-cost',          icon: DollarSign,  label: 'Public Costs', badge: '💎', key: 'true-cost' },
       { href: '/dashboard/cap-table/dilution-scenarios',      icon: Percent,     label: 'Dilution Scenarios',   badge: null,   key: 'dilution'       },
       { href: '/financial/budget-tracking',                   icon: BarChart3,   label: 'Budget Tracking',      badge: null,   key: 'budget-tracking'},
     ],
