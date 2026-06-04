@@ -267,3 +267,27 @@ FROM prospectus_sections ps
 LEFT JOIN prospectus_section_content psc ON ps.id = psc.section_id
 LEFT JOIN prospectus_reviews pr ON ps.id = pr.section_id
 GROUP BY ps.id, psc.id, ps.prospectus_id;
+
+-- ============================================================
+-- PROSPECTUS: Validations (Validator analysis snapshots)
+-- Stores each run of the Prospectus Validator: overall + per-section
+-- scores and the generated issues/gaps, for history and trend display.
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS prospectus_validations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  prospectus_id UUID REFERENCES prospectuses(id) ON DELETE CASCADE,
+  company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
+  overall_score INT NOT NULL DEFAULT 0,    -- 0-100 average of section scores
+  total_issues INT NOT NULL DEFAULT 0,
+  total_gaps INT NOT NULL DEFAULT 0,
+  section_scores JSONB NOT NULL,           -- [{ id, name, score, strength, status, issueCount, gapCount }]
+  issues JSONB NOT NULL,                   -- full ProspectusSection[] (issues + gaps + scores)
+  ruleset_version VARCHAR(20) DEFAULT 'v1',
+  created_by UUID REFERENCES users(id),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_prospectus_validations_prospectus ON prospectus_validations(prospectus_id);
+CREATE INDEX IF NOT EXISTS idx_prospectus_validations_company ON prospectus_validations(company_id);
+CREATE INDEX IF NOT EXISTS idx_prospectus_validations_created ON prospectus_validations(created_at DESC);

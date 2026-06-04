@@ -1,6 +1,9 @@
 'use client'
 
+import { useCallback, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useSession } from 'next-auth/react'
+import { RefreshCw, Loader2, Database, FileWarning } from 'lucide-react'
 import { ProspectusValidatorDashboard, ProspectusSection } from '@/components/prospectus/ProspectusValidatorDashboard'
 
 const MOCK_SECTIONS: ProspectusSection[] = [
@@ -283,7 +286,102 @@ const MOCK_SECTIONS: ProspectusSection[] = [
   },
 ]
 
+type DataSource = 'live' | 'database' | 'sample'
+
+interface AnalyzeResponse {
+  success: boolean
+  hasContent?: boolean
+  sections?: ProspectusSection[]
+  overallScore?: number
+  totalIssues?: number
+  totalGaps?: number
+  analyzedAt?: string
+  source?: 'body' | 'database'
+  message?: string
+}
+
 export default function ProspectusValidatorPage() {
+  const { data: session } = useSession()
+  const companyId = (session?.user as { companyId?: string } | undefined)?.companyId
+
+  const [sections, setSections] = useState<ProspectusSection[]>(MOCK_SECTIONS)
+  const [dataSource, setDataSource] = useState<DataSource>('sample')
+  const [loading, setLoading] = useState(false)
+  const [lastAnalyzed, setLastAnalyzed] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [prospectusId, setProspectusId] = useState<string | null>(null)
+
+  /**
+   * Resolve the prospectus to analyze: the most recently created prospectus
+   * for the signed-in user's company (if any).
+   */
+  const resolveProspectusId = useCallback(async (): Promise<string | null> => {
+    if (prospectusId) return prospectusId
+    if (!companyId) return null
+    try {
+      const res = await fetch(`/api/prospectus?companyId=${companyId}`)
+      if (!res.ok) return null
+      const data = await res.json()
+      const first = data?.prospectuses?.[0]?.id ?? null
+      if (first) setProspectusId(first)
+      return first
+    } catch {
+      return null
+    }
+  }, [companyId, prospectusId])
+
+  /**
+   * Call the analyzer with real content. Falls back to MOCK_SECTIONS whenever
+   * no live prospectus content is available or the request fails.
+   */
+  const runAnalysis = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const id = await resolveProspectusId()
+      if (!id) {
+        // No prospectus exists for this account yet — show sample data.
+        setSections(MOCK_SECTIONS)
+        setDataSource('sample')
+        return
+      }
+
+      const res = await fetch('/api/prospectus/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prospectusId: id, companyId }),
+      })
+      const data: AnalyzeResponse = await res.json()
+
+      if (data.success && data.hasContent && data.sections?.length) {
+        setSections(data.sections)
+        setDataSource(data.source === 'database' ? 'database' : 'live')
+        setLastAnalyzed(data.analyzedAt ?? new Date().toISOString())
+      } else {
+        // Content not available yet — graceful fallback to sample data.
+        setSections(MOCK_SECTIONS)
+        setDataSource('sample')
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Analysis failed')
+      setSections(MOCK_SECTIONS)
+      setDataSource('sample')
+    } finally {
+      setLoading(false)
+    }
+  }, [companyId, resolveProspectusId])
+
+  // Run analysis on mount (and whenever the company context becomes available).
+  useEffect(() => {
+    runAnalysis()
+  }, [runAnalysis])
+
+  const sourceLabel =
+    dataSource === 'sample'
+      ? { text: 'Sample data', icon: FileWarning, color: '#B45309', bg: '#FFFBEB', border: '#FEF3C7' }
+      : { text: 'Live prospectus', icon: Database, color: '#2D7A5F', bg: '#EAF5F0', border: '#D1FAE5' }
+  const SourceIcon = sourceLabel.icon
+
   return (
     <div className="min-h-screen" style={{ background: '#F7F6F4' }}>
       {/* Header */}
@@ -294,15 +392,68 @@ export default function ProspectusValidatorPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="text-xs uppercase tracking-widest font-semibold text-text-muted mb-3">
-              Analysis
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div>
+                <div className="text-xs uppercase tracking-widest font-semibold text-text-muted mb-3">
+                  Analysis
+                </div>
+                <h1 className="serif text-4xl text-nav mb-2">
+                  Prospectus Validator
+                </h1>
+                <p className="text-text-muted max-w-2xl">
+                  Analyze section strength and identify gaps. Get strength ratings from weak to strong with specific improvement recommendations.
+                </p>
+              </div>
+
+              <div className="flex flex-col items-end gap-2">
+                <button
+                  onClick={runAnalysis}
+                  disabled={loading}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold text-sm transition-colors disabled:opacity-60"
+                  style={{ background: '#2D7A5F', color: '#FFFFFF' }}
+                >
+                  {loading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <RefreshCw className="w-4 h-4" />
+                  )}
+                  {loading ? 'Analyzing…' : 'Refresh Analysis'}
+                </button>
+
+                <div
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
+                  style={{ background: sourceLabel.bg, border: `1px solid ${sourceLabel.border}`, color: sourceLabel.color }}
+                >
+                  <SourceIcon className="w-3.5 h-3.5" />
+                  {sourceLabel.text}
+                </div>
+
+                {lastAnalyzed && dataSource !== 'sample' && (
+                  <span className="text-xs text-text-muted">
+                    Last analyzed {new Date(lastAnalyzed).toLocaleTimeString()}
+                  </span>
+                )}
+              </div>
             </div>
-            <h1 className="serif text-4xl text-nav mb-2">
-              Prospectus Validator
-            </h1>
-            <p className="text-text-muted max-w-2xl">
-              Analyze section strength and identify gaps. Get strength ratings from weak to strong with specific improvement recommendations.
-            </p>
+
+            {dataSource === 'sample' && (
+              <div
+                className="mt-4 text-xs px-3 py-2 rounded-lg"
+                style={{ background: '#FFFBEB', border: '1px solid #FEF3C7', color: '#92400E' }}
+              >
+                Showing sample analysis. Draft prospectus content in the Prospectus Builder, then click
+                Refresh Analysis to validate your real content.
+              </div>
+            )}
+
+            {error && (
+              <div
+                className="mt-4 text-xs px-3 py-2 rounded-lg"
+                style={{ background: '#FEF2F2', border: '1px solid #FEE2E2', color: '#DC2626' }}
+              >
+                {error}
+              </div>
+            )}
           </motion.div>
         </div>
       </header>
@@ -310,11 +461,12 @@ export default function ProspectusValidatorPage() {
       {/* Content */}
       <main className="max-w-7xl mx-auto px-6 py-8">
         <motion.div
+          key={dataSource + (lastAnalyzed ?? '')}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
         >
-          <ProspectusValidatorDashboard sections={MOCK_SECTIONS} />
+          <ProspectusValidatorDashboard sections={sections} />
         </motion.div>
       </main>
     </div>
