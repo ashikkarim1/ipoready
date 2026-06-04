@@ -140,14 +140,14 @@ export default function ExchangePage({ params }: { params: { code: string } }) {
     <div style={{ background: '#F7F6F4', minHeight: '100vh' }}>
       <header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid #E5E4E0', background: '#FFFFFF', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1A1A1A', textDecoration: 'none' }}>
+          <Link href="/" style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1A1A1A', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
             IPOReady
           </Link>
-          <div className="flex gap-6">
-            <Link href="/resources" style={{ color: '#1A1A1A', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>
+          <div className="flex gap-6 items-center">
+            <Link href="/resources" style={{ color: '#1A1A1A', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500, display: 'flex', alignItems: 'center', height: '100%' }}>
               Resources
             </Link>
-            <Link href="/register" style={{ color: '#FFFFFF', background: '#E8312A', padding: '0.5rem 1rem', borderRadius: '9999px', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 600 }}>
+            <Link href="/register" style={{ color: '#FFFFFF', background: '#E8312A', padding: '0.625rem 1.25rem', borderRadius: '9999px', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 600, display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}>
               Get Started
             </Link>
           </div>
