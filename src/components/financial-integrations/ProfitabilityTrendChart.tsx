@@ -136,9 +136,9 @@ export function ProfitabilityTrendChart({ data }: ProfitabilityTrendChartProps) 
                 borderRadius: '8px',
                 padding: '12px',
               }}
-              formatter={(value: any, name: string) => {
+              formatter={(value: any, name: any) => {
                 if (name === 'Profit Margin %') {
-                  return [`${value.toFixed(2)}%`, name]
+                  return [`${value?.toFixed?.(2)}%`, name]
                 }
                 return [formatCurrency(value), name]
               }}
