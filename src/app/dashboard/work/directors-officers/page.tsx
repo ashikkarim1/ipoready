@@ -2,389 +2,730 @@
 
 import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { motion } from 'framer-motion'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { AlertCircle, Check, Users, DollarSign, Briefcase, TrendingUp, Search, Award } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  Users,
+  AlertCircle,
+  Check,
+  ChevronRight,
+  ChevronLeft,
+  Plus,
+  Trash2,
+  RefreshCcw,
+} from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
-// Import components
-import { ComplianceGapDashboard } from './components/ComplianceGapDashboard'
-import { MarketCompensationDashboard } from './components/MarketCompensationDashboard'
-import { TalentMarketplace } from './components/TalentMarketplace'
-import { ProfessionalRegistry } from './components/ProfessionalRegistry'
-import { CurrentBoardRoster } from './components/CurrentBoardRoster'
-import { ComplianceRequirementMapping } from './components/ComplianceRequirementMapping'
-import { ReferralCommissionDashboard } from './components/ReferralCommissionDashboard'
-
-interface Director {
+interface BoardMember {
   id: string
   name: string
   role: string
-  email: string
   independence: 'independent' | 'management'
-  committees: string[]
-  yearsExperience: number
-  annualComp?: number
-  equity?: number
-  status: 'active' | 'pending' | 'hired-via-ipoready'
-  linkedInUrl?: string
-  hiredViaIPOReady?: boolean
-  findersFeeAmount?: number
+  experience: number
+  status: 'complete' | 'pending'
+  source?: 'ipoready' | 'manual'
+  compensation?: number
+  findersFee?: number
 }
 
 interface Gap {
   id: string
-  type: 'critical' | 'warning'
-  role: string
-  requirement: string
+  type: 'critical' | 'warning' | 'info'
+  title: string
   description: string
-  marketCompMin: number
-  marketCompMax: number
-  equityMin: number
-  equityMax: number
 }
 
-interface ComplianceGap {
-  role: string
-  status: 'met' | 'missing'
-  requirement: string
+interface Change {
+  type: 'added' | 'removed' | 'updated'
+  member?: BoardMember
 }
 
-export default function DirectorsOfficersMarketplacePage() {
+const EXCHANGE_REQUIREMENTS = {
+  tsxv: {
+    name: 'TSXV (TSX Venture)',
+    requirements: [
+      { id: 'req-1', title: 'Total Directors', count: 3, description: 'Minimum board size', source: 'TSXV Policy 3.1' },
+      { id: 'req-2', title: 'Independent Directors', count: 2, description: 'Majority independence', source: 'TSXV Policy 3.2' },
+      { id: 'req-3', title: 'Audit Committee', count: 1, description: 'Required (NI 52-110)', source: 'NI 52-110' },
+      { id: 'req-4', title: 'Audit Financial Expert', count: 1, description: 'Mandated expertise', source: 'NI 52-110' },
+    ],
+  },
+  tsx: {
+    name: 'TSX (Toronto Stock Exchange)',
+    requirements: [
+      { id: 'req-1', title: 'Total Directors', count: 3, description: 'Minimum board size', source: 'TSX Policy 401' },
+      { id: 'req-2', title: 'Independent Directors', count: 2, description: 'Majority independence', source: 'TSX CG' },
+      { id: 'req-3', title: 'Audit Committee', count: 1, description: 'Required (NI 52-110)', source: 'NI 52-110' },
+      { id: 'req-4', title: 'Audit Financial Expert', count: 1, description: 'Mandated expertise', source: 'NI 52-110' },
+    ],
+  },
+}
+
+const MOCK_BOARD_MEMBERS: BoardMember[] = [
+  { id: 'dir-1', name: 'Jennifer Wong', role: 'CEO', independence: 'management', experience: 15, status: 'complete' },
+  { id: 'dir-2', name: 'Sarah Chen', role: 'Independent Director', independence: 'independent', experience: 20, status: 'complete' },
+]
+
+const STEP_VARIANTS = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -20 } }
+
+export default function DirectorsOfficersWorkflowPage() {
   const { data: session } = useSession()
-
-  // State
-  const [directors, setDirectors] = useState<Director[]>([])
+  const [currentStep, setCurrentStep] = useState(1)
+  const [selectedExchange, setSelectedExchange] = useState('tsxv')
+  const [boardMembers, setBoardMembers] = useState<BoardMember[]>(MOCK_BOARD_MEMBERS)
   const [gaps, setGaps] = useState<Gap[]>([])
-  const [selectedExchange, setSelectedExchange] = useState<string>('tsxv')
-  const [complianceGaps, setComplianceGaps] = useState<ComplianceGap[]>([])
-  const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState('gaps')
-  const [showMarketplaceSearch, setShowMarketplaceSearch] = useState(false)
+  const [changes, setChanges] = useState<Change[]>([])
+  const [newMemberForm, setNewMemberForm] = useState({ name: '', role: '', independence: 'independent' as 'independent' | 'management', experience: 0 })
+  const [loading, setLoading] = useState(false)
+  const [prospectusVersion, setProspectusVersion] = useState('v1.2.4')
 
-  // Load initial data
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        setLoading(true)
+    const requirements = EXCHANGE_REQUIREMENTS[selectedExchange as keyof typeof EXCHANGE_REQUIREMENTS]
+    if (!requirements) return
 
-        // In a real app, fetch from API
-        // For now, use mock data
-        const mockDirectors = getMockDirectors()
-        const mockGaps = getMockGaps()
-        const mockComplianceGaps = getMockComplianceGaps(mockDirectors)
+    const calculatedGaps: Gap[] = []
+    const independentCount = boardMembers.filter(m => m.independence === 'independent').length
+    const totalCount = boardMembers.length
 
-        setDirectors(mockDirectors)
-        setGaps(mockGaps)
-        setComplianceGaps(mockComplianceGaps)
-      } catch (error) {
-        console.error('Error loading data:', error)
-      } finally {
-        setLoading(false)
-      }
+    if (totalCount < requirements.requirements[0].count) {
+      calculatedGaps.push({
+        id: 'gap-1',
+        type: 'critical',
+        title: `Missing: ${requirements.requirements[0].count - totalCount} Director(s)`,
+        description: `You have ${totalCount} directors but need ${requirements.requirements[0].count} minimum`,
+      })
     }
 
-    loadData()
-  }, [selectedExchange])
+    if (independentCount < requirements.requirements[1].count) {
+      calculatedGaps.push({
+        id: 'gap-2',
+        type: 'critical',
+        title: `Missing: ${requirements.requirements[1].count - independentCount} Independent Director(s)`,
+        description: 'Required for regulatory compliance and governance',
+      })
+    }
 
-  if (loading) {
+    const hasAuditExpert = boardMembers.some(m => m.independence === 'independent' && m.experience >= 10)
+    if (!hasAuditExpert) {
+      calculatedGaps.push({
+        id: 'gap-3',
+        type: 'critical',
+        title: 'Missing: Audit Committee Financial Expert',
+        description: 'Mandated by NI 52-110 for all public companies',
+      })
+    }
+
+    setGaps(calculatedGaps)
+  }, [boardMembers, selectedExchange])
+
+  const handleAddMember = () => {
+    if (!newMemberForm.name || !newMemberForm.role) {
+      alert('Please fill in name and role')
+      return
+    }
+
+    const newMember: BoardMember = {
+      id: `dir-${Date.now()}`,
+      ...newMemberForm,
+      status: 'complete',
+      source: 'ipoready',
+      compensation: Math.random() * 50000 + 50000,
+      findersFee: (Math.random() * 50000 + 50000) * 0.15,
+    }
+
+    setBoardMembers([...boardMembers, newMember])
+    setChanges([...changes, { type: 'added', member: newMember }])
+    setNewMemberForm({ name: '', role: '', independence: 'independent', experience: 0 })
+  }
+
+  const handleRemoveMember = (memberId: string) => {
+    const member = boardMembers.find(m => m.id === memberId)
+    setBoardMembers(boardMembers.filter(m => m.id !== memberId))
+    setChanges([...changes, { type: 'removed', member }])
+  }
+
+  const handleConfirmSync = async () => {
+    setLoading(true)
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      const newVersion = `v${parseInt(prospectusVersion.split('.').pop() || '0') + 1}`
+      setProspectusVersion(newVersion)
+      setChanges([])
+      setCurrentStep(1)
+      alert('Board composition synced to prospectus successfully!')
+    } catch (error) {
+      console.error('Error syncing:', error)
+      alert('Failed to sync changes')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleRevert = () => {
+    setBoardMembers(MOCK_BOARD_MEMBERS)
+    setChanges([])
+  }
+
+  const renderStep1 = () => {
+    const requirements = EXCHANGE_REQUIREMENTS[selectedExchange as keyof typeof EXCHANGE_REQUIREMENTS]
+    if (!requirements) return null
+
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-slate-900"></div>
-          <p className="mt-4 text-slate-600">Loading Board & Talent Marketplace...</p>
+      <motion.div
+        key="step-1"
+        variants={STEP_VARIANTS}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        transition={{ duration: 0.3 }}
+        className="space-y-6"
+      >
+        <div>
+          <h2 className="text-2xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
+            Board Composition Requirements
+          </h2>
+          <p className="text-sm" style={{ color: '#717171' }}>
+            Based on your target exchange: <strong>{requirements.name}</strong>
+          </p>
         </div>
-      </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {requirements.requirements.map((req, idx) => (
+            <motion.div
+              key={req.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1 }}
+            >
+              <Card className="border-slate-200 bg-white hover:shadow-md transition-all" style={{ border: '1px solid #E5E4E0' }}>
+                <CardHeader className="pb-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <CardTitle className="text-base mb-1">{req.title}</CardTitle>
+                      <CardDescription className="text-xs">{req.description}</CardDescription>
+                    </div>
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#FDECEB' }}>
+                      <span className="text-lg font-bold" style={{ color: '#E8312A' }}>
+                        {req.count}
+                      </span>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="text-xs font-mono" style={{ color: '#717171' }}>
+                    {req.source}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+
+        <Card style={{ background: '#FDECEB', border: '1px solid #F5E5E1' }}>
+          <CardContent className="pt-6">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#E8312A' }} />
+              <div className="text-sm" style={{ color: '#1A1A1A' }}>
+                <strong>Why these requirements?</strong>
+                <p style={{ color: '#717171', marginTop: '0.5rem' }}>
+                  Regulatory bodies require diverse, experienced boards to protect shareholders and ensure proper governance.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+    )
+  }
+
+  const renderStep2 = () => {
+    const criticalGaps = gaps.filter(g => g.type === 'critical').length
+    const allMet = gaps.length === 0
+
+    return (
+      <motion.div
+        key="step-2"
+        variants={STEP_VARIANTS}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        transition={{ duration: 0.3 }}
+        className="space-y-6"
+      >
+        <div>
+          <h2 className="text-2xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
+            Current Board vs. Requirements
+          </h2>
+          <p className="text-sm" style={{ color: '#717171' }}>
+            Identify what's missing and what you have
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
+            <Card style={{ border: '1px solid #E5E4E0' }}>
+              <CardHeader>
+                <CardTitle className="text-base">Current Board Roster</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {boardMembers.length === 0 ? (
+                  <div className="text-center py-6 text-sm" style={{ color: '#717171' }}>
+                    No board members yet
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {boardMembers.map(member => (
+                      <motion.div
+                        key={member.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="p-3 rounded-lg flex items-center justify-between group"
+                        style={{ background: '#F7F6F4' }}
+                      >
+                        <div className="flex-1">
+                          <div className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>
+                            {member.name}
+                          </div>
+                          <div className="text-xs flex items-center gap-2 mt-1" style={{ color: '#717171' }}>
+                            <span>{member.role}</span>
+                            {member.independence === 'independent' && (
+                              <span className="px-2 py-0.5 rounded text-xs font-semibold" style={{ background: '#EAF5F0', color: '#2D7A5F' }}>
+                                Independent
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Check className="w-4 h-4" style={{ color: '#2D7A5F' }} />
+                          <button
+                            onClick={() => handleRemoveMember(member.id)}
+                            className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-50 rounded transition-all"
+                          >
+                            <Trash2 className="w-4 h-4" style={{ color: '#E8312A' }} />
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 }}>
+            <div className="space-y-4">
+              {criticalGaps > 0 ? (
+                <Card style={{ background: '#FDECEB', borderColor: '#F5E5E1', border: '1px solid #F5E5E1' }}>
+                  <CardContent className="pt-6">
+                    <div className="flex items-start gap-3">
+                      <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#E8312A' }} />
+                      <div>
+                        <div className="font-semibold text-sm mb-2" style={{ color: '#E8312A' }}>
+                          {criticalGaps} Critical Gap{criticalGaps > 1 ? 's' : ''}
+                        </div>
+                        <div className="space-y-1">
+                          {gaps.map(gap => (
+                            <div key={gap.id} className="text-xs" style={{ color: '#1A1A1A' }}>
+                              <strong>• {gap.title}</strong>
+                              <div style={{ color: '#717171' }}>{gap.description}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card style={{ background: '#EAF5F0', border: '1px solid #D5EDE8' }}>
+                  <CardContent className="pt-6">
+                    <div className="flex items-start gap-3">
+                      <Check className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2D7A5F' }} />
+                      <div>
+                        <div className="font-semibold text-sm" style={{ color: '#2D7A5F' }}>
+                          All Requirements Met
+                        </div>
+                        <div className="text-xs mt-1" style={{ color: '#717171' }}>
+                          Your board meets all regulatory requirements
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              <Card style={{ border: '1px solid #E5E4E0' }}>
+                <CardHeader>
+                  <CardTitle className="text-sm">Timeline</CardTitle>
+                </CardHeader>
+                <CardContent className="text-xs space-y-2" style={{ color: '#717171' }}>
+                  <div className="flex items-center justify-between">
+                    <span>Time to fill gaps:</span>
+                    <strong style={{ color: '#1A1A1A' }}>60-90 days</strong>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+    )
+  }
+
+  const renderStep3 = () => {
+    return (
+      <motion.div
+        key="step-3"
+        variants={STEP_VARIANTS}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        transition={{ duration: 0.3 }}
+        className="space-y-6"
+      >
+        <div>
+          <h2 className="text-2xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
+            Close the Gaps
+          </h2>
+          <p className="text-sm" style={{ color: '#717171' }}>
+            Add board members to meet requirements
+          </p>
+        </div>
+
+        {gaps.length > 0 && (
+          <Card style={{ background: '#FEF3C7', border: '1px solid #FCD34D' }}>
+            <CardContent className="pt-6">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#B45309' }} />
+                <div className="text-xs" style={{ color: '#1A1A1A' }}>
+                  <strong>Remaining gaps: </strong>
+                  {gaps.map(g => g.title).join(' • ')}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        <Card style={{ border: '1px solid #E5E4E0' }}>
+          <CardHeader>
+            <CardTitle className="text-base">Add Board Member</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold mb-2" style={{ color: '#1A1A1A' }}>
+                  Name
+                </label>
+                <input
+                  type="text"
+                  value={newMemberForm.name}
+                  onChange={e => setNewMemberForm({ ...newMemberForm, name: e.target.value })}
+                  placeholder="Full name"
+                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                  style={{ borderColor: '#E5E4E0' }}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold mb-2" style={{ color: '#1A1A1A' }}>
+                  Role
+                </label>
+                <input
+                  type="text"
+                  value={newMemberForm.role}
+                  onChange={e => setNewMemberForm({ ...newMemberForm, role: e.target.value })}
+                  placeholder="e.g., Independent Director"
+                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                  style={{ borderColor: '#E5E4E0' }}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold mb-2" style={{ color: '#1A1A1A' }}>
+                  Independence
+                </label>
+                <select
+                  value={newMemberForm.independence || ''}
+                  onChange={(e) => setNewMemberForm({ ...newMemberForm, independence: e.target.value as 'independent' | 'management' })}
+                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                  style={{ borderColor: '#E5E4E0' }}
+                >
+                  <option value="independent">Independent</option>
+                  <option value="management">Management</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold mb-2" style={{ color: '#1A1A1A' }}>
+                  Years Experience
+                </label>
+                <input
+                  type="number"
+                  value={newMemberForm.experience}
+                  onChange={e => setNewMemberForm({ ...newMemberForm, experience: parseInt(e.target.value) || 0 })}
+                  placeholder="e.g., 15"
+                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                  style={{ borderColor: '#E5E4E0' }}
+                />
+              </div>
+            </div>
+
+            <Button
+              onClick={handleAddMember}
+              className="w-full font-semibold py-2 rounded-lg text-white transition-all"
+              style={{ background: '#E8312A' }}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Member
+            </Button>
+          </CardContent>
+        </Card>
+      </motion.div>
+    )
+  }
+
+  const renderStep4 = () => {
+    const totalFeesDue = boardMembers
+      .filter((m) => m.source === 'ipoready')
+      .reduce((sum, m) => sum + (m.findersFee || 0), 0)
+
+    return (
+      <motion.div
+        key="step-4"
+        variants={STEP_VARIANTS}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        transition={{ duration: 0.3 }}
+        className="space-y-6"
+      >
+        <div>
+          <h2 className="text-2xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
+            Review & Confirm
+          </h2>
+          <p className="text-sm" style={{ color: '#717171' }}>
+            Version control — you can revert changes anytime
+          </p>
+        </div>
+
+        <Card style={{ border: '1px solid #E5E4E0' }}>
+          <CardHeader>
+            <CardTitle className="text-base">Changes Summary</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {changes.length === 0 ? (
+              <p className="text-sm text-center py-6" style={{ color: '#717171' }}>
+                No changes yet
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {changes.map((change, idx) => (
+                  <motion.div key={idx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-lg text-xs" style={{ background: '#F7F6F4' }}>
+                    {change.type === 'added' ? (
+                      <div className="flex items-start gap-2">
+                        <Plus className="w-4 h-4 mt-0.5" style={{ color: '#2D7A5F' }} />
+                        <div>
+                          <strong style={{ color: '#1A1A1A' }}>Added:</strong>
+                          <div style={{ color: '#717171' }}>
+                            {change.member?.name} as {change.member?.role}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-start gap-2">
+                        <Trash2 className="w-4 h-4 mt-0.5" style={{ color: '#E8312A' }} />
+                        <div>
+                          <strong style={{ color: '#1A1A1A' }}>Removed:</strong>
+                          <div style={{ color: '#717171' }}>{change.member?.name}</div>
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card style={{ border: '1px solid #E5E4E0' }}>
+          <CardHeader>
+            <CardTitle className="text-base">Version Control</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <div className="text-xs font-semibold mb-1" style={{ color: '#717171' }}>
+                  Current Version
+                </div>
+                <div className="text-lg font-bold" style={{ color: '#1A1A1A' }}>
+                  {prospectusVersion}
+                </div>
+              </div>
+              <div>
+                <div className="text-xs font-semibold mb-1" style={{ color: '#717171' }}>
+                  New Version
+                </div>
+                <div className="text-lg font-bold" style={{ color: '#E8312A' }}>
+                  v{parseInt(prospectusVersion.split('.').pop() || '0') + 1}
+                </div>
+              </div>
+            </div>
+
+            <Button
+              onClick={handleRevert}
+              variant="outline"
+              className="w-full text-xs"
+              style={{ borderColor: '#E5E4E0', color: '#717171' }}
+            >
+              <RefreshCcw className="w-3 h-3 mr-2" />
+              Revert to {prospectusVersion}
+            </Button>
+          </CardContent>
+        </Card>
+
+        {totalFeesDue > 0 && (
+          <Card style={{ background: '#FDECEB', border: '1px solid #F5E5E1' }}>
+            <CardContent className="pt-6">
+              <div className="space-y-2">
+                <div className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>
+                  IPOReady Service Fees
+                </div>
+                <div className="text-xs space-y-1" style={{ color: '#717171' }}>
+                  <div className="flex items-center justify-between">
+                    <span>Professionals hired:</span>
+                    <strong style={{ color: '#E8312A' }}>
+                      {boardMembers.filter(m => m.source === 'ipoready').length}
+                    </strong>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Total finders fees (15%):</span>
+                    <strong style={{ color: '#E8312A' }}>
+                      ${totalFeesDue.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+                    </strong>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        <div className="flex gap-3">
+          <Button
+            onClick={() => setCurrentStep(3)}
+            variant="outline"
+            className="flex-1"
+            style={{ borderColor: '#E5E4E0', color: '#1A1A1A' }}
+          >
+            Back to Edit
+          </Button>
+          <Button
+            onClick={handleConfirmSync}
+            disabled={loading}
+            className="flex-1 font-semibold py-2 rounded-lg text-white transition-all"
+            style={{ background: '#2D7A5F' }}
+          >
+            {loading ? 'Syncing...' : 'Confirm & Sync'}
+          </Button>
+        </div>
+      </motion.div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-slate-50" style={{ background: '#F7F6F4', colorScheme: 'light' }}>
-      <div className="p-6 max-w-7xl mx-auto space-y-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-2"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold text-slate-900">Board & Talent Marketplace</h1>
-              <p className="text-slate-600 mt-2">
-                Find and hire qualified directors, officers, and board members to meet compliance requirements
-              </p>
+    <div style={{ background: '#F7F6F4', minHeight: '100vh' }}>
+      <div className="max-w-7xl mx-auto p-6 lg:p-12 space-y-8">
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide" style={{ background: '#FDECEB', color: '#E8312A' }}>
+              <Users className="w-3 h-3 inline mr-1.5" />
+              Board Requirements Analyzer
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-lg">
-              <TrendingUp className="w-5 h-5 text-emerald-600" />
-              <span className="text-sm font-medium text-emerald-700">15% Finders Fee Model</span>
-            </div>
+          </div>
+          <h1 className="text-3xl lg:text-4xl font-bold" style={{ color: '#1A1A1A' }}>
+            Build Your Board
+          </h1>
+          <p className="text-sm" style={{ color: '#717171' }}>
+            Follow the workflow to identify gaps, fill them, and sync to your prospectus
+          </p>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex items-center justify-between max-w-2xl">
+          {[1, 2, 3, 4].map((step, idx) => (
+            <React.Fragment key={step}>
+              <motion.button
+                onClick={() => setCurrentStep(step)}
+                whileHover={{ scale: 1.05 }}
+                className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm cursor-pointer transition-all"
+                style={{
+                  background: currentStep === step ? '#E8312A' : currentStep > step ? '#2D7A5F' : '#E5E4E0',
+                  color: currentStep === step || currentStep > step ? 'white' : '#717171',
+                }}
+              >
+                {currentStep > step ? <Check className="w-5 h-5" /> : step}
+              </motion.button>
+              {idx < 3 && (
+                <div
+                  className="flex-1 h-1 mx-2 rounded-full"
+                  style={{
+                    background: currentStep > step + 1 ? '#2D7A5F' : '#E5E4E0',
+                  }}
+                />
+              )}
+            </React.Fragment>
+          ))}
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+          <div className="flex items-center gap-4">
+            <label className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>
+              Target Exchange:
+            </label>
+            <select
+              value={selectedExchange}
+              onChange={e => setSelectedExchange(e.target.value)}
+              className="px-4 py-2 border rounded-lg text-sm focus:outline-none font-medium"
+              style={{ borderColor: '#E5E4E0', color: '#1A1A1A' }}
+            >
+              <option value="tsxv">TSXV (TSX Venture)</option>
+              <option value="tsx">TSX (Toronto Stock Exchange)</option>
+            </select>
           </div>
         </motion.div>
 
-        {/* Exchange Selector */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-4"
-        >
-          <label className="font-medium text-slate-700">Target Exchange:</label>
-          <select
-            value={selectedExchange}
-            onChange={(e) => setSelectedExchange(e.target.value)}
-            className="px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-slate-500 bg-white"
+        <div className="min-h-96">
+          <AnimatePresence mode="wait">
+            {currentStep === 1 && renderStep1()}
+            {currentStep === 2 && renderStep2()}
+            {currentStep === 3 && renderStep3()}
+            {currentStep === 4 && renderStep4()}
+          </AnimatePresence>
+        </div>
+
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="flex items-center justify-between pt-6 border-t" style={{ borderColor: '#E5E4E0' }}>
+          <Button
+            onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
+            disabled={currentStep === 1}
+            variant="outline"
+            style={{
+              borderColor: '#E5E4E0',
+              color: currentStep === 1 ? '#C9C7C4' : '#1A1A1A',
+            }}
           >
-            <option value="tsxv">TSXV (TSX Venture)</option>
-            <option value="tsx">TSX (Toronto Stock Exchange)</option>
-            <option value="nasdaq">NASDAQ</option>
-            <option value="nyse">NYSE (New York Stock Exchange)</option>
-          </select>
+            <ChevronLeft className="w-4 h-4 mr-2" />
+            Back
+          </Button>
+
+          <div className="text-xs font-semibold text-center" style={{ color: '#717171' }}>
+            Step {currentStep} of 4
+          </div>
+
+          <Button
+            onClick={() => setCurrentStep(Math.min(4, currentStep + 1))}
+            disabled={currentStep === 4}
+            className="font-semibold text-white"
+            style={{ background: currentStep === 4 ? '#C9C7C4' : '#E8312A' }}
+          >
+            Next
+            <ChevronRight className="w-4 h-4 ml-2" />
+          </Button>
         </motion.div>
-
-        {/* Main Content - Tabbed Interface */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="gaps" className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4" />
-              <span className="hidden sm:inline">Gaps</span>
-            </TabsTrigger>
-            <TabsTrigger value="compensation" className="flex items-center gap-2">
-              <DollarSign className="w-4 h-4" />
-              <span className="hidden sm:inline">Compensation</span>
-            </TabsTrigger>
-            <TabsTrigger value="marketplace" className="flex items-center gap-2">
-              <Users className="w-4 h-4" />
-              <span className="hidden sm:inline">Marketplace</span>
-            </TabsTrigger>
-            <TabsTrigger value="roster" className="flex items-center gap-2">
-              <Briefcase className="w-4 h-4" />
-              <span className="hidden sm:inline">Roster</span>
-            </TabsTrigger>
-            <TabsTrigger value="referrals" className="flex items-center gap-2">
-              <Award className="w-4 h-4" />
-              <span className="hidden sm:inline">Referrals</span>
-            </TabsTrigger>
-          </TabsList>
-
-          {/* Tab 1: Compliance Gap Analysis Dashboard */}
-          <TabsContent value="gaps" className="space-y-6">
-            <ComplianceGapDashboard
-              gaps={gaps}
-              directors={directors}
-              selectedExchange={selectedExchange}
-              onFindTalent={() => setActiveTab('marketplace')}
-            />
-          </TabsContent>
-
-          {/* Tab 2: Market Compensation Dashboard */}
-          <TabsContent value="compensation" className="space-y-6">
-            <MarketCompensationDashboard
-              gaps={gaps}
-              selectedExchange={selectedExchange}
-            />
-          </TabsContent>
-
-          {/* Tab 3: Talent Marketplace */}
-          <TabsContent value="marketplace" className="space-y-6">
-            <TalentMarketplace
-              gaps={gaps}
-              selectedExchange={selectedExchange}
-              onProfessionalSelected={(professional) => {
-                console.log('Selected professional:', professional)
-              }}
-            />
-          </TabsContent>
-
-          {/* Tab 4: Current Board Roster */}
-          <TabsContent value="roster" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Roster */}
-              <div className="lg:col-span-2">
-                <CurrentBoardRoster
-                  directors={directors}
-                  onEdit={(director) => console.log('Edit:', director)}
-                  onDelete={(directorId) => setDirectors(directors.filter(d => d.id !== directorId))}
-                />
-              </div>
-
-              {/* Quick Stats */}
-              <div className="space-y-4">
-                <Card className="border-slate-200 bg-white">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-semibold text-slate-700">Board Overview</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <p className="text-xs text-slate-600">Total Members</p>
-                      <p className="text-2xl font-bold text-slate-900">{directors.length}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-slate-600">Independent Directors</p>
-                      <p className="text-2xl font-bold text-emerald-600">
-                        {directors.filter(d => d.independence === 'independent').length}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-slate-600">Hired via IPOReady</p>
-                      <p className="text-2xl font-bold text-blue-600">
-                        {directors.filter(d => d.hiredViaIPOReady).length}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-slate-200 bg-white">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-semibold text-slate-700">Finders Fees Generated</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div>
-                      <p className="text-xs text-slate-600">Total Paid</p>
-                      <p className="text-2xl font-bold text-slate-900">
-                        ${directors
-                          .filter(d => d.hiredViaIPOReady)
-                          .reduce((sum, d) => sum + (d.findersFeeAmount || 0), 0)
-                          .toLocaleString()}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-
-            {/* Compliance Requirements Mapping */}
-            <ComplianceRequirementMapping
-              directors={directors}
-              selectedExchange={selectedExchange}
-            />
-          </TabsContent>
-
-          {/* Tab 5: Referral & Commission Dashboard */}
-          <TabsContent value="referrals" className="space-y-6">
-            <ReferralCommissionDashboard />
-          </TabsContent>
-        </Tabs>
-
-        {/* Professional Registry Section - Always Visible */}
-        <ProfessionalRegistry />
       </div>
     </div>
   )
-}
-
-// Mock data generators
-function getMockDirectors(): Director[] {
-  return [
-    {
-      id: 'dir-1',
-      name: 'Sarah Chen',
-      role: 'Lead Independent Director',
-      email: 'sarah@example.com',
-      independence: 'independent',
-      committees: ['audit', 'governance'],
-      yearsExperience: 20,
-      annualComp: 85000,
-      equity: 0.35,
-      status: 'active',
-      linkedInUrl: 'https://linkedin.com/in/sarahchen',
-      hiredViaIPOReady: false,
-    },
-    {
-      id: 'dir-2',
-      name: 'Michael Rodriguez',
-      role: 'Audit Committee Chair',
-      email: 'michael@example.com',
-      independence: 'independent',
-      committees: ['audit', 'compensation'],
-      yearsExperience: 18,
-      annualComp: 95000,
-      equity: 0.40,
-      status: 'active',
-      linkedInUrl: 'https://linkedin.com/in/mrodriguez',
-      hiredViaIPOReady: true,
-      findersFeeAmount: 14250,
-    },
-    {
-      id: 'dir-3',
-      name: 'Jennifer Wong',
-      role: 'CEO',
-      email: 'jennifer@example.com',
-      independence: 'management',
-      committees: [],
-      yearsExperience: 15,
-      annualComp: 350000,
-      equity: 8.5,
-      status: 'active',
-      linkedInUrl: 'https://linkedin.com/in/jwong',
-      hiredViaIPOReady: false,
-    },
-  ]
-}
-
-function getMockGaps(): Gap[] {
-  return [
-    {
-      id: 'gap-1',
-      type: 'critical',
-      role: 'Independent Director',
-      requirement: 'MISSING: 1 Independent Director (Required for TSXV)',
-      description: 'You currently have 2 independent directors but need 3 minimum for TSXV compliance',
-      marketCompMin: 50000,
-      marketCompMax: 100000,
-      equityMin: 0.25,
-      equityMax: 0.5,
-    },
-    {
-      id: 'gap-2',
-      type: 'critical',
-      role: 'Audit Committee Financial Expert',
-      requirement: 'MISSING: Audit Committee Financial Expert (Mandated by NI 52-110)',
-      description: 'Audit committee must have at least one member with financial expertise',
-      marketCompMin: 60000,
-      marketCompMax: 120000,
-      equityMin: 0.3,
-      equityMax: 0.6,
-    },
-    {
-      id: 'gap-3',
-      type: 'warning',
-      role: 'CFO',
-      requirement: 'CFO Replacement',
-      description: 'Current CFO may be retiring; consider proactive recruitment',
-      marketCompMin: 300000,
-      marketCompMax: 500000,
-      equityMin: 1.0,
-      equityMax: 3.0,
-    },
-  ]
-}
-
-function getMockComplianceGaps(directors: Director[]): ComplianceGap[] {
-  const independentCount = directors.filter(d => d.independence === 'independent').length
-  const hasCEO = directors.some(d => d.role.toLowerCase().includes('ceo'))
-  const hasCFO = directors.some(d => d.role.toLowerCase().includes('cfo'))
-  const hasAuditChair = directors.some(d => d.committees.includes('audit'))
-
-  return [
-    {
-      role: 'Independent Directors',
-      status: independentCount >= 2 ? 'met' : 'missing',
-      requirement: `${independentCount}/2 Independent Directors`,
-    },
-    {
-      role: 'CEO',
-      status: hasCEO ? 'met' : 'missing',
-      requirement: 'Chief Executive Officer',
-    },
-    {
-      role: 'CFO',
-      status: hasCFO ? 'met' : 'missing',
-      requirement: 'Chief Financial Officer',
-    },
-    {
-      role: 'Audit Chair',
-      status: hasAuditChair ? 'met' : 'missing',
-      requirement: 'Audit Committee Chair',
-    },
-  ]
 }
