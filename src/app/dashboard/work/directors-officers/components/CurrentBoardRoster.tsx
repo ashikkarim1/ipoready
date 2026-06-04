@@ -36,27 +36,27 @@ export function CurrentBoardRoster({
   const getStatusBadge = (status: string, hiredViaIPOReady?: boolean) => {
     if (hiredViaIPOReady) {
       return (
-        <div className="flex items-center gap-1 px-2 py-1 bg-blue-100 rounded-full">
-          <Badge className="w-3 h-3 text-blue-600" />
-          <span className="text-xs font-medium text-blue-700">Hired via IPOReady</span>
-        </div>
+        <span className="pill px-2 py-1 text-xs font-semibold" style={{ background: '#EFF6FF', color: '#1D4ED8' }}>
+          <Badge className="w-3 h-3 inline mr-1" />
+          Hired via IPOReady
+        </span>
       )
     }
 
     switch (status) {
       case 'active':
         return (
-          <div className="flex items-center gap-1 px-2 py-1 bg-emerald-100 rounded-full">
-            <Badge className="w-3 h-3 text-emerald-600" />
-            <span className="text-xs font-medium text-emerald-700">Active</span>
-          </div>
+          <span className="pill px-2 py-1 text-xs font-semibold" style={{ background: '#EAF5F0', color: '#2D7A5F' }}>
+            <Badge className="w-3 h-3 inline mr-1" />
+            Active
+          </span>
         )
       case 'pending':
         return (
-          <div className="flex items-center gap-1 px-2 py-1 bg-amber-100 rounded-full">
-            <Badge className="w-3 h-3 text-amber-600" />
-            <span className="text-xs font-medium text-amber-700">Pending</span>
-          </div>
+          <span className="pill px-2 py-1 text-xs font-semibold" style={{ background: '#FEF3C7', color: '#B45309' }}>
+            <Badge className="w-3 h-3 inline mr-1" />
+            Pending
+          </span>
         )
       default:
         return null
@@ -65,8 +65,12 @@ export function CurrentBoardRoster({
 
   const getIndependenceColor = (independence: string) => {
     return independence === 'independent'
-      ? 'bg-purple-50 border-purple-200'
-      : 'bg-slate-50 border-slate-200'
+      ? 'border-2 border-info'
+      : 'border-border'
+  }
+
+  const getIndependenceBg = (independence: string) => {
+    return independence === 'independent' ? '#EFF6FF' : '#FFFFFF'
   }
 
   const getCommitteeLabel = (committee: string): string => {
@@ -84,8 +88,8 @@ export function CurrentBoardRoster({
     <div className="space-y-4">
       {/* Header */}
       <div>
-        <h3 className="text-lg font-semibold text-slate-900 mb-2">Current Board Roster</h3>
-        <p className="text-sm text-slate-600">
+        <h3 className="text-lg font-semibold text-nav mb-2">Current Board Roster</h3>
+        <p className="text-sm text-text-muted">
           {directors.length} board member{directors.length !== 1 ? 's' : ''} •
           {' '}{directors.filter(d => d.independence === 'independent').length} independent director{directors.filter(d => d.independence === 'independent').length !== 1 ? 's' : ''}
         </p>
@@ -98,183 +102,172 @@ export function CurrentBoardRoster({
             <motion.div
               key={director.id}
               initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: idx * 0.05 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.06 }}
             >
-              <Card
-                className={`border overflow-hidden hover:shadow-md transition-shadow ${
+              <div
+                className={`card p-4 card-hover overflow-hidden ${
                   getIndependenceColor(director.independence)
                 }`}
+                style={{ background: getIndependenceBg(director.independence), border: '1px solid ' + (director.independence === 'independent' ? '#BFDBFE' : '#E5E4E0') }}
               >
-                <CardContent className="p-4">
-                  <div className="space-y-3">
-                    {/* Header Row */}
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className="font-semibold text-slate-900">{director.name}</h4>
-                          {director.linkedInUrl && (
-                            <a
-                              href={director.linkedInUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-700"
-                            >
-                              <Link2 className="w-4 h-4" />
-                            </a>
-                          )}
-                        </div>
-                        <p className="text-sm text-slate-600 mb-2">{director.role}</p>
-                        {getStatusBadge(director.status, director.hiredViaIPOReady)}
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="flex gap-2">
-                        {onEdit && (
-                          <Button
-                            onClick={() => onEdit(director)}
-                            variant="outline"
-                            size="sm"
-                            className="h-8 w-8 p-0"
+                <div className="space-y-3">
+                  {/* Header Row */}
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="font-semibold text-nav">{director.name}</h4>
+                        {director.linkedInUrl && (
+                          <a
+                            href={director.linkedInUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-info hover:opacity-70"
                           >
-                            <Edit2 className="w-4 h-4" />
-                          </Button>
-                        )}
-                        {onDelete && (
-                          <Button
-                            onClick={() => onDelete(director.id)}
-                            variant="outline"
-                            size="sm"
-                            className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
+                            <Link2 className="w-4 h-4" />
+                          </a>
                         )}
                       </div>
+                      <p className="text-sm text-text-muted mb-2">{director.role}</p>
+                      {getStatusBadge(director.status, director.hiredViaIPOReady)}
                     </div>
 
-                    {/* Details Grid */}
-                    <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-200">
-                      <div>
-                        <p className="text-xs text-slate-600 mb-1">Classification</p>
-                        <p className="text-sm font-medium text-slate-900">
-                          {director.independence === 'independent' ? 'Independent' : 'Management'}
-                        </p>
-                      </div>
+                    {/* Action Buttons */}
+                    <div className="flex gap-2">
+                      {onEdit && (
+                        <Button
+                          onClick={() => onEdit(director)}
+                          className="btn btn-secondary h-8 w-8 p-0"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </Button>
+                      )}
+                      {onDelete && (
+                        <Button
+                          onClick={() => onDelete(director.id)}
+                          className="btn btn-secondary h-8 w-8 p-0"
+                        >
+                          <Trash2 className="w-4 h-4 text-accent" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
 
-                      <div>
-                        <p className="text-xs text-slate-600 mb-1">Experience</p>
-                        <p className="text-sm font-medium text-slate-900">{director.yearsExperience}+ yrs</p>
-                      </div>
-
-                      <div>
-                        <p className="text-xs text-slate-600 mb-1">Email</p>
-                        <a href={`mailto:${director.email}`} className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1">
-                          <Mail className="w-3 h-3" />
-                          Contact
-                        </a>
-                      </div>
+                  {/* Details Grid */}
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-border">
+                    <div>
+                      <p className="text-xs text-text-muted mb-1">Classification</p>
+                      <p className="text-sm font-medium text-nav">
+                        {director.independence === 'independent' ? 'Independent' : 'Management'}
+                      </p>
                     </div>
 
-                    {/* Compensation Details */}
-                    {(director.annualComp || director.equity) && (
-                      <div className="grid grid-cols-2 gap-3 p-3 bg-white/50 rounded-lg border border-slate-200">
-                        {director.annualComp && (
-                          <div>
-                            <p className="text-xs text-slate-600 mb-1">Annual Compensation</p>
-                            <p className="text-sm font-semibold text-slate-900">
-                              ${(director.annualComp / 1000).toFixed(0)}K
-                            </p>
-                          </div>
-                        )}
-                        {director.equity && (
-                          <div>
-                            <p className="text-xs text-slate-600 mb-1">Equity Package</p>
-                            <p className="text-sm font-semibold text-slate-900">{director.equity.toFixed(2)}%</p>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                    <div>
+                      <p className="text-xs text-text-muted mb-1">Experience</p>
+                      <p className="text-sm font-medium text-nav">{director.yearsExperience}+ yrs</p>
+                    </div>
 
-                    {/* Committees */}
-                    {director.committees.length > 0 && (
-                      <div className="pt-2 border-t border-slate-200">
-                        <p className="text-xs text-slate-600 mb-2">Committee Assignments</p>
-                        <div className="flex flex-wrap gap-2">
-                          {director.committees.map(committee => (
-                            <span
-                              key={committee}
-                              className="px-2 py-1 bg-slate-100 text-slate-700 text-xs rounded-full font-medium"
-                            >
-                              {getCommitteeLabel(committee)}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+                    <div>
+                      <p className="text-xs text-text-muted mb-1">Email</p>
+                      <a href={`mailto:${director.email}`} className="text-sm font-medium text-info hover:opacity-70 flex items-center gap-1">
+                        <Mail className="w-3 h-3" />
+                        Contact
+                      </a>
+                    </div>
+                  </div>
 
-                    {/* IPOReady Hire Info */}
-                    {director.hiredViaIPOReady && director.findersFeeAmount && (
-                      <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg space-y-2">
-                        <div className="flex items-center justify-between">
-                          <p className="text-sm font-medium text-slate-900">Finders Fee Paid</p>
-                          <p className="text-sm font-semibold text-blue-600">
-                            ${(director.findersFeeAmount).toLocaleString()}
+                  {/* Compensation Details */}
+                  {(director.annualComp || director.equity) && (
+                    <div className="grid grid-cols-2 gap-3 p-3 rounded-lg border border-border" style={{ background: '#F7F6F4' }}>
+                      {director.annualComp && (
+                        <div>
+                          <p className="text-xs text-text-muted mb-1">Annual Compensation</p>
+                          <p className="text-sm font-semibold text-nav">
+                            ${(director.annualComp / 1000).toFixed(0)}K
                           </p>
                         </div>
-                        <p className="text-xs text-slate-600">
-                          15% of 1-year compensation for IPOReady introduction
+                      )}
+                      {director.equity && (
+                        <div>
+                          <p className="text-xs text-text-muted mb-1">Equity Package</p>
+                          <p className="text-sm font-semibold text-nav">{director.equity.toFixed(2)}%</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Committees */}
+                  {director.committees.length > 0 && (
+                    <div className="pt-2 border-t border-border">
+                      <p className="text-xs text-text-muted mb-2">Committee Assignments</p>
+                      <div className="flex flex-wrap gap-2">
+                        {director.committees.map(committee => (
+                          <span key={committee} className="pill px-2 py-1 text-xs font-semibold" style={{ background: '#F7F6F4', color: '#1A1A1A' }}>
+                            {getCommitteeLabel(committee)}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* IPOReady Hire Info */}
+                  {director.hiredViaIPOReady && director.findersFeeAmount && (
+                    <div className="p-3 rounded-lg space-y-2" style={{ background: '#EFF6FF', border: '1px solid #BFDBFE' }}>
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium text-nav">Finders Fee Paid</p>
+                        <p className="text-sm font-semibold text-info">
+                          ${(director.findersFeeAmount).toLocaleString()}
                         </p>
                       </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+                      <p className="text-xs text-text-muted">
+                        15% of 1-year compensation for IPOReady introduction
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
       ) : (
-        <Card className="border-slate-200 bg-slate-50">
-          <CardContent className="pt-12 pb-12 text-center">
-            <p className="text-slate-600 font-medium mb-2">No board members yet</p>
-            <p className="text-sm text-slate-500 mb-4">Add your first director or officer to get started</p>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-              Add Board Member
-            </Button>
-          </CardContent>
-        </Card>
+        <div className="card p-12 text-center" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
+          <p className="text-nav font-medium mb-2">No board members yet</p>
+          <p className="text-sm text-text-muted mb-4">Add your first director or officer to get started</p>
+          <Button className="btn btn-accent gap-2 font-semibold px-6 py-2.5 rounded-full">
+            Add Board Member
+          </Button>
+        </div>
       )}
 
       {/* Summary Stats */}
       {directors.length > 0 && (
-        <Card className="border-slate-200 bg-gradient-to-r from-blue-50 to-slate-50">
-          <CardContent className="pt-4">
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <p className="text-xs text-slate-600 mb-1">Total Comp (Annual)</p>
-                <p className="text-lg font-bold text-slate-900">
-                  ${
-                    Math.round(
-                      directors.reduce((sum, d) => sum + (d.annualComp || 0), 0) / 1000,
-                    )
-                  }K
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-slate-600 mb-1">Total Equity Granted</p>
-                <p className="text-lg font-bold text-slate-900">
-                  {(directors.reduce((sum, d) => sum + (d.equity || 0), 0)).toFixed(2)}%
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-slate-600 mb-1">IPOReady Hires</p>
-                <p className="text-lg font-bold text-blue-600">
-                  {directors.filter(d => d.hiredViaIPOReady).length}
-                </p>
-              </div>
+        <div className="card p-6 card-hover" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <p className="text-xs text-text-muted mb-1 uppercase font-semibold tracking-widest">Total Comp (Annual)</p>
+              <p className="text-lg font-bold text-nav">
+                ${
+                  Math.round(
+                    directors.reduce((sum, d) => sum + (d.annualComp || 0), 0) / 1000,
+                  )
+                }K
+              </p>
             </div>
-          </CardContent>
-        </Card>
+            <div>
+              <p className="text-xs text-text-muted mb-1 uppercase font-semibold tracking-widest">Total Equity Granted</p>
+              <p className="text-lg font-bold text-nav">
+                {(directors.reduce((sum, d) => sum + (d.equity || 0), 0)).toFixed(2)}%
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-text-muted mb-1 uppercase font-semibold tracking-widest">IPOReady Hires</p>
+              <p className="text-lg font-bold text-info">
+                {directors.filter(d => d.hiredViaIPOReady).length}
+              </p>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

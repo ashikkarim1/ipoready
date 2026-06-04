@@ -50,109 +50,93 @@ export function ComplianceGapDashboard({
   return (
     <div className="space-y-6">
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* Board Composition */}
-        <Card className="border-slate-200 bg-white">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-slate-700">Board Composition</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div>
-                <p className="text-xs text-slate-600 mb-1">Independent Directors</p>
-                <div className="text-2xl font-bold text-emerald-600">
-                  {independentCount}/3
-                </div>
-              </div>
-              <div className="w-full bg-slate-100 rounded-full h-2">
-                <div
-                  className="bg-emerald-500 h-2 rounded-full"
-                  style={{ width: `${(independentCount / 3) * 100}%` }}
-                />
+        <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
+          <h4 className="text-sm font-semibold text-text-muted mb-4 uppercase tracking-widest">Board Composition</h4>
+          <div className="space-y-2">
+            <div>
+              <p className="text-xs text-text-muted mb-1">Independent Directors</p>
+              <div className="text-2xl font-bold text-success">
+                {independentCount}/3
               </div>
             </div>
-          </CardContent>
-        </Card>
+            <div className="w-full rounded-full h-2" style={{ background: '#E5E4E0' }}>
+              <div
+                className="h-2 rounded-full"
+                style={{ width: `${(independentCount / 3) * 100}%`, background: '#2D7A5F' }}
+              />
+            </div>
+          </div>
+        </div>
 
         {/* Critical Gaps */}
-        <Card className={`border-slate-200 ${criticalGaps.length > 0 ? 'bg-red-50' : 'bg-white'}`}>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-slate-700">Critical Gaps</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">{criticalGaps.length}</div>
-            <p className="text-xs text-slate-600 mt-2">Must fix before IPO</p>
-          </CardContent>
-        </Card>
+        <div className={`card p-6 card-hover`} style={{ background: criticalGaps.length > 0 ? '#FDECEB' : '#FFFFFF', border: '1px solid ' + (criticalGaps.length > 0 ? '#F5E5E1' : '#E5E4E0') }}>
+          <h4 className="text-sm font-semibold text-text-muted mb-4 uppercase tracking-widest">Critical Gaps</h4>
+          <div className="text-2xl font-bold text-accent">{criticalGaps.length}</div>
+          <p className="text-xs text-text-muted mt-2">Must fix before IPO</p>
+        </div>
 
         {/* Warning Items */}
-        <Card className="border-slate-200 bg-white">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-slate-700">Warnings</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-amber-600">{warningGaps.length}</div>
-            <p className="text-xs text-slate-600 mt-2">Should address soon</p>
-          </CardContent>
-        </Card>
+        <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
+          <h4 className="text-sm font-semibold text-text-muted mb-4 uppercase tracking-widest">Warnings</h4>
+          <div className="text-2xl font-bold" style={{ color: '#B45309' }}>{warningGaps.length}</div>
+          <p className="text-xs text-text-muted mt-2">Should address soon</p>
+        </div>
 
         {/* Compliance Timeline */}
-        <Card className="border-slate-200 bg-white">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-slate-700">Est. Timeline</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
-              <Clock className="w-5 h-5 text-blue-600" />
-              <div>
-                <p className="text-2xl font-bold text-slate-900">{estimatedMonths}m</p>
-                <p className="text-xs text-slate-600">to compliance</p>
-              </div>
+        <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
+          <h4 className="text-sm font-semibold text-text-muted mb-4 uppercase tracking-widest">Est. Timeline</h4>
+          <div className="flex items-center gap-2">
+            <Clock className="w-5 h-5 text-info" />
+            <div>
+              <p className="text-2xl font-bold text-nav">{estimatedMonths}m</p>
+              <p className="text-xs text-text-muted">to compliance</p>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Critical Gaps List */}
       {criticalGaps.length > 0 && (
-        <Card className="border-red-200 bg-red-50">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <AlertCircle className="w-5 h-5 text-red-600" />
-              <div>
-                <CardTitle className="text-slate-900">Critical Compliance Gaps</CardTitle>
-                <CardDescription>These must be addressed before IPO listing</CardDescription>
-              </div>
+        <div className="card p-6 card-hover" style={{ background: '#FDECEB', border: '1px solid #F5E5E1' }}>
+          <div className="flex items-center gap-2 mb-6">
+            <AlertCircle className="w-5 h-5 text-accent" />
+            <div>
+              <h3 className="font-semibold text-nav">Critical Compliance Gaps</h3>
+              <p className="text-sm text-text-muted">These must be addressed before IPO listing</p>
             </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
+          </div>
+          <div className="space-y-4">
             {criticalGaps.map((gap, idx) => (
               <motion.div
                 key={gap.id}
                 initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: idx * 0.05 }}
-                className="p-4 bg-white border border-red-100 rounded-lg space-y-3"
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.06 }}
+                className="p-4 bg-white border rounded-lg space-y-3"
+                style={{ borderColor: '#F5E5E1' }}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h4 className="font-semibold text-slate-900 mb-1">{gap.requirement}</h4>
-                    <p className="text-sm text-slate-600">{gap.description}</p>
+                    <h4 className="font-semibold text-nav mb-1">{gap.requirement}</h4>
+                    <p className="text-sm text-text-muted">{gap.description}</p>
                   </div>
-                  <div className="ml-4 px-3 py-1 bg-red-100 rounded-full">
-                    <p className="text-xs font-medium text-red-700">CRITICAL</p>
+                  <div className="ml-4 pill px-3 py-1" style={{ background: '#FDECEB', color: '#E8312A' }}>
+                    <p className="text-xs font-semibold uppercase tracking-widest">Critical</p>
                   </div>
                 </div>
 
                 {/* Role Badge and Market Comp */}
-                <div className="grid grid-cols-2 gap-4 mt-3 pt-3 border-t border-slate-200">
+                <div className="grid grid-cols-2 gap-4 mt-3 pt-3 border-t border-border">
                   <div>
-                    <p className="text-xs text-slate-600 mb-1">Role</p>
-                    <p className="text-sm font-medium text-slate-900">{gap.role}</p>
+                    <p className="text-xs text-text-muted mb-1">Role</p>
+                    <p className="text-sm font-medium text-nav">{gap.role}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-600 mb-1">Market Salary</p>
-                    <p className="text-sm font-medium text-slate-900">
+                    <p className="text-xs text-text-muted mb-1">Market Salary</p>
+                    <p className="text-sm font-medium text-nav">
                       ${(gap.marketCompMin / 1000).toFixed(0)}K - ${(gap.marketCompMax / 1000).toFixed(0)}K
                     </p>
                   </div>
@@ -161,57 +145,56 @@ export function ComplianceGapDashboard({
                 {/* CTA Button */}
                 <Button
                   onClick={onFindTalent}
-                  className="w-full mt-3 bg-red-600 hover:bg-red-700 text-white"
-                  style={{ background: '#E8312A', borderColor: '#E8312A' }}
+                  className="btn btn-accent w-full mt-3 gap-2 font-semibold px-6 py-2.5 rounded-full"
                 >
                   Find {gap.role} →
                 </Button>
               </motion.div>
             ))}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {/* Warning Items */}
       {warningGaps.length > 0 && (
-        <Card className="border-amber-200 bg-amber-50">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <AlertCircle className="w-5 h-5 text-amber-600" />
-              <div>
-                <CardTitle className="text-slate-900">Items to Address</CardTitle>
-                <CardDescription>Not critical, but should be resolved proactively</CardDescription>
-              </div>
+        <div className="card p-6 card-hover" style={{ background: '#FEF3C7', border: '1px solid #FCD34D' }}>
+          <div className="flex items-center gap-2 mb-6">
+            <AlertCircle className="w-5 h-5" style={{ color: '#B45309' }} />
+            <div>
+              <h3 className="font-semibold text-nav">Items to Address</h3>
+              <p className="text-sm text-text-muted">Not critical, but should be resolved proactively</p>
             </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
+          </div>
+          <div className="space-y-4">
             {warningGaps.map((gap, idx) => (
               <motion.div
                 key={gap.id}
                 initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: idx * 0.05 }}
-                className="p-4 bg-white border border-amber-100 rounded-lg space-y-3"
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.06 }}
+                className="p-4 bg-white border rounded-lg space-y-3"
+                style={{ borderColor: '#FCD34D' }}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h4 className="font-semibold text-slate-900 mb-1">{gap.requirement}</h4>
-                    <p className="text-sm text-slate-600">{gap.description}</p>
+                    <h4 className="font-semibold text-nav mb-1">{gap.requirement}</h4>
+                    <p className="text-sm text-text-muted">{gap.description}</p>
                   </div>
-                  <div className="ml-4 px-3 py-1 bg-amber-100 rounded-full">
-                    <p className="text-xs font-medium text-amber-700">WARNING</p>
+                  <div className="ml-4 pill px-3 py-1" style={{ background: '#FEF3C7', color: '#B45309' }}>
+                    <p className="text-xs font-semibold uppercase tracking-widest">Warning</p>
                   </div>
                 </div>
 
                 {/* Role Badge and Market Comp */}
-                <div className="grid grid-cols-2 gap-4 mt-3 pt-3 border-t border-slate-200">
+                <div className="grid grid-cols-2 gap-4 mt-3 pt-3 border-t border-border">
                   <div>
-                    <p className="text-xs text-slate-600 mb-1">Role</p>
-                    <p className="text-sm font-medium text-slate-900">{gap.role}</p>
+                    <p className="text-xs text-text-muted mb-1">Role</p>
+                    <p className="text-sm font-medium text-nav">{gap.role}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-600 mb-1">Market Salary</p>
-                    <p className="text-sm font-medium text-slate-900">
+                    <p className="text-xs text-text-muted mb-1">Market Salary</p>
+                    <p className="text-sm font-medium text-nav">
                       ${(gap.marketCompMin / 1000).toFixed(0)}K - ${(gap.marketCompMax / 1000).toFixed(0)}K
                     </p>
                   </div>
@@ -220,35 +203,30 @@ export function ComplianceGapDashboard({
                 {/* CTA Button */}
                 <Button
                   onClick={onFindTalent}
-                  variant="outline"
-                  className="w-full mt-3 border-amber-300 text-amber-700 hover:bg-amber-100"
+                  className="btn btn-secondary w-full mt-3 gap-2 font-semibold px-6 py-2.5 rounded-full"
                 >
                   Find {gap.role} →
                 </Button>
               </motion.div>
             ))}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {/* No Gaps Message */}
       {gaps.length === 0 && (
-        <Card className="border-emerald-200 bg-emerald-50">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-              <div>
-                <CardTitle className="text-slate-900">All Gaps Addressed</CardTitle>
-                <CardDescription>Your board meets all compliance requirements</CardDescription>
-              </div>
+        <div className="card p-6 card-hover" style={{ background: '#EAF5F0', border: '1px solid #D5EDE8' }}>
+          <div className="flex items-center gap-2 mb-4">
+            <CheckCircle2 className="w-5 h-5 text-success" />
+            <div>
+              <h3 className="font-semibold text-success">All Gaps Addressed</h3>
+              <p className="text-sm text-text-muted">Your board meets all compliance requirements</p>
             </div>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-slate-700">
-              Great work! Your board composition meets {selectedExchange.toUpperCase()} requirements. You're ready for IPO.
-            </p>
-          </CardContent>
-        </Card>
+          </div>
+          <p className="text-sm text-nav">
+            Great work! Your board composition meets {selectedExchange.toUpperCase()} requirements. You're ready for IPO.
+          </p>
+        </div>
       )}
     </div>
   )

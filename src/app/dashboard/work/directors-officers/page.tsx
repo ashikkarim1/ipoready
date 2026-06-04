@@ -180,60 +180,57 @@ export default function DirectorsOfficersWorkflowPage() {
         transition={{ duration: 0.3 }}
         className="space-y-6"
       >
-        <div>
-          <h2 className="text-2xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <h2 className="serif text-4xl md:text-4xl text-nav" style={{ marginBottom: '1.5rem' }}>
             Board Composition Requirements
           </h2>
-          <p className="text-sm" style={{ color: '#717171' }}>
+          <p className="text-sm text-text-muted">
             Based on your target exchange: <strong>{requirements.name}</strong>
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {requirements.requirements.map((req, idx) => (
             <motion.div
               key={req.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.06 }}
             >
-              <Card className="border-slate-200 bg-white hover:shadow-md transition-all" style={{ border: '1px solid #E5E4E0' }}>
-                <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <CardTitle className="text-base mb-1">{req.title}</CardTitle>
-                      <CardDescription className="text-xs">{req.description}</CardDescription>
-                    </div>
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#FDECEB' }}>
-                      <span className="text-lg font-bold" style={{ color: '#E8312A' }}>
-                        {req.count}
-                      </span>
-                    </div>
+              <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <h3 className="text-base font-semibold text-nav mb-1">{req.title}</h3>
+                    <p className="text-xs text-text-muted">{req.description}</p>
                   </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="text-xs font-mono" style={{ color: '#717171' }}>
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#FDECEB' }}>
+                    <span className="text-lg font-bold text-accent">
+                      {req.count}
+                    </span>
+                  </div>
+                </div>
+                <div className="pt-4 mt-4 border-t border-border">
+                  <div className="text-xs font-mono text-text-muted">
                     {req.source}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
 
-        <Card style={{ background: '#FDECEB', border: '1px solid #F5E5E1' }}>
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#E8312A' }} />
-              <div className="text-sm" style={{ color: '#1A1A1A' }}>
-                <strong>Why these requirements?</strong>
-                <p style={{ color: '#717171', marginTop: '0.5rem' }}>
-                  Regulatory bodies require diverse, experienced boards to protect shareholders and ensure proper governance.
-                </p>
-              </div>
+        <div className="card p-6" style={{ background: '#FDECEB', border: '1px solid #F5E5E1' }}>
+          <div className="flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-accent" />
+            <div className="text-sm text-nav">
+              <strong>Why these requirements?</strong>
+              <p className="text-text-muted" style={{ marginTop: '0.5rem' }}>
+                Regulatory bodies require diverse, experienced boards to protect shareholders and ensure proper governance.
+              </p>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </motion.div>
     )
   }
@@ -252,24 +249,22 @@ export default function DirectorsOfficersWorkflowPage() {
         transition={{ duration: 0.3 }}
         className="space-y-6"
       >
-        <div>
-          <h2 className="text-2xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <h2 className="serif text-4xl md:text-4xl text-nav" style={{ marginBottom: '1.5rem' }}>
             Current Board vs. Requirements
           </h2>
-          <p className="text-sm" style={{ color: '#717171' }}>
+          <p className="text-sm text-text-muted">
             Identify what's missing and what you have
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
-            <Card style={{ border: '1px solid #E5E4E0' }}>
-              <CardHeader>
-                <CardTitle className="text-base">Current Board Roster</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
+            <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
+              <h3 className="text-base font-semibold text-nav mb-4">Current Board Roster</h3>
+              <div className="space-y-3">
                 {boardMembers.length === 0 ? (
-                  <div className="text-center py-6 text-sm" style={{ color: '#717171' }}>
+                  <div className="text-center py-6 text-sm text-text-muted">
                     No board members yet
                   </div>
                 ) : (
@@ -283,87 +278,81 @@ export default function DirectorsOfficersWorkflowPage() {
                         style={{ background: '#F7F6F4' }}
                       >
                         <div className="flex-1">
-                          <div className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>
+                          <div className="font-semibold text-sm text-nav">
                             {member.name}
                           </div>
-                          <div className="text-xs flex items-center gap-2 mt-1" style={{ color: '#717171' }}>
+                          <div className="text-xs flex items-center gap-2 mt-1 text-text-muted">
                             <span>{member.role}</span>
                             {member.independence === 'independent' && (
-                              <span className="px-2 py-0.5 rounded text-xs font-semibold" style={{ background: '#EAF5F0', color: '#2D7A5F' }}>
+                              <span className="pill px-2 py-0.5" style={{ background: '#EAF5F0', color: '#2D7A5F' }}>
                                 Independent
                               </span>
                             )}
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Check className="w-4 h-4" style={{ color: '#2D7A5F' }} />
+                          <Check className="w-4 h-4 text-success" />
                           <button
                             onClick={() => handleRemoveMember(member.id)}
                             className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-50 rounded transition-all"
                           >
-                            <Trash2 className="w-4 h-4" style={{ color: '#E8312A' }} />
+                            <Trash2 className="w-4 h-4 text-accent" />
                           </button>
                         </div>
                       </motion.div>
                     ))}
                   </div>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 }}>
             <div className="space-y-4">
               {criticalGaps > 0 ? (
-                <Card style={{ background: '#FDECEB', borderColor: '#F5E5E1', border: '1px solid #F5E5E1' }}>
-                  <CardContent className="pt-6">
-                    <div className="flex items-start gap-3">
-                      <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#E8312A' }} />
-                      <div>
-                        <div className="font-semibold text-sm mb-2" style={{ color: '#E8312A' }}>
-                          {criticalGaps} Critical Gap{criticalGaps > 1 ? 's' : ''}
-                        </div>
-                        <div className="space-y-1">
-                          {gaps.map(gap => (
-                            <div key={gap.id} className="text-xs" style={{ color: '#1A1A1A' }}>
-                              <strong>• {gap.title}</strong>
-                              <div style={{ color: '#717171' }}>{gap.description}</div>
-                            </div>
-                          ))}
-                        </div>
+                <div className="card p-6" style={{ background: '#FDECEB', borderColor: '#F5E5E1', border: '1px solid #F5E5E1' }}>
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-accent" />
+                    <div>
+                      <div className="font-semibold text-sm mb-2 text-accent">
+                        {criticalGaps} Critical Gap{criticalGaps > 1 ? 's' : ''}
+                      </div>
+                      <div className="space-y-1">
+                        {gaps.map(gap => (
+                          <div key={gap.id} className="text-xs text-nav">
+                            <strong>• {gap.title}</strong>
+                            <div className="text-text-muted">{gap.description}</div>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               ) : (
-                <Card style={{ background: '#EAF5F0', border: '1px solid #D5EDE8' }}>
-                  <CardContent className="pt-6">
-                    <div className="flex items-start gap-3">
-                      <Check className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2D7A5F' }} />
-                      <div>
-                        <div className="font-semibold text-sm" style={{ color: '#2D7A5F' }}>
-                          All Requirements Met
-                        </div>
-                        <div className="text-xs mt-1" style={{ color: '#717171' }}>
-                          Your board meets all regulatory requirements
-                        </div>
+                <div className="card p-6" style={{ background: '#EAF5F0', border: '1px solid #D5EDE8' }}>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 flex-shrink-0 mt-0.5 text-success" />
+                    <div>
+                      <div className="font-semibold text-sm text-success">
+                        All Requirements Met
+                      </div>
+                      <div className="text-xs mt-1 text-text-muted">
+                        Your board meets all regulatory requirements
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               )}
 
-              <Card style={{ border: '1px solid #E5E4E0' }}>
-                <CardHeader>
-                  <CardTitle className="text-sm">Timeline</CardTitle>
-                </CardHeader>
-                <CardContent className="text-xs space-y-2" style={{ color: '#717171' }}>
+              <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
+                <h3 className="text-sm font-semibold text-nav mb-4">Timeline</h3>
+                <div className="text-xs space-y-2 text-text-muted">
                   <div className="flex items-center justify-between">
                     <span>Time to fill gaps:</span>
-                    <strong style={{ color: '#1A1A1A' }}>60-90 days</strong>
+                    <strong className="text-nav">60-90 days</strong>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -382,37 +371,33 @@ export default function DirectorsOfficersWorkflowPage() {
         transition={{ duration: 0.3 }}
         className="space-y-6"
       >
-        <div>
-          <h2 className="text-2xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <h2 className="serif text-4xl md:text-4xl text-nav" style={{ marginBottom: '1.5rem' }}>
             Close the Gaps
           </h2>
-          <p className="text-sm" style={{ color: '#717171' }}>
+          <p className="text-sm text-text-muted">
             Add board members to meet requirements
           </p>
         </div>
 
         {gaps.length > 0 && (
-          <Card style={{ background: '#FEF3C7', border: '1px solid #FCD34D' }}>
-            <CardContent className="pt-6">
-              <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#B45309' }} />
-                <div className="text-xs" style={{ color: '#1A1A1A' }}>
-                  <strong>Remaining gaps: </strong>
-                  {gaps.map(g => g.title).join(' • ')}
-                </div>
+          <div className="card p-6" style={{ background: '#FEF3C7', border: '1px solid #FCD34D' }}>
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#B45309' }} />
+              <div className="text-xs text-nav">
+                <strong>Remaining gaps: </strong>
+                {gaps.map(g => g.title).join(' • ')}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
 
-        <Card style={{ border: '1px solid #E5E4E0' }}>
-          <CardHeader>
-            <CardTitle className="text-base">Add Board Member</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
+          <h3 className="text-base font-semibold text-nav mb-6">Add Board Member</h3>
+          <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold mb-2" style={{ color: '#1A1A1A' }}>
+                <label className="block text-xs font-semibold mb-2 text-nav">
                   Name
                 </label>
                 <input
@@ -425,7 +410,7 @@ export default function DirectorsOfficersWorkflowPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-2" style={{ color: '#1A1A1A' }}>
+                <label className="block text-xs font-semibold mb-2 text-nav">
                   Role
                 </label>
                 <input
@@ -438,13 +423,13 @@ export default function DirectorsOfficersWorkflowPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-2" style={{ color: '#1A1A1A' }}>
+                <label className="block text-xs font-semibold mb-2 text-nav">
                   Independence
                 </label>
                 <select
                   value={newMemberForm.independence || ''}
                   onChange={(e) => setNewMemberForm({ ...newMemberForm, independence: e.target.value as 'independent' | 'management' })}
-                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
+                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none text-nav"
                   style={{ borderColor: '#E5E4E0' }}
                 >
                   <option value="independent">Independent</option>
@@ -452,7 +437,7 @@ export default function DirectorsOfficersWorkflowPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-2" style={{ color: '#1A1A1A' }}>
+                <label className="block text-xs font-semibold mb-2 text-nav">
                   Years Experience
                 </label>
                 <input
@@ -468,14 +453,13 @@ export default function DirectorsOfficersWorkflowPage() {
 
             <Button
               onClick={handleAddMember}
-              className="w-full font-semibold py-2 rounded-lg text-white transition-all"
-              style={{ background: '#E8312A' }}
+              className="btn btn-accent gap-2 font-semibold px-6 py-2.5 rounded-full w-full"
             >
-              <Plus className="w-4 h-4 mr-2" />
+              <Plus className="w-4 h-4" />
               Add Member
             </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </motion.div>
     )
   }
@@ -495,22 +479,20 @@ export default function DirectorsOfficersWorkflowPage() {
         transition={{ duration: 0.3 }}
         className="space-y-6"
       >
-        <div>
-          <h2 className="text-2xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <h2 className="serif text-4xl md:text-4xl text-nav" style={{ marginBottom: '1.5rem' }}>
             Review & Confirm
           </h2>
-          <p className="text-sm" style={{ color: '#717171' }}>
+          <p className="text-sm text-text-muted">
             Version control — you can revert changes anytime
           </p>
         </div>
 
-        <Card style={{ border: '1px solid #E5E4E0' }}>
-          <CardHeader>
-            <CardTitle className="text-base">Changes Summary</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
+          <h3 className="text-base font-semibold text-nav mb-4">Changes Summary</h3>
+          <div className="space-y-4">
             {changes.length === 0 ? (
-              <p className="text-sm text-center py-6" style={{ color: '#717171' }}>
+              <p className="text-sm text-center py-6 text-text-muted">
                 No changes yet
               </p>
             ) : (
@@ -519,20 +501,20 @@ export default function DirectorsOfficersWorkflowPage() {
                   <motion.div key={idx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-lg text-xs" style={{ background: '#F7F6F4' }}>
                     {change.type === 'added' ? (
                       <div className="flex items-start gap-2">
-                        <Plus className="w-4 h-4 mt-0.5" style={{ color: '#2D7A5F' }} />
+                        <Plus className="w-4 h-4 mt-0.5 text-success" />
                         <div>
-                          <strong style={{ color: '#1A1A1A' }}>Added:</strong>
-                          <div style={{ color: '#717171' }}>
+                          <strong className="text-nav">Added:</strong>
+                          <div className="text-text-muted">
                             {change.member?.name} as {change.member?.role}
                           </div>
                         </div>
                       </div>
                     ) : (
                       <div className="flex items-start gap-2">
-                        <Trash2 className="w-4 h-4 mt-0.5" style={{ color: '#E8312A' }} />
+                        <Trash2 className="w-4 h-4 mt-0.5 text-accent" />
                         <div>
-                          <strong style={{ color: '#1A1A1A' }}>Removed:</strong>
-                          <div style={{ color: '#717171' }}>{change.member?.name}</div>
+                          <strong className="text-nav">Removed:</strong>
+                          <div className="text-text-muted">{change.member?.name}</div>
                         </div>
                       </div>
                     )}
@@ -540,28 +522,26 @@ export default function DirectorsOfficersWorkflowPage() {
                 ))}
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card style={{ border: '1px solid #E5E4E0' }}>
-          <CardHeader>
-            <CardTitle className="text-base">Version Control</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
+          <h3 className="text-base font-semibold text-nav mb-4">Version Control</h3>
+          <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <div className="text-xs font-semibold mb-1" style={{ color: '#717171' }}>
+                <div className="text-xs font-semibold mb-1 text-text-muted">
                   Current Version
                 </div>
-                <div className="text-lg font-bold" style={{ color: '#1A1A1A' }}>
+                <div className="text-lg font-bold text-nav">
                   {prospectusVersion}
                 </div>
               </div>
               <div>
-                <div className="text-xs font-semibold mb-1" style={{ color: '#717171' }}>
+                <div className="text-xs font-semibold mb-1 text-text-muted">
                   New Version
                 </div>
-                <div className="text-lg font-bold" style={{ color: '#E8312A' }}>
+                <div className="text-lg font-bold text-accent">
                   v{parseInt(prospectusVersion.split('.').pop() || '0') + 1}
                 </div>
               </div>
@@ -569,47 +549,43 @@ export default function DirectorsOfficersWorkflowPage() {
 
             <Button
               onClick={handleRevert}
-              variant="outline"
-              className="w-full text-xs"
+              className="btn btn-secondary w-full text-xs"
               style={{ borderColor: '#E5E4E0', color: '#717171' }}
             >
-              <RefreshCcw className="w-3 h-3 mr-2" />
+              <RefreshCcw className="w-3 h-3" />
               Revert to {prospectusVersion}
             </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {totalFeesDue > 0 && (
-          <Card style={{ background: '#FDECEB', border: '1px solid #F5E5E1' }}>
-            <CardContent className="pt-6">
-              <div className="space-y-2">
-                <div className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>
-                  IPOReady Service Fees
+          <div className="card p-6" style={{ background: '#FDECEB', border: '1px solid #F5E5E1' }}>
+            <div className="space-y-2">
+              <div className="text-sm font-semibold text-nav">
+                IPOReady Service Fees
+              </div>
+              <div className="text-xs space-y-1 text-text-muted">
+                <div className="flex items-center justify-between">
+                  <span>Professionals hired:</span>
+                  <strong className="text-accent">
+                    {boardMembers.filter(m => m.source === 'ipoready').length}
+                  </strong>
                 </div>
-                <div className="text-xs space-y-1" style={{ color: '#717171' }}>
-                  <div className="flex items-center justify-between">
-                    <span>Professionals hired:</span>
-                    <strong style={{ color: '#E8312A' }}>
-                      {boardMembers.filter(m => m.source === 'ipoready').length}
-                    </strong>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Total finders fees (15%):</span>
-                    <strong style={{ color: '#E8312A' }}>
-                      ${totalFeesDue.toLocaleString('en-US', { maximumFractionDigits: 0 })}
-                    </strong>
-                  </div>
+                <div className="flex items-center justify-between">
+                  <span>Total finders fees (15%):</span>
+                  <strong className="text-accent">
+                    ${totalFeesDue.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+                  </strong>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
 
         <div className="flex gap-3">
           <Button
             onClick={() => setCurrentStep(3)}
-            variant="outline"
-            className="flex-1"
+            className="btn btn-secondary flex-1"
             style={{ borderColor: '#E5E4E0', color: '#1A1A1A' }}
           >
             Back to Edit
@@ -617,8 +593,7 @@ export default function DirectorsOfficersWorkflowPage() {
           <Button
             onClick={handleConfirmSync}
             disabled={loading}
-            className="flex-1 font-semibold py-2 rounded-lg text-white transition-all"
-            style={{ background: '#2D7A5F' }}
+            className="btn btn-accent flex-1 font-semibold px-6 py-2.5 rounded-full"
           >
             {loading ? 'Syncing...' : 'Confirm & Sync'}
           </Button>
@@ -629,18 +604,18 @@ export default function DirectorsOfficersWorkflowPage() {
 
   return (
     <div style={{ background: '#F7F6F4', minHeight: '100vh' }}>
-      <div className="max-w-7xl mx-auto p-6 lg:p-12 space-y-8">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-10 lg:py-16 space-y-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
           <div className="flex items-center gap-3">
-            <div className="px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide" style={{ background: '#FDECEB', color: '#E8312A' }}>
+            <div className="pill px-4 py-2 text-sm font-semibold" style={{ background: '#FDECEB', color: '#E8312A' }}>
               <Users className="w-3 h-3 inline mr-1.5" />
               Board Requirements Analyzer
             </div>
           </div>
-          <h1 className="text-3xl lg:text-4xl font-bold" style={{ color: '#1A1A1A' }}>
+          <h1 className="serif text-4xl md:text-5xl text-nav" style={{ marginBottom: '1.5rem' }}>
             Build Your Board
           </h1>
-          <p className="text-sm" style={{ color: '#717171' }}>
+          <p className="text-sm text-text-muted">
             Follow the workflow to identify gaps, fill them, and sync to your prospectus
           </p>
         </motion.div>
@@ -673,14 +648,14 @@ export default function DirectorsOfficersWorkflowPage() {
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
           <div className="flex items-center gap-4">
-            <label className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>
+            <label className="text-sm font-semibold text-nav">
               Target Exchange:
             </label>
             <select
               value={selectedExchange}
               onChange={e => setSelectedExchange(e.target.value)}
-              className="px-4 py-2 border rounded-lg text-sm focus:outline-none font-medium"
-              style={{ borderColor: '#E5E4E0', color: '#1A1A1A' }}
+              className="px-4 py-2 border rounded-lg text-sm focus:outline-none font-medium text-nav"
+              style={{ borderColor: '#E5E4E0' }}
             >
               <option value="tsxv">TSXV (TSX Venture)</option>
               <option value="tsx">TSX (Toronto Stock Exchange)</option>
@@ -701,28 +676,28 @@ export default function DirectorsOfficersWorkflowPage() {
           <Button
             onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
             disabled={currentStep === 1}
-            variant="outline"
+            className="btn btn-secondary"
             style={{
               borderColor: '#E5E4E0',
               color: currentStep === 1 ? '#C9C7C4' : '#1A1A1A',
             }}
           >
-            <ChevronLeft className="w-4 h-4 mr-2" />
+            <ChevronLeft className="w-4 h-4" />
             Back
           </Button>
 
-          <div className="text-xs font-semibold text-center" style={{ color: '#717171' }}>
+          <div className="text-xs font-semibold text-center text-text-muted">
             Step {currentStep} of 4
           </div>
 
           <Button
             onClick={() => setCurrentStep(Math.min(4, currentStep + 1))}
             disabled={currentStep === 4}
-            className="font-semibold text-white"
-            style={{ background: currentStep === 4 ? '#C9C7C4' : '#E8312A' }}
+            className="btn btn-accent font-semibold px-6 py-2.5 rounded-full"
+            style={{ opacity: currentStep === 4 ? '0.5' : '1' }}
           >
             Next
-            <ChevronRight className="w-4 h-4 ml-2" />
+            <ChevronRight className="w-4 h-4" />
           </Button>
         </motion.div>
       </div>
