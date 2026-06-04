@@ -1,6 +1,35 @@
 import Link from 'next/link'
 import { ArrowRight, CheckCircle2, Globe, Clock, DollarSign, TrendingUp } from 'lucide-react'
 
+// Schema markup for rich search results
+function getExchangeSchema(exchange: any) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: `${exchange.name} Listing Guide`,
+    description: exchange.description,
+    url: `https://www.ipoready.ai/exchanges/${exchange.code}`,
+    educationalLevel: 'Professional',
+    learningResourceType: 'Guide',
+    author: {
+      '@type': 'Organization',
+      name: 'IPOReady',
+      url: 'https://www.ipoready.ai',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'IPOReady Inc.',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.ipoready.ai/logo.png',
+      },
+    },
+    datePublished: '2024-06-01',
+    dateModified: new Date().toISOString().split('T')[0],
+    keywords: `${exchange.name}, listing, IPO, requirements, timeline, costs`,
+  }
+}
+
 // Exchange data
 const EXCHANGES: Record<string, any> = {
   tsx: {
@@ -166,8 +195,14 @@ export default function ExchangePage({ params }: { params: { code: string } }) {
     )
   }
 
+  // Add schema markup for SEO
+  const schema = getExchangeSchema({ ...exchange, code: params.code })
+
   return (
     <div style={{ background: '#F7F6F4', minHeight: '100vh' }}>
+      {/* Schema markup for Google Search */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+
       <header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid #E5E4E0', background: '#FFFFFF', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1A1A1A', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
