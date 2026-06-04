@@ -27,6 +27,15 @@ const NAV_GROUPS = [
     ],
   },
   {
+    section: 'FILINGS',
+    collapsible: true,
+    items: [
+      { href: '/dashboard/filings',                icon: FileCheck,   label: 'View Filings',        badge: null,   key: 'filings-list'     },
+      { href: '/dashboard/filings/new',            icon: FileText,    label: 'New Filing',          badge: '✨',   key: 'filings-new'      },
+      { href: '/dashboard/filings/status',         icon: Activity,    label: 'Filing Status',       badge: null,   key: 'filings-status'   },
+    ],
+  },
+  {
     section: 'WORK',
     collapsible: false,
     items: [
@@ -136,7 +145,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [showAccountPanel, setShowAccountPanel] = useState(false)
 
   // Collapsible sections state with localStorage persistence
-  const [expandedSections, setExpandedSections] = useState<string[]>(['MISSION', 'WORK', 'FINANCIAL MANAGEMENT', 'COMPLIANCE'])
+  const [expandedSections, setExpandedSections] = useState<string[]>(['MISSION', 'FILINGS', 'WORK', 'FINANCIAL MANAGEMENT', 'COMPLIANCE'])
 
   useEffect(() => {
     // Load from localStorage on mount

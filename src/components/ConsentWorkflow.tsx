@@ -508,7 +508,8 @@ function NewConsentForm({ onClose, onSubmit }: NewConsentFormProps) {
               </button>
               <button
                 type="submit"
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                className="flex-1 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity font-medium"
+                style={{ background: 'var(--color-accent)' }}
               >
                 Create Request
               </button>
@@ -735,7 +736,8 @@ export function ConsentWorkflow() {
           {/* New Consent Button */}
           <button
             onClick={() => setShowNewForm(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2"
+            className="px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity font-medium flex items-center justify-center gap-2"
+            style={{ background: 'var(--color-accent)' }}
           >
             <Plus className="w-5 h-5" />
             New Consent
