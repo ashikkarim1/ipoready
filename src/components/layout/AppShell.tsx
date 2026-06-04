@@ -27,17 +27,8 @@ const NAV_GROUPS = [
     ],
   },
   {
-    section: 'FILINGS',
-    collapsible: true,
-    items: [
-      { href: '/dashboard/filings',                icon: FileCheck,   label: 'View Filings',        badge: null,   key: 'filings-list'     },
-      { href: '/dashboard/filings/new',            icon: FileText,    label: 'New Filing',          badge: '✨',   key: 'filings-new'      },
-      { href: '/dashboard/filings/status',         icon: Activity,    label: 'Filing Status',       badge: null,   key: 'filings-status'   },
-    ],
-  },
-  {
     section: 'WORK',
-    collapsible: false,
+    collapsible: true,
     items: [
       { href: '/cap-table',                              icon: PieChart,        label: 'Cap Table',          badge: 'AI',   key: 'cap-table'        },
       { href: '/documents',                              icon: FileText,        label: 'Documents',          badge: null,   key: 'documents'        },
@@ -63,6 +54,15 @@ const NAV_GROUPS = [
       { href: '/compliance/resolutions',    icon: FileCheck,   label: 'Corporate Resolutions', badge: null,   key: 'resolutions'    },
       { href: '/demo/consent-workflow',     icon: Signature,   label: 'Consent Workflow',      badge: null,   key: 'consent'        },
       { href: '/marketplace',               icon: Share2,      label: 'Expert Network',        badge: null,   key: 'syndication'    },
+    ],
+  },
+  {
+    section: 'FILINGS',
+    collapsible: true,
+    items: [
+      { href: '/dashboard/filings',                icon: FileCheck,   label: 'View Filings',        badge: null,   key: 'filings-list'     },
+      { href: '/dashboard/filings/new',            icon: FileText,    label: 'New Filing',          badge: '✨',   key: 'filings-new'      },
+      { href: '/dashboard/filings/status',         icon: Activity,    label: 'Filing Status',       badge: null,   key: 'filings-status'   },
     ],
   },
   {
@@ -145,7 +145,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [showAccountPanel, setShowAccountPanel] = useState(false)
 
   // Collapsible sections state with localStorage persistence
-  const [expandedSections, setExpandedSections] = useState<string[]>(['MISSION', 'FILINGS', 'WORK', 'FINANCIAL MANAGEMENT', 'COMPLIANCE'])
+  const [expandedSections, setExpandedSections] = useState<string[]>(['MISSION', 'WORK', 'FINANCIAL MANAGEMENT', 'COMPLIANCE', 'FILINGS'])
 
   useEffect(() => {
     // Load from localStorage on mount
