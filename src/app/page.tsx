@@ -169,8 +169,8 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.06 }}
               className="serif"
               style={{ fontSize: '2.1rem', lineHeight: '1.2', marginBottom: '1.25rem', color: '#1A1A1A' }}>
-              Plan, prepare, and file your IPO in 50+ countries<br />
-              <span style={{ color: 'var(--color-accent)' }}>One platform. Every regulator. Zero manual work.</span>
+              Manage your entire IPO journey<br />
+              <span style={{ color: 'var(--color-accent)' }}>from first resolution to the bell—and beyond.</span>
             </motion.h1>
 
             <motion.div
@@ -182,15 +182,15 @@ export default function LandingPage() {
               <div className="space-y-2">
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 mt-0.5" style={{ color: 'var(--color-accent)' }} />
-                  <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>File on SEDAR 2, SEC Edgar, and 50+ exchanges</p>
+                  <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>180+ pre-built tasks across all exchanges</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 mt-0.5" style={{ color: 'var(--color-accent)' }} />
-                  <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>Validate documents before submission</p>
+                  <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>PACE™ Score predicts your listing date in real-time</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 mt-0.5" style={{ color: 'var(--color-accent)' }} />
-                  <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>Real-time status updates from regulators</p>
+                  <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>Coordinate your entire team and expert network</p>
                 </div>
               </div>
             </motion.div>
@@ -544,77 +544,22 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Multi-Country Filing Features ────────────────────────────────────── */}
-      <section id="filing" className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-        <div style={{ marginBottom: '2.5rem' }}>
-          <div className="text-xs uppercase tracking-widest" style={{ marginBottom: '1rem', color: '#717171' }}>Filing automation</div>
-          <h2 className="serif text-3xl md:text-4xl leading-tight" style={{ marginBottom: '0.875rem', color: '#1A1A1A', maxWidth: 'none' }}>
-            Multi-Country Filing
-          </h2>
-          <p style={{ maxWidth: '540px', lineHeight: '1.65', color: '#717171' }}>
-            Automate regulatory submissions across 50+ exchanges worldwide with intelligent adapters that handle each regulator's unique requirements.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {[
-            {
-              icon: CheckCircle2,
-              title: 'Automated Filing Submission',
-              description: 'Upload once, file everywhere. Our adapters handle each regulator\'s unique requirements.',
-              color: 'var(--color-accent)',
-              bg: 'var(--color-error-soft)',
-            },
-            {
-              icon: AlertCircle,
-              title: 'Pre-Submission Validation',
-              description: 'Catch errors before the regulator does. Automated validation prevents costly rejections.',
-              color: '#B45309',
-              bg: '#FEF3C7',
-            },
-            {
-              icon: Clock,
-              title: 'Real-Time Status Tracking',
-              description: 'Know exactly where your filing stands. Live updates from SEDAR 2, SEC Edgar, and beyond.',
-              color: '#1D4ED8',
-              bg: '#EFF6FF',
-            },
-          ].map((f, i) => {
-            const Icon = f.icon
-            return (
-              <motion.div key={f.title}
-                initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ delay: i * 0.06 }}
-                className="card p-6 card-hover">
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5"
-                  style={{ background: f.bg }}>
-                  <Icon className="w-5 h-5" style={{ color: f.color }} />
-                </div>
-                <h3 className="font-semibold mb-3" style={{ color: '#1A1A1A' }}>{f.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>{f.description}</p>
-              </motion.div>
-            )
-          })}
-        </div>
-      </section>
-
-      {/* ── Filing Stats Section ────────────────────────────────────────────── */}
+      {/* ── Integrated Filing (Downplayed) ────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto" style={{ paddingTop: '2rem', paddingBottom: '2rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { value: '50+', label: 'Countries', sub: 'Global exchange coverage' },
-            { value: '2', label: 'Adapters Live', sub: 'SEDAR 2 & SEC Edgar' },
-            { value: '100%', label: 'Extensible', sub: 'Add new regulators anytime' },
-          ].map((s, i) => (
-            <motion.div key={s.label}
-              initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ delay: i * 0.06 }}
-              className="card p-6 text-center" style={{ background: '#FFFFFF', borderColor: '#E5E4E0', border: '1px solid #E5E4E0' }}>
-              <p className="serif text-4xl md:text-5xl mb-2" style={{ color: '#1D4ED8', fontWeight: 'bold' }}>{s.value}</p>
-              <p className="font-semibold text-sm mb-1" style={{ color: '#1A1A1A' }}>{s.label}</p>
-              <p className="text-xs leading-relaxed" style={{ color: '#717171' }}>{s.sub}</p>
-            </motion.div>
-          ))}
+        <div className="card p-6 md:p-8" style={{ background: '#FAFAF8', borderColor: '#E5E4E0', border: '1px solid #E5E4E0' }}>
+          <div className="max-w-3xl">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'var(--color-error-soft)' }}>
+                <FileText className="w-6 h-6" style={{ color: 'var(--color-accent)' }} />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg mb-2" style={{ color: '#1A1A1A' }}>Regulatory Filing, Built In</h3>
+                <p style={{ color: '#717171', lineHeight: '1.6' }}>
+                  Once your company is ready, submit documents directly to SEDAR 2, SEC Edgar, and other regulators from within IPOReady — with integrated validation and real-time status tracking. No switching between platforms, no manual data entry.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -780,10 +725,10 @@ export default function LandingPage() {
 
         {/* Main grid */}
         <div className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-          <div className="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-3 md:gap-4" style={{ minWidth: 0, overflow: 'hidden' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6" style={{ minWidth: 0 }}>
 
             {/* Brand column */}
-            <div className="col-span-2 md:col-span-1">
+            <div>
               <Link href="/" className="flex items-center gap-2.5" style={{ marginBottom: '1rem' }}>
                 <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: 'var(--color-text-primary)' }}>
                   <Rocket className="w-4 h-4 text-white" />
@@ -839,8 +784,6 @@ export default function LandingPage() {
                   { label: 'Raising Capital',    href: '/raising-capital' },
                   { label: 'Document Workspace', href: '/documents' },
                   { label: 'Expert Network',     href: '/marketplace' },
-                  { label: 'Templates & Forms',  href: '/templates' },
-                  { label: 'PACE™ Score',        href: '/dashboard' },
                 ].map(({ label, href }) => (
                   <li key={label}>
                     <Link href={href}
@@ -850,53 +793,44 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
+              <div style={{ marginTop: '1.5rem' }}>
+                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Company</p>
+                <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                  {[
+                    { label: 'Pricing',      href: '/pricing' },
+                    { label: 'Referral Program', href: '/referrals' },
+                    { label: 'Account',      href: '/account' },
+                    { label: 'Get Started',  href: '/register' },
+                  ].map(({ label, href }) => (
+                    <li key={label}>
+                      <Link href={href}
+                        className="text-sm text-text-muted transition-colors hover:text-nav">
+                        {label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
-            {/* Company */}
-            <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Company</p>
-              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                {[
-                  { label: 'Pricing',          href: '/pricing' },
-                  { label: 'Referral Program', href: '/referrals' },
-                  { label: 'Mission Control',  href: '/dashboard' },
-                  { label: 'Team & Roles',     href: '/team' },
-                  { label: 'Account',          href: '/account' },
-                  { label: 'Get Started',      href: '/register' },
-                  { label: 'Sign In',          href: '/login' },
-                ].map(({ label, href }) => (
-                  <li key={label}>
-                    <Link href={href}
-                      className="text-sm text-text-muted transition-colors hover:text-nav">
-                      {label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Exchanges */}
+            {/* Exchanges & Listing Types */}
             <div>
               <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Exchanges</p>
               <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                {[
-                  'TSX', 'TSXV', 'CSE', 'NASDAQ', 'NYSE', 'OTC Markets', 'Cboe Canada',
-                ].map(ex => (
+                {['TSX', 'TSXV', 'CSE', 'NASDAQ', 'NYSE', 'OTC Markets'].map(ex => (
                   <li key={ex}>
                     <span className="text-sm text-text-muted">{ex}</span>
                   </li>
                 ))}
               </ul>
-            </div>
-
-            {/* Listing Types */}
-            <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Listing Types</p>
-              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                {['IPO', 'Direct Listing', 'RTO', 'SPAC', 'Regulation A+'].map(t => (
-                  <li key={t}><span className="text-sm text-text-muted">{t}</span></li>
-                ))}
-              </ul>
+              <div style={{ marginTop: '1.5rem' }}>
+                <p className="text-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Listing Types</p>
+                <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                  {['IPO', 'Direct Listing', 'RTO', 'SPAC'].map(t => (
+                    <li key={t}><span className="text-sm text-text-muted">{t}</span></li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
             {/* Legal & Support */}
