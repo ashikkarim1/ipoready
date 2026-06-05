@@ -2,10 +2,11 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import { AppShell } from '@/components/layout/AppShell'
 import {
   TrendingUp, DollarSign, Users, BarChart3, CheckCircle2, AlertCircle,
-  Filter, ArrowUpRight, ArrowDownRight
+  Filter, ArrowUpRight, ArrowDownRight, HelpCircle
 } from 'lucide-react'
 
 interface Peer {
@@ -14,6 +15,8 @@ interface Peer {
   sector: string
   ipo_year: number
   valuation: string
+  valuationMethod: string
+  valuationLogic: string
   revenue: string
   ipo_raised: string
   employees: number
@@ -28,6 +31,8 @@ const MOCK_PEERS: Peer[] = [
     sector: 'Cloud Monitoring',
     ipo_year: 2019,
     valuation: '$38B',
+    valuationMethod: 'EV/Revenue Multiple',
+    valuationLogic: '38B valuation = $1.5B revenue × 25.3x multiple. Datadog trades at 25x revenue due to: (1) 30%+ YoY growth, (2) 130%+ net retention rate, (3) AI-driven observability platform in high-demand market, (4) Strong enterprise customer base with average ACV $500K+',
     revenue: '$1.5B (2023)',
     ipo_raised: '$648M',
     employees: 3500,
@@ -40,6 +45,8 @@ const MOCK_PEERS: Peer[] = [
     sector: 'Communications API',
     ipo_year: 2016,
     valuation: '$12B',
+    valuationMethod: 'EV/Revenue Multiple',
+    valuationLogic: '12B valuation = $2.9B revenue × 4.1x multiple. Lower multiple (4x vs 25x Datadog) reflects: (1) Slower growth after market saturation, (2) Increased competition from AWS/Google, (3) Customer churn in certain verticals, (4) Mature SaaS platform without AI differentiation',
     revenue: '$2.9B (2023)',
     ipo_raised: '$200M',
     employees: 4900,
@@ -52,6 +59,8 @@ const MOCK_PEERS: Peer[] = [
     sector: 'Infrastructure Automation',
     ipo_year: 2021,
     valuation: '$4.2B',
+    valuationMethod: 'EV/Revenue Multiple',
+    valuationLogic: '4.2B valuation = $550M revenue × 7.6x multiple. Mid-range multiple driven by: (1) 40%+ growth but below DDOG, (2) Open-source community adoption, (3) Enterprise TCO model with sticky deployments, (4) Lower net retention vs pure-cloud platforms',
     revenue: '$550M (2023)',
     ipo_raised: '$1.2B',
     employees: 1300,
@@ -64,6 +73,8 @@ const MOCK_PEERS: Peer[] = [
     sector: 'Search & Analytics',
     ipo_year: 2018,
     valuation: '$18B',
+    valuationMethod: 'EV/Revenue Multiple + DCF',
+    valuationLogic: '18B valuation = $1.2B revenue × 15x multiple. Premium pricing justified by: (1) 35% growth in search/analytics, (2) Switching costs embedded in infrastructure, (3) 50+ countries showing global expansion, (4) Mission-critical role in observability stack post-AI adoption',
     revenue: '$1.2B (2023)',
     ipo_raised: '$235M',
     employees: 2600,
@@ -76,6 +87,8 @@ const MOCK_PEERS: Peer[] = [
     sector: 'Database Platform',
     ipo_year: 2017,
     valuation: '$32B',
+    valuationMethod: 'EV/Revenue Multiple + Growth',
+    valuationLogic: '32B valuation = $1.7B revenue × 18.8x multiple. High multiple reflects: (1) 32% ARR growth, (2) Highest net retention among peers (140%+), (3) Developer-first moat with largest NoSQL install base, (4) Essential infrastructure reducing churn risk, (5) AI integration roadmap creating upsell opportunities',
     revenue: '$1.7B (2023)',
     ipo_raised: '$192M',
     employees: 2200,
@@ -85,7 +98,9 @@ const MOCK_PEERS: Peer[] = [
 ]
 
 export default function PeerAnalysisPage() {
+  const router = useRouter()
   const [selectedSector, setSelectedSector] = useState<string | null>(null)
+  const [hoveredValuation, setHoveredValuation] = useState<string | null>(null)
 
   const peers = selectedSector
     ? MOCK_PEERS.filter(p => p.sector.toLowerCase().includes(selectedSector.toLowerCase()))
@@ -244,9 +259,18 @@ export default function PeerAnalysisPage() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.05 }}
+                    onClick={() => router.push(`/market-analysis/peer-analysis/${peer.id}`)}
                     style={{
                       borderBottom: '1px solid #E5E4E0',
-                      background: idx % 2 === 0 ? '#FFFFFF' : '#FAFAF8'
+                      background: idx % 2 === 0 ? '#FFFFFF' : '#FAFAF8',
+                      cursor: 'pointer',
+                      transition: 'background 0.2s'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#F3F3F3'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = idx % 2 === 0 ? '#FFFFFF' : '#FAFAF8'
                     }}
                   >
                     <td style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: 600, color: '#1A1A1A' }}>
@@ -255,8 +279,63 @@ export default function PeerAnalysisPage() {
                     <td style={{ padding: '1rem', fontSize: '0.875rem', color: '#717171' }}>
                       {peer.sector}
                     </td>
-                    <td style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: 600, color: '#1A1A1A', textAlign: 'right' }}>
-                      {peer.valuation}
+                    <td style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: 600, color: '#1A1A1A', textAlign: 'right', position: 'relative' }}>
+                      <div
+                        style={{ position: 'relative', display: 'inline-block', cursor: 'help' }}
+                        onMouseEnter={() => setHoveredValuation(peer.id)}
+                        onMouseLeave={() => setHoveredValuation(null)}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', justifyContent: 'flex-end' }}>
+                          {peer.valuation}
+                          <HelpCircle className="w-4 h-4" style={{ color: '#1D4ED8', opacity: 0.6 }} />
+                        </div>
+
+                        {hoveredValuation === peer.id && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            style={{
+                              position: 'absolute',
+                              bottom: '120%',
+                              right: 0,
+                              background: '#1A1A1A',
+                              color: '#FFFFFF',
+                              padding: '1rem',
+                              borderRadius: '0.5rem',
+                              fontSize: '0.875rem',
+                              zIndex: 10,
+                              minWidth: '300px',
+                              boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
+                              pointerEvents: 'none'
+                            }}
+                          >
+                            <p style={{ margin: 0, marginBottom: '0.5rem', fontWeight: 700, color: '#E8312A' }}>
+                              Valuation Method
+                            </p>
+                            <p style={{ margin: 0, marginBottom: '0.75rem', fontSize: '0.875rem', lineHeight: 1.5 }}>
+                              {peer.valuationMethod}
+                            </p>
+                            <p style={{ margin: 0, fontSize: '0.75rem', lineHeight: 1.5, color: '#CCCCCC' }}>
+                              {peer.valuationLogic}
+                            </p>
+
+                            {/* Tooltip arrow */}
+                            <div
+                              style={{
+                                position: 'absolute',
+                                bottom: '-6px',
+                                right: '20px',
+                                width: 0,
+                                height: 0,
+                                borderLeft: '6px solid transparent',
+                                borderRight: '6px solid transparent',
+                                borderTop: '6px solid #1A1A1A'
+                              }}
+                            />
+                          </motion.div>
+                        )}
+                      </div>
                     </td>
                     <td style={{ padding: '1rem', fontSize: '0.875rem', color: '#717171', textAlign: 'right' }}>
                       {peer.ipo_year}
