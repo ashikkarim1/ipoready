@@ -146,40 +146,41 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
               fontWeight: 700,
               cursor: 'pointer',
               letterSpacing: '-0.2px',
-              transition: 'opacity 0.15s ease',
+              transition: 'all 0.15s ease',
               opacity: tryAgainHovered ? 0.85 : 1,
+              transform: tryAgainHovered ? 'translateY(-1px)' : 'translateY(0)',
+              boxShadow: tryAgainHovered ? '0 4px 12px rgba(0,0,0,0.1)' : 'none',
             }}
           >
             Try again
           </button>
 
-          <div
+          <Link
+            href="/dashboard"
             onMouseEnter={() => setDashboardHovered(true)}
             onMouseLeave={() => setDashboardHovered(false)}
+            style={{
+              flex: 1,
+              height: '44px',
+              borderRadius: '10px',
+              backgroundColor: 'transparent',
+              color: 'var(--color-text-primary)',
+              border: `1.5px solid ${dashboardHovered ? 'var(--color-text-primary)' : 'var(--color-border)'}`,
+              fontSize: '14px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              letterSpacing: '-0.2px',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.15s ease',
+              transform: dashboardHovered ? 'translateY(-1px)' : 'translateY(0)',
+              boxShadow: dashboardHovered ? '0 4px 12px rgba(0,0,0,0.05)' : 'none',
+            }}
           >
-            <Link
-              href="/dashboard"
-              style={{
-                flex: 1,
-                height: '44px',
-                borderRadius: '10px',
-                backgroundColor: 'transparent',
-                color: 'var(--color-text-primary)',
-                border: `1.5px solid ${dashboardHovered ? 'var(--color-text-primary)' : 'var(--color-border)'}`,
-                fontSize: '14px',
-                fontWeight: 700,
-                cursor: 'pointer',
-                letterSpacing: '-0.2px',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'border-color 0.15s ease',
-              }}
-            >
-              Go to dashboard
-            </Link>
-          </div>
+            Go to dashboard
+          </Link>
         </div>
       </motion.div>
     </div>
