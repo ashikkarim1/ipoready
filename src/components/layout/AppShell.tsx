@@ -36,6 +36,12 @@ const NAV_GROUPS = [
       { href: '/dashboard/documents/contracts-map',      icon: FileText,        label: 'Prospectus Map',     badge: null,   key: 'prospectus-map'   },
       { href: '/prospectus',                             icon: FileText,        label: 'Prospectus Builder', badge: '✨',   key: 'prospectus'       },
       { href: '/dashboard/work/prospectus-validator',    icon: CheckSquare,     label: 'Prospectus Validator', badge: null,  key: 'validator'        },
+    ],
+  },
+  {
+    section: 'PEOPLE',
+    collapsible: true,
+    items: [
       { href: '/dashboard/work/directors-officers',      icon: Users,           label: 'Board & Talent',     badge: '💎',   key: 'directors'        },
     ],
   },
