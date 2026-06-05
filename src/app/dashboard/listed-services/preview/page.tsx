@@ -1,6 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import { LockedCard } from '@/components/ListedServices/LockedCard'
+import { AppNav } from '@/components/ListedServices/AppNav'
 import { motion } from 'framer-motion'
 import {
   AlertCircle, Clock, MessageSquare, Eye, Users, BarChart3, DollarSign,
@@ -8,403 +10,257 @@ import {
 } from 'lucide-react'
 
 export default function ListedServicesPreviewPage() {
+  const [activeSection, setActiveSection] = useState('disclosure')
+
+  // App-optimized module organization
+  const modules = {
+    disclosure: {
+      name: 'Disclosure & Filings',
+      cards: [
+        {
+          title: 'Filing Calendar',
+          description: 'Track regulatory deadlines',
+          icon: <Clock className="w-5 h-5" />,
+          features: ['10-K/10-Q/8-K deadlines', 'Jurisdiction requirements', 'Readiness scoring', 'AI predictions'],
+          dataPreview: ['Q1 10-Q: 35 days (85% ready)', 'Proxy circular: 120 days', 'Material changes tracked']
+        },
+        {
+          title: 'MD&A Studio',
+          description: 'AI generates draft MD&A',
+          icon: <BarChart3 className="w-5 h-5" />,
+          features: ['ERP data auto-pull', 'SEC/SEDAR output', 'Variance explanations', 'Risk disclosure'],
+          dataPreview: ['Q1 revenue: +12% YoY', 'Liquidity risk flagged', 'Missing footnote 7']
+        },
+        {
+          title: 'Disclosure Center',
+          description: 'Materiality analyzer',
+          icon: <AlertCircle className="w-5 h-5" />,
+          features: ['Materiality engine', 'Litigation tracker', 'Management alerts', 'Press release recs'],
+          dataPreview: ['CEO resignation: 8-K', 'New financing: material', 'Warranty: immaterial']
+        }
+      ]
+    },
+    ir: {
+      name: 'Investor Relations',
+      cards: [
+        {
+          title: 'IR Calendar',
+          description: '12-month IR plan',
+          icon: <Clock className="w-5 h-5" />,
+          features: ['Earnings calendar', 'Conference recs', 'Roadshow planning', 'Analyst calls'],
+          dataPreview: ['Q1 earnings: March 15', 'Investor conference: April 8-10', 'Roadshow: 12 cities']
+        },
+        {
+          title: 'Press Releases',
+          description: 'AI drafts announcements',
+          icon: <MessageSquare className="w-5 h-5" />,
+          features: ['Earnings drafts', 'Exchange check', 'Materiality review', 'Multi-language'],
+          dataPreview: ['Q1 earnings draft: Ready for review', 'New customer win: 2 releases pending', 'Product launch: Materiality check']
+        },
+        {
+          title: 'Market Awareness',
+          description: 'News & sentiment tracking',
+          icon: <Eye className="w-5 h-5" />,
+          features: ['News monitoring', 'Analyst tracking', 'Sentiment analysis', 'Risk alerts'],
+          dataPreview: ['Last 7 days: 28 mentions', 'Analyst coverage: 12 firms', 'Sentiment: 72% positive']
+        },
+        {
+          title: 'Investor CRM',
+          description: 'Engagement tracking',
+          icon: <Users className="w-5 h-5" />,
+          features: ['Institution database', 'Engagement logs', 'Outreach recs', 'Automation'],
+          dataPreview: ['Top 20 shareholders tracked', 'Last quarter: 42 meetings', 'Action items: 5 pending']
+        }
+      ]
+    },
+    cfo: {
+      name: 'CFO Command',
+      cards: [
+        {
+          title: 'Financial Reporting',
+          description: 'Draft disclosures',
+          icon: <BarChart3 className="w-5 h-5" />,
+          features: ['Footnote drafting', 'Disclosure gen', 'Variance analysis', 'Audit readiness'],
+          dataPreview: ['Q1 10-Q: All footnotes drafted', 'Revenue variance: -3% explained', 'Audit readiness: 94%']
+        },
+        {
+          title: 'Financing Center',
+          description: 'Capital structure modeling',
+          icon: <DollarSign className="w-5 h-5" />,
+          features: ['Cap structure', 'Dilution analysis', 'Scenario planning', 'Cost of capital'],
+          dataPreview: ['Current debt: $50M at 4.5%', 'Series B scenario: 25% dilution', 'WACC: 8.2%']
+        },
+        {
+          title: 'Dilution Simulator',
+          description: 'Future dilution scenarios',
+          icon: <PieChart className="w-5 h-5" />,
+          features: ['Warrant modeling', 'Option scenarios', 'RSU impact', 'Ownership projections'],
+          dataPreview: ['Current shares: 10M outstanding', 'Fully diluted: 12.5M (25% dilution)', 'CEO ownership: 15% → 12%']
+        },
+        {
+          title: 'Treasury',
+          description: 'Cash & runway tracking',
+          icon: <DollarSign className="w-5 h-5" />,
+          features: ['Cash position', 'Burn forecasting', 'Debt calendar', 'Runway alerts'],
+          dataPreview: ['Cash on hand: $25.5M', 'Monthly burn: $2.1M', 'Runway: 12+ months']
+        }
+      ]
+    },
+    executive: {
+      name: 'Executive',
+      cards: [
+        {
+          title: 'CEO Dashboard',
+          description: 'Strategic intelligence',
+          icon: <Zap className="w-5 h-5" />,
+          features: ['Recommendations', 'KPI tracking', 'Growth opportunities', 'Board summaries'],
+          dataPreview: ['Revenue target: 98% complete', 'Margin improvement: +2.3%', 'Headcount: 85 of 90']
+        },
+        {
+          title: 'Risk Center',
+          description: 'Enterprise risk register',
+          icon: <AlertCircle className="w-5 h-5" />,
+          features: ['Risk register', 'Risk scoring', 'Mitigation plans', 'Gap analysis'],
+          dataPreview: ['Regulatory change: High', 'Supply chain: Medium', 'Talent retention: Low']
+        },
+        {
+          title: 'Opportunity Center',
+          description: 'M&A & financing opportunities',
+          icon: <Target className="w-5 h-5" />,
+          features: ['Target tracking', 'Synergy analysis', 'Strategic fit', 'Opportunity alerts'],
+          dataPreview: ['3 acquisition targets tracked', 'Debt refinancing opportunity', 'Cross-sell potential: +$2M']
+        }
+      ]
+    },
+    mna: {
+      name: 'M&A',
+      cards: [
+        {
+          title: 'Deal Pipeline',
+          description: 'Track targets & synergies',
+          icon: <GitBranch className="w-5 h-5" />,
+          features: ['Target tracking', 'Deal stages', 'Synergy modeling', 'Valuation'],
+          dataPreview: ['Target A: 18% synergies', 'Target B: LOI signed', 'Target C: Discovery phase']
+        },
+        {
+          title: 'Due Diligence',
+          description: 'Organize diligence items',
+          icon: <CheckSquare className="w-5 h-5" />,
+          features: ['Document tracking', 'Gap detection', 'Risk summaries', 'Alerts'],
+          dataPreview: ['Legal: 8/10 items received', 'Tax returns: missing 2025', 'IT audit: risk flagged']
+        },
+        {
+          title: 'Integration',
+          description: 'Post-acquisition tracking',
+          icon: <Briefcase className="w-5 h-5" />,
+          features: ['Integration plans', 'Milestones', 'Synergy capture', 'Dashboards'],
+          dataPreview: ['System migration: 60% done', 'Synergies realized: 45%', 'Timeline: on schedule']
+        }
+      ]
+    },
+    compliance: {
+      name: 'Compliance',
+      cards: [
+        {
+          title: 'Insider Compliance',
+          description: 'Trading & blackout windows',
+          icon: <Eye className="w-5 h-5" />,
+          features: ['Blackout management', 'Form 4 reminders', 'Trade alerts', 'Tracking'],
+          dataPreview: ['Blackout: 3 days remaining', 'Form 4s: 2 due this week', '10% owners: 8 tracked']
+        },
+        {
+          title: 'Audit & Controls',
+          description: 'SOX/ICFR compliance',
+          icon: <Shield className="w-5 h-5" />,
+          features: ['ICFR testing', 'Gap detection', 'Deficiency tracking', 'Audit readiness'],
+          dataPreview: ['Control tests: 92% complete', 'Material weaknesses: 1', 'Readiness: 89%']
+        },
+        {
+          title: 'Legal Center',
+          description: 'Contracts & litigation',
+          icon: <Scale className="w-5 h-5" />,
+          features: ['Contract summaries', 'Litigation tracking', 'Regulatory matters', 'Risk detection'],
+          dataPreview: ['Active litigation: 2', 'Regulatory inquiries: 0', 'Contracts renewing: 4']
+        },
+        {
+          title: 'ESG',
+          description: 'ESG & sustainability',
+          icon: <Award className="w-5 h-5" />,
+          features: ['ESG scoring', 'Carbon reporting', 'Governance reports', 'Sustainability'],
+          dataPreview: ['ESG score: 72/100', 'Carbon reduction: -15%', 'Women in leadership: 38%']
+        }
+      ]
+    }
+  }
+
+  const activeCards = modules[activeSection as keyof typeof modules]?.cards || []
+
   return (
-    <div className="w-full">
-      {/* Header */}
-      <div className="mb-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1 className="serif text-5xl text-nav mb-4 leading-tight">
-            Listed Services OS
-          </h1>
-          <p className="text-lg text-text-muted max-w-3xl">
-            Your complete operating system for managing a public company. When your company lists, these tools unlock automatically with AI agents that understand your business completely.
-          </p>
-        </motion.div>
-      </div>
-
-      {/* Disclosure & Filings */}
-      <div className="mb-16">
-        <h2 className="text-2xl font-bold text-nav mb-6">📄 Disclosure & Filings</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          <LockedCard
-            title="Filing Calendar"
-            description="Track all regulatory deadlines across your primary and secondary exchanges."
-            icon={<Clock className="w-6 h-6" />}
-            features={[
-              '10-K, 10-Q, 8-K deadlines',
-              'Jurisdiction-specific requirements',
-              'Readiness scoring per filing',
-              'AI deadline predictions'
-            ]}
-            dataPreview={[
-              'Q1 10-Q due in 35 days (85% ready)',
-              'Annual proxy circular due in 120 days',
-              'Material change reports auto-tracked'
-            ]}
-          />
-
-          <LockedCard
-            title="MD&A Studio"
-            description="AI generates draft MD&A by pulling from your financials, board minutes, and historical data."
-            icon={<BarChart3 className="w-6 h-6" />}
-            features={[
-              'Auto-pull from ERP systems',
-              'Multi-format output (SEC, SEDAR)',
-              'Variance explanations',
-              'Risk disclosure recommendations'
-            ]}
-            dataPreview={[
-              'Q1 revenue variance: +12% YoY explained',
-              'Liquidity risk flagged from cash flow',
-              'Compliance gap: missing footnote 7'
-            ]}
-          />
-
-          <LockedCard
-            title="Disclosure Center"
-            description="Materiality analyzer that recommends what needs public disclosure and when."
-            icon={<AlertCircle className="w-6 h-6" />}
-            features={[
-              'Materiality assessment engine',
-              'Litigation tracker',
-              'Management change alerts',
-              'Press release recommendations'
-            ]}
-            dataPreview={[
-              'CEO resignation requires 8-K filing',
-              'New financing round is material',
-              'Warranty claim: immaterial (0.1% revenue)'
-            ]}
-          />
+    <div className="w-full h-screen bg-white flex flex-col overflow-hidden md:overflow-auto">
+      {/* Mobile Header */}
+      <div className="flex-shrink-0 sticky top-0 z-10 bg-white border-b border-gray-200 md:border-0">
+        <div className="p-4 md:p-8">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h1 className="text-2xl md:text-4xl font-bold text-nav leading-tight">
+              Listed Services OS
+            </h1>
+            <p className="text-xs md:text-sm text-text-muted mt-2">
+              Unlocks automatically when your company lists
+            </p>
+          </motion.div>
         </div>
       </div>
 
-      {/* Investor Relations */}
-      <div className="mb-16">
-        <h2 className="text-2xl font-bold text-nav mb-6">💬 Investor Relations</h2>
-        <div className="grid md:grid-cols-4 gap-6">
-          <LockedCard
-            title="IR Calendar"
-            description="12-month plan that recommends earnings calls, conferences, and roadshows."
-            icon={<Clock className="w-6 h-6" />}
-            features={[
-              'Earnings calendar',
-              'Conference recommendations',
-              'Roadshow planning',
-              'Analyst call scheduling'
-            ]}
-          />
+      {/* Main Content - Scrollable */}
+      <div className="flex-1 overflow-y-auto">
+        {/* Card Grid - Mobile optimized */}
+        <div className="px-4 md:px-8 py-4 md:py-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
+            {activeCards.map((card, i) => (
+              <LockedCard
+                key={i}
+                title={card.title}
+                description={card.description}
+                icon={card.icon}
+                features={card.features}
+                dataPreview={card.dataPreview}
+                isApp={true}
+              />
+            ))}
+          </div>
 
-          <LockedCard
-            title="Press Release Engine"
-            description="AI drafts earnings and corporate announcements with compliance review built-in."
-            icon={<MessageSquare className="w-6 h-6" />}
-            features={[
-              'Earnings release generation',
-              'Exchange compliance check',
-              'Materiality review',
-              'Multi-language support'
-            ]}
-          />
-
-          <LockedCard
-            title="Market Awareness"
-            description="Track news, analysts, and social sentiment. AI alerts you to reputation risks."
-            icon={<Eye className="w-6 h-6" />}
-            features={[
-              'News tracking',
-              'Analyst coverage monitoring',
-              'Sentiment analysis',
-              'Reputation risk alerts'
-            ]}
-          />
-
-          <LockedCard
-            title="Investor CRM"
-            description="Track institutions, analysts, and retail investor engagement across time."
-            icon={<Users className="w-6 h-6" />}
-            features={[
-              'Investor database',
-              'Engagement tracking',
-              'Outreach recommendations',
-              'Follow-up automation'
-            ]}
-          />
-        </div>
-      </div>
-
-      {/* CFO Command Center */}
-      <div className="mb-16">
-        <h2 className="text-2xl font-bold text-nav mb-6">💰 CFO Command Center</h2>
-        <div className="grid md:grid-cols-4 gap-6">
-          <LockedCard
-            title="Financial Reporting"
-            description="Draft footnotes, disclosures, and variance explanations for quarterly and annual filings."
-            icon={<BarChart3 className="w-6 h-6" />}
-            features={[
-              'Footnote drafting',
-              'Disclosure generation',
-              'Variance analysis',
-              'Audit readiness scoring'
-            ]}
-          />
-
-          <LockedCard
-            title="Financing Center"
-            description="Model capital structure, equity raises, debt offerings, and ATM programs."
-            icon={<DollarSign className="w-6 h-6" />}
-            features={[
-              'Capital structure modeling',
-              'Dilution analysis',
-              'Financing scenario planning',
-              'Cost of capital estimation'
-            ]}
-          />
-
-          <LockedCard
-            title="Dilution Simulator"
-            description="Model future dilution scenarios for warrants, options, RSUs, and convertibles."
-            icon={<PieChart className="w-6 h-6" />}
-            features={[
-              'Warrant dilution modeling',
-              'Option exercise scenarios',
-              'RSU vesting impact',
-              'Fully diluted ownership projections'
-            ]}
-          />
-
-          <LockedCard
-            title="Treasury Management"
-            description="Track cash, burn rate, and debt. AI forecasts runway and alerts to financing needs."
-            icon={<DollarSign className="w-6 h-6" />}
-            features={[
-              'Cash position tracking',
-              'Burn rate forecasting',
-              'Debt obligation calendar',
-              'Runway alerts'
-            ]}
-          />
-        </div>
-      </div>
-
-      {/* Executive Leadership */}
-      <div className="mb-16">
-        <h2 className="text-2xl font-bold text-nav mb-6">🎯 Executive Leadership</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          <LockedCard
-            title="CEO Command Center"
-            description="Dashboard with strategic recommendations, growth opportunities, and board alerts."
-            icon={<Zap className="w-6 h-6" />}
-            features={[
-              'Strategic recommendations',
-              'KPI tracking',
-              'Growth opportunity identification',
-              'Board communication summaries'
-            ]}
-          />
-
-          <LockedCard
-            title="Risk Center"
-            description="Enterprise risk register with scoring and proactive mitigation recommendations."
-            icon={<AlertCircle className="w-6 h-6" />}
-            features={[
-              'Risk register management',
-              'Risk scoring (legal, regulatory, financial)',
-              'Mitigation planning',
-              'Compliance gap analysis'
-            ]}
-          />
-
-          <LockedCard
-            title="Opportunity Center"
-            description="Track M&A targets, partnerships, and financing opportunities with AI scoring."
-            icon={<Target className="w-6 h-6" />}
-            features={[
-              'Acquisition opportunity tracking',
-              'Synergy analysis',
-              'Strategic fit scoring',
-              'Financing opportunity alerts'
-            ]}
-          />
-        </div>
-      </div>
-
-      {/* M&A OS */}
-      <div className="mb-16">
-        <h2 className="text-2xl font-bold text-nav mb-6">🤝 M&A Operating System</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          <LockedCard
-            title="Deal Pipeline"
-            description="Track acquisition targets, acquirers, and strategic partnerships with synergy analysis."
-            icon={<GitBranch className="w-6 h-6" />}
-            features={[
-              'Target tracking',
-              'Deal stage management',
-              'Synergy modeling',
-              'Valuation analysis'
-            ]}
-          />
-
-          <LockedCard
-            title="Due Diligence Room"
-            description="Organize and track legal, financial, tax, and operational diligence items."
-            icon={<CheckSquare className="w-6 h-6" />}
-            features={[
-              'Document tracking',
-              'Gap detection',
-              'Risk summaries',
-              'Missing document alerts'
-            ]}
-          />
-
-          <LockedCard
-            title="Integration Center"
-            description="Post-acquisition integration planning and progress monitoring."
-            icon={<Briefcase className="w-6 h-6" />}
-            features={[
-              'Integration plans',
-              'Milestone tracking',
-              'Synergy capture monitoring',
-              'Progress dashboards'
-            ]}
-          />
-        </div>
-      </div>
-
-      {/* Compliance & Governance */}
-      <div className="mb-16">
-        <h2 className="text-2xl font-bold text-nav mb-6">✅ Compliance & Governance</h2>
-        <div className="grid md:grid-cols-4 gap-6">
-          <LockedCard
-            title="Insider Compliance"
-            description="Track trading windows, blackout periods, and insider transaction filings."
-            icon={<Eye className="w-6 h-6" />}
-            features={[
-              'Blackout period management',
-              'Form 4 filing reminders',
-              'Trading alert system',
-              'Insider transaction tracking'
-            ]}
-          />
-
-          <LockedCard
-            title="Audit & Controls"
-            description="SOX and NI 52-109 compliance. Track internal control framework and test results."
-            icon={<Shield className="w-6 h-6" />}
-            features={[
-              'ICFR testing',
-              'Control gap identification',
-              'Deficiency tracking',
-              'Audit readiness scoring'
-            ]}
-          />
-
-          <LockedCard
-            title="Legal Center"
-            description="Contract management, litigation tracking, and employment matters in one place."
-            icon={<Scale className="w-6 h-6" />}
-            features={[
-              'Contract summaries',
-              'Litigation tracking',
-              'Regulatory matter management',
-              'Risk detection'
-            ]}
-          />
-
-          <LockedCard
-            title="ESG & Sustainability"
-            description="Track ESG initiatives, carbon reporting, and governance disclosures."
-            icon={<Award className="w-6 h-6" />}
-            features={[
-              'ESG readiness scoring',
-              'Carbon reporting',
-              'Governance reporting',
-              'Sustainability tracking'
-            ]}
-          />
-        </div>
-      </div>
-
-      {/* Corporate Secretary */}
-      <div className="mb-16">
-        <h2 className="text-2xl font-bold text-nav mb-6">🏢 Corporate Secretary</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          <LockedCard
-            title="Entity Management"
-            description="Track subsidiaries, directors, officers, and jurisdictional registrations."
-            icon={<Users className="w-6 h-6" />}
-            features={[
-              'Subsidiary tracking',
-              'Director/officer database',
-              'Jurisdiction management',
-              'Annual return management'
-            ]}
-          />
-
-          <LockedCard
-            title="Board Management"
-            description="Board meetings, agendas, packages, resolutions, voting, and approvals."
-            icon={<CheckSquare className="w-6 h-6" />}
-            features={[
-              'Meeting scheduling',
-              'Agenda generation',
-              'Board package preparation',
-              'Resolution drafting'
-            ]}
-          />
-
-          <LockedCard
-            title="Governance Library"
-            description="Central repository for charters, policies, governance manuals, and delegation matrices."
-            icon={<Award className="w-6 h-6" />}
-            features={[
-              'Document repository',
-              'Governance gap analysis',
-              'Policy review',
-              'Compliance checking'
-            ]}
-          />
-        </div>
-      </div>
-
-      {/* AI Agents */}
-      <div className="mb-16 p-8 rounded-xl" style={{ background: '#EFF6FF', border: '2px solid #1D4ED8' }}>
-        <h2 className="text-2xl font-bold text-nav mb-6">🤖 AI Agent Team</h2>
-        <p className="text-text-muted mb-6">
-          When you unlock Listed Services, you get a team of AI agents that understand your company deeply.
-        </p>
-        <div className="grid md:grid-cols-5 gap-4">
-          {[
-            { role: 'AI CEO', description: 'Strategic recommendations' },
-            { role: 'AI CFO', description: 'Financial optimization' },
-            { role: 'AI Secretary', description: 'Governance & compliance' },
-            { role: 'AI Counsel', description: 'Legal & risk analysis' },
-            { role: 'AI IR Officer', description: 'Investor engagement' },
-          ].map((agent, i) => (
-            <div key={i} className="p-4 bg-white rounded-lg border border-blue-200">
-              <p className="font-bold text-nav text-sm">{agent.role}</p>
-              <p className="text-xs text-text-muted mt-1">{agent.description}</p>
+          {/* AI Agents Preview */}
+          <div className="mt-8 md:mt-12 p-4 md:p-6 rounded-xl" style={{ background: '#EFF6FF', border: '1px solid #BFDBFE' }}>
+            <p className="text-xs md:text-sm font-semibold text-blue-900 uppercase tracking-wider mb-3">
+              AI Agent Team
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+              {['AI CEO', 'AI CFO', 'AI Secretary', 'AI Counsel', 'AI IR'].map((agent, i) => (
+                <div key={i} className="p-3 bg-white rounded-lg border border-blue-200">
+                  <p className="text-xs md:text-sm font-bold text-nav">{agent}</p>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Bottom CTA */}
+          <div className="mt-8 md:mt-12 text-center pb-8">
+            <h2 className="text-xl md:text-3xl font-bold text-nav mb-3">
+              All unlocks when you list
+            </h2>
+            <p className="text-xs md:text-sm text-text-muted">
+              Same platform. Same AI. One source of truth.
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* CTA */}
-      <div className="text-center py-12">
-        <p className="text-lg text-text-muted mb-4">
-          When your company lists on TSX, NASDAQ, NYSE, or CSE...
-        </p>
-        <h2 className="text-4xl font-bold text-nav mb-8">
-          All of this unlocks automatically.
-        </h2>
-        <p className="text-text-muted max-w-2xl mx-auto">
-          Your IPO readiness journey continues as your public company operations engine. Same platform. Same data. One source of truth for your entire lifecycle.
-        </p>
-      </div>
+      {/* App-style Bottom Navigation */}
+      <AppNav activeSection={activeSection} onSectionChange={setActiveSection} />
     </div>
   )
 }
