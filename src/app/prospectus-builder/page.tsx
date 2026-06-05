@@ -5,8 +5,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Rocket, ArrowRight, BookOpen, Sparkles, Lock, RefreshCcw, Upload, Eye, BarChart3, FileText, Users, Mail, Zap, ExternalLink } from 'lucide-react'
-import { FeaturesMegaMenu } from '@/app/components/FeaturesMegaMenu'
+import { ArrowRight, BookOpen, Sparkles, Lock, RefreshCcw, Upload, Eye, BarChart3, FileText, Users, Mail, Zap, ExternalLink, Rocket } from 'lucide-react'
+import { Header } from '@/app/components/Header'
 import { ScheduleDemoModal } from '@/app/components/ScheduleDemoModal'
 
 const CAPABILITIES = [
@@ -110,25 +110,10 @@ export default function ProspectusBuilderPage() {
   return (
     <div suppressHydrationWarning>
       {/* ── Header ──────────────────────────────────────────────────────────── */}
-      <header className="fixed top-0 left-0 right-0 z-50"
-        style={{ background: 'rgba(247,246,244,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #E5E4E0' }}>
-        <div className="max-w-7xl mx-auto h-16 flex items-center justify-between" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Link href="/" className="flex items-center gap-2.5" style={{ marginRight: '0.5rem' }}>
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: '#1A1A1A' }}>
-                <Rocket className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-display font-bold text-lg text-nav">
-                IPO<span style={{ color: '#E8312A' }}>Ready</span>
-              </span>
-            </Link>
-            <FeaturesMegaMenu />
-          </div>
-        </div>
-      </header>
+      <Header />
 
-      {/* ── Header ──────────────────────────────────────────────────────────── */}
-      <section style={{ paddingTop: '1.5rem', paddingBottom: '1rem', background: '#F7F6F4' }}>
+      {/* ── Page Header ──────────────────────────────────────────────────────── */}
+      <section style={{ paddingTop: '2rem', paddingBottom: '1rem', background: '#F7F6F4' }}>
         <div className="max-w-7xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Prospectus Builder</h1>
           <p className="text-text-muted text-sm">Upload documents. AI organizes and structures them with compliance built-in. Route through multi-tier review — all in one platform.</p>
