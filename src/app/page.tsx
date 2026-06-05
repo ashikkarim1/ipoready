@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Header } from '@/app/components/Header'
@@ -73,15 +74,16 @@ export default function LandingPage() {
             style={{
               borderRadius: '16px',
               boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-              minHeight: '400px'
+              minHeight: '400px',
+              position: 'relative'
             }}
           >
-            <img
+            <Image
               src="/images/mainmenu.png"
               alt="IPOReady Mission Control Dashboard"
+              fill
+              priority
               style={{
-                width: '100%',
-                height: '100%',
                 objectFit: 'cover',
                 borderRadius: '16px'
               }}
