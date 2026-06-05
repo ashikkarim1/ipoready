@@ -58,18 +58,18 @@ const PLANS = [
     nameFr: 'Croissance',
     descriptionEn: 'For companies actively pursuing a listing',
     descriptionFr: "Pour les entreprises activement en processus d'inscription",
-    monthlyUSD: 999,
-    monthlyCAD: 1335,
-    sixmonthUSD: 799,
-    sixmonthCAD: 1068,
-    annualUSD: 665,
-    annualCAD: 890,
-    originalMonthlyUSD: 1999,
-    originalMonthlyCAD: 2670,
-    originalSixmonthUSD: 1599,
-    originalSixmonthCAD: 2136,
-    originalAnnualUSD: 1330,
-    originalAnnualCAD: 1780,
+    monthlyUSD: 499,
+    monthlyCAD: 667,
+    sixmonthUSD: 499,
+    sixmonthCAD: 667,
+    annualUSD: 499,
+    annualCAD: 667,
+    originalMonthlyUSD: 999,
+    originalMonthlyCAD: 1335,
+    originalSixmonthUSD: 999,
+    originalSixmonthCAD: 1335,
+    originalAnnualUSD: 999,
+    originalAnnualCAD: 1335,
     minCommitmentMonths: 3,
     features: [
       'Everything in Starter',
@@ -86,45 +86,48 @@ const PLANS = [
       'Expert network access',
       'Raising Capital education hub',
       'Priority email support',
+      'Additional seats: $129/mo (Canada), $199/mo (US)',
     ],
     isPopular: true,
     maxMembers: 15,
-    exchanges: ['TSX', 'TSXV', 'CSE', 'OTC'],
+    exchanges: ['TSX', 'TSXV', 'CSE', 'OTC', 'NASDAQ', 'NYSE'],
     badge: '⭐ Most Popular',
   },
   {
-    id: 'filing',
-    nameEn: 'Filing Module',
-    nameFr: 'Module de Dépôt',
-    descriptionEn: 'Multi-country filing automation',
-    descriptionFr: 'Automatisation des dépôts multi-pays',
-    monthlyUSD: 2999,
-    monthlyCAD: 3999,
-    sixmonthUSD: 2399,
-    sixmonthCAD: 3199,
-    annualUSD: 1999,
-    annualCAD: 2665,
-    originalMonthlyUSD: 5999,
-    originalMonthlyCAD: 7999,
-    originalSixmonthUSD: 4799,
-    originalSixmonthCAD: 6399,
-    originalAnnualUSD: 3999,
-    originalAnnualCAD: 5330,
+    id: 'listed-services',
+    nameEn: 'Listed Services OS',
+    nameFr: 'OS Services Cotés',
+    descriptionEn: 'AI-powered operating system for public companies',
+    descriptionFr: "Système d'exploitation alimenté par IA pour les sociétés publiques",
+    monthlyUSD: 0,
+    monthlyCAD: 0,
+    sixmonthUSD: 0,
+    sixmonthCAD: 0,
+    annualUSD: 0,
+    annualCAD: 0,
+    originalMonthlyUSD: 0,
+    originalMonthlyCAD: 0,
+    originalSixmonthUSD: 0,
+    originalSixmonthCAD: 0,
+    originalAnnualUSD: 0,
+    originalAnnualCAD: 0,
     minCommitmentMonths: 3,
     features: [
-      'Submit to 50+ exchanges',
-      'SEDAR 2 + SEC Edgar included',
-      'Document pre-validation',
-      'Real-time status tracking',
-      'Webhook notifications',
-      'Complete audit trail',
-      'Batch filing support',
-      'Regulatory alerts',
+      'Disclosure & Filings AI — Auto-generate 10-K/10-Q with MD&A',
+      'Predictive Analytics — Cash burn forecasting, revenue modeling',
+      'Analyst Coverage Intelligence — Track sentiment, guidance impact',
+      'Competitive Intelligence — Real-time competitor tracking & multiple analysis',
+      'M&A Intelligence Engine — Target scoring, synergy modeling',
+      'Uplisting Strategy — When to move exchanges, multiple uplift',
+      'CFO/CEO/CRO Coaching AI — Real-time strategic decision support',
+      'Market Cap Growth Advisor — Sustainable growth levers',
+      'Regulatory Compliance Dashboard — All 6 Listed Services modules',
+      'Pricing unlocks when you list — Included with Growth tier post-IPO',
     ],
     isPopular: false,
     maxMembers: 999,
-    exchanges: ['50+ Countries'],
-    badge: null,
+    exchanges: ['All'],
+    badge: '🚀 Coming Soon',
   },
   {
     id: 'enterprise',
@@ -200,7 +203,7 @@ const FAQS = [
 ]
 
 // Plan tier order — used to determine upgrade vs downgrade
-const PLAN_TIER: Record<string, number> = { starter: 0, growth: 1, filing: 2, enterprise: 3 }
+const PLAN_TIER: Record<string, number> = { starter: 0, growth: 1, 'listed-services': 2, enterprise: 3 }
 
 export default function PricingPage() {
   const { data: session } = useSession()
@@ -494,22 +497,37 @@ export default function PricingPage() {
                 </p>
               </div>
 
-              <div className="mb-5 pb-5" style={{ borderBottom: '1px solid #E5E4E0' }}>
-                <div className="flex items-center gap-2 flex-wrap mb-1.5">
-                  <span className="font-medium line-through text-text-light body-sm">
-                    {formatPrice(getOriginalPrice(plan))}
-                  </span>
-                  <span className="label-xs px-2 py-0.5 rounded-full font-bold"
-                    style={{ background: '#FDECEB', color: '#E8312A', border: '1px solid rgba(232,49,42,0.15)' }}>
-                    50% OFF
-                  </span>
+              {plan.id === 'listed-services' ? (
+                <div className="mb-5 pb-5" style={{ borderBottom: '1px solid #E5E4E0' }}>
+                  <div className="mb-3 p-4 rounded-lg" style={{ background: '#F0FDF4', border: '1px solid #BBF7D0' }}>
+                    <p className="label font-bold text-green-700 mb-2">
+                      {language === 'en' ? 'Pricing Coming Soon' : 'Tarification à venir'}
+                    </p>
+                    <p className="body-sm text-green-600">
+                      {language === 'en'
+                        ? 'Unlocks automatically when your company lists. Included with Growth tier.'
+                        : 'Déverrouillé automatiquement lorsque votre entreprise est cotée. Inclus dans le forfait Growth.'}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex items-baseline gap-1">
-                  <span className="font-display text-4xl font-black text-nav">{formatPrice(getPrice(plan))}</span>
-                  <span className="text-text-muted body-sm">/mo</span>
+              ) : (
+                <div className="mb-5 pb-5" style={{ borderBottom: '1px solid #E5E4E0' }}>
+                  <div className="flex items-center gap-2 flex-wrap mb-1.5">
+                    <span className="font-medium line-through text-text-light body-sm">
+                      {formatPrice(getOriginalPrice(plan))}
+                    </span>
+                    <span className="label-xs px-2 py-0.5 rounded-full font-bold"
+                      style={{ background: '#FDECEB', color: '#E8312A', border: '1px solid rgba(232,49,42,0.15)' }}>
+                      50% OFF
+                    </span>
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="font-display text-4xl font-black text-nav">{formatPrice(getPrice(plan))}</span>
+                    <span className="text-text-muted body-sm">/mo</span>
+                  </div>
+                  <p className="label-sm mt-1.5 text-text-muted font-medium">{getBilledNote(plan)}</p>
                 </div>
-                <p className="label-sm mt-1.5 text-text-muted font-medium">{getBilledNote(plan)}</p>
-              </div>
+              )}
 
               <div className="mb-5">
                 <div className="flex flex-wrap gap-1 mb-2.5">
@@ -590,19 +608,22 @@ export default function PricingPage() {
                   <th className="pb-3 pr-4"><p className="label-sm font-bold text-nav">{language === 'en' ? 'Feature' : 'Fonction'}</p></th>
                   <th className="pb-3 px-2"><p className="label-sm font-bold text-nav">Starter</p></th>
                   <th className="pb-3 px-2"><p className="label-sm font-bold text-nav">Growth</p></th>
-                  <th className="pb-3 px-2"><p className="label-sm font-bold text-nav">Filing</p></th>
+                  <th className="pb-3 px-2"><p className="label-sm font-bold text-nav">Listed Services</p></th>
                   <th className="pb-3 pl-2"><p className="label-sm font-bold text-nav">Enterprise</p></th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { feature: language === 'en' ? 'Filing Automation' : 'Automatisation des dépôts', starter: 'No', growth: 'SEDAR 2', filing: '50+ countries', enterprise: '50+ countries' },
-                ].map(({ feature, starter, growth, filing, enterprise }, idx) => (
+                  { feature: language === 'en' ? 'Filing Automation' : 'Automatisation des dépôts', starter: 'No', growth: 'SEDAR 2', listedServices: 'Coming Soon', enterprise: '50+ countries' },
+                  { feature: language === 'en' ? 'AI Disclosure & Filing' : 'IA Divulgation & Dépôt', starter: 'No', growth: 'Basic', listedServices: 'Advanced', enterprise: 'Advanced' },
+                  { feature: language === 'en' ? 'M&A Intelligence' : 'Intelligence F&A', starter: 'No', growth: 'No', listedServices: 'Coming Soon', enterprise: 'Yes' },
+                  { feature: language === 'en' ? 'CFO/CEO Coaching AI' : 'IA Coaching CFO/CEO', starter: 'No', growth: 'No', listedServices: 'Coming Soon', enterprise: 'Yes' },
+                ].map(({ feature, starter, growth, listedServices, enterprise }, idx) => (
                   <tr key={idx} style={{ borderBottom: '1px solid #E5E4E0' }}>
                     <td className="py-4 pr-4"><p className="body-sm text-nav font-medium">{feature}</p></td>
                     <td className="py-4 px-2"><p className="body-sm text-text-muted">{starter}</p></td>
                     <td className="py-4 px-2"><p className="body-sm text-text-muted">{growth}</p></td>
-                    <td className="py-4 px-2"><p className="body-sm font-semibold" style={{ color: '#2D7A5F' }}>{filing}</p></td>
+                    <td className="py-4 px-2"><p className="body-sm font-semibold" style={{ color: '#2D7A5F' }}>{listedServices}</p></td>
                     <td className="py-4 pl-2"><p className="body-sm font-semibold" style={{ color: '#2D7A5F' }}>{enterprise}</p></td>
                   </tr>
                 ))}
