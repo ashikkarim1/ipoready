@@ -174,6 +174,18 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen" style={{ colorScheme: 'light' }}>
+      {/* Inline animations */}
+      <style>{`
+        @keyframes slideInUp {
+          from { transform: translateY(20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-in { animation: slideInUp 0.6s ease-out forwards; }
+        .animate-slide-in-1 { animation: slideInUp 0.6s ease-out 0.1s both; }
+        .animate-slide-in-2 { animation: slideInUp 0.6s ease-out 0.2s both; }
+        .animate-slide-in-3 { animation: slideInUp 0.6s ease-out 0.3s both; }
+      `}</style>
+
       {/* Rocket Animation */}
       <RocketAnimation />
 
@@ -185,19 +197,19 @@ export default function LandingPage() {
 
           {/* Left: Copy */}
           <div>
-            <div className="flex items-center gap-2" style={{ marginBottom: '1.5rem', animation: 'slideInUp 0.6s ease-out' }}>
+            <div className="flex items-center gap-2 animate-slide-in" style={{ marginBottom: '1.5rem' }}>
               <span className="pill text-xs font-bold uppercase tracking-wider"
                 style={{ background: 'var(--color-error-soft)', color: 'var(--color-accent)' }}>The IPO Operating System</span>
               <span className="text-text-muted text-sm">Canadian & US listings</span>
             </div>
 
-            <h1 className="serif"
-              style={{ fontSize: '2.1rem', lineHeight: '1.2', marginBottom: '1.25rem', color: '#1A1A1A', animation: 'slideInUp 0.6s ease-out 0.1s both' }}>
+            <h1 className="serif animate-slide-in-1"
+              style={{ fontSize: '2.1rem', lineHeight: '1.2', marginBottom: '1.25rem', color: '#1A1A1A' }}>
               Manage your entire IPO journey<br />
               <span style={{ color: 'var(--color-accent)' }}>from first resolution to the bell—and beyond.</span>
             </h1>
 
-            <div className="space-y-3" style={{ marginBottom: '2rem', animation: 'slideInUp 0.6s ease-out 0.2s both' }}>
+            <div className="space-y-3 animate-slide-in-2" style={{ marginBottom: '2rem' }}>
               <p className="text-lg leading-relaxed" style={{ color: '#717171' }}>
                 Tell us your exchange and listing type — IPOReady instantly builds your personalized 180+ task roadmap, assigns workstreams to your team, and tracks your velocity toward listing day. No setup. No spreadsheets. No missed steps.
               </p>
@@ -230,7 +242,7 @@ export default function LandingPage() {
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-3" style={{ animation: 'slideInUp 0.6s ease-out 0.3s both' }}>
+            <div className="flex flex-wrap items-center gap-3 animate-slide-in-3">
               <Link href="/register"
                 className="btn btn-primary gap-2 font-semibold px-6 py-2.5 rounded-full">
                 Start your IPO journey <ArrowRight className="w-4 h-4" />
