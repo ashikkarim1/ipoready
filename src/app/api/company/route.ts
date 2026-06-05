@@ -20,6 +20,10 @@ export async function GET(request: NextRequest) {
       founded: 2018,
       employees: 45,
       postMoneyValuation: 100000000,
+      paceScore: 62,
+      progressPercentage: 23,
+      estimatedDaysToIPO: 187,
+      currentPhase: 'corporate_restructuring',
     },
   })
 }
