@@ -32,7 +32,7 @@ export default function LandingPage() {
       <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left: Copy */}
-          <div className="order-1 md:order-1">
+          <div className="order-2 md:order-1">
             <div className="flex items-center gap-2 mb-6">
               <span className="inline-block px-3 py-1 bg-red-100 text-red-600 text-xs sm:text-sm font-bold uppercase rounded-full">
                 The IPO Operating System
@@ -69,7 +69,7 @@ export default function LandingPage() {
 
           {/* Right: Dashboard Showcase */}
           <div
-            className="w-full overflow-hidden"
+            className="w-full overflow-hidden order-1 md:order-2"
             style={{
               borderRadius: '16px',
               boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
@@ -77,7 +77,7 @@ export default function LandingPage() {
             }}
           >
             <img
-              src="/images/dashboard-showcase.png"
+              src="/mainmenu.png"
               alt="IPOReady Mission Control Dashboard"
               style={{
                 width: '100%',
