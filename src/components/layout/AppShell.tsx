@@ -43,6 +43,7 @@ const NAV_GROUPS = [
     collapsible: true,
     items: [
       { href: '/dashboard/work/directors-officers',      icon: Users,           label: 'Board & Talent',     badge: '💎',   key: 'directors'        },
+      { href: '/marketplace',                             icon: ShoppingBag,     label: 'Expert Network',     badge: null,   key: 'marketplace'      },
     ],
   },
   {
@@ -98,7 +99,6 @@ const NAV_GROUPS = [
       { href: '/learning-compliance/insurances', icon: Shield,      label: 'Insurances',         badge: null,   key: 'insurances'  },
       { href: '/resources',       icon: BookOpen,        label: 'Resource Centre',    badge: null,   key: 'resources'   },
       { href: '/checklist-guide', icon: FileSearch,      label: 'Compliance Guide',   badge: null,   key: 'guide'       },
-      { href: '/marketplace',     icon: ShoppingBag,     label: 'Expert Network',     badge: null,   key: 'marketplace' },
     ],
   },
   {
