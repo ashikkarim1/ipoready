@@ -109,8 +109,14 @@ export default function DocumentsPage() {
     setError(null)
     try {
       // Requirements are essential; progress is best-effort.
-      const requirementsRes = await getRequirements(exchange)
-      setDocuments(requirementsRes.documents)
+      try {
+        const requirementsRes = await getRequirements(exchange)
+        setDocuments(requirementsRes.documents)
+      } catch (err) {
+        // Fallback: Use empty requirements with message
+        console.warn('Failed to fetch requirements from API, using empty state:', err)
+        setDocuments([])
+      }
 
       try {
         const progressRes = await getProgress(exchange)
