@@ -375,72 +375,11 @@ export default function DocumentsPage() {
   return (
     <AppShell>
       <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
-        {/* Hero */}
-        <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1.5rem', background: '#F7F6F4' }}>
+        {/* Header */}
+        <section style={{ padding: '1.5rem', background: '#F7F6F4' }}>
           <div className="max-w-7xl mx-auto">
-            <div className="flex items-center justify-between gap-8">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg" style={{ background: '#F0F4FF', border: '1px solid #1D4ED830', marginBottom: '1rem' }}>
-                  <FileText className="w-4 h-4" style={{ color: '#1D4ED8' }} />
-                  <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1D4ED8' }}>SEC Filing Hub</span>
-                </div>
-
-                <h1 style={{ fontSize: '2.75rem', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.2, marginBottom: '0.75rem' }}>
-                  Document Management
-                </h1>
-
-                <p style={{ fontSize: '1rem', color: '#717171', maxWidth: '50rem' }}>
-                  Centralized repository for all IPO filing documents. Track versions, approvals, and compliance status in real-time.
-                </p>
-              </motion.div>
-
-              {/* Progress Widget */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                style={{
-                  padding: '1rem',
-                  background: '#FFFFFF',
-                  border: '1px solid #E5E4E0',
-                  borderRadius: '0.5rem',
-                  minWidth: '180px',
-                  textAlign: 'center'
-                }}
-              >
-                <div style={{ position: 'relative', width: '120px', height: '120px', margin: '0 auto 1rem' }}>
-                  <svg style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
-                    <circle cx="60" cy="60" r="50" fill="none" stroke="#E5E4E0" strokeWidth="8" />
-                    <circle
-                      cx="60"
-                      cy="60"
-                      r="50"
-                      fill="none"
-                      stroke="#E8312A"
-                      strokeWidth="8"
-                      strokeDasharray={`${(stats.completion / 100) * 314.16} 314.16`}
-                      style={{ transition: 'stroke-dasharray 0.6s ease' }}
-                    />
-                  </svg>
-                  <div style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    textAlign: 'center'
-                  }}>
-                    <p style={{ fontSize: '1.75rem', fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
-                      {stats.completion}%
-                    </p>
-                    <p style={{ fontSize: '0.75rem', color: '#717171', margin: 0 }}>Complete</p>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
+            <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Document Management</h1>
+            <p className="text-text-muted text-sm">Centralized repository for all IPO filing documents. Track versions, approvals, and compliance status.</p>
           </div>
         </section>
 

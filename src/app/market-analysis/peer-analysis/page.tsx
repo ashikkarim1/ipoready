@@ -116,35 +116,11 @@ export default function PeerAnalysisPage() {
     <AppShell>
       <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
 
-      {/* Hero */}
-      <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1.5rem', background: '#F7F6F4' }}>
+      {/* Header */}
+      <section style={{ padding: '1.5rem', background: '#F7F6F4' }}>
         <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center space-y-6"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg" style={{ background: '#FEF3E1', border: '1px solid #B4530930' }}>
-              <BarChart3 className="w-4 h-4" style={{ color: '#B45309' }} />
-              <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#B45309' }}>Market Intelligence</span>
-            </div>
-
-            <h1 style={{ fontSize: '2.75rem', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.2, margin: '1rem 0' }}>
-              Peer Analysis
-            </h1>
-
-            <p style={{ fontSize: '1.125rem', color: '#717171', maxWidth: '48rem', margin: '1rem auto' }}>
-              Understand your position relative to comparable companies. Benchmarking for valuation, growth, and market performance.
-            </p>
-
-            <div style={{ marginTop: '1.5rem' }}>
-              <div className="inline-flex items-center gap-2" style={{ color: '#1A1A1A' }}>
-                <CheckCircle2 className="w-5 h-5" style={{ color: '#2D7A5F' }} />
-                <span style={{ fontWeight: 600 }}>Data from 100+ publicly traded companies</span>
-              </div>
-            </div>
-          </motion.div>
+          <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Peer Analysis</h1>
+          <p className="text-text-muted text-sm">Understand your position relative to comparable companies. Benchmarking for valuation, growth, and market performance.</p>
         </div>
       </section>
 
