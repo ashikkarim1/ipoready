@@ -77,7 +77,7 @@ export default function LandingPage() {
             }}
           >
             <img
-              src="/mainmenu.png"
+              src="/images/mainmenu.png"
               alt="IPOReady Mission Control Dashboard"
               style={{
                 width: '100%',
