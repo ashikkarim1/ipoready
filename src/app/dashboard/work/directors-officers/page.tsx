@@ -14,6 +14,10 @@ import {
   AlertCircle,
   ChevronDown,
   Trash2,
+  MessageCircle,
+  Send,
+  CheckSquare,
+  Square,
 } from 'lucide-react'
 
 /* ------------------------------------------------------------------ */
@@ -571,10 +575,322 @@ function MissingRow({ label, onClick }: { label: string; onClick: () => void }) 
 }
 
 /* ------------------------------------------------------------------ */
+/*  Talent Inquiry Modal                                               */
+/* ------------------------------------------------------------------ */
+interface SelectedGap {
+  groupId: string
+  groupName: string
+  position: string
+  location?: 'onsite' | 'hybrid' | 'remote'
+  commitment?: 'full-time' | 'fractional'
+  urgency?: 'immediate' | '30-60 days' | '60-90 days'
+  additionalNotes?: string
+}
+
+function TalentInquiryModal({
+  gaps,
+  onClose,
+  onSubmit,
+}: {
+  gaps: Array<{ groupId: string; groupName: string; position: string; required: number; current: number }>
+  onClose: () => void
+  onSubmit: (selected: SelectedGap[], email: string, notes: string) => void
+}) {
+  const [selectedGaps, setSelectedGaps] = useState<Record<string, boolean>>({})
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
+  const [gapDetails, setGapDetails] = useState<Record<string, { location: string; commitment: string; urgency: string }>>({})
+  const [submitted, setSubmitted] = useState(false)
+
+  const selectedCount = Object.values(selectedGaps).filter(Boolean).length
+  const canSubmit = selectedCount > 0 && email.includes('@')
+
+  const handleToggleGap = (key: string) => {
+    setSelectedGaps(prev => ({ ...prev, [key]: !prev[key] }))
+  }
+
+  const handleSubmit = async () => {
+    const selected: SelectedGap[] = gaps
+      .map((gap, idx) => {
+        const key = `${gap.groupId}-${idx}`
+        if (selectedGaps[key]) {
+          return {
+            groupId: gap.groupId,
+            groupName: gap.groupName,
+            position: gap.position,
+            location: gapDetails[key]?.location || 'flexible',
+            commitment: gapDetails[key]?.commitment || 'full-time',
+            urgency: gapDetails[key]?.urgency || '30-60 days',
+          }
+        }
+        return null
+      })
+      .filter(Boolean) as SelectedGap[]
+
+    onSubmit(selected, email, message)
+    setSubmitted(true)
+
+    setTimeout(() => {
+      onClose()
+    }, 2000)
+  }
+
+  if (submitted) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="bg-white rounded-xl p-8 max-w-md w-full text-center"
+          onClick={e => e.stopPropagation()}
+        >
+          <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: GREEN_BG }}>
+            <Check className="w-6 h-6" style={{ color: GREEN }} />
+          </div>
+          <h2 className="text-lg font-bold text-nav mb-2">Inquiry Submitted!</h2>
+          <p className="text-sm text-text-muted mb-4">
+            We'll review your talent needs and connect you with the right candidates within 48 hours.
+          </p>
+          <p className="text-xs text-text-muted">Confirmation sent to <strong>{email}</strong></p>
+        </motion.div>
+      </motion.div>
+    )
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        className="bg-white rounded-xl shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div
+          className="flex items-center justify-between p-6 border-b"
+          style={{ borderColor: BORDER }}
+        >
+          <div>
+            <h2 className="text-xl font-bold text-nav">Find the Right Talent</h2>
+            <p className="text-sm text-text-muted mt-1">Tell us which positions you need to fill</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            <X className="w-5 h-5" style={{ color: '#9CA3AF' }} />
+          </button>
+        </div>
+
+        <div className="p-6 space-y-6">
+          {/* Select Gaps */}
+          <div>
+            <h3 className="font-semibold text-nav mb-3 flex items-center gap-2">
+              <span className="text-sm">Which positions do you need help filling?</span>
+              <span className="text-xs font-normal" style={{ color: '#717171' }}>
+                (Select {selectedCount})
+              </span>
+            </h3>
+            <div className="space-y-2">
+              {gaps.map((gap, idx) => {
+                const key = `${gap.groupId}-${idx}`
+                const isSelected = selectedGaps[key]
+
+                return (
+                  <div key={key}>
+                    <motion.button
+                      onClick={() => handleToggleGap(key)}
+                      className="w-full text-left p-3 rounded-lg border-2 transition-all"
+                      style={{
+                        borderColor: isSelected ? RED : BORDER,
+                        background: isSelected ? RED_BG : '#FFFFFF',
+                      }}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="mt-0.5 flex-shrink-0">
+                          {isSelected ? (
+                            <CheckSquare className="w-5 h-5" style={{ color: RED }} />
+                          ) : (
+                            <Square className="w-5 h-5" style={{ color: '#D1D5DB' }} />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-sm text-nav">{gap.position}</p>
+                          <p className="text-xs text-text-muted mt-0.5">{gap.groupName}</p>
+                        </div>
+                      </div>
+                    </motion.button>
+
+                    {/* Details for selected gap */}
+                    <AnimatePresence>
+                      {isSelected && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="mt-3 ml-8 space-y-3 pb-3 border-l-2" style={{ borderColor: RED_BG }}
+                        >
+                          <div>
+                            <label className="block text-xs font-semibold text-nav mb-1.5">
+                              Work Arrangement
+                            </label>
+                            <div className="grid grid-cols-3 gap-2">
+                              {(['onsite', 'hybrid', 'remote'] as const).map(loc => (
+                                <button
+                                  key={loc}
+                                  onClick={() => setGapDetails(prev => ({
+                                    ...prev,
+                                    [key]: { ...prev[key], location: loc }
+                                  }))}
+                                  className="px-3 py-2 rounded-lg text-xs font-semibold border transition-all"
+                                  style={{
+                                    borderColor: gapDetails[key]?.location === loc ? RED : BORDER,
+                                    background: gapDetails[key]?.location === loc ? RED_BG : '#F9F8F7',
+                                    color: gapDetails[key]?.location === loc ? RED : '#717171',
+                                  }}
+                                >
+                                  {loc === 'onsite' ? 'In Office' : loc === 'hybrid' ? 'Hybrid' : 'Remote'}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-semibold text-nav mb-1.5">
+                              Commitment Level
+                            </label>
+                            <div className="grid grid-cols-2 gap-2">
+                              {(['full-time', 'fractional'] as const).map(com => (
+                                <button
+                                  key={com}
+                                  onClick={() => setGapDetails(prev => ({
+                                    ...prev,
+                                    [key]: { ...prev[key], commitment: com }
+                                  }))}
+                                  className="px-3 py-2 rounded-lg text-xs font-semibold border transition-all"
+                                  style={{
+                                    borderColor: gapDetails[key]?.commitment === com ? RED : BORDER,
+                                    background: gapDetails[key]?.commitment === com ? RED_BG : '#F9F8F7',
+                                    color: gapDetails[key]?.commitment === com ? RED : '#717171',
+                                  }}
+                                >
+                                  {com === 'full-time' ? 'Full-Time' : 'Fractional (Part-Time)'}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-semibold text-nav mb-1.5">
+                              Timeline
+                            </label>
+                            <div className="grid grid-cols-3 gap-2">
+                              {(['immediate', '30-60 days', '60-90 days'] as const).map(urg => (
+                                <button
+                                  key={urg}
+                                  onClick={() => setGapDetails(prev => ({
+                                    ...prev,
+                                    [key]: { ...prev[key], urgency: urg }
+                                  }))}
+                                  className="px-3 py-2 rounded-lg text-xs font-semibold border transition-all"
+                                  style={{
+                                    borderColor: gapDetails[key]?.urgency === urg ? RED : BORDER,
+                                    background: gapDetails[key]?.urgency === urg ? RED_BG : '#F9F8F7',
+                                    color: gapDetails[key]?.urgency === urg ? RED : '#717171',
+                                  }}
+                                >
+                                  {urg}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Contact & Message */}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-nav mb-1.5">
+                Your Email *
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="contact@company.com"
+                className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none bg-white"
+                style={{ borderColor: BORDER }}
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-nav mb-1.5">
+                Additional Context (Optional)
+              </label>
+              <textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Tell us about your company stage, culture, any specific requirements..."
+                rows={3}
+                className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none bg-white resize-none"
+                style={{ borderColor: BORDER }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div
+          className="flex gap-3 p-6 border-t bg-gray-50"
+          style={{ borderColor: BORDER }}
+        >
+          <button
+            onClick={onClose}
+            className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm border transition-colors"
+            style={{ borderColor: BORDER, color: '#717171' }}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!canSubmit}
+            className="flex-1 btn btn-accent px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center justify-center gap-2"
+            style={{ opacity: canSubmit ? 1 : 0.5, cursor: canSubmit ? 'pointer' : 'not-allowed' }}
+          >
+            <Send className="w-4 h-4" />
+            Send Inquiry
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
 export default function DirectorsOfficersGapAnalysisPage() {
   const [groups, setGroups] = useState<Group[]>(seedGroups)
+  const [inquiryModalOpen, setInquiryModalOpen] = useState(false)
+  const [submittedInquiry, setSubmittedInquiry] = useState<{ email: string; gaps: SelectedGap[] } | null>(null)
 
   const totals = useMemo(() => {
     let required = 0
@@ -587,6 +903,43 @@ export default function DirectorsOfficersGapAnalysisPage() {
       gaps += s.gaps
     }
     return { required, current, gaps, filled: current }
+  }, [groups])
+
+  // Build list of gaps for the inquiry modal
+  const gapsList = useMemo(() => {
+    const gaps: Array<{ groupId: string; groupName: string; position: string; required: number; current: number }> = []
+    for (const g of groups) {
+      const s = groupStats(g)
+      if (s.gaps > 0) {
+        if (g.kind === 'slots') {
+          // For slots, list missing positions
+          const rows = slotRows(g)
+          rows.forEach(row => {
+            if (!row.person) {
+              gaps.push({
+                groupId: g.id,
+                groupName: g.name,
+                position: row.position,
+                required: 1,
+                current: 0
+              })
+            }
+          })
+        } else {
+          // For count-based, just show the gap count
+          for (let i = 0; i < s.gaps; i++) {
+            gaps.push({
+              groupId: g.id,
+              groupName: g.name,
+              position: `Board Member (Gap ${i + 1})`,
+              required: 1,
+              current: 0
+            })
+          }
+        }
+      }
+    }
+    return gaps
   }, [groups])
 
   const pct = totals.required > 0 ? Math.round((Math.min(totals.filled, totals.required) / totals.required) * 100) : 100
@@ -607,6 +960,12 @@ export default function DirectorsOfficersGapAnalysisPage() {
         g.id === groupId ? { ...g, members: g.members.filter((m) => m.id !== personId) } : g
       )
     )
+  }
+
+  const handleInquirySubmit = (selectedGaps: SelectedGap[], email: string, notes: string) => {
+    setSubmittedInquiry({ email, gaps: selectedGaps })
+    // In production, send to backend
+    console.log('Talent inquiry submitted:', { selectedGaps, email, notes })
   }
 
   return (
@@ -689,7 +1048,56 @@ export default function DirectorsOfficersGapAnalysisPage() {
             </motion.div>
           ))}
         </div>
+
+        {/* Need Help Section */}
+        {totals.gaps > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="card overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, #FDECEB 0%, #FEF3E1 100%)',
+              border: `2px solid ${RED}`,
+            }}
+          >
+            <div className="px-6 py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: RED_BG }}
+                >
+                  <MessageCircle className="w-6 h-6" style={{ color: RED }} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-nav mb-1">Need Help Finding Talent?</h3>
+                  <p className="text-sm text-text-muted">
+                    We can help you identify and recruit the right board members, executives, and advisors to fill your {totals.gaps} open {totals.gaps === 1 ? 'position' : 'positions'}.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setInquiryModalOpen(true)}
+                className="btn btn-accent px-6 py-2.5 rounded-full font-semibold text-sm flex items-center gap-2 flex-shrink-0 whitespace-nowrap"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Get Help
+              </button>
+            </div>
+          </motion.div>
+        )}
       </div>
+
+      {/* Talent Inquiry Modal */}
+      <AnimatePresence>
+        {inquiryModalOpen && (
+          <TalentInquiryModal
+            gaps={gapsList}
+            onClose={() => setInquiryModalOpen(false)}
+            onSubmit={handleInquirySubmit}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }
