@@ -51,6 +51,15 @@ export const PRE_IPO_NAV_GROUPS = [
     ],
   },
   {
+    section: 'INVESTOR READINESS',
+    collapsible: true,
+    items: [
+      { href: '/dashboard/investor-readiness/data-room',      icon: Lock,    label: 'Data Room',         badge: '🔒',   key: 'data-room'      },
+      { href: '/dashboard/pace',                              icon: Target,  label: 'PACE™ Scorecard',   badge: null,   key: 'pace'           },
+      { href: '/dashboard/cap-table',                          icon: PieChart, label: 'Cap Table',        badge: null,   key: 'cap-table'      },
+    ],
+  },
+  {
     section: 'LISTED SERVICES (Coming)',
     collapsible: true,
     isLocked: true,
