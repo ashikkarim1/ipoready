@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Header } from '@/app/components/Header'
+import { RocketAnimation } from '@/components/RocketAnimation'
 import {
   Rocket, CheckSquare, FileText, Users, ShoppingBag, DollarSign,
   PieChart, Banknote, ChevronRight, ChevronDown, Zap, Shield, ArrowRight,
@@ -147,8 +148,29 @@ export default function LandingPage() {
     setCurrentYear(new Date().getFullYear())
   }, [])
 
+  // Ensure visibility fallback: if animations don't start, make content visible after 1 second
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // Add inline style to ensure any opacity: 0 elements become visible
+      const style = document.createElement('style')
+      style.textContent = `
+        * {
+          animation: ensureVisibility 0.1s forwards !important;
+        }
+        @keyframes ensureVisibility {
+          to { opacity: 1 !important; }
+        }
+      `
+      document.head.appendChild(style)
+    }, 1000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <div className="min-h-screen" style={{ colorScheme: 'light' }}>
+      {/* Rocket Animation */}
+      <RocketAnimation />
 
       {/* ── Header ──────────────────────────────────────────────────────────── */}
       <Header />
@@ -158,12 +180,11 @@ export default function LandingPage() {
 
           {/* Left: Copy */}
           <div>
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-              className="flex items-center gap-2" style={{ marginBottom: '1.5rem' }}>
+            <div className="flex items-center gap-2" style={{ marginBottom: '1.5rem' }}>
               <span className="pill text-xs font-bold uppercase tracking-wider"
                 style={{ background: 'var(--color-error-soft)', color: 'var(--color-accent)' }}>The IPO Operating System</span>
               <span className="text-text-muted text-sm">Canadian & US listings</span>
-            </motion.div>
+            </div>
 
             <motion.h1
               initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.06 }}
