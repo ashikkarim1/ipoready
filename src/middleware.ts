@@ -10,7 +10,8 @@
  * entirely at the edge — no network hop to origin or Neon DB.
  *
  * Lead Capture Enforcement:
- *  Unauthenticated user visits /dashboard, /cap-table, /trial → redirect to /leads/capture
+ *  Unauthenticated user visits /dashboard, /trial → redirect to /leads/capture
+ *  Public feature showcase pages (/cap-table, /checklist, /documents, /marketplace) are accessible without login
  *
  * Trial Setup Enforcement:
  *  Authenticated user without trial company yet → redirect to /trial/cap-table-setup
@@ -36,14 +37,10 @@ export async function middleware(req: NextRequest) {
     // Redirect all other protected routes to lead capture
     if (
       pathname.startsWith('/dashboard') ||
-      pathname.startsWith('/cap-table') ||
       pathname.startsWith('/trial') ||
-      pathname.startsWith('/checklist') ||
       pathname.startsWith('/raising-capital') ||
-      pathname.startsWith('/documents') ||
       pathname.startsWith('/team') ||
       pathname.startsWith('/templates') ||
-      pathname.startsWith('/marketplace') ||
       pathname.startsWith('/referrals') ||
       pathname.startsWith('/account') ||
       pathname.startsWith('/admin') ||
@@ -80,13 +77,9 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     '/dashboard/:path*',
-    '/checklist/:path*',
-    '/cap-table/:path*',
     '/raising-capital/:path*',
-    '/documents/:path*',
     '/team/:path*',
     '/templates/:path*',
-    '/marketplace/:path*',
     '/referrals/:path*',
     '/account/:path*',
     '/admin/:path*',
