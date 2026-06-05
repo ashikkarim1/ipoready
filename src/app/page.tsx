@@ -59,11 +59,13 @@ export default function LandingPage() {
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <Link href="/register" className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg text-center hover:bg-red-600 transition-colors text-sm sm:text-base">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+              <Link href="/register" className="px-6 py-2.5 text-white font-bold rounded-full text-center transition-all text-sm sm:text-base inline-flex items-center justify-center hover:opacity-90"
+                style={{ background: '#E8312A', display: 'inline-flex', minHeight: '44px' }}>
                 Get Started Free
               </Link>
-              <Link href="/pricing" className="px-6 py-3 border-2 border-red-500 text-red-600 font-bold rounded-lg text-center hover:bg-red-50 transition-colors text-sm sm:text-base">
+              <Link href="/pricing" className="px-6 py-2.5 text-center font-bold rounded-full transition-all text-sm sm:text-base inline-flex items-center justify-center hover:opacity-90"
+                style={{ border: '2px solid #E8312A', color: '#E8312A', display: 'inline-flex', minHeight: '44px' }}>
                 View Pricing
               </Link>
             </div>
