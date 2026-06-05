@@ -395,7 +395,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <Building2 className="w-3.5 h-3.5 text-text-muted mt-0.5 flex-shrink-0" />
                   <div className="min-w-0 flex-1">
                     <p className="text-nav label-sm font-semibold truncate">{company.name}</p>
-                    <p className="text-text-muted caption-sm">{company.targetExchange.toUpperCase()} · {company.listingType.toUpperCase()}</p>
+                    <p className="text-text-muted caption-sm">{company.targetExchange?.toUpperCase() || 'N/A'} · {company.listingType?.toUpperCase() || 'N/A'}</p>
                     <div className="mt-2 space-y-1">
                       <div className="flex items-center justify-between">
                         <span className="text-text-light caption-sm">Progress</span>
