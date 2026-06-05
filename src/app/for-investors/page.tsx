@@ -32,7 +32,7 @@ export default function ForInvestorsPage() {
       <Header />
 
       {/* ── Page Header ──────────────────────────────────────────────────────── */}
-      <section style={{ paddingTop: '4rem', paddingBottom: '3rem', background: '#F7F6F4' }}>
+      <section style={{ paddingTop: '6rem', paddingBottom: '4rem', background: '#F7F6F4' }}>
         <div className="max-w-6xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <h1 className="serif text-5xl text-nav mb-4 leading-tight">Deal Flow You Can't Get Anywhere Else</h1>
           <p className="text-text-muted text-lg">IPOReady is the only platform with real-time visibility into companies actually executing IPO/RTO journeys. Get notified when opportunities match your thesis.</p>
@@ -40,7 +40,7 @@ export default function ForInvestorsPage() {
       </section>
 
       {/* ── CTA Bar ─────────────────────────────────────────────────────────── */}
-      <section style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
+      <section style={{ paddingTop: '2rem', paddingBottom: '2rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
         <div className="max-w-6xl mx-auto flex flex-wrap gap-3" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <button
             onClick={() => router.push('/investor/signup')}
@@ -58,7 +58,7 @@ export default function ForInvestorsPage() {
       </section>
 
       {/* ── Value Proposition ──────────────────────────────────────────────────── */}
-      <section style={{ paddingTop: '3rem', paddingBottom: '3rem', background: '#FFFFFF' }}>
+      <section style={{ paddingTop: '5rem', paddingBottom: '5rem', background: '#FFFFFF' }}>
         <div className="max-w-6xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -406,9 +406,52 @@ export default function ForInvestorsPage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="px-6 py-12 border-t border-gray-200">
-        <div className="max-w-6xl mx-auto text-center text-text-muted text-sm">
-          <p>IPOReady © 2026. The IPO-bound company intelligence platform.</p>
+      <footer className="border-t border-gray-200 mt-12 sm:mt-16 py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', marginBottom: '2rem' }}>
+            {[
+              {
+                title: 'Exchanges',
+                links: ['TSX', 'TSXV', 'CSE', 'NASDAQ', 'NYSE', 'OTC Markets', 'Cboe Canada']
+              },
+              {
+                title: 'Listing Types',
+                links: ['IPO', 'Direct Listing', 'RTO', 'SPAC', 'Regulation A+']
+              },
+              {
+                title: 'Legal',
+                links: ['Privacy Policy', 'Terms of Service', 'Disclaimer', 'Cookie Policy']
+              },
+              {
+                title: 'Support',
+                links: ['Contact Us', 'Help Centre', 'System Status']
+              },
+            ].map((column) => (
+              <div key={column.title}>
+                <p className="font-bold text-xs sm:text-sm mb-3 uppercase tracking-wider" style={{ color: '#1A1A1A' }}>
+                  {column.title}
+                </p>
+                <ul className="space-y-2">
+                  {column.links.map((link) => (
+                    <li key={link}>
+                      <Link href="#" className="text-xs sm:text-sm" style={{ color: '#717171' }}>
+                        {link}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <div className="border-t border-gray-200 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-xs sm:text-sm" style={{ color: '#717171' }}>
+              © 2026 IPOReady. All rights reserved.
+            </p>
+            <p className="text-xs sm:text-sm" style={{ color: '#717171' }}>
+              The IPO Operating System for Canada & US Listings
+            </p>
+          </div>
         </div>
       </footer>
     </div>
