@@ -612,7 +612,7 @@ export default function ResourcesPage() {
       <Header />
 
       {/* ── Header Section ──────────────────────────────────────────────────── */}
-      <section style={{ paddingTop: '1.5rem', paddingBottom: '1rem', background: '#F7F6F4', marginTop: '4rem' }}>
+      <section style={{ paddingTop: '2rem', paddingBottom: '1rem', background: '#F7F6F4' }}>
         <div className="max-w-7xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Resource Centre</h1>
           <p className="text-text-muted text-sm">Recent filings, regulatory policies, and procedures across all major listing exchanges. For reference only — always verify directly with the exchange or your legal counsel.</p>
@@ -637,30 +637,22 @@ export default function ResourcesPage() {
       <div style={{ marginBottom: '2.5rem' }}>
         {/* Section header */}
         <div style={{ marginBottom: '1.25rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem' }}>
-            <BookMarked className="w-4 h-4" style={{ color: '#1D4ED8' }} />
-            <h2 style={{ fontWeight: 800, fontSize: '1.15rem', color: '#1A1A1A' }}>IPO &amp; Compliance Learning Centre</h2>
-          </div>
-          <p style={{ fontSize: '0.8rem', color: '#717171' }}>
+          <h2 className="serif text-2xl sm:text-3xl text-nav mb-2">IPO &amp; Compliance Learning Centre</h2>
+          <p className="text-text-muted text-sm mb-6">
             Everything you need to know — from first filing to post-listing compliance
           </p>
         </div>
 
         {/* Tab bar */}
-        <div style={{ display: 'flex', gap: '0.375rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+        <div className="flex gap-1.5 mb-6 flex-wrap">
           {learnTabs.map(tab => (
             <button key={tab.key} onClick={() => setLearnTab(tab.key)}
+              className="px-4 py-2 rounded-full text-sm font-semibold transition-all"
               style={{
-                padding: '0.4rem 1rem',
-                borderRadius: '999px',
-                fontSize: '0.8rem',
-                fontWeight: 600,
-                border: '1px solid',
+                background: learnTab === tab.key ? '#1D4ED8' : 'white',
+                color: learnTab === tab.key ? 'white' : '#717171',
+                border: `1px solid ${learnTab === tab.key ? '#1D4ED8' : '#E5E4E0'}`,
                 cursor: 'pointer',
-                transition: 'all 0.15s',
-                ...(learnTab === tab.key
-                  ? { background: '#1D4ED8', borderColor: '#1D4ED8', color: 'white' }
-                  : { background: 'white', borderColor: '#E5E4E0', color: '#717171' }),
               }}>
               {tab.label}
             </button>
@@ -672,7 +664,7 @@ export default function ResourcesPage() {
           {learnTab === 'pre-ipo' && (
             <motion.div key="pre-ipo"
               initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-              style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+              className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {preIpoGuides.map(guide => (
                 <GuideCardItem
                   key={guide.id}
@@ -689,7 +681,7 @@ export default function ResourcesPage() {
           {learnTab === 'post-listing' && (
             <motion.div key="post-listing"
               initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-              style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+              className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {postListingGuides.map(guide => (
                 <GuideCardItem
                   key={guide.id}
@@ -706,7 +698,7 @@ export default function ResourcesPage() {
           {learnTab === 'forms' && (
             <motion.div key="forms"
               initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-              style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+              className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {formTemplates.map((tpl, i) => (
                 <a key={i} href={tpl.href}
                   style={{
