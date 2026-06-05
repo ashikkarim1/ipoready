@@ -631,7 +631,7 @@ export default function ResourcesPage() {
         </div>
       </section>
 
-      <div style={{ maxWidth: '1280px' }} suppressHydrationWarning>
+      <div className="max-w-7xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
 
       {/* ── Learning Centre ─────────────────────────────────────────────────── */}
       <div style={{ marginBottom: '2.5rem' }}>
