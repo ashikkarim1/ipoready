@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import { Header } from '@/app/components/Header'
 import dynamic from 'next/dynamic'
 import { CheckCircle2 } from 'lucide-react'
+import dashboardImage from '../../public/images/mainmenu.png'
 
 const SimpleRocket = dynamic(
   () => import('@/components/SimpleRocket').then(mod => mod.SimpleRocket),
@@ -79,12 +80,13 @@ export default function LandingPage() {
             }}
           >
             <Image
-              src="/images/mainmenu.png"
+              src={dashboardImage}
               alt="IPOReady Mission Control Dashboard"
               fill
               priority
+              quality={90}
               style={{
-                objectFit: 'cover',
+                objectFit: 'contain',
                 borderRadius: '16px'
               }}
             />
