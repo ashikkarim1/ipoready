@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Header } from '@/app/components/Header'
+import { AppShell } from '@/components/layout/AppShell'
 import {
   CheckCircle2, Copy, Download, Mail, AlertCircle, ChevronDown, ChevronUp,
   TrendingUp, Zap, Users, Target, Calendar, DollarSign, BarChart3, Sparkles,
@@ -296,8 +296,8 @@ Aggressive Estimate: $${budgets.aggressive.toLocaleString()}`
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#F7F6F4' }}>
-      <Header />
+    <AppShell>
+      <div className="min-h-screen" style={{ background: '#F7F6F4' }}>
 
       {/* Hero Section */}
       <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1.5rem 1.5rem', background: '#F7F6F4' }}>
@@ -828,6 +828,7 @@ Aggressive Estimate: $${budgets.aggressive.toLocaleString()}`
         </section>
       </div>
     </div>
+    </AppShell>
   )
 }
 
