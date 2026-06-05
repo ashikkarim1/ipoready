@@ -51,7 +51,10 @@ const NAV_GROUPS = [
     section: 'INVESTOR READINESS',
     collapsible: true,
     items: [
-      { href: '/dashboard/investor-match', icon: Target, label: 'Investor Match™', badge: '✨', key: 'investor-match' },
+      { href: '/dashboard/investor-readiness/data-room/executive-summary', icon: FileText, label: 'Executive Summary', badge: null, key: 'exec-summary' },
+      { href: '/dashboard/investor-readiness/data-room/financial-statements', icon: BarChart3, label: 'Financial Statements', badge: null, key: 'financial-stmts' },
+      { href: '/dashboard/investor-readiness/data-room/legal-documents', icon: FileCheck, label: 'Legal Documents', badge: null, key: 'legal-docs' },
+      { href: '/dashboard/investor-readiness/data-room/regulatory-filings', icon: Shield, label: 'Regulatory Filings', badge: null, key: 'regulatory-filings' },
     ],
   },
   {
