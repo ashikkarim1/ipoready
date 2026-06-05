@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Header } from '@/app/components/Header'
 import {
-  BookOpen, FileText, ExternalLink, Newspaper, ChevronRight,
+  BookOpen, FileText, ExternalLink, Newspaper, ChevronRight, ArrowRight,
   Search, Filter, Clock, Building2, AlertCircle, Globe, Scale,
   TrendingUp, BookMarked, Shield, Star, Bookmark, ChevronDown, ChevronUp
 } from 'lucide-react'
@@ -611,19 +611,27 @@ export default function ResourcesPage() {
       {/* Header with menu */}
       <Header />
 
-      <div style={{ maxWidth: '1280px' }} suppressHydrationWarning>
+      {/* ── Header Section ──────────────────────────────────────────────────── */}
+      <section style={{ paddingTop: '1.5rem', paddingBottom: '1rem', background: '#F7F6F4', marginTop: '4rem' }}>
+        <div className="max-w-7xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+          <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Resource Centre</h1>
+          <p className="text-text-muted text-sm">Recent filings, regulatory policies, and procedures across all major listing exchanges. For reference only — always verify directly with the exchange or your legal counsel.</p>
+        </div>
+      </section>
 
-        {/* Page header */}
-        <div style={{ marginBottom: '1.75rem' }}>
-          <div className="flex items-center gap-2" style={{ marginBottom: '0.375rem' }}>
-            <BookOpen className="w-5 h-5" style={{ color: '#E8312A' }} />
-            <h1 className="text-nav font-bold text-2xl">Resource Centre</h1>
-          </div>
-        <p className="text-text-muted body-sm">
-          Recent filings, regulatory policies, and procedures across all major listing exchanges.
-          For reference only — always verify directly with the exchange or your legal counsel.
-        </p>
-      </div>
+      {/* ── CTA Bar ─────────────────────────────────────────────────────────── */}
+      <section style={{ paddingTop: '1rem', paddingBottom: '1rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
+        <div className="max-w-7xl mx-auto flex flex-wrap gap-3" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+          <a href="/dashboard/documents" className="btn btn-primary gap-2 font-semibold px-6 py-2.5 rounded-full" style={{ background: '#E8312A', color: 'white', textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
+            Upload Documents <ArrowRight className="w-4 h-4" />
+          </a>
+          <a href="/prospectus-builder" className="btn btn-secondary px-6 py-2.5 rounded-full" style={{ border: '1px solid #E5E4E0', color: '#1A1A1A', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', background: 'white' }}>
+            Prospectus Builder
+          </a>
+        </div>
+      </section>
+
+      <div style={{ maxWidth: '1280px' }} suppressHydrationWarning>
 
       {/* ── Learning Centre ─────────────────────────────────────────────────── */}
       <div style={{ marginBottom: '2.5rem' }}>
