@@ -6,7 +6,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Header } from '@/app/components/Header'
-import { SimpleRocket } from '@/components/SimpleRocket'
+import dynamic from 'next/dynamic'
+
+const SimpleRocket = dynamic(() => import('@/components/SimpleRocket').then(mod => mod.SimpleRocket), {
+  ssr: false
+})
 import {
   Rocket, CheckSquare, FileText, Users, ShoppingBag, DollarSign,
   PieChart, Banknote, ChevronRight, ChevronDown, Zap, Shield, ArrowRight,
