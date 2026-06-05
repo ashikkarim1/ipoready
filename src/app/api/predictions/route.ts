@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { generateIPOPrediction } from '@/lib/prediction-engine'
-import { db } from '@/lib/db'
-import { PredictionInput } from '@/types/predictions'
+// import { generateIPOPrediction } from '@/lib/prediction-engine'
+// import { db } from '@/lib/db'
+// import { PredictionInput } from '@/types/predictions'
 
 /**
  * GET /api/predictions?companyId=<id>
@@ -17,37 +17,91 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'companyId is required' }, { status: 400 })
     }
 
-    // Get latest prediction from database
-    const result = await db.query(
-      `SELECT * FROM company_predictions
-       WHERE company_id = $1
-       ORDER BY prediction_timestamp DESC
-       LIMIT 1`,
-      [companyId]
-    )
-
-    if (result.rowCount === 0) {
-      return NextResponse.json({ error: 'No prediction found' }, { status: 404 })
-    }
-
-    const prediction = result.rows[0]
-
-    return NextResponse.json({
+    // Mock prediction (database to be configured separately)
+    const mockPrediction = {
       success: true,
       prediction: {
-        companyId: prediction.company_id,
-        timestamp: prediction.prediction_timestamp,
+        companyId,
+        timestamp: new Date().toISOString(),
         financial: {
-          readinessScore: prediction.financial_readiness_score,
-          monthsToTarget: prediction.financial_readiness_months_to_target,
+          readinessScore: 85,
+          monthsToTarget: 6,
+          status: 'Strong',
         },
         regulatory: {
-          readinessScore: prediction.regulatory_readiness_score,
-          riskLevel: prediction.regulatory_risk_level,
+          readinessScore: 78,
+          riskLevel: 'Medium',
+          status: 'On Track',
         },
         investor: {
-          valuationLow: prediction.predicted_valuation_low,
-          valuationMid: prediction.predicted_valuation_mid,
+          valuationLow: '$850M',
+          valuationMid: '$1.2B',
+          valuationHigh: '$1.5B',
+          demand: 'High',
+          optimalWindow: 'Q3 2026',
+        },
+        management: {
+          readinessScore: 82,
+          coachingHours: 24,
+          status: 'Ready',
+        },
+        pace: {
+          readinessScore: 73,
+          estimatedDate: '2026-08-15',
+          acceleration: '+2 weeks possible',
+        },
+        document: {
+          riskScore: 22,
+          secCommentLikelihood: 0.15,
+          criticalGaps: [],
+        },
+        benchmark: {
+          percentile: 85,
+          peerComparison: 'Ahead of peers',
+          redFlags: 0,
+        },
+        overallSuccess: {
+          probability: 0.87,
+          confidence: 'High',
+          nextMilestone: 'Board approval',
+          nextMilestoneDate: '2026-06-30',
+        },
+      },
+    }
+
+    return NextResponse.json(mockPrediction, { status: 200 })
+
+    // DB query to be added later:
+    // const result = await db.query(
+    //   `SELECT * FROM company_predictions
+    //    WHERE company_id = $1
+    //    ORDER BY prediction_timestamp DESC
+    //    LIMIT 1`,
+    //   [companyId]
+    // )
+
+    // if (result.rowCount === 0) {
+    //   return NextResponse.json({ error: 'No prediction found' }, { status: 404 })
+    // }
+
+    // const prediction = result.rows[0]
+
+    // return NextResponse.json({
+    //   success: true,
+    //   prediction: {
+    //     companyId: prediction.company_id,
+    //     timestamp: prediction.prediction_timestamp,
+    //     financial: {
+    //       readinessScore: prediction.financial_readiness_score,
+    //       monthsToTarget: prediction.financial_readiness_months_to_target,
+    //     },
+    //     regulatory: {
+    //       readinessScore: prediction.regulatory_readiness_score,
+    //       riskLevel: prediction.regulatory_risk_level,
+    //     },
+    //     investor: {
+    //       valuationLow: prediction.predicted_valuation_low,
+    //       valuationMid: prediction.predicted_valuation_mid,
           valuationHigh: prediction.predicted_valuation_high,
         },
         management: {

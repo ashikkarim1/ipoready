@@ -1,5 +1,61 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+// import { db } from '@/lib/db'
+
+/**
+ * GET /api/intelligence/actions?companyId=<id>
+ * Retrieve all action items for a company
+ */
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const companyId = searchParams.get('companyId')
+
+    if (!companyId) {
+      return NextResponse.json(
+        { error: 'companyId is required' },
+        { status: 400 }
+      )
+    }
+
+    // Mock action items (database to be configured separately)
+    const mockActions = {
+      companyId,
+      actions: [
+        {
+          id: '1',
+          title: 'Update financial projections',
+          source: 'Market Intelligence',
+          priority: 'HIGH',
+          dueDate: new Date(Date.now() + 86400000).toISOString(),
+          status: 'pending',
+          assignee: 'CFO',
+          estimatedTime: '4 hours',
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: '2',
+          title: 'Board meeting - IPO timeline review',
+          source: 'Autonomous Actions',
+          priority: 'MEDIUM',
+          dueDate: new Date(Date.now() + 604800000).toISOString(),
+          status: 'pending',
+          assignee: 'CEO',
+          estimatedTime: '2 hours',
+          createdAt: new Date().toISOString(),
+        },
+      ],
+      totalCount: 2,
+    }
+
+    return NextResponse.json(mockActions, { status: 200 })
+  } catch (error) {
+    console.error('Actions API error:', error)
+    return NextResponse.json(
+      { error: 'Failed to retrieve actions' },
+      { status: 500 }
+    )
+  }
+}
 
 /**
  * POST /api/intelligence/actions
@@ -19,35 +75,52 @@ export async function POST(request: NextRequest) {
       priority,
     } = await request.json()
 
-    if (!userId || !companyId || !title) {
+    if (!companyId || !title) {
       return NextResponse.json(
-        { error: 'userId, companyId, and title are required' },
+        { error: 'companyId and title are required' },
         { status: 400 }
       )
     }
 
-    const result = await db.query(`
-      INSERT INTO briefing_action_items (
-        user_id,
-        company_id,
-        article_id,
-        briefing_send_id,
-        title,
-        description,
-        due_date,
-        priority,
-        status
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'open')
-      RETURNING *
-    `, [
+    const newAction = {
+      id: `action_${Date.now()}`,
       userId,
       companyId,
-      articleId || null,
-      briefingSendId || null,
+      articleId,
+      briefingSendId,
       title,
-      description || null,
-      dueDate || null,
-      priority || 'medium',
+      description,
+      dueDate,
+      priority: priority || 'medium',
+      status: 'open',
+      createdAt: new Date().toISOString(),
+    }
+
+    return NextResponse.json(newAction, { status: 201 })
+
+    // DB query to be added later:
+    // const result = await db.query(`
+    //   INSERT INTO briefing_action_items (
+    //     user_id,
+    //     company_id,
+    //     article_id,
+    //     briefing_send_id,
+    //     title,
+    //     description,
+    //     due_date,
+    //     priority,
+    //     status
+    //   ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'open')
+    //   RETURNING *
+    // `, [
+    //   userId,
+    //   companyId,
+    //   articleId || null,
+    //   briefingSendId || null,
+    //   title,
+    //   description || null,
+    //   dueDate || null,
+    //   priority || 'medium',
     ])
 
     if (result.rowCount === 0) {
