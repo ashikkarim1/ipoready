@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Header } from '@/app/components/Header'
+import { AppShell } from '@/components/layout/AppShell'
 import {
   TrendingUp, DollarSign, Users, BarChart3, CheckCircle2, AlertCircle,
   Filter, ArrowUpRight, ArrowDownRight
@@ -98,8 +98,8 @@ export default function PeerAnalysisPage() {
   const avgEmployees = Math.round(peers.reduce((sum, p) => sum + p.employees, 0) / peers.length)
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
-      <Header />
+    <AppShell>
+      <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
 
       {/* Hero */}
       <section style={{ borderBottom: '1px solid #E5E4E0', padding: '3rem 1.5rem', background: '#F7F6F4' }}>
@@ -289,6 +289,7 @@ export default function PeerAnalysisPage() {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </AppShell>
   )
 }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Header } from '@/app/components/Header'
+import { AppShell } from '@/components/layout/AppShell'
 import {
   Target, Users, TrendingUp, DollarSign, CheckCircle2, AlertCircle,
   Filter, Search, Star, MapPin, Building2, BarChart3
@@ -100,8 +100,8 @@ export default function InvestorMatchPage() {
   })
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
-      <Header />
+    <AppShell>
+      <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
 
       {/* Hero */}
       <section style={{ borderBottom: '1px solid #E5E4E0', padding: '3rem 1.5rem', background: '#F7F6F4' }}>
@@ -321,6 +321,7 @@ export default function InvestorMatchPage() {
           )}
         </div>
       </section>
-    </div>
+      </div>
+    </AppShell>
   )
 }

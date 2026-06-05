@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Header } from '@/app/components/Header'
+import { AppShell } from '@/components/layout/AppShell'
 import {
   TrendingUp, Users, DollarSign, Zap, BarChart3, Target, AlertCircle, CheckCircle2, Trophy
 } from 'lucide-react'
@@ -40,8 +40,8 @@ export default function CoveragePredictorPage() {
   const scoreLabel = score >= 8 ? 'Strong' : score >= 6 ? 'Moderate' : 'Challenging'
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
-      <Header />
+    <AppShell>
+      <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
 
       {/* Hero */}
       <section style={{ borderBottom: '1px solid #E5E4E0', padding: '3rem 1.5rem', background: '#F7F6F4' }}>
@@ -274,6 +274,7 @@ export default function CoveragePredictorPage() {
           </motion.div>
         </div>
       </section>
-    </div>
+      </div>
+    </AppShell>
   )
 }
