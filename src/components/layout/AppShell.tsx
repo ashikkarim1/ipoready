@@ -22,9 +22,10 @@ const NAV_GROUPS = [
     section: 'MISSION',
     collapsible: false,
     items: [
-      { href: '/dashboard',       icon: LayoutDashboard, label: 'Dashboard',          badge: null,   key: 'dashboard'   },
-      { href: '/dashboard/ipo-journey', icon: Map,     label: 'IPO Journey™',      badge: '✨',   key: 'ipo-journey' },
-      { href: '/checklist',       icon: CheckSquare,     label: 'IPO Checklist',      badge: null,   key: 'checklist'   },
+      { href: '/dashboard',            icon: LayoutDashboard, label: 'Dashboard',         badge: null,   key: 'dashboard'       },
+      { href: '/new-to-this',          icon: HelpCircle,      label: 'New To This?',      badge: '✨',   key: 'new-to-this'     },
+      { href: '/dashboard/ipo-journey', icon: Map,            label: 'IPO Journey™',      badge: '✨',   key: 'ipo-journey'     },
+      { href: '/checklist',            icon: CheckSquare,     label: 'IPO Checklist',     badge: null,   key: 'checklist'       },
     ],
   },
   {
@@ -38,6 +39,22 @@ const NAV_GROUPS = [
       { href: '/dashboard/work/prospectus-validator',    icon: CheckSquare,     label: 'Prospectus Validator', badge: null,  key: 'validator'        },
       { href: '/dashboard/work/directors-officers',      icon: Users,           label: 'Board & Talent',     badge: '💎',   key: 'directors'        },
       { href: '/templates',                              icon: Award,           label: 'Templates & Forms',  badge: null,   key: 'templates'        },
+    ],
+  },
+  {
+    section: 'INVESTOR READINESS',
+    collapsible: true,
+    items: [
+      { href: '/dashboard/investor-match', icon: Target, label: 'Investor Match™', badge: '✨', key: 'investor-match' },
+    ],
+  },
+  {
+    section: 'MARKET ANALYSIS',
+    collapsible: true,
+    items: [
+      { href: '/market-analysis/peer-analysis',        icon: BarChart3,   label: 'Peer Analysis',        badge: '✨',   key: 'peer-analysis'     },
+      { href: '/market-analysis/coverage-predictor',   icon: TrendingUp,  label: 'Coverage Predictor™', badge: '✨',   key: 'coverage-pred'     },
+      { href: '/market-analysis/market-ir',            icon: DollarSign,  label: 'Market IR',           badge: '✨',   key: 'market-ir'         },
     ],
   },
   {
@@ -150,7 +167,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [showAccountPanel, setShowAccountPanel] = useState(false)
 
   // Collapsible sections state with localStorage persistence
-  const [expandedSections, setExpandedSections] = useState<string[]>(['MISSION', 'WORK', 'FINANCIAL MANAGEMENT', 'COMPLIANCE', 'FILINGS'])
+  const [expandedSections, setExpandedSections] = useState<string[]>(['MISSION', 'WORK', 'INVESTOR READINESS', 'MARKET ANALYSIS', 'FINANCIAL MANAGEMENT', 'COMPLIANCE', 'FILINGS'])
 
   useEffect(() => {
     // Load from localStorage on mount
@@ -317,12 +334,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     // Map full paths and patterns to breadcrumb labels
     const pathMappings: Record<string, string> = {
       '/dashboard': 'Dashboard',
+      '/new-to-this': 'New To This?',
       '/dashboard/ipo-journey': 'IPO Journey™',
       '/checklist': 'IPO Checklist',
       '/cap-table': 'Cap Table',
       '/documents': 'Documents',
       '/prospectus': 'Prospectus Builder',
       '/templates': 'Templates & Forms',
+      '/dashboard/investor-match': 'Investor Match™',
+      '/market-analysis/peer-analysis': 'Peer Analysis',
+      '/market-analysis/coverage-predictor': 'Coverage Predictor™',
+      '/market-analysis/market-ir': 'Market IR',
       '/compliance/listing-rules': 'Listing Rules',
       '/compliance/resolutions': 'Corporate Resolutions',
       '/demo/consent-workflow': 'Consent Workflow',
@@ -345,6 +367,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     if (pathMappings[path]) return pathMappings[path]
 
     // Check for pattern matches (for dynamic routes)
+    if (path.includes('investor-match')) return 'Investor Match™'
+    if (path.includes('peer-analysis')) return 'Peer Analysis'
+    if (path.includes('coverage-predictor')) return 'Coverage Predictor™'
+    if (path.includes('market-ir')) return 'Market IR'
     if (path.includes('cost-calculator')) return 'Cost Calculator'
     if (path.includes('budget-tracking')) return 'Budget Tracking'
     if (path.includes('dilution')) return 'Dilution Scenarios'

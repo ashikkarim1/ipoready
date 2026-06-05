@@ -563,6 +563,135 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── Market IR: Budget Planner ────────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto" style={{ paddingTop: '3rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        {/* Header */}
+        <div style={{ marginBottom: '3rem' }}>
+          <div className="text-xs uppercase tracking-widest text-accent font-semibold" style={{ marginBottom: '0.75rem' }}>Post-IPO Planning</div>
+          <h2 className="serif text-3xl md:text-4xl text-nav leading-tight" style={{ marginBottom: '1rem', maxWidth: '700px' }}>
+            Most IPO Companies Underbudget Post-IPO Market Support by <span style={{ color: 'var(--color-accent)' }}>40–60%</span>
+          </h2>
+          <p className="text-text-muted text-base leading-relaxed" style={{ maxWidth: '680px' }}>
+            IPOReady's Market IR Budget Planner helps you understand the real costs of investor relations, market making, analyst coverage, and ongoing capital markets support — and avoid the budgeting shortfalls that damage many newly listed companies.
+          </p>
+        </div>
+
+        {/* Content Grid: Left (Budget Scenarios) + Right (8 Services) */}
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Left: Budget Scenarios */}
+          <div className="space-y-4">
+            <p className="text-xs uppercase tracking-widest text-text-muted font-semibold mb-6">Annual Budget Scenarios</p>
+
+            {[
+              { level: 'Essential', annual: '$135K', monthly: '$11.3K/mo', color: 'var(--color-info)', bg: 'var(--color-info-soft)' },
+              { level: 'Standard', annual: '$248K', monthly: '$20.7K/mo', color: 'var(--color-warning)', bg: 'var(--color-warning-soft)', recommended: true },
+              { level: 'Aggressive', annual: '$450K', monthly: '$37.5K/mo', color: 'var(--color-accent)', bg: 'var(--color-error-soft)' },
+            ].map((scenario, i) => (
+              <motion.div
+                key={scenario.level}
+                initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+                className="card p-6 card-hover" style={{
+                  position: 'relative',
+                  background: scenario.recommended ? '#FFFFFF' : 'var(--color-bg-primary)',
+                  border: scenario.recommended ? `2px solid ${scenario.color}` : '1px solid #E5E4E0',
+                  boxShadow: scenario.recommended ? `0 4px 12px rgba(232, 49, 42, 0.1)` : 'none'
+                }}>
+                {scenario.recommended && (
+                  <div style={{
+                    position: 'absolute', top: '-12px', left: '20px',
+                    background: scenario.color, color: 'white', fontSize: '10px', fontWeight: 700,
+                    padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em', textTransform: 'uppercase'
+                  }}>
+                    Recommended
+                  </div>
+                )}
+                <div className="flex items-start justify-between mb-3">
+                  <h3 className="font-semibold text-nav" style={{ fontSize: '1.05rem' }}>{scenario.level}</h3>
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: scenario.bg }}>
+                    <DollarSign className="w-4 h-4" style={{ color: scenario.color }} />
+                  </div>
+                </div>
+                <p className="serif text-3xl font-bold mb-2" style={{ color: scenario.color }}>{scenario.annual}</p>
+                <p className="text-sm text-text-muted">{scenario.monthly}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Right: 8 Services */}
+          <div className="space-y-4">
+            <p className="text-xs uppercase tracking-widest text-text-muted font-semibold mb-6">8 Core Post-IPO Services</p>
+
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { name: 'Investor Relations Agency', range: '$3K–$15K/mo' },
+                { name: 'Market Maker', range: '$2K–$8K/mo' },
+                { name: 'Analyst Outreach', range: '$1.5K–$6K/mo' },
+                { name: 'Investor Conferences', range: '$2K–$10K/mo' },
+                { name: 'Shareholder Communications', range: '$1K–$4K/mo' },
+                { name: 'IR Website & Portal', range: '$0.5K–$3K/mo' },
+                { name: 'Press Newswire', range: '$0.5K–$2K/mo' },
+                { name: 'Investor CRM & Analytics', range: '$1K–$5K/mo' },
+              ].map((service, i) => (
+                <motion.div
+                  key={service.name}
+                  initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }} transition={{ delay: i * 0.04 }}
+                  className="card p-4 card-hover"
+                  style={{ background: 'var(--color-bg-primary)', border: '1px solid #E5E4E0' }}>
+                  <p className="font-semibold text-sm mb-2" style={{ color: '#1A1A1A' }}>{service.name}</p>
+                  <p className="text-xs text-text-muted font-medium">{service.range}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Key Benefits + CTA */}
+        <div className="mt-8 grid lg:grid-cols-[2fr_1fr] gap-8 items-center">
+          {/* Benefits */}
+          <div className="space-y-3">
+            <p className="text-xs uppercase tracking-widest text-text-muted font-semibold">Why Market IR Matters</p>
+            {[
+              'Understand the real, post-IPO costs upfront — avoid surprises at board review',
+              'Prepare your board with scenario-based budget options (Essential, Standard, Aggressive)',
+              'Compare cost ranges by service and find pre-vetted capital markets vendors',
+              'Prevent the 40–60% budgeting shortfall that impacts stock performance and investor relations',
+              'Build a 3-year post-IPO support plan with accurate vendor partnerships',
+            ].map((benefit, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -8 }} whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }} transition={{ delay: i * 0.05 }}
+                className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-accent)' }} />
+                <p className="text-sm text-text-muted leading-relaxed">{benefit}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.45 }}
+            className="card p-8" style={{ background: '#FFFFFF', border: '1px solid #E5E4E0', textAlign: 'center' }}>
+            <p className="text-xs uppercase tracking-widest text-accent font-semibold mb-4">Calculate Now</p>
+            <Link href="/market-analysis/market-ir"
+              className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-all"
+              style={{
+                background: 'var(--color-accent)', color: 'white', marginBottom: '1rem'
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-error-dark)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'var(--color-accent)')}>
+              Plan Your Budget <ArrowRight className="w-4 h-4" />
+            </Link>
+            <p className="text-xs text-text-muted leading-relaxed">
+              Interactive budget planner with vendor connections, 5 minutes to complete
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ── Customer Ratings ────────────────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         {/* Header */}
