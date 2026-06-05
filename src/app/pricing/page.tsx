@@ -739,7 +739,7 @@ export default function PricingPage() {
 
           {/* Main grid */}
           <div className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-            <div className="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-[1.5fr_0.9fr_0.9fr_0.9fr_0.9fr_0.9fr] gap-8">
 
               {/* Brand column */}
               <div className="col-span-2 md:col-span-1">
@@ -846,14 +846,16 @@ export default function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <div style={{ marginTop: '1.5rem' }}>
-                  <p className="label-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Listing Types</p>
-                  <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                    {['IPO', 'Direct Listing', 'RTO', 'SPAC', 'Regulation A+'].map(t => (
-                      <li key={t}><span className="body-sm text-text-muted">{t}</span></li>
-                    ))}
-                  </ul>
-                </div>
+              </div>
+
+              {/* Listing Types */}
+              <div>
+                <p className="label-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Listing Types</p>
+                <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                  {['IPO', 'Direct Listing', 'RTO', 'SPAC', 'Regulation A+'].map(t => (
+                    <li key={t}><span className="body-sm text-text-muted">{t}</span></li>
+                  ))}
+                </ul>
               </div>
 
               {/* Legal & Support */}
