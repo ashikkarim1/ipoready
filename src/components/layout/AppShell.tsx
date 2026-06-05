@@ -53,6 +53,10 @@ const NAV_GROUPS = [
     items: [
       { href: '/dashboard/investor-match', icon: Target, label: 'Investor Match™', badge: '✨', key: 'investor-match' },
       { href: '/dashboard/investor-readiness/data-room', icon: Zap, label: 'Data Room', badge: null, key: 'data-room' },
+      { href: '/dashboard/investor-readiness/data-room/executive-summary', icon: FileText, label: 'Executive Summary', badge: null, key: 'exec-summary' },
+      { href: '/dashboard/investor-readiness/data-room/financial-statements', icon: BarChart3, label: 'Financial Statements', badge: null, key: 'financial-stmts' },
+      { href: '/dashboard/investor-readiness/data-room/legal-documents', icon: FileCheck, label: 'Legal Documents', badge: null, key: 'legal-docs' },
+      { href: '/dashboard/investor-readiness/data-room/regulatory-filings', icon: Shield, label: 'Regulatory Filings', badge: null, key: 'regulatory-filings' },
       { href: '/dashboard/investor-readiness/data-room-health', icon: TrendingUp, label: 'Data Room Health', badge: null, key: 'data-room-health' },
       { href: '/dashboard/investor-readiness/data-room-viewer', icon: Eye, label: 'Document Viewer', badge: null, key: 'data-room-viewer' },
       { href: '/dashboard/investor-readiness/data-room-analytics', icon: BarChart3, label: 'Data Room Analytics', badge: null, key: 'data-room-analytics' },
