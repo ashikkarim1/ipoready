@@ -322,6 +322,266 @@ export default function CoveragePredictorPage() {
           </div>
         </section>
 
+        {/* Analyst Coverage Strategy */}
+        <section style={{ padding: '1.5rem 1.5rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
+          <div className="max-w-6xl mx-auto">
+            <h2 className="serif text-2xl sm:text-3xl text-nav mb-4">Analyst Coverage Strategy</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Who to Target */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                style={{
+                  padding: '1.5rem',
+                  background: '#F7F6F4',
+                  borderRadius: '0.5rem',
+                  border: '1px solid #E5E4E0'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                  <Users className="w-5 h-5" style={{ color: '#1D4ED8' }} />
+                  <h3 className="font-bold text-nav" style={{ fontSize: '1rem', margin: 0 }}>Who to Target</h3>
+                </div>
+
+                <div className="space-y-3">
+                  <div style={{ paddingBottom: '1rem', borderBottom: '1px solid #E5E4E0' }}>
+                    <p className="font-semibold text-nav text-sm mb-1">By Market Cap Range</p>
+                    <ul className="text-sm text-text-muted space-y-1" style={{ marginLeft: '1rem' }}>
+                      <li>• <strong>$500M-$2B:</strong> Regional/emerging specialists, sell-side boutiques, sector focuses</li>
+                      <li>• <strong>$2B-$10B:</strong> Tier-2 investment banks, coverage clusters (3-8 analysts)</li>
+                      <li>• <strong>$10B+:</strong> Tier-1 banks (Goldman, Morgan Stanley), industry groups (10+ analysts)</li>
+                    </ul>
+                  </div>
+
+                  <div style={{ paddingBottom: '1rem', borderBottom: '1px solid #E5E4E0' }}>
+                    <p className="font-semibold text-nav text-sm mb-1">Priority Targets</p>
+                    <ul className="text-sm text-text-muted space-y-1" style={{ marginLeft: '1rem' }}>
+                      <li>✓ Your IPO underwriters' research teams (built-in relationships)</li>
+                      <li>✓ Sector specialists covering 3-5 closest competitors</li>
+                      <li>✓ Banks with #1 or #2 market share in your sector</li>
+                      <li>✓ Banks covering your target geographic markets (if international)</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-nav text-sm mb-1">Realistic Coverage Timeline</p>
+                    <p className="text-sm text-text-muted">Day 1 (IPO): 2-3 day 1 initiations (underwriters). Week 2-4: 5-8 additional initiations. Month 2-3: Laggards and regional analysts. <strong>Total: 12-20 analyst coverage expected for your profile.</strong></p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* How to Sell the Story */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                style={{
+                  padding: '1.5rem',
+                  background: '#F7F6F4',
+                  borderRadius: '0.5rem',
+                  border: '1px solid #E5E4E0'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                  <Lightbulb className="w-5 h-5" style={{ color: '#E8312A' }} />
+                  <h3 className="font-bold text-nav" style={{ fontSize: '1rem', margin: 0 }}>How to Sell Your Story</h3>
+                </div>
+
+                <div className="space-y-3">
+                  <div style={{ paddingBottom: '1rem', borderBottom: '1px solid #E5E4E0' }}>
+                    <p className="font-semibold text-nav text-sm mb-1">Narrative Pillars (Pick 3 Max)</p>
+                    <ul className="text-sm text-text-muted space-y-1" style={{ marginLeft: '1rem' }}>
+                      <li>🎯 TAM Expansion: "$100B TAM, growing 25% annually"</li>
+                      <li>🎯 Market Share Gain: "Gaining share from legacy players"</li>
+                      <li>🎯 Product Innovation: "AI-first platform gaining 40% growth"</li>
+                      <li>🎯 Unit Economics: "NDR 135%, CAC payback 18 months"</li>
+                      <li>🎯 Geographic/Vertical Expansion: "Entering 3 new verticals"</li>
+                    </ul>
+                  </div>
+
+                  <div style={{ paddingBottom: '1rem', borderBottom: '1px solid #E5E4E0' }}>
+                    <p className="font-semibold text-nav text-sm mb-1">Analyst Engagement Plan</p>
+                    <ul className="text-sm text-text-muted space-y-1" style={{ marginLeft: '1rem' }}>
+                      <li>• Week -2: Analyst education calls (IR team + product lead)</li>
+                      <li>• Day -1: Pre-IPO roadshow (focus on top 10 analyst targets)</li>
+                      <li>• Day 1: IPO day initiate calls with underwriters' analysts</li>
+                      <li>• Week 1-2: Proactive outreach to tier-2 analysts</li>
+                      <li>• Ongoing: Monthly earnings calls, quarterly guidance updates</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-nav text-sm mb-1">Key Messaging Framework</p>
+                    <p className="text-sm text-text-muted"><strong>Opening:</strong> "We're the [#1 / only / fastest-growing] in [TAM]. We capture [growth driver] before [risk/competitor]."</p>
+                    <p className="text-sm text-text-muted" style={{ marginTop: '0.5rem' }}><strong>Defense:</strong> Have counter-narratives ready for: valuation concerns, growth deceleration, profitability path, competitive threats.</p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Critical KPIs for Coverage */}
+        <section style={{ padding: '1.5rem 1.5rem', background: '#F7F6F4', borderBottom: '1px solid #E5E4E0' }}>
+          <div className="max-w-6xl mx-auto">
+            <h2 className="serif text-2xl sm:text-3xl text-nav mb-4">Critical KPIs Analysts Track</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                {
+                  metric: 'ARR & ARR Growth',
+                  target: '$350M+ | 30%+ YoY growth',
+                  why: 'Revenue scale and growth trajectory determine TAM addressability',
+                  flag: 'If ARR growth drops below 20%, expect 3-5 analyst downgrades'
+                },
+                {
+                  metric: 'Net Revenue Retention (NRR)',
+                  target: '130%+ for best-in-class',
+                  why: 'Shows customer expansion and sticky product - key for long-term value',
+                  flag: 'NRR decline signals product/market-fit concerns; major derating risk'
+                },
+                {
+                  metric: 'Customer Concentration',
+                  target: 'Top 10 customers <20% of ARR',
+                  why: 'Indicates diversified customer base and lower revenue risk',
+                  flag: 'Top customer >30% = analyst concern, lower valuation multiple'
+                },
+                {
+                  metric: 'Rule of 40 (Growth + Margin)',
+                  target: '40+ (30% growth + 10%+ margin)',
+                  why: 'Industry shorthand for balancing growth vs. profitability',
+                  flag: 'Rule of 40 <30 signals unsustainable business model'
+                },
+                {
+                  metric: 'Gross Margin & Trend',
+                  target: '70%+ for SaaS | Improving by 200bps annually',
+                  why: 'Gross margin drives LTV, unit economics, and scalability',
+                  flag: 'Declining gross margin = analyst red flag for pricing power'
+                },
+                {
+                  metric: 'CAC Payback Period',
+                  target: '<18 months (ideal: 12 months)',
+                  why: 'Shows efficiency of sales/marketing spend and cash generation',
+                  flag: 'CAC payback >24 months = growth-at-all-costs concern'
+                },
+                {
+                  metric: 'Operating Margin Path',
+                  target: 'Path to 20%+ EBITDA margin within 3 years',
+                  why: 'Analysts need to see profitability roadmap, not distant promise',
+                  flag: 'No credible margin expansion plan = lower valuation'
+                },
+                {
+                  metric: 'Cash Burn & Runway',
+                  target: '12+ months of cash runway (at worst)',
+                  why: 'Eliminates secondary offering risk and shows financial discipline',
+                  flag: '<6 months runway = analyst concern about dilution'
+                },
+                {
+                  metric: 'Market Share Trends',
+                  target: 'Gaining 200-300 bps annually in addressable market',
+                  why: 'Shows competitive strength and long runway for growth',
+                  flag: 'Flat/declining share in growing TAM = analyst downgrade trigger'
+                }
+              ].map((kpi, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                  style={{
+                    padding: '1.25rem',
+                    background: '#FFFFFF',
+                    borderRadius: '0.5rem',
+                    border: '1px solid #E5E4E0'
+                  }}
+                >
+                  <p className="font-semibold text-nav text-sm mb-1">{kpi.metric}</p>
+                  <p className="text-xs text-text-muted mb-2"><strong>Target:</strong> {kpi.target}</p>
+                  <p className="text-xs text-text-muted mb-2">{kpi.why}</p>
+                  <p className="text-xs" style={{ color: '#E8312A', fontWeight: 600 }}>⚠️ {kpi.flag}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Action Items to Win Coverage */}
+        <section style={{ padding: '1.5rem 1.5rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
+          <div className="max-w-6xl mx-auto">
+            <h2 className="serif text-2xl sm:text-3xl text-nav mb-4">Action Items to Win Coverage</h2>
+
+            <div className="space-y-4">
+              {[
+                {
+                  phase: 'Pre-IPO (90 days before)',
+                  items: [
+                    'Align on 3-5 analyst narrative pillars with underwriters',
+                    'Identify top 15-20 analyst targets + their key questions',
+                    'Build analyst presentation deck (separate from investor deck)',
+                    'Conduct 2-3 mock analyst questions with CFO/CEO',
+                    'Create one-pager: 5-year growth thesis + competitive positioning'
+                  ]
+                },
+                {
+                  phase: 'IPO Week',
+                  items: [
+                    'CEO/CFO does analyst education calls (20-30 min each) with lead underwriters',
+                    'Prepare detailed guidance + long-term commentary for analyst calls',
+                    'Have IR lead schedule day-1 media calls + analyst briefings',
+                    'Live monitor analyst intiations + be ready to respond to questions',
+                    'Prep defensive talking points on valuation/growth concerns'
+                  ]
+                },
+                {
+                  phase: 'First 90 Days Post-IPO',
+                  items: [
+                    'Monthly analyst calls with tier-2/regional banks (reach out proactively)',
+                    'Provide detailed quarterly metrics + quarterly guidance (beat expectations)',
+                    'Build analyst advisory council (3-5 key analysts for input)',
+                    'Host investor day with 50+ institutions (invite key analysts)',
+                    'Track every analyst question + create FAQ database for IR'
+                  ]
+                },
+                {
+                  phase: 'Ongoing (Quarterly)',
+                  items: [
+                    'Beat/meet guidance by 200+ bps consistently',
+                    'Maintain monthly earnings call quality (clear growth narrative)',
+                    'Provide real-time updates on KPIs analysts care about',
+                    'Host quarterly analyst round-tables on trends/roadmap',
+                    'Monitor analyst sentiment + track rating changes + price targets'
+                  ]
+                }
+              ].map((phase_item, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  style={{
+                    padding: '1.5rem',
+                    background: '#F7F6F4',
+                    borderRadius: '0.5rem',
+                    border: '1px solid #E5E4E0'
+                  }}
+                >
+                  <h3 className="font-bold text-nav mb-3" style={{ fontSize: '1rem' }}>{phase_item.phase}</h3>
+                  <ul className="space-y-2">
+                    {phase_item.items.map((item, i) => (
+                      <li key={i} className="text-sm text-text-muted flex gap-2">
+                        <span style={{ color: '#2D7A5F', fontWeight: 700, flexShrink: 0 }}>✓</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Recommendations */}
         <section style={{ padding: '1.5rem 1.5rem', background: '#F7F6F4' }}>
           <div className="max-w-6xl mx-auto">
