@@ -1,828 +1,694 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
+import React, { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Users,
-  AlertCircle,
-  Check,
-  ChevronRight,
-  ChevronLeft,
+  Briefcase,
+  ShieldCheck,
+  Scale,
+  Building2,
   Plus,
+  X,
+  Check,
+  AlertCircle,
+  ChevronDown,
   Trash2,
-  RefreshCcw,
 } from 'lucide-react'
 
-interface BoardMember {
+/* ------------------------------------------------------------------ */
+/*  Palette                                                            */
+/* ------------------------------------------------------------------ */
+const RED = '#E8312A'
+const RED_BG = '#FDECEB'
+const GREEN = '#2D7A5F'
+const GREEN_BG = '#EAF5F0'
+const GRAY = '#9CA3AF'
+const BORDER = '#E5E4E0'
+
+/* ------------------------------------------------------------------ */
+/*  Types                                                              */
+/* ------------------------------------------------------------------ */
+interface Person {
   id: string
   name: string
-  role: string
-  independence: 'independent' | 'management'
-  experience: number
-  status: 'complete' | 'pending'
-  source?: 'ipoready' | 'manual'
-  compensation?: number
-  findersFee?: number
-  // Prospectus-required fields
+  position: string // the slot/role this person fills
+  company?: string
   email?: string
-  phone?: string
   linkedIn?: string
-  resume?: string
-  // Prospectus disclosure fields
-  principalOccupation?: string
-  education?: string
-  certifications?: string
-  boardExperience?: string
-  stockOwnership?: number
-  relatedPartyTransactions?: boolean
 }
 
-interface Gap {
+interface Slot {
+  // A specific required position (used by officer / committee / advisor groups)
+  position: string
+  filledBy?: string // person id
+}
+
+type GroupKind = 'count' | 'slots'
+
+interface Group {
   id: string
-  type: 'critical' | 'warning' | 'info'
-  title: string
+  name: string
+  icon: React.ReactNode
   description: string
+  kind: GroupKind
+  // For "count" groups (e.g. Board Members) — a minimum headcount.
+  requiredCount?: number
+  // For "slots" groups — explicit named positions.
+  slots?: Slot[]
+  // People currently assigned to this group.
+  members: Person[]
+  // Position options surfaced in the quick-add dropdown.
+  positionOptions: string[]
 }
 
-interface Change {
-  type: 'added' | 'removed' | 'updated'
-  member?: BoardMember
+/* ------------------------------------------------------------------ */
+/*  Seed data                                                          */
+/* ------------------------------------------------------------------ */
+function seedGroups(): Group[] {
+  return [
+    {
+      id: 'board',
+      name: 'Board Members',
+      icon: <Users className="w-5 h-5" />,
+      description: 'Required fields: Name, Title (Independent / Non-Independent), Occupation, Education',
+      kind: 'count',
+      requiredCount: 5,
+      members: [
+        { id: 'b1', name: 'Jennifer Wong', position: 'Chair (Non-Independent)', company: 'CEO, Acme Corp' },
+        { id: 'b2', name: 'Sarah Chen', position: 'Independent Director', company: 'Former CFO, Beta Inc' },
+        { id: 'b3', name: 'David Okafor', position: 'Independent Director', company: 'Partner, Vista Capital' },
+      ],
+      positionOptions: [
+        'Chair (Non-Independent)',
+        'Chair (Independent)',
+        'Independent Director',
+        'Non-Independent Director',
+      ],
+    },
+    {
+      id: 'officers',
+      name: 'Key Officers',
+      icon: <Briefcase className="w-5 h-5" />,
+      description: 'Executive leadership required for listing readiness',
+      kind: 'slots',
+      slots: [
+        { position: 'Chief Executive Officer (CEO)' },
+        { position: 'Chief Financial Officer (CFO)' },
+        { position: 'Chief Operating Officer (COO)' },
+        { position: 'General Counsel' },
+      ],
+      members: [
+        { id: 'o1', name: 'Jennifer Wong', position: 'Chief Executive Officer (CEO)' },
+        { id: 'o2', name: 'Marcus Lee', position: 'Chief Operating Officer (COO)' },
+      ],
+      positionOptions: [
+        'Chief Executive Officer (CEO)',
+        'Chief Financial Officer (CFO)',
+        'Chief Operating Officer (COO)',
+        'General Counsel',
+      ],
+    },
+    {
+      id: 'audit',
+      name: 'Audit Committee',
+      icon: <ShieldCheck className="w-5 h-5" />,
+      description: 'Required under NI 52-110',
+      kind: 'slots',
+      slots: [
+        { position: 'Audit Committee Chair' },
+        { position: 'Audit Committee Member' },
+        { position: 'Audit Committee Member' },
+      ],
+      members: [
+        { id: 'a1', name: 'Sarah Chen', position: 'Audit Committee Chair' },
+      ],
+      positionOptions: ['Audit Committee Chair', 'Audit Committee Member'],
+    },
+    {
+      id: 'comp',
+      name: 'Compensation Committee',
+      icon: <Scale className="w-5 h-5" />,
+      description: 'Governance best practice for listed issuers',
+      kind: 'slots',
+      slots: [
+        { position: 'Compensation Committee Chair' },
+        { position: 'Compensation Committee Member' },
+        { position: 'Compensation Committee Member' },
+      ],
+      members: [
+        { id: 'c1', name: 'David Okafor', position: 'Compensation Committee Chair' },
+        { id: 'c2', name: 'Sarah Chen', position: 'Compensation Committee Member' },
+      ],
+      positionOptions: ['Compensation Committee Chair', 'Compensation Committee Member'],
+    },
+    {
+      id: 'advisors',
+      name: 'External Advisors',
+      icon: <Building2 className="w-5 h-5" />,
+      description: 'Firm + partner name required for each engagement',
+      kind: 'slots',
+      slots: [
+        { position: 'Lead Auditor (Big 4)' },
+        { position: 'Legal Counsel' },
+      ],
+      members: [],
+      positionOptions: ['Lead Auditor (Big 4)', 'Legal Counsel'],
+    },
+  ]
 }
 
-const EXCHANGE_REQUIREMENTS = {
-  tsxv: {
-    name: 'TSXV (TSX Venture)',
-    requirements: [
-      { id: 'req-1', title: 'Total Directors', count: 3, description: 'Minimum board size', source: 'TSXV Policy 3.1' },
-      { id: 'req-2', title: 'Independent Directors', count: 2, description: 'Majority independence', source: 'TSXV Policy 3.2' },
-      { id: 'req-3', title: 'Audit Committee', count: 1, description: 'Required (NI 52-110)', source: 'NI 52-110' },
-      { id: 'req-4', title: 'Audit Financial Expert', count: 1, description: 'Mandated expertise', source: 'NI 52-110' },
-    ],
-  },
-  tsx: {
-    name: 'TSX (Toronto Stock Exchange)',
-    requirements: [
-      { id: 'req-1', title: 'Total Directors', count: 3, description: 'Minimum board size', source: 'TSX Policy 401' },
-      { id: 'req-2', title: 'Independent Directors', count: 2, description: 'Majority independence', source: 'TSX CG' },
-      { id: 'req-3', title: 'Audit Committee', count: 1, description: 'Required (NI 52-110)', source: 'NI 52-110' },
-      { id: 'req-4', title: 'Audit Financial Expert', count: 1, description: 'Mandated expertise', source: 'NI 52-110' },
-    ],
-  },
+/* ------------------------------------------------------------------ */
+/*  Gap math                                                           */
+/* ------------------------------------------------------------------ */
+function groupStats(group: Group) {
+  if (group.kind === 'count') {
+    const required = group.requiredCount ?? 0
+    const current = group.members.length
+    const gaps = Math.max(0, required - current)
+    return { required, current, gaps }
+  }
+  // slots
+  const slots = group.slots ?? []
+  const required = slots.length
+  // A slot is filled if a member exists for that position. Match positions
+  // to slots sequentially so duplicate positions (e.g. two members) each count.
+  const remaining = [...group.members]
+  let current = 0
+  for (const slot of slots) {
+    const idx = remaining.findIndex((m) => m.position === slot.position)
+    if (idx !== -1) {
+      current += 1
+      remaining.splice(idx, 1)
+    }
+  }
+  const gaps = Math.max(0, required - current)
+  return { required, current, gaps }
 }
 
-const MOCK_BOARD_MEMBERS: BoardMember[] = [
-  { id: 'dir-1', name: 'Jennifer Wong', role: 'CEO', independence: 'management', experience: 15, status: 'complete' },
-  { id: 'dir-2', name: 'Sarah Chen', role: 'Independent Director', independence: 'independent', experience: 20, status: 'complete' },
-]
-
-const STEP_VARIANTS = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -20 } }
-
-export default function DirectorsOfficersWorkflowPage() {
-  const { data: session } = useSession()
-  const [currentStep, setCurrentStep] = useState(1)
-  const [selectedExchange, setSelectedExchange] = useState('tsxv')
-  const [boardMembers, setBoardMembers] = useState<BoardMember[]>(MOCK_BOARD_MEMBERS)
-  const [gaps, setGaps] = useState<Gap[]>([])
-  const [changes, setChanges] = useState<Change[]>([])
-  const [newMemberForm, setNewMemberForm] = useState({
-    name: '',
-    role: '',
-    independence: 'independent' as 'independent' | 'management',
-    experience: 0,
-    email: '',
-    phone: '',
-    linkedIn: '',
-    principalOccupation: '',
-    education: '',
-    certifications: '',
-    boardExperience: '',
+// Returns the rendered rows for a slots group: every slot, filled or missing.
+function slotRows(group: Group) {
+  const remaining = [...group.members]
+  return (group.slots ?? []).map((slot, i) => {
+    const idx = remaining.findIndex((m) => m.position === slot.position)
+    let person: Person | undefined
+    if (idx !== -1) {
+      person = remaining[idx]
+      remaining.splice(idx, 1)
+    }
+    return { key: `${slot.position}-${i}`, position: slot.position, person }
   })
-  const [loading, setLoading] = useState(false)
-  const [prospectusVersion, setProspectusVersion] = useState('v1.2.4')
+}
 
-  useEffect(() => {
-    const requirements = EXCHANGE_REQUIREMENTS[selectedExchange as keyof typeof EXCHANGE_REQUIREMENTS]
-    if (!requirements) return
+/* ------------------------------------------------------------------ */
+/*  Quick-add inline form                                             */
+/* ------------------------------------------------------------------ */
+function QuickAddForm({
+  group,
+  presetPosition,
+  onSave,
+  onCancel,
+}: {
+  group: Group
+  presetPosition?: string
+  onSave: (p: Omit<Person, 'id'>) => void
+  onCancel: () => void
+}) {
+  const [position, setPosition] = useState(presetPosition ?? group.positionOptions[0] ?? '')
+  const [name, setName] = useState('')
+  const [company, setCompany] = useState('')
+  const [email, setEmail] = useState('')
+  const [linkedIn, setLinkedIn] = useState('')
 
-    const calculatedGaps: Gap[] = []
-    const independentCount = boardMembers.filter(m => m.independence === 'independent').length
-    const totalCount = boardMembers.length
+  const canSave = name.trim().length > 0 && position.trim().length > 0
 
-    if (totalCount < requirements.requirements[0].count) {
-      calculatedGaps.push({
-        id: 'gap-1',
-        type: 'critical',
-        title: `Missing: ${requirements.requirements[0].count - totalCount} Director(s)`,
-        description: `You have ${totalCount} directors but need ${requirements.requirements[0].count} minimum`,
-      })
-    }
-
-    if (independentCount < requirements.requirements[1].count) {
-      calculatedGaps.push({
-        id: 'gap-2',
-        type: 'critical',
-        title: `Missing: ${requirements.requirements[1].count - independentCount} Independent Director(s)`,
-        description: 'Required for regulatory compliance and governance',
-      })
-    }
-
-    const hasAuditExpert = boardMembers.some(m => m.independence === 'independent' && m.experience >= 10)
-    if (!hasAuditExpert) {
-      calculatedGaps.push({
-        id: 'gap-3',
-        type: 'critical',
-        title: 'Missing: Audit Committee Financial Expert',
-        description: 'Mandated by NI 52-110 for all public companies',
-      })
-    }
-
-    setGaps(calculatedGaps)
-  }, [boardMembers, selectedExchange])
-
-  const handleAddMember = () => {
-    if (!newMemberForm.name || !newMemberForm.role) {
-      alert('Please fill in name and role')
-      return
-    }
-
-    const newMember: BoardMember = {
-      id: `dir-${Date.now()}`,
-      ...newMemberForm,
-      status: 'complete',
-      source: 'ipoready',
-      compensation: Math.random() * 50000 + 50000,
-      findersFee: (Math.random() * 50000 + 50000) * 0.15,
-    }
-
-    setBoardMembers([...boardMembers, newMember])
-    setChanges([...changes, { type: 'added', member: newMember }])
-    setNewMemberForm({
-      name: '',
-      role: '',
-      independence: 'independent',
-      experience: 0,
-      email: '',
-      phone: '',
-      linkedIn: '',
-      principalOccupation: '',
-      education: '',
-      certifications: '',
-      boardExperience: '',
-    })
+  const inputStyle: React.CSSProperties = {
+    borderColor: BORDER,
   }
 
-  const handleRemoveMember = (memberId: string) => {
-    const member = boardMembers.find(m => m.id === memberId)
-    setBoardMembers(boardMembers.filter(m => m.id !== memberId))
-    setChanges([...changes, { type: 'removed', member }])
-  }
-
-  const handleConfirmSync = async () => {
-    setLoading(true)
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      const newVersion = `v${parseInt(prospectusVersion.split('.').pop() || '0') + 1}`
-      setProspectusVersion(newVersion)
-      setChanges([])
-      setCurrentStep(1)
-      alert('Board composition synced to prospectus successfully!')
-    } catch (error) {
-      console.error('Error syncing:', error)
-      alert('Failed to sync changes')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleRevert = () => {
-    setBoardMembers(MOCK_BOARD_MEMBERS)
-    setChanges([])
-  }
-
-  const renderStep1 = () => {
-    const requirements = EXCHANGE_REQUIREMENTS[selectedExchange as keyof typeof EXCHANGE_REQUIREMENTS]
-    if (!requirements) return null
-
-    return (
-      <motion.div
-        key="step-1"
-        variants={STEP_VARIANTS}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-        transition={{ duration: 0.3 }}
-        className="space-y-6"
+  return (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: 'auto' }}
+      exit={{ opacity: 0, height: 0 }}
+      transition={{ duration: 0.22 }}
+      className="overflow-hidden"
+    >
+      <div
+        className="rounded-xl p-4 mt-3"
+        style={{ background: '#F7F6F4', border: `1px solid ${BORDER}` }}
       >
-        <div style={{ marginBottom: '1.5rem' }}>
-          <h2 className="serif text-4xl md:text-4xl text-nav" style={{ marginBottom: '1.5rem' }}>
-            Board Composition Requirements
-          </h2>
-          <p className="text-sm text-text-muted">
-            Based on your target exchange: <strong>{requirements.name}</strong>
-          </p>
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#717171' }}>
+            Add to {group.name}
+          </span>
+          <button onClick={onCancel} className="p-1 rounded hover:bg-black/5 transition-colors" aria-label="Close form">
+            <X className="w-4 h-4" style={{ color: '#717171' }} />
+          </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {requirements.requirements.map((req, idx) => (
-            <motion.div
-              key={req.id}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.06 }}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="md:col-span-2">
+            <label className="block text-xs font-semibold mb-1.5 text-nav">Position</label>
+            <select
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none text-nav bg-white"
+              style={inputStyle}
             >
-              <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <h3 className="text-base font-semibold text-nav mb-1">{req.title}</h3>
-                    <p className="text-xs text-text-muted">{req.description}</p>
-                  </div>
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#FDECEB' }}>
-                    <span className="text-lg font-bold text-accent">
-                      {req.count}
-                    </span>
-                  </div>
-                </div>
-                <div className="pt-4 mt-4 border-t border-border">
-                  <div className="text-xs font-mono text-text-muted">
-                    {req.source}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="card p-6" style={{ background: '#FDECEB', border: '1px solid #F5E5E1' }}>
-          <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-accent" />
-            <div className="text-sm text-nav">
-              <strong>Why these requirements?</strong>
-              <p className="text-text-muted" style={{ marginTop: '0.5rem' }}>
-                Regulatory bodies require diverse, experienced boards to protect shareholders and ensure proper governance.
-              </p>
-            </div>
+              {group.positionOptions.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold mb-1.5 text-nav">Name *</label>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Full legal name"
+              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none bg-white"
+              style={inputStyle}
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold mb-1.5 text-nav">
+              {group.id === 'advisors' ? 'Firm' : 'Company / Occupation'}
+            </label>
+            <input
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              placeholder={group.id === 'advisors' ? 'e.g., Deloitte LLP' : 'e.g., CFO, Beta Inc'}
+              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none bg-white"
+              style={inputStyle}
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold mb-1.5 text-nav">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="email@example.com"
+              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none bg-white"
+              style={inputStyle}
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold mb-1.5 text-nav">
+              LinkedIn <span className="font-normal" style={{ color: '#9CA3AF' }}>(optional)</span>
+            </label>
+            <input
+              type="url"
+              value={linkedIn}
+              onChange={(e) => setLinkedIn(e.target.value)}
+              placeholder="linkedin.com/in/…"
+              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none bg-white"
+              style={inputStyle}
+            />
           </div>
         </div>
-      </motion.div>
-    )
+
+        <div className="flex gap-2 mt-4">
+          <button
+            onClick={() => canSave && onSave({ name: name.trim(), position, company, email, linkedIn })}
+            disabled={!canSave}
+            className="btn btn-accent font-semibold px-5 py-2 rounded-full flex items-center gap-2 text-sm"
+            style={{ opacity: canSave ? 1 : 0.5, cursor: canSave ? 'pointer' : 'not-allowed' }}
+          >
+            <Check className="w-4 h-4" />
+            Save
+          </button>
+          <button
+            onClick={onCancel}
+            className="btn btn-secondary px-5 py-2 rounded-full text-sm"
+            style={{ borderColor: BORDER, color: '#717171' }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  Group card                                                        */
+/* ------------------------------------------------------------------ */
+function GroupCard({
+  group,
+  onAdd,
+  onRemove,
+}: {
+  group: Group
+  onAdd: (groupId: string, person: Omit<Person, 'id'>) => void
+  onRemove: (groupId: string, personId: string) => void
+}) {
+  const stats = useMemo(() => groupStats(group), [group])
+  const [expanded, setExpanded] = useState(true)
+  const [formOpen, setFormOpen] = useState(false)
+  const [presetPosition, setPresetPosition] = useState<string | undefined>(undefined)
+
+  const openForm = (position?: string) => {
+    setPresetPosition(position)
+    setFormOpen(true)
+    setExpanded(true)
   }
 
-  const renderStep2 = () => {
-    const criticalGaps = gaps.filter(g => g.type === 'critical').length
-    const allMet = gaps.length === 0
+  const handleSave = (p: Omit<Person, 'id'>) => {
+    onAdd(group.id, p)
+    setFormOpen(false)
+    setPresetPosition(undefined)
+  }
 
-    return (
-      <motion.div
-        key="step-2"
-        variants={STEP_VARIANTS}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-        transition={{ duration: 0.3 }}
-        className="space-y-6"
+  return (
+    <div className="card card-hover" style={{ border: `1px solid ${BORDER}`, overflow: 'hidden' }}>
+      {/* Header */}
+      <div
+        className="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer"
+        onClick={() => setExpanded((v) => !v)}
+        style={{ borderBottom: `1px solid ${BORDER}` }}
       >
-        <div style={{ marginBottom: '1.5rem' }}>
-          <h2 className="serif text-4xl md:text-4xl text-nav" style={{ marginBottom: '1.5rem' }}>
-            Current Board vs. Requirements
-          </h2>
-          <p className="text-sm text-text-muted">
-            Identify what's missing and what you have
-          </p>
+        <div className="flex items-center gap-3 min-w-0">
+          <div
+            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: stats.gaps > 0 ? RED_BG : GREEN_BG, color: stats.gaps > 0 ? RED : GREEN }}
+          >
+            {group.icon}
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-base font-semibold text-nav truncate">{group.name}</h3>
+            <p className="text-xs text-text-muted truncate">{group.description}</p>
+          </div>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
-            <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
-              <h3 className="text-base font-semibold text-nav mb-4">Current Board Roster</h3>
-              <div className="space-y-3">
-                {boardMembers.length === 0 ? (
-                  <div className="text-center py-6 text-sm text-text-muted">
-                    No board members yet
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {boardMembers.map(member => (
-                      <motion.div
-                        key={member.id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="p-3 rounded-lg flex items-center justify-between group"
-                        style={{ background: '#F7F6F4' }}
-                      >
-                        <div className="flex-1">
-                          <div className="font-semibold text-sm text-nav">
-                            {member.name}
-                          </div>
-                          <div className="text-xs flex items-center gap-2 mt-1 text-text-muted">
-                            <span>{member.role}</span>
-                            {member.independence === 'independent' && (
-                              <span className="pill px-2 py-0.5" style={{ background: '#EAF5F0', color: '#2D7A5F' }}>
-                                Independent
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Check className="w-4 h-4 text-success" />
-                          <button
-                            onClick={() => handleRemoveMember(member.id)}
-                            className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-50 rounded transition-all"
-                          >
-                            <Trash2 className="w-4 h-4 text-accent" />
-                          </button>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              openForm()
+            }}
+            className="btn btn-accent font-semibold px-3.5 py-1.5 rounded-full flex items-center gap-1.5 text-xs"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            Add
+          </button>
+          <motion.div animate={{ rotate: expanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
+            <ChevronDown className="w-5 h-5" style={{ color: '#717171' }} />
           </motion.div>
+        </div>
+      </div>
 
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 }}>
-            <div className="space-y-4">
-              {criticalGaps > 0 ? (
-                <div className="card p-6" style={{ background: '#FDECEB', borderColor: '#F5E5E1', border: '1px solid #F5E5E1' }}>
-                  <div className="flex items-start gap-3">
-                    <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-accent" />
-                    <div>
-                      <div className="font-semibold text-sm mb-2 text-accent">
-                        {criticalGaps} Critical Gap{criticalGaps > 1 ? 's' : ''}
-                      </div>
-                      <div className="space-y-1">
-                        {gaps.map(gap => (
-                          <div key={gap.id} className="text-xs text-nav">
-                            <strong>• {gap.title}</strong>
-                            <div className="text-text-muted">{gap.description}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+      {/* Stat strip */}
+      <div
+        className="grid grid-cols-3 divide-x text-center"
+        style={{ borderBottom: `1px solid ${BORDER}`, ['--tw-divide-opacity' as any]: 1 }}
+      >
+        <div className="py-3" style={{ borderRight: `1px solid ${BORDER}` }}>
+          <div className="text-lg font-bold text-nav leading-none">{stats.required}</div>
+          <div className="text-[11px] uppercase tracking-wider mt-1" style={{ color: '#717171' }}>
+            Required
+          </div>
+        </div>
+        <div className="py-3" style={{ borderRight: `1px solid ${BORDER}` }}>
+          <div className="text-lg font-bold leading-none" style={{ color: GREEN }}>
+            {stats.current}
+          </div>
+          <div className="text-[11px] uppercase tracking-wider mt-1" style={{ color: '#717171' }}>
+            Current
+          </div>
+        </div>
+        <div className="py-3">
+          <div
+            className="text-lg font-bold leading-none flex items-center justify-center gap-1.5"
+            style={{ color: stats.gaps > 0 ? RED : GREEN }}
+          >
+            {stats.gaps > 0 && <span style={{ fontSize: 10 }}>🔴</span>}
+            {stats.gaps}
+          </div>
+          <div className="text-[11px] uppercase tracking-wider mt-1" style={{ color: '#717171' }}>
+            Gaps
+          </div>
+        </div>
+      </div>
+
+      {/* Body */}
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.22 }}
+            className="overflow-hidden"
+          >
+            <div className="px-5 py-4">
+              {group.kind === 'slots' ? (
+                <SlotsBody group={group} onAddSlot={openForm} onRemove={onRemove} />
               ) : (
-                <div className="card p-6" style={{ background: '#EAF5F0', border: '1px solid #D5EDE8' }}>
-                  <div className="flex items-start gap-3">
-                    <Check className="w-5 h-5 flex-shrink-0 mt-0.5 text-success" />
-                    <div>
-                      <div className="font-semibold text-sm text-success">
-                        All Requirements Met
-                      </div>
-                      <div className="text-xs mt-1 text-text-muted">
-                        Your board meets all regulatory requirements
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <CountBody group={group} stats={stats} onAddSlot={openForm} onRemove={onRemove} />
               )}
 
-              <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
-                <h3 className="text-sm font-semibold text-nav mb-4">Timeline</h3>
-                <div className="text-xs space-y-2 text-text-muted">
-                  <div className="flex items-center justify-between">
-                    <span>Time to fill gaps:</span>
-                    <strong className="text-nav">60-90 days</strong>
-                  </div>
-                </div>
-              </div>
+              <AnimatePresence>
+                {formOpen && (
+                  <QuickAddForm
+                    group={group}
+                    presetPosition={presetPosition}
+                    onSave={handleSave}
+                    onCancel={() => {
+                      setFormOpen(false)
+                      setPresetPosition(undefined)
+                    }}
+                  />
+                )}
+              </AnimatePresence>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+/* ---- body for slot-based groups (officers, committees, advisors) -- */
+function SlotsBody({
+  group,
+  onAddSlot,
+  onRemove,
+}: {
+  group: Group
+  onAddSlot: (position?: string) => void
+  onRemove: (groupId: string, personId: string) => void
+}) {
+  const rows = useMemo(() => slotRows(group), [group])
+  return (
+    <div className="space-y-2">
+      {rows.map((row) =>
+        row.person ? (
+          <FilledRow key={row.key} person={row.person} onRemove={() => onRemove(group.id, row.person!.id)} />
+        ) : (
+          <MissingRow
+            key={row.key}
+            label={`${row.position} — MISSING`}
+            onClick={() => onAddSlot(row.position)}
+          />
+        )
+      )}
+    </div>
+  )
+}
+
+/* ---- body for count-based groups (board) -------------------------- */
+function CountBody({
+  group,
+  stats,
+  onAddSlot,
+  onRemove,
+}: {
+  group: Group
+  stats: { required: number; current: number; gaps: number }
+  onAddSlot: (position?: string) => void
+  onRemove: (groupId: string, personId: string) => void
+}) {
+  return (
+    <div className="space-y-2">
+      {group.members.map((m) => (
+        <FilledRow key={m.id} person={m} onRemove={() => onRemove(group.id, m.id)} />
+      ))}
+      {Array.from({ length: stats.gaps }).map((_, i) => (
+        <MissingRow key={`gap-${i}`} label="Open board seat — MISSING" onClick={() => onAddSlot()} />
+      ))}
+    </div>
+  )
+}
+
+/* ---- shared rows -------------------------------------------------- */
+function FilledRow({ person, onRemove }: { person: Person; onRemove: () => void }) {
+  return (
+    <div
+      className="group flex items-center gap-3 px-3 py-2.5 rounded-lg"
+      style={{ background: GREEN_BG }}
+    >
+      <Check className="w-4 h-4 flex-shrink-0" style={{ color: GREEN }} />
+      <div className="min-w-0 flex-1">
+        <div className="text-sm font-semibold text-nav truncate">
+          {person.name}
+          <span className="font-normal text-text-muted"> — {person.position}</span>
         </div>
-      </motion.div>
+        {person.company && (
+          <div className="text-xs text-text-muted truncate">{person.company}</div>
+        )}
+      </div>
+      <button
+        onClick={onRemove}
+        className="opacity-0 group-hover:opacity-100 p-1.5 rounded transition-all hover:bg-white"
+        aria-label={`Remove ${person.name}`}
+      >
+        <Trash2 className="w-4 h-4" style={{ color: RED }} />
+      </button>
+    </div>
+  )
+}
+
+function MissingRow({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all hover:brightness-95"
+      style={{ background: RED_BG, border: `1px dashed ${RED}` }}
+    >
+      <span style={{ fontSize: 11 }}>🔴</span>
+      <span className="text-sm font-semibold flex-1" style={{ color: RED }}>
+        {label}
+      </span>
+      <span className="text-xs font-semibold flex items-center gap-1" style={{ color: RED }}>
+        <Plus className="w-3.5 h-3.5" />
+        Fill gap
+      </span>
+    </button>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  Page                                                               */
+/* ------------------------------------------------------------------ */
+export default function DirectorsOfficersGapAnalysisPage() {
+  const [groups, setGroups] = useState<Group[]>(seedGroups)
+
+  const totals = useMemo(() => {
+    let required = 0
+    let current = 0
+    let gaps = 0
+    for (const g of groups) {
+      const s = groupStats(g)
+      required += s.required
+      current += s.current
+      gaps += s.gaps
+    }
+    return { required, current, gaps, filled: current }
+  }, [groups])
+
+  const pct = totals.required > 0 ? Math.round((Math.min(totals.filled, totals.required) / totals.required) * 100) : 100
+
+  const handleAdd = (groupId: string, person: Omit<Person, 'id'>) => {
+    setGroups((prev) =>
+      prev.map((g) =>
+        g.id === groupId
+          ? { ...g, members: [...g.members, { ...person, id: `${groupId}-${Date.now()}` }] }
+          : g
+      )
     )
   }
 
-  const renderStep3 = () => {
-    return (
-      <motion.div
-        key="step-3"
-        variants={STEP_VARIANTS}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-        transition={{ duration: 0.3 }}
-        className="space-y-6"
-      >
-        <div style={{ marginBottom: '1.5rem' }}>
-          <h2 className="serif text-4xl md:text-4xl text-nav" style={{ marginBottom: '1.5rem' }}>
-            Close the Gaps
-          </h2>
-          <p className="text-sm text-text-muted">
-            Add board members to meet requirements
-          </p>
-        </div>
-
-        {gaps.length > 0 && (
-          <div className="card p-6" style={{ background: '#FEF3C7', border: '1px solid #FCD34D' }}>
-            <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#B45309' }} />
-              <div className="text-xs text-nav">
-                <strong>Remaining gaps: </strong>
-                {gaps.map(g => g.title).join(' • ')}
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
-          <h3 className="text-base font-semibold text-nav mb-6">Add Board Member</h3>
-          <div className="space-y-6">
-            {/* Basic Information */}
-            <div>
-              <div className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-4" style={{ color: '#717171' }}>
-                Basic Information
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold mb-2 text-nav">Name *</label>
-                  <input
-                    type="text"
-                    value={newMemberForm.name}
-                    onChange={e => setNewMemberForm({ ...newMemberForm, name: e.target.value })}
-                    placeholder="Full legal name"
-                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
-                    style={{ borderColor: '#E5E4E0' }}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold mb-2 text-nav">Role *</label>
-                  <input
-                    type="text"
-                    value={newMemberForm.role}
-                    onChange={e => setNewMemberForm({ ...newMemberForm, role: e.target.value })}
-                    placeholder="e.g., Independent Director"
-                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
-                    style={{ borderColor: '#E5E4E0' }}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold mb-2 text-nav">Email</label>
-                  <input
-                    type="email"
-                    value={newMemberForm.email || ''}
-                    onChange={e => setNewMemberForm({ ...newMemberForm, email: e.target.value })}
-                    placeholder="Email address"
-                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
-                    style={{ borderColor: '#E5E4E0' }}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold mb-2 text-nav">Phone</label>
-                  <input
-                    type="tel"
-                    value={newMemberForm.phone || ''}
-                    onChange={e => setNewMemberForm({ ...newMemberForm, phone: e.target.value })}
-                    placeholder="Phone number"
-                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
-                    style={{ borderColor: '#E5E4E0' }}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold mb-2 text-nav">LinkedIn</label>
-                  <input
-                    type="url"
-                    value={newMemberForm.linkedIn || ''}
-                    onChange={e => setNewMemberForm({ ...newMemberForm, linkedIn: e.target.value })}
-                    placeholder="LinkedIn profile URL"
-                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
-                    style={{ borderColor: '#E5E4E0' }}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold mb-2 text-nav">Independence</label>
-                  <select
-                    value={newMemberForm.independence || ''}
-                    onChange={(e) => setNewMemberForm({ ...newMemberForm, independence: e.target.value as 'independent' | 'management' })}
-                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none text-nav"
-                    style={{ borderColor: '#E5E4E0' }}
-                  >
-                    <option value="independent">Independent</option>
-                    <option value="management">Management</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            {/* Prospectus-Required Information */}
-            <div style={{ paddingTop: '0.5rem', borderTop: '1px solid #E5E4E0' }}>
-              <div className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-4" style={{ color: '#717171' }}>
-                Prospectus Information (Regulatory Disclosure)
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold mb-2 text-nav">Principal Occupation</label>
-                  <input
-                    type="text"
-                    value={newMemberForm.principalOccupation || ''}
-                    onChange={e => setNewMemberForm({ ...newMemberForm, principalOccupation: e.target.value })}
-                    placeholder="Current occupation / title"
-                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
-                    style={{ borderColor: '#E5E4E0' }}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold mb-2 text-nav">Years Experience</label>
-                  <input
-                    type="number"
-                    value={newMemberForm.experience}
-                    onChange={e => setNewMemberForm({ ...newMemberForm, experience: parseInt(e.target.value) || 0 })}
-                    placeholder="e.g., 15"
-                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
-                    style={{ borderColor: '#E5E4E0' }}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold mb-2 text-nav">Education</label>
-                  <input
-                    type="text"
-                    value={newMemberForm.education || ''}
-                    onChange={e => setNewMemberForm({ ...newMemberForm, education: e.target.value })}
-                    placeholder="e.g., MBA, Stanford University"
-                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
-                    style={{ borderColor: '#E5E4E0' }}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold mb-2 text-nav">Professional Certifications</label>
-                  <input
-                    type="text"
-                    value={newMemberForm.certifications || ''}
-                    onChange={e => setNewMemberForm({ ...newMemberForm, certifications: e.target.value })}
-                    placeholder="e.g., CPA, CFA"
-                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
-                    style={{ borderColor: '#E5E4E0' }}
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-xs font-semibold mb-2 text-nav">Board/Committee Experience</label>
-                  <textarea
-                    value={newMemberForm.boardExperience || ''}
-                    onChange={e => setNewMemberForm({ ...newMemberForm, boardExperience: e.target.value })}
-                    placeholder="e.g., Board member at ABC Corp (5 years), Audit Committee Chair at XYZ Inc (3 years)"
-                    className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none"
-                    style={{ borderColor: '#E5E4E0' }}
-                    rows={3}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={handleAddMember}
-              className="btn btn-accent gap-2 font-semibold px-6 py-2.5 rounded-full w-full flex items-center justify-center"
-            >
-              <Plus className="w-4 h-4" />
-              Add Member
-            </button>
-          </div>
-        </div>
-      </motion.div>
-    )
-  }
-
-  const renderStep4 = () => {
-    const totalFeesDue = boardMembers
-      .filter((m) => m.source === 'ipoready')
-      .reduce((sum, m) => sum + (m.findersFee || 0), 0)
-
-    return (
-      <motion.div
-        key="step-4"
-        variants={STEP_VARIANTS}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-        transition={{ duration: 0.3 }}
-        className="space-y-6"
-      >
-        <div style={{ marginBottom: '1.5rem' }}>
-          <h2 className="serif text-4xl md:text-4xl text-nav" style={{ marginBottom: '1.5rem' }}>
-            Review & Confirm
-          </h2>
-          <p className="text-sm text-text-muted">
-            Version control — you can revert changes anytime
-          </p>
-        </div>
-
-        <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
-          <h3 className="text-base font-semibold text-nav mb-4">Changes Summary</h3>
-          <div className="space-y-4">
-            {changes.length === 0 ? (
-              <p className="text-sm text-center py-6 text-text-muted">
-                No changes yet
-              </p>
-            ) : (
-              <div className="space-y-3">
-                {changes.map((change, idx) => (
-                  <motion.div key={idx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 rounded-lg text-xs" style={{ background: '#F7F6F4' }}>
-                    {change.type === 'added' ? (
-                      <div className="flex items-start gap-2">
-                        <Plus className="w-4 h-4 mt-0.5 text-success" />
-                        <div>
-                          <strong className="text-nav">Added:</strong>
-                          <div className="text-text-muted">
-                            {change.member?.name} as {change.member?.role}
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex items-start gap-2">
-                        <Trash2 className="w-4 h-4 mt-0.5 text-accent" />
-                        <div>
-                          <strong className="text-nav">Removed:</strong>
-                          <div className="text-text-muted">{change.member?.name}</div>
-                        </div>
-                      </div>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="card p-6 card-hover" style={{ border: '1px solid #E5E4E0' }}>
-          <h3 className="text-base font-semibold text-nav mb-4">Version Control</h3>
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <div className="text-xs font-semibold mb-1 text-text-muted">
-                  Current Version
-                </div>
-                <div className="text-lg font-bold text-nav">
-                  {prospectusVersion}
-                </div>
-              </div>
-              <div>
-                <div className="text-xs font-semibold mb-1 text-text-muted">
-                  New Version
-                </div>
-                <div className="text-lg font-bold text-accent">
-                  v{parseInt(prospectusVersion.split('.').pop() || '0') + 1}
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={handleRevert}
-              className="btn btn-secondary w-full text-xs"
-              style={{ borderColor: '#E5E4E0', color: '#717171' }}
-            >
-              <RefreshCcw className="w-3 h-3" />
-              Revert to {prospectusVersion}
-            </button>
-          </div>
-        </div>
-
-        {totalFeesDue > 0 && (
-          <div className="card p-6" style={{ background: '#FDECEB', border: '1px solid #F5E5E1' }}>
-            <div className="space-y-2">
-              <div className="text-sm font-semibold text-nav">
-                IPOReady Service Fees
-              </div>
-              <div className="text-xs space-y-1 text-text-muted">
-                <div className="flex items-center justify-between">
-                  <span>Professionals hired:</span>
-                  <strong className="text-accent">
-                    {boardMembers.filter(m => m.source === 'ipoready').length}
-                  </strong>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>Total finders fees (15%):</span>
-                  <strong className="text-accent">
-                    ${totalFeesDue.toLocaleString('en-US', { maximumFractionDigits: 0 })}
-                  </strong>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div className="flex gap-3">
-          <button
-            onClick={() => setCurrentStep(3)}
-            className="btn btn-secondary flex-1"
-            style={{ borderColor: '#E5E4E0', color: '#1A1A1A' }}
-          >
-            Back to Edit
-          </button>
-          <button
-            onClick={handleConfirmSync}
-            disabled={loading}
-            className="btn btn-accent flex-1 font-semibold px-6 py-2.5 rounded-full"
-          >
-            {loading ? 'Syncing...' : 'Confirm & Sync'}
-          </button>
-        </div>
-      </motion.div>
+  const handleRemove = (groupId: string, personId: string) => {
+    setGroups((prev) =>
+      prev.map((g) =>
+        g.id === groupId ? { ...g, members: g.members.filter((m) => m.id !== personId) } : g
+      )
     )
   }
 
   return (
     <div style={{ background: '#F7F6F4', minHeight: '100vh' }}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-10 lg:py-16 space-y-8">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="pill px-4 py-2 text-sm font-semibold" style={{ background: '#FDECEB', color: '#E8312A' }}>
-              <Users className="w-3 h-3 inline mr-1.5" />
-              Board Requirements Analyzer
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-10 lg:py-14 space-y-8">
+        {/* Header */}
+        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+            <div className="space-y-2">
+              <div className="pill px-3.5 py-1.5 text-xs font-semibold inline-flex items-center" style={{ background: RED_BG, color: RED }}>
+                <Users className="w-3.5 h-3.5 inline mr-1.5" />
+                Board &amp; Leadership
+              </div>
+              <h1 className="serif text-4xl md:text-5xl text-nav">Board &amp; Leadership Gap Analysis</h1>
+              <p className="text-sm text-text-muted">
+                View required positions, current coverage, and gaps
+              </p>
+            </div>
+
+            {/* Gap badge */}
+            <div
+              className="self-start rounded-2xl px-5 py-4 text-center flex-shrink-0"
+              style={{
+                background: totals.gaps > 0 ? RED_BG : GREEN_BG,
+                border: `1px solid ${totals.gaps > 0 ? '#F5C9C5' : '#CDE7DD'}`,
+              }}
+            >
+              <div className="text-3xl font-bold leading-none" style={{ color: totals.gaps > 0 ? RED : GREEN }}>
+                {totals.gaps}
+              </div>
+              <div className="text-xs font-semibold mt-1.5" style={{ color: totals.gaps > 0 ? RED : GREEN }}>
+                {totals.gaps === 1 ? 'Gap Remaining' : 'Gaps Remaining'}
+              </div>
             </div>
           </div>
-          <h1 className="serif text-4xl md:text-5xl text-nav" style={{ marginBottom: '1.5rem' }}>
-            Build Your Board
-          </h1>
-          <p className="text-sm text-text-muted">
-            Follow the workflow to identify gaps, fill them, and sync to your prospectus
-          </p>
+
+          {/* Progress bar */}
+          <div className="card p-5" style={{ border: `1px solid ${BORDER}` }}>
+            <div className="flex items-center justify-between mb-2.5">
+              <span className="text-sm font-semibold text-nav">
+                {Math.min(totals.filled, totals.required)} of {totals.required} positions filled
+              </span>
+              <span className="text-sm font-bold" style={{ color: pct === 100 ? GREEN : RED }}>
+                {pct}%
+              </span>
+            </div>
+            <div className="h-3 rounded-full overflow-hidden" style={{ background: '#EEEDEA' }}>
+              <motion.div
+                className="h-full rounded-full"
+                style={{ background: pct === 100 ? GREEN : RED }}
+                initial={{ width: 0 }}
+                animate={{ width: `${pct}%` }}
+                transition={{ duration: 0.6, ease: 'easeOut' }}
+              />
+            </div>
+            {totals.gaps > 0 ? (
+              <p className="text-xs text-text-muted mt-2.5 flex items-center gap-1.5">
+                <AlertCircle className="w-3.5 h-3.5" style={{ color: RED }} />
+                Click any red row below to fill the gap instantly.
+              </p>
+            ) : (
+              <p className="text-xs mt-2.5 flex items-center gap-1.5" style={{ color: GREEN }}>
+                <Check className="w-3.5 h-3.5" />
+                All required positions are filled.
+              </p>
+            )}
+          </div>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex items-center justify-between max-w-2xl">
-          {[1, 2, 3, 4].map((step, idx) => (
-            <React.Fragment key={step}>
-              <motion.button
-                onClick={() => setCurrentStep(step)}
-                whileHover={{ scale: 1.05 }}
-                className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm cursor-pointer transition-all"
-                style={{
-                  background: currentStep === step ? '#E8312A' : currentStep > step ? '#2D7A5F' : '#E5E4E0',
-                  color: currentStep === step || currentStep > step ? 'white' : '#717171',
-                }}
-              >
-                {currentStep > step ? <Check className="w-5 h-5" /> : step}
-              </motion.button>
-              {idx < 3 && (
-                <div
-                  className="flex-1 h-1 mx-2 rounded-full"
-                  style={{
-                    background: currentStep > step + 1 ? '#2D7A5F' : '#E5E4E0',
-                  }}
-                />
-              )}
-            </React.Fragment>
-          ))}
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-          <div className="flex items-center gap-4">
-            <label className="text-sm font-semibold text-nav">
-              Target Exchange:
-            </label>
-            <select
-              value={selectedExchange}
-              onChange={e => setSelectedExchange(e.target.value)}
-              className="px-4 py-2 border rounded-lg text-sm focus:outline-none font-medium text-nav"
-              style={{ borderColor: '#E5E4E0' }}
+        {/* Group grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+          {groups.map((g, i) => (
+            <motion.div
+              key={g.id}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.06 }}
             >
-              <option value="tsxv">TSXV (TSX Venture)</option>
-              <option value="tsx">TSX (Toronto Stock Exchange)</option>
-            </select>
-          </div>
-        </motion.div>
-
-        <div className="min-h-96">
-          <AnimatePresence mode="wait">
-            {currentStep === 1 && renderStep1()}
-            {currentStep === 2 && renderStep2()}
-            {currentStep === 3 && renderStep3()}
-            {currentStep === 4 && renderStep4()}
-          </AnimatePresence>
+              <GroupCard group={g} onAdd={handleAdd} onRemove={handleRemove} />
+            </motion.div>
+          ))}
         </div>
-
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="flex items-center justify-between pt-6 border-t" style={{ borderColor: '#E5E4E0' }}>
-          <button
-            onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
-            disabled={currentStep === 1}
-            className="btn btn-secondary flex items-center gap-2 px-4 py-2.5 rounded-full"
-            style={{
-              borderColor: '#E5E4E0',
-              color: currentStep === 1 ? '#C9C7C4' : '#1A1A1A',
-              cursor: currentStep === 1 ? 'not-allowed' : 'pointer',
-              opacity: currentStep === 1 ? 0.5 : 1,
-            }}
-          >
-            <ChevronLeft className="w-4 h-4" />
-            Back
-          </button>
-
-          <div className="text-xs font-semibold text-center text-text-muted">
-            Step {currentStep} of 4
-          </div>
-
-          <button
-            onClick={() => setCurrentStep(Math.min(4, currentStep + 1))}
-            disabled={currentStep === 4}
-            className="btn btn-accent font-semibold px-6 py-2.5 rounded-full flex items-center gap-2"
-            style={{
-              opacity: currentStep === 4 ? '0.5' : '1',
-              cursor: currentStep === 4 ? 'not-allowed' : 'pointer',
-            }}
-          >
-            Next
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </motion.div>
       </div>
     </div>
   )
