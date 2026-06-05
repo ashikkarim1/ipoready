@@ -180,3 +180,4 @@ export default function LandingPage() {
     </div>
   )
 }
+// Mobile responsive landing page
