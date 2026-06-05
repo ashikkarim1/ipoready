@@ -120,6 +120,58 @@ body {
   color: #1A1A1A;
 }
 
+/* ─── Page Entry Animations (CSS-based) ─────────────────────────────────── */
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Apply animations to main landing page sections */
+main > section > div > div > div:first-child {
+  animation: slideInUp 0.6s ease-out forwards;
+}
+
+section [class*="grid"] > div:nth-child(1) {
+  animation: slideInUp 0.5s ease-out 0.1s forwards;
+}
+
+section [class*="grid"] > div:nth-child(2) {
+  animation: slideInRight 0.5s ease-out 0.2s forwards;
+}
+
 /* ─── Scrollbar ──────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar             { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track       { background: #F7F6F4; }

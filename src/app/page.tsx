@@ -185,24 +185,19 @@ export default function LandingPage() {
 
           {/* Left: Copy */}
           <div>
-            <motion.div initial={{ opacity: 1, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-              className="flex items-center gap-2" style={{ marginBottom: '1.5rem' }}>
+            <div className="flex items-center gap-2" style={{ marginBottom: '1.5rem', animation: 'slideInUp 0.6s ease-out' }}>
               <span className="pill text-xs font-bold uppercase tracking-wider"
                 style={{ background: 'var(--color-error-soft)', color: 'var(--color-accent)' }}>The IPO Operating System</span>
               <span className="text-text-muted text-sm">Canadian & US listings</span>
-            </motion.div>
+            </div>
 
-            <motion.h1
-              initial={{ opacity: 1, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.06 }}
-              className="serif"
-              style={{ fontSize: '2.1rem', lineHeight: '1.2', marginBottom: '1.25rem', color: '#1A1A1A' }}>
+            <h1 className="serif"
+              style={{ fontSize: '2.1rem', lineHeight: '1.2', marginBottom: '1.25rem', color: '#1A1A1A', animation: 'slideInUp 0.6s ease-out 0.1s both' }}>
               Manage your entire IPO journey<br />
               <span style={{ color: 'var(--color-accent)' }}>from first resolution to the bell—and beyond.</span>
-            </motion.h1>
+            </h1>
 
-            <motion.div
-              initial={{ opacity: 1, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.12 }}
-              className="space-y-3" style={{ marginBottom: '2rem' }}>
+            <div className="space-y-3" style={{ marginBottom: '2rem', animation: 'slideInUp 0.6s ease-out 0.2s both' }}>
               <p className="text-lg leading-relaxed" style={{ color: '#717171' }}>
                 Tell us your exchange and listing type — IPOReady instantly builds your personalized 180+ task roadmap, assigns workstreams to your team, and tracks your velocity toward listing day. No setup. No spreadsheets. No missed steps.
               </p>
@@ -220,28 +215,22 @@ export default function LandingPage() {
                   <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>Coordinate your entire team and expert network</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.p
-              initial={{ opacity: 1, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.16 }}
-              className="text-sm leading-relaxed" style={{ marginBottom: '2rem', color: '#717171' }}>
+            <p className="text-sm leading-relaxed" style={{ marginBottom: '2rem', color: '#717171' }}>
               Works for IPO, RTO, SPAC, and Reg A+ across every major exchange.{' '}
               <Link href="/register" className="text-accent font-semibold hover:underline">
                 Get your personalized checklist in 5 minutes →
               </Link>
-            </motion.p>
+            </p>
 
             {/* Purpose pills */}
-            <motion.div
-              initial={{ opacity: 1, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.2 }}
-              className="grid grid-cols-2 gap-3" style={{ marginBottom: '2rem' }}>
+            <div className="grid grid-cols-2 gap-3" style={{ marginBottom: '2rem' }}>
               {PURPOSES.map(p => <PurposePill key={p.label} icon={p.icon} label={p.label} sub={p.sub} color={p.color} bg={p.bg} />)}
-            </motion.div>
+            </div>
 
             {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 1, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.25 }}
-              className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3" style={{ animation: 'slideInUp 0.6s ease-out 0.3s both' }}>
               <Link href="/register"
                 className="btn btn-primary gap-2 font-semibold px-6 py-2.5 rounded-full">
                 Start your IPO journey <ArrowRight className="w-4 h-4" />
@@ -253,14 +242,11 @@ export default function LandingPage() {
                 className="btn btn-ghost px-4 py-2.5 text-sm">
                 Pre-audit readiness →
               </a>
-            </motion.div>
+            </div>
           </div>
 
           {/* Right: Dashboard preview */}
-          <motion.div
-            initial={{ opacity: 1, x: 24 }} animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.55, delay: 0.18 }}
-            className="hidden lg:block">
+          <div className="hidden lg:block">
             <div className="card" style={{ padding: '1.5rem', boxShadow: '0 24px 64px rgba(0,0,0,0.09)', overflow: 'hidden' }}>
               {/* Card header */}
               <div className="flex items-center justify-between" style={{ marginBottom: '1.25rem' }}>
@@ -326,7 +312,7 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -391,7 +377,7 @@ export default function LandingPage() {
               detailIcon: Zap,
             },
           ].map(({ step, icon: Icon, color, bg, title, body, detail, detailIcon: DetailIcon }, i) => (
-            <motion.div
+            <div
               key={step}
               initial={{ opacity: 1, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -426,12 +412,12 @@ export default function LandingPage() {
                 <DetailIcon className="w-3.5 h-3.5" />
                 {detail}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Bottom connector */}
-        <motion.div
+        <div
           initial={{ opacity: 1, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ delay: 0.35 }}
           className="text-center"
@@ -450,21 +436,21 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* ── Stats ───────────────────────────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto" style={{ paddingTop: '1.75rem', paddingBottom: '2rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {STATS.map((s, i) => (
-            <motion.div key={s.label}
+            <div key={s.label}
               initial={{ opacity: 1, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ delay: i * 0.06 }}
               className="card p-6">
               <p className="serif text-3xl md:text-4xl mb-1" style={{ color: '#1A1A1A' }}>{s.value}</p>
               <p className="font-semibold text-sm mb-0.5" style={{ color: '#1A1A1A' }}>{s.label}</p>
               <p className="text-xs leading-relaxed" style={{ color: '#717171' }}>{s.sub}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
           <p className="text-xs" style={{ color: 'var(--color-text-tertiary)', marginTop: '1.5rem' }}>
@@ -555,7 +541,7 @@ export default function LandingPage() {
           {FEATURES.map((f, i) => {
             const Icon = f.icon
             return (
-              <motion.div key={f.title}
+              <div key={f.title}
                 initial={{ opacity: 1, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: i * 0.06 }}
                 className="card p-6 card-hover">
@@ -565,7 +551,7 @@ export default function LandingPage() {
                 </div>
                 <h3 className="font-semibold mb-3" style={{ color: '#1A1A1A' }}>{f.title}</h3>
                 <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>{f.description}</p>
-              </motion.div>
+              </div>
             )
           })}
         </div>
@@ -614,7 +600,7 @@ export default function LandingPage() {
               { level: 'Standard', annual: '$248K', monthly: '$20.7K/mo', color: 'var(--color-warning)', bg: 'var(--color-warning-soft)', recommended: true },
               { level: 'Aggressive', annual: '$450K', monthly: '$37.5K/mo', color: 'var(--color-accent)', bg: 'var(--color-error-soft)' },
             ].map((scenario, i) => (
-              <motion.div
+              <div
                 key={scenario.level}
                 initial={{ opacity: 1, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: i * 0.08 }}
@@ -641,7 +627,7 @@ export default function LandingPage() {
                 </div>
                 <p className="serif text-3xl font-bold mb-2" style={{ color: scenario.color }}>{scenario.annual}</p>
                 <p className="text-sm text-text-muted">{scenario.monthly}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
 
@@ -660,7 +646,7 @@ export default function LandingPage() {
                 { name: 'Press Newswire', range: '$0.5K–$2K/mo' },
                 { name: 'Investor CRM & Analytics', range: '$1K–$5K/mo' },
               ].map((service, i) => (
-                <motion.div
+                <div
                   key={service.name}
                   initial={{ opacity: 1, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }} transition={{ delay: i * 0.04 }}
@@ -668,7 +654,7 @@ export default function LandingPage() {
                   style={{ background: 'var(--color-bg-primary)', border: '1px solid #E5E4E0' }}>
                   <p className="font-semibold text-sm mb-2" style={{ color: '#1A1A1A' }}>{service.name}</p>
                   <p className="text-xs text-text-muted font-medium">{service.range}</p>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -686,19 +672,19 @@ export default function LandingPage() {
               'Prevent the 40–60% budgeting shortfall that impacts stock performance and investor relations',
               'Build a 3-year post-IPO support plan with accurate vendor partnerships',
             ].map((benefit, i) => (
-              <motion.div
+              <div
                 key={i}
                 initial={{ opacity: 1, x: -8 }} whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }} transition={{ delay: i * 0.05 }}
                 className="flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-accent)' }} />
                 <p className="text-sm text-text-muted leading-relaxed">{benefit}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
 
           {/* CTA */}
-          <motion.div
+          <div
             initial={{ opacity: 1, x: 24 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.45 }}
             className="card p-8" style={{ background: '#FFFFFF', border: '1px solid #E5E4E0', textAlign: 'center' }}>
@@ -715,7 +701,7 @@ export default function LandingPage() {
             <p className="text-xs text-text-muted leading-relaxed">
               Interactive budget planner with vendor connections, 5 minutes to complete
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -739,7 +725,7 @@ export default function LandingPage() {
         {/* Cards */}
         <div className="grid md:grid-cols-2 gap-6" style={{ maxWidth: '860px', margin: '0 auto' }}>
           {TESTIMONIALS.map((t) => (
-            <motion.div
+            <div
               key={t.name}
               initial={{ opacity: 1, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -787,7 +773,7 @@ export default function LandingPage() {
                   </span>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
@@ -834,14 +820,14 @@ export default function LandingPage() {
               a: 'We monitor regulatory updates quarterly and push changes automatically to all active users. Your compliance framework is always current, and we notify you of any filing requirement changes that affect your submission.',
             },
           ].map(({ q, a }, i) => (
-            <motion.div key={q}
+            <div key={q}
               initial={{ opacity: 1, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ delay: i * 0.06 }}
               className="card p-6"
               style={{ background: '#FFFFFF', borderColor: '#E5E4E0' }}>
               <h3 className="font-semibold mb-2" style={{ color: '#1A1A1A', fontSize: '1rem' }}>{q}</h3>
               <p className="text-sm leading-relaxed" style={{ color: '#717171' }}>{a}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
