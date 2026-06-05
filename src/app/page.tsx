@@ -217,6 +217,42 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Required Team Section */}
+      <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 bg-blue-50">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-center mb-2" style={{ color: '#1A1A1A' }}>
+            Your IPO Team
+          </h2>
+          <p className="text-center text-sm sm:text-base mb-8 sm:mb-12" style={{ color: '#717171' }}>
+            Coordinate across all specialists needed for a successful IPO process
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { role: 'CFO/Finance Lead', responsibilities: 'Financial statements, audits, cap table, valuation' },
+              { role: 'IPO Legal Counsel', responsibilities: 'Corporate governance, filings, regulatory compliance' },
+              { role: 'External Auditor', responsibilities: 'Financial audit, SOX controls (if applicable)' },
+              { role: 'Underwriter', responsibilities: 'Pricing, marketing, investor relations' },
+              { role: 'IR Manager', responsibilities: 'Roadshow, analyst relations, messaging' },
+              { role: 'Compliance Officer', responsibilities: 'Ongoing SOX, exchange, and SEC compliance' },
+              { role: 'Corporate Secretary', responsibilities: 'Board resolutions, shareholder approvals' },
+              { role: 'Accounting Manager', responsibilities: 'Financial close, regulatory reporting' },
+              { role: 'HR Lead', responsibilities: 'Employee communications, equity plan compliance' },
+            ].map((member) => (
+              <div key={member.role} className="bg-white rounded-xl p-6 border border-blue-200">
+                <h3 className="font-bold text-base mb-2" style={{ color: '#1D4ED8' }}>
+                  {member.role}
+                </h3>
+                <p className="text-sm" style={{ color: '#717171' }}>
+                  {member.responsibilities}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Stats Section */}
       <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 max-w-7xl mx-auto">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
