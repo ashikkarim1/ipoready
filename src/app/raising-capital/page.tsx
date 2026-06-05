@@ -7,6 +7,7 @@ import {
   DollarSign, Users, Building2, Zap, Globe, FileText,
   ShieldCheck, Percent, Calendar, BarChart2, Award, Banknote
 } from 'lucide-react'
+import { Header } from '@/app/components/Header'
 import { useAppStore } from '@/store/app-store'
 import Link from 'next/link'
 
@@ -697,9 +698,12 @@ export default function RaisingCapitalPage() {
   }
 
   return (
-    <div style={{ maxWidth: '900px' }} suppressHydrationWarning>
+    <>
+      <Header />
 
-      {/* Page header */}
+      <div style={{ maxWidth: '900px' }} suppressHydrationWarning>
+
+        {/* Page header */}
       <div style={{ marginBottom: '1.5rem' }}>
         <div className="flex items-center gap-2" style={{ marginBottom: '0.5rem' }}>
           <Banknote className="w-5 h-5" style={{ color: '#E8312A' }} />
@@ -833,6 +837,7 @@ export default function RaisingCapitalPage() {
           </div>
         </motion.div>
       )}
-    </div>
+      </div>
+    </>
   )
 }
