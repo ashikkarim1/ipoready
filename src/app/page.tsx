@@ -67,17 +67,25 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Right: Visual */}
+          {/* Right: Dashboard Showcase */}
           <div
-            className="flex items-center justify-center rounded-2xl w-full"
+            className="w-full overflow-hidden"
             style={{
-              background: 'linear-gradient(135deg, #FDECEB 0%, #FCE4E1 100%)',
-              minHeight: '400px',
-              padding: '2rem',
-              border: '2px solid #FDECEB'
+              borderRadius: '16px',
+              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+              minHeight: '400px'
             }}
           >
-            <div className="text-6xl sm:text-7xl md:text-8xl">📊</div>
+            <img
+              src="/images/dashboard-showcase.png"
+              alt="IPOReady Mission Control Dashboard"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                borderRadius: '16px'
+              }}
+            />
           </div>
         </div>
       </section>
