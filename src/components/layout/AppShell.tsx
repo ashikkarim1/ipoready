@@ -37,7 +37,6 @@ const NAV_GROUPS = [
       { href: '/prospectus',                             icon: FileText,        label: 'Prospectus Builder', badge: '✨',   key: 'prospectus'       },
       { href: '/dashboard/work/prospectus-validator',    icon: CheckSquare,     label: 'Prospectus Validator', badge: null,  key: 'validator'        },
       { href: '/dashboard/work/directors-officers',      icon: Users,           label: 'Board & Talent',     badge: '💎',   key: 'directors'        },
-      { href: '/templates',                              icon: Award,           label: 'Templates & Forms',  badge: null,   key: 'templates'        },
     ],
   },
   {
@@ -86,9 +85,10 @@ const NAV_GROUPS = [
     ],
   },
   {
-    section: 'LEARNING & COMPLIANCE',
+    section: 'RESOURCES',
     collapsible: true,
     items: [
+      { href: '/templates',                              icon: Award,           label: 'Templates & Forms',  badge: null,   key: 'templates'        },
       { href: '/learning-compliance/insurances', icon: Shield,      label: 'Insurances',         badge: null,   key: 'insurances'  },
       { href: '/resources',       icon: BookOpen,        label: 'Resource Centre',    badge: null,   key: 'resources'   },
       { href: '/checklist-guide', icon: FileSearch,      label: 'Compliance Guide',   badge: null,   key: 'guide'       },

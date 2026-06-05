@@ -378,7 +378,7 @@ export default function DocumentsPage() {
         {/* Hero */}
         <section style={{ borderBottom: '1px solid #E5E4E0', padding: '3rem 2rem lg:3rem 2rem', background: '#F7F6F4' }}>
           <div className="max-w-7xl mx-auto">
-            <div className="flex items-start justify-between gap-8">
+            <div className="flex items-center justify-between gap-8">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -389,7 +389,7 @@ export default function DocumentsPage() {
                   <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1D4ED8' }}>SEC Filing Hub</span>
                 </div>
 
-                <h1 style={{ fontSize: '2.75rem', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.2, marginBottom: '0.75rem' }}>
+                <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.2, marginBottom: '0.75rem' }}>
                   Document Management
                 </h1>
 
