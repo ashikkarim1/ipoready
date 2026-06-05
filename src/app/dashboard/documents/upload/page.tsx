@@ -112,21 +112,41 @@ export default function DocumentsUploadPage() {
   const { completionData } = useDocumentCompletion(documents)
 
   const handleDownloadTemplate = async (documentId: string) => {
-    console.log(`Downloading template for: ${documentId}`)
-    // TODO: Implement template download from backend
-    // window.location.href = `/api/documents/templates/${documentId}`
+    try {
+      const response = await fetch(`/api/documents/templates?type=${documentId}`)
+      if (!response.ok) throw new Error('Download failed')
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${documentId}-template.txt`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (error) {
+      console.error('Template download error:', error)
+      alert('Failed to download template')
+    }
   }
 
   const handleUploadFile = async (documentId: string, files: File[]) => {
     setUploading(documentId)
     try {
-      // TODO: Implement file upload to backend
-      console.log(`Uploading ${files.length} files for document: ${documentId}`)
+      const formData = new FormData()
+      formData.append('documentId', documentId)
+      files.forEach((file) => formData.append('files', file))
 
-      // Simulate upload
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      const response = await fetch('/api/documents/upload', {
+        method: 'POST',
+        body: formData,
+      })
 
-      // Update document status
+      if (!response.ok) throw new Error('Upload failed')
+
+      const result = await response.json()
+
       setDocuments((prev) =>
         prev.map((doc) => {
           if (doc.id === documentId) {
@@ -141,14 +161,37 @@ export default function DocumentsUploadPage() {
       )
     } catch (error) {
       console.error('Upload error:', error)
+      alert('Failed to upload files')
     } finally {
       setUploading(null)
     }
   }
 
   const handleRemoveFile = async (documentId: string, fileId: string) => {
-    console.log(`Removing file ${fileId} from document ${documentId}`)
-    // TODO: Implement file removal
+    try {
+      const response = await fetch('/api/documents/delete', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ documentId, fileId }),
+      })
+
+      if (!response.ok) throw new Error('Delete failed')
+
+      setDocuments((prev) =>
+        prev.map((doc) => {
+          if (doc.id === documentId) {
+            return {
+              ...doc,
+              fileCount: Math.max(0, doc.fileCount - 1),
+            }
+          }
+          return doc
+        })
+      )
+    } catch (error) {
+      console.error('Delete error:', error)
+      alert('Failed to delete file')
+    }
   }
 
   const mandatoryDocs = documents.filter((d) => d.isMandatory)
