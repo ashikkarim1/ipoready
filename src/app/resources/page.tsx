@@ -1,12 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Header } from '@/app/components/Header'
 import {
   BookOpen, FileText, ExternalLink, Newspaper, ChevronRight, ArrowRight,
   Search, Filter, Clock, Building2, AlertCircle, Globe, Scale,
-  TrendingUp, BookMarked, Shield, Star, Bookmark, ChevronDown, ChevronUp
+  TrendingUp, BookMarked, Shield, Star, Bookmark, ChevronDown, ChevronUp, LogIn
 } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -477,6 +479,8 @@ function GuideCardItem({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ResourcesPage() {
+  const { data: session, status } = useSession()
+
   const [activeExchange, setActiveExchange] = useState<ExchangeKey>('TSX')
   const [activeTab, setActiveTab] = useState<'filings' | 'policies'>('filings')
   const [search, setSearch] = useState('')
@@ -619,6 +623,39 @@ export default function ResourcesPage() {
         </div>
       </section>
 
+      {/* Show login prompt if not authenticated */}
+      {!session ? (
+        <section style={{ paddingTop: '4rem', paddingBottom: '4rem', background: '#FFFFFF' }}>
+          <div className="max-w-4xl mx-auto text-center" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+            <div style={{ background: '#F7F6F4', borderRadius: '16px', padding: '3rem 2rem' }}>
+              <LogIn className="w-12 h-12 mx-auto mb-4" style={{ color: '#E8312A' }} />
+              <h2 className="serif text-3xl font-bold mb-3" style={{ color: '#1A1A1A' }}>
+                Access Real-Time Filings & Compliance Data
+              </h2>
+              <p className="text-text-muted text-lg mb-8" style={{ maxWidth: '600px', margin: '0 auto 2rem' }}>
+                Sign in to your IPOReady account to access filing notifications, regulatory tracking, and compliance guides tailored to your exchange and listing type.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  href="/login"
+                  className="px-8 py-3 font-bold rounded-full text-white text-center"
+                  style={{ background: '#E8312A', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/register"
+                  className="px-8 py-3 font-bold rounded-full text-white text-center"
+                  style={{ background: '#1A1A1A', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  Create Account
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <>
       {/* ── CTA Bar ─────────────────────────────────────────────────────────── */}
       <section style={{ paddingTop: '1rem', paddingBottom: '1rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
         <div className="max-w-7xl mx-auto flex flex-wrap gap-3" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
@@ -995,6 +1032,8 @@ export default function ResourcesPage() {
         </div>
       </div>
       </div>
+        </>
+      )}
     </>
   )
 }
