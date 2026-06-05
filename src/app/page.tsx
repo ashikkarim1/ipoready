@@ -68,8 +68,8 @@ export default function LandingPage() {
           </div>
 
           {/* Right: Visual */}
-          <div className="flex items-center justify-center bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-4 sm:p-6 md:p-8 order-2 md:order-2" style={{ aspectRatio: '1 / 1', minHeight: '300px' }}>
-            <div className="text-5xl sm:text-6xl md:text-7xl">📊</div>
+          <div className="flex items-center justify-center bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-8 sm:p-10 md:p-12 order-2 md:order-2 w-full" style={{ minHeight: '350px', height: '100%', maxWidth: '500px', margin: '0 auto' }}>
+            <div className="text-6xl sm:text-7xl">📊</div>
           </div>
         </div>
       </section>
