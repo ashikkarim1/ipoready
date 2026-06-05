@@ -637,6 +637,168 @@ export default function PricingPage() {
           </div>
         </div>
 
+        {/* ─── INVESTOR PLANS SECTION ─────────────────────────────────── */}
+        <div className="py-32 md:py-48" style={{ borderTop: '2px solid #E5E4E0', marginTop: '4rem', marginBottom: '4rem' }}>
+          <div className="max-w-6xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} viewport={{ once: true }} className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 label-sm font-semibold uppercase tracking-widest"
+                style={{ background: '#EAF5F0', color: '#2D7A5F', border: '1px solid rgba(45,122,95,0.2)' }}>
+                <TrendingUp className="w-3 h-3" />
+                {language === 'en' ? 'For Institutional Investors' : 'Pour les investisseurs institutionnels'}
+              </div>
+              <h2 className="serif text-5xl text-nav mb-4 leading-tight">
+                {language === 'en'
+                  ? <>Deal Flow <span style={{ color: '#E8312A' }}>You Can't Get</span> Anywhere Else</>
+                  : <>Flux de transactions <span style={{ color: '#E8312A' }}>que vous ne pouvez pas</span> obtenir ailleurs</>
+                }
+              </h2>
+              <p className="text-text-muted text-lg max-w-3xl mx-auto">
+                {language === 'en'
+                  ? 'Real-time visibility into companies actually executing IPO/RTO journeys. First look at institutional-grade deal flow in North America.'
+                  : 'Visibilité en temps réel des entreprises exécutant réellement les processus d\'IPO/RTO. Premier regard sur les flux de transactions de niveau institutionnel.'}
+              </p>
+            </motion.div>
+
+            {/* Investor Plans Grid */}
+            <div className="grid md:grid-cols-2 gap-8 mb-10">
+              {/* Canada Plan */}
+              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }} viewport={{ once: true }}
+                style={{ background: 'white', border: '2px solid #E5E4E0', borderRadius: '1rem', padding: '2rem' }}>
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Globe className="w-5 h-5" style={{ color: '#2D7A5F' }} />
+                    <h3 className="font-display text-2xl font-bold text-nav">🇨🇦 Canada</h3>
+                  </div>
+                  <p className="text-text-muted text-sm mb-4">
+                    {language === 'en' ? 'TSX, TSXV, CSE deal flow' : 'Flux TSX, TSXV, CSE'}
+                  </p>
+                </div>
+
+                {/* Trial */}
+                <div className="mb-8 p-4 rounded-lg" style={{ background: '#F0FDF4', border: '1px solid #BBF7D0' }}>
+                  <p className="text-xs font-semibold text-success mb-1 uppercase tracking-wider">
+                    {language === 'en' ? 'Try Risk-Free' : 'Essai sans risque'}
+                  </p>
+                  <p className="text-3xl font-bold text-nav mb-1">$99 <span className="text-lg text-text-muted">/mo</span></p>
+                  <p className="text-xs text-text-muted">1 month trial</p>
+                </div>
+
+                {/* Monthly Plan */}
+                <div className="mb-8">
+                  <p className="text-xs font-semibold text-nav uppercase tracking-wider mb-2">After trial:</p>
+                  <p className="text-4xl font-bold text-nav mb-2">$499 <span className="text-lg text-text-muted">/mo</span></p>
+                  <p className="text-sm text-text-muted">1 included seat</p>
+                </div>
+
+                {/* Additional Seats */}
+                <div className="mb-8 p-4 rounded-lg" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
+                  <p className="text-xs font-semibold text-nav uppercase tracking-wider mb-2">Additional seats:</p>
+                  <p className="text-2xl font-bold text-nav">$99 <span className="text-base text-text-muted">/seat</span></p>
+                </div>
+
+                {/* Features */}
+                <div className="space-y-3 mb-8">
+                  {[
+                    language === 'en' ? 'Real-time deal alerts' : 'Alertes transactionnelles en temps réel',
+                    language === 'en' ? 'Company pipeline tracking' : 'Suivi du pipeline d\'entreprises',
+                    language === 'en' ? 'PACE™ readiness scores' : 'Scores de préparation PACE™',
+                    language === 'en' ? 'Investor directory access' : 'Accès au répertoire des investisseurs',
+                    language === 'en' ? 'Email & SMS notifications' : 'Notifications par e-mail et SMS',
+                  ].map((feature, i) => (
+                    <div key={i} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
+                      <span className="text-sm text-nav">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <button onClick={() => handleCheckout('investor-cad')} disabled={checkoutLoading === 'investor-cad'}
+                  className="w-full font-semibold text-white px-4 py-3 rounded-full transition-all"
+                  style={{ background: '#E8312A', opacity: checkoutLoading === 'investor-cad' ? 0.7 : 1 }}>
+                  {checkoutLoading === 'investor-cad'
+                    ? (language === 'en' ? 'Processing...' : 'Traitement...')
+                    : (language === 'en' ? 'Start Free Trial →' : 'Commencer l\'essai gratuit →')}
+                </button>
+              </motion.div>
+
+              {/* USA Plan */}
+              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} viewport={{ once: true }}
+                style={{ background: 'white', border: '2px solid #1A1A1A', boxShadow: '0 8px 32px rgba(26,26,26,0.12)', borderRadius: '1rem', padding: '2rem', position: 'relative' }}>
+                <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)' }}>
+                  <span className="label-xs font-bold" style={{ background: '#1A1A1A', color: 'white', padding: '0.25rem 0.75rem', borderRadius: '9999px', display: 'inline-block' }}>
+                    {language === 'en' ? '⭐ Most Deal Flow' : '⭐ Plus de transactions'}
+                  </span>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Globe className="w-5 h-5" style={{ color: '#1D4ED8' }} />
+                    <h3 className="font-display text-2xl font-bold text-nav">🇺🇸 USA</h3>
+                  </div>
+                  <p className="text-text-muted text-sm mb-4">
+                    {language === 'en' ? 'NASDAQ, NYSE, OTC deal flow' : 'Flux NASDAQ, NYSE, OTC'}
+                  </p>
+                </div>
+
+                {/* Trial */}
+                <div className="mb-8 p-4 rounded-lg" style={{ background: '#EFF6FF', border: '1px solid #BFDBFE' }}>
+                  <p className="text-xs font-semibold text-blue-700 mb-1 uppercase tracking-wider">
+                    {language === 'en' ? 'Try Risk-Free' : 'Essai sans risque'}
+                  </p>
+                  <p className="text-3xl font-bold text-nav mb-1">$99 <span className="text-lg text-text-muted">/mo</span></p>
+                  <p className="text-xs text-text-muted">1 month trial</p>
+                </div>
+
+                {/* Monthly Plan */}
+                <div className="mb-8">
+                  <p className="text-xs font-semibold text-nav uppercase tracking-wider mb-2">After trial:</p>
+                  <p className="text-4xl font-bold text-nav mb-2">$999 <span className="text-lg text-text-muted">/mo</span></p>
+                  <p className="text-sm text-text-muted">1 included seat</p>
+                </div>
+
+                {/* Additional Seats */}
+                <div className="mb-8 p-4 rounded-lg" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
+                  <p className="text-xs font-semibold text-nav uppercase tracking-wider mb-2">Additional seats:</p>
+                  <p className="text-2xl font-bold text-nav">$149 <span className="text-base text-text-muted">/seat</span></p>
+                </div>
+
+                {/* Features */}
+                <div className="space-y-3 mb-8">
+                  {[
+                    language === 'en' ? 'Everything in Canada +' : 'Tout du plan Canada +',
+                    language === 'en' ? 'NASDAQ & NYSE pipeline' : 'Pipeline NASDAQ & NYSE',
+                    language === 'en' ? 'US institutional network' : 'Réseau institutionnel américain',
+                    language === 'en' ? 'SEC filing integration' : 'Intégration des dépôts SEC',
+                    language === 'en' ? '24/7 priority support' : 'Support prioritaire 24/7',
+                  ].map((feature, i) => (
+                    <div key={i} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
+                      <span className="text-sm text-nav">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <button onClick={() => handleCheckout('investor-usa')} disabled={checkoutLoading === 'investor-usa'}
+                  className="w-full font-semibold text-white px-4 py-3 rounded-full transition-all"
+                  style={{ background: '#E8312A', opacity: checkoutLoading === 'investor-usa' ? 0.7 : 1 }}>
+                  {checkoutLoading === 'investor-usa'
+                    ? (language === 'en' ? 'Processing...' : 'Traitement...')
+                    : (language === 'en' ? 'Start Free Trial →' : 'Commencer l\'essai gratuit →')}
+                </button>
+              </motion.div>
+            </div>
+
+            {/* Pricing Note */}
+            <div className="text-center p-6 rounded-xl" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
+              <p className="text-sm text-text-muted">
+                {language === 'en'
+                  ? '💰 All pricing shown in USD. CAD display available at checkout. Cancel anytime during trial.'
+                  : '💰 Tous les prix affichés en USD. Affichage CAD disponible à la caisse. Annulez à tout moment pendant l\'essai.'}
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* FAQ */}
         <div className="max-w-3xl mx-auto mb-10">
           <h2 className="serif text-2xl text-nav mb-6 text-center">
