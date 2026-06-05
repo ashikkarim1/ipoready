@@ -351,7 +351,7 @@ export default function ForInvestorsPage() {
 
       {/* CTA SECTION */}
       <section
-        className="px-6 md:px-8 py-32 md:py-48"
+        className="px-6 md:px-8 py-48 md:py-64"
         style={{ background: '#1A1A1A' }}
       >
         <div className="max-w-4xl mx-auto text-center text-white">
