@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { AppShell } from '@/components/layout/AppShell'
 import {
@@ -294,20 +294,81 @@ Best regards,
   const sentCount = crmTracker.filter(e => e.status === 'sent').length
   const repliedCount = crmTracker.filter(e => e.status === 'replied').length
 
+  // Split-view state
+  const [showCRM, setShowCRM] = useState(true)
+  const [showInvestors, setShowInvestors] = useState(true)
+  const [dividerPos, setDividerPos] = useState(50) // percentage
+  const [isDragging, setIsDragging] = useState(false)
+
+  const handleDividerMouseDown = () => setIsDragging(true)
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging) return
+      const container = document.getElementById('split-view-container')
+      if (!container) return
+      const rect = container.getBoundingClientRect()
+      const newPos = ((e.clientX - rect.left) / rect.width) * 100
+      if (newPos > 20 && newPos < 80) setDividerPos(newPos)
+    }
+    const handleMouseUp = () => setIsDragging(false)
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+      }
+    }
+  }, [isDragging])
+
   return (
     <AppShell>
-      <div style={{ minHeight: '100vh', background: '#F7F6F4', display: 'grid', gridTemplateColumns: '340px 1fr' }}>
+      <div
+        id="split-view-container"
+        style={{
+          minHeight: '100vh',
+          background: '#F7F6F4',
+          display: 'flex',
+          overflow: 'hidden'
+        }}
+      >
 
         {/* CRM SIDEBAR */}
-        <div style={{ background: '#FFFFFF', borderRight: '1px solid #E5E4E0', display: 'flex', flexDirection: 'column', maxHeight: '100vh', overflowY: 'auto' }}>
+        {showCRM && (
+        <div style={{
+          background: '#FFFFFF',
+          borderRight: '1px solid #E5E4E0',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+          overflow: 'hidden',
+          flex: `0 0 ${dividerPos}%`,
+          transition: isDragging ? 'none' : 'flex 0.2s'
+        }}>
 
           {/* CRM Header */}
-          <div style={{ padding: '1.5rem', borderBottom: '1px solid #E5E4E0', background: '#FFFFFF' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-              <Inbox className="w-5 h-5" style={{ color: '#E8312A' }} />
-              <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
-                Outreach Pipeline
-              </h2>
+          <div style={{ padding: '1.5rem', borderBottom: '1px solid #E5E4E0', background: '#FFFFFF', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Inbox className="w-5 h-5" style={{ color: '#E8312A' }} />
+                <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
+                  Outreach Pipeline
+                </h2>
+              </div>
+              <button
+                onClick={() => setShowCRM(false)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: '0.25rem',
+                  color: '#717171'
+                }}
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
 
             {/* CRM Stats */}
@@ -349,8 +410,8 @@ Best regards,
             </button>
           </div>
 
-          {/* CRM Entries */}
-          <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
+          {/* CRM Entries - Scrollable */}
+          <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '1rem' }}>
             {crmTracker.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '2rem 1rem', color: '#717171' }}>
                 <Mail className="w-8 h-8 mx-auto mb-2" style={{ opacity: 0.3 }} />
@@ -459,34 +520,75 @@ Best regards,
             </div>
           )}
         </div>
+        )}
 
-        {/* MAIN CONTENT */}
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {/* Resizable Divider */}
+        {showCRM && showInvestors && (
+          <div
+            onMouseDown={handleDividerMouseDown}
+            style={{
+              width: '4px',
+              background: isDragging ? '#1D4ED8' : '#E5E4E0',
+              cursor: 'col-resize',
+              transition: 'background 0.2s',
+              flexShrink: 0,
+              userSelect: 'none'
+            }}
+          />
+        )}
+
+        {/* MAIN CONTENT - Investors */}
+        {showInvestors && (
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+          overflow: 'hidden',
+          flex: `0 0 ${showCRM ? 100 - dividerPos : 100}%`,
+          transition: isDragging ? 'none' : 'flex 0.2s'
+        }}>
 
           {/* Hero Section */}
-          <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1rem 2rem', background: '#F7F6F4' }}>
+          <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1rem 1.5rem', background: '#F7F6F4', flexShrink: 0 }}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
+              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                <div style={{ padding: '0.5rem', background: '#F0F4FF', borderRadius: '0.375rem' }}>
-                  <Target className="w-5 h-5" style={{ color: '#1D4ED8' }} />
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                  <div style={{ padding: '0.5rem', background: '#F0F4FF', borderRadius: '0.375rem' }}>
+                    <Target className="w-5 h-5" style={{ color: '#1D4ED8' }} />
+                  </div>
+                  <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1D4ED8' }}>Investor Intelligence</span>
                 </div>
-                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1D4ED8' }}>Investor Intelligence</span>
+                <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#1A1A1A', margin: '0 0 0.75rem 0', lineHeight: 1.2 }}>
+                  Investor Match™
+                </h1>
+                <p style={{ fontSize: '0.875rem', color: '#717171', margin: 0 }}>
+                  AI-matched investors + CRM pipeline. Find, reach out, and track conversations.
+                </p>
               </div>
-              <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#1A1A1A', margin: '0 0 0.75rem 0', lineHeight: 1.2 }}>
-                Investor Match™
-              </h1>
-              <p style={{ fontSize: '0.875rem', color: '#717171', margin: 0 }}>
-                AI-matched investors + CRM pipeline. Find, reach out, and track investor conversations.
-              </p>
+              {showCRM && (
+                <button
+                  onClick={() => setShowInvestors(false)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: '0.25rem',
+                    color: '#717171'
+                  }}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
             </motion.div>
           </section>
 
           {/* Filters Section */}
-          <section style={{ padding: '1.5rem 2rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
+          <section style={{ padding: '1rem 1.5rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0', flexShrink: 0 }}>
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
               {/* Search */}
               <div style={{ flex: 1, minWidth: '250px' }}>
@@ -565,7 +667,7 @@ Best regards,
           </section>
 
           {/* Investors Grid */}
-          <section style={{ padding: '1rem', flex: 1, overflowY: 'auto' }}>
+          <section style={{ padding: '1.5rem', flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
               {investors.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '1.5rem' }}>
@@ -676,6 +778,50 @@ Best regards,
             </div>
           </section>
         </div>
+        )}
+
+        {/* Collapsed CRM/Investors Buttons */}
+        {!showCRM && !showInvestors && (
+          <div style={{
+            display: 'flex',
+            gap: '1rem',
+            padding: '1.5rem',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flex: 1
+          }}>
+            <button
+              onClick={() => setShowCRM(true)}
+              style={{
+                padding: '0.75rem 1.5rem',
+                background: '#E8312A',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '0.375rem',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                cursor: 'pointer'
+              }}
+            >
+              Show Outreach
+            </button>
+            <button
+              onClick={() => setShowInvestors(true)}
+              style={{
+                padding: '0.75rem 1.5rem',
+                background: '#E8312A',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '0.375rem',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                cursor: 'pointer'
+              }}
+            >
+              Show Investors
+            </button>
+          </div>
+        )}
 
         {/* ADD INVESTOR MODAL */}
         <AnimatePresence>
