@@ -54,6 +54,7 @@ export const PRE_IPO_NAV_GROUPS = [
     section: 'INVESTOR READINESS',
     collapsible: true,
     items: [
+      { href: '/dashboard/investor-readiness/intelligence-hub',     icon: Zap,       label: 'Intelligence Hub',    badge: '🚀',   key: 'intelligence-hub'     },
       { href: '/dashboard/investor-readiness/data-room-viewer',     icon: Brain,     label: 'AI Document Viewer',  badge: '✨',   key: 'data-room-viewer'     },
       { href: '/dashboard/investor-readiness/data-room-health',     icon: BarChart3, label: 'Data Room Health',    badge: 'AI',   key: 'data-room-health'     },
       { href: '/dashboard/investor-readiness/data-room-analytics',  icon: Eye,       label: 'Investor Activity',   badge: '📊',   key: 'data-room-analytics'  },
