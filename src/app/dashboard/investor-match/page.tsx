@@ -464,7 +464,7 @@ Best regards,
         <div style={{ display: 'flex', flexDirection: 'column' }}>
 
           {/* Hero Section */}
-          <section style={{ borderBottom: '1px solid #E5E4E0', padding: '2rem 2rem', background: '#F7F6F4' }}>
+          <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1rem 2rem', background: '#F7F6F4' }}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -565,10 +565,10 @@ Best regards,
           </section>
 
           {/* Investors Grid */}
-          <section style={{ padding: '2rem', flex: 1, overflowY: 'auto' }}>
+          <section style={{ padding: '1rem', flex: 1, overflowY: 'auto' }}>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
               {investors.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '3rem' }}>
+                <div style={{ textAlign: 'center', padding: '1.5rem' }}>
                   <AlertCircle className="w-12 h-12 mx-auto mb-3" style={{ color: '#717171' }} />
                   <p style={{ fontSize: '0.875rem', color: '#717171' }}>No investors match your criteria</p>
                 </div>
@@ -714,7 +714,7 @@ Best regards,
                   zIndex: 50
                 }}
               >
-                <div style={{ padding: '2rem', borderBottom: '1px solid #E5E4E0' }}>
+                <div style={{ padding: '1rem', borderBottom: '1px solid #E5E4E0' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                     <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
                       Add Investor to CRM
@@ -736,7 +736,7 @@ Best regards,
                   </p>
                 </div>
 
-                <div style={{ padding: '2rem' }}>
+                <div style={{ padding: '1rem' }}>
                   <div style={{ marginBottom: '1.5rem' }}>
                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
                       Investor Name *
@@ -884,7 +884,7 @@ Best regards,
                 }}
               >
                 {/* Header */}
-                <div style={{ padding: '2rem', borderBottom: '1px solid #E5E4E0', background: '#F7F6F4' }}>
+                <div style={{ padding: '1rem', borderBottom: '1px solid #E5E4E0', background: '#F7F6F4' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
                     <div>
                       <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1A1A1A', margin: '0 0 0.5rem 0' }}>
@@ -926,7 +926,7 @@ Best regards,
                 </div>
 
                 {/* Content */}
-                <div style={{ padding: '2rem' }}>
+                <div style={{ padding: '1rem' }}>
                   {emailSent && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}

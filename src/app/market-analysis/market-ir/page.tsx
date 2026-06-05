@@ -300,7 +300,7 @@ Aggressive Estimate: $${budgets.aggressive.toLocaleString()}`
       <Header />
 
       {/* Hero Section */}
-      <section style={{ borderBottom: '1px solid #E5E4E0', padding: '3rem 1.5rem', background: '#F7F6F4' }}>
+      <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1.5rem 1.5rem', background: '#F7F6F4' }}>
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -436,7 +436,7 @@ Aggressive Estimate: $${budgets.aggressive.toLocaleString()}`
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            style={{ borderRadius: '0.5rem', padding: '2rem', border: '1px solid #E5E4E0', background: '#FFFFFF' }}
+            style={{ borderRadius: '0.5rem', padding: '1rem', border: '1px solid #E5E4E0', background: '#FFFFFF' }}
           >
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '2rem' }}>
               Your Budget Summary
@@ -714,7 +714,7 @@ Aggressive Estimate: $${budgets.aggressive.toLocaleString()}`
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            style={{ borderRadius: '0.5rem', padding: '2rem', border: '1px solid #E5E4E0', background: '#FFFFFF' }}
+            style={{ borderRadius: '0.5rem', padding: '1rem', border: '1px solid #E5E4E0', background: '#FFFFFF' }}
           >
             <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '1rem' }}>
               Need Assistance?

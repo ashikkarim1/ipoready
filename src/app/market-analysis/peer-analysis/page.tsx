@@ -117,7 +117,7 @@ export default function PeerAnalysisPage() {
       <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
 
       {/* Hero */}
-      <section style={{ borderBottom: '1px solid #E5E4E0', padding: '3rem 1.5rem', background: '#F7F6F4' }}>
+      <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1.5rem', background: '#F7F6F4' }}>
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -149,7 +149,7 @@ export default function PeerAnalysisPage() {
       </section>
 
       {/* Filters & Stats */}
-      <section style={{ padding: '2rem 1.5rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
+      <section style={{ padding: '1rem 1.5rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-6">
             <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.75rem' }}>
@@ -238,7 +238,7 @@ export default function PeerAnalysisPage() {
       </section>
 
       {/* Peers Table */}
-      <section style={{ padding: '3rem 1.5rem' }}>
+      <section style={{ padding: '1.5rem' }}>
         <div className="max-w-6xl mx-auto">
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>

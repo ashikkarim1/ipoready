@@ -202,7 +202,7 @@ export default function CoveragePredictorPage() {
     <AppShell>
       <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
         {/* Hero */}
-        <section style={{ borderBottom: '1px solid #E5E4E0', padding: '3rem 1.5rem', background: '#FFFFFF' }}>
+        <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1.5rem 1.5rem', background: '#FFFFFF' }}>
           <div className="max-w-6xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -230,7 +230,7 @@ export default function CoveragePredictorPage() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
                   style={{
-                    padding: '2rem',
+                    padding: '1rem',
                     background: scoreBg,
                     border: `2px solid ${scoreColor}`,
                     borderRadius: '0.75rem',
@@ -261,7 +261,7 @@ export default function CoveragePredictorPage() {
         </section>
 
         {/* Coverage Factors */}
-        <section style={{ borderBottom: '1px solid #E5E4E0', padding: '3rem 1.5rem', background: '#FFFFFF' }}>
+        <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1.5rem 1.5rem', background: '#FFFFFF' }}>
           <div className="max-w-6xl mx-auto">
             <h2 style={{ fontSize: '1.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '2rem' }}>
               Coverage Factors
@@ -338,7 +338,7 @@ export default function CoveragePredictorPage() {
         </section>
 
         {/* Recommendations */}
-        <section style={{ padding: '3rem 1.5rem', background: '#F7F6F4' }}>
+        <section style={{ padding: '1.5rem 1.5rem', background: '#F7F6F4' }}>
           <div className="max-w-6xl mx-auto">
             <h2 style={{ fontSize: '1.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '2rem' }}>
               Actionable Recommendations

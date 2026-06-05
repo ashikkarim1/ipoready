@@ -167,7 +167,7 @@ export default function CompanyProfilePage() {
   if (!company) {
     return (
       <AppShell>
-        <div style={{ minHeight: '100vh', background: '#F7F6F4', padding: '3rem' }}>
+        <div style={{ minHeight: '100vh', background: '#F7F6F4', padding: '1.5rem' }}>
           <div style={{ textAlign: 'center' }}>
             <AlertCircle className="w-12 h-12 mx-auto mb-3" style={{ color: '#E8312A' }} />
             <p style={{ fontSize: '1.125rem', color: '#717171' }}>Company not found</p>
@@ -196,7 +196,7 @@ export default function CompanyProfilePage() {
     <AppShell>
       <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
         {/* Header */}
-        <section style={{ borderBottom: '1px solid #E5E4E0', padding: '2rem', background: '#FFFFFF' }}>
+        <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1rem', background: '#FFFFFF' }}>
           <div className="max-w-6xl mx-auto">
             <button
               onClick={() => router.back()}
@@ -234,7 +234,7 @@ export default function CompanyProfilePage() {
         </section>
 
         {/* Key Metrics */}
-        <section style={{ padding: '3rem 2rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
+        <section style={{ padding: '1.5rem 2rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-4 gap-6 mb-8">
               {[
@@ -274,7 +274,7 @@ export default function CompanyProfilePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
               style={{
-                padding: '2rem',
+                padding: '1rem',
                 background: '#F0F4FF',
                 border: '1px solid #1D4ED8',
                 borderRadius: '0.5rem'
@@ -291,7 +291,7 @@ export default function CompanyProfilePage() {
         </section>
 
         {/* Comparable Multiples */}
-        <section style={{ padding: '3rem 2rem', background: '#F7F6F4', borderBottom: '1px solid #E5E4E0' }}>
+        <section style={{ padding: '1.5rem 2rem', background: '#F7F6F4', borderBottom: '1px solid #E5E4E0' }}>
           <div className="max-w-6xl mx-auto">
             <h2 style={{ fontSize: '1.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '2rem' }}>
               Comparable EV/Revenue Multiples
@@ -342,7 +342,7 @@ export default function CompanyProfilePage() {
         </section>
 
         {/* Highlights & Risks */}
-        <section style={{ padding: '3rem 2rem', background: '#FFFFFF' }}>
+        <section style={{ padding: '1.5rem 2rem', background: '#FFFFFF' }}>
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-2 gap-12">
               {/* Highlights */}
@@ -389,7 +389,7 @@ export default function CompanyProfilePage() {
         </section>
 
         {/* Investment Thesis */}
-        <section style={{ padding: '3rem 2rem', background: '#F0F4FF', borderTop: '1px solid #E5E4E0' }}>
+        <section style={{ padding: '1.5rem 2rem', background: '#F0F4FF', borderTop: '1px solid #E5E4E0' }}>
           <div className="max-w-6xl mx-auto">
             <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1D4ED8', marginBottom: '1rem' }}>
               Investment Thesis

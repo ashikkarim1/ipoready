@@ -284,7 +284,7 @@ export default function FilingSystemsPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto" style={{ padding: '2rem 1.5rem' }}>
+      <div className="max-w-7xl mx-auto" style={{ padding: '1rem 1.5rem' }}>
 
         {/* Header */}
         <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -349,7 +349,7 @@ export default function FilingSystemsPage() {
               <tbody>
                 {systems.length === 0 && (
                   <tr>
-                    <td colSpan={6} style={{ padding: '3rem', textAlign: 'center', color: '#9A9A9A', fontSize: '14px' }}>
+                    <td colSpan={6} style={{ padding: '1.5rem', textAlign: 'center', color: '#9A9A9A', fontSize: '14px' }}>
                       No filing systems configured
                     </td>
                   </tr>
@@ -489,7 +489,7 @@ export default function FilingSystemsPage() {
                 maxHeight: '90vh',
                 overflowY: 'auto',
               }}>
-              <div style={{ padding: '2rem' }}>
+              <div style={{ padding: '1rem' }}>
                 <h3 className="h3" style={{ color: '#1A1A1A', marginBottom: '1.5rem' }}>
                   Add Filing System
                 </h3>
@@ -643,7 +643,7 @@ export default function FilingSystemsPage() {
                 maxWidth: '500px',
                 width: '90%',
               }}>
-              <div style={{ padding: '2rem' }}>
+              <div style={{ padding: '1rem' }}>
                 <h3 className="h3" style={{ color: '#1A1A1A', marginBottom: '1.5rem' }}>
                   Test {selectedSystem.exchange_name}
                 </h3>
