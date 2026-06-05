@@ -168,7 +168,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const { data: session } = useSession()
   const { company, currency, language, setCurrency, setLanguage, sidebarOpen, toggleSidebar, setCompany, setUserPlan } = useAppStore()
-  const [showUserMenu, setShowUserMenu] = useState(false)
   const [showAccountPanel, setShowAccountPanel] = useState(false)
 
   // Collapsible sections state with localStorage persistence
@@ -567,119 +566,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </div>
               </div>
             )}
-
-            {/* User */}
-            <div className="px-4 py-4" style={{ borderTop: '1px solid var(--color-border)' }}>
-              <div className="relative">
-                <button
-                  onClick={() => setShowUserMenu(v => !v)}
-                  className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-bg transition-colors"
-                >
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-white label-xs font-bold flex-shrink-0"
-                    style={{ background: 'var(--color-text-primary)' }}>
-                    {session?.user?.name?.charAt(0) || 'U'}
-                  </div>
-                  <div className="flex-1 min-w-0 text-left">
-                    <p className="text-nav label-sm font-semibold truncate">{session?.user?.name || 'User'}</p>
-                    <p className="text-text-muted caption-sm truncate">{session?.user?.email}</p>
-                  </div>
-                  <ChevronDown className="w-3.5 h-3.5 text-text-light flex-shrink-0" />
-                </button>
-
-                <AnimatePresence>
-                  {showUserMenu && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.97 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 8, scale: 0.97 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute bottom-full left-0 right-0 mb-2 z-50 overflow-hidden rounded-2xl"
-                      style={{ background: 'white', border: '1px solid var(--color-border)', boxShadow: '0 -12px 48px rgba(0,0,0,0.12), 0 -2px 8px rgba(0,0,0,0.06)' }}
-                    >
-                      {/* User info */}
-                      <div className="px-4 py-3.5" style={{ background: 'var(--color-bg-primary)', borderBottom: '1px solid var(--color-border-medium)' }}>
-                        <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full flex items-center justify-center text-white body-sm font-bold flex-shrink-0"
-                            style={{ background: 'var(--color-text-primary)' }}>
-                            {getInitials(session?.user?.name)}
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="body-sm font-bold truncate" style={{ color: 'var(--color-text-primary)' }}>{session?.user?.name || 'User'}</p>
-                            <p className="caption-sm truncate" style={{ color: 'var(--color-text-tertiary)' }}>{session?.user?.email}</p>
-                          </div>
-                        </div>
-                        <div className="mt-2 flex items-center gap-1.5">
-                          <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: 'var(--color-success-bright)' }} />
-                          <span className="label-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
-                            {formatRole((session?.user as any)?.role)}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Settings link */}
-                      <div className="p-1.5" style={{ borderBottom: '1px solid #F0EFED' }}>
-                        <Link href="/account"
-                          onClick={() => setShowUserMenu(false)}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl label font-medium transition-colors"
-                          style={{ color: 'var(--color-text-primary)' }}
-                          onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-bg-primary)')}
-                          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                          <Settings className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--color-text-secondary)' }} />
-                          Account Settings
-                        </Link>
-                      </div>
-
-                      {/* Preferences */}
-                      <div className="px-4 py-3" style={{ borderBottom: '1px solid #F0EFED' }}>
-                        <p className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--color-text-muted)' }}>
-                          Preferences
-                        </p>
-                        <div className="flex items-center justify-between mb-2.5">
-                          <span className="label-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>Currency</span>
-                          <div className="flex items-center p-0.5 rounded-lg gap-0.5" style={{ background: 'var(--color-surface-secondary)' }}>
-                            {(['CAD', 'USD'] as const).map(c => (
-                              <button key={c} onClick={() => setCurrency(c)}
-                                className="label-sm px-2.5 py-1 rounded-md font-semibold transition-all"
-                                style={currency === c
-                                  ? { background: 'white', color: 'var(--color-text-primary)', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }
-                                  : { color: 'var(--color-text-tertiary)' }}>
-                                ${c}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="label-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>Language</span>
-                          <div className="flex items-center p-0.5 rounded-lg gap-0.5" style={{ background: 'var(--color-surface-secondary)' }}>
-                            {(['en', 'fr'] as const).map(l => (
-                              <button key={l} onClick={() => setLanguage(l)}
-                                className="label-sm px-2.5 py-1 rounded-md font-semibold transition-all"
-                                style={language === l
-                                  ? { background: 'white', color: 'var(--color-text-primary)', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }
-                                  : { color: 'var(--color-text-tertiary)' }}>
-                                {l.toUpperCase()}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Sign out */}
-                      <div className="p-1.5">
-                        <button
-                          onClick={() => signOut({ callbackUrl: '/login' })}
-                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl label font-medium transition-colors"
-                          style={{ color: 'var(--color-accent)' }}
-                          onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-error-soft)')}
-                          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                          <LogOut className="w-4 h-4 flex-shrink-0" /> Sign Out
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
           </motion.div>
         )}
       </AnimatePresence>
