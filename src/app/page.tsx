@@ -143,15 +143,27 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="border-t border-gray-200 mt-12 sm:mt-16 py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 mb-8">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', marginBottom: '2rem' }}>
             {[
-              { title: 'Product', links: ['Features', 'Pricing', 'Get Started'] },
-              { title: 'Company', links: ['About', 'Blog', 'Careers'] },
-              { title: 'Legal', links: ['Privacy', 'Terms', 'Disclaimer'] },
-              { title: 'Connect', links: ['Twitter', 'LinkedIn', 'Contact'] },
+              {
+                title: 'Exchanges',
+                links: ['TSX', 'TSXV', 'CSE', 'NASDAQ', 'NYSE', 'OTC Markets', 'Cboe Canada']
+              },
+              {
+                title: 'Listing Types',
+                links: ['IPO', 'Direct Listing', 'RTO', 'SPAC', 'Regulation A+']
+              },
+              {
+                title: 'Legal',
+                links: ['Privacy Policy', 'Terms of Service', 'Disclaimer', 'Cookie Policy']
+              },
+              {
+                title: 'Support',
+                links: ['Contact Us', 'Help Centre', 'System Status']
+              },
             ].map((column) => (
               <div key={column.title}>
-                <p className="font-bold text-sm mb-3" style={{ color: '#1A1A1A' }}>
+                <p className="font-bold text-xs sm:text-sm mb-3 uppercase tracking-wider" style={{ color: '#1A1A1A' }}>
                   {column.title}
                 </p>
                 <ul className="space-y-2">
