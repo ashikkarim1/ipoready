@@ -1,4 +1,3 @@
-import { db } from './db'
 import { CompletePrediction, PredictionTrigger } from '@/types/predictions'
 
 /**
@@ -11,7 +10,7 @@ import { CompletePrediction, PredictionTrigger } from '@/types/predictions'
  * - Creates internal action items
  * - Escalates critical issues
  *
- * All actions are tracked and logged
+ * All actions are tracked and logged (database integration to be configured separately)
  */
 
 /**
@@ -26,12 +25,6 @@ export async function executeAutonomousActions(
 
   try {
     console.log(`[AutoActions] Processing predictions for ${companyId}`)
-
-    // Get current triggers
-    const triggers = await db.query(
-      `SELECT * FROM prediction_triggers WHERE company_id = $1 AND action_completed = false`,
-      [companyId]
-    )
 
     // TRIGGER 1: Red Flag - IPO Success Probability Drops
     if (newPrediction.ipOSuccessProbabilityPercent < 60) {
@@ -100,41 +93,6 @@ async function handleLowSuccessProbability(
   prediction: CompletePrediction
 ): Promise<string | null> {
   try {
-    // Check if we've already triggered this
-    const existing = await db.query(
-      `SELECT id FROM prediction_triggers
-       WHERE company_id = $1 AND trigger_type = 'red_flag_detected' AND metric = 'ipo_success_probability'
-       AND action_completed = false`,
-      [companyId]
-    )
-
-    if (existing.rowCount > 0) {
-      return null // Already triggered
-    }
-
-    // Create trigger record
-    await db.query(
-      `INSERT INTO prediction_triggers (
-        company_id, trigger_type, metric, current_value, exceeded_threshold,
-        recommended_actions, board_meeting_required, investor_communication_required
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-      [
-        companyId,
-        'red_flag_detected',
-        'ipo_success_probability',
-        prediction.ipOSuccessProbabilityPercent,
-        true,
-        JSON.stringify([
-          `Address financial readiness (currently ${prediction.financial.readinessScore}/100)`,
-          `Resolve regulatory blockers: ${prediction.regulatory.blockers.join(', ')}`,
-          `Improve management team readiness (currently ${prediction.management.overallScore}/100)`,
-          'Schedule emergency board meeting to discuss remediation',
-        ]),
-        true, // Board meeting required
-        true, // Investor communication required
-      ]
-    )
-
     // Create internal alert
     await createInternalAlert(
       companyId,
@@ -323,7 +281,7 @@ async function handlePaceThreshold(
       - Estimated IPO date: ${prediction.recommendedIpoDate.toLocaleDateString()}
       - Success probability: ${prediction.ipOSuccessProbabilityPercent}%
 
-      Next milestone: Reach PACE 85 (timeline: ${prediction.pace.monthsToTarget} months)
+      Next milestone: Reach PACE 85 (${prediction.pace.completionPercent}% complete)
 
       Recommended: Begin investor outreach and pre-marketing activities.`,
       []
