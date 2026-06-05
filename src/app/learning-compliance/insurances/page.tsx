@@ -306,7 +306,7 @@ function InsightCard({ icon, title, description }: { icon: React.ReactNode; titl
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-white rounded-lg border border-slate-200 p-5 flex gap-4 hover:shadow-md transition-shadow"
+      className="bg-white rounded-lg border border-slate-200 p-8 flex gap-5 hover:shadow-md transition-shadow"
     >
       <div className="flex-shrink-0">
         <div className="p-3 rounded-lg bg-red-50">
@@ -314,8 +314,8 @@ function InsightCard({ icon, title, description }: { icon: React.ReactNode; titl
         </div>
       </div>
       <div>
-        <h3 className="font-semibold text-slate-900">{title}</h3>
-        <p className="text-sm text-slate-600 mt-1">{description}</p>
+        <h3 className="font-semibold text-slate-900 mb-2">{title}</h3>
+        <p className="text-sm text-slate-600 leading-relaxed">{description}</p>
       </div>
     </motion.div>
   )
@@ -336,10 +336,10 @@ function InsuranceTypeCard({ insurance, isExpanded, onToggle }: { insurance: Ins
       }}
       onClick={onToggle}
     >
-      <div className="p-5">
+      <div className="p-8">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center gap-4 mb-4">
               <div className="p-2 rounded-lg bg-white" style={{ color: insurance.color }}>
                 {insurance.icon}
               </div>
@@ -366,9 +366,9 @@ function InsuranceTypeCard({ insurance, isExpanded, onToggle }: { insurance: Ins
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="mt-5 pt-5 border-t border-slate-300 space-y-5"
+              className="mt-8 pt-8 border-t border-slate-300 space-y-8"
             >
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-6">
                 <div>
                   <label className="text-xs font-bold text-slate-600 uppercase block mb-2">Why Required</label>
                   <p className="text-sm text-slate-700">{insurance.why}</p>
@@ -379,7 +379,7 @@ function InsuranceTypeCard({ insurance, isExpanded, onToggle }: { insurance: Ins
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-6">
                 <div>
                   <label className="text-xs font-bold text-slate-600 uppercase block mb-2">Pre-IPO</label>
                   <p className="text-sm text-slate-700">{insurance.preIPO}</p>
@@ -412,8 +412,8 @@ function InsuranceTypeCard({ insurance, isExpanded, onToggle }: { insurance: Ins
                 </div>
               </div>
 
-              <div className="bg-white rounded p-4 border border-slate-300">
-                <p className="text-sm text-slate-700">{insurance.details}</p>
+              <div className="bg-white rounded p-6 border border-slate-300">
+                <p className="text-sm text-slate-700 leading-relaxed">{insurance.details}</p>
               </div>
             </motion.div>
           )}
@@ -462,9 +462,9 @@ function ProviderCard({ provider }: { provider: Provider }) {
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-white rounded-lg border border-slate-200 p-5 hover:shadow-lg transition-shadow"
+      className="bg-white rounded-lg border border-slate-200 p-8 hover:shadow-lg transition-shadow"
     >
-      <div className="flex items-start justify-between gap-4 mb-4">
+      <div className="flex items-start justify-between gap-4 mb-6">
         <div>
           <h4 className="font-bold text-slate-900">{provider.name}</h4>
           <p className="text-xs text-slate-600 mt-1">{provider.specialization}</p>
@@ -472,9 +472,9 @@ function ProviderCard({ provider }: { provider: Provider }) {
         <Shield className="w-6 h-6 text-slate-400 flex-shrink-0" />
       </div>
 
-      <p className="text-xs text-slate-600 italic mb-4">"{provider.testimonial}"</p>
+      <p className="text-xs text-slate-600 italic mb-6 leading-relaxed">"{provider.testimonial}"</p>
 
-      <div className="space-y-3 mb-4">
+      <div className="space-y-4 mb-6">
         <div>
           <label className="text-xs font-semibold text-slate-600">Coverage Types</label>
           <div className="flex flex-wrap gap-1 mt-1">
@@ -491,13 +491,13 @@ function ProviderCard({ provider }: { provider: Provider }) {
         </div>
       </div>
 
-      <div className="p-3 bg-blue-50 rounded border border-blue-200 mb-4">
-        <p className="text-xs text-blue-900">{provider.referralFee}</p>
+      <div className="p-4 bg-blue-50 rounded border border-blue-200 mb-6">
+        <p className="text-xs text-blue-900 leading-relaxed">{provider.referralFee}</p>
       </div>
 
       <button
         onClick={trackInsuranceQuote}
-        className="w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+        className="w-full px-4 py-3 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
       >
         <Zap className="w-4 h-4" />
         Get Quote
@@ -512,7 +512,7 @@ function TimelineItem({ phase, timing, title, description, items }: { phase: num
       initial={{ opacity: 0, x: -10 }}
       whileInView={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="flex gap-4 pb-8 relative"
+      className="flex gap-6 pb-12 relative"
     >
       <div className="flex flex-col items-center">
         <div className="w-10 h-10 rounded-full bg-red-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
@@ -520,15 +520,15 @@ function TimelineItem({ phase, timing, title, description, items }: { phase: num
         </div>
         <div className="w-1 flex-1 bg-gradient-to-b from-red-300 to-transparent mt-2" />
       </div>
-      <div className="pb-4 flex-1">
-        <div className="flex items-start gap-3 mb-2">
+      <div className="pb-6 flex-1">
+        <div className="flex items-start gap-3 mb-3">
           <div>
             <h4 className="font-bold text-slate-900">{title}</h4>
-            <p className="text-xs text-slate-500 font-semibold">{timing}</p>
+            <p className="text-xs text-slate-500 font-semibold mt-1">{timing}</p>
           </div>
         </div>
-        <p className="text-sm text-slate-700 mb-3">{description}</p>
-        <div className="space-y-1">
+        <p className="text-sm text-slate-700 mb-5 leading-relaxed">{description}</p>
+        <div className="space-y-3">
           {items.map((item, idx) => (
             <div key={idx} className="flex items-center gap-2 text-sm text-slate-700">
               <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
@@ -647,7 +647,7 @@ export default function InsurancesPage() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="py-20 lg:py-28 px-6 lg:px-12"
+        className="py-12 md:py-16 lg:py-24 px-4 md:px-6 lg:px-12"
       >
         <div className="max-w-7xl mx-auto space-y-12">
           <motion.div
@@ -682,7 +682,7 @@ export default function InsurancesPage() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="py-20 lg:py-28 px-6 lg:px-12"
+        className="py-12 md:py-16 lg:py-24 px-4 md:px-6 lg:px-12"
         style={{ borderTop: '1px solid #E5E4E0', borderBottom: '1px solid #E5E4E0', background: '#FFFFFF' }}
       >
         <div className="max-w-4xl mx-auto space-y-12">
@@ -797,11 +797,11 @@ export default function InsurancesPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
-                className="mt-8 pt-8 border-t border-slate-200 space-y-6"
+                className="mt-12 pt-12 border-t border-slate-200 space-y-10"
               >
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-4">Your Recommendations</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <h3 className="text-xl font-bold text-slate-900 mb-6">Your Recommendations</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {recommendations.map((rec) => {
                       const insurance = INSURANCE_TYPES.find(i => i.name === rec.insuranceType)
                       return (
@@ -809,9 +809,9 @@ export default function InsurancesPage() {
                           key={rec.insuranceType}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="bg-slate-50 rounded-lg p-4 border border-slate-200"
+                          className="bg-slate-50 rounded-lg p-8 border border-slate-200"
                         >
-                          <div className="flex items-start justify-between gap-3 mb-3">
+                          <div className="flex items-start justify-between gap-3 mb-4">
                             <div>
                               <h4 className="font-bold text-slate-900">{rec.insuranceType}</h4>
                               <p className="text-sm text-slate-600">{insurance?.costRange}</p>
@@ -840,7 +840,7 @@ export default function InsurancesPage() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.1 }}
-                  className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg border border-emerald-200 p-6"
+                  className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg border border-emerald-200 p-8"
                 >
                   <div className="flex items-start justify-between">
                     <div>
@@ -872,7 +872,7 @@ export default function InsurancesPage() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
-          className="py-20 lg:py-28 px-6 lg:px-12"
+          className="py-12 md:py-16 lg:py-24 px-4 md:px-6 lg:px-12"
         >
           <div className="max-w-7xl mx-auto space-y-12">
             <motion.div
@@ -900,11 +900,11 @@ export default function InsurancesPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <div className="mb-4 flex items-center justify-between">
+                  <div className="mb-8 flex items-center justify-between">
                     <h3 className="text-2xl font-bold text-slate-900">{rec.insuranceType}</h3>
                     <RecommendationBadge level={rec.level} />
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
                     {providers.slice(0, 3).map((provider) => (
                       <ProviderCard key={provider.id} provider={provider} />
                     ))}
@@ -921,7 +921,7 @@ export default function InsurancesPage() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="py-20 lg:py-28 px-6 lg:px-12"
+        className="py-12 md:py-16 lg:py-24 px-4 md:px-6 lg:px-12"
         style={{ borderTop: '1px solid #E5E4E0', borderBottom: '1px solid #E5E4E0', background: '#FFFFFF' }}
       >
         <div className="max-w-4xl mx-auto space-y-12">
@@ -1013,19 +1013,19 @@ export default function InsurancesPage() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="py-12 px-6"
+        className="py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-12"
       >
-        <div className="max-w-6xl mx-auto space-y-8">
+        <div className="max-w-7xl mx-auto space-y-12">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4 flex items-center gap-3">
               <Target className="w-8 h-8 text-purple-500" />
               Regulatory Requirements by Exchange
             </h2>
-            <p className="text-slate-600">
+            <p className="text-slate-600 leading-relaxed">
               Each exchange has specific insurance requirements. Use this guide to understand your obligations.
             </p>
           </motion.div>
@@ -1034,23 +1034,23 @@ export default function InsurancesPage() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="overflow-x-auto"
+            className="overflow-x-auto mb-12"
           >
             <table className="w-full bg-white rounded-lg border border-slate-200 overflow-hidden">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200">
-                  <th className="px-4 py-3 text-left text-sm font-bold text-slate-900">Insurance Type</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-slate-900">TSX</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-slate-900">TSXV</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-slate-900">NASDAQ</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-slate-900">NYSE</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-slate-900">CSE</th>
+                  <th className="px-6 py-5 text-left text-sm font-bold text-slate-900">Insurance Type</th>
+                  <th className="px-6 py-5 text-center text-sm font-bold text-slate-900">TSX</th>
+                  <th className="px-6 py-5 text-center text-sm font-bold text-slate-900">TSXV</th>
+                  <th className="px-6 py-5 text-center text-sm font-bold text-slate-900">NASDAQ</th>
+                  <th className="px-6 py-5 text-center text-sm font-bold text-slate-900">NYSE</th>
+                  <th className="px-6 py-5 text-center text-sm font-bold text-slate-900">CSE</th>
                 </tr>
               </thead>
               <tbody>
                 {INSURANCE_TYPES.map((insurance) => (
                   <tr key={insurance.id} className="border-b border-slate-200 hover:bg-slate-50">
-                    <td className="px-4 py-3 text-sm font-semibold text-slate-900">{insurance.shortName}</td>
+                    <td className="px-6 py-5 text-sm font-semibold text-slate-900">{insurance.shortName}</td>
                     {['TSX', 'TSXV', 'NASDAQ', 'NYSE', 'CSE'].map((exchange) => {
                       const req = (EXCHANGE_REQUIREMENTS[exchange] || {})[insurance.id]
                       const levelColor = {
@@ -1062,7 +1062,7 @@ export default function InsurancesPage() {
                       return (
                         <td
                           key={exchange}
-                          className="px-4 py-3 text-center text-xs font-semibold"
+                          className="px-6 py-5 text-center text-xs font-semibold"
                           style={{ backgroundColor: levelColor || '#F3F4F6' }}
                         >
                           {req ? req.level.replace(/_/g, ' ') : '—'}
@@ -1082,21 +1082,21 @@ export default function InsurancesPage() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="py-12 px-6 bg-white border-y border-slate-200"
+        className="py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-12 bg-white border-y border-slate-200"
       >
-        <div className="max-w-4xl mx-auto space-y-8">
+        <div className="max-w-4xl mx-auto space-y-12">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4 flex items-center gap-3">
               <FileText className="w-8 h-8 text-cyan-500" />
               Frequently Asked Questions
             </h2>
           </motion.div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             {[
               {
                 q: "When do I NEED to have D&O insurance?",
@@ -1130,11 +1130,11 @@ export default function InsurancesPage() {
                 transition={{ duration: 0.5, delay: idx * 0.05 }}
                 className="group bg-slate-50 rounded-lg border border-slate-200 cursor-pointer hover:border-slate-300 transition-colors"
               >
-                <summary className="px-5 py-4 flex items-center justify-between font-semibold text-slate-900 select-none">
+                <summary className="px-8 py-6 flex items-center justify-between gap-4 font-semibold text-slate-900 select-none">
                   {faq.q}
-                  <ChevronDown className="w-5 h-5 text-slate-600 group-open:rotate-180 transition-transform" />
+                  <ChevronDown className="w-5 h-5 text-slate-600 group-open:rotate-180 transition-transform flex-shrink-0" />
                 </summary>
-                <div className="px-5 pb-4 text-slate-700 border-t border-slate-200 pt-4">
+                <div className="px-8 pb-6 text-slate-700 leading-relaxed border-t border-slate-200 pt-6">
                   {faq.a}
                 </div>
               </motion.details>
@@ -1148,24 +1148,24 @@ export default function InsurancesPage() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="py-12 px-6"
+        className="py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-12"
       >
-        <div className="max-w-6xl mx-auto space-y-8">
+        <div className="max-w-7xl mx-auto space-y-12">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4 flex items-center gap-3">
               <DownloadCloud className="w-8 h-8 text-indigo-500" />
               Resources & Guides
             </h2>
-            <p className="text-slate-600">
+            <p className="text-slate-600 leading-relaxed">
               Download helpful guides and reference materials for your insurance planning.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
             {[
               {
                 title: 'Complete Insurance Guide for IPO-Ready Companies',
@@ -1193,13 +1193,13 @@ export default function InsurancesPage() {
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="bg-white rounded-lg border border-slate-200 p-6 hover:shadow-lg transition-shadow"
+                className="bg-white rounded-lg border border-slate-200 p-8 hover:shadow-lg transition-shadow"
               >
-                <div className="flex items-start gap-4 mb-4">
+                <div className="flex items-start gap-4 mb-6">
                   <div className="text-slate-600">{resource.icon}</div>
                   <h3 className="font-bold text-slate-900">{resource.title}</h3>
                 </div>
-                <p className="text-sm text-slate-700 mb-4">{resource.description}</p>
+                <p className="text-sm text-slate-700 mb-6 leading-relaxed">{resource.description}</p>
                 <button className="text-sm font-semibold text-red-500 hover:text-red-600 flex items-center gap-2">
                   <Download className="w-4 h-4" />
                   Download
@@ -1215,18 +1215,18 @@ export default function InsurancesPage() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="py-12 px-6 bg-gradient-to-r from-red-50 to-orange-50 border-t border-slate-200"
+        className="py-16 md:py-20 lg:py-24 px-4 md:px-6 lg:px-12 bg-gradient-to-r from-red-50 to-orange-50 border-t border-slate-200"
       >
-        <div className="max-w-4xl mx-auto space-y-6 text-center">
+        <div className="max-w-4xl mx-auto space-y-10 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold text-slate-900 mb-3">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">
               Ready to Get Insured?
             </h2>
-            <p className="text-slate-700 max-w-2xl mx-auto">
+            <p className="text-slate-700 max-w-2xl mx-auto leading-relaxed">
               Use our quiz above to identify your insurance needs, then connect with top-rated providers who specialize in IPO-ready companies.
             </p>
           </motion.div>
@@ -1235,7 +1235,7 @@ export default function InsurancesPage() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex gap-4 justify-center flex-wrap"
+            className="flex gap-6 justify-center flex-wrap"
           >
             <motion.button
               whileHover={{ scale: 1.05 }}
