@@ -42,10 +42,10 @@ export function FeaturesMegaMenu({ isSticky = false }: { isSticky?: boolean } = 
       {/* Middle - Schedule A Demo Button */}
       <button
         onClick={() => setDemoModalOpen(true)}
-        className="flex items-center gap-1 px-2 md:px-4 py-1 md:py-1.5 rounded-lg text-xs md:text-sm font-semibold text-white transition-colors hover:opacity-90 whitespace-nowrap"
-        style={{ background: '#E8312A' }}
+        className="flex items-center gap-1 px-3 md:px-4 py-2 md:py-2.5 rounded-full text-sm md:text-sm font-semibold text-white transition-all hover:opacity-90 whitespace-nowrap"
+        style={{ background: '#E8312A', minHeight: '40px', display: 'inline-flex', alignItems: 'center' }}
       >
-        <Calendar className="w-3 h-3 md:w-4 md:h-4" />
+        <Calendar className="w-4 h-4 md:w-4 md:h-4" />
         <span className="hidden md:inline">Schedule Demo</span>
         <span className="md:hidden">Demo</span>
       </button>
@@ -108,14 +108,15 @@ export function FeaturesMegaMenu({ isSticky = false }: { isSticky?: boolean } = 
           <>
             <Link
               href="/login"
-              className="px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs md:text-sm font-medium text-nav hover:bg-gray-100 transition-colors whitespace-nowrap"
+              className="px-4 md:px-4 py-2 md:py-2.5 rounded-full text-sm md:text-sm font-medium text-nav hover:bg-gray-100 transition-colors whitespace-nowrap"
+              style={{ minHeight: '40px', display: 'inline-flex', alignItems: 'center' }}
             >
               Sign In
             </Link>
             <Link
               href="/register"
-              className="px-2 md:px-4 py-1 md:py-1.5 rounded-lg text-xs md:text-sm font-semibold text-white transition-colors hover:opacity-90 whitespace-nowrap"
-              style={{ background: '#1A1A1A' }}
+              className="px-4 md:px-5 py-2 md:py-2.5 rounded-full text-sm md:text-sm font-semibold text-white transition-all hover:opacity-90 whitespace-nowrap"
+              style={{ background: '#1A1A1A', minHeight: '40px', display: 'inline-flex', alignItems: 'center' }}
             >
               Sign Up
             </Link>

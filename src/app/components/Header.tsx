@@ -31,7 +31,7 @@ export function Header() {
       }}
     >
       <div
-        className="flex items-center justify-between max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4 gap-2 md:gap-0"
+        className="flex items-center justify-between max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4 gap-3 md:gap-4"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -41,10 +41,10 @@ export function Header() {
           marginRight: 'auto',
           paddingLeft: '1rem',
           paddingRight: '1rem',
-          paddingTop: '0.75rem',
-          paddingBottom: '0.75rem',
+          paddingTop: '1rem',
+          paddingBottom: '1rem',
           flexWrap: 'nowrap',
-          gap: '0.5rem',
+          gap: '0.75rem',
         }}
       >
         {/* Logo */}
