@@ -56,7 +56,7 @@ export function SimpleRocket() {
           right: -200px;
           top: 0;
           white-space: nowrap;
-          color: #E8312A;
+          color: var(--color-accent);
           text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
           animation: textFadeIn 3s ease-in-out forwards;
           font-weight: bold;
