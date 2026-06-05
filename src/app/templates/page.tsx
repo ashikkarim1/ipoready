@@ -139,7 +139,7 @@ export default function TemplatesPage() {
 
       <div className="flex items-start justify-between flex-wrap gap-4">
         <div>
-          <h1 className="font-display text-3xl font-black mb-1" style={{ color: '#1A1A1A' }}>Templates & Forms</h1>
+          <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Templates & Forms</h1>
           <p className="text-sm" style={{ color: '#9A9A9A' }}>Download, name, and track every regulatory document in your IPO process.</p>
         </div>
         {docs.length > 0 && (

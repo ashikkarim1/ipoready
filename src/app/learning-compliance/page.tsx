@@ -46,34 +46,14 @@ const FRAMEWORKS = [
 
 export default function LearningCompliancePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Hero Section */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        className="relative overflow-hidden bg-gradient-to-r from-red-50 to-orange-50 border-b border-slate-200 py-12 px-6"
-      >
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="space-y-4"
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <BookOpen className="w-8 h-8 text-red-500" />
-              <span className="text-sm font-bold text-red-600 uppercase">Learning Frameworks</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight">
-              Master IPO Readiness
-            </h1>
-            <p className="text-lg text-slate-700 max-w-3xl">
-              World-class guided frameworks to help you understand, plan, and execute every critical aspect of going public.
-            </p>
-          </motion.div>
+    <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
+      {/* Header Section */}
+      <section style={{ paddingTop: '1.5rem', paddingBottom: '1rem', background: '#F7F6F4' }}>
+        <div className="max-w-7xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+          <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Learning Frameworks</h1>
+          <p className="text-text-muted text-sm">World-class guided frameworks to help you understand, plan, and execute every critical aspect of going public.</p>
         </div>
-      </motion.section>
+      </section>
 
       {/* Frameworks Grid */}
       <motion.section

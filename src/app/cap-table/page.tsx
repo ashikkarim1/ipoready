@@ -145,10 +145,8 @@ export default function CapTableDashboard() {
     <div className="space-y-6 p-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold">Cap Table Management</h1>
-        <p className="text-gray-600 mt-2">
-          Upload, validate, analyze, and model cap table scenarios
-        </p>
+        <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Cap Table Management</h1>
+        <p className="text-text-muted text-sm">Upload, validate, analyze, and model cap table scenarios.</p>
       </div>
 
       {/* Upload Section */}

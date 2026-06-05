@@ -236,15 +236,8 @@ export default function ProspectusList() {
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         {/* Page Header */}
         <div style={{ marginBottom: '2rem' }}>
-          <div className="flex items-center gap-2" style={{ marginBottom: '0.5rem' }}>
-            <FileText className="w-5 h-5" style={{ color: '#E8312A' }} />
-            <h1 className="font-bold" style={{ fontSize: '1.5rem', color: '#1A1A1A' }}>
-              Prospectus Builder
-            </h1>
-          </div>
-          <p className="text-sm leading-relaxed max-w-3xl" style={{ color: '#717171' }}>
-            Create, manage, and distribute IPO prospectus documents with AI-powered drafting, compliance scoring, team collaboration, and expert review workflows.
-          </p>
+          <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Prospectus Builder</h1>
+          <p className="text-text-muted text-sm">Create, manage, and distribute IPO prospectus documents with AI-powered drafting and compliance scoring.</p>
         </div>
 
         {/* Key Features Grid */}

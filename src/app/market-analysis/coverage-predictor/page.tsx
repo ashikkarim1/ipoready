@@ -201,60 +201,45 @@ export default function CoveragePredictorPage() {
   return (
     <AppShell>
       <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
-        {/* Hero */}
-        <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1.5rem 1.5rem', background: '#FFFFFF' }}>
+        {/* Header */}
+        <section style={{ padding: '1.5rem', background: '#F7F6F4' }}>
+          <div className="max-w-6xl mx-auto">
+            <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Coverage Predictor™</h1>
+            <p className="text-text-muted text-sm">AI-powered prediction of post-IPO analyst coverage based on your company fundamentals, market position, and financial metrics.</p>
+          </div>
+        </section>
+
+        {/* Coverage Score Card */}
+        <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1.5rem', background: '#FFFFFF' }}>
           <div className="max-w-6xl mx-auto">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
+              style={{
+                padding: '1rem',
+                background: scoreBg,
+                border: `2px solid ${scoreColor}`,
+                borderRadius: '0.75rem',
+                maxWidth: '300px'
+              }}
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg" style={{ background: scoreBg, border: `1px solid ${scoreColor}30`, marginBottom: '1.5rem' }}>
-                <Gauge className="w-4 h-4" style={{ color: scoreColor }} />
-                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: scoreColor }}>Real-Time Coverage Prediction</span>
-              </div>
-
-              <div className="flex items-start justify-between gap-8">
-                <div className="flex-1">
-                  <h1 style={{ fontSize: '2.75rem', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.2, marginBottom: '0.75rem' }}>
-                    Coverage Predictor™
-                  </h1>
-                  <p style={{ fontSize: '1rem', color: '#717171' }}>
-                    AI-powered prediction of post-IPO analyst coverage based on your company fundamentals, market position, and financial metrics. See what drives coverage decisions and how to improve your analyst outlook.
-                  </p>
-                </div>
-
-                {/* Score Card */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  style={{
-                    padding: '1rem',
-                    background: scoreBg,
-                    border: `2px solid ${scoreColor}`,
-                    borderRadius: '0.75rem',
-                    minWidth: '220px'
-                  }}
-                >
-                  <p style={{ fontSize: '0.75rem', color: '#717171', fontWeight: 700, margin: 0, marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    Coverage Likelihood
-                  </p>
-                  <p style={{ fontSize: '3rem', fontWeight: 700, color: scoreColor, margin: 0, marginBottom: '0.5rem' }}>
-                    {prediction.score}/10
-                  </p>
-                  <p style={{ fontSize: '1rem', fontWeight: 700, color: scoreColor, margin: 0, marginBottom: '1rem' }}>
-                    {prediction.likelihood}
-                  </p>
-                  <div style={{ borderTop: `1px solid ${scoreColor}30`, paddingTop: '1rem' }}>
-                    <p style={{ fontSize: '0.875rem', color: '#717171', margin: 0, marginBottom: '0.25rem' }}>
-                      <strong>{prediction.likely_analysts}</strong> analysts likely
-                    </p>
-                    <p style={{ fontSize: '0.75rem', color: '#717171', margin: 0 }}>
-                      {prediction.timeToFirstCoverage}
-                    </p>
-                  </div>
-                </motion.div>
+              <p style={{ fontSize: '0.75rem', color: '#717171', fontWeight: 700, margin: 0, marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                Coverage Likelihood
+              </p>
+              <p style={{ fontSize: '2.5rem', fontWeight: 700, color: scoreColor, margin: 0, marginBottom: '0.5rem' }}>
+                {prediction.score}/10
+              </p>
+              <p style={{ fontSize: '1rem', fontWeight: 700, color: scoreColor, margin: 0, marginBottom: '1rem' }}>
+                {prediction.likelihood}
+              </p>
+              <div style={{ borderTop: `1px solid ${scoreColor}30`, paddingTop: '1rem' }}>
+                <p style={{ fontSize: '0.875rem', color: '#717171', margin: 0, marginBottom: '0.25rem' }}>
+                  <strong>{prediction.likely_analysts}</strong> analysts likely
+                </p>
+                <p style={{ fontSize: '0.75rem', color: '#717171', margin: 0 }}>
+                  {prediction.timeToFirstCoverage}
+                </p>
               </div>
             </motion.div>
           </div>

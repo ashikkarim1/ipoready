@@ -299,34 +299,27 @@ Aggressive Estimate: $${budgets.aggressive.toLocaleString()}`
     <AppShell>
       <div className="min-h-screen" style={{ background: '#F7F6F4' }}>
 
-      {/* Hero Section */}
-      <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1.5rem 1.5rem', background: '#F7F6F4' }}>
+      {/* Header */}
+      <section style={{ padding: '1.5rem', background: '#F7F6F4' }}>
+        <div className="max-w-6xl mx-auto">
+          <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Post-IPO Capital Markets Budget Planner</h1>
+          <p className="text-text-muted text-sm">Understand the real cost of investor relations, market support, and ongoing capital markets management.</p>
+        </div>
+      </section>
+
+      {/* Budget Alert */}
+      <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1.5rem', background: '#FFFFFF' }}>
         <div className="max-w-6xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center space-y-6"
+            transition={{ duration: 0.4 }}
+            style={{ padding: '1rem 1.5rem', borderRadius: '0.5rem', background: '#F9E4E1', border: '1px solid #FECACA' }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg" style={{ background: '#F9E4E1', border: '1px solid #E8312A30' }}>
-              <Sparkles className="w-4 h-4" style={{ color: '#E8312A' }} />
-              <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#E8312A' }}>Budget Intelligence</span>
-            </div>
-
-            <h1 style={{ fontSize: '2.75rem', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.2 }}>
-              Post-IPO Capital Markets Budget Planner
-            </h1>
-
-            <p style={{ fontSize: '1.125rem', color: '#717171', maxWidth: '48rem', margin: '0 auto' }}>
-              Understand the real cost of investor relations, market support, and ongoing capital markets management
+            <p style={{ color: '#E8312A', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+              <AlertCircle className="w-5 h-5" />
+              Most IPO companies underbudget for market support by 40-60%
             </p>
-
-            <div className="inline-block" style={{ padding: '1rem 1.5rem', borderRadius: '0.375rem', background: '#F9E4E1', border: '1px solid #FECACA' }}>
-              <p style={{ color: '#E8312A', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
-                <AlertCircle className="w-5 h-5" />
-                Most IPO companies underbudget for market support by 40-60%
-              </p>
-            </div>
           </motion.div>
         </div>
       </section>

@@ -94,94 +94,14 @@ export default function PostListingPage() {
   return (
     <div style={{ background: '#F7F6F4', minHeight: '100vh', color: '#1A1A1A' }}>
 
-      {/* ── Header Banner ─────────────────────────────────────────────────── */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        style={{
-          background: 'linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%)',
-          borderRadius: '20px',
-          padding: '56px 48px',
-          marginBottom: '40px',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Subtle grid texture */}
-        <div style={{
-          position: 'absolute', inset: 0, opacity: 0.04,
-          backgroundImage: 'repeating-linear-gradient(0deg, #fff 0, #fff 1px, transparent 1px, transparent 48px), repeating-linear-gradient(90deg, #fff 0, #fff 1px, transparent 1px, transparent 48px)',
-          pointerEvents: 'none',
-        }} />
+      {/* ── Header ────────────────────────────────────────────────────────── */}
+      <section style={{ paddingTop: '1.5rem', paddingBottom: '1rem', background: '#F7F6F4' }}>
+        <div className="max-w-7xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+          <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Post-Listing Support</h1>
+          <p className="text-text-muted text-sm">Comprehensive tools for managing continuous disclosure, regulatory compliance, and shareholder communications after your listing.</p>
+        </div>
+      </section>
 
-        {/* Coming Soon pill */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.85 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.4 }}
-          style={{ marginBottom: '20px' }}
-        >
-          <span style={{
-            display: 'inline-flex', alignItems: 'center', gap: '6px',
-            background: '#E8312A', color: 'white',
-            fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em',
-            padding: '5px 14px', borderRadius: '20px', textTransform: 'uppercase',
-          }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'rgba(255,255,255,0.7)', flexShrink: 0 }} />
-            Coming Soon
-          </span>
-        </motion.div>
-
-        {/* Title */}
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-          style={{
-            fontSize: '48px', fontWeight: 800, color: 'white',
-            lineHeight: 1.1, marginBottom: '16px', maxWidth: '640px',
-            fontFamily: 'Georgia, "Times New Roman", serif',
-          }}
-        >
-          Post-Listing Support
-        </motion.h1>
-
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.5 }}
-          style={{
-            fontSize: '17px', color: 'rgba(255,255,255,0.65)',
-            maxWidth: '560px', lineHeight: 1.65, marginBottom: '32px',
-          }}
-        >
-          From IPO to ongoing compliance. We're the only platform that supports your full listing lifecycle — pre-IPO through post-listing.
-        </motion.p>
-
-        {/* Stat pills */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.45 }}
-          style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}
-        >
-          {[
-            '180+ Pre-IPO Tasks Tracked',
-            'Post-Listing Module: Q4 2026',
-          ].map((text) => (
-            <span key={text} style={{
-              display: 'inline-flex', alignItems: 'center', gap: '7px',
-              background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.14)',
-              color: 'rgba(255,255,255,0.8)', fontSize: '13px', fontWeight: 600,
-              padding: '8px 16px', borderRadius: '10px',
-            }}>
-              {text}
-            </span>
-          ))}
-        </motion.div>
-      </motion.section>
 
       {/* ── Value Proposition ─────────────────────────────────────────────── */}
       <motion.section
@@ -196,16 +116,12 @@ export default function PostListingPage() {
           textAlign: 'center',
         }}
       >
-        <h2 style={{
-          fontSize: '38px', fontWeight: 800, color: '#1A1A1A',
-          lineHeight: 1.15, marginBottom: '20px', maxWidth: '640px', margin: '0 auto 20px',
-          fontFamily: 'Georgia, "Times New Roman", serif',
-        }}>
+        <h2 className="serif text-2xl sm:text-3xl text-nav mb-4" style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 1.25rem' }}>
           Your IPO is the beginning,<br />not the finish line.
         </h2>
-        <p style={{
-          fontSize: '17px', color: '#717171', maxWidth: '680px',
-          margin: '0 auto', lineHeight: 1.7,
+        <p className="text-text-muted text-sm" style={{
+          maxWidth: '680px',
+          margin: '0 auto',
         }}>
           After listing, public companies face continuous disclosure obligations, regulatory filings, insider reporting, AGM management, and shareholder communications. IPOReady Post-Listing is the only AI-powered platform purpose-built to handle all of it.
         </p>
