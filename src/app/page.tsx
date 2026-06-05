@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Header } from '@/app/components/Header'
-import { SimpleRocket } from '@/components/SimpleRocket'
+import { RocketAnimation } from '@/components/RocketAnimation'
 import {
   Rocket, CheckSquare, FileText, Users, ShoppingBag, DollarSign,
   PieChart, Banknote, ChevronRight, ChevronDown, Zap, Shield, ArrowRight,
@@ -174,8 +174,8 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen" style={{ colorScheme: 'light' }}>
-      {/* Rocket Animation - CSS based */}
-      <SimpleRocket />
+      {/* Rocket Animation - Full with astronaut */}
+      <RocketAnimation />
 
       {/* ── Header ──────────────────────────────────────────────────────────── */}
       <Header />
