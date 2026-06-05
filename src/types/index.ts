@@ -1,3 +1,6 @@
+// Re-export integration types
+export * from './integrations'
+
 export type UserRole =
   | 'system_admin'
   | 'ceo'
