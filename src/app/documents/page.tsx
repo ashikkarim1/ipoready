@@ -1,583 +1,581 @@
 'use client'
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Header } from '@/app/components/Header'
 import {
-  Search,
-  ChevronDown,
-  AlertCircle,
-  Loader2,
-  FileText,
+  Upload, Download, Eye, Trash2, CheckCircle2, AlertCircle, Clock,
+  FileText, Filter, Search, ChevronDown, ChevronUp
 } from 'lucide-react'
-import {
-  DocumentCard,
-  CategoryFilter,
-  ProgressTracker,
-  DocumentPreview,
-  type DocumentStatus,
-} from '@/components/filing-documents'
-import {
-  getRequirements,
-  getProgress,
-  getDocument,
-  uploadDocument,
-  updateDocumentStatus,
-  deleteDocument,
-  viewDocument,
-  downloadDocument,
-  validateFile,
-  formatDate,
-} from '@/lib/filing-documents-client'
-import {
-  type ExchangeId,
-  type DocumentCategory,
-  type DocumentRequirement,
-  type ProgressResponse,
-  DOCUMENT_CATEGORIES,
-  EXCHANGES,
-  getExchangeLabel,
-} from '@/types/filing-documents'
 
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-
-/** Exchanges selectable in the hub. Order matters for the dropdown. */
-const SELECTABLE_EXCHANGES: ExchangeId[] = ['nasdaq', 'nyse', 'tsx', 'tsxv', 'cse']
-
-const DEFAULT_EXCHANGE: ExchangeId = 'nasdaq'
-
-const CATEGORY_DESCRIPTIONS: Record<DocumentCategory, string> = {
-  Financial: 'Audited statements, projections, and tax filings',
-  Legal: 'Articles, contracts, IP, and regulatory approvals',
-  Governance: 'Board resolutions, director bios, and policies',
-  Corporate: 'Cap tables, equity plans, and shareholder agreements',
-  Compliance: 'Internal controls, insurance, and risk frameworks',
-}
-
-/** Statuses that count as "complete" for progress calculations. */
-const COMPLETE_STATUSES: DocumentStatus[] = ['uploaded', 'verified']
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-interface PreviewState {
-  isOpen: boolean
-  documentId: string
-  documentName: string
-  fileUrl: string
+interface Document {
+  id: string
+  name: string
+  category: string
+  status: 'verified' | 'uploaded' | 'missing' | 'required'
   uploadedDate?: string
   uploadedBy?: string
+  fileSize?: string
+  version?: number
+  description: string
 }
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
+const DOCUMENTS: Document[] = [
+  // Mandatory - Verified
+  {
+    id: '1',
+    name: 'Prospectus (Form S-1)',
+    category: 'Mandatory',
+    status: 'verified',
+    uploadedDate: 'Jun 3, 2026',
+    uploadedBy: 'Sarah Chen (CEO)',
+    fileSize: '2.3 MB',
+    version: 3,
+    description: 'Audited statements, projections, and tax filings'
+  },
+  {
+    id: '2',
+    name: 'Financial Statements (10-K style)',
+    category: 'Mandatory',
+    status: 'uploaded',
+    uploadedDate: 'Jun 2, 2026',
+    uploadedBy: 'Marc Leblanc (CFO)',
+    fileSize: '1.8 MB',
+    version: 2,
+    description: 'Audited statements, projections, and tax filings'
+  },
+  {
+    id: '3',
+    name: 'Audit Report',
+    category: 'Mandatory',
+    status: 'verified',
+    uploadedDate: 'May 28, 2026',
+    uploadedBy: 'Auditor Team',
+    fileSize: '0.9 MB',
+    version: 1,
+    description: 'Independent auditor\'s report on financial statements'
+  },
+  {
+    id: '4',
+    name: 'Legal Opinion',
+    category: 'Mandatory',
+    status: 'verified',
+    uploadedDate: 'May 25, 2026',
+    uploadedBy: 'Legal Counsel',
+    fileSize: '0.5 MB',
+    version: 1,
+    description: 'Legal opinion on incorporation and corporate authority'
+  },
+  {
+    id: '5',
+    name: 'Board Resolutions',
+    category: 'Mandatory',
+    status: 'uploaded',
+    uploadedDate: 'May 20, 2026',
+    uploadedBy: 'Board Secretary',
+    fileSize: '1.2 MB',
+    version: 2,
+    description: 'Board resolutions authorizing IPO'
+  },
+  {
+    id: '6',
+    name: 'Articles of Incorporation',
+    category: 'Mandatory',
+    status: 'verified',
+    uploadedDate: 'May 15, 2026',
+    uploadedBy: 'Corporate Records',
+    fileSize: '0.3 MB',
+    version: 1,
+    description: 'Original articles of incorporation'
+  },
+  {
+    id: '7',
+    name: 'Bylaws',
+    category: 'Mandatory',
+    status: 'verified',
+    uploadedDate: 'May 15, 2026',
+    uploadedBy: 'Corporate Records',
+    fileSize: '0.4 MB',
+    version: 1,
+    description: 'Current bylaws with all amendments'
+  },
+  {
+    id: '8',
+    name: 'Cap Table',
+    category: 'Mandatory',
+    status: 'verified',
+    uploadedDate: 'Jun 1, 2026',
+    uploadedBy: 'CFO',
+    fileSize: '0.6 MB',
+    version: 5,
+    description: 'Current capitalization table'
+  },
+  {
+    id: '9',
+    name: 'MD&A',
+    category: 'Mandatory',
+    status: 'missing',
+    description: 'Management discussion and analysis'
+  },
+  {
+    id: '10',
+    name: 'Risk Factors',
+    category: 'Mandatory',
+    status: 'uploaded',
+    uploadedDate: 'May 30, 2026',
+    uploadedBy: 'Legal Team',
+    fileSize: '1.1 MB',
+    version: 3,
+    description: 'Risk factors for SEC filing'
+  },
+  {
+    id: '11',
+    name: 'Corporate Governance',
+    category: 'Mandatory',
+    status: 'verified',
+    uploadedDate: 'May 22, 2026',
+    uploadedBy: 'Board Secretary',
+    fileSize: '2.1 MB',
+    version: 1,
+    description: 'Corporate governance policies and practices'
+  },
+  {
+    id: '12',
+    name: 'Escrow Agreement',
+    category: 'Mandatory',
+    status: 'missing',
+    description: 'Escrow arrangement agreements'
+  }
+]
 
-function isComplete(status: DocumentStatus): boolean {
-  return COMPLETE_STATUSES.includes(status)
+const STATUS_CONFIG = {
+  verified: { color: '#2D7A5F', bgColor: '#EBF9F4', icon: CheckCircle2, label: 'Verified' },
+  uploaded: { color: '#1D4ED8', bgColor: '#F0F4FF', icon: FileText, label: 'Uploaded' },
+  missing: { color: '#E8312A', bgColor: '#F9E4E1', icon: AlertCircle, label: 'Missing' },
+  required: { color: '#B45309', bgColor: '#FEF3E1', icon: Clock, label: 'Required' }
 }
-
-// ---------------------------------------------------------------------------
-// Page
-// ---------------------------------------------------------------------------
 
 export default function DocumentsPage() {
-  // Core state
-  const [selectedExchange, setSelectedExchange] = useState<ExchangeId>(DEFAULT_EXCHANGE)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [expandedDoc, setExpandedDoc] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
-  const [documents, setDocuments] = useState<DocumentRequirement[]>([])
-  const [progress, setProgress] = useState<ProgressResponse | null>(null)
 
-  // Async / UX state
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [uploadingDocId, setUploadingDocId] = useState<string | null>(null)
-  const [actionError, setActionError] = useState<string | null>(null)
+  const categories = ['Mandatory']
+  const filteredDocs = DOCUMENTS.filter(doc => {
+    const matchesCategory = !selectedCategory || doc.category === selectedCategory
+    const matchesSearch = doc.name.toLowerCase().includes(searchQuery.toLowerCase())
+    return matchesCategory && matchesSearch
+  })
 
-  // Preview modal state
-  const [preview, setPreview] = useState<PreviewState | null>(null)
+  const stats = {
+    total: DOCUMENTS.length,
+    verified: DOCUMENTS.filter(d => d.status === 'verified').length,
+    uploaded: DOCUMENTS.filter(d => d.status === 'uploaded').length,
+    missing: DOCUMENTS.filter(d => d.status === 'missing').length
+  }
 
-  // -------------------------------------------------------------------------
-  // Data loading
-  // -------------------------------------------------------------------------
-
-  const loadData = useCallback(async (exchange: ExchangeId) => {
-    setIsLoading(true)
-    setError(null)
-    try {
-      // Requirements are essential; progress is best-effort.
-      try {
-        const requirementsRes = await getRequirements(exchange)
-        setDocuments(requirementsRes.documents)
-      } catch (err) {
-        // Fallback: Use empty requirements with message
-        console.warn('Failed to fetch requirements from API, using empty state:', err)
-        setDocuments([])
-      }
-
-      try {
-        const progressRes = await getProgress(exchange)
-        setProgress(progressRes)
-      } catch {
-        // Fall back to deriving progress from the requirements payload.
-        setProgress(null)
-      }
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'Unable to load filing documents. Please try again.'
-      )
-      setDocuments([])
-      setProgress(null)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    loadData(selectedExchange)
-  }, [selectedExchange, loadData])
-
-  // -------------------------------------------------------------------------
-  // Derived data
-  // -------------------------------------------------------------------------
-
-  // Per-category counts (complete / total) computed from current documents.
-  const categoryStats = useMemo(() => {
-    const stats: Record<string, { completed: number; total: number }> = {}
-    for (const cat of DOCUMENT_CATEGORIES) {
-      stats[cat] = { completed: 0, total: 0 }
-    }
-    for (const doc of documents) {
-      const bucket = stats[doc.category]
-      if (!bucket) continue
-      bucket.total += 1
-      if (isComplete(doc.currentStatus)) bucket.completed += 1
-    }
-    return stats
-  }, [documents])
-
-  // Only show category tabs that actually have documents for this exchange.
-  const categoryFilters = useMemo(
-    () =>
-      DOCUMENT_CATEGORIES.filter((cat) => categoryStats[cat]?.total > 0).map(
-        (cat) => ({
-          id: cat,
-          label: cat,
-          count: categoryStats[cat].completed,
-          total: categoryStats[cat].total,
-        })
-      ),
-    [categoryStats]
-  )
-
-  const categoryProgressForTracker = useMemo(
-    () =>
-      categoryFilters.map((c) => ({
-        name: c.label,
-        completed: c.count,
-        total: c.total,
-      })),
-    [categoryFilters]
-  )
-
-  // Totals — prefer API progress, fall back to local computation.
-  const totalDocuments = documents.length
-  const totalCompleted = useMemo(
-    () => documents.filter((d) => isComplete(d.currentStatus)).length,
-    [documents]
-  )
-
-  const overallPercent =
-    progress?.overall ??
-    (totalDocuments > 0
-      ? Math.round((totalCompleted / totalDocuments) * 100)
-      : 0)
-
-  // Rough time-to-completion estimate from remaining required prep days.
-  const estimatedDaysRemaining = useMemo(() => {
-    const remaining = documents
-      .filter((d) => !isComplete(d.currentStatus))
-      .reduce((sum, d) => sum + (d.estimatedPrepDays || 0), 0)
-    return remaining > 0 ? remaining : undefined
-  }, [documents])
-
-  // Search + category filtering.
-  const filteredDocuments = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase()
-    return documents.filter((doc) => {
-      const matchesSearch =
-        !query || doc.documentName.toLowerCase().includes(query)
-      const matchesCategory =
-        !selectedCategory || doc.category === selectedCategory
-      return matchesSearch && matchesCategory
-    })
-  }, [documents, searchQuery, selectedCategory])
-
-  // -------------------------------------------------------------------------
-  // Local state mutation helpers
-  // -------------------------------------------------------------------------
-
-  const patchDocument = useCallback(
-    (documentId: string, changes: Partial<DocumentRequirement>) => {
-      setDocuments((prev) =>
-        prev.map((doc) =>
-          doc.id === documentId ? { ...doc, ...changes } : doc
-        )
-      )
-    },
-    []
-  )
-
-  const refreshProgress = useCallback(() => {
-    getProgress(selectedExchange)
-      .then(setProgress)
-      .catch(() => {
-        /* keep deriving progress locally on failure */
-      })
-  }, [selectedExchange])
-
-  // -------------------------------------------------------------------------
-  // Action handlers
-  // -------------------------------------------------------------------------
-
-  const handleUpload = useCallback(
-    async (documentId: string, file: File) => {
-      setActionError(null)
-
-      const validation = validateFile(file)
-      if (!validation.valid) {
-        setActionError(validation.error || 'Invalid file')
-        return
-      }
-
-      setUploadingDocId(documentId)
-      try {
-        const res = await uploadDocument(documentId, file)
-        if (!res.success) {
-          throw new Error(res.error || 'Upload failed')
-        }
-        patchDocument(documentId, {
-          currentStatus: (res.status as DocumentStatus) || 'uploaded',
-          uploadedAt: new Date(),
-        })
-        refreshProgress()
-      } catch (err) {
-        setActionError(
-          err instanceof Error ? err.message : 'Failed to upload document'
-        )
-      } finally {
-        setUploadingDocId(null)
-      }
-    },
-    [patchDocument, refreshProgress]
-  )
-
-  const handleView = useCallback(async (doc: DocumentRequirement) => {
-    setActionError(null)
-    try {
-      const res = await getDocument(doc.id)
-      if (res.success && res.documentUrl) {
-        setPreview({
-          isOpen: true,
-          documentId: doc.id,
-          documentName: doc.documentName,
-          fileUrl: res.documentUrl,
-          uploadedDate: doc.uploadedAt ? formatDate(doc.uploadedAt) : undefined,
-        })
-      } else {
-        // No previewable URL (e.g. streamed file) — open directly.
-        viewDocument(doc.id)
-      }
-    } catch (err) {
-      setActionError(
-        err instanceof Error ? err.message : 'Failed to open document'
-      )
-    }
-  }, [])
-
-  const handleDownload = useCallback((doc: DocumentRequirement) => {
-    downloadDocument(doc.id, `${doc.documentName}.pdf`)
-  }, [])
-
-  const handleDelete = useCallback(
-    async (documentId: string) => {
-      setActionError(null)
-      try {
-        const res = await deleteDocument(documentId)
-        if (!res.success) throw new Error(res.error || 'Delete failed')
-        // Reset workflow status back to the start.
-        await updateDocumentStatus({
-          documentId,
-          status: 'not_started',
-        }).catch(() => {})
-        patchDocument(documentId, {
-          currentStatus: 'not_started',
-          uploadedAt: null,
-        })
-        setPreview((prev) => (prev?.documentId === documentId ? null : prev))
-        refreshProgress()
-      } catch (err) {
-        setActionError(
-          err instanceof Error ? err.message : 'Failed to delete document'
-        )
-      }
-    },
-    [patchDocument, refreshProgress]
-  )
-
-  // -------------------------------------------------------------------------
-  // Render
-  // -------------------------------------------------------------------------
+  const progressPercent = Math.round(((stats.verified + stats.uploaded) / stats.total) * 100)
 
   return (
-    <div className="min-h-screen" style={{ background: '#F7F6F4' }} suppressHydrationWarning>
-      {/* ===================== Header ===================== */}
-      <header
-        className="border-b"
-        style={{ borderColor: '#E5E4E0', background: '#FFFFFF' }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+    <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
+      <Header />
+
+      {/* Hero */}
+      <section style={{ borderBottom: '1px solid #E5E4E0', padding: '3rem 1.5rem', background: '#F7F6F4' }}>
+        <div className="max-w-6xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.6 }}
+            className="space-y-6"
           >
-            <div className="text-xs uppercase tracking-widest font-semibold text-text-muted mb-3">
-              IPO Roadmap
-            </div>
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-              <div>
-                <h1 className="serif text-3xl sm:text-4xl text-nav mb-2">
-                  Filing Documents Hub
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg" style={{ background: '#F0F4FF', border: '1px solid #1D4ED830', marginBottom: '1rem' }}>
+                  <FileText className="w-4 h-4" style={{ color: '#1D4ED8' }} />
+                  <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1D4ED8' }}>Document Management</span>
+                </div>
+
+                <h1 style={{ fontSize: '2.75rem', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.2, marginBottom: '1rem' }}>
+                  SEC Filing Documents
                 </h1>
-                <p className="text-text-muted max-w-2xl">
-                  Track, prepare, and upload every document required for your
-                  listing. Requirements update automatically based on your
-                  selected exchange.
+
+                <p style={{ fontSize: '1rem', color: '#717171', maxWidth: '42rem' }}>
+                  Upload and manage all required documents for your SEC filing. Track status, version history, and completion progress in one place.
                 </p>
               </div>
 
-              {/* Exchange selector */}
-              <div className="w-full lg:w-auto">
-                <label
-                  htmlFor="exchange-select"
-                  className="block text-xs uppercase tracking-widest font-semibold text-text-muted mb-2"
-                >
-                  Target Exchange
-                </label>
-                <div className="relative">
-                  <select
-                    id="exchange-select"
-                    value={selectedExchange}
-                    onChange={(e) => {
-                      setSelectedExchange(e.target.value as ExchangeId)
-                      setSelectedCategory(null)
-                      setSearchQuery('')
-                    }}
-                    disabled={isLoading}
-                    className="w-full lg:w-64 appearance-none rounded-lg border bg-white px-4 py-3 pr-10 text-sm font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-60"
-                    style={{ borderColor: '#E5E4E0' }}
-                  >
-                    {SELECTABLE_EXCHANGES.map((id) => (
-                      <option key={id} value={id}>
-                        {EXCHANGES[id]?.name || id.toUpperCase()}
-                        {EXCHANGES[id]?.country ? ` — ${EXCHANGES[id].country}` : ''}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              {/* Progress Circle */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                style={{
+                  padding: '2rem',
+                  background: '#FFFFFF',
+                  border: '1px solid #E5E4E0',
+                  borderRadius: '0.5rem',
+                  textAlign: 'center',
+                  minWidth: '150px'
+                }}
+              >
+                <div style={{ position: 'relative', width: '100px', height: '100px', margin: '0 auto 1rem' }}>
+                  <svg style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="45"
+                      fill="none"
+                      stroke="#E5E4E0"
+                      strokeWidth="8"
+                    />
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="45"
+                      fill="none"
+                      stroke="#E8312A"
+                      strokeWidth="8"
+                      strokeDasharray={`${(progressPercent / 100) * 282.7} 282.7`}
+                      style={{ transition: 'stroke-dasharray 0.6s ease' }}
+                    />
+                  </svg>
+                  <div style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    textAlign: 'center'
+                  }}>
+                    <p style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
+                      {progressPercent}%
+                    </p>
+                    <p style={{ fontSize: '0.75rem', color: '#717171', margin: 0 }}>Complete</p>
+                  </div>
                 </div>
-                {!isLoading && !error && (
-                  <p className="mt-2 text-xs text-text-muted">
-                    {totalDocuments} document
-                    {totalDocuments === 1 ? '' : 's'} required for{' '}
-                    {getExchangeLabel(selectedExchange)}
-                  </p>
-                )}
-              </div>
+                <p style={{ fontSize: '0.75rem', color: '#717171', fontWeight: 600, margin: 0 }}>
+                  {stats.verified + stats.uploaded} of {stats.total} docs
+                </p>
+              </motion.div>
             </div>
           </motion.div>
         </div>
-      </header>
+      </section>
 
-      {/* ===================== Content ===================== */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        {/* Action-level error banner */}
-        {actionError && (
-          <div className="mb-6 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4">
-            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-            <div className="flex-1">
-              <p className="text-sm font-medium text-red-800">{actionError}</p>
-            </div>
-            <button
-              onClick={() => setActionError(null)}
-              className="text-sm font-medium text-red-700 hover:text-red-900"
-            >
-              Dismiss
-            </button>
-          </div>
-        )}
-
-        {/* Loading state */}
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-32">
-            <Loader2 className="w-8 h-8 text-red-600 animate-spin mb-4" />
-            <p className="text-text-muted">
-              Loading {getExchangeLabel(selectedExchange)} requirements…
-            </p>
-          </div>
-        ) : error ? (
-          /* Fatal error state */
-          <div className="card p-12 text-center">
-            <AlertCircle className="w-10 h-10 text-red-600 mx-auto mb-4" />
-            <h2 className="h3 font-semibold text-gray-900 mb-2">
-              Something went wrong
-            </h2>
-            <p className="text-text-muted mb-6">{error}</p>
-            <button
-              onClick={() => loadData(selectedExchange)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white font-medium transition-colors"
-              style={{ background: '#E8312A' }}
-            >
-              Try Again
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-8">
-            {/* Progress dashboard */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35 }}
-            >
-              <ProgressTracker
-                totalCompleted={totalCompleted}
-                totalDocuments={totalDocuments || 1}
-                estimatedDaysRemaining={estimatedDaysRemaining}
-                categoryProgress={categoryProgressForTracker}
-              />
-            </motion.div>
-
-            {/* Search bar */}
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search documents by name…"
-                className="w-full rounded-lg border bg-white py-3.5 pl-12 pr-4 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500"
-                style={{ borderColor: '#E5E4E0' }}
-              />
-            </div>
-
-            {/* Category filter tabs */}
-            <CategoryFilter
-              categories={categoryFilters}
-              selectedCategory={selectedCategory}
-              onSelectCategory={setSelectedCategory}
-            />
-
-            {/* Results meta */}
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-text-muted">
-                Showing {filteredDocuments.length} of {totalDocuments} documents
-                {selectedCategory ? ` in ${selectedCategory}` : ''}
-                {overallPercent > 0 ? ` · ${overallPercent}% complete` : ''}
-              </p>
-            </div>
-
-            {/* Document grid */}
-            {filteredDocuments.length === 0 ? (
-              <div className="card p-12 text-center">
-                <FileText className="w-10 h-10 text-gray-400 mx-auto mb-4" />
-                <h3 className="h4 font-semibold text-gray-900 mb-1">
-                  No documents found
-                </h3>
-                <p className="text-text-muted">
-                  {searchQuery
-                    ? 'Try adjusting your search or category filter.'
-                    : 'No documents are configured for this selection.'}
+      {/* Stats Cards */}
+      <section style={{ padding: '2rem 1.5rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-4">
+            {[
+              { label: 'Total Documents', value: stats.total, color: '#1A1A1A', icon: FileText },
+              { label: 'Verified', value: stats.verified, color: '#2D7A5F', icon: CheckCircle2 },
+              { label: 'Uploaded', value: stats.uploaded, color: '#1D4ED8', icon: FileText },
+              { label: 'Missing', value: stats.missing, color: '#E8312A', icon: AlertCircle }
+            ].map((stat, idx) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                style={{
+                  padding: '1rem',
+                  background: '#F7F6F4',
+                  border: '1px solid #E5E4E0',
+                  borderRadius: '0.375rem'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  <stat.icon className="w-4 h-4" style={{ color: stat.color }} />
+                  <p style={{ fontSize: '0.75rem', color: '#717171', fontWeight: 600, margin: 0 }}>
+                    {stat.label}
+                  </p>
+                </div>
+                <p style={{ fontSize: '1.5rem', fontWeight: 700, color: stat.color, margin: 0 }}>
+                  {stat.value}
                 </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-                {filteredDocuments.map((doc) => {
-                  const baseDescription =
-                    CATEGORY_DESCRIPTIONS[doc.category as DocumentCategory] || ''
-                  const description = doc.regulatoryReference
-                    ? `${baseDescription}${baseDescription ? ' · ' : ''}Ref: ${doc.regulatoryReference}`
-                    : baseDescription
-                  const isUploading = uploadingDocId === doc.id
-                  const complete = isComplete(doc.currentStatus)
-                  return (
-                    <motion.div
-                      key={doc.id}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.25 }}
-                      className="relative"
-                    >
-                      {isUploading && (
-                        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-white/70 backdrop-blur-sm">
-                          <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                            <Loader2 className="w-5 h-5 animate-spin text-red-600" />
-                            Uploading…
-                          </div>
-                        </div>
-                      )}
-                      <DocumentCard
-                        id={doc.id}
-                        name={doc.documentName}
-                        description={description}
-                        category={doc.category}
-                        status={doc.currentStatus}
-                        isRequired={doc.isRequired}
-                        estimatedDays={doc.estimatedPrepDays}
-                        uploadedDate={
-                          doc.uploadedAt ? formatDate(doc.uploadedAt) : undefined
-                        }
-                        uploadedBy={(doc as any).uploadedBy}
-                        templateUrl={doc.templateUrl || undefined}
-                        guideUrl={doc.exampleDocumentUrl || undefined}
-                        onUpload={(file) => handleUpload(doc.id, file)}
-                        onView={
-                          complete || doc.currentStatus === 'ready'
-                            ? () => handleView(doc)
-                            : undefined
-                        }
-                        onDownload={complete ? () => handleDownload(doc) : undefined}
-                        onDelete={complete ? () => handleDelete(doc.id) : undefined}
-                      />
-                    </motion.div>
-                  )
-                })}
-              </div>
-            )}
+              </motion.div>
+            ))}
           </div>
-        )}
-      </main>
+        </div>
+      </section>
 
-      {/* ===================== Preview Modal ===================== */}
-      {preview && (
-        <DocumentPreview
-          isOpen={preview.isOpen}
-          documentName={preview.documentName}
-          fileUrl={preview.fileUrl}
-          uploadedDate={preview.uploadedDate}
-          uploadedBy={preview.uploadedBy}
-          onClose={() => setPreview(null)}
-          onDownload={() =>
-            downloadDocument(preview.documentId, `${preview.documentName}.pdf`)
-          }
-          onDelete={() => handleDelete(preview.documentId)}
-        />
-      )}
+      {/* Filters */}
+      <section style={{ padding: '2rem 1.5rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row gap-4 items-end">
+            {/* Search */}
+            <div className="flex-1">
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
+                Search Documents
+              </label>
+              <div style={{ position: 'relative' }}>
+                <Search className="w-5 h-5" style={{ position: 'absolute', left: '0.75rem', top: '0.75rem', color: '#717171' }} />
+                <input
+                  type="text"
+                  placeholder="Search by document name..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 0.75rem 0.75rem 2.5rem',
+                    fontSize: '0.875rem',
+                    border: '1px solid #E5E4E0',
+                    borderRadius: '0.375rem',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Documents Grid */}
+      <section style={{ padding: '3rem 1.5rem' }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="space-y-4">
+            {filteredDocs.map((doc, idx) => {
+              const statusConfig = STATUS_CONFIG[doc.status]
+              const StatusIcon = statusConfig.icon
+              return (
+                <motion.div
+                  key={doc.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: idx * 0.05 }}
+                  style={{
+                    background: '#FFFFFF',
+                    border: '1px solid #E5E4E0',
+                    borderRadius: '0.5rem',
+                    overflow: 'hidden'
+                  }}
+                >
+                  {/* Header */}
+                  <button
+                    onClick={() => setExpandedDoc(expandedDoc === doc.id ? null : doc.id)}
+                    style={{
+                      width: '100%',
+                      padding: '1.5rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '1rem',
+                      border: 'none',
+                      background: '#FFFFFF',
+                      cursor: 'pointer',
+                      transition: 'background 0.2s'
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = '#F9F9F9')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = '#FFFFFF')}
+                  >
+                    <FileText className="w-5 h-5" style={{ color: '#717171', flexShrink: 0 }} />
+
+                    <div className="flex-1 text-left">
+                      <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#1A1A1A', margin: 0, marginBottom: '0.25rem' }}>
+                        {doc.name}
+                      </h3>
+                      <p style={{ fontSize: '0.875rem', color: '#717171', margin: 0 }}>
+                        {doc.description}
+                      </p>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          padding: '0.5rem 0.75rem',
+                          background: statusConfig.bgColor,
+                          borderRadius: '0.375rem'
+                        }}
+                      >
+                        <StatusIcon className="w-4 h-4" style={{ color: statusConfig.color }} />
+                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: statusConfig.color }}>
+                          {statusConfig.label}
+                        </span>
+                      </div>
+                      <ChevronDown
+                        className="w-5 h-5"
+                        style={{
+                          color: '#717171',
+                          transform: expandedDoc === doc.id ? 'rotate(180deg)' : 'rotate(0deg)',
+                          transition: 'transform 0.2s'
+                        }}
+                      />
+                    </div>
+                  </button>
+
+                  {/* Expanded Details */}
+                  <AnimatePresence>
+                    {expandedDoc === doc.id && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        style={{
+                          borderTop: '1px solid #E5E4E0',
+                          background: '#F9F9F9',
+                          padding: '1.5rem'
+                        }}
+                      >
+                        {doc.uploadedDate && (
+                          <div className="grid md:grid-cols-2 gap-6 mb-4">
+                            <div>
+                              <p style={{ fontSize: '0.75rem', color: '#717171', fontWeight: 600, marginBottom: '0.25rem' }}>
+                                Last Upload
+                              </p>
+                              <p style={{ fontSize: '0.875rem', color: '#1A1A1A' }}>
+                                {doc.uploadedDate}
+                              </p>
+                            </div>
+                            <div>
+                              <p style={{ fontSize: '0.75rem', color: '#717171', fontWeight: 600, marginBottom: '0.25rem' }}>
+                                Uploaded By
+                              </p>
+                              <p style={{ fontSize: '0.875rem', color: '#1A1A1A' }}>
+                                {doc.uploadedBy}
+                              </p>
+                            </div>
+                            {doc.fileSize && (
+                              <div>
+                                <p style={{ fontSize: '0.75rem', color: '#717171', fontWeight: 600, marginBottom: '0.25rem' }}>
+                                  File Size
+                                </p>
+                                <p style={{ fontSize: '0.875rem', color: '#1A1A1A' }}>
+                                  {doc.fileSize}
+                                </p>
+                              </div>
+                            )}
+                            {doc.version && (
+                              <div>
+                                <p style={{ fontSize: '0.75rem', color: '#717171', fontWeight: 600, marginBottom: '0.25rem' }}>
+                                  Version
+                                </p>
+                                <p style={{ fontSize: '0.875rem', color: '#1A1A1A' }}>
+                                  v{doc.version}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Actions */}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '0.75rem', marginTop: '1rem' }}>
+                          <button
+                            style={{
+                              padding: '0.75rem 1rem',
+                              background: '#E8312A',
+                              color: '#FFFFFF',
+                              fontWeight: 700,
+                              fontSize: '0.875rem',
+                              border: 'none',
+                              borderRadius: '0.375rem',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '0.5rem',
+                              transition: 'background 0.2s'
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = '#D12620')}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = '#E8312A')}
+                          >
+                            <Upload className="w-4 h-4" />
+                            Upload
+                          </button>
+                          {doc.uploadedDate && (
+                            <>
+                              <button
+                                style={{
+                                  padding: '0.75rem 1rem',
+                                  background: '#FFFFFF',
+                                  color: '#1D4ED8',
+                                  fontWeight: 700,
+                                  fontSize: '0.875rem',
+                                  border: '1px solid #1D4ED8',
+                                  borderRadius: '0.375rem',
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  gap: '0.5rem',
+                                  transition: 'all 0.2s'
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.background = '#F0F4FF'
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.background = '#FFFFFF'
+                                }}
+                              >
+                                <Eye className="w-4 h-4" />
+                                View
+                              </button>
+                              <button
+                                style={{
+                                  padding: '0.75rem 1rem',
+                                  background: '#FFFFFF',
+                                  color: '#1A1A1A',
+                                  fontWeight: 700,
+                                  fontSize: '0.875rem',
+                                  border: '1px solid #E5E4E0',
+                                  borderRadius: '0.375rem',
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  gap: '0.5rem',
+                                  transition: 'all 0.2s'
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.borderColor = '#1A1A1A'
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.borderColor = '#E5E4E0'
+                                }}
+                              >
+                                <Download className="w-4 h-4" />
+                                Download
+                              </button>
+                              <button
+                                style={{
+                                  padding: '0.75rem 1rem',
+                                  background: '#FFFFFF',
+                                  color: '#E8312A',
+                                  fontWeight: 700,
+                                  fontSize: '0.875rem',
+                                  border: '1px solid #E8312A',
+                                  borderRadius: '0.375rem',
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  gap: '0.5rem',
+                                  transition: 'all 0.2s'
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.background = '#F9E4E1'
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.background = '#FFFFFF'
+                                }}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                                Delete
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
     </div>
   )
 }

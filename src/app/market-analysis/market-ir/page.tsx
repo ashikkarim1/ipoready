@@ -300,22 +300,29 @@ Aggressive Estimate: $${budgets.aggressive.toLocaleString()}`
       <Header />
 
       {/* Hero Section */}
-      <section className="py-16 border-b" style={{ borderColor: '#E5E4E0', background: '#FFFFFF' }}>
-        <div className="max-w-6xl mx-auto px-6">
+      <section style={{ borderBottom: '1px solid #E5E4E0', padding: '3rem 1.5rem', background: '#F7F6F4' }}>
+        <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center"
+            className="text-center space-y-6"
           >
-            <h1 className="text-5xl font-bold mb-4" style={{ color: '#1A1A1A' }}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg" style={{ background: '#F9E4E1', border: '1px solid #E8312A30' }}>
+              <Sparkles className="w-4 h-4" style={{ color: '#E8312A' }} />
+              <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#E8312A' }}>Budget Intelligence</span>
+            </div>
+
+            <h1 style={{ fontSize: '2.75rem', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.2 }}>
               Post-IPO Capital Markets Budget Planner
             </h1>
-            <p className="text-xl mb-6" style={{ color: '#717171' }}>
+
+            <p style={{ fontSize: '1.125rem', color: '#717171', maxWidth: '48rem', margin: '0 auto' }}>
               Understand the real cost of investor relations, market support, and ongoing capital markets management
             </p>
-            <div className="inline-block px-6 py-3 rounded-xl" style={{ background: '#FDECEB' }}>
-              <p style={{ color: '#B91C1C' }} className="font-semibold flex items-center gap-2">
+
+            <div className="inline-block" style={{ padding: '1rem 1.5rem', borderRadius: '0.375rem', background: '#F9E4E1', border: '1px solid #FECACA' }}>
+              <p style={{ color: '#E8312A', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
                 <AlertCircle className="w-5 h-5" />
                 Most IPO companies underbudget for market support by 40-60%
               </p>
@@ -324,18 +331,18 @@ Aggressive Estimate: $${budgets.aggressive.toLocaleString()}`
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-12 py-16">
         {/* Services Section */}
-        <section className="mb-20">
+        <section style={{ marginBottom: '5rem' }}>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <h2 className="text-3xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
+            <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '1rem' }}>
               Essential Capital Markets Services
             </h2>
-            <p className="mb-8" style={{ color: '#717171' }}>
+            <p style={{ fontSize: '1rem', color: '#717171', marginBottom: '2rem' }}>
               Select the services your company needs. Prices reflect typical market rates for post-IPO companies.
             </p>
 
@@ -358,23 +365,24 @@ Aggressive Estimate: $${budgets.aggressive.toLocaleString()}`
                       checked={selectedServices.has(service.id)}
                       onChange={() => toggleService(service.id)}
                       onClick={(e) => e.stopPropagation()}
-                      className="w-6 h-6 mt-1 rounded accent-red-600 cursor-pointer flex-shrink-0"
+                      className="w-6 h-6 mt-1 rounded cursor-pointer flex-shrink-0"
+                      style={{ accentColor: '#E8312A' }}
                     />
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold" style={{ color: '#1A1A1A' }}>
+                      <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
                         {service.name}
                       </h3>
-                      <p className="text-sm mb-2" style={{ color: '#717171' }}>
+                      <p style={{ fontSize: '0.875rem', color: '#717171', marginBottom: '0.75rem' }}>
                         {service.description}
                       </p>
-                      <div className="flex gap-3 text-sm mb-3">
-                        <span style={{ color: '#717171' }} className="px-2 py-1 rounded bg-gray-100">
+                      <div style={{ display: 'flex', gap: '0.75rem', fontSize: '0.875rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
+                        <span style={{ color: '#717171', background: '#FAFAF8', padding: '0.25rem 0.75rem', borderRadius: '0.25rem' }}>
                           Low: ${(service.priceLow / 1000).toFixed(0)}K
                         </span>
-                        <span style={{ color: '#1A1A1A', background: '#FEF3C7' }} className="px-2 py-1 rounded font-semibold">
+                        <span style={{ color: '#1A1A1A', background: '#FEF3E1', padding: '0.25rem 0.75rem', borderRadius: '0.25rem', fontWeight: 600 }}>
                           Expected: ${(service.priceExpected / 1000).toFixed(0)}K
                         </span>
-                        <span style={{ color: '#B91C1C', background: '#FEE2E2' }} className="px-2 py-1 rounded font-semibold">
+                        <span style={{ color: '#E8312A', background: '#F9E4E1', padding: '0.25rem 0.75rem', borderRadius: '0.25rem', fontWeight: 600 }}>
                           Aggressive: ${(service.priceAggressive / 1000).toFixed(0)}K
                         </span>
                       </div>
@@ -401,16 +409,16 @@ Aggressive Estimate: $${budgets.aggressive.toLocaleString()}`
                         exit={{ opacity: 0, height: 0 }}
                         className="mt-4 pt-4 border-t" style={{ borderColor: '#E5E4E0' }}
                       >
-                        <p className="font-semibold mb-3" style={{ color: '#1A1A1A' }}>What it covers:</p>
-                        <ul className="space-y-2 mb-4">
+                        <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.75rem' }}>What it covers:</p>
+                        <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem' }}>
                           {service.coverageItems.map((item, idx) => (
-                            <li key={idx} className="flex items-start gap-2 text-sm" style={{ color: '#717171' }}>
+                            <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.875rem', color: '#717171' }}>
                               <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#2D7A5F' }} />
                               {item}
                             </li>
                           ))}
                         </ul>
-                        <p className="text-sm font-semibold" style={{ color: '#2D7A5F' }}>
+                        <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#2D7A5F' }}>
                           Why it matters: {service.importance}
                         </p>
                       </motion.div>
@@ -423,14 +431,14 @@ Aggressive Estimate: $${budgets.aggressive.toLocaleString()}`
         </section>
 
         {/* Budget Calculator */}
-        <section className="mb-20">
+        <section style={{ marginBottom: '5rem' }}>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="rounded-2xl p-8 border-2" style={{ background: '#FFFFFF', borderColor: '#E5E4E0' }}
+            style={{ borderRadius: '0.5rem', padding: '2rem', border: '1px solid #E5E4E0', background: '#FFFFFF' }}
           >
-            <h2 className="text-2xl font-bold mb-8" style={{ color: '#1A1A1A' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '2rem' }}>
               Your Budget Summary
             </h2>
 
@@ -701,26 +709,26 @@ Aggressive Estimate: $${budgets.aggressive.toLocaleString()}`
         </section>
 
         {/* Vendor Marketplace */}
-        <section className="mb-20">
+        <section style={{ marginBottom: '5rem' }}>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="rounded-2xl p-8 border-2" style={{ background: '#FFFFFF', borderColor: '#E5E4E0' }}
+            style={{ borderRadius: '0.5rem', padding: '2rem', border: '1px solid #E5E4E0', background: '#FFFFFF' }}
           >
-            <h2 className="text-3xl font-bold mb-4" style={{ color: '#1A1A1A' }}>
+            <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '1rem' }}>
               Need Assistance?
             </h2>
-            <p className="mb-8 text-lg" style={{ color: '#717171' }}>
-              IPOReady can facilitate introductions with qualified providers in each category. We connect you with vetted professionals who understand the IPO space and post-listing requirements. <span className="font-semibold">These are introductions only — you retain complete independence in vendor selection.</span>
+            <p style={{ fontSize: '1rem', color: '#717171', marginBottom: '2rem' }}>
+              IPOReady can facilitate introductions with qualified providers in each category. We connect you with vetted professionals who understand the IPO space and post-listing requirements. <span style={{ fontWeight: 700 }}>These are introductions only — you retain complete independence in vendor selection.</span>
             </p>
 
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               <div>
-                <h3 className="font-bold mb-4" style={{ color: '#1A1A1A' }}>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '1rem' }}>
                   Services We Can Introduce
                 </h3>
-                <div className="space-y-3">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   {[
                     'Investor Relations Agencies',
                     'Market Makers / Market Support',
@@ -730,38 +738,49 @@ Aggressive Estimate: $${budgets.aggressive.toLocaleString()}`
                     'Capital Markets Advisors',
                     'Investor Conference Organizers'
                   ].map((service) => (
-                    <div key={service} className="flex items-center gap-3">
-                      <CheckCircle2 className="w-5 h-5" style={{ color: '#2D7A5F' }} />
-                      <span style={{ color: '#1A1A1A' }}>{service}</span>
+                    <div key={service} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: '#2D7A5F' }} />
+                      <span style={{ color: '#1A1A1A', fontSize: '0.875rem' }}>{service}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="rounded-2xl p-6 border-2" style={{ background: '#F7F6F4', borderColor: '#E5E4E0' }}>
-                <h3 className="text-xl font-bold mb-4" style={{ color: '#1A1A1A' }}>
+              <div style={{ borderRadius: '0.5rem', padding: '1.5rem', border: '1px solid #E5E4E0', background: '#F7F6F4' }}>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '1rem' }}>
                   Ready for Introductions?
                 </h3>
-                <p className="mb-6" style={{ color: '#717171' }}>
+                <p style={{ fontSize: '0.875rem', color: '#717171', marginBottom: '1.5rem' }}>
                   Contact our market advisory team:
                 </p>
                 <a
-                  href="mailto:market@ipoready.com"
-                  className="block mb-6 text-center rounded-xl py-3 font-semibold transition-all"
-                  style={{ background: '#E8312A', color: 'white' }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#C4261F'}
-                  onMouseLeave={(e) => e.currentTarget.style.background = '#E8312A'}
+                  href="mailto:ceo@theupcapital.com"
+                  style={{
+                    display: 'block',
+                    marginBottom: '1.5rem',
+                    textAlign: 'center',
+                    borderRadius: '0.375rem',
+                    padding: '0.75rem 1rem',
+                    fontWeight: 700,
+                    fontSize: '0.875rem',
+                    background: '#E8312A',
+                    color: 'white',
+                    textDecoration: 'none',
+                    transition: 'background 0.2s'
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = '#D12620')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = '#E8312A')}
                 >
-                  market@ipoready.com
+                  ceo@theupcapital.com
                 </a>
-                <div className="space-y-3 text-sm" style={{ color: '#717171' }}>
-                  <p><span className="font-semibold">Tell us:</span></p>
-                  <ul className="list-disc list-inside space-y-2">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem', color: '#717171' }}>
+                  <p><span style={{ fontWeight: 700 }}>Tell us:</span></p>
+                  <ul style={{ listStyle: 'disc', listStylePosition: 'inside', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                     <li>Which services you need</li>
                     <li>Your budget range</li>
                     <li>Your timeline</li>
                   </ul>
-                  <p className="mt-4"><span className="font-semibold">We'll introduce you to 2-3 qualified providers</span> who specialize in post-IPO companies.</p>
+                  <p style={{ marginTop: '1rem' }}><span style={{ fontWeight: 700 }}>We'll introduce you to 2-3 qualified providers</span> who specialize in post-IPO companies.</p>
                 </div>
               </div>
             </div>
@@ -769,17 +788,17 @@ Aggressive Estimate: $${budgets.aggressive.toLocaleString()}`
         </section>
 
         {/* FAQ Section */}
-        <section>
+        <section style={{ marginTop: '5rem' }}>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
           >
-            <h2 className="text-3xl font-bold mb-8" style={{ color: '#1A1A1A' }}>
+            <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '2rem' }}>
               Common Questions
             </h2>
 
-            <div className="space-y-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {[
                 {
                   q: 'When should we start engaging IR services?',
@@ -817,24 +836,38 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 
   return (
     <motion.div
-      className="rounded-xl border-2 overflow-hidden transition-all"
       style={{
-        background: '#FFFFFF',
-        borderColor: open ? '#E8312A' : '#E5E4E0'
+        borderRadius: '0.375rem',
+        border: `1px solid ${open ? '#E8312A' : '#E5E4E0'}`,
+        overflow: 'hidden',
+        transition: 'all 0.2s',
+        background: '#FFFFFF'
       }}
     >
       <button
         onClick={() => setOpen(!open)}
-        className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-all"
+        style={{
+          width: '100%',
+          padding: '1.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          border: 'none',
+          background: '#FFFFFF',
+          cursor: 'pointer',
+          transition: 'background 0.2s'
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.background = '#F9F9F9')}
+        onMouseLeave={(e) => (e.currentTarget.style.background = '#FFFFFF')}
       >
-        <span className="text-left font-semibold" style={{ color: '#1A1A1A' }}>
+        <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', textAlign: 'left' }}>
           {question}
         </span>
         <motion.div
           animate={{ rotate: open ? 180 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          <ChevronDown className="w-5 h-5" style={{ color: '#E8312A' }} />
+          <ChevronDown className="w-5 h-5" style={{ color: '#E8312A', flexShrink: 0 }} />
         </motion.div>
       </button>
       <AnimatePresence>
@@ -844,9 +877,9 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="border-t px-6 py-4" style={{ borderColor: '#E5E4E0' }}
+            style={{ borderTop: '1px solid #E5E4E0', padding: '1.5rem' }}
           >
-            <p style={{ color: '#717171' }}>{answer}</p>
+            <p style={{ fontSize: '0.875rem', color: '#717171', lineHeight: 1.6, margin: 0 }}>{answer}</p>
           </motion.div>
         )}
       </AnimatePresence>
