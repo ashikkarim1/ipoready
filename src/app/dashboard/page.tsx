@@ -481,7 +481,7 @@ export default function DashboardPage() {
               </p>
             </div>
           </div>
-          <Link href="/pace" className="flex items-center gap-1 mt-3"
+          <Link href="/dashboard#pace-details" className="flex items-center gap-1 mt-3"
             style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-accent)', textDecoration: 'none' }}
             onMouseEnter={e => (e.currentTarget.style.opacity = '0.7')}
             onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
