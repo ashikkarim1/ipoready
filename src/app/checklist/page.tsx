@@ -183,44 +183,44 @@ export default function ChecklistPage() {
       <AnimatePresence>
         {!aiAdvisorDismissed && (
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, height: 0 }}
-            className="rounded-2xl p-5 relative"
-            style={{ background: 'linear-gradient(135deg, #1A1A1A 0%, #1e1145 100%)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            className="rounded-2xl p-5 relative card"
+            style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
             <button onClick={() => setAiAdvisorDismissed(true)}
               className="absolute top-4 right-4 opacity-40 hover:opacity-80 transition-opacity"
-              style={{ color: 'white' }}>
+              style={{ color: 'var(--color-text-secondary)' }}>
               <X className="w-4 h-4" />
             </button>
             <div className="flex items-center gap-2.5 mb-4">
               <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-                style={{ background: 'rgba(232,49,42,0.25)', border: '1px solid rgba(232,49,42,0.35)' }}>
-                <Sparkles className="w-4 h-4" style={{ color: 'var(--color-error-soft)' }} />
+                style={{ background: 'var(--color-error-soft)', border: '1px solid rgba(232,49,42,0.2)' }}>
+                <Sparkles className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <p className="font-bold text-sm text-white">AI Task Advisor</p>
+                  <p className="font-bold text-sm" style={{ color: 'var(--color-text-primary)' }}>AI Task Advisor</p>
                   <span className="text-[9px] px-1.5 py-0.5 rounded font-bold tracking-wide"
-                    style={{ background: 'rgba(232,49,42,0.3)', color: 'var(--color-error-soft)', border: '1px solid rgba(232,49,42,0.25)' }}>LIVE</span>
+                    style={{ background: 'var(--color-error-soft)', color: 'var(--color-accent)', border: '1px solid rgba(232,49,42,0.2)' }}>LIVE</span>
                 </div>
-                <p className="text-[11px]" style={{ color: 'rgba(255,255,255,0.4)' }}>Critical path analysis · TSXV timeline · updated now</p>
+                <p className="text-[11px]" style={{ color: 'var(--color-text-tertiary)' }}>Critical path analysis · TSXV timeline · updated now</p>
               </div>
             </div>
             <div className="grid md:grid-cols-3 gap-3">
               {[
                 {
                   icon: AlertTriangle,
-                  color: 'var(--color-error-soft)', bg: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.22)',
+                  color: 'var(--color-accent)', bg: 'var(--color-error-soft)', border: '#E8312A20',
                   label: 'Critical Path Alert',
                   text: '1 blocked task is holding back 4 downstream tasks. Resolving "Corporate Structure Review" unlocks your entire Legal Documentation phase — estimated 3–4 week delay if unresolved.',
                 },
                 {
                   icon: Zap,
-                  color: 'var(--color-warning-medium)', bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.22)',
+                  color: 'var(--color-warning)', bg: 'var(--color-warning-soft)', border: '#D4A96A20',
                   label: 'Quickest Win Today',
                   text: '"Director Independence Confirmation" needs only a board resolution — completable today in ~2 hours. Finishing it advances 2 governance milestones and improves your PACE score by ~4 points.',
                 },
                 {
                   icon: TrendingUp,
-                  color: 'var(--color-success-bright)', bg: 'rgba(16,185,129,0.12)', border: 'rgba(16,185,129,0.22)',
+                  color: 'var(--color-success)', bg: 'var(--color-success-soft)', border: '#2D7A5F20',
                   label: 'Phase 3 Unlock Path',
                   text: 'Complete 3 more Corporate Restructuring tasks to unlock Financial Audit phase. At current pace you\'re 12 days ahead of TSXV average — stay consistent to keep that buffer.',
                 },
@@ -230,7 +230,7 @@ export default function ChecklistPage() {
                     <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color }} />
                     <p className="text-xs font-semibold" style={{ color }}>{label}</p>
                   </div>
-                  <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>{text}</p>
+                  <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>{text}</p>
                 </div>
               ))}
             </div>
