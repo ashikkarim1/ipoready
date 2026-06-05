@@ -315,10 +315,11 @@ export default function ForInvestorsPage() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               onClick={() => router.push('/investor/signup')}
-              className="btn btn-accent text-white px-8 py-3 rounded-lg font-bold flex items-center gap-2"
+              className="font-semibold text-white px-6 py-2.5 rounded-full flex items-center gap-2"
+              style={{ background: '#E8312A', display: 'inline-flex', alignItems: 'center' }}
             >
               Get Early Access Now
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 h-4" />
             </motion.button>
           </div>
         </motion.div>
@@ -431,11 +432,11 @@ export default function ForInvestorsPage() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               onClick={() => router.push('/investor/signup')}
-              className="px-8 py-4 rounded-full font-bold text-lg flex items-center justify-center gap-2"
-              style={{ background: '#E8312A', color: '#FFFFFF' }}
+              className="font-semibold text-white px-6 py-2.5 rounded-full flex items-center gap-2"
+              style={{ background: '#E8312A', display: 'inline-flex', alignItems: 'center' }}
             >
               Join as Investor
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 h-4" />
             </motion.button>
           </motion.div>
 
