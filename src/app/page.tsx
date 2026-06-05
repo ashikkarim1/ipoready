@@ -30,9 +30,9 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left: Copy */}
-          <div>
+          <div className="order-1 md:order-1">
             <div className="flex items-center gap-2 mb-6">
               <span className="inline-block px-3 py-1 bg-red-100 text-red-600 text-xs sm:text-sm font-bold uppercase rounded-full">
                 The IPO Operating System
@@ -68,8 +68,8 @@ export default function LandingPage() {
           </div>
 
           {/* Right: Visual */}
-          <div className="hidden lg:flex items-center justify-center bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-8" style={{ aspectRatio: '1 / 1', minHeight: '400px' }}>
-            <div className="text-7xl">📊</div>
+          <div className="flex items-center justify-center bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-4 sm:p-6 md:p-8 order-2 md:order-2" style={{ aspectRatio: '1 / 1', minHeight: '300px' }}>
+            <div className="text-5xl sm:text-6xl md:text-7xl">📊</div>
           </div>
         </div>
       </section>
