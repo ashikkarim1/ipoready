@@ -71,9 +71,10 @@ export default function LandingPage() {
           <div
             className="flex items-center justify-center rounded-2xl w-full"
             style={{
-              background: 'linear-gradient(to bottom right, #FEF2F2, #FDE8E8)',
+              background: 'linear-gradient(135deg, #FDECEB 0%, #FCE4E1 100%)',
               minHeight: '400px',
-              padding: '2rem'
+              padding: '2rem',
+              border: '2px solid #FDECEB'
             }}
           >
             <div className="text-6xl sm:text-7xl md:text-8xl">📊</div>
