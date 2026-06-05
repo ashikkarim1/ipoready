@@ -79,7 +79,7 @@ export function FeaturesMegaMenu({ isSticky = false }: { isSticky?: boolean } = 
       {/* Middle - Schedule A Demo Button */}
       <button
         onClick={() => setDemoModalOpen(true)}
-        className="flex items-center gap-1 px-2 md:px-4 py-1 md:py-1.5 rounded-full text-xs md:text-sm font-semibold text-white transition-colors hover:opacity-90 whitespace-nowrap"
+        className="flex items-center gap-1 px-2 md:px-4 py-1 md:py-1.5 rounded-lg text-xs md:text-sm font-semibold text-white transition-colors hover:opacity-90 whitespace-nowrap"
         style={{ background: '#E8312A' }}
       >
         <Calendar className="w-3 h-3 md:w-4 md:h-4" />

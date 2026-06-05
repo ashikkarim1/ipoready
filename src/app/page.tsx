@@ -75,12 +75,12 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 max-w-7xl mx-auto">
+      <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 max-w-7xl mx-auto w-full">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-center mb-8 sm:mb-12" style={{ color: '#1A1A1A' }}>
           Everything You Need for IPO Success
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', width: '100%' }}>
           {[
             { title: 'PACE™ Velocity Engine', description: 'Always know where you stand toward listing day' },
             { title: '180+ IPO Milestones', description: 'Pre-built tasks for your exact exchange and type' },
@@ -89,7 +89,7 @@ export default function LandingPage() {
             { title: 'Document Workspace', description: 'Version-controlled hub for all IPO documents' },
             { title: 'Expert Network', description: 'Vetted legal, accounting, and finance professionals' },
           ].map((feature) => (
-            <div key={feature.title} className="bg-white border-2 border-gray-200 rounded-xl p-4 sm:p-6 hover:border-red-200 transition-colors">
+            <div key={feature.title} className="bg-white border-2 border-gray-200 rounded-xl p-4 sm:p-6 hover:border-red-200 transition-colors" style={{ minHeight: '100%' }}>
               <h3 className="font-bold text-base sm:text-lg mb-2" style={{ color: '#1A1A1A' }}>
                 {feature.title}
               </h3>
