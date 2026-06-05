@@ -68,8 +68,15 @@ export default function LandingPage() {
           </div>
 
           {/* Right: Visual */}
-          <div className="flex items-center justify-center bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-8 sm:p-10 md:p-12 order-2 md:order-2 w-full" style={{ minHeight: '350px', height: '100%', maxWidth: '500px', margin: '0 auto' }}>
-            <div className="text-6xl sm:text-7xl">📊</div>
+          <div
+            className="flex items-center justify-center rounded-2xl w-full"
+            style={{
+              background: 'linear-gradient(to bottom right, #FEF2F2, #FDE8E8)',
+              minHeight: '400px',
+              padding: '2rem'
+            }}
+          >
+            <div className="text-6xl sm:text-7xl md:text-8xl">📊</div>
           </div>
         </div>
       </section>
