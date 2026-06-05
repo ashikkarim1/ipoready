@@ -199,7 +199,7 @@ export default function ForInvestorsPage() {
 
       {/* STATS / SOCIAL PROOF */}
       <section
-        className="px-6 md:px-8 py-32 md:py-48"
+        className="px-6 md:px-8 py-40 md:py-56"
         style={{ background: '#1A1A1A', color: '#FFFFFF' }}
       >
         <div className="max-w-6xl mx-auto">
