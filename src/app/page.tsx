@@ -68,8 +68,8 @@ export default function LandingPage() {
           </div>
 
           {/* Right: Visual */}
-          <div className="hidden lg:block bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-8 aspect-square flex items-center justify-center">
-            <div className="text-6xl">📊</div>
+          <div className="hidden lg:flex items-center justify-center bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-8" style={{ aspectRatio: '1 / 1', minHeight: '400px' }}>
+            <div className="text-7xl">📊</div>
           </div>
         </div>
       </section>
