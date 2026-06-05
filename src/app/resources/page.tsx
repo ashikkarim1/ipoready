@@ -1031,6 +1031,56 @@ export default function ResourcesPage() {
           </div>
         </div>
       </div>
+
+      {/* FOOTER */}
+      <footer className="border-t border-gray-200 mt-12 sm:mt-16 py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', marginBottom: '2rem' }}>
+            {[
+              {
+                title: 'Exchanges',
+                links: ['TSX', 'TSXV', 'CSE', 'NASDAQ', 'NYSE', 'OTC Markets', 'Cboe Canada']
+              },
+              {
+                title: 'Listing Types',
+                links: ['IPO', 'Direct Listing', 'RTO', 'SPAC', 'Regulation A+']
+              },
+              {
+                title: 'Legal',
+                links: ['Privacy Policy', 'Terms of Service', 'Disclaimer', 'Cookie Policy']
+              },
+              {
+                title: 'Support',
+                links: ['Contact Us', 'Help Centre', 'System Status']
+              },
+            ].map((column) => (
+              <div key={column.title}>
+                <p className="font-bold text-xs sm:text-sm mb-3 uppercase tracking-wider" style={{ color: '#1A1A1A' }}>
+                  {column.title}
+                </p>
+                <ul className="space-y-2">
+                  {column.links.map((link) => (
+                    <li key={link}>
+                      <Link href="#" className="text-xs sm:text-sm" style={{ color: '#717171' }}>
+                        {link}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <div className="border-t border-gray-200 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-xs sm:text-sm" style={{ color: '#717171' }}>
+              © 2026 IPOReady. All rights reserved.
+            </p>
+            <p className="text-xs sm:text-sm" style={{ color: '#717171' }}>
+              The IPO Operating System for Canada & US Listings
+            </p>
+          </div>
+        </div>
+      </footer>
       </div>
         </>
       )}
