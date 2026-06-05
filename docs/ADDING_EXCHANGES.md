@@ -6,15 +6,29 @@ When the user says "add Dubai" or "add London Exchange", here's the exact flow:
 
 ## Quick Reference
 
-| Exchange | Code | Country | Status | Steps |
-|----------|------|---------|--------|-------|
-| Toronto Stock Exchange | TSX | Canada | ✅ Live | - |
-| TSX Venture Exchange | TSXV | Canada | ✅ Live | - |
-| Canadian Securities Exchange | CSE | Canada | ✅ Live | - |
-| NASDAQ | NASDAQ | USA | ✅ Live | - |
-| NYSE | NYSE | USA | ✅ Live | - |
-| London Stock Exchange | LSE | UK | 🔧 Template | [Add LSE](#adding-london-stock-exchange-lse) |
-| Dubai Financial Market | DFM | UAE | 🔧 Template | [Add DFM](#adding-dubai-financial-market-dfm) |
+### North America
+| Exchange | Code | Country | Status |
+|----------|------|---------|--------|
+| Toronto Stock Exchange | TSX | Canada | ✅ Live |
+| TSX Venture Exchange | TSXV | Canada | ✅ Live |
+| Canadian Securities Exchange | CSE | Canada | ✅ Live |
+| NASDAQ | NASDAQ | USA | ✅ Live |
+| New York Stock Exchange | NYSE | USA | ✅ Live |
+
+### Europe & Middle East
+| Exchange | Code | Country | Status |
+|----------|------|---------|--------|
+| London Stock Exchange | LSE | UK | 🔧 Template |
+| Dubai Financial Market | DFM | UAE | 🔧 Template |
+| Saudi Stock Exchange | TADAWUL | Saudi Arabia | 🔧 Template |
+
+### Asia-Pacific
+| Exchange | Code | Country | Status |
+|----------|------|---------|--------|
+| Australian Securities Exchange | ASX | Australia | 🔧 Template |
+| Hong Kong Exchanges | HKEX | Hong Kong | 🔧 Template |
+| Korea Exchange | KRX | South Korea | 🔧 Template |
+| Singapore Exchange | SGX | Singapore | 🔧 Template |
 
 ---
 
@@ -355,17 +369,22 @@ This is the fastest way to add a new exchange when the regulatory framework is s
 
 ---
 
-## Future Exchanges (Template Ready)
+## Pre-Configured Exchanges (Ready to Activate)
 
-These exchanges are configured but not yet live. When user requests them, set `isLive: true` and follow the 5-step process:
+These exchanges are fully configured and ready to go live. When user requests them, set `isLive: true` and follow the 5-step process:
 
-- 🔧 LSE (London Stock Exchange) - UK
-- 🔧 DFM (Dubai Financial Market) - UAE
-- 🔧 ADXE (Abu Dhabi Securities Exchange) - UAE (template ready)
-- 🔧 SGX (Singapore Exchange) - Singapore (template ready)
-- 🔧 ASX (Australian Securities Exchange) - Australia (template ready)
+### European & Middle Eastern
+- 🔧 **LSE** (London Stock Exchange) - UK, FCA regulated, RNS filing
+- 🔧 **DFM** (Dubai Financial Market) - UAE, DFSA regulated, eServe filing
+- 🔧 **TADAWUL** (Saudi Stock Exchange) - Saudi Arabia, CMA regulated, Vision 2030 aligned
 
-To add any of these:
+### Asia-Pacific (NEW - Priority)
+- 🔧 **ASX** (Australian Securities Exchange) - Australia, ASIC regulated, IFRS required
+- 🔧 **HKEX** (Hong Kong Exchanges & Clearing) - Hong Kong, SFC regulated, dual-language (EN/ZH)
+- 🔧 **KRX** (Korea Exchange) - South Korea, FSC regulated, dual-language (EN/KO), tech-focused
+- 🔧 **SGX** (Singapore Exchange) - Singapore, MAS regulated, ASEAN gateway
+
+To activate any exchange:
 1. Find in `/src/config/exchanges.ts`
 2. Set `isLive: true`
 3. Follow 5-step onboarding above

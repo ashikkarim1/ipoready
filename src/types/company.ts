@@ -5,7 +5,7 @@
 
 export type CompanyStatus = 'pre-ipo' | 'ipo-in-progress' | 'public' | 'exited' | 'other'
 
-export type Exchange = 'TSX' | 'TSXV' | 'CSE' | 'NASDAQ' | 'NYSE' | 'OTCQX' | 'OTCQB' | string
+export type Exchange = 'TSX' | 'TSXV' | 'CSE' | 'NASDAQ' | 'NYSE' | 'OTCQX' | 'OTCQB' | 'LSE' | 'DFM' | 'ASX' | 'TADAWUL' | 'HKEX' | 'KRX' | 'SGX' | string
 
 export interface CompanyProfile {
   id: string

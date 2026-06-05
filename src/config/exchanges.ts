@@ -368,6 +368,205 @@ export const EXCHANGES: Record<ExchangeCode, ExchangeConfig> = {
     supportEmail: 'listings@dfm.ae',
     isLive: false,
     notes: 'Middle East gateway. Enable when user requests Dubai listing'
+  },
+
+  // AUSTRALIA
+  ASX: {
+    code: 'ASX',
+    name: 'Australian Securities Exchange',
+    country: 'Australia',
+    timezone: 'Australia/Sydney',
+    regulator: 'ASIC',
+    regulatoryBody: 'Australian Securities and Investments Commission',
+    filingSystem: 'ASX Listings',
+    minPublicFloat: {
+      amount: 500000,
+      currency: 'AUD'
+    },
+    minMarketCap: {
+      amount: 5000000,
+      currency: 'AUD'
+    },
+    minYearsProfitability: 3,
+    minShareholderCount: 400,
+    minIndependentDirectors: 2,
+    enabledModules: ['disclosure', 'ir', 'cfo', 'executive', 'mna', 'compliance'],
+    mandatoryModules: ['disclosure', 'compliance'],
+    requiredDocuments: [
+      'Prospectus',
+      'Financial Statements (IFRS)',
+      'Risk Factors',
+      'Directors Report',
+      'Corporate Governance Statement'
+    ],
+    filingDeadlines: {
+      firstQuarterlyReport: 45,
+      firstAnnualReport: 90,
+      continuousDisclosure: 2
+    },
+    supportEmail: 'listings@asx.com.au',
+    isLive: false,
+    notes: 'Asia-Pacific gateway. Largest exchange in Southern Hemisphere'
+  },
+
+  // SAUDI ARABIA
+  TADAWUL: {
+    code: 'TADAWUL',
+    name: 'Saudi Stock Exchange (Tadawul)',
+    country: 'Saudi Arabia',
+    timezone: 'Asia/Riyadh',
+    regulator: 'CMA',
+    regulatoryBody: 'Capital Market Authority (Saudi Arabia)',
+    filingSystem: 'Tadawul Platform',
+    minPublicFloat: {
+      amount: 10000000,
+      currency: 'SAR'
+    },
+    minMarketCap: {
+      amount: 500000000,
+      currency: 'SAR'
+    },
+    minYearsProfitability: 2,
+    minShareholderCount: 500,
+    minIndependentDirectors: 3,
+    enabledModules: ['disclosure', 'ir', 'cfo', 'compliance'],
+    mandatoryModules: ['disclosure', 'compliance'],
+    requiredDocuments: [
+      'Prospectus',
+      'Financial Statements (IFRS)',
+      'Risk Factors',
+      'Board of Directors Information',
+      'Corporate Governance Compliance',
+      'Sharia Board Approval (if applicable)'
+    ],
+    filingDeadlines: {
+      firstQuarterlyReport: 60,
+      firstAnnualReport: 90,
+      continuousDisclosure: 5
+    },
+    supportEmail: 'support@tadawul.com.sa',
+    isLive: false,
+    notes: 'Middle East wealth hub. Strategic for Vision 2030 initiatives'
+  },
+
+  // HONG KONG
+  HKEX: {
+    code: 'HKEX',
+    name: 'Hong Kong Exchanges and Clearing',
+    country: 'Hong Kong',
+    timezone: 'Asia/Hong_Kong',
+    regulator: 'SFC',
+    regulatoryBody: 'Securities and Futures Commission',
+    filingSystem: 'HKExnews',
+    minPublicFloat: {
+      amount: 50000000,
+      currency: 'HKD'
+    },
+    minMarketCap: {
+      amount: 500000000,
+      currency: 'HKD'
+    },
+    minYearsProfitability: 2,
+    minShareholderCount: 300,
+    minIndependentDirectors: 3,
+    enabledModules: ['disclosure', 'ir', 'cfo', 'executive', 'mna', 'compliance'],
+    mandatoryModules: ['disclosure', 'ir', 'compliance'],
+    requiredDocuments: [
+      'Prospectus (English & Chinese)',
+      'Financial Statements (IFRS)',
+      'Risk Factors',
+      'Directors and Senior Management Bios',
+      'Corporate Governance Code Compliance',
+      'Circulars'
+    ],
+    filingDeadlines: {
+      firstQuarterlyReport: 45,
+      firstAnnualReport: 120,
+      continuousDisclosure: 1
+    },
+    supportEmail: 'issuers@hkex.com.hk',
+    isLive: false,
+    notes: 'Asia gateway to global markets. Dual-language filings required'
+  },
+
+  // SOUTH KOREA
+  KRX: {
+    code: 'KRX',
+    name: 'Korea Exchange (KRX)',
+    country: 'South Korea',
+    timezone: 'Asia/Seoul',
+    regulator: 'FSC',
+    regulatoryBody: 'Financial Services Commission',
+    filingSystem: 'KIND (Korea Investors Network & Exchange Database)',
+    minPublicFloat: {
+      amount: 5000000000,
+      currency: 'KRW'
+    },
+    minMarketCap: {
+      amount: 50000000000,
+      currency: 'KRW'
+    },
+    minYearsProfitability: 3,
+    minShareholderCount: 500,
+    minIndependentDirectors: 3,
+    enabledModules: ['disclosure', 'ir', 'cfo', 'executive', 'mna', 'compliance'],
+    mandatoryModules: ['disclosure', 'compliance'],
+    requiredDocuments: [
+      'Prospectus (Korean & English)',
+      'Financial Statements (K-GAAP or IFRS)',
+      'Business Plan',
+      'Risk Factors',
+      'Corporate Governance Statement',
+      'Insider Trading Policy'
+    ],
+    filingDeadlines: {
+      firstQuarterlyReport: 45,
+      firstAnnualReport: 90,
+      continuousDisclosure: 4
+    },
+    supportEmail: 'support@krx.co.kr',
+    isLive: false,
+    notes: 'Tech-focused exchange. Strong financial sector. Dual-language required'
+  },
+
+  // SINGAPORE
+  SGX: {
+    code: 'SGX',
+    name: 'Singapore Exchange',
+    country: 'Singapore',
+    timezone: 'Asia/Singapore',
+    regulator: 'MAS',
+    regulatoryBody: 'Monetary Authority of Singapore',
+    filingSystem: 'SGXnet',
+    minPublicFloat: {
+      amount: 10000000,
+      currency: 'SGD'
+    },
+    minMarketCap: {
+      amount: 50000000,
+      currency: 'SGD'
+    },
+    minYearsProfitability: 3,
+    minShareholderCount: 200,
+    minIndependentDirectors: 2,
+    enabledModules: ['disclosure', 'ir', 'cfo', 'executive', 'mna', 'compliance'],
+    mandatoryModules: ['disclosure', 'compliance'],
+    requiredDocuments: [
+      'Prospectus',
+      'Financial Statements (IFRS)',
+      'Risk Factors',
+      'Board Composition',
+      'Corporate Governance Code Compliance',
+      'Use of Proceeds'
+    ],
+    filingDeadlines: {
+      firstQuarterlyReport: 45,
+      firstAnnualReport: 120,
+      continuousDisclosure: 2
+    },
+    supportEmail: 'listings@sgx.com',
+    isLive: false,
+    notes: 'Asian financial hub. Gateway to ASEAN markets. English-language filings'
   }
 }
 
