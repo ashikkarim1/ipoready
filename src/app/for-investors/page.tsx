@@ -33,15 +33,15 @@ export default function ForInvestorsPage() {
 
       {/* ── Page Header ──────────────────────────────────────────────────────── */}
       <section style={{ paddingTop: '2rem', paddingBottom: '1rem', background: '#F7F6F4' }}>
-        <div className="max-w-7xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-          <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Deal Flow You Can't Get Anywhere Else</h1>
-          <p className="text-text-muted text-sm">IPOReady is the only platform with real-time visibility into companies actually executing IPO/RTO journeys. Get notified when opportunities match your thesis.</p>
+        <div className="max-w-6xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+          <h1 className="serif text-5xl text-nav mb-4 leading-tight">Deal Flow You Can't Get Anywhere Else</h1>
+          <p className="text-text-muted text-lg">IPOReady is the only platform with real-time visibility into companies actually executing IPO/RTO journeys. Get notified when opportunities match your thesis.</p>
         </div>
       </section>
 
       {/* ── CTA Bar ─────────────────────────────────────────────────────────── */}
       <section style={{ paddingTop: '1rem', paddingBottom: '1rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
-        <div className="max-w-7xl mx-auto flex flex-wrap gap-3" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <div className="max-w-6xl mx-auto flex flex-wrap gap-3" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <button
             onClick={() => router.push('/investor/signup')}
             className="btn btn-primary gap-2 font-semibold px-6 py-2.5 rounded-full"
@@ -59,7 +59,7 @@ export default function ForInvestorsPage() {
 
       {/* ── Value Proposition ──────────────────────────────────────────────────── */}
       <section style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem', background: '#FFFFFF' }}>
-        <div className="max-w-7xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <div className="max-w-6xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -67,10 +67,10 @@ export default function ForInvestorsPage() {
             viewport={{ once: true }}
             className="mb-8"
           >
-            <h2 className="serif text-2xl sm:text-3xl text-nav mb-2">
+            <h2 className="serif text-4xl text-nav mb-4 leading-tight">
               Why IPOReady for Investors
             </h2>
-            <p className="text-text-muted text-sm max-w-3xl">
+            <p className="text-text-muted text-lg max-w-3xl">
               Every other platform gives you generic startup deal flow. We give you the companies actually executing IPO journeys.
             </p>
           </motion.div>

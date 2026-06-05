@@ -114,15 +114,15 @@ export default function ProspectusBuilderPage() {
 
       {/* ── Page Header ──────────────────────────────────────────────────────── */}
       <section style={{ paddingTop: '2rem', paddingBottom: '1rem', background: '#F7F6F4' }}>
-        <div className="max-w-7xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-          <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Prospectus Builder</h1>
-          <p className="text-text-muted text-sm">Upload documents. AI organizes and structures them with compliance built-in. Route through multi-tier review — all in one platform.</p>
+        <div className="max-w-6xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+          <h1 className="serif text-5xl text-nav mb-4 leading-tight">Prospectus Builder</h1>
+          <p className="text-text-muted text-lg">Upload documents. AI organizes and structures them with compliance built-in. Route through multi-tier review — all in one platform.</p>
         </div>
       </section>
 
       {/* ── CTA Bar ─────────────────────────────────────────────────────────── */}
       <section style={{ paddingTop: '1rem', paddingBottom: '1rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
-        <div className="max-w-7xl mx-auto flex flex-wrap gap-3" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <div className="max-w-6xl mx-auto flex flex-wrap gap-3" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <Link href="/register"
             className="btn btn-primary gap-2 font-semibold px-6 py-2.5 rounded-full">
             Start Building <ArrowRight className="w-4 h-4" />
@@ -135,7 +135,7 @@ export default function ProspectusBuilderPage() {
 
       {/* ── Stats ───────────────────────────────────────────────────────────── */}
       <section style={{ paddingTop: '1rem', paddingBottom: '1.5rem', background: '#FFFFFF' }}>
-        <div className="max-w-7xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <div className="max-w-6xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {BENEFITS.map((s, i) => (
               <motion.div key={s.label}
@@ -154,9 +154,9 @@ export default function ProspectusBuilderPage() {
       </section>
 
       {/* ── How It Works ────────────────────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto" style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-        <h2 className="serif text-2xl sm:text-3xl text-nav mb-2">4 steps to completion</h2>
-        <p className="text-text-muted text-sm mb-6">Here's how to take your documents from source material to filing-ready prospectus.</p>
+      <section className="max-w-6xl mx-auto" style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <h2 className="serif text-4xl text-nav mb-4 leading-tight">4 steps to completion</h2>
+        <p className="text-text-muted text-lg mb-8">Here's how to take your documents from source material to filing-ready prospectus.</p>
 
         <div className="grid md:grid-cols-4 gap-4">
           {WORKFLOW_STEPS.map((item, idx) => {
@@ -182,9 +182,9 @@ export default function ProspectusBuilderPage() {
       </section>
 
       {/* ── Capabilities ────────────────────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto" style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-        <h2 className="serif text-2xl sm:text-3xl text-nav mb-2">Everything you need for compliance-ready prospectuses.</h2>
-        <p className="text-text-muted text-sm mb-8">Purpose-built capabilities for drafting, review, and filing across all major exchanges.</p>
+      <section className="max-w-6xl mx-auto" style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <h2 className="serif text-4xl text-nav mb-4 leading-tight">Everything you need for compliance-ready prospectuses</h2>
+        <p className="text-text-muted text-lg mb-8">Purpose-built capabilities for drafting, review, and filing across all major exchanges.</p>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {CAPABILITIES.map((cap, idx) => {
@@ -210,7 +210,7 @@ export default function ProspectusBuilderPage() {
 
       {/* ── Exchanges ───────────────────────────────────────────────────────── */}
       <section style={{ background: '#FFFFFF', borderTop: '1px solid #E5E4E0' }}>
-        <div className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <div className="max-w-6xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <div className="text-xs uppercase tracking-widest text-text-muted font-semibold text-center" style={{ marginBottom: '1.5rem' }}>
             Supported Exchanges
           </div>
@@ -225,7 +225,7 @@ export default function ProspectusBuilderPage() {
       </section>
 
       {/* ── CTA ─────────────────────────────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+      <section className="max-w-6xl mx-auto" style={{ paddingTop: '2.5rem', paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

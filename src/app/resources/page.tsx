@@ -613,9 +613,9 @@ export default function ResourcesPage() {
 
       {/* ── Header Section ──────────────────────────────────────────────────── */}
       <section style={{ paddingTop: '2rem', paddingBottom: '1rem', background: '#F7F6F4' }}>
-        <div className="max-w-7xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-          <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Resource Centre</h1>
-          <p className="text-text-muted text-sm">Recent filings, regulatory policies, and procedures across all major listing exchanges. For reference only — always verify directly with the exchange or your legal counsel.</p>
+        <div className="max-w-6xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+          <h1 className="serif text-5xl text-nav mb-4 leading-tight">Resource Centre</h1>
+          <p className="text-text-muted text-lg">Recent filings, regulatory policies, and procedures across all major listing exchanges. For reference only — always verify directly with the exchange or your legal counsel.</p>
         </div>
       </section>
 
