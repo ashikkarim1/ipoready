@@ -59,6 +59,11 @@ export function FeaturesMegaMenu({ isSticky = false }: { isSticky?: boolean } = 
           )}
         </div>
 
+        {/* All Features Link */}
+        <Link href="/#features" className="hidden md:block px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs md:text-sm font-medium text-nav hover:bg-gray-100 transition-colors whitespace-nowrap">
+          Features
+        </Link>
+
         {/* Prospectus Builder - Direct Link */}
         <Link href="/prospectus-builder" className="hidden lg:flex items-center gap-1 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs md:text-sm font-medium text-nav hover:bg-gray-100 transition-colors whitespace-nowrap">
           <BookOpen className="w-3 h-3 md:w-4 md:h-4" />
