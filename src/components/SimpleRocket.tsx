@@ -53,7 +53,7 @@ export function SimpleRocket() {
 
         .rocket-text {
           position: absolute;
-          right: -150px;
+          right: -200px;
           top: 0;
           white-space: nowrap;
           color: #E8312A;
