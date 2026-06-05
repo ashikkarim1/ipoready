@@ -355,7 +355,7 @@ export default function CompanyProfilePage() {
                   <CheckCircle2 className="w-6 h-6" />
                   Investment Highlights
                 </h3>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, space: '1rem' }}>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0,  }}>
                   {company.highlights.map((highlight, idx) => (
                     <li key={idx} style={{ marginBottom: '1rem', paddingLeft: '2rem', position: 'relative', lineHeight: 1.6, color: '#1A1A1A' }}>
                       <span style={{ position: 'absolute', left: 0, color: '#2D7A5F', fontWeight: 700 }}>✓</span>

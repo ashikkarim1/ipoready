@@ -710,9 +710,9 @@ export default function DocumentsPage() {
                                         {STATUS_CONFIG[doc.status].label}
                                       </span>
                                     </div>
-                                    {doc.approvedBy && (
+                                    {(doc as any).approvedBy && (
                                       <span style={{ fontSize: '0.75rem', color: '#2D7A5F', fontWeight: 600 }}>
-                                        ✓ Approved by {doc.approvedBy}
+                                        ✓ Approved by {(doc as any).approvedBy}
                                       </span>
                                     )}
                                   </div>
