@@ -542,6 +542,7 @@ export default function DocumentsPage() {
                         uploadedDate={
                           doc.uploadedAt ? formatDate(doc.uploadedAt) : undefined
                         }
+                        uploadedBy={(doc as any).uploadedBy}
                         templateUrl={doc.templateUrl || undefined}
                         guideUrl={doc.exampleDocumentUrl || undefined}
                         onUpload={(file) => handleUpload(doc.id, file)}

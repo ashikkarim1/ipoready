@@ -11,7 +11,7 @@ import {
   CreditCard, Shield, Flame, HelpCircle, ExternalLink, TrendingUp,
   AlertTriangle, RefreshCcw, Activity, Plug, BellRing, Store, FileSearch,
   CheckCheck, Clock, Calculator, Target, CheckCircle, Percent, Briefcase,
-  FileCheck, Scale, Signature, Share2, BarChart3
+  FileCheck, Scale, Signature, Share2, BarChart3, Map
 } from 'lucide-react'
 import { useAppStore } from '@/store/app-store'
 import type { Notification } from '@/types'
@@ -23,6 +23,7 @@ const NAV_GROUPS = [
     collapsible: false,
     items: [
       { href: '/dashboard',       icon: LayoutDashboard, label: 'Dashboard',          badge: null,   key: 'dashboard'   },
+      { href: '/dashboard/ipo-journey', icon: Map,     label: 'IPO Journey™',      badge: '✨',   key: 'ipo-journey' },
       { href: '/checklist',       icon: CheckSquare,     label: 'IPO Checklist',      badge: null,   key: 'checklist'   },
     ],
   },
@@ -316,6 +317,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     // Map full paths and patterns to breadcrumb labels
     const pathMappings: Record<string, string> = {
       '/dashboard': 'Dashboard',
+      '/dashboard/ipo-journey': 'IPO Journey™',
       '/checklist': 'IPO Checklist',
       '/cap-table': 'Cap Table',
       '/documents': 'Documents',
