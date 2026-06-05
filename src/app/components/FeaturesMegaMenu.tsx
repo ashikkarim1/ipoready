@@ -3,11 +3,10 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
-import { ChevronDown, CheckSquare, PieChart, FileText, ShoppingBag, BookOpen, Calendar, LogOut, Settings } from 'lucide-react'
+import { ChevronDown, CheckSquare, BookOpen, Calendar, LogOut, Settings } from 'lucide-react'
 import { ScheduleDemoModal } from './ScheduleDemoModal'
 
 export function FeaturesMegaMenu({ isSticky = false }: { isSticky?: boolean } = {}) {
-  const [featuresOpen, setFeaturesOpen] = useState(false)
   const [demoModalOpen, setDemoModalOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
   const { data: session } = useSession()
@@ -16,48 +15,6 @@ export function FeaturesMegaMenu({ isSticky = false }: { isSticky?: boolean } = 
     <nav className={`flex items-center flex-1 flex-wrap md:flex-nowrap gap-1 ${isSticky ? 'relative z-40' : ''}`} style={{ marginLeft: isSticky ? '1rem' : '2rem', position: 'relative', zIndex: 40 }}>
       {/* Left side menu */}
       <div className="flex items-center gap-0.5 flex-wrap md:gap-1 md:flex-nowrap" style={{ flex: 1 }}>
-        {/* Features Dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => setFeaturesOpen(!featuresOpen)}
-            className="flex items-center gap-1 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs md:text-sm font-medium text-nav hover:bg-gray-100 transition-colors whitespace-nowrap"
-          >
-            Features
-            <ChevronDown className="w-3 h-3 md:w-4 md:h-4" style={{ transform: featuresOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
-          </button>
-
-          {featuresOpen && (
-            <div
-              className="absolute top-full left-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-3"
-              style={{ zIndex: 1000, position: 'absolute', pointerEvents: 'auto' }}
-              onMouseLeave={() => setFeaturesOpen(false)}
-            >
-              <div className="px-4 py-2">
-                <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3">Core Features</p>
-                <Link href="/#features" className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-lg text-sm text-nav font-medium transition-colors">
-                  <CheckSquare className="w-4 h-4 text-blue-600" />
-                  All Features
-                </Link>
-                <Link href="/cap-table" className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-lg text-sm text-nav transition-colors">
-                  <PieChart className="w-4 h-4 text-amber-600" />
-                  Cap Table
-                </Link>
-                <Link href="/checklist" className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-lg text-sm text-nav transition-colors">
-                  <CheckSquare className="w-4 h-4 text-green-600" />
-                  IPO Checklist
-                </Link>
-                <Link href="/documents" className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-lg text-sm text-nav transition-colors">
-                  <FileText className="w-4 h-4 text-gray-600" />
-                  Document Workspace
-                </Link>
-                <Link href="/marketplace" className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-lg text-sm text-nav transition-colors">
-                  <ShoppingBag className="w-4 h-4 text-purple-600" />
-                  Expert Network
-                </Link>
-              </div>
-            </div>
-          )}
-        </div>
 
 
         {/* Prospectus Builder - Direct Link */}
