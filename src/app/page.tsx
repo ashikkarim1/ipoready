@@ -148,23 +148,28 @@ export default function LandingPage() {
     setCurrentYear(new Date().getFullYear())
   }, [])
 
-  // Ensure visibility fallback: if animations don't start, make content visible after 1 second
+  // Trigger animations on mount - force reflow to ensure they start
   useEffect(() => {
-    const timer = setTimeout(() => {
-      // Add inline style to ensure any opacity: 0 elements become visible
-      const style = document.createElement('style')
-      style.textContent = `
-        * {
-          animation: ensureVisibility 0.1s forwards !important;
-        }
-        @keyframes ensureVisibility {
-          to { opacity: 1 !important; }
-        }
-      `
-      document.head.appendChild(style)
-    }, 1000)
+    // Small delay to ensure DOM is fully ready
+    const timer = requestAnimationFrame(() => {
+      // Trigger a reflow to kick off CSS animations and Framer Motion
+      void document.body.offsetHeight
 
-    return () => clearTimeout(timer)
+      // Fallback: if animations still don't work after 2 seconds, force visibility
+      const fallbackTimer = setTimeout(() => {
+        const style = document.createElement('style')
+        style.textContent = `
+          [style*="opacity"]:not([style*="opacity: 1"]) {
+            opacity: 1 !important;
+          }
+        `
+        document.head.appendChild(style)
+      }, 2000)
+
+      return () => clearTimeout(fallbackTimer)
+    })
+
+    return () => cancelAnimationFrame(timer)
   }, [])
 
   return (
@@ -180,14 +185,15 @@ export default function LandingPage() {
 
           {/* Left: Copy */}
           <div>
-            <div className="flex items-center gap-2" style={{ marginBottom: '1.5rem' }}>
+            <motion.div initial={{ opacity: 1, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
+              className="flex items-center gap-2" style={{ marginBottom: '1.5rem' }}>
               <span className="pill text-xs font-bold uppercase tracking-wider"
                 style={{ background: 'var(--color-error-soft)', color: 'var(--color-accent)' }}>The IPO Operating System</span>
               <span className="text-text-muted text-sm">Canadian & US listings</span>
-            </div>
+            </motion.div>
 
             <motion.h1
-              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.06 }}
+              initial={{ opacity: 1, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.06 }}
               className="serif"
               style={{ fontSize: '2.1rem', lineHeight: '1.2', marginBottom: '1.25rem', color: '#1A1A1A' }}>
               Manage your entire IPO journey<br />
@@ -195,7 +201,7 @@ export default function LandingPage() {
             </motion.h1>
 
             <motion.div
-              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.12 }}
+              initial={{ opacity: 1, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.12 }}
               className="space-y-3" style={{ marginBottom: '2rem' }}>
               <p className="text-lg leading-relaxed" style={{ color: '#717171' }}>
                 Tell us your exchange and listing type — IPOReady instantly builds your personalized 180+ task roadmap, assigns workstreams to your team, and tracks your velocity toward listing day. No setup. No spreadsheets. No missed steps.
@@ -217,7 +223,7 @@ export default function LandingPage() {
             </motion.div>
 
             <motion.p
-              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.16 }}
+              initial={{ opacity: 1, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.16 }}
               className="text-sm leading-relaxed" style={{ marginBottom: '2rem', color: '#717171' }}>
               Works for IPO, RTO, SPAC, and Reg A+ across every major exchange.{' '}
               <Link href="/register" className="text-accent font-semibold hover:underline">
@@ -227,14 +233,14 @@ export default function LandingPage() {
 
             {/* Purpose pills */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.2 }}
+              initial={{ opacity: 1, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.2 }}
               className="grid grid-cols-2 gap-3" style={{ marginBottom: '2rem' }}>
               {PURPOSES.map(p => <PurposePill key={p.label} icon={p.icon} label={p.label} sub={p.sub} color={p.color} bg={p.bg} />)}
             </motion.div>
 
             {/* CTAs */}
             <motion.div
-              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.25 }}
+              initial={{ opacity: 1, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.25 }}
               className="flex flex-wrap items-center gap-3">
               <Link href="/register"
                 className="btn btn-primary gap-2 font-semibold px-6 py-2.5 rounded-full">
@@ -252,7 +258,7 @@ export default function LandingPage() {
 
           {/* Right: Dashboard preview */}
           <motion.div
-            initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 1, x: 24 }} animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.55, delay: 0.18 }}
             className="hidden lg:block">
             <div className="card" style={{ padding: '1.5rem', boxShadow: '0 24px 64px rgba(0,0,0,0.09)', overflow: 'hidden' }}>
@@ -387,7 +393,7 @@ export default function LandingPage() {
           ].map(({ step, icon: Icon, color, bg, title, body, detail, detailIcon: DetailIcon }, i) => (
             <motion.div
               key={step}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 1, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.45 }}
@@ -426,7 +432,7 @@ export default function LandingPage() {
 
         {/* Bottom connector */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 1, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ delay: 0.35 }}
           className="text-center"
           style={{ marginTop: '1.75rem' }}>
@@ -452,7 +458,7 @@ export default function LandingPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {STATS.map((s, i) => (
             <motion.div key={s.label}
-              initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 1, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ delay: i * 0.06 }}
               className="card p-6">
               <p className="serif text-3xl md:text-4xl mb-1" style={{ color: '#1A1A1A' }}>{s.value}</p>
@@ -550,7 +556,7 @@ export default function LandingPage() {
             const Icon = f.icon
             return (
               <motion.div key={f.title}
-                initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 1, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: i * 0.06 }}
                 className="card p-6 card-hover">
                 <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5"
@@ -610,7 +616,7 @@ export default function LandingPage() {
             ].map((scenario, i) => (
               <motion.div
                 key={scenario.level}
-                initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 1, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                 className="card p-6 card-hover" style={{
                   position: 'relative',
@@ -656,7 +662,7 @@ export default function LandingPage() {
               ].map((service, i) => (
                 <motion.div
                   key={service.name}
-                  initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 1, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }} transition={{ delay: i * 0.04 }}
                   className="card p-4 card-hover"
                   style={{ background: 'var(--color-bg-primary)', border: '1px solid #E5E4E0' }}>
@@ -682,7 +688,7 @@ export default function LandingPage() {
             ].map((benefit, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: -8 }} whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 1, x: -8 }} whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }} transition={{ delay: i * 0.05 }}
                 className="flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-accent)' }} />
@@ -693,7 +699,7 @@ export default function LandingPage() {
 
           {/* CTA */}
           <motion.div
-            initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 1, x: 24 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.45 }}
             className="card p-8" style={{ background: '#FFFFFF', border: '1px solid #E5E4E0', textAlign: 'center' }}>
             <p className="text-xs uppercase tracking-widest text-accent font-semibold mb-4">Calculate Now</p>
@@ -735,7 +741,7 @@ export default function LandingPage() {
           {TESTIMONIALS.map((t) => (
             <motion.div
               key={t.name}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 1, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.45, ease: 'easeOut' }}
@@ -829,7 +835,7 @@ export default function LandingPage() {
             },
           ].map(({ q, a }, i) => (
             <motion.div key={q}
-              initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 1, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ delay: i * 0.06 }}
               className="card p-6"
               style={{ background: '#FFFFFF', borderColor: '#E5E4E0' }}>
