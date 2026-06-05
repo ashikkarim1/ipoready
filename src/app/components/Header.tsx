@@ -66,7 +66,7 @@ export function Header() {
           style={{ display: 'flex', alignItems: 'center' }}
         >
           <Link
-            href="/help"
+            href="/resources"
             title="Help & Documentation"
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center"
             style={{
