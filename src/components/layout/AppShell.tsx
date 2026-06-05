@@ -79,7 +79,8 @@ const NAV_GROUPS = [
       { href: '/compliance/listing-rules',  icon: Scale,       label: 'Listing Rules',         badge: null,   key: 'listing-rules'  },
       { href: '/compliance/resolutions',    icon: FileCheck,   label: 'Corporate Resolutions', badge: null,   key: 'resolutions'    },
       { href: '/demo/consent-workflow',     icon: Signature,   label: 'Consent Workflow',      badge: null,   key: 'consent'        },
-      { href: '/marketplace',               icon: Share2,      label: 'Expert Network',        badge: null,   key: 'syndication'    },
+      { href: '/learning-compliance/insurances', icon: Shield,      label: 'Insurances',         badge: null,   key: 'insurances'  },
+      { href: '/checklist-guide', icon: FileSearch,      label: 'Compliance Guide',   badge: null,   key: 'guide'       },
     ],
   },
   {
@@ -95,10 +96,8 @@ const NAV_GROUPS = [
     section: 'RESOURCES',
     collapsible: true,
     items: [
-      { href: '/templates',                              icon: Award,           label: 'Templates & Forms',  badge: null,   key: 'templates'        },
-      { href: '/learning-compliance/insurances', icon: Shield,      label: 'Insurances',         badge: null,   key: 'insurances'  },
-      { href: '/resources',       icon: BookOpen,        label: 'Resource Centre',    badge: null,   key: 'resources'   },
-      { href: '/checklist-guide', icon: FileSearch,      label: 'Compliance Guide',   badge: null,   key: 'guide'       },
+      { href: '/templates',              icon: Award,      label: 'Templates & Forms',  badge: null,   key: 'templates'  },
+      { href: '/resources',              icon: BookOpen,   label: 'Resource Centre',    badge: null,   key: 'resources'  },
     ],
   },
   {
