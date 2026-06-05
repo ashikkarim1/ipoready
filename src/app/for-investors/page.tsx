@@ -28,117 +28,60 @@ export default function ForInvestorsPage() {
   const router = useRouter()
 
   return (
-    <div style={{ background: '#F7F6F4', minHeight: '100vh' }}>
+    <div suppressHydrationWarning>
       <Header />
 
-      {/* HERO */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        className="relative overflow-hidden px-6 py-16 md:py-32"
-        style={{ background: 'linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%)' }}
-      >
-        <div className="max-w-6xl mx-auto text-center text-white">
+      {/* ── Page Header ──────────────────────────────────────────────────────── */}
+      <section style={{ paddingTop: '2rem', paddingBottom: '1rem', background: '#F7F6F4' }}>
+        <div className="max-w-7xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+          <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Deal Flow You Can't Get Anywhere Else</h1>
+          <p className="text-text-muted text-sm">IPOReady is the only platform with real-time visibility into companies actually executing IPO/RTO journeys. Get notified when opportunities match your thesis.</p>
+        </div>
+      </section>
+
+      {/* ── CTA Bar ─────────────────────────────────────────────────────────── */}
+      <section style={{ paddingTop: '1rem', paddingBottom: '1rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
+        <div className="max-w-7xl mx-auto flex flex-wrap gap-3" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+          <button
+            onClick={() => router.push('/investor/signup')}
+            className="btn btn-primary gap-2 font-semibold px-6 py-2.5 rounded-full"
+            style={{ background: '#E8312A', color: 'white', display: 'inline-flex', alignItems: 'center' }}>
+            Get Early Access <ArrowRight className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => router.push('/for-investors/data')}
+            className="btn btn-secondary px-6 py-2.5 rounded-full"
+            style={{ border: '1px solid #E5E4E0', color: '#1A1A1A', background: 'white' }}>
+            See Our Data
+          </button>
+        </div>
+      </section>
+
+      {/* ── Value Proposition ──────────────────────────────────────────────────── */}
+      <section style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem', background: '#FFFFFF' }}>
+        <div className="max-w-7xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="mb-4 md:mb-6 inline-block"
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="mb-8"
           >
-            <div className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm">
-              <p className="text-xs md:text-sm font-semibold">The IPO-Bound Deal Flow Network</p>
-            </div>
+            <h2 className="serif text-2xl sm:text-3xl text-nav mb-2">
+              Why IPOReady for Investors
+            </h2>
+            <p className="text-text-muted text-sm max-w-3xl">
+              Every other platform gives you generic startup deal flow. We give you the companies actually executing IPO journeys.
+            </p>
           </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="text-3xl md:text-6xl font-bold mb-4 md:mb-6 leading-tight"
-          >
-            Deal Flow You Can't Get Anywhere Else
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-base md:text-xl text-white/80 mb-6 md:mb-8 max-w-3xl mx-auto"
-          >
-            IPOReady is the only platform with real-time visibility into companies actually executing IPO/RTO journeys. Get notified when opportunities match your thesis. No noise. Just signal.
-          </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-4"
           >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              onClick={() => router.push('/investor/signup')}
-              className="px-8 py-4 rounded-full font-bold text-lg flex items-center justify-center gap-2"
-              style={{ background: '#E8312A', color: '#FFFFFF' }}
-            >
-              Get Early Access
-              <ArrowRight className="w-5 h-5" />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              onClick={() => router.push('/for-investors/data')}
-              className="px-8 py-4 rounded-full font-bold text-lg border-2 border-white text-white hover:bg-white/10 transition"
-            >
-              See Our Data
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              onClick={() => router.push('/for-investors/datasets')}
-              className="px-8 py-4 rounded-full font-bold text-lg border-2 border-white text-white hover:bg-white/10 transition"
-            >
-              Data Transparency
-            </motion.button>
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="text-sm text-white/60 mt-8"
-          >
-            Free for investors. No credit card required.
-          </motion.p>
-        </div>
-
-        {/* Animated background elements */}
-        <div className="absolute top-10 right-10 w-40 h-40 rounded-full bg-accent/10 blur-3xl opacity-20" />
-        <div className="absolute bottom-10 left-10 w-60 h-60 rounded-full bg-success/10 blur-3xl opacity-20" />
-      </motion.section>
-
-      {/* VALUE PROPOSITION GRID */}
-      <section className="px-6 py-20 md:py-32 max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="serif text-4xl md:text-5xl font-bold text-nav mb-4">
-            Why IPOReady for Investors
-          </h2>
-          <p className="text-xl text-text-muted max-w-3xl mx-auto">
-            Every other platform gives you generic startup deal flow. We give you the companies actually executing IPO journeys.
-          </p>
-        </motion.div>
-
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
-        >
           {/* Card 1: Real Signal */}
           <motion.div
             variants={item}
@@ -250,7 +193,8 @@ export default function ForInvestorsPage() {
               </li>
             </ul>
           </motion.div>
-        </motion.div>
+          </motion.div>
+        </div>
       </section>
 
       {/* STATS / SOCIAL PROOF */}
