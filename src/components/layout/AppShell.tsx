@@ -20,12 +20,11 @@ import type { Notification } from '@/types'
 const NAV_GROUPS = [
   {
     section: 'MISSION',
-    collapsible: false,
+    collapsible: true,
     items: [
-      { href: '/dashboard',            icon: LayoutDashboard, label: 'Dashboard',         badge: null,   key: 'dashboard'       },
       { href: '/new-to-this',          icon: HelpCircle,      label: 'New To This?',      badge: '✨',   key: 'new-to-this'     },
+      { href: '/dashboard',            icon: LayoutDashboard, label: 'Dashboard',         badge: null,   key: 'dashboard'       },
       { href: '/dashboard/ipo-journey', icon: Map,            label: 'IPO Journey™',      badge: '✨',   key: 'ipo-journey'     },
-      { href: '/checklist',            icon: CheckSquare,     label: 'IPO Checklist',     badge: null,   key: 'checklist'       },
     ],
   },
   {
