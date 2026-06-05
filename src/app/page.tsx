@@ -75,29 +75,31 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 max-w-7xl mx-auto w-full">
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-center mb-8 sm:mb-12" style={{ color: '#1A1A1A' }}>
-          Everything You Need for IPO Success
-        </h2>
+      <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-center mb-8 sm:mb-12" style={{ color: '#1A1A1A' }}>
+            Everything You Need for IPO Success
+          </h2>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', width: '100%' }}>
-          {[
-            { title: 'PACE™ Velocity Engine', description: 'Always know where you stand toward listing day' },
-            { title: '180+ IPO Milestones', description: 'Pre-built tasks for your exact exchange and type' },
-            { title: 'AI-Assisted Cap Table', description: 'Model your equity structure automatically' },
-            { title: 'Capital Raise Tracker', description: 'Track every tranche and investor commitment' },
-            { title: 'Document Workspace', description: 'Version-controlled hub for all IPO documents' },
-            { title: 'Expert Network', description: 'Vetted legal, accounting, and finance professionals' },
-          ].map((feature) => (
-            <div key={feature.title} className="bg-white border-2 border-gray-200 rounded-xl p-4 sm:p-6 hover:border-red-200 transition-colors" style={{ minHeight: '100%' }}>
-              <h3 className="font-bold text-base sm:text-lg mb-2" style={{ color: '#1A1A1A' }}>
-                {feature.title}
-              </h3>
-              <p className="text-sm sm:text-base" style={{ color: '#717171' }}>
-                {feature.description}
-              </p>
-            </div>
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { title: 'PACE™ Velocity Engine', description: 'Always know where you stand toward listing day' },
+              { title: '180+ IPO Milestones', description: 'Pre-built tasks for your exact exchange and type' },
+              { title: 'AI-Assisted Cap Table', description: 'Model your equity structure automatically' },
+              { title: 'Capital Raise Tracker', description: 'Track every tranche and investor commitment' },
+              { title: 'Document Workspace', description: 'Version-controlled hub for all IPO documents' },
+              { title: 'Expert Network', description: 'Vetted legal, accounting, and finance professionals' },
+            ].map((feature) => (
+              <div key={feature.title} className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-red-200 transition-colors">
+                <h3 className="font-bold text-base sm:text-lg mb-3" style={{ color: '#1A1A1A' }}>
+                  {feature.title}
+                </h3>
+                <p className="text-sm sm:text-base" style={{ color: '#717171' }}>
+                  {feature.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
