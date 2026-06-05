@@ -269,9 +269,9 @@ export default function DocumentsUploadPage() {
                 Your mandatory documents are {completionData.mandatoryCompletionPercentage}% complete.
                 Your team has been notified. Continue uploading remaining documents, then submit when ready.
               </p>
-              <button className="inline-flex items-center gap-2 px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-colors">
+              <a href="/dashboard/submission" className="inline-flex items-center gap-2 px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-colors">
                 🚀 View Submission Portal
-              </button>
+              </a>
             </div>
           </div>
         </motion.div>

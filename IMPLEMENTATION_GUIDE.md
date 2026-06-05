@@ -1,334 +1,421 @@
-# PACE Accuracy & Billing System Implementation Guide
+# IPOReady Document Upload System - Implementation Guide
 
 ## Overview
 
-This guide covers the deployment and integration of two major systems:
-1. **PACE Accuracy Deepening** - Benchmarking, predictive scoring, sequencing validation, document tracking
-2. **Billing System Completion** - Stripe webhooks, trial management, feature gating
+This guide covers the complete implementation of the IPOReady document upload system with database integration, document verification workflow, and submission portal.
 
-## Phase 1: Database Migrations
+## System Architecture
 
-### 1. Apply Schema Changes
+### Components Implemented
 
-```bash
-# Run the migration
-psql $DATABASE_URL < src/lib/pace-billing-schema.sql
+1. **Database Schema** — 4 tables for document management
+2. **API Endpoints** — Document upload, verification, submission, status tracking
+3. **Upload UI** — Document upload page with progress tracking
+4. **Verification Workflow** — Admin dashboard for document verification
+5. **Submission Portal** — Final submission interface with status tracking
+6. **Notification System** — Event-based notifications for document lifecycle
 
-# Verify tables were created
-psql $DATABASE_URL -c "\dt" | grep -E "(ipo_benchmarks|ipo_historical_data|document_scorecards|webhook_logs|billing_invoices|payment_history)"
+### API Endpoints
+
+#### Document Upload
+```
+POST /api/documents/upload
+- Body: FormData { documentId: string, files: File[] }
+- Response: { uploadedFiles: { id, name, size, uploadedAt, status, publicPath } }
 ```
 
-### 2. Seed IPO Benchmarks
-
-```bash
-# In your Node.js/TypeScript environment:
-import { seedIpoBenchmarks } from '@/lib/seed-ipo-benchmarks'
-
-await seedIpoBenchmarks()
-console.log('✅ Benchmarks seeded')
+#### Document Verification (Admin)
+```
+POST /api/documents/verify
+- Body: { fileId, documentId, status, notes }
+- Response: { success, fileId, status, verifiedAt, verifiedBy }
 ```
 
-### 3. Initialize Document Scorecards (Optional)
+#### Document Submission
+```
+POST /api/documents/submit
+- Body: { companyId, documentIds[], notes }
+- Response: { success, submissionId, submittedAt, status }
 
-For existing companies, initialize their document scorecards:
-
-```bash
-import { initializeDocumentScorecardsForCompany } from '@/lib/document-scorer'
-
-// For each company:
-for (const company of companies) {
-  await initializeDocumentScorecardsForCompany(company.id)
-}
+GET /api/documents/submit?companyId={id}
+- Response: { submissions: [{ id, submittedAt, status, documentCount }] }
 ```
 
-## Phase 2: Environment Variables
+#### Status & Verification Tracking
+```
+GET /api/documents/status?companyId={id}
+- Response: { totalDocuments, completedDocuments, completionPercentage, mandatoryDocuments, ... }
 
-Add/update in `.env.local`:
-
-```bash
-# Stripe (already configured, validate)
-STRIPE_PUBLIC_KEY=pk_...
-STRIPE_SECRET_KEY=sk_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-
-# Resend (for email notifications)
-RESEND_API_KEY=re_...
+POST /api/documents/notify
+- Body: { type, companyId, documentType, details }
+- Response: { success, notificationType, message }
 ```
 
-## Phase 3: API Endpoint Updates
+## Database Integration Steps
 
-### Update PACE Scores Endpoint
+### 1. Create Tables in Neon PostgreSQL
 
-Modify `/src/app/api/pace/scores/route.ts` to include new fields:
+Run the migration file:
+
+```bash
+psql $NEON_DATABASE_URL < scripts/migrations/030_document_upload_system.sql
+```
+
+Tables created:
+- `documents` — Document definitions and metadata
+- `document_files` — Individual uploaded files with verification status
+- `document_submissions` — Submission history and tracking
+- `document_verification_logs` — Audit trail of all verifications
+
+### 2. Update API Routes to Use Database
+
+#### `/api/documents/upload/route.ts`
+
+Replace mock file system with:
 
 ```typescript
-// Add these imports
-import { calculatePredictiveScore } from '@/lib/pace-predictor'
-import { getActiveViolations, getSequencingRecommendations } from '@/lib/ipo-sequencing'
-import { calculateDocumentReadinessScore } from '@/lib/document-scorer'
-import { calculatePeerPercentile, getAverageDaysToIpoByExchange } from '@/lib/seed-ipo-benchmarks'
+import { db } from '@/lib/db'
 
-// In the GET handler, update the response:
-const predictive = await calculatePredictiveScore(companyId)
-const violations = await getActiveViolations(companyId)
-const docScore = await calculateDocumentReadinessScore(companyId)
-const peerPercentile = await calculatePeerPercentile(company.pace_score, company.target_exchange, phaseIndex + 1)
+// After file upload to public folder:
+const fileRecord = await db.query(
+  `INSERT INTO document_files (document_id, file_name, file_path, file_size, file_type, uploaded_by, uploaded_at)
+   VALUES ($1, $2, $3, $4, $5, $6, NOW())
+   RETURNING id, created_at`,
+  [documentId, fileName, filePath, fileSize, fileType, session.user.id]
+)
+
+// Update document status
+await db.query(
+  `UPDATE documents SET status = $1, updated_at = NOW()
+   WHERE id = $2 AND company_id = $3`,
+  ['partial', documentId, session.user.id] // company_id from session
+)
+```
+
+#### `/api/documents/verify/route.ts`
+
+Implement verification database calls:
+
+```typescript
+import { db } from '@/lib/db'
+
+const verified = await db.query(
+  `UPDATE document_files
+   SET status = $1, verified_by = $2, verified_at = NOW(), verification_notes = $3
+   WHERE id = $4
+   RETURNING id`,
+  [status, session.user.id, notes, fileId]
+)
+
+// Log verification
+await db.query(
+  `INSERT INTO document_verification_logs (document_id, file_id, verified_by, status, notes, verified_at)
+   VALUES ($1, $2, $3, $4, $5, NOW())`,
+  [documentId, fileId, session.user.id, status, notes]
+)
+
+// Trigger notification
+await fetch('/api/documents/notify', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    type: status === 'verified' ? 'document-verified' : 'document-rejected',
+    companyId,
+    documentType,
+    details: { fileName, verificationNotes: notes },
+  }),
+})
+```
+
+#### `/api/documents/submit/route.ts`
+
+Implement submission tracking:
+
+```typescript
+import { db } from '@/lib/db'
+
+// Calculate completion percentage
+const docStatus = await db.query(
+  `SELECT 
+     COUNT(*) as total,
+     SUM(CASE WHEN status IN ('verified', 'submitted') THEN 1 ELSE 0 END) as completed
+   FROM documents
+   WHERE company_id = $1`,
+  [companyId]
+)
+
+const completionPercentage = Math.round((completed / total) * 100)
+
+// Save submission
+const submission = await db.query(
+  `INSERT INTO document_submissions 
+   (company_id, submitted_by, completion_percentage, submission_status, notes)
+   VALUES ($1, $2, $3, $4, $5)
+   RETURNING id, submitted_at`,
+  [companyId, session.user.id, completionPercentage, 'submitted', notes]
+)
+
+// Trigger notification
+await fetch('/api/documents/notify', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    type: 'document-submitted',
+    companyId,
+    documentType: 'All Documents',
+    details: { completionPercentage },
+  }),
+})
+```
+
+#### `/api/documents/status/route.ts`
+
+Fetch status from database:
+
+```typescript
+import { db } from '@/lib/db'
+
+const status = await db.query(
+  `SELECT 
+     COUNT(*) as total_documents,
+     SUM(CASE WHEN df.status = 'verified' THEN 1 ELSE 0 END) as verified,
+     SUM(CASE WHEN df.status IN ('submitted', 'uploaded') THEN 1 ELSE 0 END) as submitted,
+     SUM(CASE WHEN df.status = 'partial' THEN 1 ELSE 0 END) as partial,
+     SUM(CASE WHEN df.status = 'empty' THEN 1 ELSE 0 END) as empty
+   FROM documents d
+   LEFT JOIN document_files df ON d.id = df.document_id
+   WHERE d.company_id = $1`,
+  [companyId]
+)
+
+const completionPercentage = Math.round((verified / total_documents) * 100)
 
 return NextResponse.json({
-  ...existingData,
-  // New fields
-  predictiveScore: {
-    adjustedScore: predictive.adjustedPaceScore,
-    baseScore: predictive.baseScore,
-    adjustment: predictive.adjustment,
-    confidenceLevel: predictive.confidenceLevel,
-    estimatedDaysToIpoAdjusted: predictive.estimatedDaysToIpoAdjusted,
-    riskFactors: predictive.riskFactors,
+  companyId,
+  totalDocuments: status.total_documents,
+  completedDocuments: {
+    verified: status.verified,
+    submitted: status.submitted,
+    partial: status.partial,
+    empty: status.empty,
   },
-  benchmarking: {
-    peerPercentile,
-    avgDaysToIpoByExchange: await getAverageDaysToIpoByExchange(company.target_exchange),
-  },
-  documentReadiness: docScore,
-  sequencingAlerts: violations.map(v => ({
-    rule: v.rule,
-    severity: v.severity,
-  })),
+  completionPercentage,
+  // ... rest of response
 })
 ```
 
-### Add New API Endpoints
+### 3. Initialize Document Catalog on First Company Upload
 
-Create `/src/app/api/admin/company-factors/route.ts`:
+When a company uploads their first document, initialize their documents:
 
 ```typescript
-import { updateCompanyFactors, getReadinessFactors } from '@/lib/pace-predictor'
+// In upload route, before processing files:
+const existingDocs = await db.query(
+  'SELECT COUNT(*) as count FROM documents WHERE company_id = $1',
+  [companyId]
+)
 
-export async function PATCH(req: Request) {
-  const { companyId, factors } = await req.json()
-  
-  // Verify admin access
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.isAdmin) return new Response('Unauthorized', { status: 401 })
-  
-  await updateCompanyFactors(companyId, factors)
-  const readiness = await getReadinessFactors(companyId)
-  
-  return Response.json({ success: true, readiness })
+if (existingDocs.count === 0) {
+  // Initialize all document types for this company
+  const documentTypes = [
+    'prospectus',
+    'financial-statements',
+    'board-resolutions',
+    'ceo-cfo-certs',
+    'legal-opinions',
+    'tax-compliance',
+    'ip-assignments',
+    'insurance-policies',
+    'contracts-material',
+    'underwriting-agreement',
+  ]
+
+  for (const type of documentTypes) {
+    await db.query(
+      `INSERT INTO documents (company_id, document_type, name, is_mandatory, status)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [
+        companyId,
+        type,
+        type.replace(/-/g, ' '),
+        ['prospectus', 'financial-statements', 'board-resolutions', ...].includes(type),
+        'empty',
+      ]
+    )
+  }
 }
 ```
 
-Create `/src/app/api/features/gates/route.ts`:
+## UI Integration Checklist
 
-```typescript
-import { getFeatureGatesForUI } from '@/lib/feature-gates'
+- [x] Document upload page with progress tracking
+- [x] Document verification admin dashboard
+- [x] Submission portal with completion tracking
+- [x] Status API for real-time updates
+- [ ] **Database queries in API routes** ← START HERE
+- [ ] Link submission portal in upload page (DONE)
+- [ ] Add admin verification link in navigation
+- [ ] Add submission portal link in navigation
+- [ ] Notification delivery system (email, in-app, etc.)
+- [ ] Real-time status updates using WebSockets or polling
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url)
-  const companyId = searchParams.get('companyId')
-  
-  if (!companyId) return new Response('Missing companyId', { status: 400 })
-  
-  const gates = await getFeatureGatesForUI(companyId)
-  return Response.json(gates)
-}
-```
+## Testing Checklist
 
-## Phase 4: UI Integration
+### Manual Testing
 
-### Add Trial Banner to Dashboard
+1. **Upload Documents**
+   - [ ] Upload a file to document upload page
+   - [ ] Verify file appears in the file list
+   - [ ] Verify completion percentage increases
+   - [ ] Verify status badge updates
 
-In `/src/app/dashboard/page.tsx`:
+2. **Verify Documents (Admin)**
+   - [ ] Navigate to `/dashboard/admin/documents`
+   - [ ] See list of uploaded files
+   - [ ] Click file to open detail panel
+   - [ ] Add verification notes
+   - [ ] Click "Approve Document"
+   - [ ] Verify file status changes to "verified"
 
-```typescript
-import { getTrialUiData } from '@/lib/trial-manager'
+3. **Submit Documents**
+   - [ ] Upload documents until 90%+ completion
+   - [ ] See "Submission Ready" alert
+   - [ ] Click "View Submission Portal"
+   - [ ] Review completion statistics
+   - [ ] Click "Submit Documents Now"
+   - [ ] Verify success message appears
 
-// In component:
-const trialData = await getTrialUiData(companyId)
+### Database Verification
 
-// Render banner:
-{trialData.showTrialBanner && trialData.activeBanner && (
-  <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
-    <p className="font-semibold">{trialData.activeBanner.message}</p>
-    <a href={trialData.activeBanner.ctaUrl} className="btn btn-primary mt-2">
-      {trialData.activeBanner.cta}
-    </a>
-  </div>
-)}
-```
-
-### Add PACE Readiness Factors Card
-
-In `/src/app/pace/page.tsx`:
-
-```typescript
-import { getReadinessFactors } from '@/lib/pace-predictor'
-
-const readiness = await getReadinessFactors(companyId)
-
-// Add to UI:
-<Card title="Readiness Factors">
-  {readiness?.cashRunway && (
-    <div>
-      <strong>Cash Runway:</strong> {readiness.cashRunway.months} months
-      <StatusBadge status={readiness.cashRunway.status} />
-    </div>
-  )}
-  {/* ...other factors */}
-</Card>
-```
-
-### Add Document Tracking Page
-
-Create `/src/app/documents/page.tsx` with document scorecard UI
-
-## Phase 5: Billing Checkout Updates
-
-Update `/src/app/api/checkout/route.ts`:
-
-```typescript
-// Add trial_upgrade detection:
-const isTrialUpgrade = searchParams.get('trial_upgrade') === 'true'
-const trialData = isTrialUpgrade ? await getTrialInfo(companyId) : null
-
-// When creating session:
-const session = await stripe.checkout.sessions.create({
-  ...sessionParams,
-  metadata: {
-    ...metadata,
-    trial_upgrade: isTrialUpgrade,
-    trial_plan: trialData?.trialPlan,
-  },
-})
-```
-
-## Phase 6: Cron/Background Jobs
-
-Create a cron job to handle trial expiry (runs daily):
-
-```typescript
-// /src/app/api/cron/trial-expiry/route.ts
-import { checkExpiredTrials, handleTrialExpiry } from '@/lib/trial-manager'
-import { getTrialsExpiringsoon, markTrialWarningAsSent } from '@/lib/trial-manager'
-import { sendTrialExpiryWarningEmail } from '@/lib/billing-notifications'
-
-export async function POST(req: Request) {
-  // Verify cron secret
-  if (req.headers.get('authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response('Unauthorized', { status: 401 })
-  }
-
-  // Check expiring trials (2 days before)
-  const expiringTrials = await getTrialsExpiringsoon(2)
-  for (const trial of expiringTrials) {
-    await sendTrialExpiryWarningEmail({
-      companyName: trial.name,
-      userEmail: 'user@company.com', // Get from users table
-      daysRemaining: 2,
-      planName: 'Growth',
-    })
-    await markTrialWarningAsSent(trial.id)
-  }
-
-  // Handle expired trials
-  const expired = await checkExpiredTrials()
-  for (const exp of expired) {
-    await handleTrialExpiry(exp.id)
-  }
-
-  return Response.json({ processed: expired.length })
-}
-```
-
-## Phase 7: Testing Checklist
-
-### PACE System Testing
-- [ ] Seed benchmarks - verify data in `ipo_benchmarks` table
-- [ ] Calculate PACE score - check API returns new fields
-- [ ] Predictive scoring - update cash_runway_months, verify adjusted score changes
-- [ ] Document tracking - create/update scorecard, verify completeness score
-- [ ] Sequencing validation - verify violations detected
-- [ ] Peer percentile - compare to benchmarks
-
-### Billing System Testing
-- [ ] Stripe webhook signature verification - use Stripe CLI
-- [ ] Subscription creation - verify company record updated
-- [ ] Payment failure - verify email sent, failure count incremented
-- [ ] Trial creation - verify trial_status = 'active'
-- [ ] Trial expiry - verify handled correctly
-- [ ] Feature gates - verify locked features based on plan
-
-### Test Stripe Webhooks Locally
-```bash
-stripe listen --forward-to localhost:3000/api/webhooks/stripe
-
-# In another terminal, trigger test events:
-stripe trigger payment_intent.succeeded
-stripe trigger customer.subscription.updated
-```
-
-## Phase 8: Monitoring & Maintenance
-
-### Monitor Webhook Health
 ```sql
-SELECT event_type, status, COUNT(*) as count, MAX(created_at) as last_event
-FROM webhook_logs
-GROUP BY event_type, status
-ORDER BY last_event DESC;
+-- Check documents created
+SELECT * FROM documents WHERE company_id = 'test-company';
+
+-- Check uploaded files
+SELECT * FROM document_files WHERE document_id = (
+  SELECT id FROM documents LIMIT 1
+);
+
+-- Check submissions
+SELECT * FROM document_submissions WHERE company_id = 'test-company';
+
+-- Check verification logs
+SELECT * FROM document_verification_logs ORDER BY verified_at DESC;
 ```
 
-### Check Failed Webhooks
+## File Structure
+
+```
+src/
+├── app/
+│   ├── api/
+│   │   └── documents/
+│   │       ├── upload/route.ts (DONE)
+│   │       ├── verify/route.ts (DONE)
+│   │       ├── submit/route.ts (DONE)
+│   │       ├── status/route.ts (DONE)
+│   │       ├── notify/route.ts (DONE)
+│   │       ├── templates/route.ts (DONE)
+│   │       └── delete/route.ts (DONE)
+│   └── dashboard/
+│       ├── documents/
+│       │   └── upload/page.tsx (DONE - needs DB integration)
+│       ├── submission/
+│       │   └── page.tsx (DONE - needs DB integration)
+│       └── admin/
+│           └── documents/page.tsx (DONE - needs DB integration)
+├── components/
+│   ├── DocumentUploadCard.tsx (exists)
+│   ├── DocumentProgressBar.tsx (exists)
+│   └── CompletionMilestones.tsx (exists)
+└── lib/
+    ├── db.ts (create if not exists)
+    └── typography.ts (exists)
+
+scripts/
+└── migrations/
+    └── 030_document_upload_system.sql (DONE)
+```
+
+## Next Steps (Phase 2)
+
+After database integration is complete:
+
+1. **Cloud Storage Integration** — Replace public/uploads with S3/Cloudinary
+   - Create `/api/documents/upload-cloud` endpoint
+   - Update storage layer abstraction
+   - Implement signed URLs for secure downloads
+
+2. **LinkedIn Integration** — Profile verification & connection tracking
+   - Add LinkedIn OAuth to auth.ts
+   - Create `/api/linkedin/verify` endpoint
+   - Add founder LinkedIn field to company profile
+
+3. **Stripe Integration** — Subscription & payment handling
+   - Add Stripe webhooks
+   - Create subscription management UI
+   - Implement billing lifecycle
+
+4. **Webhooks** — Real-time event delivery to external systems
+   - Document verification webhooks
+   - Submission status webhooks
+   - Integration with external compliance platforms
+
+## Key Database Queries
+
+### Get all documents for a company with file counts
 ```sql
-SELECT event_id, event_type, error_message, created_at
-FROM webhook_logs
-WHERE status = 'failed'
-ORDER BY created_at DESC
-LIMIT 20;
+SELECT 
+  d.id,
+  d.document_type,
+  d.name,
+  d.status,
+  d.is_mandatory,
+  COUNT(df.id) as file_count,
+  SUM(CASE WHEN df.status = 'verified' THEN 1 ELSE 0 END) as verified_count
+FROM documents d
+LEFT JOIN document_files df ON d.id = df.document_id
+WHERE d.company_id = $1
+GROUP BY d.id, d.document_type, d.name, d.status, d.is_mandatory
+ORDER BY d.is_mandatory DESC, d.document_type;
 ```
 
-### Monitor Trial Status
+### Get verification audit trail
 ```sql
-SELECT trial_status, COUNT(*) as count
-FROM companies
-WHERE trial_status != 'not_started'
-GROUP BY trial_status;
+SELECT 
+  dvl.verified_at,
+  dvl.status,
+  u.email as verified_by,
+  dvl.notes,
+  df.file_name
+FROM document_verification_logs dvl
+LEFT JOIN users u ON dvl.verified_by = u.id
+LEFT JOIN document_files df ON dvl.file_id = df.id
+WHERE dvl.document_id = $1
+ORDER BY dvl.verified_at DESC;
 ```
 
-## Phase 9: Rollout Strategy
+### Get submission history
+```sql
+SELECT 
+  ds.id,
+  ds.submitted_at,
+  u.email as submitted_by,
+  ds.completion_percentage,
+  ds.submission_status,
+  (SELECT COUNT(*) FROM document_files WHERE document_id IN (
+    SELECT id FROM documents WHERE company_id = ds.company_id
+  )) as total_files
+FROM document_submissions ds
+LEFT JOIN users u ON ds.submitted_by = u.id
+WHERE ds.company_id = $1
+ORDER BY ds.submitted_at DESC;
+```
 
-1. **Day 1**: Deploy schema migrations + run benchmarks seed
-2. **Day 2**: Deploy API updates + webhook handler
-3. **Day 3**: Deploy UI changes + feature gates
-4. **Day 4**: Enable cron jobs + start billing notifications
-5. **Day 5**: Monitor and iterate based on production data
+## Support
 
-## Troubleshooting
-
-### Webhook Not Processing
-- Check `STRIPE_WEBHOOK_SECRET` is set correctly
-- Verify webhook endpoint is accessible: `curl -X POST https://yourapp.com/api/webhooks/stripe`
-- Check webhook_logs table for error_message
-
-### PACE Score Not Updating
-- Verify `pace-billing-schema.sql` migration ran successfully
-- Check company has target_exchange set
-- Verify tasks table has data for the company
-
-### Trial Banner Not Showing
-- Check company has trial_start_date and trial_end_date set
-- Verify getTrialUiData is called with correct companyId
-- Check date comparison logic (now() vs trial_end_date)
-
-### Benchmarks Not Seeding
-- Verify ipo_benchmarks table created
-- Check seedIpoBenchmarks() was called
-- Validate exchange names match (lowercase)
-
-## Next Steps
-
-After deployment:
-1. Monitor production webhook processing
-2. Gather feedback on new PACE features
-3. Optimize queries if needed
-4. Consider implementing usage-based billing tier
-5. Expand document requirements by industry/exchange
+For questions or issues, refer to:
+- NextAuth documentation: https://next-auth.js.org/
+- Next.js API routes: https://nextjs.org/docs/api-routes/introduction
+- PostgreSQL documentation: https://www.postgresql.org/docs/
+- Neon documentation: https://neon.tech/docs/
