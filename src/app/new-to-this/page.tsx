@@ -427,7 +427,7 @@ export default function NewToThisPage() {
                           <p style={{ fontSize: '0.875rem', color: '#717171', fontWeight: 600, marginBottom: '0.25rem' }}>
                             Typical delay:
                           </p>
-                          <p style={{ fontSize: '0.875rem', color: '#1A1A1A', fontWeight: 600, color: '#E8312A' }}>
+                          <p style={{ fontSize: '0.875rem', color: '#E8312A', fontWeight: 600 }}>
                             {pitfall.impact}
                           </p>
                         </div>
