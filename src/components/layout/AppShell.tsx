@@ -432,7 +432,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     <div className="mt-2 space-y-1">
                       <div className="flex items-center justify-between">
                         <span className="text-text-light caption-sm">Progress</span>
-                        <span className="label-sm font-semibold text-accent">{company.progressPercentage}%</span>
+                        <span className="label-sm font-semibold text-accent">{company.progressPercentage || 0}%</span>
                       </div>
                       <div className="progress-bar" style={{ height: '4px' }}>
                         <div className="progress-fill" style={{ width: `${company.progressPercentage}%`, background: 'var(--color-accent)' }} />
