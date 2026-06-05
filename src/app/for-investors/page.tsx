@@ -197,53 +197,6 @@ export default function ForInvestorsPage() {
         </div>
       </section>
 
-      {/* STATS / SOCIAL PROOF */}
-      <section
-        className="px-6 md:px-8 py-40 md:py-56"
-        style={{ background: '#1A1A1A', color: '#FFFFFF' }}
-      >
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-20 md:mb-24"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              The Platform Built for Institutional Capital
-            </h2>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto">
-              Used by VCs, PEs, debt funds, and strategic investors looking for IPO-bound companies before they're household names.
-            </p>
-          </motion.div>
-
-          <motion.div
-            variants={container}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16"
-          >
-            <motion.div variants={item} className="text-center">
-              <div className="text-5xl font-bold text-accent mb-2">500+</div>
-              <p className="text-white/70">IPO-Ready Companies</p>
-              <p className="text-sm text-white/50 mt-1">Actively executing their journeys</p>
-            </motion.div>
-            <motion.div variants={item} className="text-center">
-              <div className="text-5xl font-bold text-success mb-2">$50B+</div>
-              <p className="text-white/70">In Pending Raises</p>
-              <p className="text-sm text-white/50 mt-1">Available deal flow this year</p>
-            </motion.div>
-            <motion.div variants={item} className="text-center">
-              <div className="text-5xl font-bold text-info mb-2">98%</div>
-              <p className="text-white/70">Institutional Grade</p>
-              <p className="text-sm text-white/50 mt-1">Compliance verified</p>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* EXCLUSIVITY / EARLY ADOPTER */}
       <section className="px-6 py-20 md:py-32 max-w-6xl mx-auto">
         <motion.div
