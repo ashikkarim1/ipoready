@@ -376,7 +376,7 @@ export default function DocumentsPage() {
     <AppShell>
       <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
         {/* Hero */}
-        <section style={{ borderBottom: '1px solid #E5E4E0', padding: '3rem 2rem lg:3rem 2rem', background: '#F7F6F4' }}>
+        <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1.5rem', background: '#F7F6F4' }}>
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center justify-between gap-8">
               <motion.div
@@ -389,7 +389,7 @@ export default function DocumentsPage() {
                   <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1D4ED8' }}>SEC Filing Hub</span>
                 </div>
 
-                <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.2, marginBottom: '0.75rem' }}>
+                <h1 style={{ fontSize: '2.75rem', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.2, marginBottom: '0.75rem' }}>
                   Document Management
                 </h1>
 
@@ -404,7 +404,7 @@ export default function DocumentsPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
                 style={{
-                  padding: '2rem',
+                  padding: '1rem',
                   background: '#FFFFFF',
                   border: '1px solid #E5E4E0',
                   borderRadius: '0.5rem',
@@ -445,7 +445,7 @@ export default function DocumentsPage() {
         </section>
 
         {/* Stats Grid */}
-        <section style={{ padding: '2rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
+        <section style={{ padding: '1rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
           <div className="max-w-7xl mx-auto">
             <div className="grid md:grid-cols-5 gap-4">
               {[
@@ -483,7 +483,7 @@ export default function DocumentsPage() {
         </section>
 
         {/* Filters */}
-        <section style={{ padding: '2rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
+        <section style={{ padding: '1rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col lg:flex-row gap-4 items-end">
               {/* Search */}
@@ -569,7 +569,7 @@ export default function DocumentsPage() {
         </section>
 
         {/* Document Groups */}
-        <section style={{ padding: '2rem' }}>
+        <section style={{ padding: '1rem' }}>
           <div className="max-w-7xl mx-auto space-y-6">
             {Object.entries(filteredGroups).map(([ groupName, docs ], groupIdx) => {
               const isMandatoryGroup = groupName.includes('Mandatory')
@@ -594,7 +594,7 @@ export default function DocumentsPage() {
                     onClick={() => setExpandedGroup(expandedGroup === groupName ? null : groupName)}
                     style={{
                       width: '100%',
-                      padding: '1.5rem',
+                      padding: '1rem',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
@@ -611,7 +611,7 @@ export default function DocumentsPage() {
                         {isMandatoryGroup && (
                           <Star className="w-5 h-5" style={{ color: '#E8312A', fill: '#E8312A' }} />
                         )}
-                        <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
+                        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
                           {groupName}
                         </h2>
                       </div>
@@ -666,7 +666,7 @@ export default function DocumentsPage() {
                               transition={{ delay: docIdx * 0.05 }}
                               style={{
                                 borderTop: docIdx > 0 ? '1px solid #E5E4E0' : 'none',
-                                padding: '1.5rem'
+                                padding: '1rem'
                               }}
                             >
                               {/* Document Header */}
@@ -990,7 +990,7 @@ export default function DocumentsPage() {
             })}
 
             {Object.keys(filteredGroups).length === 0 && (
-              <div style={{ textAlign: 'center', padding: '3rem', background: '#FFFFFF', borderRadius: '0.5rem' }}>
+              <div style={{ textAlign: 'center', padding: '1.5rem', background: '#FFFFFF', borderRadius: '0.5rem' }}>
                 <AlertCircle className="w-12 h-12 mx-auto mb-3" style={{ color: '#717171' }} />
                 <p style={{ fontSize: '1rem', color: '#717171' }}>No documents match your filters</p>
               </div>
