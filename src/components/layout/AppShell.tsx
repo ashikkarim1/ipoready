@@ -11,7 +11,7 @@ import {
   CreditCard, Shield, Flame, HelpCircle, ExternalLink, TrendingUp,
   AlertTriangle, RefreshCcw, Activity, Plug, BellRing, Store, FileSearch,
   CheckCheck, Clock, Calculator, Target, CheckCircle, Percent, Briefcase,
-  FileCheck, Scale, Signature, Share2, BarChart3, Map
+  FileCheck, Scale, Signature, Share2, BarChart3, Map, Eye
 } from 'lucide-react'
 import { useAppStore } from '@/store/app-store'
 import type { Notification } from '@/types'
@@ -51,10 +51,12 @@ const NAV_GROUPS = [
     section: 'INVESTOR READINESS',
     collapsible: true,
     items: [
-      { href: '/dashboard/investor-readiness/data-room/executive-summary', icon: FileText, label: 'Executive Summary', badge: null, key: 'exec-summary' },
-      { href: '/dashboard/investor-readiness/data-room/financial-statements', icon: BarChart3, label: 'Financial Statements', badge: null, key: 'financial-stmts' },
-      { href: '/dashboard/investor-readiness/data-room/legal-documents', icon: FileCheck, label: 'Legal Documents', badge: null, key: 'legal-docs' },
-      { href: '/dashboard/investor-readiness/data-room/regulatory-filings', icon: Shield, label: 'Regulatory Filings', badge: null, key: 'regulatory-filings' },
+      { href: '/dashboard/investor-match', icon: Target, label: 'Investor Match™', badge: '✨', key: 'investor-match' },
+      { href: '/dashboard/investor-readiness/data-room', icon: Zap, label: 'Data Room', badge: null, key: 'data-room' },
+      { href: '/dashboard/investor-readiness/data-room-health', icon: TrendingUp, label: 'Data Room Health', badge: null, key: 'data-room-health' },
+      { href: '/dashboard/investor-readiness/data-room-viewer', icon: Eye, label: 'Document Viewer', badge: null, key: 'data-room-viewer' },
+      { href: '/dashboard/investor-readiness/data-room-analytics', icon: BarChart3, label: 'Data Room Analytics', badge: null, key: 'data-room-analytics' },
+      { href: '/dashboard/investor-readiness/intelligence-hub', icon: Zap, label: 'Intelligence Hub', badge: null, key: 'intelligence-hub' },
     ],
   },
   {
