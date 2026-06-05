@@ -254,6 +254,33 @@ export const NAV_GROUPS: NavGroup[] = [
   },
 
   // ═══════════════════════════════════════════════════════════════
+  // INVESTOR READINESS: Data Room & Intelligence
+  // ═══════════════════════════════════════════════════════════════
+  {
+    section: 'INVESTOR READINESS',
+    collapsible: false,
+    description: 'Investor-facing data room and intelligence hub',
+    items: [
+      {
+        href: '/dashboard/investor-readiness/data-room',
+        icon: Zap,
+        label: 'Data Room',
+        badge: 'AI',
+        key: 'data-room',
+        description: 'Secure document management and NDA automation',
+      },
+      {
+        href: '/dashboard/investor-readiness/intelligence-hub',
+        icon: TrendingUp,
+        label: 'Intelligence Hub',
+        badge: null,
+        key: 'intelligence-hub',
+        description: 'Command center with KPIs and market intelligence',
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════════
   // LEARNING & SUPPORT: Resources and Guidance
   // ═══════════════════════════════════════════════════════════════
   {
@@ -403,6 +430,60 @@ export const FINANCIAL_MGMT_MENU = {
 }
 
 /**
+ * Menu hierarchy structure for Investor Readiness section
+ * Used for building submenu navigation trees
+ */
+export const INVESTOR_READINESS_MENU = {
+  root: '/dashboard/investor-readiness',
+  sections: [
+    {
+      id: 'data-room',
+      label: 'Data Room',
+      icon: Zap,
+      items: [
+        {
+          label: 'Main Data Room',
+          href: '/dashboard/investor-readiness/data-room',
+          icon: Zap,
+          description: 'Secure document management with 6 smart folders',
+        },
+        {
+          label: 'AI Document Viewer',
+          href: '/dashboard/investor-readiness/data-room-viewer',
+          icon: Eye,
+          description: 'AI-powered summaries with confidence metrics',
+        },
+        {
+          label: 'Health Dashboard',
+          href: '/dashboard/investor-readiness/data-room-health',
+          icon: TrendingUp,
+          description: 'Investor confidence scoring and recommendations',
+        },
+        {
+          label: 'Investor Analytics',
+          href: '/dashboard/investor-readiness/data-room-analytics',
+          icon: BarChart3,
+          description: 'Real-time investor activity and intent signals',
+        },
+      ],
+    },
+    {
+      id: 'intelligence',
+      label: 'Intelligence',
+      icon: TrendingUp,
+      items: [
+        {
+          label: 'Intelligence Hub',
+          href: '/dashboard/investor-readiness/intelligence-hub',
+          icon: TrendingUp,
+          description: 'Command center with KPIs and market intelligence',
+        },
+      ],
+    },
+  ],
+}
+
+/**
  * Menu hierarchy structure for Compliance section
  * Used for building submenu navigation trees
  */
@@ -488,6 +569,7 @@ export const COMPLIANCE_MENU = {
 export const DEFAULT_EXPANDED_SECTIONS = [
   'MISSION',
   'WORK',
+  'INVESTOR READINESS',
   'FINANCIAL MANAGEMENT',
   'COMPLIANCE',
 ]

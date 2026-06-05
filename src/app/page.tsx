@@ -145,17 +145,22 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: '📊', title: 'PACE™ Velocity Engine', description: 'AI-powered listing date prediction with real-time progress tracking toward your IPO' },
+              { icon: '📊', title: 'PACE™ Velocity Engine', description: 'AI-powered listing date prediction with real-time progress tracking toward your IPO', badge: '⭐ AI' },
+              { icon: '🤖', title: 'AI Document Viewer', description: 'Investors get instant AI summaries, confidence metrics, and red flags for every document', badge: '⭐ AI' },
               { icon: '📋', title: '180+ IPO Milestones', description: 'Pre-built task templates customized for your exchange (TSX, NASDAQ, NYSE, CSE, TSXV, etc.)' },
               { icon: '💰', title: 'Cap Table Intelligence', description: 'Automated cap table modeling, float analysis, and ownership structure optimization' },
               { icon: '📈', title: 'Capital Raise Tracker', description: 'Track every funding round, valuation, and investor commitment from Series A through IPO' },
-              { icon: '🗂️', title: 'Document Workspace', description: 'Centralized, version-controlled hub for prospectuses, legal docs, and regulatory filings' },
+              { icon: '🔍', title: 'Investor Intent Tracking', description: 'Know exactly where investors are spending time and what documents matter most', badge: '⭐ AI' },
               { icon: '🤝', title: 'Expert Network', description: 'Direct access to vetted IPO lawyers, accountants, underwriters, and compliance experts' },
-              { icon: '🎯', title: 'Analyst Coverage Maps', description: 'Research analyst tracking, engagement planning, and coverage prediction models' },
+              { icon: '🎯', title: 'Market Intelligence Feed', description: 'Real-time news alerts, regulatory changes, and competitor tracking with AI-powered impact analysis', badge: '⭐ AI' },
               { icon: '👥', title: 'Team Management', description: 'Workstream coordination, role assignments, and accountability across your IPO team' },
-              { icon: '🔄', title: 'Multi-Jurisdiction Filings', description: 'Seamless support for dual listings, cross-border IPOs, and regulatory coordination' },
             ].map((feature) => (
-              <div key={feature.title} className="bg-white rounded-xl p-6 border border-gray-200 hover:border-red-300 hover:shadow-lg transition-all">
+              <div key={feature.title} className="bg-white rounded-xl p-6 border border-gray-200 hover:border-red-300 hover:shadow-lg transition-all relative">
+                {feature.badge && (
+                  <div className="absolute top-4 right-4 bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded-full">
+                    {feature.badge}
+                  </div>
+                )}
                 <div className="text-4xl mb-4">{feature.icon}</div>
                 <h3 className="font-bold text-base sm:text-lg mb-2" style={{ color: '#1A1A1A' }}>
                   {feature.title}
@@ -165,6 +170,186 @@ export default function LandingPage() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* The Investor Experience - Before/After */}
+      <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 bg-gradient-to-b from-red-50 to-white">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-center mb-4 sm:mb-6" style={{ color: '#1A1A1A' }}>
+            Why Investors Choose Companies Using IPOReady
+          </h2>
+          <p className="text-center text-sm sm:text-base mb-8 sm:mb-12" style={{ color: '#717171' }}>
+            The difference between a 2-week deal decision and a 2-month one
+          </p>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+            {/* Before - Intralinks */}
+            <div className="bg-white rounded-xl border-2 border-gray-300 overflow-hidden">
+              <div className="bg-gray-100 px-6 py-4 border-b-2 border-gray-300">
+                <h3 className="font-black text-lg" style={{ color: '#717171' }}>
+                  ❌ Old Way (Competitor Tools)
+                </h3>
+                <p className="text-xs mt-1" style={{ color: '#999999' }}>Manual, document-dump approach</p>
+              </div>
+              <div className="p-6 space-y-3">
+                <div className="flex gap-3">
+                  <span className="text-2xl">1.</span>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Investor receives password</p>
+                    <p className="text-xs mt-1" style={{ color: '#717171' }}>"Here's your access credentials"</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <span className="text-2xl">2.</span>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Sees 150+ files</p>
+                    <p className="text-xs mt-1" style={{ color: '#717171' }}>Overwhelming pile of documents</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <span className="text-2xl">3.</span>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Investor is lost</p>
+                    <p className="text-xs mt-1" style={{ color: '#717171' }}>"What should I read first?"</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <span className="text-2xl">4.</span>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>CEO sends reading guide</p>
+                    <p className="text-xs mt-1" style={{ color: '#717171' }}>Delays start by 2-3 days</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <span className="text-2xl">5.</span>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Hours of reading</p>
+                    <p className="text-xs mt-1" style={{ color: '#717171' }}>2-3 hours in the data room</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <span className="text-2xl">6.</span>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>50+ questions</p>
+                    <p className="text-xs mt-1" style={{ color: '#717171' }}>Investor is confused, needs clarification</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <span className="text-2xl">7.</span>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>CEO spends 2 hours answering</p>
+                    <p className="text-xs mt-1" style={{ color: '#717171' }}>Back-and-forth emails, delays</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3 mt-4 pt-4 border-t-2 border-gray-200">
+                  <span className="text-xl">⏱️</span>
+                  <div className="flex-1">
+                    <p className="font-black text-sm" style={{ color: '#DC2626' }}>Deal decision: 15-20 days</p>
+                    <p className="text-xs mt-1" style={{ color: '#717171' }}>Long delays = investor loses interest</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* After - IPOReady */}
+            <div className="bg-white rounded-xl border-2" style={{ borderColor: '#E8312A' }} >
+              <div className="px-6 py-4 border-b-2" style={{ borderColor: '#E8312A', background: '#FFF5F5' }}>
+                <h3 className="font-black text-lg" style={{ color: '#E8312A' }}>
+                  ✨ IPOReady Way (AI-Powered)
+                </h3>
+                <p className="text-xs mt-1" style={{ color: '#B91C1C' }}>Smart, guided, AI-curated experience</p>
+              </div>
+              <div className="p-6 space-y-3">
+                <div className="flex gap-3">
+                  <span className="text-2xl">1.</span>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Investor gets invitation</p>
+                    <p className="text-xs mt-1" style={{ color: '#059669' }}>✓ NDA auto-signed, instant access granted</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <span className="text-2xl">2.</span>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Sees 4 smart folders</p>
+                    <p className="text-xs mt-1" style={{ color: '#059669' }}>✓ Clean, organized by decision</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <span className="text-2xl">3.</span>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Clicks "Cap Table"</p>
+                    <p className="text-xs mt-1" style={{ color: '#059669' }}>✓ AI shows ownership structure instantly</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <span className="text-2xl">4.</span>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Reads AI summary</p>
+                    <p className="text-xs mt-1" style={{ color: '#059669' }}>✓ 30 seconds: founder stake, readiness</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <span className="text-2xl">5.</span>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Clicks "Financials"</p>
+                    <p className="text-xs mt-1" style={{ color: '#059669' }}>✓ AI highlights: $12.4M ARR, +42% growth</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <span className="text-2xl">6.</span>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>5 smart questions only</p>
+                    <p className="text-xs mt-1" style={{ color: '#059669' }}>✓ Investor is informed, asks real questions</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <span className="text-2xl">7.</span>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>CEO answers in 30 minutes</p>
+                    <p className="text-xs mt-1" style={{ color: '#059669' }}>✓ Investor ready to decide immediately</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3 mt-4 pt-4 border-t-2" style={{ borderColor: '#FEE2E2' }}>
+                  <span className="text-xl">⚡</span>
+                  <div className="flex-1">
+                    <p className="font-black text-sm" style={{ color: '#E8312A' }}>Deal decision: 5 days</p>
+                    <p className="text-xs mt-1" style={{ color: '#717171' }}>Fast, informed decisions = closed deals</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Key Differences Highlight */}
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-blue-50 rounded-lg p-6 border-l-4 border-blue-500">
+              <p className="font-bold text-sm" style={{ color: '#1D4ED8' }}>⏱️ Time to Decision</p>
+              <p className="text-xs mt-2" style={{ color: '#717171' }}><span style={{ fontWeight: 'bold' }}>Before:</span> 15-20 days | <span style={{ fontWeight: 'bold', color: '#E8312A' }}>After:</span> <span style={{ color: '#E8312A', fontWeight: 'bold' }}>5 days</span></p>
+            </div>
+            <div className="bg-green-50 rounded-lg p-6 border-l-4 border-green-500">
+              <p className="font-bold text-sm" style={{ color: '#059669' }}>🧠 Question Quality</p>
+              <p className="text-xs mt-2" style={{ color: '#717171' }}><span style={{ fontWeight: 'bold' }}>Before:</span> 50 basic | <span style={{ fontWeight: 'bold', color: '#E8312A' }}>After:</span> <span style={{ color: '#E8312A', fontWeight: 'bold' }}>5 smart</span></p>
+            </div>
+            <div className="bg-yellow-50 rounded-lg p-6 border-l-4 border-yellow-500">
+              <p className="font-bold text-sm" style={{ color: '#B45309' }}>💪 Investor Confidence</p>
+              <p className="text-xs mt-2" style={{ color: '#717171' }}><span style={{ fontWeight: 'bold' }}>Before:</span> Confused | <span style={{ fontWeight: 'bold', color: '#E8312A' }}>After:</span> <span style={{ color: '#E8312A', fontWeight: 'bold' }}>Confident</span></p>
+            </div>
           </div>
         </div>
       </section>
@@ -275,17 +460,53 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Stats Section */}
+      {/* Investor Experience Impact Stats */}
+      <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 max-w-7xl mx-auto">
+        <div className="text-center mb-8 sm:mb-12">
+          <h3 className="text-lg sm:text-xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
+            The IPOReady Investor Experience Impact
+          </h3>
+          <p className="text-sm" style={{ color: '#717171' }}>Real results from using AI-powered data rooms</p>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {[
+            { before: '15-20', after: '5', label: 'Days to Decision', unit: 'days' },
+            { before: '50+', after: '5', label: 'Questions Needed', unit: 'smart' },
+            { before: '2hrs', after: '30m', label: 'CEO Answer Time', unit: '' },
+            { before: '2-3', after: '<30m', label: 'Data Room Review', unit: 'minutes' },
+          ].map((stat) => (
+            <div key={stat.label} className="bg-gradient-to-br from-red-50 to-orange-50 rounded-lg p-4 sm:p-6 text-center border border-red-100">
+              <p className="text-xs sm:text-sm font-semibold mb-2" style={{ color: '#717171' }}>
+                {stat.label}
+              </p>
+              <div className="flex justify-center items-center gap-2 mb-2">
+                <p className="text-lg sm:text-xl font-bold line-through" style={{ color: '#999999' }}>
+                  {stat.before}
+                </p>
+                <span className="text-xs font-bold" style={{ color: '#E8312A' }}>→</span>
+                <p className="text-2xl sm:text-3xl font-black" style={{ color: '#E8312A' }}>
+                  {stat.after}
+                </p>
+              </div>
+              <p className="text-xs" style={{ color: '#717171' }}>
+                {stat.unit && <span>{stat.unit}</span>}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Core Stats Section */}
       <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 max-w-7xl mx-auto">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {[
             { value: '180+', label: 'IPO Milestones' },
-            { value: '7', label: 'Exchanges' },
-            { value: '60%', label: 'Less Overhead' },
-            { value: '24h', label: 'Profile Review' },
+            { value: '12+', label: 'Exchanges' },
+            { value: '85%+', label: 'Accuracy' },
+            { value: '50+', label: 'Data Sources' },
           ].map((stat) => (
-            <div key={stat.label} className="bg-red-50 rounded-lg p-4 sm:p-6 text-center">
-              <p className="text-2xl sm:text-3xl font-black mb-2" style={{ color: '#E8312A' }}>
+            <div key={stat.label} className="bg-blue-50 rounded-lg p-4 sm:p-6 text-center border border-blue-200">
+              <p className="text-2xl sm:text-3xl font-black mb-2" style={{ color: '#1D4ED8' }}>
                 {stat.value}
               </p>
               <p className="text-xs sm:text-sm font-semibold" style={{ color: '#717171' }}>

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { useAppStore } from '@/store/app-store'
 import type { Notification } from '@/types'
+import { DashboardFooter } from './DashboardFooter'
 
 // Navigation organized into semantic groups
 const NAV_GROUPS = [
@@ -877,6 +878,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           )}
         </main>
+
+        {/* Footer */}
+        <DashboardFooter />
       </div>
 
       {/* ── Account Panel ─────────────────────────────────────────────────── */}
