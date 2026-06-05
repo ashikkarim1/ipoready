@@ -32,7 +32,7 @@ export default function ForInvestorsPage() {
       <Header />
 
       {/* ── Page Header ──────────────────────────────────────────────────────── */}
-      <section style={{ paddingTop: '2rem', paddingBottom: '1rem', background: '#F7F6F4' }}>
+      <section style={{ paddingTop: '4rem', paddingBottom: '3rem', background: '#F7F6F4' }}>
         <div className="max-w-6xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <h1 className="serif text-5xl text-nav mb-4 leading-tight">Deal Flow You Can't Get Anywhere Else</h1>
           <p className="text-text-muted text-lg">IPOReady is the only platform with real-time visibility into companies actually executing IPO/RTO journeys. Get notified when opportunities match your thesis.</p>
@@ -40,7 +40,7 @@ export default function ForInvestorsPage() {
       </section>
 
       {/* ── CTA Bar ─────────────────────────────────────────────────────────── */}
-      <section style={{ paddingTop: '1rem', paddingBottom: '1rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
+      <section style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
         <div className="max-w-6xl mx-auto flex flex-wrap gap-3" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <button
             onClick={() => router.push('/investor/signup')}
@@ -58,7 +58,7 @@ export default function ForInvestorsPage() {
       </section>
 
       {/* ── Value Proposition ──────────────────────────────────────────────────── */}
-      <section style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem', background: '#FFFFFF' }}>
+      <section style={{ paddingTop: '3rem', paddingBottom: '3rem', background: '#FFFFFF' }}>
         <div className="max-w-6xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -198,7 +198,7 @@ export default function ForInvestorsPage() {
       </section>
 
       {/* EXCLUSIVITY / EARLY ADOPTER */}
-      <section className="px-6 py-20 md:py-32 max-w-6xl mx-auto">
+      <section className="px-6 py-32 md:py-48 max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -279,7 +279,7 @@ export default function ForInvestorsPage() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="px-6 py-20 md:py-32 max-w-6xl mx-auto">
+      <section className="px-6 py-32 md:py-48 max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
