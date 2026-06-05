@@ -6,7 +6,8 @@ import { AppShell } from '@/components/layout/AppShell'
 import {
   Target, Users, TrendingUp, DollarSign, CheckCircle2, AlertCircle,
   Filter, Search, Star, MapPin, Building2, BarChart3, X, Mail, Download,
-  Copy, Send, Lightbulb, ArrowRight, Clock, Eye, CheckCircle, FileText
+  Copy, Send, Lightbulb, ArrowRight, Clock, Eye, CheckCircle, FileText,
+  Plus, Trash2, Edit2, ExternalLink, Inbox
 } from 'lucide-react'
 
 interface Investor {
@@ -20,23 +21,28 @@ interface Investor {
   successRate: number
   relevance: number
   notes: string
+  isCustom?: boolean
 }
 
 interface OutreachDraft {
   subject: string
   body: string
-  hasAttachment: boolean
+  attachmentOption: 'auto' | 'upload' | 'none'
+  attachmentFileName?: string
 }
 
 interface CRMEntry {
   id: string
   investorId: string
   investorName: string
+  investorType: string
   status: 'draft' | 'sent' | 'opened' | 'replied'
   sentAt?: Date
   openedAt?: Date
   repliedAt?: Date
   subject: string
+  nextFollowUp?: Date
+  notes?: string
 }
 
 const MOCK_INVESTORS: Investor[] = [
@@ -106,16 +112,29 @@ export default function InvestorMatchPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedType, setSelectedType] = useState<string | null>(null)
   const [sortBy, setSortBy] = useState<'relevance' | 'successRate'>('relevance')
+
+  // CRM State
+  const [crmTracker, setCrmTracker] = useState<CRMEntry[]>([])
+  const [customInvestors, setCustomInvestors] = useState<Investor[]>([])
+  const [showAddInvestor, setShowAddInvestor] = useState(false)
+  const [newInvestorName, setNewInvestorName] = useState('')
+  const [newInvestorType, setNewInvestorType] = useState<Investor['type']>('VC')
+  const [newInvestorCheckSize, setNewInvestorCheckSize] = useState('')
+
+  // Outreach State
   const [selectedInvestor, setSelectedInvestor] = useState<Investor | null>(null)
-  const [showDraftModal, setShowDraftModal] = useState(false)
+  const [showOutreachModal, setShowOutreachModal] = useState(false)
   const [emailDraft, setEmailDraft] = useState<OutreachDraft | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [editedBody, setEditedBody] = useState('')
-  const [crmTracker, setCrmTracker] = useState<CRMEntry[]>([])
   const [emailSent, setEmailSent] = useState(false)
+  const [attachmentOption, setAttachmentOption] = useState<'auto' | 'upload' | 'none'>('auto')
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null)
   const [copiedEmail, setCopiedEmail] = useState('')
 
-  const investors = MOCK_INVESTORS.filter(inv => {
+  const allInvestors = [...MOCK_INVESTORS, ...customInvestors]
+
+  const investors = allInvestors.filter(inv => {
     const matchesSearch = inv.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       inv.sector.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesType = !selectedType || inv.type === selectedType
@@ -125,28 +144,23 @@ export default function InvestorMatchPage() {
     return b.successRate - a.successRate
   })
 
-  // Generate AI insights for why this investor is a good match
   const generateAIInsights = (investor: Investor) => {
     const insights = []
-
     if (investor.relevance >= 90) {
       insights.push(`${investor.name} has a ${investor.relevance}% match with your company profile, indicating they're actively seeking companies like yours in the ${investor.sector} sector.`)
     }
     if (investor.successRate >= 85) {
-      insights.push(`With a ${investor.successRate}% exit rate, ${investor.name} has proven expertise in scaling companies to successful outcomes, making them an ideal strategic partner.`)
+      insights.push(`With a ${investor.successRate}% exit rate, ${investor.name} has proven expertise in scaling companies to successful outcomes.`)
     }
     if (investor.stage.includes('Series') || investor.stage.includes('D')) {
-      insights.push(`Their focus on ${investor.stage} companies aligns perfectly with your growth stage and maturity level.`)
+      insights.push(`Their focus on ${investor.stage} companies aligns perfectly with your growth stage.`)
     }
-    insights.push(`At ${investor.location}, ${investor.name} brings deep market connections and operational expertise specific to your region.`)
-
+    insights.push(`At ${investor.location}, ${investor.name} brings deep market connections and operational expertise.`)
     return insights
   }
 
-  // Generate approach strategy
   const generateApproachStrategy = (investor: Investor) => {
     const strategies = []
-
     if (investor.type === 'VC') {
       strategies.push('Focus on market opportunity and scalability potential. VCs prioritize growth trajectory and market size.')
       strategies.push('Emphasize your competitive advantage, team expertise, and why you\'re positioned to capture market share.')
@@ -157,16 +171,12 @@ export default function InvestorMatchPage() {
       strategies.push('Show revenue traction and unit economics. Growth investors want profitable, scalable companies.')
       strategies.push('Emphasize how capital will accelerate growth and market penetration.')
     }
-
     strategies.push(`Request a 20-minute introductory call to discuss how ${investor.name}'s expertise can accelerate your roadmap.`)
-
     return strategies
   }
 
-  // Generate AI-powered draft email
   const generateDraftEmail = (investor: Investor) => {
-    const subject = `Introducing [Your Company] - Opportunity to Lead Series B Growth`
-
+    const subject = `Introducing [Your Company] - ${investor.type === 'PE' ? 'Growth Opportunity' : 'Series B Funding'}`
     const body = `Hi [Investor Name at ${investor.name}],
 
 I hope this reaches you well. I'm reaching out because [Your Company] aligns closely with ${investor.name}'s investment thesis in ${investor.sector} companies at the ${investor.stage} stage.
@@ -183,7 +193,7 @@ We're actively seeking a lead investor who understands the market dynamics and c
 
 Would you be open to a brief 20-minute call next week to explore this further?
 
-Attached is our 1-pager with key metrics and market analysis.
+${attachmentOption !== 'none' ? 'Attached is our 1-pager with key metrics and market analysis.' : 'I\'m happy to share our 1-pager and detailed metrics upon your request.'}
 
 Looking forward to connecting.
 
@@ -196,45 +206,78 @@ Best regards,
     return {
       subject,
       body,
-      hasAttachment: true
+      attachmentOption: attachmentOption as 'auto' | 'upload' | 'none',
+      attachmentFileName: uploadedFile?.name
     }
   }
 
-  // Handle opening investor detail modal
   const handleInvestorSelect = (investor: Investor) => {
     setSelectedInvestor(investor)
+    setAttachmentOption('auto')
+    setUploadedFile(null)
     const draft = generateDraftEmail(investor)
     setEmailDraft(draft)
     setEditedBody(draft.body)
-    setShowDraftModal(true)
+    setShowOutreachModal(true)
     setIsEditing(false)
     setEmailSent(false)
   }
 
-  // Handle sending email
   const handleSendEmail = () => {
     if (!selectedInvestor || !emailDraft) return
+
+    const nextFollowUp = new Date()
+    nextFollowUp.setDate(nextFollowUp.getDate() + 3)
 
     const crmEntry: CRMEntry = {
       id: `outreach-${Date.now()}`,
       investorId: selectedInvestor.id,
       investorName: selectedInvestor.name,
+      investorType: selectedInvestor.type,
       status: 'sent',
       sentAt: new Date(),
-      subject: emailDraft.subject
+      subject: emailDraft.subject,
+      nextFollowUp,
+      notes: `Sent via Investor Match. ${attachmentOption === 'auto' ? 'Auto-generated 1-pager attached.' : attachmentOption === 'upload' ? `Custom 1-pager "${uploadedFile?.name}" attached.` : 'No attachment.'}`
     }
 
     setCrmTracker([...crmTracker, crmEntry])
     setEmailSent(true)
 
-    // Auto-close modal after 2 seconds
     setTimeout(() => {
-      setShowDraftModal(false)
+      setShowOutreachModal(false)
       setSelectedInvestor(null)
     }, 2000)
   }
 
-  // Handle copy to clipboard
+  const handleAddCustomInvestor = () => {
+    if (!newInvestorName.trim()) return
+
+    const customInvestor: Investor = {
+      id: `custom-${Date.now()}`,
+      name: newInvestorName,
+      type: newInvestorType,
+      stage: 'Custom',
+      checkSize: newInvestorCheckSize || 'TBD',
+      sector: 'Custom',
+      location: 'TBD',
+      successRate: 0,
+      relevance: 0,
+      notes: 'Custom investor added to CRM',
+      isCustom: true
+    }
+
+    setCustomInvestors([...customInvestors, customInvestor])
+    setNewInvestorName('')
+    setNewInvestorType('VC')
+    setNewInvestorCheckSize('')
+    setShowAddInvestor(false)
+  }
+
+  const handleDeleteCustomInvestor = (id: string) => {
+    setCustomInvestors(customInvestors.filter(inv => inv.id !== id))
+  }
+
   const handleCopyEmail = () => {
     const fullEmail = `Subject: ${emailDraft?.subject}\n\n${editedBody}`
     navigator.clipboard.writeText(fullEmail)
@@ -242,665 +285,1028 @@ Best regards,
     setTimeout(() => setCopiedEmail(''), 2000)
   }
 
+  const handleCopyCRMEntry = (entry: CRMEntry) => {
+    navigator.clipboard.writeText(`${entry.investorName} - ${entry.status}`)
+    setCopiedEmail(entry.id)
+    setTimeout(() => setCopiedEmail(''), 2000)
+  }
+
+  const sentCount = crmTracker.filter(e => e.status === 'sent').length
+  const repliedCount = crmTracker.filter(e => e.status === 'replied').length
+
   return (
     <AppShell>
-      <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
+      <div style={{ minHeight: '100vh', background: '#F7F6F4', display: 'grid', gridTemplateColumns: '340px 1fr' }}>
 
-      {/* Hero */}
-      <section style={{ borderBottom: '1px solid #E5E4E0', padding: '3rem 1.5rem', background: '#F7F6F4' }}>
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center space-y-6"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg" style={{ background: '#F0F4FF', border: '1px solid #1D4ED830' }}>
-              <Target className="w-4 h-4" style={{ color: '#1D4ED8' }} />
-              <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1D4ED8' }}>Investor Intelligence</span>
+        {/* CRM SIDEBAR */}
+        <div style={{ background: '#FFFFFF', borderRight: '1px solid #E5E4E0', display: 'flex', flexDirection: 'column', maxHeight: '100vh', overflowY: 'auto' }}>
+
+          {/* CRM Header */}
+          <div style={{ padding: '1.5rem', borderBottom: '1px solid #E5E4E0', background: '#FFFFFF' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+              <Inbox className="w-5 h-5" style={{ color: '#E8312A' }} />
+              <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
+                Outreach Pipeline
+              </h2>
             </div>
 
-            <h1 style={{ fontSize: '2.75rem', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.2, margin: '1rem 0' }}>
-              Investor Match™
-            </h1>
-
-            <p style={{ fontSize: '1.125rem', color: '#717171', maxWidth: '48rem', margin: '1rem auto' }}>
-              Find the investors most likely to lead your round. Matching based on stage, sector, check size, and exit patterns.
-            </p>
-
-            <div style={{ marginTop: '1.5rem' }}>
-              <div className="inline-flex items-center gap-2" style={{ color: '#1A1A1A' }}>
-                <CheckCircle2 className="w-5 h-5" style={{ color: '#2D7A5F' }} />
-                <span style={{ fontWeight: 600 }}>Curated from 500+ institutional investors</span>
+            {/* CRM Stats */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.5rem' }}>
+              <div style={{ padding: '0.75rem', background: '#F0F4FF', borderRadius: '0.375rem', textAlign: 'center' }}>
+                <p style={{ fontSize: '0.75rem', color: '#717171', fontWeight: 600, margin: '0 0 0.25rem 0' }}>Sent</p>
+                <p style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1D4ED8', margin: 0 }}>{sentCount}</p>
               </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Filters */}
-      <section style={{ padding: '2rem 1.5rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row gap-4 items-end">
-            {/* Search */}
-            <div className="flex-1">
-              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
-                Search
-              </label>
-              <div style={{ position: 'relative' }}>
-                <Search className="w-5 h-5" style={{ position: 'absolute', left: '0.75rem', top: '0.75rem', color: '#717171' }} />
-                <input
-                  type="text"
-                  placeholder="Investor name or sector..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem 0.75rem 0.75rem 2.5rem',
-                    fontSize: '0.875rem',
-                    border: '1px solid #E5E4E0',
-                    borderRadius: '0.375rem',
-                    outline: 'none'
-                  }}
-                />
+              <div style={{ padding: '0.75rem', background: '#EBF9F4', borderRadius: '0.375rem', textAlign: 'center' }}>
+                <p style={{ fontSize: '0.75rem', color: '#717171', fontWeight: 600, margin: '0 0 0.25rem 0' }}>Replied</p>
+                <p style={{ fontSize: '1.5rem', fontWeight: 700, color: '#2D7A5F', margin: 0 }}>{repliedCount}</p>
               </div>
             </div>
 
-            {/* Type Filter */}
-            <div>
-              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
-                Investor Type
-              </label>
-              <select
-                value={selectedType || ''}
-                onChange={(e) => setSelectedType(e.target.value || null)}
-                style={{
-                  padding: '0.75rem 1rem',
-                  fontSize: '0.875rem',
-                  border: '1px solid #E5E4E0',
-                  borderRadius: '0.375rem',
-                  background: '#FFFFFF',
-                  color: '#1A1A1A',
-                  cursor: 'pointer'
-                }}
-              >
-                <option value="">All Types</option>
-                <option value="VC">Venture Capital</option>
-                <option value="PE">Private Equity</option>
-                <option value="Growth">Growth Equity</option>
-                <option value="Strategic">Strategic</option>
-              </select>
-            </div>
-
-            {/* Sort */}
-            <div>
-              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
-                Sort By
-              </label>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as 'relevance' | 'successRate')}
-                style={{
-                  padding: '0.75rem 1rem',
-                  fontSize: '0.875rem',
-                  border: '1px solid #E5E4E0',
-                  borderRadius: '0.375rem',
-                  background: '#FFFFFF',
-                  color: '#1A1A1A',
-                  cursor: 'pointer'
-                }}
-              >
-                <option value="relevance">Relevance</option>
-                <option value="successRate">Exit Rate</option>
-              </select>
-            </div>
+            {/* Add Investor Button */}
+            <button
+              onClick={() => setShowAddInvestor(true)}
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                background: '#E8312A',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '0.375rem',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                transition: 'background 0.2s'
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#D12620')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = '#E8312A')}
+            >
+              <Plus className="w-4 h-4" />
+              Add Investor
+            </button>
           </div>
-        </div>
-      </section>
 
-      {/* Investors Grid */}
-      <section style={{ padding: '3rem 1.5rem' }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-6">
-            {investors.map((investor, idx) => (
-              <motion.div
-                key={investor.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: idx * 0.05 }}
-                style={{
-                  padding: '1.5rem',
-                  background: '#FFFFFF',
-                  border: '1px solid #E5E4E0',
-                  borderRadius: '0.5rem'
-                }}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1">
-                    <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.25rem' }}>
-                      {investor.name}
-                    </h3>
-                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      <span
-                        style={{
-                          fontSize: '0.75rem',
+          {/* CRM Entries */}
+          <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
+            {crmTracker.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '2rem 1rem', color: '#717171' }}>
+                <Mail className="w-8 h-8 mx-auto mb-2" style={{ opacity: 0.3 }} />
+                <p style={{ fontSize: '0.875rem', margin: 0 }}>Start reaching out to build your pipeline</p>
+              </div>
+            ) : (
+              <div style={{ display: 'grid', gap: '0.75rem' }}>
+                {crmTracker.map((entry) => (
+                  <motion.div
+                    key={entry.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    style={{
+                      padding: '1rem',
+                      background: '#F9F9F9',
+                      border: '1px solid #E5E4E0',
+                      borderRadius: '0.375rem',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={(e: any) => {
+                      e.currentTarget.style.background = '#F0F4FF'
+                      e.currentTarget.style.borderColor = '#1D4ED8'
+                    }}
+                    onMouseLeave={(e: any) => {
+                      e.currentTarget.style.background = '#F9F9F9'
+                      e.currentTarget.style.borderColor = '#E5E4E0'
+                    }}
+                  >
+                    <div style={{ marginBottom: '0.5rem' }}>
+                      <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1A1A1A', margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span>{entry.investorName}</span>
+                        <span style={{
+                          fontSize: '0.65rem',
                           fontWeight: 700,
                           padding: '0.25rem 0.5rem',
                           borderRadius: '0.25rem',
-                          background: investor.type === 'VC' ? '#EBF9F4' : investor.type === 'PE' ? '#F0F4FF' : '#FEF3E1',
-                          color: investor.type === 'VC' ? '#2D7A5F' : investor.type === 'PE' ? '#1D4ED8' : '#B45309'
-                        }}
-                      >
-                        {investor.type}
-                      </span>
+                          background: entry.status === 'sent' ? '#F0F4FF' : '#EBF9F4',
+                          color: entry.status === 'sent' ? '#1D4ED8' : '#2D7A5F'
+                        }}>
+                          {entry.status.toUpperCase()}
+                        </span>
+                      </p>
                     </div>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', marginBottom: '0.25rem' }}>
-                      <Star className="w-4 h-4" style={{ color: '#FCD34D', fill: '#FCD34D' }} />
-                      <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A' }}>
-                        {investor.relevance}%
-                      </span>
-                    </div>
-                    <p style={{ fontSize: '0.75rem', color: '#717171' }}>Match</p>
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-                  <div>
-                    <p style={{ fontSize: '0.75rem', color: '#717171', fontWeight: 600, marginBottom: '0.25rem' }}>Stage</p>
-                    <p style={{ fontSize: '0.875rem', color: '#1A1A1A' }}>{investor.stage}</p>
-                  </div>
-                  <div>
-                    <p style={{ fontSize: '0.75rem', color: '#717171', fontWeight: 600, marginBottom: '0.25rem' }}>Check Size</p>
-                    <p style={{ fontSize: '0.875rem', color: '#1A1A1A' }}>{investor.checkSize}</p>
-                  </div>
-                  <div>
-                    <p style={{ fontSize: '0.75rem', color: '#717171', fontWeight: 600, marginBottom: '0.25rem' }}>Sector Focus</p>
-                    <p style={{ fontSize: '0.875rem', color: '#1A1A1A' }}>{investor.sector}</p>
-                  </div>
-                  <div>
-                    <p style={{ fontSize: '0.75rem', color: '#717171', fontWeight: 600, marginBottom: '0.25rem' }}>Exit Rate</p>
-                    <p style={{ fontSize: '0.875rem', color: '#1A1A1A' }}>{investor.successRate}%</p>
-                  </div>
-                </div>
-
-                <div style={{ padding: '0.75rem', background: '#F9F9F9', borderRadius: '0.375rem', marginBottom: '1rem' }}>
-                  <p style={{ fontSize: '0.75rem', color: '#717171', marginBottom: '0.25rem', fontWeight: 600 }}>Location</p>
-                  <p style={{ fontSize: '0.875rem', color: '#1A1A1A' }}>{investor.location}</p>
-                </div>
-
-                <p style={{ fontSize: '0.875rem', color: '#717171', marginBottom: '1rem', lineHeight: 1.5 }}>
-                  {investor.notes}
-                </p>
-
-                <button
-                  onClick={() => handleInvestorSelect(investor)}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem 1rem',
-                    background: '#E8312A',
-                    color: '#FFFFFF',
-                    fontWeight: 700,
-                    fontSize: '0.875rem',
-                    border: 'none',
-                    borderRadius: '0.375rem',
-                    cursor: 'pointer',
-                    transition: 'background 0.2s'
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = '#D12620')}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = '#E8312A')}
-                >
-                  Start Outreach
-                </button>
-              </motion.div>
-            ))}
+                    <p style={{ fontSize: '0.75rem', color: '#717171', margin: '0.25rem 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {entry.subject}
+                    </p>
+                    {entry.sentAt && (
+                      <p style={{ fontSize: '0.7rem', color: '#999', margin: '0.25rem 0 0 0' }}>
+                        {entry.sentAt.toLocaleDateString()}
+                      </p>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {investors.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '3rem' }}>
-              <AlertCircle className="w-12 h-12 mx-auto mb-3" style={{ color: '#717171' }} />
-              <p style={{ fontSize: '1rem', color: '#717171' }}>No investors match your criteria</p>
+          {/* Custom Investors Section */}
+          {customInvestors.length > 0 && (
+            <div style={{ padding: '1rem', borderTop: '1px solid #E5E4E0', background: '#F9F9F9' }}>
+              <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#717171', textTransform: 'uppercase', marginBottom: '0.75rem', margin: '0 0 0.75rem 0' }}>
+                Custom Investors ({customInvestors.length})
+              </p>
+              <div style={{ display: 'grid', gap: '0.5rem' }}>
+                {customInvestors.map((inv) => (
+                  <div
+                    key={inv.id}
+                    style={{
+                      padding: '0.75rem',
+                      background: '#FFFFFF',
+                      border: '1px solid #E5E4E0',
+                      borderRadius: '0.375rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: '0.5rem'
+                    }}
+                  >
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1A1A1A', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {inv.name}
+                      </p>
+                      <p style={{ fontSize: '0.7rem', color: '#717171', margin: '0.25rem 0 0 0' }}>
+                        {inv.type}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleDeleteCustomInvestor(inv.id)}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: '0.25rem',
+                        color: '#717171',
+                        flexShrink: 0
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = '#DC2626')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = '#717171')}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
-      </section>
 
-      {/* Investor Detail Modal with AI Insights & Outreach Workflow */}
-      <AnimatePresence>
-        {showDraftModal && selectedInvestor && emailDraft && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowDraftModal(false)}
-              style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: 'rgba(0, 0, 0, 0.5)',
-                zIndex: 40
-              }}
-            />
+        {/* MAIN CONTENT */}
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
 
-            {/* Modal */}
+          {/* Hero Section */}
+          <section style={{ borderBottom: '1px solid #E5E4E0', padding: '2rem 2rem', background: '#F7F6F4' }}>
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.3 }}
-              style={{
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                background: '#FFFFFF',
-                borderRadius: '0.75rem',
-                border: '1px solid #E5E4E0',
-                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-                maxWidth: '900px',
-                width: '90%',
-                maxHeight: '90vh',
-                overflowY: 'auto',
-                zIndex: 50
-              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
             >
-              {/* Header */}
-              <div style={{ padding: '2rem', borderBottom: '1px solid #E5E4E0', background: '#F7F6F4' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                  <div>
-                    <h2 style={{ fontSize: '1.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
-                      {selectedInvestor.name}
-                    </h2>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                      <span
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                <div style={{ padding: '0.5rem', background: '#F0F4FF', borderRadius: '0.375rem' }}>
+                  <Target className="w-5 h-5" style={{ color: '#1D4ED8' }} />
+                </div>
+                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1D4ED8' }}>Investor Intelligence</span>
+              </div>
+              <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#1A1A1A', margin: '0 0 0.75rem 0', lineHeight: 1.2 }}>
+                Investor Match™
+              </h1>
+              <p style={{ fontSize: '0.875rem', color: '#717171', margin: 0 }}>
+                AI-matched investors + CRM pipeline. Find, reach out, and track investor conversations.
+              </p>
+            </motion.div>
+          </section>
+
+          {/* Filters Section */}
+          <section style={{ padding: '1.5rem 2rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+              {/* Search */}
+              <div style={{ flex: 1, minWidth: '250px' }}>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                  Search
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <Search className="w-4 h-4" style={{ position: 'absolute', left: '0.75rem', top: '0.75rem', color: '#717171' }} />
+                  <input
+                    type="text"
+                    placeholder="Investor name or sector..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 0.75rem 0.75rem 2.5rem',
+                      fontSize: '0.875rem',
+                      border: '1px solid #E5E4E0',
+                      borderRadius: '0.375rem',
+                      outline: 'none',
+                      color: '#1A1A1A'
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Type Filter */}
+              <div>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                  Type
+                </label>
+                <select
+                  value={selectedType || ''}
+                  onChange={(e) => setSelectedType(e.target.value || null)}
+                  style={{
+                    padding: '0.75rem 1rem',
+                    fontSize: '0.875rem',
+                    border: '1px solid #E5E4E0',
+                    borderRadius: '0.375rem',
+                    background: '#FFFFFF',
+                    color: '#1A1A1A',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="">All Types</option>
+                  <option value="VC">Venture Capital</option>
+                  <option value="PE">Private Equity</option>
+                  <option value="Growth">Growth Equity</option>
+                  <option value="Strategic">Strategic</option>
+                </select>
+              </div>
+
+              {/* Sort */}
+              <div>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                  Sort
+                </label>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as 'relevance' | 'successRate')}
+                  style={{
+                    padding: '0.75rem 1rem',
+                    fontSize: '0.875rem',
+                    border: '1px solid #E5E4E0',
+                    borderRadius: '0.375rem',
+                    background: '#FFFFFF',
+                    color: '#1A1A1A',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="relevance">Relevance</option>
+                  <option value="successRate">Exit Rate</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          {/* Investors Grid */}
+          <section style={{ padding: '2rem', flex: 1, overflowY: 'auto' }}>
+            <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+              {investors.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '3rem' }}>
+                  <AlertCircle className="w-12 h-12 mx-auto mb-3" style={{ color: '#717171' }} />
+                  <p style={{ fontSize: '0.875rem', color: '#717171' }}>No investors match your criteria</p>
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+                  {investors.map((investor, idx) => (
+                    <motion.div
+                      key={investor.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: idx * 0.05 }}
+                      style={{
+                        padding: '1.5rem',
+                        background: '#FFFFFF',
+                        border: investor.isCustom ? '2px solid #E8312A' : '1px solid #E5E4E0',
+                        borderRadius: '0.5rem',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s'
+                      }}
+                      onMouseEnter={(e: any) => {
+                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'
+                        e.currentTarget.style.borderColor = '#1D4ED8'
+                      }}
+                      onMouseLeave={(e: any) => {
+                        e.currentTarget.style.boxShadow = 'none'
+                        e.currentTarget.style.borderColor = investor.isCustom ? '#E8312A' : '#E5E4E0'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'start', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                        <div>
+                          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#1A1A1A', margin: '0 0 0.25rem 0' }}>
+                            {investor.name}
+                            {investor.isCustom && <span style={{ fontSize: '0.65rem', marginLeft: '0.5rem', background: '#FEE2E2', color: '#DC2626', padding: '0.2rem 0.5rem', borderRadius: '0.25rem' }}>CUSTOM</span>}
+                          </h3>
+                          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <span style={{
+                              fontSize: '0.75rem',
+                              fontWeight: 700,
+                              padding: '0.25rem 0.5rem',
+                              borderRadius: '0.25rem',
+                              background: investor.type === 'VC' ? '#EBF9F4' : investor.type === 'PE' ? '#F0F4FF' : '#FEF3E1',
+                              color: investor.type === 'VC' ? '#2D7A5F' : investor.type === 'PE' ? '#1D4ED8' : '#B45309'
+                            }}>
+                              {investor.type}
+                            </span>
+                          </div>
+                        </div>
+                        {!investor.isCustom && (
+                          <div style={{ textAlign: 'right' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', marginBottom: '0.25rem' }}>
+                              <Star className="w-4 h-4" style={{ color: '#FCD34D', fill: '#FCD34D' }} />
+                              <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A' }}>
+                                {investor.relevance}%
+                              </span>
+                            </div>
+                            <p style={{ fontSize: '0.75rem', color: '#717171', margin: 0 }}>Match</p>
+                          </div>
+                        )}
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1rem' }}>
+                        <div>
+                          <p style={{ fontSize: '0.7rem', color: '#717171', fontWeight: 600, margin: '0 0 0.25rem 0', textTransform: 'uppercase' }}>Stage</p>
+                          <p style={{ fontSize: '0.875rem', color: '#1A1A1A', margin: 0 }}>{investor.stage}</p>
+                        </div>
+                        <div>
+                          <p style={{ fontSize: '0.7rem', color: '#717171', fontWeight: 600, margin: '0 0 0.25rem 0', textTransform: 'uppercase' }}>Check Size</p>
+                          <p style={{ fontSize: '0.875rem', color: '#1A1A1A', margin: 0 }}>{investor.checkSize}</p>
+                        </div>
+                      </div>
+
+                      <div style={{ padding: '0.75rem', background: '#F9F9F9', borderRadius: '0.375rem', marginBottom: '1rem' }}>
+                        <p style={{ fontSize: '0.7rem', color: '#717171', fontWeight: 600, margin: '0 0 0.25rem 0', textTransform: 'uppercase' }}>Location</p>
+                        <p style={{ fontSize: '0.875rem', color: '#1A1A1A', margin: 0 }}>{investor.location}</p>
+                      </div>
+
+                      <p style={{ fontSize: '0.875rem', color: '#717171', margin: '0 0 1rem 0', lineHeight: 1.5 }}>
+                        {investor.notes}
+                      </p>
+
+                      <button
+                        onClick={() => handleInvestorSelect(investor)}
                         style={{
+                          width: '100%',
+                          padding: '0.75rem 1rem',
+                          background: '#E8312A',
+                          color: '#FFFFFF',
+                          fontWeight: 700,
+                          fontSize: '0.875rem',
+                          border: 'none',
+                          borderRadius: '0.375rem',
+                          cursor: 'pointer',
+                          transition: 'background 0.2s'
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = '#D12620')}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = '#E8312A')}
+                      >
+                        <Mail className="w-4 h-4 inline mr-2" />
+                        Start Outreach
+                      </button>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+        </div>
+
+        {/* ADD INVESTOR MODAL */}
+        <AnimatePresence>
+          {showAddInvestor && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowAddInvestor(false)}
+                style={{
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'rgba(0, 0, 0, 0.5)',
+                  zIndex: 40
+                }}
+              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                style={{
+                  position: 'fixed',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  background: '#FFFFFF',
+                  borderRadius: '0.75rem',
+                  border: '1px solid #E5E4E0',
+                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                  maxWidth: '400px',
+                  width: '90%',
+                  zIndex: 50
+                }}
+              >
+                <div style={{ padding: '2rem', borderBottom: '1px solid #E5E4E0' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                    <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
+                      Add Investor to CRM
+                    </h2>
+                    <button
+                      onClick={() => setShowAddInvestor(false)}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: '0.5rem'
+                      }}
+                    >
+                      <X className="w-5 h-5" style={{ color: '#717171' }} />
+                    </button>
+                  </div>
+                  <p style={{ fontSize: '0.875rem', color: '#717171', margin: 0 }}>
+                    Create a custom investor entry to track in your CRM pipeline.
+                  </p>
+                </div>
+
+                <div style={{ padding: '2rem' }}>
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
+                      Investor Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={newInvestorName}
+                      onChange={(e) => setNewInvestorName(e.target.value)}
+                      placeholder="e.g., Benchmark Capital"
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        fontSize: '0.875rem',
+                        border: '1px solid #E5E4E0',
+                        borderRadius: '0.375rem',
+                        boxSizing: 'border-box',
+                        color: '#1A1A1A'
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
+                      Investor Type
+                    </label>
+                    <select
+                      value={newInvestorType}
+                      onChange={(e) => setNewInvestorType(e.target.value as Investor['type'])}
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        fontSize: '0.875rem',
+                        border: '1px solid #E5E4E0',
+                        borderRadius: '0.375rem',
+                        boxSizing: 'border-box',
+                        color: '#1A1A1A',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <option value="VC">Venture Capital</option>
+                      <option value="PE">Private Equity</option>
+                      <option value="Growth">Growth Equity</option>
+                      <option value="Strategic">Strategic</option>
+                    </select>
+                  </div>
+
+                  <div style={{ marginBottom: '2rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
+                      Check Size (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={newInvestorCheckSize}
+                      onChange={(e) => setNewInvestorCheckSize(e.target.value)}
+                      placeholder="e.g., $5M-$50M"
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        fontSize: '0.875rem',
+                        border: '1px solid #E5E4E0',
+                        borderRadius: '0.375rem',
+                        boxSizing: 'border-box',
+                        color: '#1A1A1A'
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <button
+                      onClick={() => setShowAddInvestor(false)}
+                      style={{
+                        padding: '0.75rem 1rem',
+                        background: '#FFFFFF',
+                        color: '#1A1A1A',
+                        border: '1px solid #E5E4E0',
+                        borderRadius: '0.375rem',
+                        fontSize: '0.875rem',
+                        fontWeight: 600,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleAddCustomInvestor}
+                      disabled={!newInvestorName.trim()}
+                      style={{
+                        padding: '0.75rem 1rem',
+                        background: newInvestorName.trim() ? '#E8312A' : '#CCCCCC',
+                        color: '#FFFFFF',
+                        border: 'none',
+                        borderRadius: '0.375rem',
+                        fontSize: '0.875rem',
+                        fontWeight: 600,
+                        cursor: newInvestorName.trim() ? 'pointer' : 'not-allowed'
+                      }}
+                    >
+                      Add Investor
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* OUTREACH MODAL */}
+        <AnimatePresence>
+          {showOutreachModal && selectedInvestor && emailDraft && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowOutreachModal(false)}
+                style={{
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'rgba(0, 0, 0, 0.5)',
+                  zIndex: 40
+                }}
+              />
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                style={{
+                  position: 'fixed',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  background: '#FFFFFF',
+                  borderRadius: '0.75rem',
+                  border: '1px solid #E5E4E0',
+                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                  maxWidth: '900px',
+                  width: '90%',
+                  maxHeight: '90vh',
+                  overflowY: 'auto',
+                  zIndex: 50
+                }}
+              >
+                {/* Header */}
+                <div style={{ padding: '2rem', borderBottom: '1px solid #E5E4E0', background: '#F7F6F4' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                    <div>
+                      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1A1A1A', margin: '0 0 0.5rem 0' }}>
+                        {selectedInvestor.name}
+                      </h2>
+                      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                        <span style={{
                           fontSize: '0.75rem',
                           fontWeight: 700,
                           padding: '0.375rem 0.75rem',
                           borderRadius: '0.375rem',
                           background: selectedInvestor.type === 'VC' ? '#EBF9F4' : selectedInvestor.type === 'PE' ? '#F0F4FF' : '#FEF3E1',
                           color: selectedInvestor.type === 'VC' ? '#2D7A5F' : selectedInvestor.type === 'PE' ? '#1D4ED8' : '#B45309'
-                        }}
-                      >
-                        {selectedInvestor.type}
-                      </span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                        <Star className="w-4 h-4" style={{ color: '#FCD34D', fill: '#FCD34D' }} />
-                        <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1A1A1A' }}>
-                          {selectedInvestor.relevance}% Match
+                        }}>
+                          {selectedInvestor.type}
                         </span>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setShowDraftModal(false)}
-                    style={{
-                      background: 'transparent',
-                      border: 'none',
-                      cursor: 'pointer',
-                      padding: '0.5rem'
-                    }}
-                  >
-                    <X className="w-6 h-6" style={{ color: '#717171' }} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div style={{ padding: '2rem' }}>
-                {/* Success Message */}
-                {emailSent && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    style={{
-                      padding: '1rem 1.5rem',
-                      background: '#EBF9F4',
-                      border: '1px solid #2D7A5F',
-                      borderRadius: '0.5rem',
-                      marginBottom: '1.5rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '1rem'
-                    }}
-                  >
-                    <CheckCircle className="w-5 h-5" style={{ color: '#2D7A5F', flexShrink: 0 }} />
-                    <div>
-                      <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#2D7A5F', marginBottom: '0.25rem' }}>
-                        Email Sent Successfully!
-                      </p>
-                      <p style={{ fontSize: '0.75rem', color: '#2D7A5F' }}>
-                        Your outreach to {selectedInvestor.name} has been tracked in your CRM.
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
-                  {/* Left Column: AI Insights & Strategy */}
-                  <div>
-                    {/* AI Insights */}
-                    <div style={{ marginBottom: '2rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                        <Lightbulb className="w-5 h-5" style={{ color: '#E8312A' }} />
-                        <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1A1A1A' }}>
-                          Why This Investor?
-                        </h3>
-                      </div>
-                      <div>
-                        {generateAIInsights(selectedInvestor).map((insight, idx) => (
-                          <div
-                            key={idx}
-                            style={{
-                              padding: '0.875rem',
-                              background: '#F9F9F9',
-                              borderLeft: '3px solid #E8312A',
-                              borderRadius: '0.375rem',
-                              marginBottom: '0.75rem'
-                            }}
-                          >
-                            <p style={{ fontSize: '0.875rem', color: '#1A1A1A', lineHeight: 1.5 }}>
-                              {insight}
-                            </p>
+                        {!selectedInvestor.isCustom && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                            <Star className="w-4 h-4" style={{ color: '#FCD34D', fill: '#FCD34D' }} />
+                            <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1A1A1A' }}>
+                              {selectedInvestor.relevance}% Match
+                            </span>
                           </div>
-                        ))}
+                        )}
                       </div>
                     </div>
+                    <button
+                      onClick={() => setShowOutreachModal(false)}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: '0.5rem'
+                      }}
+                    >
+                      <X className="w-6 h-6" style={{ color: '#717171' }} />
+                    </button>
+                  </div>
+                </div>
 
-                    {/* Approach Strategy */}
-                    <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                        <ArrowRight className="w-5 h-5" style={{ color: '#1D4ED8' }} />
-                        <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1A1A1A' }}>
-                          How to Approach
-                        </h3>
-                      </div>
+                {/* Content */}
+                <div style={{ padding: '2rem' }}>
+                  {emailSent && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      style={{
+                        padding: '1rem 1.5rem',
+                        background: '#EBF9F4',
+                        border: '1px solid #2D7A5F',
+                        borderRadius: '0.5rem',
+                        marginBottom: '1.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem'
+                      }}
+                    >
+                      <CheckCircle className="w-5 h-5" style={{ color: '#2D7A5F', flexShrink: 0 }} />
                       <div>
-                        {generateApproachStrategy(selectedInvestor).map((strategy, idx) => (
-                          <div
-                            key={idx}
-                            style={{
-                              display: 'flex',
-                              gap: '1rem',
-                              marginBottom: '1rem'
-                            }}
-                          >
+                        <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#2D7A5F', margin: '0 0 0.25rem 0' }}>
+                          Email Sent Successfully!
+                        </p>
+                        <p style={{ fontSize: '0.75rem', color: '#2D7A5F', margin: 0 }}>
+                          Your outreach to {selectedInvestor.name} has been tracked in your CRM.
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
+                    {/* Left Column: AI Insights & Strategy */}
+                    <div>
+                      {/* AI Insights */}
+                      <div style={{ marginBottom: '2rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                          <Lightbulb className="w-5 h-5" style={{ color: '#E8312A' }} />
+                          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
+                            Why This Investor?
+                          </h3>
+                        </div>
+                        <div>
+                          {generateAIInsights(selectedInvestor).map((insight, idx) => (
                             <div
+                              key={idx}
                               style={{
-                                width: '1.75rem',
-                                height: '1.75rem',
-                                background: '#F0F4FF',
-                                border: '2px solid #1D4ED8',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0,
-                                fontSize: '0.75rem',
-                                fontWeight: 700,
-                                color: '#1D4ED8'
+                                padding: '0.875rem',
+                                background: '#F9F9F9',
+                                borderLeft: '3px solid #E8312A',
+                                borderRadius: '0.375rem',
+                                marginBottom: '0.75rem'
                               }}
                             >
-                              {idx + 1}
+                              <p style={{ fontSize: '0.875rem', color: '#1A1A1A', lineHeight: 1.5, margin: 0 }}>
+                                {insight}
+                              </p>
                             </div>
-                            <p style={{ fontSize: '0.875rem', color: '#1A1A1A', lineHeight: 1.5, paddingTop: '0.25rem' }}>
-                              {strategy}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right Column: Email Draft Editor */}
-                  <div>
-                    {/* Email Preview / Edit Toggle */}
-                    <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
-                      <button
-                        onClick={() => setIsEditing(false)}
-                        style={{
-                          flex: 1,
-                          padding: '0.75rem 1rem',
-                          background: !isEditing ? '#1A1A1A' : '#FFFFFF',
-                          color: !isEditing ? '#FFFFFF' : '#1A1A1A',
-                          border: !isEditing ? 'none' : '1px solid #E5E4E0',
-                          borderRadius: '0.375rem',
-                          fontSize: '0.875rem',
-                          fontWeight: 600,
-                          cursor: 'pointer'
-                        }}
-                      >
-                        <Eye className="w-4 h-4 inline mr-2" />
-                        Preview
-                      </button>
-                      <button
-                        onClick={() => setIsEditing(true)}
-                        style={{
-                          flex: 1,
-                          padding: '0.75rem 1rem',
-                          background: isEditing ? '#1A1A1A' : '#FFFFFF',
-                          color: isEditing ? '#FFFFFF' : '#1A1A1A',
-                          border: isEditing ? 'none' : '1px solid #E5E4E0',
-                          borderRadius: '0.375rem',
-                          fontSize: '0.875rem',
-                          fontWeight: 600,
-                          cursor: 'pointer'
-                        }}
-                      >
-                        <FileText className="w-4 h-4 inline mr-2" />
-                        Edit
-                      </button>
-                    </div>
-
-                    {/* Email Draft */}
-                    <div style={{
-                      background: '#F9F9F9',
-                      border: '1px solid #E5E4E0',
-                      borderRadius: '0.5rem',
-                      padding: '1.5rem'
-                    }}>
-                      <div style={{ marginBottom: '1.25rem' }}>
-                        <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#717171', marginBottom: '0.375rem' }}>
-                          SUBJECT
-                        </p>
-                        {isEditing ? (
-                          <input
-                            type="text"
-                            value={emailDraft.subject}
-                            onChange={(e) => setEmailDraft({ ...emailDraft, subject: e.target.value })}
-                            style={{
-                              width: '100%',
-                              padding: '0.75rem',
-                              fontSize: '0.875rem',
-                              fontWeight: 600,
-                              border: '1px solid #E5E4E0',
-                              borderRadius: '0.375rem',
-                              color: '#1A1A1A'
-                            }}
-                          />
-                        ) : (
-                          <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1A1A1A' }}>
-                            {emailDraft.subject}
-                          </p>
-                        )}
-                      </div>
-
-                      <div>
-                        <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#717171', marginBottom: '0.375rem' }}>
-                          MESSAGE
-                        </p>
-                        {isEditing ? (
-                          <textarea
-                            value={editedBody}
-                            onChange={(e) => setEditedBody(e.target.value)}
-                            style={{
-                              width: '100%',
-                              height: '300px',
-                              padding: '0.75rem',
-                              fontSize: '0.75rem',
-                              border: '1px solid #E5E4E0',
-                              borderRadius: '0.375rem',
-                              color: '#1A1A1A',
-                              fontFamily: 'monospace',
-                              resize: 'vertical'
-                            }}
-                          />
-                        ) : (
-                          <div style={{
-                            padding: '1rem',
-                            background: '#FFFFFF',
-                            borderRadius: '0.375rem',
-                            fontSize: '0.75rem',
-                            color: '#1A1A1A',
-                            whiteSpace: 'pre-wrap',
-                            wordBreak: 'break-word',
-                            lineHeight: 1.6,
-                            maxHeight: '250px',
-                            overflowY: 'auto'
-                          }}>
-                            {editedBody}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Attachment Badge */}
-                      {emailDraft.hasAttachment && (
-                        <div style={{
-                          marginTop: '1rem',
-                          padding: '0.75rem',
-                          background: '#EBF9F4',
-                          borderRadius: '0.375rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem'
-                        }}>
-                          <Download className="w-4 h-4" style={{ color: '#2D7A5F' }} />
-                          <span style={{ fontSize: '0.75rem', color: '#2D7A5F', fontWeight: 600 }}>
-                            📎 1-Pager Teaser (PDF attached)
-                          </span>
+                          ))}
                         </div>
-                      )}
+                      </div>
+
+                      {/* Approach Strategy */}
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                          <ArrowRight className="w-5 h-5" style={{ color: '#1D4ED8' }} />
+                          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
+                            How to Approach
+                          </h3>
+                        </div>
+                        <div>
+                          {generateApproachStrategy(selectedInvestor).map((strategy, idx) => (
+                            <div
+                              key={idx}
+                              style={{
+                                display: 'flex',
+                                gap: '1rem',
+                                marginBottom: '1rem'
+                              }}
+                            >
+                              <div
+                                style={{
+                                  width: '1.75rem',
+                                  height: '1.75rem',
+                                  background: '#F0F4FF',
+                                  border: '2px solid #1D4ED8',
+                                  borderRadius: '50%',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  flexShrink: 0,
+                                  fontSize: '0.75rem',
+                                  fontWeight: 700,
+                                  color: '#1D4ED8'
+                                }}
+                              >
+                                {idx + 1}
+                              </div>
+                              <p style={{ fontSize: '0.875rem', color: '#1A1A1A', lineHeight: 1.5, margin: '0.25rem 0 0 0' }}>
+                                {strategy}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Action Buttons */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginTop: '1.5rem' }}>
-                      <button
-                        onClick={handleCopyEmail}
-                        style={{
-                          padding: '0.75rem 1rem',
-                          background: '#FFFFFF',
-                          color: '#1A1A1A',
-                          border: '1px solid #E5E4E0',
-                          borderRadius: '0.375rem',
-                          fontSize: '0.875rem',
-                          fontWeight: 600,
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '0.5rem',
-                          transition: 'background 0.2s'
-                        }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = '#F9F9F9')}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = '#FFFFFF')}
-                      >
-                        <Copy className="w-4 h-4" />
-                        {copiedEmail === 'email' ? 'Copied!' : 'Copy Email'}
-                      </button>
-                      <button
-                        onClick={handleSendEmail}
-                        disabled={emailSent}
-                        style={{
-                          padding: '0.75rem 1rem',
-                          background: emailSent ? '#2D7A5F' : '#E8312A',
-                          color: '#FFFFFF',
-                          border: 'none',
-                          borderRadius: '0.375rem',
-                          fontSize: '0.875rem',
-                          fontWeight: 600,
-                          cursor: emailSent ? 'default' : 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '0.5rem',
-                          transition: 'background 0.2s'
-                        }}
-                        onMouseEnter={(e) => !emailSent && (e.currentTarget.style.background = '#D12620')}
-                        onMouseLeave={(e) => !emailSent && (e.currentTarget.style.background = '#E8312A')}
-                      >
-                        {emailSent ? (
-                          <>
-                            <CheckCircle className="w-4 h-4" />
-                            Sent
-                          </>
-                        ) : (
-                          <>
-                            <Send className="w-4 h-4" />
-                            Send Email
-                          </>
-                        )}
-                      </button>
+                    {/* Right Column: Email Draft & Attachment Options */}
+                    <div>
+                      {/* Email Preview / Edit Toggle */}
+                      <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                        <button
+                          onClick={() => setIsEditing(false)}
+                          style={{
+                            flex: 1,
+                            padding: '0.75rem 1rem',
+                            background: !isEditing ? '#1A1A1A' : '#FFFFFF',
+                            color: !isEditing ? '#FFFFFF' : '#1A1A1A',
+                            border: !isEditing ? 'none' : '1px solid #E5E4E0',
+                            borderRadius: '0.375rem',
+                            fontSize: '0.875rem',
+                            fontWeight: 600,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <Eye className="w-4 h-4 inline mr-2" />
+                          Preview
+                        </button>
+                        <button
+                          onClick={() => setIsEditing(true)}
+                          style={{
+                            flex: 1,
+                            padding: '0.75rem 1rem',
+                            background: isEditing ? '#1A1A1A' : '#FFFFFF',
+                            color: isEditing ? '#FFFFFF' : '#1A1A1A',
+                            border: isEditing ? 'none' : '1px solid #E5E4E0',
+                            borderRadius: '0.375rem',
+                            fontSize: '0.875rem',
+                            fontWeight: 600,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <FileText className="w-4 h-4 inline mr-2" />
+                          Edit
+                        </button>
+                      </div>
+
+                      {/* Email Draft */}
+                      <div style={{
+                        background: '#F9F9F9',
+                        border: '1px solid #E5E4E0',
+                        borderRadius: '0.5rem',
+                        padding: '1.5rem',
+                        marginBottom: '1.5rem'
+                      }}>
+                        <div style={{ marginBottom: '1.25rem' }}>
+                          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#717171', margin: '0 0 0.375rem 0', textTransform: 'uppercase' }}>
+                            Subject
+                          </p>
+                          {isEditing ? (
+                            <input
+                              type="text"
+                              value={emailDraft.subject}
+                              onChange={(e) => setEmailDraft({ ...emailDraft, subject: e.target.value })}
+                              style={{
+                                width: '100%',
+                                padding: '0.75rem',
+                                fontSize: '0.875rem',
+                                fontWeight: 600,
+                                border: '1px solid #E5E4E0',
+                                borderRadius: '0.375rem',
+                                color: '#1A1A1A',
+                                boxSizing: 'border-box'
+                              }}
+                            />
+                          ) : (
+                            <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1A1A1A', margin: 0 }}>
+                              {emailDraft.subject}
+                            </p>
+                          )}
+                        </div>
+
+                        <div>
+                          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#717171', margin: '0 0 0.375rem 0', textTransform: 'uppercase' }}>
+                            Message
+                          </p>
+                          {isEditing ? (
+                            <textarea
+                              value={editedBody}
+                              onChange={(e) => setEditedBody(e.target.value)}
+                              style={{
+                                width: '100%',
+                                height: '300px',
+                                padding: '0.75rem',
+                                fontSize: '0.75rem',
+                                border: '1px solid #E5E4E0',
+                                borderRadius: '0.375rem',
+                                color: '#1A1A1A',
+                                fontFamily: 'monospace',
+                                resize: 'vertical',
+                                boxSizing: 'border-box'
+                              }}
+                            />
+                          ) : (
+                            <div style={{
+                              padding: '1rem',
+                              background: '#FFFFFF',
+                              borderRadius: '0.375rem',
+                              fontSize: '0.75rem',
+                              color: '#1A1A1A',
+                              whiteSpace: 'pre-wrap',
+                              wordBreak: 'break-word',
+                              lineHeight: 1.6,
+                              maxHeight: '250px',
+                              overflowY: 'auto'
+                            }}>
+                              {editedBody}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Attachment Options */}
+                      <div style={{ marginBottom: '1.5rem', padding: '1rem', background: '#F9F9F9', borderRadius: '0.5rem' }}>
+                        <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', margin: '0 0 1rem 0' }}>
+                          📎 1-Pager Attachment
+                        </p>
+                        <div style={{ display: 'grid', gap: '0.75rem' }}>
+                          {/* Auto-Generate Option */}
+                          <label style={{
+                            padding: '1rem',
+                            border: attachmentOption === 'auto' ? '2px solid #E8312A' : '1px solid #E5E4E0',
+                            borderRadius: '0.375rem',
+                            background: attachmentOption === 'auto' ? '#FFF5F5' : '#FFFFFF',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s'
+                          }}>
+                            <input
+                              type="radio"
+                              name="attachment"
+                              value="auto"
+                              checked={attachmentOption === 'auto'}
+                              onChange={(e) => {
+                                setAttachmentOption('auto')
+                                setUploadedFile(null)
+                              }}
+                              style={{ marginRight: '0.75rem', cursor: 'pointer' }}
+                            />
+                            <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1A1A1A' }}>
+                              Auto-Generate
+                            </span>
+                            <p style={{ fontSize: '0.75rem', color: '#717171', margin: '0.25rem 0 0 1.75rem', marginTop: '0.5rem' }}>
+                              AI creates a professional 1-pager with your company metrics & market analysis
+                            </p>
+                          </label>
+
+                          {/* Upload Option */}
+                          <label style={{
+                            padding: '1rem',
+                            border: attachmentOption === 'upload' ? '2px solid #E8312A' : '1px solid #E5E4E0',
+                            borderRadius: '0.375rem',
+                            background: attachmentOption === 'upload' ? '#FFF5F5' : '#FFFFFF',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s'
+                          }}>
+                            <input
+                              type="radio"
+                              name="attachment"
+                              value="upload"
+                              checked={attachmentOption === 'upload'}
+                              onChange={(e) => setAttachmentOption('upload')}
+                              style={{ marginRight: '0.75rem', cursor: 'pointer' }}
+                            />
+                            <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1A1A1A' }}>
+                              Upload Custom
+                            </span>
+                            <p style={{ fontSize: '0.75rem', color: '#717171', margin: '0.25rem 0 0 1.75rem', marginTop: '0.5rem' }}>
+                              Use your own 1-pager or teaser document {uploadedFile && `(${uploadedFile.name})`}
+                            </p>
+                            {attachmentOption === 'upload' && (
+                              <input
+                                type="file"
+                                onChange={(e) => setUploadedFile(e.target.files?.[0] || null)}
+                                style={{ marginTop: '0.5rem', marginLeft: '1.75rem', fontSize: '0.75rem' }}
+                              />
+                            )}
+                          </label>
+
+                          {/* No Attachment Option */}
+                          <label style={{
+                            padding: '1rem',
+                            border: attachmentOption === 'none' ? '2px solid #E8312A' : '1px solid #E5E4E0',
+                            borderRadius: '0.375rem',
+                            background: attachmentOption === 'none' ? '#FFF5F5' : '#FFFFFF',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s'
+                          }}>
+                            <input
+                              type="radio"
+                              name="attachment"
+                              value="none"
+                              checked={attachmentOption === 'none'}
+                              onChange={(e) => {
+                                setAttachmentOption('none')
+                                setUploadedFile(null)
+                              }}
+                              style={{ marginRight: '0.75rem', cursor: 'pointer' }}
+                            />
+                            <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1A1A1A' }}>
+                              No Attachment
+                            </span>
+                            <p style={{ fontSize: '0.75rem', color: '#717171', margin: '0.25rem 0 0 1.75rem', marginTop: '0.5rem' }}>
+                              Send without attachment, offer to share 1-pager upon request
+                            </p>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                        <button
+                          onClick={handleCopyEmail}
+                          style={{
+                            padding: '0.75rem 1rem',
+                            background: '#FFFFFF',
+                            color: '#1A1A1A',
+                            border: '1px solid #E5E4E0',
+                            borderRadius: '0.375rem',
+                            fontSize: '0.875rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            transition: 'background 0.2s'
+                          }}
+                          onMouseEnter={(e) => (e.currentTarget.style.background = '#F9F9F9')}
+                          onMouseLeave={(e) => (e.currentTarget.style.background = '#FFFFFF')}
+                        >
+                          <Copy className="w-4 h-4" />
+                          {copiedEmail === 'email' ? 'Copied!' : 'Copy Email'}
+                        </button>
+                        <button
+                          onClick={handleSendEmail}
+                          disabled={emailSent}
+                          style={{
+                            padding: '0.75rem 1rem',
+                            background: emailSent ? '#2D7A5F' : '#E8312A',
+                            color: '#FFFFFF',
+                            border: 'none',
+                            borderRadius: '0.375rem',
+                            fontSize: '0.875rem',
+                            fontWeight: 600,
+                            cursor: emailSent ? 'default' : 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            transition: 'background 0.2s'
+                          }}
+                          onMouseEnter={(e) => !emailSent && (e.currentTarget.style.background = '#D12620')}
+                          onMouseLeave={(e) => !emailSent && (e.currentTarget.style.background = '#E8312A')}
+                        >
+                          {emailSent ? (
+                            <>
+                              <CheckCircle className="w-4 h-4" />
+                              Sent
+                            </>
+                          ) : (
+                            <>
+                              <Send className="w-4 h-4" />
+                              Send Email
+                            </>
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                {/* CRM Tracker Summary */}
-                {crmTracker.length > 0 && (
-                  <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid #E5E4E0' }}>
-                    <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '1rem' }}>
-                      📊 Outreach History
-                    </h3>
-                    <div style={{ display: 'grid', gap: '0.75rem' }}>
-                      {crmTracker.filter(e => e.investorId === selectedInvestor.id).map((entry) => (
-                        <div
-                          key={entry.id}
-                          style={{
-                            padding: '0.875rem',
-                            background: '#F9F9F9',
-                            border: '1px solid #E5E4E0',
-                            borderRadius: '0.375rem',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between'
-                          }}
-                        >
-                          <div>
-                            <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1A1A1A', marginBottom: '0.25rem' }}>
-                              {entry.subject}
-                            </p>
-                            <p style={{ fontSize: '0.75rem', color: '#717171' }}>
-                              <Clock className="w-3 h-3 inline mr-1" />
-                              {entry.sentAt?.toLocaleDateString()}
-                            </p>
-                          </div>
-                          <span
-                            style={{
-                              fontSize: '0.75rem',
-                              fontWeight: 700,
-                              padding: '0.375rem 0.75rem',
-                              borderRadius: '0.25rem',
-                              background: entry.status === 'sent' ? '#F0F4FF' : '#EBF9F4',
-                              color: entry.status === 'sent' ? '#1D4ED8' : '#2D7A5F'
-                            }}
-                          >
-                            {entry.status.toUpperCase()}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
       </div>
     </AppShell>
   )
