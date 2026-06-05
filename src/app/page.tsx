@@ -241,7 +241,7 @@ export default function LandingPage() {
               { role: 'HR Lead', responsibilities: 'Employee communications, equity plan compliance' },
             ].map((member) => (
               <div key={member.role} className="bg-white rounded-xl p-6 border border-blue-200">
-                <h3 className="font-bold text-base mb-2" style={{ color: '#1D4ED8' }}>
+                <h3 className="font-bold text-base mb-2" style={{ color: '#E8312A' }}>
                   {member.role}
                 </h3>
                 <p className="text-sm" style={{ color: '#717171' }}>
