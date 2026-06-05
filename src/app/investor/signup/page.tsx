@@ -130,17 +130,6 @@ export default function InvestorSignupPage() {
                 </div>
               </div>
 
-              <div className="mt-8 p-6 rounded-lg" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
-                <p className="text-sm text-text-muted">
-                  <span className="font-semibold">Founding members get:</span>
-                  <br />
-                  ✓ 50% off first 90 days
-                  <br />
-                  ✓ Lifetime early adopter pricing
-                  <br />
-                  ✓ Featured on investor directory
-                </p>
-              </div>
             </div>
           </div>
         </div>
