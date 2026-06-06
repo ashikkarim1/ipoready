@@ -64,15 +64,10 @@ export const PRE_IPO_NAV_GROUPS = [
     ],
   },
   {
-    section: 'LISTED SERVICES (Coming)',
+    section: 'LISTED SERVICES',
     collapsible: true,
-    isLocked: true,
     items: [
-      { href: '/dashboard/listed-services/preview', icon: Lock, label: '🔒 Disclosure & Filings', badge: 'Coming', key: 'locked-disclosure' },
-      { href: '/dashboard/listed-services/preview', icon: Lock, label: '🔒 Investor Relations',    badge: 'Coming', key: 'locked-ir' },
-      { href: '/dashboard/listed-services/preview', icon: Lock, label: '🔒 Corporate Governance',  badge: 'Coming', key: 'locked-governance' },
-      { href: '/dashboard/listed-services/preview', icon: Lock, label: '🔒 CFO Command Center',    badge: 'Coming', key: 'locked-cfo' },
-      { href: '/dashboard/listed-services/preview', icon: Lock, label: '🔒 Risk & Compliance',     badge: 'Coming', key: 'locked-risk' },
+      { href: '/dashboard/listed-services', icon: Eye, label: 'Listed Services OS', badge: '✨', key: 'listed-services' },
     ],
   },
   {
