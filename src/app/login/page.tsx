@@ -246,10 +246,10 @@ export default function LoginPage() {
             <p className="text-text-muted text-sm mb-3">
               Not ready yet? Join our waitlist
             </p>
-            <Link href="/#waitlist" className="inline-block px-4 py-2.5 rounded-lg text-sm font-medium transition-all"
-              style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#1A1A1A' }}
-              onMouseEnter={e => (e.currentTarget.style.background = '#E5E4E0')}
-              onMouseLeave={e => (e.currentTarget.style.background = '#F7F6F4')}>
+            <Link href="/#waitlist" className="inline-block px-6 py-2.5 rounded-xl text-sm font-medium transition-all text-white"
+              style={{ background: '#E8312A' }}
+              onMouseEnter={e => (e.currentTarget.style.opacity = '0.9')}
+              onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
               Sign up for early access
             </Link>
           </div>
