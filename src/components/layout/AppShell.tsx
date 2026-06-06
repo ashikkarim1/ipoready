@@ -25,6 +25,7 @@ const NAV_GROUPS = [
     items: [
       { href: '/new-to-this',          icon: HelpCircle,      label: 'New To This?',      badge: '✨',   key: 'new-to-this'     },
       { href: '/dashboard',            icon: LayoutDashboard, label: 'Dashboard',         badge: null,   key: 'dashboard'       },
+      { href: '/dashboard/investor-readiness/intelligence-hub', icon: Zap, label: 'Intelligence Hub', badge: null, key: 'intelligence-hub' },
       { href: '/dashboard/ipo-journey', icon: Map,            label: 'IPO Journey™',      badge: '✨',   key: 'ipo-journey'     },
     ],
   },
@@ -60,7 +61,6 @@ const NAV_GROUPS = [
       { href: '/dashboard/investor-readiness/data-room-health', icon: TrendingUp, label: 'Data Room Health', badge: null, key: 'data-room-health' },
       { href: '/dashboard/investor-readiness/data-room-viewer', icon: Eye, label: 'Document Viewer', badge: null, key: 'data-room-viewer' },
       { href: '/dashboard/investor-readiness/data-room-analytics', icon: BarChart3, label: 'Data Room Analytics', badge: null, key: 'data-room-analytics' },
-      { href: '/dashboard/investor-readiness/intelligence-hub', icon: Zap, label: 'Intelligence Hub', badge: null, key: 'intelligence-hub' },
     ],
   },
   {
