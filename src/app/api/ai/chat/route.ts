@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { loadContext, processMessage } from '@/lib/ai-companion'
 import { sql } from '@/lib/db'
 
+export const dynamic = 'force-dynamic'
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
   if (!session?.user) {

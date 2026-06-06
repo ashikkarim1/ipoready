@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sql } from '@/lib/db'
 
+export const dynamic = 'force-dynamic'
 // ============================================================================
 // GET /api/compliance/resolutions - Fetch resolutions
 // ============================================================================

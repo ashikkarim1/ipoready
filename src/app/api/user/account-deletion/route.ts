@@ -14,6 +14,7 @@ import { compare } from 'bcryptjs'
 import { NextResponse } from 'next/server'
 import { sendSubscriptionCancelledEmail } from '@/lib/billing-notifications'
 
+export const dynamic = 'force-dynamic'
 interface DeletionRequest {
   password: string
   reason?: string

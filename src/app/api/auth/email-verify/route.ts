@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { sql } from '@/lib/db'
 import crypto from 'crypto'
 
+export const dynamic = 'force-dynamic'
 export async function POST(request: NextRequest) {
   try {
     const { email } = await request.json()

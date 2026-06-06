@@ -8,6 +8,7 @@ import crypto from 'crypto'
 import { getSlackConfig } from '@/lib/slack-config'
 import { sql } from '@/lib/db'
 
+export const dynamic = 'force-dynamic'
 /**
  * Verify Slack webhook signature using HMAC-SHA256
  * https://api.slack.com/authentication/verifying-requests-from-slack

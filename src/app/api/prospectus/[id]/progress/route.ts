@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { sql } from '@/lib/db';
 import { z } from 'zod';
 
+export const dynamic = 'force-dynamic'
 /**
  * GET /api/prospectus/[id]/progress
  * Fetch prospectus progress and approval state

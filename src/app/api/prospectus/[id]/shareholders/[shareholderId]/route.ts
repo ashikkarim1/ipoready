@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
 /**
  * GET /api/prospectus/[id]/shareholders/[shareholderId]
  * Fetch a specific shareholder

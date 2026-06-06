@@ -20,6 +20,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getFilingService } from '@/lib/services/filing-service'
 import {
+export const dynamic = 'force-dynamic'
   DocumentMetadata,
   FilingMetadata,
   DocumentType,

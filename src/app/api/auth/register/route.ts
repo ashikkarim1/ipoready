@@ -4,6 +4,7 @@ import { sql } from '@/lib/db'
 import { APP_URL } from '@/lib/resend'
 import { sendWelcomeEmail } from '@/lib/email-service'
 
+export const dynamic = 'force-dynamic'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()

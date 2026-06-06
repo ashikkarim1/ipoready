@@ -3,6 +3,7 @@ import { sql } from '@/lib/db'
 import { resend, FROM_ADDRESS } from '@/lib/resend'
 import { sendLeadConfirmationEmail } from '@/lib/email-service'
 
+export const dynamic = 'force-dynamic'
 /**
  * GET /api/lead-capture/check-email?email=X
  * Real-time email validation for the lead capture form

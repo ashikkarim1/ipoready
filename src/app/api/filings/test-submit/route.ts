@@ -36,6 +36,7 @@ import {
   DocumentType,
 } from '@/lib/filing-adapters/BaseFilingAdapter'
 import {
+export const dynamic = 'force-dynamic'
   generateSampleProspectus,
   generateRequiredDocuments,
   generateEdgeCaseDocuments,

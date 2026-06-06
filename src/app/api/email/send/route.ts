@@ -4,6 +4,7 @@ import { enqueueEmail } from '@/lib/email-queue'
 import { EmailTemplateId } from '@/lib/email-templates'
 import { sql } from '@/lib/db'
 
+export const dynamic = 'force-dynamic'
 interface SendEmailRequest {
   to: string
   templateId: EmailTemplateId

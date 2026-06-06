@@ -7,6 +7,7 @@ import { extractProspectusContent } from '@/lib/prospectus-extractor'
 import { userCanAccessFeature } from '@/lib/feature-gates'
 import { uploadProspectusFile } from '@/lib/prospectus-storage'
 
+export const dynamic = 'force-dynamic'
 // Strict whitelist of supported document types
 const SUPPORTED_DOCUMENT_TYPES = ['pdf', 'docx', 'csv', 'text'] as const
 const SUPPORTED_FILE_EXTENSIONS = {

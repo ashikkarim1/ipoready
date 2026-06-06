@@ -5,6 +5,7 @@ import { extractProspectusContent } from '@/lib/prospectus-extractor'
 import { mapExtractedSectionsToProspectus } from '@/lib/prospectus-mapper'
 import { sql } from '@/lib/db'
 
+export const dynamic = 'force-dynamic'
 // Supported MIME types and their corresponding document types
 const SUPPORTED_MIME_TYPES: Record<string, 'pdf' | 'docx' | 'csv' | 'text'> = {
   'application/pdf': 'pdf',

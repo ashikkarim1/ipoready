@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { z } from 'zod'
 import { sql } from '@/lib/db'
 
+export const dynamic = 'force-dynamic'
 const applySchema = z.object({
   sections: z.array(
     z.object({

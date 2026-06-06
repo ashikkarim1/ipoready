@@ -4,6 +4,7 @@ import { APP_URL } from '@/lib/resend'
 import { sendPasswordResetEmail } from '@/lib/email-service'
 import { randomBytes } from 'crypto'
 
+export const dynamic = 'force-dynamic'
 export async function POST(req: NextRequest) {
   try {
     const { email } = await req.json()

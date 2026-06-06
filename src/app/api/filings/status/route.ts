@@ -24,6 +24,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getFilingService } from '@/lib/services/filing-service'
 import { FilingError } from '@/lib/filing-adapters/BaseFilingAdapter'
 
+export const dynamic = 'force-dynamic'
 /**
  * Validate query parameters
  */

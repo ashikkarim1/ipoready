@@ -13,6 +13,7 @@ import {
 } from '@/lib/listing-rules'
 import { ExchangeCode, getExchangeConfig } from '@/lib/exchange-config'
 
+export const dynamic = 'force-dynamic'
 // ============================================================================
 // POST Handler - Generate Listing Report
 // ============================================================================

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { sendWeeklySummary } from '@/lib/email-notifications'
 import { sql } from '@/lib/db'
 
+export const dynamic = 'force-dynamic'
 /**
  * POST /api/email/weekly-summary
  *

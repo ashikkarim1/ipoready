@@ -16,6 +16,7 @@ import { createHash } from 'crypto';
 import path from 'path';
 import { recordCapTableMetrics } from '@/lib/monitoring/cap-table-metrics';
 
+export const dynamic = 'force-dynamic'
 // Security: Define allowed file types for cap table uploads
 const ALLOWED_MIME_TYPES = [
   'application/vnd.ms-excel',

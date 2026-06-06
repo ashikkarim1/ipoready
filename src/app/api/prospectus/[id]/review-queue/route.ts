@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { sql } from '@/lib/db';
 
+export const dynamic = 'force-dynamic'
 /**
  * GET /api/prospectus/[id]/review-queue
  * Fetch sections awaiting review filtered by user role

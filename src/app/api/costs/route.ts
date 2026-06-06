@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { calculateCostMetrics, generateCSVExport, CostItem } from '@/lib/cost-calculator'
 
+export const dynamic = 'force-dynamic'
 interface SaveCostsRequest {
   costs: CostItem[]
   projectId?: string

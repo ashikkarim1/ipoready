@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendBoardReport, notifyTeamOfAlert } from '@/lib/email-notifications'
 
+export const dynamic = 'force-dynamic'
 /**
  * POST /api/email/board-report
  *

@@ -12,6 +12,7 @@ import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import { getExchangeConfig } from '@/lib/exchange-config'
 
+export const dynamic = 'force-dynamic'
 // ============================================================================
 // Types
 // ============================================================================

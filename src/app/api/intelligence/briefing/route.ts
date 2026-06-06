@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
 /**
  * GET /api/intelligence/briefing?date=YYYY-MM-DD&companyId=<id>
  *

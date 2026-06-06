@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
 type BodyInit = string | ReadableStream<Uint8Array> | ArrayBuffer | FormData | URLSearchParams
 
 interface Service {

@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { sql } from '@/lib/db';
 import { z } from 'zod';
 
+export const dynamic = 'force-dynamic'
 const extractDocumentsSchema = z.object({
   documentIds: z.array(z.string().min(1)).min(1, 'At least one document required'),
   format: z.enum(['pdf', 'docx', 'markdown']).default('pdf'),

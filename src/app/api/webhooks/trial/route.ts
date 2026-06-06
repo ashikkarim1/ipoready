@@ -3,6 +3,7 @@ import { sql } from '@/lib/db'
 import { sendTrialExpiringEmail } from '@/lib/billing-notifications'
 import { handleTrialExpiry } from '@/lib/trial-manager'
 
+export const dynamic = 'force-dynamic'
 /**
  * Trial Expiry Batch Webhook Handler
  *

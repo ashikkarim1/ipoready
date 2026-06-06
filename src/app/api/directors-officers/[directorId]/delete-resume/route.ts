@@ -16,6 +16,7 @@ import { sql } from '@/lib/db'
 import { unlinkSync, existsSync } from 'fs'
 import path from 'path'
 
+export const dynamic = 'force-dynamic'
 const RESUMES_DIR = path.join(process.cwd(), 'public', 'resumes')
 
 export async function DELETE(

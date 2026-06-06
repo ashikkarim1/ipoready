@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
 /**
  * GET /api/prospectus/[id]/regulatory-checklist
  * Fetch regulatory checklist items for a prospectus

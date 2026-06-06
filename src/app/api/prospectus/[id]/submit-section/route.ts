@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { sql } from '@/lib/db';
 import { z } from 'zod';
 
+export const dynamic = 'force-dynamic'
 const submitSectionSchema = z.object({
   sectionId: z.string().min(1, 'Section ID required'),
   content: z.string().min(1, 'Content required'),

@@ -22,6 +22,7 @@ import { RegulatoryRulesEngine } from '@/lib/regulatory-rules-engine'
 import TSXConfig from '@/config/regulatory-exchanges/tsx-config.json'
 import SECConfig from '@/config/regulatory-exchanges/sec-edgar-config.json'
 
+export const dynamic = 'force-dynamic'
 // ============================================================================
 // INITIALIZATION - Load exchange configurations
 // ============================================================================

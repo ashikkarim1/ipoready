@@ -5,6 +5,7 @@ import { sql } from '@/lib/db'
 import { resend, FROM_ADDRESS } from '@/lib/resend'
 import Anthropic from '@anthropic-ai/sdk'
 
+export const dynamic = 'force-dynamic'
 type Period = '7d' | '30d' | '90d' | 'all'
 
 // ─── HTML email template ──────────────────────────────────────────────────────

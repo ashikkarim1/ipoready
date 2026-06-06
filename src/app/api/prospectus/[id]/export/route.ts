@@ -5,6 +5,7 @@ import { sql } from '@/lib/db'
 import { generatePDF, generateDOCX, generateZIPFile } from '@/lib/prospectus-generator'
 import { userCanAccessFeature } from '@/lib/feature-gates'
 
+export const dynamic = 'force-dynamic'
 type ExportFormat = 'pdf' | 'docx' | 'zip'
 
 interface ExportRequest {

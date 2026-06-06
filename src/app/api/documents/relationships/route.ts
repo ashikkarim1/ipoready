@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth'
 import { sql } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
 /**
  * GET /api/documents/relationships
  * Fetch document relationships and graph data for a company

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 
+export const dynamic = 'force-dynamic'
 interface DigestSettings {
   frequency: 'daily' | 'weekly' | 'off'
   deliveryDay?: string // Monday, Tuesday, etc (for weekly)
