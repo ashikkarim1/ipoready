@@ -188,18 +188,18 @@ export default function NewToThisPage() {
                 <span className="label-sm" style={{ color: 'var(--color-accent)' }}>Welcome to Reality</span>
               </div>
 
-              <h1 className="h2 text-text-primary">
+              <h1 className="h2" style={{ color: 'var(--color-text-primary)' }}>
                 Welcome to Your IPO Journey
               </h1>
 
-              <p className="body text-text-secondary max-w-2xl mx-auto">
+              <p className="body max-w-2xl mx-auto" style={{ color: 'var(--color-text-secondary)' }}>
                 You're about to do something 99% of companies never do. Here's what to expect — honest, encouraging, and real.
               </p>
 
               <div className="pt-2">
                 <div className="inline-flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5" style={{ color: 'var(--color-success)' }} />
-                  <span className="label text-text-primary font-semibold">No sugarcoating. No false promises. Just reality.</span>
+                  <span className="label font-semibold" style={{ color: 'var(--color-text-primary)' }}>No sugarcoating. No false promises. Just reality.</span>
                 </div>
               </div>
             </motion.div>
@@ -210,10 +210,10 @@ export default function NewToThisPage() {
         <section className="border-b" style={{ borderColor: 'var(--color-border)', padding: '3rem 1.5rem lg:3rem', background: 'white' }}>
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="h2 text-text-primary mb-3">
+              <h2 className="h2 mb-3" style={{ color: 'var(--color-text-primary)' }}>
                 What This Process Actually Is
               </h2>
-              <p className="body text-text-secondary max-w-2xl mx-auto">
+              <p className="body max-w-2xl mx-auto" style={{ color: 'var(--color-text-secondary)' }}>
                 Four fundamental truths that will shape your next 18 months.
               </p>
             </div>
@@ -232,10 +232,10 @@ export default function NewToThisPage() {
                     <TrendingUp className="w-6 h-6" style={{ color: 'var(--color-accent)' }} />
                   </div>
                   <div className="flex-1">
-                    <h3 className="h4 text-text-primary mb-2">
+                    <h3 className="h4 mb-2" style={{ color: 'var(--color-text-primary)' }}>
                       It's a Transformation
                     </h3>
-                    <p className="body text-text-secondary">
+                    <p className="body" style={{ color: 'var(--color-text-secondary)' }}>
                       You'll professionalize governance, controls, compliance, and board dynamics. Your company will be fundamentally better.
                     </p>
                   </div>
@@ -255,10 +255,10 @@ export default function NewToThisPage() {
                     <Clock className="w-6 h-6" style={{ color: 'var(--color-warning)' }} />
                   </div>
                   <div className="flex-1">
-                    <h3 className="h4 text-text-primary mb-2">
+                    <h3 className="h4 mb-2" style={{ color: 'var(--color-text-primary)' }}>
                       It Takes 12-18 Months
                     </h3>
-                    <p className="body text-text-secondary">
+                    <p className="body" style={{ color: 'var(--color-text-secondary)' }}>
                       Not 6, not 9. Realistically 12-18 months of intensive work. Some take 24 months. Plan accordingly.
                     </p>
                   </div>
@@ -278,10 +278,10 @@ export default function NewToThisPage() {
                     <DollarSign className="w-6 h-6" style={{ color: 'var(--color-info)' }} />
                   </div>
                   <div className="flex-1">
-                    <h3 className="h4 text-text-primary mb-2">
+                    <h3 className="h4 mb-2" style={{ color: 'var(--color-text-primary)' }}>
                       It Costs $500K-2M
                     </h3>
-                    <p className="body text-text-secondary">
+                    <p className="body" style={{ color: 'var(--color-text-secondary)' }}>
                       Legal, audit, advisory, underwriting, and leadership time. Budget conservatively and add 20% for contingencies.
                     </p>
                   </div>
@@ -301,10 +301,10 @@ export default function NewToThisPage() {
                     <Award className="w-6 h-6" style={{ color: 'var(--color-success)' }} />
                   </div>
                   <div className="flex-1">
-                    <h3 className="h4 text-text-primary mb-2">
+                    <h3 className="h4 mb-2" style={{ color: 'var(--color-text-primary)' }}>
                       You'll Own 15-30% Less
                     </h3>
-                    <p className="body text-text-secondary">
+                    <p className="body" style={{ color: 'var(--color-text-secondary)' }}>
                       Underwriting, new shares, expanded options. You'll be a smaller percentage, but it's a much bigger pie.
                     </p>
                   </div>
@@ -318,10 +318,10 @@ export default function NewToThisPage() {
         <section className="border-b" style={{ borderColor: 'var(--color-border)', padding: '3rem 1.5rem lg:3rem' }}>
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="h2 text-text-primary mb-3">
+              <h2 className="h2 mb-3" style={{ color: 'var(--color-text-primary)' }}>
                 8 Common Pitfalls (and How to Avoid Them)
               </h2>
-              <p className="body text-text-secondary max-w-2xl mx-auto">
+              <p className="body max-w-2xl mx-auto" style={{ color: 'var(--color-text-secondary)' }}>
                 These delays happen to most IPO candidates. But they're preventable if you know what to watch for.
               </p>
             </div>
@@ -342,7 +342,7 @@ export default function NewToThisPage() {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-1">
-                          <h3 className="h4 text-text-primary m-0">
+                          <h3 className="h4 m-0" style={{ color: 'var(--color-text-primary)' }}>
                             {pitfall.title}
                           </h3>
                           <span
@@ -355,15 +355,15 @@ export default function NewToThisPage() {
                             {pitfall.severity}
                           </span>
                         </div>
-                        <p className="body-sm text-text-secondary m-0">
+                        <p className="body-sm m-0" style={{ color: 'var(--color-text-secondary)' }}>
                           {pitfall.description}
                         </p>
                       </div>
                       <div className="ml-4 flex-shrink-0">
                         {expandedPitfall === pitfall.id ? (
-                          <ChevronUp className="w-5 h-5 text-text-primary" />
+                          <ChevronUp className="w-5 h-5" style={{ color: 'var(--color-text-primary)' }} />
                         ) : (
-                          <ChevronDown className="w-5 h-5 text-text-secondary" />
+                          <ChevronDown className="w-5 h-5" style={{ color: 'var(--color-text-secondary)' }} />
                         )}
                       </div>
                     </div>
@@ -389,26 +389,26 @@ export default function NewToThisPage() {
                       >
                         <div className="space-y-4">
                           <div>
-                            <p className="body-sm text-text-secondary font-semibold mb-1">
+                            <p className="body-sm font-semibold mb-1" style={{ color: 'var(--color-text-secondary)' }}>
                               What this looks like:
                             </p>
-                            <p className="body-sm text-text-primary">
+                            <p className="body-sm" style={{ color: 'var(--color-text-primary)' }}>
                               {pitfall.details}
                             </p>
                           </div>
                           <div>
-                            <p className="body-sm text-text-secondary font-semibold mb-1">
+                            <p className="body-sm font-semibold mb-1" style={{ color: 'var(--color-text-secondary)' }}>
                               How to prevent it:
                             </p>
-                            <p className="body-sm text-text-primary">
+                            <p className="body-sm" style={{ color: 'var(--color-text-primary)' }}>
                               {pitfall.prevention}
                             </p>
                           </div>
                           <div>
-                            <p className="body-sm text-text-secondary font-semibold mb-1">
+                            <p className="body-sm font-semibold mb-1" style={{ color: 'var(--color-text-secondary)' }}>
                               Typical delay:
                             </p>
-                            <p className="body-sm text-accent font-semibold">
+                            <p className="body-sm font-semibold" style={{ color: 'var(--color-accent)' }}>
                               {pitfall.impact}
                             </p>
                           </div>
@@ -426,10 +426,10 @@ export default function NewToThisPage() {
         <section className="border-b" style={{ borderColor: 'var(--color-border)', padding: '3rem 1.5rem lg:3rem', background: 'white' }}>
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="h2 text-text-primary mb-3">
+              <h2 className="h2 mb-3" style={{ color: 'var(--color-text-primary)' }}>
                 How It Feels Over Time
               </h2>
-              <p className="body text-text-secondary max-w-2xl mx-auto">
+              <p className="body max-w-2xl mx-auto" style={{ color: 'var(--color-text-secondary)' }}>
                 From overwhelm to relief. Here's what the emotional journey looks like.
               </p>
             </div>
@@ -450,18 +450,18 @@ export default function NewToThisPage() {
                     borderLeftColor: 'var(--color-accent)'
                   }}
                 >
-                  <h3 className="h4 text-text-primary mb-2 ml-1">
+                  <h3 className="h4 mb-2 ml-1" style={{ color: 'var(--color-text-primary)' }}>
                     {stage.phase}
                   </h3>
-                  <p className="body-sm text-text-secondary mb-2 ml-1">
+                  <p className="body-sm mb-2 ml-1" style={{ color: 'var(--color-text-secondary)' }}>
                     <span className="font-semibold">Feeling:</span> {stage.feeling}
                   </p>
-                  <p className="body-sm text-text-primary mb-3 ml-1">
+                  <p className="body-sm mb-3 ml-1" style={{ color: 'var(--color-text-primary)' }}>
                     {stage.reality}
                   </p>
                   <ul className="ml-6 space-y-1">
                     {stage.bullets.map((bullet, i) => (
-                      <li key={i} className="body-sm text-text-secondary list-disc">
+                      <li key={i} className="body-sm list-disc" style={{ color: 'var(--color-text-secondary)' }}>
                         {bullet}
                       </li>
                     ))}
@@ -475,10 +475,10 @@ export default function NewToThisPage() {
         {/* Final CTA */}
         <section className="border-t" style={{ borderColor: 'var(--color-border)', padding: '3rem 1.5rem lg:3rem', background: 'var(--color-bg-primary)' }}>
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="h2 text-text-primary mb-3">
+            <h2 className="h2 mb-3" style={{ color: 'var(--color-text-primary)' }}>
               Ready to Get Started?
             </h2>
-            <p className="body text-text-secondary mb-8">
+            <p className="body mb-8" style={{ color: 'var(--color-text-secondary)' }}>
               The IPO Journey™ page breaks down every phase, dependency, and role. Your PACE Score shows where you stand today.
             </p>
             <div className="flex gap-3 justify-center flex-wrap">
