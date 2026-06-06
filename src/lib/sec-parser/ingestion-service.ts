@@ -187,49 +187,37 @@ export async function ingestCompanyFilings(companyId: string, cik: string) {
       const fiscalQuarter = filing.formType === '10-K' ? 0 : Math.ceil((date.getMonth() + 1) / 3)
 
       // Store in database
-      await sql(
-        `INSERT INTO company_financials
-         (company_id, fiscal_year, fiscal_quarter, filing_type, filing_date, period_end_date,
-          revenue, net_income, operating_cash_flow, total_assets, total_liabilities,
-          stockholders_equity, eps, data_quality_score, source, validation_status)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
-         ON CONFLICT (company_id, fiscal_year, fiscal_quarter) DO NOTHING`,
-        [
-          companyId,
-          fiscalYear,
-          fiscalQuarter,
-          filing.formType,
-          filing.filingDate,
-          filing.filingDate,
-          financials.revenue,
-          financials.netIncome,
-          financials.operatingCashFlow,
-          financials.assets,
-          financials.liabilities,
-          financials.equity,
-          financials.eps,
-          75, // Initial quality score
-          'SEC_EDGAR',
-          'valid',
-        ]
-      )
+      await sql`
+        INSERT INTO company_financials
+        (company_id, fiscal_year, fiscal_quarter, filing_type, filing_date, period_end_date,
+         revenue, net_income, operating_cash_flow, total_assets, total_liabilities,
+         stockholders_equity, eps, data_quality_score, source, validation_status)
+        VALUES (${companyId}, ${fiscalYear}, ${fiscalQuarter}, ${filing.formType}, ${filing.filingDate}, ${filing.filingDate},
+                ${financials.revenue}, ${financials.netIncome}, ${financials.operatingCashFlow}, ${financials.assets}, ${financials.liabilities},
+                ${financials.equity}, ${financials.eps}, 75, 'SEC_EDGAR', 'valid')
+        ON CONFLICT (company_id, fiscal_year, fiscal_quarter) DO NOTHING
+      `
     }
 
     // Update company's last filing date
-    await sql(
-      `UPDATE capital_companies
-       SET last_10k_date = CASE
-             WHEN $2 = '10-K' THEN $3::date
-             ELSE last_10k_date
-           END,
-           last_10q_date = CASE
-             WHEN $2 = '10-Q' THEN $3::date
-             ELSE last_10q_date
-           END,
-           updated_at = CURRENT_TIMESTAMP
-       WHERE id = $1`,
-      [companyId, filings[0]?.formType, filings[0]?.filingDate]
-    )
+    const formType = filings[0]?.formType
+    const filingDate = filings[0]?.filingDate
+
+    if (formType && filingDate) {
+      await sql`
+        UPDATE capital_companies
+        SET last_10k_date = CASE
+              WHEN ${formType} = '10-K' THEN ${filingDate}::date
+              ELSE last_10k_date
+            END,
+            last_10q_date = CASE
+              WHEN ${formType} = '10-Q' THEN ${filingDate}::date
+              ELSE last_10q_date
+            END,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${companyId}
+      `
+    }
 
     console.log(`✅ Ingested ${filings.length} filings for company ${companyId}`)
   } catch (error) {
