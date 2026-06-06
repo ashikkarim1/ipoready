@@ -496,7 +496,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                               // Prefer exact match; only use startsWith if no other route is more specific
                               const isExactMatch = pathname === href
                               // Only consider as child if href doesn't have /new or /status (sibling routes)
-                              const isChildMatch = pathname.startsWith(href + '/') && href !== '/dashboard' && !href.includes('/new') && !href.includes('/status')
+                              // AND only if no more specific route (with exact match) exists
+                              const hasMoreSpecificMatch = group.items.some(item =>
+                                item.href !== href &&
+                                pathname === item.href &&
+                                item.href.startsWith(href + '/')
+                              )
+                              const isChildMatch = !isExactMatch && !hasMoreSpecificMatch && pathname.startsWith(href + '/') && href !== '/dashboard' && !href.includes('/new') && !href.includes('/status')
                               const isActive = isExactMatch || isChildMatch
 
                               // Derive dynamic badge overrides
