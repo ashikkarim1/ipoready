@@ -3,12 +3,15 @@ import { exchangeCodeForToken } from '@/lib/cloud-storage/google-drive-adapter'
 import { sql } from '@/lib/db'
 
 export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 /**
  * GET /api/auth/google-drive/callback
  * Google OAuth2 callback - handles authorization code
  */
 export async function GET(request: NextRequest) {
+  const origin = request.headers.get('origin') || `${request.nextUrl.protocol}//${request.nextUrl.host}`
+
   try {
     const code = request.nextUrl.searchParams.get('code')
     const state = request.nextUrl.searchParams.get('state')
@@ -17,13 +20,13 @@ export async function GET(request: NextRequest) {
     // Check for OAuth errors
     if (error) {
       return NextResponse.redirect(
-        `/settings/integrations?error=google_drive_auth_denied`
+        new URL(`/settings/integrations?error=google_drive_auth_denied`, origin)
       )
     }
 
     if (!code) {
       return NextResponse.redirect(
-        `/settings/integrations?error=missing_auth_code`
+        new URL(`/settings/integrations?error=missing_auth_code`, origin)
       )
     }
 
@@ -37,7 +40,7 @@ export async function GET(request: NextRequest) {
 
     if (!companyId) {
       return NextResponse.redirect(
-        `/settings/integrations?error=no_company_selected`
+        new URL(`/settings/integrations?error=no_company_selected`, origin)
       )
     }
 
@@ -87,12 +90,12 @@ export async function GET(request: NextRequest) {
 
     // Redirect to settings with success message
     return NextResponse.redirect(
-      `/settings/integrations?success=google_drive_connected`
+      new URL(`/settings/integrations?success=google_drive_connected`, origin)
     )
   } catch (error) {
     console.error('Google Drive callback error:', error)
     return NextResponse.redirect(
-      `/settings/integrations?error=google_drive_callback_failed`
+      new URL(`/settings/integrations?error=google_drive_callback_failed`, origin)
     )
   }
 }
