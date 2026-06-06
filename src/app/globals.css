@@ -410,7 +410,6 @@ section [class*="grid"] > div:nth-child(2) {
 .nav-item.active {
   background: #E8312A;
   color: #FFFFFF;
-  font-weight: 600;
 }
 
 /* ─── Inputs ─────────────────────────────────────────────────────────────── */
