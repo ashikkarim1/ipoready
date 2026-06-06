@@ -51,10 +51,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Trigger batch ingestion
-    console.log(`Starting SEC filing ingestion for ${result.rows.length} companies...`)
+    console.log(`Starting SEC filing ingestion for ${result.length} companies...`)
 
     const startTime = Date.now()
-    const ingestionResults = await batchIngestCompanies(result.rows)
+    const ingestionResults = await batchIngestCompanies(result)
     const duration = Date.now() - startTime
 
     return NextResponse.json({
