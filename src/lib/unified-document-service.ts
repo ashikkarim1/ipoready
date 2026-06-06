@@ -168,7 +168,7 @@ export class UnifiedDocumentService {
         throw new Error(`${storageProvider} storage not yet available. Coming in Phase 1, Week 2.`)
       }
 
-      const adapter = CloudStorageAdapterFactory.getGoogleDriveAdapter(
+      const adapter = CloudStorageAdapterFactory.createGoogleDriveAdapter(
         credentials.accessToken,
         credentials.refreshToken,
         credentials.expiresAt

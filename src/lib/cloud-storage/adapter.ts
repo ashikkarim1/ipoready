@@ -133,10 +133,124 @@ export abstract class CloudStorageAdapter {
 }
 
 /**
+ * Stub implementations for adapters not yet built (Dropbox, OneDrive, Box)
+ * These prevent build-time errors until implementations are added in Phase 1, Week 2+
+ */
+class StubAdapter extends CloudStorageAdapter {
+  private providerName: string
+
+  constructor(
+    providerName: string,
+    accessToken: string,
+    refreshToken?: string,
+    expiresAt?: Date
+  ) {
+    super(accessToken, refreshToken, expiresAt)
+    this.providerName = providerName
+  }
+
+  async refreshAccessToken(): Promise<string> {
+    throw new Error(`${this.providerName} adapter not yet implemented`)
+  }
+
+  async readFile(): Promise<Buffer> {
+    throw new Error(`${this.providerName} adapter not yet implemented`)
+  }
+
+  async listFiles(): Promise<FileMetadata[]> {
+    throw new Error(`${this.providerName} adapter not yet implemented`)
+  }
+
+  async getFileMetadata(): Promise<FileMetadata> {
+    throw new Error(`${this.providerName} adapter not yet implemented`)
+  }
+
+  async searchFiles(): Promise<FileMetadata[]> {
+    throw new Error(`${this.providerName} adapter not yet implemented`)
+  }
+
+  async uploadFile(): Promise<FileMetadata> {
+    throw new Error(`${this.providerName} adapter not yet implemented`)
+  }
+
+  async updateFile(): Promise<FileMetadata> {
+    throw new Error(`${this.providerName} adapter not yet implemented`)
+  }
+
+  async deleteFile(): Promise<void> {
+    throw new Error(`${this.providerName} adapter not yet implemented`)
+  }
+
+  async moveFile(): Promise<void> {
+    throw new Error(`${this.providerName} adapter not yet implemented`)
+  }
+
+  async createFolder(): Promise<FolderMetadata> {
+    throw new Error(`${this.providerName} adapter not yet implemented`)
+  }
+
+  async deleteFolder(): Promise<void> {
+    throw new Error(`${this.providerName} adapter not yet implemented`)
+  }
+
+  async renameFolder(): Promise<void> {
+    throw new Error(`${this.providerName} adapter not yet implemented`)
+  }
+
+  async getFilePreview(): Promise<Buffer | string> {
+    throw new Error(`${this.providerName} adapter not yet implemented`)
+  }
+
+  async shareFile(): Promise<string> {
+    throw new Error(`${this.providerName} adapter not yet implemented`)
+  }
+}
+
+/**
  * Factory to get appropriate adapter
+ * Phase 1: Google Drive only. Other adapters coming Week 2+
  */
 export class CloudStorageAdapterFactory {
-  static async getAdapter(
+  /**
+   * Synchronous factory for Google Drive (Phase 1)
+   * Avoids dynamic imports that cause build-time errors
+   */
+  static createGoogleDriveAdapter(
+    accessToken: string,
+    refreshToken?: string,
+    expiresAt?: Date
+  ): CloudStorageAdapter {
+    // Lazy require to avoid build-time dependency issues
+    // eslint-disable-next-line global-require
+    const { GoogleDriveAdapter } = require('./google-drive-adapter')
+    return new GoogleDriveAdapter(accessToken, refreshToken, expiresAt)
+  }
+
+  /**
+   * Get adapter by provider (Phase 1 - Google Drive only)
+   */
+  static getAdapter(
+    provider: 'google_drive' | 'dropbox' | 'onedrive' | 'box',
+    accessToken: string,
+    refreshToken?: string,
+    expiresAt?: Date
+  ): CloudStorageAdapter {
+    if (provider === 'google_drive') {
+      return this.createGoogleDriveAdapter(accessToken, refreshToken, expiresAt)
+    }
+    // Return stub for unimplemented providers
+    return new StubAdapter(
+      provider.replace('_', ' ').toUpperCase(),
+      accessToken,
+      refreshToken,
+      expiresAt
+    )
+  }
+
+  /**
+   * Async factory for future use (Dropbox, OneDrive, Box)
+   */
+  static async getAdapterAsync(
     provider: 'google_drive' | 'dropbox' | 'onedrive' | 'box',
     accessToken: string,
     refreshToken?: string,
@@ -144,52 +258,44 @@ export class CloudStorageAdapterFactory {
   ): Promise<CloudStorageAdapter> {
     switch (provider) {
       case 'google_drive': {
-        // Dynamic import to avoid loading all adapters at build time
-        const { GoogleDriveAdapter } = await import('./google-drive-adapter')
-        return new GoogleDriveAdapter(accessToken, refreshToken, expiresAt)
+        return this.createGoogleDriveAdapter(accessToken, refreshToken, expiresAt)
       }
 
       case 'dropbox': {
+        // Coming Phase 1, Week 2
         try {
-          const { DropboxAdapter } = await import('./dropbox-adapter')
+          // eslint-disable-next-line global-require
+          const { DropboxAdapter } = require('./dropbox-adapter')
           return new DropboxAdapter(accessToken, refreshToken, expiresAt)
         } catch {
-          throw new Error('Dropbox adapter not yet implemented. Coming in Phase 1, Week 2.')
+          throw new Error('Dropbox adapter not yet implemented. Coming Phase 1, Week 2.')
         }
       }
 
       case 'onedrive': {
+        // Coming Phase 1, Week 2
         try {
-          const { OneDriveAdapter } = await import('./onedrive-adapter')
+          // eslint-disable-next-line global-require
+          const { OneDriveAdapter } = require('./onedrive-adapter')
           return new OneDriveAdapter(accessToken, refreshToken, expiresAt)
         } catch {
-          throw new Error('OneDrive adapter not yet implemented. Coming in Phase 1, Week 2.')
+          throw new Error('OneDrive adapter not yet implemented. Coming Phase 1, Week 2.')
         }
       }
 
       case 'box': {
+        // Coming Phase 1, Week 3
         try {
-          const { BoxAdapter } = await import('./box-adapter')
+          // eslint-disable-next-line global-require
+          const { BoxAdapter } = require('./box-adapter')
           return new BoxAdapter(accessToken, refreshToken, expiresAt)
         } catch {
-          throw new Error('Box adapter not yet implemented. Coming in Phase 1, Week 3.')
+          throw new Error('Box adapter not yet implemented. Coming Phase 1, Week 3.')
         }
       }
 
       default:
         throw new Error(`Unsupported cloud storage provider: ${provider}`)
     }
-  }
-
-  /**
-   * Synchronous version for Google Drive only (Phase 1)
-   */
-  static getGoogleDriveAdapter(
-    accessToken: string,
-    refreshToken?: string,
-    expiresAt?: Date
-  ) {
-    const { GoogleDriveAdapter } = require('./google-drive-adapter')
-    return new GoogleDriveAdapter(accessToken, refreshToken, expiresAt)
   }
 }
