@@ -57,10 +57,9 @@ export async function POST(request: NextRequest) {
     // Step 1: Check if unified_documents exists
     console.log('[deployment] Step 1: Checking if unified_documents exists...')
     try {
-      const check = await sql.query(
-        "SELECT EXISTS(SELECT 1 FROM information_schema.tables WHERE table_name='unified_documents')",
-        []
-      )
+      const check = await sql`
+        SELECT EXISTS(SELECT 1 FROM information_schema.tables WHERE table_name='unified_documents')
+      `
 
       const exists = check[0]?.exists || false
 
@@ -89,17 +88,15 @@ export async function POST(request: NextRequest) {
     // Step 2: Migrate documents from prospectus_documents
     console.log('[deployment] Step 2: Migrating from prospectus_documents...')
     try {
-      const prospectusCount = await sql.query(
-        `SELECT COUNT(*) as count FROM prospectus_documents`,
-        []
-      )
+      const prospectusCount = await sql`
+        SELECT COUNT(*) as count FROM prospectus_documents
+      `
 
       const count = prospectusCount[0]?.count || 0
 
       if (count > 0) {
         // Migrate
-        const migrated = await sql.query(
-          `
+        await sql`
           INSERT INTO unified_documents (
             id, company_id, name, display_name, description, mime_type,
             storage_provider, storage_id, file_size,
@@ -136,9 +133,7 @@ export async function POST(request: NextRequest) {
             WHERE ud.storage_id = prospectus_documents.id::varchar
               AND ud.company_id = prospectus_documents.company_id
           )
-          `,
-          []
-        )
+        `
 
         result.summary.totalDocumentsMigrated += count
         result.steps.push({
@@ -166,8 +161,7 @@ export async function POST(request: NextRequest) {
     // Step 3: Check for duplicates
     console.log('[deployment] Step 3: Checking for duplicates...')
     try {
-      const duplicates = await sql.query(
-        `
+      const duplicates = await sql`
         SELECT COUNT(*) as dup_count FROM (
           SELECT storage_id, COUNT(*) as count
           FROM unified_documents
@@ -175,9 +169,7 @@ export async function POST(request: NextRequest) {
           GROUP BY storage_id
           HAVING COUNT(*) > 1
         ) dups
-        `,
-        []
-      )
+      `
 
       const dupCount = duplicates[0]?.dup_count || 0
       result.summary.duplicatesFound = dupCount
@@ -196,8 +188,7 @@ export async function POST(request: NextRequest) {
         })
 
         // Auto-resolve: keep latest, delete older versions
-        const resolved = await sql.query(
-          `
+        await sql`
           WITH duplicates AS (
             SELECT storage_id, COUNT(*) as count
             FROM unified_documents
@@ -217,9 +208,7 @@ export async function POST(request: NextRequest) {
             )
           )
           DELETE FROM unified_documents WHERE id IN (SELECT id FROM to_delete)
-          `,
-          []
-        )
+        `
 
         result.summary.duplicatesResolved = dupCount - 1
       }
@@ -235,8 +224,7 @@ export async function POST(request: NextRequest) {
     // Step 4: Initialize cloud storage providers
     console.log('[deployment] Step 4: Initializing cloud storage providers...')
     try {
-      await sql.query(
-        `
+      await sql`
         INSERT INTO cloud_storage_providers (company_id, enabled_providers, provider_settings)
         SELECT DISTINCT company_id, '[]'::varchar[], '{}'::jsonb
         FROM unified_documents
@@ -245,9 +233,7 @@ export async function POST(request: NextRequest) {
           WHERE csp.company_id = unified_documents.company_id
         )
         ON CONFLICT (company_id) DO NOTHING
-        `,
-        []
-      )
+      `
 
       result.steps.push({
         step: 'Initialize cloud storage providers',
@@ -265,13 +251,11 @@ export async function POST(request: NextRequest) {
     // Step 5: Final verification
     console.log('[deployment] Step 5: Final verification...')
     try {
-      const totalDocs = await sql.query(
-        'SELECT COUNT(*) as count FROM unified_documents',
-        []
-      )
+      const totalDocs = await sql`
+        SELECT COUNT(*) as count FROM unified_documents
+      `
 
-      const finalDupCheck = await sql.query(
-        `
+      const finalDupCheck = await sql`
         SELECT COUNT(*) as dup_count FROM (
           SELECT storage_id, COUNT(*) as count
           FROM unified_documents
@@ -279,9 +263,7 @@ export async function POST(request: NextRequest) {
           GROUP BY storage_id
           HAVING COUNT(*) > 1
         ) dups
-        `,
-        []
-      )
+      `
 
       const totalDocCount = totalDocs[0]?.count || 0
       const finalDupCount = finalDupCheck[0]?.dup_count || 0

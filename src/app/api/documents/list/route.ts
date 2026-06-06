@@ -19,17 +19,21 @@ export async function GET(request: NextRequest) {
       }, { status: 400 })
     }
 
-    let query = 'SELECT * FROM unified_documents WHERE company_id = $1'
-    const params: any[] = [companyId]
+    let documents: any[] = []
 
     if (category) {
-      query += ` AND category = $2`
-      params.push(category)
+      documents = await sql`
+        SELECT * FROM unified_documents
+        WHERE company_id = ${companyId} AND category = ${category}
+        ORDER BY uploaded_at DESC
+      `
+    } else {
+      documents = await sql`
+        SELECT * FROM unified_documents
+        WHERE company_id = ${companyId}
+        ORDER BY uploaded_at DESC
+      `
     }
-
-    query += ' ORDER BY uploaded_at DESC'
-
-    const documents = await sql(query, params)
 
     return NextResponse.json({
       documents: documents || [],
