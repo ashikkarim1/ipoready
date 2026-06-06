@@ -379,7 +379,7 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
             <p className="body-sm text-text-secondary mt-1">Step {step} of 3: {step === 1 ? 'Select Template' : step === 2 ? 'Configure Details' : 'Review & Approve'}</p>
           </div>
           <button
-            onClick={() => setShowTemplateModal(false)}
+            onClick={onClose}
             className="text-text-tertiary hover:text-text-primary transition"
             title="Close"
           >
