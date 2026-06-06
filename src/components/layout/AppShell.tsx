@@ -103,10 +103,16 @@ const NAV_GROUPS = [
     ],
   },
   {
+    section: 'LISTED SERVICES',
+    collapsible: true,
+    items: [
+      { href: '/dashboard/listed-services',  icon: Zap,      label: 'Listed Services OS', badge: '✨',   key: 'listed-services' },
+    ],
+  },
+  {
     section: 'RESOURCES',
     collapsible: true,
     items: [
-      { href: '/dashboard/listed-services',  icon: Eye,      label: 'Listed Services OS', badge: '✨',   key: 'listed-services' },
       { href: '/templates',                   icon: Award,    label: 'Templates & Forms',  badge: null,   key: 'templates'  },
       { href: '/resources',                   icon: BookOpen, label: 'Resource Centre',    badge: null,   key: 'resources'  },
     ],

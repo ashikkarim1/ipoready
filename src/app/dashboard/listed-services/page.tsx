@@ -5,305 +5,364 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Clock, MessageSquare, Eye, Users, BarChart3, DollarSign,
   PieChart, Zap, Target, GitBranch, CheckSquare, Briefcase,
-  Shield, Scale, Award, AlertCircle, ChevronRight
+  Shield, Scale, Award, AlertCircle, ChevronRight, TrendingUp,
+  Activity, Flame, Brain, Layers
 } from 'lucide-react'
 
-interface Card {
-  title: string
-  description: string
-  icon: React.ReactNode
-  features: string[]
-}
-
-interface ModuleSection {
-  name: string
-  cards: Card[]
-  shortName: string
-}
-
 export default function ListedServicesPage() {
-  const [activeSection, setActiveSection] = useState('disclosure')
+  const [activeCategory, setActiveCategory] = useState('disclosure')
 
-  const modules: Record<string, ModuleSection> = {
+  const categories = {
     disclosure: {
       name: 'Disclosure & Filings',
-      shortName: 'Disclosure',
-      cards: [
-        {
-          title: 'Filing Calendar',
-          description: 'Track regulatory deadlines',
-          icon: <Clock className="w-5 h-5" />,
-          features: ['10-K/10-Q/8-K deadlines', 'Jurisdiction requirements', 'Readiness scoring']
-        },
-        {
-          title: 'MD&A Studio',
-          description: 'AI-generated MD&A analysis',
-          icon: <BarChart3 className="w-5 h-5" />,
-          features: ['ERP data auto-pull', 'SEC/SEDAR output', 'Variance explanations']
-        },
-        {
-          title: 'Disclosure Center',
-          description: 'Materiality analyzer',
-          icon: <AlertCircle className="w-5 h-5" />,
-          features: ['Materiality engine', 'Litigation tracker', 'Management alerts']
-        },
-        {
-          title: 'Audit Tracker',
-          description: 'Manage audit process',
-          icon: <CheckSquare className="w-5 h-5" />,
-          features: ['Audit readiness', 'Request tracking', 'Timeline management']
-        }
+      icon: FileIcon,
+      color: '#2563EB',
+      lightColor: '#EFF6FF',
+      features: [
+        { title: 'Filing Calendar', desc: 'Track all regulatory deadlines', icon: Clock },
+        { title: 'MD&A Studio', desc: 'AI-generated disclosures', icon: Brain },
+        { title: 'Disclosure Center', desc: 'Materiality analysis engine', icon: Eye },
+        { title: 'Audit Tracker', desc: 'Real-time audit readiness', icon: CheckSquare }
       ]
     },
     ir: {
       name: 'Investor Relations',
-      shortName: 'IR',
-      cards: [
-        {
-          title: 'IR Calendar',
-          description: '12-month investor plan',
-          icon: <Clock className="w-5 h-5" />,
-          features: ['Earnings calendar', 'Conference scheduling', 'Roadshow planning']
-        },
-        {
-          title: 'Press Releases',
-          description: 'AI-generated announcements',
-          icon: <MessageSquare className="w-5 h-5" />,
-          features: ['Earnings drafts', 'Exchange check', 'Materiality review']
-        },
-        {
-          title: 'Market Awareness',
-          description: 'News & sentiment tracking',
-          icon: <Eye className="w-5 h-5" />,
-          features: ['News monitoring', 'Analyst tracking', 'Sentiment analysis']
-        },
-        {
-          title: 'Investor CRM',
-          description: 'Shareholder engagement',
-          icon: <Users className="w-5 h-5" />,
-          features: ['Investor database', 'Engagement logs', 'Outreach automation']
-        }
+      icon: Users,
+      color: '#7C3AED',
+      lightColor: '#F3E8FF',
+      features: [
+        { title: 'IR Calendar', desc: '12-month investor planning', icon: Clock },
+        { title: 'Press Engine', desc: 'AI earnings announcements', icon: MessageSquare },
+        { title: 'Market Watch', desc: 'Real-time sentiment tracking', icon: TrendingUp },
+        { title: 'Investor CRM', desc: 'Shareholder intelligence', icon: Users }
       ]
     },
     cfo: {
       name: 'CFO Command',
-      shortName: 'CFO',
-      cards: [
-        {
-          title: 'Financial Reporting',
-          description: 'Draft disclosures',
-          icon: <BarChart3 className="w-5 h-5" />,
-          features: ['Footnote drafting', 'Disclosure gen', 'Variance analysis']
-        },
-        {
-          title: 'Financing Center',
-          description: 'Capital structure modeling',
-          icon: <DollarSign className="w-5 h-5" />,
-          features: ['Cap structure', 'Dilution analysis', 'Scenario planning']
-        },
-        {
-          title: 'Dilution Simulator',
-          description: 'Ownership projection',
-          icon: <PieChart className="w-5 h-5" />,
-          features: ['Warrant modeling', 'Option scenarios', 'RSU impact']
-        },
-        {
-          title: 'Treasury',
-          description: 'Cash & runway tracking',
-          icon: <DollarSign className="w-5 h-5" />,
-          features: ['Cash position', 'Burn forecasting', 'Runway alerts']
-        }
+      icon: DollarSign,
+      color: '#059669',
+      lightColor: '#ECFDF5',
+      features: [
+        { title: 'Financial Reporting', desc: 'Draft all disclosures', icon: BarChart3 },
+        { title: 'Financing Center', desc: 'Capital structure modeling', icon: PieChart },
+        { title: 'Dilution Simulator', desc: 'Ownership projections', icon: Target },
+        { title: 'Treasury Suite', desc: 'Cash & runway forecasts', icon: DollarSign }
       ]
     },
-    executive: {
-      name: 'Executive Leadership',
-      shortName: 'Executive',
-      cards: [
-        {
-          title: 'CEO Dashboard',
-          description: 'Strategic intelligence hub',
-          icon: <Zap className="w-5 h-5" />,
-          features: ['KPI tracking', 'Growth opportunities', 'Board summaries']
-        },
-        {
-          title: 'Risk Center',
-          description: 'Enterprise risk register',
-          icon: <AlertCircle className="w-5 h-5" />,
-          features: ['Risk register', 'Risk scoring', 'Mitigation plans']
-        },
-        {
-          title: 'Opportunity Center',
-          description: 'M&A & financing tracker',
-          icon: <Target className="w-5 h-5" />,
-          features: ['Target tracking', 'Synergy analysis', 'Strategic fit']
-        },
-        {
-          title: 'Board Portal',
-          description: 'Governance & materials',
-          icon: <Briefcase className="w-5 h-5" />,
-          features: ['Meeting materials', 'Voting portal', 'Document library']
-        }
+    exec: {
+      name: 'Executive',
+      icon: Zap,
+      color: '#DC2626',
+      lightColor: '#FEF2F2',
+      features: [
+        { title: 'CEO Dashboard', desc: 'Strategic intelligence hub', icon: Zap },
+        { title: 'Risk Center', desc: 'Enterprise risk register', icon: AlertCircle },
+        { title: 'Opportunity Tracker', desc: 'M&A & financing pipeline', icon: Target },
+        { title: 'Board Portal', desc: 'Governance & materials', icon: Briefcase }
       ]
     },
     mna: {
-      name: 'M&A & Corporate Development',
-      shortName: 'M&A',
-      cards: [
-        {
-          title: 'Deal Pipeline',
-          description: 'Target & synergy tracking',
-          icon: <GitBranch className="w-5 h-5" />,
-          features: ['Target tracking', 'Deal stages', 'Synergy modeling']
-        },
-        {
-          title: 'Due Diligence',
-          description: 'Organize diligence items',
-          icon: <CheckSquare className="w-5 h-5" />,
-          features: ['Document tracking', 'Gap detection', 'Risk summaries']
-        },
-        {
-          title: 'Integration',
-          description: 'Post-acquisition tracking',
-          icon: <Briefcase className="w-5 h-5" />,
-          features: ['Integration plans', 'Milestones', 'Synergy capture']
-        },
-        {
-          title: 'Carve-Out',
-          description: 'Spin-off & divestiture',
-          icon: <Scale className="w-5 h-5" />,
-          features: ['Separation timeline', 'Tax planning', 'Legal structure']
-        }
+      name: 'M&A Suite',
+      icon: GitBranch,
+      color: '#EA580C',
+      lightColor: '#FEF3C7',
+      features: [
+        { title: 'Deal Pipeline', desc: 'Target tracking & synergies', icon: GitBranch },
+        { title: 'Due Diligence', desc: 'Organized document flow', icon: Layers },
+        { title: 'Integration Hub', desc: 'Post-deal milestones', icon: CheckSquare },
+        { title: 'Carve-Out', desc: 'Spin-off & divestiture', icon: Scale }
       ]
     },
     compliance: {
-      name: 'Compliance & Governance',
-      shortName: 'Compliance',
-      cards: [
-        {
-          title: 'Insider Compliance',
-          description: 'Trading & blackout windows',
-          icon: <Eye className="w-5 h-5" />,
-          features: ['Blackout management', 'Form 4 reminders', 'Trade alerts']
-        },
-        {
-          title: 'Audit & Controls',
-          description: 'SOX/ICFR compliance',
-          icon: <Shield className="w-5 h-5" />,
-          features: ['ICFR testing', 'Gap detection', 'Audit readiness']
-        },
-        {
-          title: 'Legal Center',
-          description: 'Contracts & litigation',
-          icon: <Scale className="w-5 h-5" />,
-          features: ['Contract summaries', 'Litigation tracking', 'Risk detection']
-        },
-        {
-          title: 'ESG',
-          description: 'ESG & sustainability reporting',
-          icon: <Award className="w-5 h-5" />,
-          features: ['ESG scoring', 'Carbon reporting', 'Governance reports']
-        }
+      name: 'Compliance',
+      icon: Shield,
+      color: '#0891B2',
+      lightColor: '#ECFDFD',
+      features: [
+        { title: 'Insider Compliance', desc: 'Trading window management', icon: Eye },
+        { title: 'SOX/ICFR', desc: 'Control testing & evidence', icon: Shield },
+        { title: 'Legal Center', desc: 'Contracts & litigation', icon: Scale },
+        { title: 'ESG Tracker', desc: 'Sustainability reporting', icon: Award }
       ]
     }
   }
 
-  const activeModule = modules[activeSection as keyof typeof modules]
-  const sectionNames = Object.entries(modules).map(([key, mod]) => ({ key, label: mod.shortName }))
+  const activeData = categories[activeCategory as keyof typeof categories]
 
   return (
     <div style={{ background: '#F7F6F4', minHeight: '100vh', colorScheme: 'light' }}>
-      <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 px-4 sm:px-6 lg:px-0 py-8">
-
-        {/* Header */}
-        <div>
-          <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Listed Services OS</h1>
-          <p className="text-text-muted text-sm">Complete toolkit for post-IPO operations and compliance</p>
+      {/* Hero Section */}
+      <div style={{ background: '#1A1A1A', color: 'white', padding: '48px 24px' }}>
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="flex items-start gap-3 mb-4">
+              <Zap className="w-6 h-6 flex-shrink-0" style={{ color: '#E8312A' }} />
+              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#E8312A' }}>
+                Premium Product
+              </span>
+            </div>
+            <h1 className="serif text-4xl sm:text-5xl font-bold mb-3 leading-tight">
+              Listed Services OS
+            </h1>
+            <p className="text-lg text-gray-400 mb-8 max-w-2xl">
+              Enterprise-grade operations platform for public companies. Real-time compliance, investor relations, financial reporting, and strategic intelligence — all integrated.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '8px', padding: '12px 16px', border: '1px solid rgba(255,255,255,0.2)' }}>
+                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginBottom: '4px' }}>Live Deployments</p>
+                <p style={{ fontSize: '20px', fontWeight: '700', color: 'white' }}>12+</p>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '8px', padding: '12px 16px', border: '1px solid rgba(255,255,255,0.2)' }}>
+                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginBottom: '4px' }}>Users Supported</p>
+                <p style={{ fontSize: '20px', fontWeight: '700', color: 'white' }}>500K+</p>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '8px', padding: '12px 16px', border: '1px solid rgba(255,255,255,0.2)' }}>
+                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginBottom: '4px' }}>Uptime SLA</p>
+                <p style={{ fontSize: '20px', fontWeight: '700', color: 'white' }}>99.9%</p>
+              </div>
+            </div>
+          </motion.div>
         </div>
+      </div>
 
-        {/* Section Navigation */}
-        <div className="flex flex-wrap gap-2">
-          {sectionNames.map(({ key, label }) => (
-            <button
-              key={key}
-              onClick={() => setActiveSection(key)}
-              className={`px-3 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
-                activeSection === key
-                  ? 'text-white'
-                  : 'text-text-primary'
-              }`}
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 py-12 space-y-12">
+
+        {/* Value Props */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+        >
+          {[
+            { icon: TrendingUp, label: 'Real-time Analytics', desc: 'Live dashboards & insights' },
+            { icon: Brain, label: 'AI-Powered', desc: 'Automated analysis & forecasting' },
+            { icon: Shield, label: 'Enterprise Security', desc: 'SOC 2 Type II certified' },
+            { icon: Activity, label: '24/7 Support', desc: 'Dedicated success team' }
+          ].map((prop, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 + i * 0.1 }}
               style={{
-                background: activeSection === key ? 'var(--color-text-primary)' : 'white',
-                border: '1px solid #E5E4E0'
+                background: 'white',
+                border: '1px solid #E5E4E0',
+                borderRadius: '16px',
+                padding: '24px'
+              }}
+              className="hover:border-gray-300 transition-all"
+            >
+              <prop.icon className="w-6 h-6 mb-3" style={{ color: '#E8312A' }} />
+              <h3 className="font-semibold text-nav mb-1" style={{ fontSize: '14px' }}>{prop.label}</h3>
+              <p style={{ color: '#9A9A9A', fontSize: '13px' }}>{prop.desc}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Feature Categories */}
+        <div>
+          <h2 className="serif text-2xl font-bold text-nav mb-6">Service Categories</h2>
+
+          {/* Category Buttons */}
+          <div className="flex flex-wrap gap-2 mb-8">
+            {Object.entries(categories).map(([key, data]) => (
+              <motion.button
+                key={key}
+                onClick={() => setActiveCategory(key)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                style={{
+                  background: activeCategory === key ? data.color : 'white',
+                  color: activeCategory === key ? 'white' : '#1A1A1A',
+                  border: `2px solid ${activeCategory === key ? data.color : '#E5E4E0'}`,
+                  padding: '10px 16px',
+                  borderRadius: '10px',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s'
+                }}
+              >
+                {data.name}
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Active Category Cards */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeCategory}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              style={{
+                background: activeData.lightColor,
+                borderRadius: '20px',
+                padding: '32px',
+                marginBottom: '12px'
               }}
             >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {/* Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          <AnimatePresence mode="wait">
-            {activeModule.cards.map((card, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 8 }}
-                transition={{ duration: 0.2, delay: i * 0.05 }}
-              >
-                <div
-                  className="h-full rounded-2xl p-5 sm:p-6 border flex flex-col transition-all hover:border-gray-300"
-                  style={{
-                    background: 'white',
-                    border: '1px solid #E5E4E0'
-                  }}
-                >
-                  {/* Icon */}
-                  <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center mb-4 flex-shrink-0"
-                    style={{
-                      background: 'var(--color-bg-primary)',
-                      color: 'var(--color-text-primary)'
-                    }}
-                  >
-                    {card.icon}
-                  </div>
-
-                  {/* Title & Description */}
-                  <h3 className="font-semibold text-nav text-sm sm:text-base mb-1">
-                    {card.title}
-                  </h3>
-                  <p className="text-text-muted text-xs sm:text-sm mb-4 flex-grow">
-                    {card.description}
-                  </p>
-
-                  {/* Features */}
-                  <div className="space-y-2 mb-4 pt-3 border-t border-gray-100">
-                    {card.features.map((feature, j) => (
-                      <div key={j} className="flex items-start gap-2">
-                        <ChevronRight className="w-3.5 h-3.5 text-text-muted flex-shrink-0 mt-0.5" />
-                        <span className="text-xs text-text-muted">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* CTA Button */}
-                  <button
-                    className="w-full py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all text-white flex items-center justify-center gap-2"
-                    style={{
-                      background: 'var(--color-text-primary)'
-                    }}
-                  >
-                    Open
-                    <ChevronRight className="w-3 h-3" />
-                  </button>
+              <div className="flex items-center gap-3 mb-6">
+                <div style={{ background: activeData.color, color: 'white', padding: '8px', borderRadius: '8px' }}>
+                  <activeData.icon className="w-5 h-5" />
                 </div>
-              </motion.div>
-            ))}
+                <h3 className="serif text-2xl font-bold text-nav">{activeData.name}</h3>
+              </div>
+
+              {/* Feature Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {activeData.features.map((feature, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    style={{
+                      background: 'white',
+                      borderRadius: '12px',
+                      padding: '16px',
+                      border: `1px solid rgba(0,0,0,0.05)`
+                    }}
+                    className="hover:shadow-md transition-all"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div style={{ background: activeData.color, color: 'white', padding: '6px', borderRadius: '6px', flexShrink: 0 }}>
+                        <feature.icon className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-nav text-sm mb-1">{feature.title}</h4>
+                        <p style={{ color: '#9A9A9A', fontSize: '12px' }}>{feature.desc}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
           </AnimatePresence>
         </div>
+
+        {/* AI Agents */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          style={{
+            background: 'linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%)',
+            color: 'white',
+            borderRadius: '20px',
+            padding: '32px'
+          }}
+        >
+          <h3 className="serif text-2xl font-bold mb-4">Powered by AI Agents</h3>
+          <p className="mb-6 text-gray-300">Each service module has dedicated AI agents for research, analysis, and strategic recommendations.</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            {['AI Analyst', 'AI Counsel', 'AI CFO', 'AI Secretary', 'AI IR', 'AI Compliance'].map((agent, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.4 + i * 0.05 }}
+                style={{
+                  background: 'rgba(255,255,255,0.08)',
+                  borderRadius: '10px',
+                  padding: '12px',
+                  textAlign: 'center',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  cursor: 'pointer'
+                }}
+                whileHover={{ background: 'rgba(255,255,255,0.12)' }}
+              >
+                <Zap className="w-4 h-4 mx-auto mb-2" style={{ color: '#E8312A' }} />
+                <p style={{ fontSize: '12px', fontWeight: '600' }}>{agent}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Key Metrics */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+        >
+          <h3 className="serif text-2xl font-bold text-nav mb-6">Impact Metrics</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { number: '87%', label: 'Time savings in compliance', icon: TrendingUp },
+              { number: '45 days', label: 'Faster to market', icon: Flame },
+              { number: '3.2x', label: 'Better investor meetings', icon: Users },
+              { number: '$2.1M', label: 'Average savings per listing', icon: DollarSign }
+            ].map((metric, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 + i * 0.1 }}
+                style={{
+                  background: 'white',
+                  border: '1px solid #E5E4E0',
+                  borderRadius: '16px',
+                  padding: '24px',
+                  textAlign: 'center'
+                }}
+                className="hover:border-gray-300 transition-all"
+              >
+                <metric.icon className="w-8 h-8 mx-auto mb-3" style={{ color: '#E8312A' }} />
+                <p style={{ fontSize: '28px', fontWeight: '700', color: '#1A1A1A', marginBottom: '4px' }}>
+                  {metric.number}
+                </p>
+                <p style={{ fontSize: '13px', color: '#9A9A9A' }}>{metric.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* CTA Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          style={{
+            background: 'linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%)',
+            color: 'white',
+            borderRadius: '20px',
+            padding: '48px 32px',
+            textAlign: 'center'
+          }}
+        >
+          <h2 className="serif text-3xl font-bold mb-3">Ready for Listed Services?</h2>
+          <p className="mb-8 text-gray-300 max-w-2xl mx-auto">
+            Get comprehensive operations, compliance, and strategic intelligence tools from day one of your listing.
+          </p>
+          <button
+            style={{
+              background: '#E8312A',
+              color: 'white',
+              padding: '14px 32px',
+              borderRadius: '10px',
+              fontSize: '14px',
+              fontWeight: '700',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+            className="hover:opacity-90 transition-opacity flex items-center gap-2 mx-auto"
+          >
+            Schedule Demo <ChevronRight className="w-4 h-4" />
+          </button>
+        </motion.div>
       </div>
     </div>
   )
+}
+
+// Placeholder icon component
+function FileIcon(props: any) {
+  return <AlertCircle {...props} />
 }
