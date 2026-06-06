@@ -371,39 +371,48 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
 
   return (
     <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-900 dark:to-blue-800 px-6 py-4 border-b border-blue-700">
-          <h2 className="h4 font-bold text-white">Create New Resolution</h2>
-          <p className="text-blue-100 body-sm">Step {step} of 3: {step === 1 ? 'Select Template' : step === 2 ? 'Configure Details' : 'Review & Approve'}</p>
+        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-start justify-between">
+          <div>
+            <h2 className="h4 font-bold text-nav">Create New Resolution</h2>
+            <p className="body-sm text-text-secondary mt-1">Step {step} of 3: {step === 1 ? 'Select Template' : step === 2 ? 'Configure Details' : 'Review & Approve'}</p>
+          </div>
+          <button
+            onClick={() => setShowTemplateModal(false)}
+            className="text-text-tertiary hover:text-text-primary transition"
+            title="Close"
+          >
+            <XCircle className="w-5 h-5" />
+          </button>
         </div>
 
         <div className="p-6">
           {step === 1 && (
             <div className="space-y-4">
-              <h3 className="h4 font-semibold text-slate-900 dark:text-white mb-4">Choose a Resolution Template</h3>
+              <h3 className="h4 font-semibold text-nav mb-4">Choose a Resolution Template</h3>
               <div className="grid grid-cols-1 gap-3 max-h-96 overflow-y-auto">
                 {RESOLUTION_TEMPLATES.map(template => (
                   <button
                     key={template.id}
                     onClick={() => handleSelectTemplate(template)}
-                    className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-left transition"
+                    className="p-4 border border-gray-200 rounded-lg hover:border-primary hover:bg-gray-50 text-left transition"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h4 className="font-semibold text-slate-900 dark:text-white">{template.name}</h4>
-                        <p className="body-sm text-slate-600 dark:text-slate-400 mt-1">{template.description}</p>
+                        <h4 className="font-semibold text-nav">{template.name}</h4>
+                        <p className="body-sm text-text-secondary mt-1">{template.description}</p>
                         {template.requiredForExchange && template.requiredForExchange.length > 0 && (
                           <div className="flex gap-2 mt-2 flex-wrap">
                             {template.requiredForExchange.map(exchange => (
-                              <span key={exchange} className="caption-sm bg-blue-100 dark:bg-blue-900/30 text-blue-900 dark:text-blue-200 px-2 py-1 rounded">
+                              <span key={exchange} className="caption-sm bg-gray-100 text-gray-700 px-2 py-1 rounded">
                                 Required for {exchange}
                               </span>
                             ))}
                           </div>
                         )}
                       </div>
-                      <ChevronRight className="w-5 h-5 text-slate-400 dark:text-slate-500 flex-shrink-0 ml-2" />
+                      <ChevronRight className="w-5 h-5 text-gray-400 flex-shrink-0 ml-2" />
                     </div>
                   </button>
                 ))}
@@ -419,46 +428,46 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
               className="space-y-6"
             >
               <div>
-                <label className="block label font-semibold text-slate-900 dark:text-white mb-2">Template</label>
-                <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                  <p className="label font-medium text-slate-900 dark:text-white">{selectedTemplate.name}</p>
-                  <p className="caption-sm text-slate-600 dark:text-slate-400 mt-1">{selectedTemplate.description}</p>
+                <label className="block label font-semibold text-nav mb-2">Template</label>
+                <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                  <p className="label font-medium text-nav">{selectedTemplate.name}</p>
+                  <p className="caption-sm text-text-secondary mt-1">{selectedTemplate.description}</p>
                 </div>
               </div>
 
               <div>
-                <label className="block label font-semibold text-slate-900 dark:text-white mb-2">Resolution Title</label>
+                <label className="block label font-semibold text-nav mb-2">Resolution Title</label>
                 <input
                   {...register('title')}
                   type="text"
                   placeholder="e.g., Authorization for 3:1 Share Split"
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-nav placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
                 {errors.title && <p className="text-red-500 body-sm mt-1">{errors.title.message}</p>}
               </div>
 
               <div>
-                <label className="block label font-semibold text-slate-900 dark:text-white mb-2">Description</label>
+                <label className="block label font-semibold text-nav mb-2">Description</label>
                 <textarea
                   {...register('description')}
                   rows={4}
                   placeholder="Describe the purpose and rationale for this resolution..."
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-nav placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
                 {errors.description && <p className="text-red-500 body-sm mt-1">{errors.description.message}</p>}
               </div>
 
               <div>
-                <label className="block label font-semibold text-slate-900 dark:text-white mb-2">Effective Date (Optional)</label>
+                <label className="block label font-semibold text-nav mb-2">Effective Date (Optional)</label>
                 <input
                   {...register('effectiveDate')}
                   type="date"
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-nav focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block label font-semibold text-slate-900 dark:text-white mb-3">Board Members for Approval</label>
+                <label className="block label font-semibold text-nav mb-3">Board Members for Approval</label>
                 <div className="flex gap-2 mb-3">
                   <input
                     type="text"
@@ -470,18 +479,18 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
                         ;(e.target as HTMLInputElement).value = ''
                       }
                     }}
-                    className="flex-1 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-white text-nav placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>
                 {boardMembersInput.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {boardMembersInput.map((member, idx) => (
-                      <div key={idx} className="bg-blue-100 dark:bg-blue-900/30 text-blue-900 dark:text-blue-100 px-3 py-1 rounded-full flex items-center gap-2">
+                      <div key={idx} className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full flex items-center gap-2">
                         <span className="body-sm">{member}</span>
                         <button
                           type="button"
                           onClick={() => removeBoardMember(idx)}
-                          className="hover:text-blue-700 dark:hover:text-blue-200"
+                          className="hover:text-gray-900"
                         >
                           ×
                         </button>
@@ -496,13 +505,13 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="flex-1 px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-nav hover:bg-gray-50 transition"
                 >
                   Back
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
+                  className="flex-1 px-4 py-2 bg-primary hover:opacity-90 text-white rounded-lg transition"
                 >
                   Continue to Review
                 </button>
@@ -513,25 +522,25 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
           {step === 3 && selectedTemplate && (
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Review Resolution Details</h3>
-                <div className="space-y-4 bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                <h3 className="font-semibold text-nav mb-4">Review Resolution Details</h3>
+                <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
                   <div>
-                    <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 uppercase">Template</p>
-                    <p className="text-slate-900 dark:text-white font-medium">{selectedTemplate.name}</p>
+                    <p className="label-sm font-semibold text-text-secondary uppercase">Template</p>
+                    <p className="text-nav font-medium">{selectedTemplate.name}</p>
                   </div>
                   <div>
-                    <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 uppercase">Title</p>
-                    <p className="text-slate-900 dark:text-white">{watch('title')}</p>
+                    <p className="label-sm font-semibold text-text-secondary uppercase">Title</p>
+                    <p className="text-nav">{watch('title')}</p>
                   </div>
                   <div>
-                    <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 uppercase">Description</p>
-                    <p className="text-slate-900 dark:text-white body-sm">{watch('description')}</p>
+                    <p className="label-sm font-semibold text-text-secondary uppercase">Description</p>
+                    <p className="text-nav body-sm">{watch('description')}</p>
                   </div>
                   <div>
-                    <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 uppercase">Board Members</p>
+                    <p className="label-sm font-semibold text-text-secondary uppercase">Board Members</p>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {boardMembersInput.map((member, idx) => (
-                        <span key={idx} className="body-sm bg-blue-100 dark:bg-blue-900/30 text-blue-900 dark:text-blue-100 px-3 py-1 rounded-full">
+                        <span key={idx} className="body-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
                           {member}
                         </span>
                       ))}
@@ -544,14 +553,14 @@ function ResolutionWizard({ onClose, onSubmit, isSubmitting }: ResolutionWizardP
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="flex-1 px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-nav hover:bg-gray-50 transition"
                 >
                   Back
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white rounded-lg transition flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-2 bg-primary hover:opacity-90 disabled:opacity-50 text-white rounded-lg transition flex items-center justify-center gap-2"
                 >
                   {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                   Create Resolution
@@ -573,40 +582,40 @@ interface ResolutionDetailProps {
 function ResolutionDetail({ resolution, onClose }: ResolutionDetailProps) {
   return (
     <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg shadow-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-700 dark:to-slate-800 px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="h4 font-bold text-slate-900 dark:text-white">{resolution.title}</h2>
-            <p className="body-sm text-slate-600 dark:text-slate-400 mt-1">Created {resolution.createdDate}</p>
+            <h2 className="h4 font-bold text-nav">{resolution.title}</h2>
+            <p className="body-sm text-text-secondary mt-1">Created {resolution.createdDate}</p>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+            className="text-text-tertiary hover:text-text-primary transition"
           >
-            ×
+            <XCircle className="w-5 h-5" />
           </button>
         </div>
 
         <div className="p-6 space-y-6">
           {/* Status & Stats */}
           <div className="grid grid-cols-3 gap-4">
-            <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
-              <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 uppercase">Status</p>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="label-sm font-semibold text-text-secondary uppercase">Status</p>
               <div className="flex items-center gap-2 mt-2">
                 {STATUS_CONFIG[resolution.status].icon}
-                <span className="font-medium text-slate-900 dark:text-white">{STATUS_CONFIG[resolution.status].label}</span>
+                <span className="font-medium text-nav">{STATUS_CONFIG[resolution.status].label}</span>
               </div>
             </div>
-            <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
-              <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 uppercase">Approvals</p>
-              <p className="text-2xl font-bold text-slate-900 dark:text-white mt-2">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="label-sm font-semibold text-text-secondary uppercase">Approvals</p>
+              <p className="text-2xl font-bold text-nav mt-2">
                 {resolution.approvalCount}/{resolution.totalBoardMembers}
               </p>
             </div>
-            <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
-              <p className="label-sm font-semibold text-slate-600 dark:text-slate-400 uppercase">Effective Date</p>
-              <p className="text-slate-900 dark:text-white font-medium mt-2">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="label-sm font-semibold text-text-secondary uppercase">Effective Date</p>
+              <p className="text-nav font-medium mt-2">
                 {resolution.effectiveDate ? new Date(resolution.effectiveDate).toLocaleDateString() : 'Pending'}
               </p>
             </div>
@@ -614,38 +623,38 @@ function ResolutionDetail({ resolution, onClose }: ResolutionDetailProps) {
 
           {/* Description */}
           <div>
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Description</h3>
-            <p className="text-slate-700 dark:text-slate-300">{resolution.description}</p>
+            <h3 className="font-semibold text-nav mb-2">Description</h3>
+            <p className="text-text-primary">{resolution.description}</p>
           </div>
 
           {/* Resolution Content */}
           <div>
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Resolution Text</h3>
-            <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 max-h-64 overflow-y-auto">
-              <p className="body-sm text-slate-700 dark:text-slate-300 font-mono whitespace-pre-wrap">{resolution.content}</p>
+            <h3 className="font-semibold text-nav mb-2">Resolution Text</h3>
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 max-h-64 overflow-y-auto">
+              <p className="body-sm text-text-primary font-mono whitespace-pre-wrap">{resolution.content}</p>
             </div>
           </div>
 
           {/* Board Members & Approvals */}
           <div>
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-3">Board Member Approvals</h3>
+            <h3 className="font-semibold text-nav mb-3">Board Member Approvals</h3>
             <div className="space-y-2">
               {resolution.boardMembers.map((member, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-700">
+                <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
                   <div>
-                    <p className="font-medium text-slate-900 dark:text-white">{member.name}</p>
-                    <p className="caption-sm text-slate-600 dark:text-slate-400">{member.title}</p>
+                    <p className="font-medium text-nav">{member.name}</p>
+                    <p className="caption-sm text-text-secondary">{member.title}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     {member.approved ? (
                       <>
-                        <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
-                        <span className="caption-sm text-green-600 dark:text-green-400">{member.approvalDate}</span>
+                        <CheckCircle2 className="w-5 h-5 text-green-600" />
+                        <span className="caption-sm text-green-600">{member.approvalDate}</span>
                       </>
                     ) : (
                       <>
-                        <Clock className="w-5 h-5 text-slate-400" />
-                        <span className="caption-sm text-slate-500">Pending</span>
+                        <Clock className="w-5 h-5 text-gray-400" />
+                        <span className="caption-sm text-gray-500">Pending</span>
                       </>
                     )}
                   </div>
@@ -655,12 +664,12 @@ function ResolutionDetail({ resolution, onClose }: ResolutionDetailProps) {
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
-            <button className="flex-1 px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition flex items-center justify-center gap-2">
+          <div className="flex gap-3 pt-4 border-t border-gray-200">
+            <button className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-nav hover:bg-gray-50 transition flex items-center justify-center gap-2">
               <Download className="w-4 h-4" />
               Export as PDF
             </button>
-            <button className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition flex items-center justify-center gap-2">
+            <button className="flex-1 px-4 py-2 bg-primary hover:opacity-90 text-white rounded-lg transition flex items-center justify-center gap-2">
               <Copy className="w-4 h-4" />
               Duplicate
             </button>
