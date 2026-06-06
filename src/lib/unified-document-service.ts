@@ -1,3 +1,5 @@
+'use server'
+
 /**
  * Unified Document Service - Single Source of Truth
  *

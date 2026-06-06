@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { sql } from '@/lib/db'
 
 export const runtime = 'nodejs'
 
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
 
     query += ' ORDER BY i.listing_date DESC LIMIT 100'
 
-    const result = await db.query(query, params)
+    const result = await sql(query, params)
 
     // Calculate performance metrics
     const ipos = result.rows.map((ipo: any) => ({

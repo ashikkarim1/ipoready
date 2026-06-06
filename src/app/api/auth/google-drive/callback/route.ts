@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { exchangeCodeForToken } from '@/lib/cloud-storage/google-drive-adapter'
-import { db } from '@/lib/db'
+import { sql } from '@/lib/db'
 
 export const runtime = 'nodejs'
 
@@ -42,14 +42,14 @@ export async function GET(request: NextRequest) {
     }
 
     // Store OAuth tokens in cloud_storage_providers table
-    const existing = await db.query(
+    const existing = await sql(
       `SELECT id FROM cloud_storage_providers WHERE company_id = $1`,
       [companyId]
     )
 
-    if (existing.rows.length > 0) {
+    if (existing.length > 0) {
       // Update existing record
-      await db.query(
+      await sql(
         `UPDATE cloud_storage_providers
          SET provider_settings = jsonb_set(
            COALESCE(provider_settings, '{}'::jsonb),
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
       )
     } else {
       // Create new record
-      await db.query(
+      await sql(
         `INSERT INTO cloud_storage_providers
          (company_id, enabled_providers, provider_settings, created_at, updated_at)
          VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,

@@ -1,10 +1,11 @@
+'use server'
+
 /**
  * SEC EDGAR Data Ingestion Service
  * Fetches 10-K, 10-Q filings and extracts financial data
  */
 
-import fetch from 'node-fetch'
-import { db } from '@/lib/db'
+import { sql } from '@/lib/db'
 
 const SEC_API_BASE = 'https://www.sec.gov/cgi-bin/browse-edgar'
 const EDGAR_DATA_BASE = 'https://www.sec.gov/cgi-bin/viewer'
@@ -185,7 +186,7 @@ export async function ingestCompanyFilings(companyId: string, cik: string) {
       const fiscalQuarter = filing.formType === '10-K' ? 0 : Math.ceil((date.getMonth() + 1) / 3)
 
       // Store in database
-      await db.query(
+      await sql(
         `INSERT INTO company_financials
          (company_id, fiscal_year, fiscal_quarter, filing_type, filing_date, period_end_date,
           revenue, net_income, operating_cash_flow, total_assets, total_liabilities,
@@ -214,7 +215,7 @@ export async function ingestCompanyFilings(companyId: string, cik: string) {
     }
 
     // Update company's last filing date
-    await db.query(
+    await sql(
       `UPDATE capital_companies
        SET last_10k_date = CASE
              WHEN $2 = '10-K' THEN $3::date

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { batchIngestCompanies } from '@/lib/sec-parser/ingestion-service'
-import { db } from '@/lib/db'
+import { sql } from '@/lib/db'
 
 export const runtime = 'nodejs'
 export const maxDuration = 300 // 5 minute timeout for batch processing
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     query += ` LIMIT $${params.length + 1}`
     params.push(limit)
 
-    const result = await db.query(query, params)
+    const result = await sql(query, params)
 
     if (result.rows.length === 0) {
       return NextResponse.json({

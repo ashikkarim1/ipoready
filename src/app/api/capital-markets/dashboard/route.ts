@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { sql } from '@/lib/db'
 
 export const runtime = 'nodejs'
 
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get company overview
-    const company = await db.query(
+    const company = await sql(
       `SELECT * FROM capital_companies WHERE id = $1`,
       [companyId]
     )

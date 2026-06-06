@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { sql } from '@/lib/db'
 
 export const runtime = 'nodejs'
 
@@ -27,18 +27,18 @@ export async function GET(request: NextRequest) {
     }
 
     // Get total count
-    const countResult = await db.query(
+    const countResult = await sql(
       query.replace('SELECT *', 'SELECT COUNT(*) as count'),
       params
     )
 
-    const total = parseInt(countResult.rows[0].count)
+    const total = parseInt(countResult[0].count)
 
     // Get paginated results
     query += ` ORDER BY market_cap DESC NULLS LAST LIMIT $${paramCount} OFFSET $${paramCount + 1}`
     params.push(limit, offset)
 
-    const result = await db.query(query, params)
+    const result = await sql(query, params)
 
     return NextResponse.json({
       companies: result.rows,

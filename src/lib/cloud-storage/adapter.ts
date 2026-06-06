@@ -213,16 +213,20 @@ class StubAdapter extends CloudStorageAdapter {
 export class CloudStorageAdapterFactory {
   /**
    * Synchronous factory for Google Drive (Phase 1)
-   * Avoids dynamic imports that cause build-time errors
+   * Server-only: googleapis requires Node.js modules
    */
   static createGoogleDriveAdapter(
     accessToken: string,
     refreshToken?: string,
     expiresAt?: Date
   ): CloudStorageAdapter {
-    // Lazy require to avoid build-time dependency issues
-    // eslint-disable-next-line global-require
-    const { GoogleDriveAdapter } = require('./google-drive-adapter')
+    // This is server-only code - will only run on server
+    // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+    const mod = require('./google-drive-adapter')
+    const GoogleDriveAdapter = mod.GoogleDriveAdapter || mod.default
+    if (!GoogleDriveAdapter) {
+      throw new Error('Failed to load GoogleDriveAdapter')
+    }
     return new GoogleDriveAdapter(accessToken, refreshToken, expiresAt)
   }
 
