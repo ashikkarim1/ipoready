@@ -9,41 +9,121 @@ export async function GET(request: NextRequest) {
     const sector = request.nextUrl.searchParams.get('sector')
     const days = parseInt(request.nextUrl.searchParams.get('days') || '90')
 
-    let query = `
-      SELECT
-        i.*,
-        c.name as company_name,
-        c.ticker,
-        c.sector
-      FROM ipos i
-      LEFT JOIN capital_companies c ON i.company_id = c.id
-      WHERE 1=1
-    `
-    const params: any[] = []
-    let paramCount = 1
+    let result: any[]
 
-    if (status) {
-      query += ` AND i.status = $${paramCount}`
-      params.push(status)
-      paramCount++
+    // Build query with conditional filters
+    if (status && sector && days > 0) {
+      result = await sql`
+        SELECT
+          i.*,
+          c.name as company_name,
+          c.ticker,
+          c.sector
+        FROM ipos i
+        LEFT JOIN capital_companies c ON i.company_id = c.id
+        WHERE i.status = ${status}
+        AND (c.sector = ${sector} OR i.sector = ${sector})
+        AND i.listing_date >= CURRENT_DATE - INTERVAL '${days} days'
+        ORDER BY i.listing_date DESC
+        LIMIT 100
+      `
+    } else if (status && sector) {
+      result = await sql`
+        SELECT
+          i.*,
+          c.name as company_name,
+          c.ticker,
+          c.sector
+        FROM ipos i
+        LEFT JOIN capital_companies c ON i.company_id = c.id
+        WHERE i.status = ${status}
+        AND (c.sector = ${sector} OR i.sector = ${sector})
+        ORDER BY i.listing_date DESC
+        LIMIT 100
+      `
+    } else if (status && days > 0) {
+      result = await sql`
+        SELECT
+          i.*,
+          c.name as company_name,
+          c.ticker,
+          c.sector
+        FROM ipos i
+        LEFT JOIN capital_companies c ON i.company_id = c.id
+        WHERE i.status = ${status}
+        AND i.listing_date >= CURRENT_DATE - INTERVAL '${days} days'
+        ORDER BY i.listing_date DESC
+        LIMIT 100
+      `
+    } else if (sector && days > 0) {
+      result = await sql`
+        SELECT
+          i.*,
+          c.name as company_name,
+          c.ticker,
+          c.sector
+        FROM ipos i
+        LEFT JOIN capital_companies c ON i.company_id = c.id
+        WHERE (c.sector = ${sector} OR i.sector = ${sector})
+        AND i.listing_date >= CURRENT_DATE - INTERVAL '${days} days'
+        ORDER BY i.listing_date DESC
+        LIMIT 100
+      `
+    } else if (status) {
+      result = await sql`
+        SELECT
+          i.*,
+          c.name as company_name,
+          c.ticker,
+          c.sector
+        FROM ipos i
+        LEFT JOIN capital_companies c ON i.company_id = c.id
+        WHERE i.status = ${status}
+        ORDER BY i.listing_date DESC
+        LIMIT 100
+      `
+    } else if (sector) {
+      result = await sql`
+        SELECT
+          i.*,
+          c.name as company_name,
+          c.ticker,
+          c.sector
+        FROM ipos i
+        LEFT JOIN capital_companies c ON i.company_id = c.id
+        WHERE c.sector = ${sector} OR i.sector = ${sector}
+        ORDER BY i.listing_date DESC
+        LIMIT 100
+      `
+    } else if (days > 0) {
+      result = await sql`
+        SELECT
+          i.*,
+          c.name as company_name,
+          c.ticker,
+          c.sector
+        FROM ipos i
+        LEFT JOIN capital_companies c ON i.company_id = c.id
+        WHERE i.listing_date >= CURRENT_DATE - INTERVAL '${days} days'
+        ORDER BY i.listing_date DESC
+        LIMIT 100
+      `
+    } else {
+      result = await sql`
+        SELECT
+          i.*,
+          c.name as company_name,
+          c.ticker,
+          c.sector
+        FROM ipos i
+        LEFT JOIN capital_companies c ON i.company_id = c.id
+        ORDER BY i.listing_date DESC
+        LIMIT 100
+      `
     }
-
-    if (sector) {
-      query += ` AND (c.sector = $${paramCount} OR i.sector = $${paramCount})`
-      params.push(sector)
-      paramCount++
-    }
-
-    if (days > 0) {
-      query += ` AND i.listing_date >= CURRENT_DATE - INTERVAL '${days} days'`
-    }
-
-    query += ' ORDER BY i.listing_date DESC LIMIT 100'
-
-    const result = await sql(query, params)
 
     // Calculate performance metrics
-    const ipos = result.rows.map((ipo: any) => ({
+    const ipos = result.map((ipo: any) => ({
       ...ipo,
       performance: {
         first_day_return: ipo.first_day_return,

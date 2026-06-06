@@ -10,38 +10,70 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(request.nextUrl.searchParams.get('limit') || '50')
     const offset = parseInt(request.nextUrl.searchParams.get('offset') || '0')
 
-    let query = 'SELECT * FROM capital_companies WHERE 1=1'
-    const params: any[] = []
-    let paramCount = 1
+    const searchPattern = search ? `%${search}%` : null
 
-    if (sector) {
-      query += ` AND sector = $${paramCount}`
-      params.push(sector)
-      paramCount++
+    // Get total count with filters
+    let countResult: any[]
+
+    if (sector && searchPattern) {
+      countResult = await sql`
+        SELECT COUNT(*) as count FROM capital_companies
+        WHERE sector = ${sector}
+        AND (name ILIKE ${searchPattern} OR ticker ILIKE ${searchPattern})
+      `
+    } else if (sector) {
+      countResult = await sql`
+        SELECT COUNT(*) as count FROM capital_companies
+        WHERE sector = ${sector}
+      `
+    } else if (searchPattern) {
+      countResult = await sql`
+        SELECT COUNT(*) as count FROM capital_companies
+        WHERE name ILIKE ${searchPattern} OR ticker ILIKE ${searchPattern}
+      `
+    } else {
+      countResult = await sql`
+        SELECT COUNT(*) as count FROM capital_companies
+      `
     }
-
-    if (search) {
-      query += ` AND (name ILIKE $${paramCount} OR ticker ILIKE $${paramCount})`
-      params.push(`%${search}%`)
-      paramCount++
-    }
-
-    // Get total count
-    const countResult = await sql(
-      query.replace('SELECT *', 'SELECT COUNT(*) as count'),
-      params
-    )
 
     const total = parseInt(countResult[0].count)
 
     // Get paginated results
-    query += ` ORDER BY market_cap DESC NULLS LAST LIMIT $${paramCount} OFFSET $${paramCount + 1}`
-    params.push(limit, offset)
+    let result: any[]
 
-    const result = await sql(query, params)
+    if (sector && searchPattern) {
+      result = await sql`
+        SELECT * FROM capital_companies
+        WHERE sector = ${sector}
+        AND (name ILIKE ${searchPattern} OR ticker ILIKE ${searchPattern})
+        ORDER BY market_cap DESC NULLS LAST
+        LIMIT ${limit} OFFSET ${offset}
+      `
+    } else if (sector) {
+      result = await sql`
+        SELECT * FROM capital_companies
+        WHERE sector = ${sector}
+        ORDER BY market_cap DESC NULLS LAST
+        LIMIT ${limit} OFFSET ${offset}
+      `
+    } else if (searchPattern) {
+      result = await sql`
+        SELECT * FROM capital_companies
+        WHERE name ILIKE ${searchPattern} OR ticker ILIKE ${searchPattern}
+        ORDER BY market_cap DESC NULLS LAST
+        LIMIT ${limit} OFFSET ${offset}
+      `
+    } else {
+      result = await sql`
+        SELECT * FROM capital_companies
+        ORDER BY market_cap DESC NULLS LAST
+        LIMIT ${limit} OFFSET ${offset}
+      `
+    }
 
     return NextResponse.json({
-      companies: result.rows,
+      companies: result,
       pagination: {
         total,
         limit,

@@ -14,52 +14,45 @@ export async function GET(request: NextRequest) {
     }
 
     // Get company overview
-    const company = await sql(
-      `SELECT * FROM capital_companies WHERE id = $1`,
-      [companyId]
-    )
+    const company = await sql`SELECT * FROM capital_companies WHERE id = ${companyId}`
 
-    if (company.rows.length === 0) {
+    if (company.length === 0) {
       return NextResponse.json({
         error: 'Company not found',
       }, { status: 404 })
     }
 
-    const companyData = company.rows[0]
+    const companyData = company[0]
 
     // Get latest financials
-    const financials = await db.query(
-      `SELECT * FROM company_financials
-       WHERE company_id = $1 AND fiscal_quarter = 0
-       ORDER BY fiscal_year DESC LIMIT 3`,
-      [companyId]
-    )
+    const financials = await sql`
+      SELECT * FROM company_financials
+      WHERE company_id = ${companyId} AND fiscal_quarter = 0
+      ORDER BY fiscal_year DESC LIMIT 3
+    `
 
     // Get IPO data if applicable
-    const ipo = await db.query(
-      `SELECT * FROM ipos WHERE company_id = $1 ORDER BY listing_date DESC LIMIT 1`,
-      [companyId]
-    )
+    const ipos = await sql`
+      SELECT * FROM ipos WHERE company_id = ${companyId} ORDER BY listing_date DESC LIMIT 1
+    `
 
     // Get peer benchmarks
-    const benchmarks = await db.query(
-      `SELECT * FROM peer_benchmarks
-       WHERE company_id = $1
-       ORDER BY benchmark_date DESC LIMIT 1`,
-      [companyId]
-    )
+    const benchmarks = await sql`
+      SELECT * FROM peer_benchmarks
+      WHERE company_id = ${companyId}
+      ORDER BY benchmark_date DESC LIMIT 1
+    `
 
     // Get valuation multiples
-    const multiples = await db.query(
-      `SELECT * FROM valuation_multiples
-       WHERE company_id = $1
-       ORDER BY valuation_date DESC LIMIT 1`,
-      [companyId]
-    )
+    const multiples = await sql`
+      SELECT * FROM valuation_multiples
+      WHERE company_id = ${companyId}
+      ORDER BY valuation_date DESC LIMIT 1
+    `
 
     // Calculate key metrics
-    const latestFinancials = financials.rows[0]
-    const previousFinancials = financials.rows[1]
+    const latestFinancials = financials[0]
+    const previousFinancials = financials[1]
 
     const revenueGrowth = previousFinancials
       ? ((latestFinancials.revenue - previousFinancials.revenue) / previousFinancials.revenue * 100).toFixed(1)
@@ -86,19 +79,19 @@ export async function GET(request: NextRequest) {
         } : null,
         revenueGrowth: revenueGrowth ? parseFloat(revenueGrowth) : null,
       },
-      ipo: ipo.rows[0] ? {
-        listing_date: ipo.rows[0].listing_date,
-        first_day_return: ipo.rows[0].first_day_return,
-        return_365d: ipo.rows[0].return_365d,
+      ipo: ipos[0] ? {
+        listing_date: ipos[0].listing_date,
+        first_day_return: ipos[0].first_day_return,
+        return_365d: ipos[0].return_365d,
       } : null,
-      benchmarks: benchmarks.rows[0] ? {
-        percentile_vs_peers: benchmarks.rows[0].percentile_vs_peers,
-        percentile_vs_sector: benchmarks.rows[0].percentile_vs_sector,
+      benchmarks: benchmarks[0] ? {
+        percentile_vs_peers: benchmarks[0].percentile_vs_peers,
+        percentile_vs_sector: benchmarks[0].percentile_vs_sector,
       } : null,
-      valuation: multiples.rows[0] ? {
-        pe_ratio: multiples.rows[0].pe_ratio,
-        ev_revenue: multiples.rows[0].ev_revenue,
-        ev_ebitda: multiples.rows[0].ev_ebitda,
+      valuation: multiples[0] ? {
+        pe_ratio: multiples[0].pe_ratio,
+        ev_revenue: multiples[0].ev_revenue,
+        ev_ebitda: multiples[0].ev_ebitda,
       } : null,
     }
 

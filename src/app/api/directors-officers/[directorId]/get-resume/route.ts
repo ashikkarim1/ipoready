@@ -41,26 +41,38 @@ export async function GET(
     }
 
     // Build query to fetch resume
-    let query = `
-      SELECT id, file_path, file_url, file_name, file_mime_type
-      FROM director_resumes
-      WHERE professional_id = $1
-    `
-    const queryParams: any[] = [directorId]
+    let result: any[]
 
     if (resumeId) {
-      query += ` AND id = $2`
-      queryParams.push(resumeId)
+      result = await sql`
+        SELECT id, file_path, file_url, file_name, file_mime_type
+        FROM director_resumes
+        WHERE professional_id = ${directorId} AND id = ${resumeId}
+        ORDER BY uploaded_at DESC LIMIT 1
+      `
     } else if (version) {
-      query += ` AND version = $2`
-      queryParams.push(parseInt(version))
+      result = await sql`
+        SELECT id, file_path, file_url, file_name, file_mime_type
+        FROM director_resumes
+        WHERE professional_id = ${directorId} AND version = ${parseInt(version)}
+        ORDER BY uploaded_at DESC LIMIT 1
+      `
     } else if (isCurrent) {
-      query += ` AND is_current = true`
+      result = await sql`
+        SELECT id, file_path, file_url, file_name, file_mime_type
+        FROM director_resumes
+        WHERE professional_id = ${directorId} AND is_current = true
+        ORDER BY uploaded_at DESC LIMIT 1
+      `
+    } else {
+      result = await sql`
+        SELECT id, file_path, file_url, file_name, file_mime_type
+        FROM director_resumes
+        WHERE professional_id = ${directorId}
+        ORDER BY uploaded_at DESC LIMIT 1
+      `
     }
 
-    query += ` ORDER BY uploaded_at DESC LIMIT 1`
-
-    const result = await sql(query as any, ...queryParams)
     const [resume] = result as any[]
 
     if (!resume) {
