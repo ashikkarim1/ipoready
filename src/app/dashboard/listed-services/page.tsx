@@ -106,7 +106,7 @@ export default function ListedServicesPage() {
               </span>
             </div>
             <h1 className="serif text-4xl sm:text-5xl font-bold mb-3 leading-tight">
-              Listed Services OS
+              Listed Services
             </h1>
             <p className="text-lg text-gray-400 mb-8 max-w-2xl">
               Enterprise-grade operations platform for public companies. Real-time compliance, investor relations, financial reporting, and strategic intelligence — all integrated.

@@ -67,7 +67,7 @@ export const PRE_IPO_NAV_GROUPS = [
     section: 'LISTED SERVICES',
     collapsible: true,
     items: [
-      { href: '/dashboard/listed-services', icon: Eye, label: 'Listed Services OS', badge: '✨', key: 'listed-services' },
+      { href: '/dashboard/listed-services', icon: Eye, label: 'Listed Services', badge: '✨', key: 'listed-services' },
     ],
   },
   {
