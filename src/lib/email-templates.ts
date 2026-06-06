@@ -12,6 +12,8 @@ export type EmailTemplateId =
   | 'board-report'
   | 'weekly-summary'
   | 'plan-upgrade'
+  | 'demo-confirmation'
+  | 'lead-confirmation'
 
 export interface EmailTemplate {
   id: EmailTemplateId
@@ -340,6 +342,297 @@ function boardReportTemplate(vars: Record<string, any>): string {
 </html>`
 }
 
+/**
+ * Demo confirmation email template (HTML)
+ * World-class enterprise template for demo request confirmations
+ */
+function demoConfirmationTemplate(vars: Record<string, any>): string {
+  const { name, companyName, supportEmail = 'hello@ipoready.ai' } = vars
+
+  return `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; padding: 40px 0; background-color: #F7F6F4; }
+      .container { max-width: 600px; margin: 0 auto; padding: 0 20px; }
+      .preheader { display: none; font-size: 1px; color: #F7F6F4; line-height: 1px; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; }
+      .header { text-align: center; margin-bottom: 40px; padding-top: 20px; }
+      .logo { font-size: 28px; margin-bottom: 8px; }
+      .logo-text { font-size: 22px; font-weight: 800; color: #1A1A1A; letter-spacing: -0.5px; margin: 0; }
+      .logo-text .accent { color: #E8312A; }
+      .card { background-color: #FFFFFF; border-radius: 16px; border: 1px solid #E5E4E0; padding: 48px 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); margin-bottom: 24px; }
+      h1 { font-size: 28px; font-weight: 700; color: #1A1A1A; margin: 0 0 12px 0; line-height: 1.3; letter-spacing: -0.5px; }
+      h2 { font-size: 18px; font-weight: 700; color: #1A1A1A; margin: 32px 0 16px 0; line-height: 1.3; }
+      p { font-size: 16px; color: #4F4F4F; margin: 0 0 20px 0; line-height: 1.6; }
+      .success-box { background: linear-gradient(135deg, #F0FDF4 0%, #FAFAF8 100%); border-left: 4px solid #22C55E; border-radius: 12px; padding: 24px; margin-bottom: 32px; }
+      .success-icon { font-size: 32px; margin-bottom: 12px; }
+      .success-title { font-size: 16px; font-weight: 700; color: #1A1A1A; margin-bottom: 8px; }
+      .success-text { font-size: 14px; color: #4F4F4F; margin: 0; }
+      .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+      .feature-item { background-color: #F7F6F4; border-radius: 12px; padding: 20px; border: 1px solid #E5E4E0; }
+      .feature-icon { font-size: 24px; margin-bottom: 12px; }
+      .feature-title { font-size: 14px; font-weight: 700; color: #1A1A1A; margin-bottom: 8px; }
+      .feature-text { font-size: 13px; color: #717171; margin: 0; line-height: 1.5; }
+      .timeline { margin-bottom: 32px; }
+      .timeline-item { display: flex; gap: 16px; margin-bottom: 20px; }
+      .timeline-dot { width: 24px; height: 24px; background-color: #E8312A; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 700; margin-top: 2px; }
+      .timeline-content h4 { font-size: 14px; font-weight: 700; color: #1A1A1A; margin: 0 0 4px 0; }
+      .timeline-content p { font-size: 13px; color: #717171; margin: 0; line-height: 1.5; }
+      .cta-primary { background-color: #E8312A; color: #FFFFFF; border-radius: 100px; font-size: 15px; font-weight: 700; padding: 14px 32px; display: inline-block; text-decoration: none; margin: 24px 0; transition: all 0.2s; }
+      .cta-primary:hover { background-color: #D02420; }
+      .divider { border: none; border-top: 1px solid #E5E4E0; margin: 32px 0; }
+      .footer { background-color: #FAFAF8; border-radius: 12px; padding: 24px; text-align: center; margin-top: 32px; border: 1px solid #E5E4E0; }
+      .footer-title { font-size: 12px; font-weight: 700; color: #1A1A1A; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+      .footer-text { font-size: 13px; color: #717171; margin: 0 0 8px 0; line-height: 1.6; }
+      .footer-link { color: #E8312A; text-decoration: none; font-weight: 600; }
+      .footer-link:hover { text-decoration: underline; }
+      .legal { font-size: 11px; color: #999; margin-top: 16px; padding-top: 16px; border-top: 1px solid #E5E4E0; line-height: 1.6; }
+      @media (max-width: 600px) {
+        .card { padding: 32px 24px; }
+        h1 { font-size: 24px; }
+        .feature-grid { grid-template-columns: 1fr; gap: 16px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preheader">Your demo is confirmed. One step closer to IPO readiness.</div>
+
+    <div class="container">
+      <div class="header">
+        <div class="logo">🚀</div>
+        <p class="logo-text">IPO<span class="accent">Ready</span></p>
+      </div>
+
+      <div class="card">
+        <h1>Demo confirmed ✓</h1>
+        <p>Hi ${name},</p>
+        <p>Thank you for requesting a demo of IPOReady. We're excited to show you how companies like <strong>${companyName}</strong> manage their IPO journey with our platform.</p>
+
+        <div class="success-box">
+          <div class="success-icon">✨</div>
+          <div class="success-title">You're all set</div>
+          <div class="success-text">Our team will reach out within 24 hours to schedule your personalized demo.</div>
+        </div>
+
+        <h2>What to expect</h2>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot">1</div>
+            <div class="timeline-content">
+              <h4>Within 24 hours</h4>
+              <p>You'll receive a calendar invite with your demo meeting time.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot">2</div>
+            <div class="timeline-content">
+              <h4>During the demo</h4>
+              <p>We'll walk through your company's IPO readiness (PACE™ score), filing requirements, and timeline.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot">3</div>
+            <div class="timeline-content">
+              <h4>Next steps</h4>
+              <p>Discuss pricing, implementation, and how we can support your IPO journey.</p>
+            </div>
+          </div>
+        </div>
+
+        <h2>Why IPOReady</h2>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">📊</div>
+            <div class="feature-title">PACE™ Score</div>
+            <div class="feature-text">Know your IPO readiness at a glance with our proprietary framework.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">✅</div>
+            <div class="feature-title">Task Management</div>
+            <div class="feature-text">Organize and track every step of your IPO preparation.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📁</div>
+            <div class="feature-title">Document Hub</div>
+            <div class="feature-text">Centralize all IPO-related docs, filings, and compliance items.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">👥</div>
+            <div class="feature-title">Team Collaboration</div>
+            <div class="feature-text">Keep your board, advisors, and stakeholders aligned.</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <p style="text-align: center; font-size: 14px; color: #717171;">Have questions before your demo?<br>
+        Reach out to us at <a href="mailto:${supportEmail}" style="color: #E8312A; text-decoration: none; font-weight: 600;">${supportEmail}</a></p>
+      </div>
+
+      <div class="footer">
+        <div class="footer-title">Questions?</div>
+        <p class="footer-text">Our team is ready to help. <a href="mailto:${supportEmail}" class="footer-link">Contact support</a></p>
+        <p class="footer-text">Follow us on <a href="https://linkedin.com/company/ipoready" class="footer-link">LinkedIn</a> for IPO insights and updates.</p>
+        <div class="legal">
+          IPOReady · <a href="https://ipoready.ai" class="footer-link">ipoready.ai</a><br>
+          This is a transactional email confirming your demo request. <a href="https://ipoready.ai/unsubscribe" class="footer-link">Manage preferences</a><br>
+          IPOReady is a workflow platform and does not provide legal, securities, or financial advice.
+        </div>
+      </div>
+    </div>
+  </body>
+</html>`
+}
+
+/**
+ * Lead confirmation email template (HTML)
+ * World-class enterprise template for lead capture confirmations
+ */
+function leadConfirmationTemplate(vars: Record<string, any>): string {
+  const { name, companyName, trialDays = 14, dashboardUrl = 'https://app.ipoready.ai', supportEmail = 'hello@ipoready.ai' } = vars
+
+  return `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; padding: 40px 0; background-color: #F7F6F4; }
+      .container { max-width: 600px; margin: 0 auto; padding: 0 20px; }
+      .preheader { display: none; font-size: 1px; color: #F7F6F4; line-height: 1px; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; }
+      .header { text-align: center; margin-bottom: 40px; padding-top: 20px; }
+      .logo { font-size: 28px; margin-bottom: 8px; }
+      .logo-text { font-size: 22px; font-weight: 800; color: #1A1A1A; letter-spacing: -0.5px; margin: 0; }
+      .logo-text .accent { color: #E8312A; }
+      .card { background-color: #FFFFFF; border-radius: 16px; border: 1px solid #E5E4E0; padding: 48px 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); margin-bottom: 24px; }
+      h1 { font-size: 28px; font-weight: 700; color: #1A1A1A; margin: 0 0 12px 0; line-height: 1.3; letter-spacing: -0.5px; }
+      h2 { font-size: 18px; font-weight: 700; color: #1A1A1A; margin: 32px 0 16px 0; line-height: 1.3; }
+      p { font-size: 16px; color: #4F4F4F; margin: 0 0 20px 0; line-height: 1.6; }
+      .welcome-box { background: linear-gradient(135deg, #F0FDFF 0%, #F5F9FF 100%); border-left: 4px solid #06B6D4; border-radius: 12px; padding: 24px; margin-bottom: 32px; }
+      .welcome-icon { font-size: 32px; margin-bottom: 12px; }
+      .welcome-title { font-size: 16px; font-weight: 700; color: #1A1A1A; margin-bottom: 8px; }
+      .welcome-text { font-size: 14px; color: #4F4F4F; margin: 0; line-height: 1.6; }
+      .cta-box { background-color: #F7F6F4; border-radius: 12px; padding: 28px; margin-bottom: 32px; border: 1px solid #E5E4E0; }
+      .cta-label { font-size: 12px; font-weight: 700; color: #717171; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+      .cta-primary { background-color: #E8312A; color: #FFFFFF; border-radius: 100px; font-size: 15px; font-weight: 700; padding: 14px 32px; display: block; text-decoration: none; text-align: center; margin: 16px 0 0 0; transition: all 0.2s; }
+      .cta-primary:hover { background-color: #D02420; }
+      .benefits { margin-bottom: 32px; }
+      .benefit-item { display: flex; gap: 16px; margin-bottom: 18px; }
+      .benefit-icon { font-size: 20px; flex-shrink: 0; }
+      .benefit-content h4 { font-size: 14px; font-weight: 700; color: #1A1A1A; margin: 0 0 4px 0; }
+      .benefit-content p { font-size: 13px; color: #717171; margin: 0; line-height: 1.5; }
+      .trial-badge { display: inline-block; background-color: #FEF3F2; border: 1px solid #FED7D3; border-radius: 100px; padding: 8px 16px; font-size: 12px; font-weight: 700; color: #E8312A; margin-bottom: 16px; }
+      .divider { border: none; border-top: 1px solid #E5E4E0; margin: 32px 0; }
+      .footer { background-color: #FAFAF8; border-radius: 12px; padding: 24px; text-align: center; margin-top: 32px; border: 1px solid #E5E4E0; }
+      .footer-title { font-size: 12px; font-weight: 700; color: #1A1A1A; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+      .footer-text { font-size: 13px; color: #717171; margin: 0 0 8px 0; line-height: 1.6; }
+      .footer-link { color: #E8312A; text-decoration: none; font-weight: 600; }
+      .footer-link:hover { text-decoration: underline; }
+      .legal { font-size: 11px; color: #999; margin-top: 16px; padding-top: 16px; border-top: 1px solid #E5E4E0; line-height: 1.6; }
+      @media (max-width: 600px) {
+        .card { padding: 32px 24px; }
+        h1 { font-size: 24px; }
+        .cta-box { padding: 20px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preheader">Welcome to IPOReady. Your ${trialDays}-day free trial is ready.</div>
+
+    <div class="container">
+      <div class="header">
+        <div class="logo">🚀</div>
+        <p class="logo-text">IPO<span class="accent">Ready</span></p>
+      </div>
+
+      <div class="card">
+        <h1>Welcome to IPOReady 🎉</h1>
+        <p>Hi ${name},</p>
+        <p>Thank you for signing up! Your free ${trialDays}-day trial of IPOReady is now active. You're joining companies across North America who use IPOReady to manage their IPO preparation with clarity and confidence.</p>
+
+        <div class="welcome-box">
+          <div class="welcome-icon">✅</div>
+          <div class="welcome-title">You're all set</div>
+          <div class="welcome-text">Your trial account for <strong>${companyName}</strong> is ready to go. No credit card required. Full feature access included.</div>
+        </div>
+
+        <div class="cta-box">
+          <div class="cta-label">Get Started Now</div>
+          <p style="font-size: 14px; color: #717171; margin: 0 0 16px 0;">Log in to your dashboard and begin setting up your IPO timeline.</p>
+          <a href="${dashboardUrl}" class="cta-primary">Access Your Dashboard →</a>
+        </div>
+
+        <h2>What you can do now</h2>
+
+        <div class="benefits">
+          <div class="benefit-item">
+            <div class="benefit-icon">📊</div>
+            <div class="benefit-content">
+              <h4>Calculate Your PACE™ Score</h4>
+              <p>Get your IPO readiness score based on company financials, governance, and preparation stage.</p>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon">✅</div>
+            <div class="benefit-content">
+              <h4>Create Your IPO Checklist</h4>
+              <p>Set up your roadmap with pre-built checklists for US, Canada, and other exchanges.</p>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon">📁</div>
+            <div class="benefit-content">
+              <h4>Build Your Data Room</h4>
+              <p>Organize prospectuses, financial statements, legal docs, and regulatory filings in one hub.</p>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon">👥</div>
+            <div class="benefit-content">
+              <h4>Invite Your Team</h4>
+              <p>Add board members, advisors, lawyers, and accountants to collaborate in real time.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="trial-badge">Free trial · ${trialDays} days remaining</div>
+
+        <h2>Next steps</h2>
+        <p>We recommend completing these in order:</p>
+        <ol style="color: #4F4F4F; line-height: 1.8; margin: 0 0 20px 0;">
+          <li><strong>Set your company details</strong> (location, industry, stage)</li>
+          <li><strong>Run your PACE™ score</strong> to understand readiness gaps</li>
+          <li><strong>Create your exchange checklist</strong> (TSX, NASDAQ, NYSE, TSXV, etc.)</li>
+          <li><strong>Invite team members</strong> and assign roles</li>
+          <li><strong>Schedule a walkthrough call</strong> with our team</li>
+        </ol>
+
+        <div class="divider"></div>
+
+        <p>Have questions about your trial or how to get started? <strong>Our team is here to help.</strong></p>
+        <p style="font-size: 14px; color: #717171;">Email us at <a href="mailto:${supportEmail}" style="color: #E8312A; text-decoration: none; font-weight: 600;">${supportEmail}</a> or schedule a guided walkthrough from your dashboard.</p>
+      </div>
+
+      <div class="footer">
+        <div class="footer-title">Need help?</div>
+        <p class="footer-text">Check out our <a href="https://help.ipoready.ai" class="footer-link">help center</a> or <a href="mailto:${supportEmail}" class="footer-link">contact support</a></p>
+        <p class="footer-text">Follow <a href="https://linkedin.com/company/ipoready" class="footer-link">IPOReady on LinkedIn</a> for IPO insights, market updates, and regulatory changes.</p>
+        <div class="legal">
+          IPOReady · <a href="https://ipoready.ai" class="footer-link">ipoready.ai</a><br>
+          Congratulations on taking this step toward your IPO. We look forward to supporting your journey.<br>
+          <a href="https://ipoready.ai/unsubscribe" class="footer-link">Manage preferences</a><br>
+          IPOReady is a workflow platform and does not provide legal, securities, or financial advice.
+        </div>
+      </div>
+    </div>
+  </body>
+</html>`
+}
+
 export const emailTemplates: Record<EmailTemplateId, EmailTemplate> = {
   'welcome': {
     id: 'welcome',
@@ -399,6 +692,16 @@ export const emailTemplates: Record<EmailTemplateId, EmailTemplate> = {
         manageUrl: vars.manageUrl || '/account/billing',
       })
     },
+  },
+  'demo-confirmation': {
+    id: 'demo-confirmation',
+    subject: (vars) => `Your IPOReady demo is confirmed`,
+    render: demoConfirmationTemplate,
+  },
+  'lead-confirmation': {
+    id: 'lead-confirmation',
+    subject: (vars) => `Welcome to IPOReady — Your ${vars.trialDays || 14}-day free trial is ready`,
+    render: leadConfirmationTemplate,
   },
 }
 
