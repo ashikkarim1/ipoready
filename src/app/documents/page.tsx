@@ -38,6 +38,13 @@ interface UnifiedDocument {
   uploadedBy: string
   commentCount: number
   requiredForFiling?: boolean
+  currentVersion?: number
+  totalVersions?: number
+  completeness?: number
+  approvedAt?: string
+  lastModifiedAt?: string
+  lastModifiedBy?: string
+  ownerUserId?: string
 }
 
 interface DocumentGroup {

@@ -38,9 +38,14 @@ interface UnifiedDocument {
   uploadedAt: string
   uploadedBy: string
   commentCount: number
-  currentVersion: number
+  currentVersion?: number
+  totalVersions?: number
+  completeness?: number
   requiredForFiling?: boolean
   approvedAt?: string
+  lastModifiedAt?: string
+  lastModifiedBy?: string
+  ownerUserId?: string
 }
 
 interface DataRoomFolder {
