@@ -864,12 +864,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         {/* Page content — only this area scrolls */}
         <main className="flex-1 overflow-y-auto p-8" style={{ position: 'relative', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ flex: 1 }}>
+          <div>
             {children}
           </div>
 
-          {/* Footer — scrolls with content */}
-          <DashboardFooter />
+          {/* Footer — scrolls with content, not sticky */}
+          <footer style={{ flexShrink: 0 }}>
+            <DashboardFooter />
+          </footer>
 
           {/* Frozen state overlay — read-only mode */}
           {daysRemaining <= 0 && (
