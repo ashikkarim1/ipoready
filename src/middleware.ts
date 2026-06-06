@@ -23,19 +23,64 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 
+/**
+ * Security Headers
+ * Protects against: XSS, clickjacking, MIME sniffing, etc.
+ */
+function addSecurityHeaders(response: NextResponse): NextResponse {
+  // Prevent XSS attacks
+  response.headers.set('X-Content-Type-Options', 'nosniff')
+
+  // Prevent clickjacking
+  response.headers.set('X-Frame-Options', 'DENY')
+
+  // Enable browser XSS filter
+  response.headers.set('X-XSS-Protection', '1; mode=block')
+
+  // Referrer policy
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+
+  // Content Security Policy (restrictive)
+  response.headers.set(
+    'Content-Security-Policy',
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://js.stripe.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "img-src 'self' data: https:",
+      "font-src 'self' https://fonts.gstatic.com data:",
+      "connect-src 'self' https://api.stripe.com https://js.stripe.com",
+      "frame-src https://js.stripe.com",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join('; ')
+  )
+
+  // HTTP Strict Transport Security (HSTS)
+  response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
+
+  // Permissions Policy (formerly Feature Policy)
+  response.headers.set(
+    'Permissions-Policy',
+    'geolocation=(), microphone=(), camera=(), payment=(self "https://js.stripe.com")'
+  )
+
+  return response
+}
+
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
   const { pathname } = req.nextUrl
+
+  let response: NextResponse
 
   // ── Not authenticated — enforce lead capture gate ──────────────────────────
   if (!token) {
     // Allow unauthenticated access to lead capture flow
     if (pathname.startsWith('/leads/capture') || pathname.startsWith('/auth/')) {
-      return NextResponse.next()
-    }
-
-    // Redirect all other protected routes to lead capture
-    if (
+      response = NextResponse.next()
+    } else if (
       pathname.startsWith('/dashboard') ||
       pathname.startsWith('/trial') ||
       pathname.startsWith('/raising-capital') ||
@@ -52,26 +97,30 @@ export async function middleware(req: NextRequest) {
       pathname.startsWith('/checklist-guide') ||
       pathname.startsWith('/post-listing')
     ) {
+      // Redirect all other protected routes to lead capture
       const captureUrl = new URL('/leads/capture', req.url)
       captureUrl.searchParams.set('from', pathname)
-      return NextResponse.redirect(captureUrl)
+      response = NextResponse.redirect(captureUrl)
+    } else {
+      // Default to login for other routes
+      const loginUrl = new URL('/login', req.url)
+      loginUrl.searchParams.set('callbackUrl', req.url)
+      response = NextResponse.redirect(loginUrl)
     }
-
-    // Default to login for other routes
-    const loginUrl = new URL('/login', req.url)
-    loginUrl.searchParams.set('callbackUrl', req.url)
-    return NextResponse.redirect(loginUrl)
-  }
-
-  // ── Admin routes — require system_admin role ───────────────────────────────
-  if (pathname.startsWith('/admin')) {
+  } else if (pathname.startsWith('/admin')) {
+    // ── Admin routes — require system_admin role ───────────────────────────────
     if ((token as { role?: string }).role !== 'system_admin') {
       // Authenticated but not an admin — silently redirect to dashboard
-      return NextResponse.redirect(new URL('/dashboard', req.url))
+      response = NextResponse.redirect(new URL('/dashboard', req.url))
+    } else {
+      response = NextResponse.next()
     }
+  } else {
+    response = NextResponse.next()
   }
 
-  return NextResponse.next()
+  // Add security headers to all responses
+  return addSecurityHeaders(response)
 }
 
 export const config = {
