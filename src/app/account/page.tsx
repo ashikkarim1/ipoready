@@ -514,11 +514,10 @@ export default function AccountPage() {
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     {([['en', 'English'] as const, ['fr', 'Français'] as const]).map(([k, l]) => (
                       <button key={k} onClick={() => setLanguage(k)}
-                        className="flex-1 py-3 rounded-xl label font-semibold transition-all"
+                        className={`flex-1 py-3 rounded-xl label font-semibold transition-all ${language === k ? '' : 'text-text-muted'}`}
                         style={language === k
                           ? { background: '#1A1A1A', border: '1px solid #1A1A1A', color: 'white' }
-                          : { background: '#F7F6F4', border: '1px solid #E5E4E0' }}
-                        className={language === k ? '' : 'text-text-muted'}>
+                          : { background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
                         {language === k && <span style={{ color: '#E8312A' }}>✓ </span>}{l}
                       </button>
                     ))}
@@ -582,7 +581,7 @@ export default function AccountPage() {
                       : { background: '#FAFAFA', border: '1px solid #E5E4E0' }}>
                     <div className="flex items-center gap-2 mb-1">
                       {notifFreq === value && <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: '#E8312A' }} />}
-                      <p className="label font-semibold" style={{ color: notifFreq === value ? '#1A1A1A' : 'inherit' }} className={notifFreq === value ? 'text-nav' : 'text-text-muted'}>{en}</p>
+                      <p className={`label font-semibold ${notifFreq === value ? 'text-nav' : 'text-text-muted'}`} style={{ color: notifFreq === value ? '#1A1A1A' : 'inherit' }}>{en}</p>
                     </div>
                     <p className="caption-sm text-text-muted">{desc}</p>
                   </button>

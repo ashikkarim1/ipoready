@@ -115,7 +115,9 @@ export class IpoReadyApiClient {
     if (options.body) {
       if (options.body instanceof FormData) {
         // Don't set Content-Type for FormData
-        delete fetchOptions.headers['Content-Type']
+        if (fetchOptions.headers && typeof fetchOptions.headers === 'object' && !Array.isArray(fetchOptions.headers)) {
+          delete (fetchOptions.headers as Record<string, string>)['Content-Type']
+        }
         fetchOptions.body = options.body
       } else {
         fetchOptions.body = JSON.stringify(options.body)
@@ -153,7 +155,8 @@ export class IpoReadyApiClient {
 
       throw error
     } catch (error) {
-      if (error instanceof ApiErrorResponse) {
+      // If it's already our error object, re-throw it
+      if (error && typeof error === 'object' && 'status' in error && 'error' in error) {
         throw error
       }
 

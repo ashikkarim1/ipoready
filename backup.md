@@ -1,53 +1,1399 @@
 # IPOReady Backup & Disaster Recovery Strategy
 
-**Version**: 1.0  
-**Date**: 2026-06-07  
-**Status**: Approved for Implementation  
-**Owner**: DevOps / Infrastructure Team  
-**Compliance**: SOC 2, GDPR, HIPAA, SEC (as applicable)
+**Document Version:** 1.0  
+**Last Updated:** June 7, 2026  
+**Status:** CRITICAL INFRASTRUCTURE  
+**Compliance:** SOC 2, GDPR, PIPEDA, CCPA, SEC/FINRA Ready
 
 ---
 
 ## Executive Summary
 
-This document defines the backup and disaster recovery (DR) strategy for IPOReady, ensuring business continuity and data protection. The strategy balances operational resilience with cost efficiency and compliance requirements.
+This document defines the complete backup and disaster recovery strategy for IPOReady, covering:
+- **Neon PostgreSQL** database backup schedules (daily full, hourly incremental)
+- **Vercel** deployment backup/rollback procedures
+- **Data retention policies** aligned with compliance requirements (7-year SEC retention, 3-year GDPR audit trail)
+- **Recovery targets** (4-hour RTO, 1-hour RPO)
+- **Tested restore procedures** with monthly validation
+- **Off-site backup storage** requirements (AWS S3 multi-region, Glacier archiving)
 
-**Key Targets**:
-- **RTO** (Recovery Time Objective): 4 hours
-- **RPO** (Recovery Point Objective): 1 hour
-- **Backup Retention**: 30 days (standard), 90 days (regulatory), 7 years (archive)
-- **Off-site Storage**: AWS S3 + Neon native backups in separate regions
-- **Disaster Recovery Drills**: Monthly automated testing
+**Critical Principle:** IPOReady is a financial/regulatory compliance tool serving IPO-bound companies. Data loss is not an option. This strategy ensures zero data loss in 99.9% of failure scenarios, with monthly restore drills to prove capability.
 
 ---
 
-## 1. Infrastructure Overview
+## 1. Architecture Overview
+
+### Components Protected
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    IPOReady Infrastructure                   │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ┌──────────────────┐       ┌──────────────────┐            │
+│  │  Vercel (CDN)    │       │  Next.js App     │            │
+│  │  Edge Compute    │──────▶│  (API Routes)    │            │
+│  │  Deployment      │       │  (Server)        │            │
+│  └──────────────────┘       └────────┬─────────┘            │
+│                                      │                       │
+│                                      ▼                       │
+│  ┌────────────────────────────────────────────────────┐    │
+│  │   Neon PostgreSQL Database (us-east-1)             │    │
+│  │   - unified_documents (SOC 2 critical)             │    │
+│  │   - companies, users, teams, tasks                 │    │
+│  │   - audit_logs (3-year retention, GDPR)            │    │
+│  │   - payment_records (7-year SEC retention)         │    │
+│  └────────────────────────────────────────────────────┘    │
+│                                                              │
+│  ┌──────────────────┐       ┌──────────────────┐            │
+│  │  Vercel Blob     │       │  External Cloud  │            │
+│  │  (Document       │       │  Storage         │            │
+│  │   Backups)       │       │  (Google Drive,  │            │
+│  │                  │       │   Dropbox, etc.) │            │
+│  └──────────────────┘       └──────────────────┘            │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ### Technology Stack
-- **Application**: Next.js 14 (TypeScript) deployed on Vercel
-- **Database**: Neon PostgreSQL (serverless, multi-region capable)
-- **Storage**: Vercel Blob + AWS S3 (documents, backups)
-- **Authentication**: NextAuth v4 (JWT, credential-based)
-- **Cloud Integrations**: Google Drive, Dropbox, OneDrive, Box
-- **Monitoring**: Vercel Analytics, custom instrumentation
-
-### Data Classification
-| Category | Examples | Sensitivity | Retention |
-|----------|----------|-------------|-----------|
-| **Tier 1: Critical** | User accounts, company data, cap tables, financial records | High | 7 years |
-| **Tier 2: Important** | Documents, comments, audit logs, access records | Medium | 90 days |
-| **Tier 3: Operational** | Cache, sessions, temporary files, logs | Low | 30 days |
-| **Tier 4: Public** | Marketing content, public docs | N/A | 30 days |
+- **Application**: Next.js 14 (TypeScript) on Vercel
+- **Database**: Neon PostgreSQL (serverless, us-east-1)
+- **Storage**: AWS S3 (primary: us-east-1, DR: eu-west-1)
+- **Backups**: Neon native + WAL archiving + S3 replication
+- **Compliance**: SOC 2 Type II, GDPR, PIPEDA, CCPA, SEC/FINRA
 
 ---
 
-## 2. Database Backup Strategy
+## 2. Neon Database Backup Strategy
 
-### 2.1 Neon PostgreSQL Backup Schedule
+### 2.1 Backup Schedule
 
-#### Daily Full Backup (Primary Strategy)
+#### Daily Full Backups (Primary Strategy)
+**Configuration:**
+- **Frequency:** Once per day at 2:00 AM UTC (off-peak, avoids trading hours)
+- **Retention:** 30 days (rolling window)
+- **Method:** Neon automated full database snapshot
+- **Storage Location:** Neon managed storage + AWS S3 (us-east-1)
+- **Size estimate:** ~2-5 GB per backup
+- **RPO:** 24 hours (can recover to 24 hours ago)
+
+**Neon Setup:**
+```bash
+# In Neon Console:
+# 1. Go to Project Settings → Backups
+# 2. Enable "Automated Backups"
+# 3. Schedule: Daily at 02:00 UTC
+# 4. Retention: 30 days
+# 5. Backup Type: Full Database Snapshot
 ```
-Schedule: 02:00 UTC daily (off-peak)
+
+**Verification Query:**
+```sql
+-- Check backup status in Neon UI/API
+SELECT 
+  backup_id,
+  database_name,
+  started_at,
+  completed_at,
+  size_bytes / 1024 / 1024 AS size_mb,
+  status
+FROM neon_backups
+WHERE created_at >= NOW() - INTERVAL '30 days'
+ORDER BY created_at DESC;
+```
+
+#### Hourly Incremental Backups (WAL Archiving)
+**Configuration:**
+- **Frequency:** Continuous (every transaction)
+- **Method:** PostgreSQL WAL (Write-Ahead Log) streaming to S3
+- **Retention:** 7 days (rolling window)
+- **RPO:** 1 hour (can recover to any point within last hour)
+- **Cost:** ~$50-100/month for S3 storage
+
+**Implementation:**
+```bash
+# Deploy WAL archiving service (Lambda + S3)
+# Triggered by: Neon replication slot events every hour
+# Destination: s3://ipoready-backups/wal-archive/
+
+# Archive path structure:
+# s3://ipoready-backups/wal-archive/
+#   ├── 2026-06-07/
+#   │   ├── 000000010000000000000001
+#   │   ├── 000000010000000000000002
+#   │   └── ...
+#   └── 2026-06-08/
+```
+
+**Verification:**
+```bash
+# Check WAL files age and count
+aws s3 ls s3://ipoready-backups/wal-archive/ --recursive | tail -20
+
+# Verify files are < 1 hour old
+LATEST_WAL=$(aws s3 ls s3://ipoready-backups/wal-archive/ --recursive | sort | tail -1 | awk '{print $1, $2}')
+echo "Latest WAL file timestamp: $LATEST_WAL"
+```
+
+### 2.2 Automated Backup Verification
+
+**Script:** `scripts/verify-db-backups.sh` (runs daily at 08:00 UTC)
+
+```bash
+#!/bin/bash
+set -e
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+echo "🔍 IPOReady Daily Backup Verification"
+echo "Time: $(date -u)"
+
+# 1. Check latest full backup status
+echo ""
+echo "1️⃣ Checking daily full backup..."
+LATEST_BACKUP=$(curl -s -H "Authorization: Bearer $NEON_API_KEY" \
+  https://console.neon.tech/api/v1/projects/$NEON_PROJECT_ID/backups \
+  | jq -r '.backups[0]')
+
+BACKUP_STATUS=$(echo $LATEST_BACKUP | jq -r '.status')
+BACKUP_TIME=$(echo $LATEST_BACKUP | jq -r '.started_at')
+BACKUP_SIZE=$(echo $LATEST_BACKUP | jq -r '.size_bytes / 1024 / 1024 | round')
+
+if [ "$BACKUP_STATUS" = "completed" ]; then
+  echo -e "${GREEN}✓ Status: COMPLETED${NC}"
+else
+  echo -e "${RED}✗ Status: $BACKUP_STATUS${NC}"
+  exit 1
+fi
+
+# 2. Check backup age (must be < 24 hours)
+BACKUP_EPOCH=$(date -d "$BACKUP_TIME" +%s)
+NOW_EPOCH=$(date +%s)
+BACKUP_AGE=$((($NOW_EPOCH - $BACKUP_EPOCH) / 3600))
+
+echo "  Size: ${BACKUP_SIZE}MB | Age: ${BACKUP_AGE}h"
+
+if [ $BACKUP_AGE -lt 24 ]; then
+  echo -e "${GREEN}✓ Backup age within SLA (< 24h)${NC}"
+else
+  echo -e "${RED}✗ Backup age EXCEEDS SLA (>= 24h)${NC}"
+  exit 1
+fi
+
+# 3. Check backup size sanity (must be > 100MB)
+if [ $BACKUP_SIZE -gt 100 ]; then
+  echo -e "${GREEN}✓ Backup size valid (> 100MB)${NC}"
+else
+  echo -e "${RED}✗ Backup size SUSPICIOUS (< 100MB)${NC}"
+  exit 1
+fi
+
+# 4. Check WAL archive freshness
+echo ""
+echo "2️⃣ Checking WAL archive..."
+WAL_COUNT=$(aws s3 ls s3://ipoready-backups/wal-archive/ --recursive | wc -l)
+
+if [ $WAL_COUNT -gt 100 ]; then
+  echo -e "${GREEN}✓ WAL files archived: $WAL_COUNT${NC}"
+else
+  echo -e "${RED}✗ WAL files insufficient: $WAL_COUNT${NC}"
+  exit 1
+fi
+
+# 5. Check S3 replication status
+echo ""
+echo "3️⃣ Checking S3 cross-region replication..."
+REPL_STATUS=$(aws s3api get-bucket-replication \
+  --bucket ipoready-backups-primary \
+  --query 'ReplicationConfiguration.Rules[0].Status' 2>/dev/null || echo "NOT_CONFIGURED")
+
+if [ "$REPL_STATUS" = "Enabled" ]; then
+  echo -e "${GREEN}✓ Replication: ACTIVE${NC}"
+else
+  echo -e "${RED}✗ Replication: $REPL_STATUS${NC}"
+  exit 1
+fi
+
+# 6. Verify database is accessible
+echo ""
+echo "4️⃣ Checking database connectivity..."
+if psql "$DATABASE_URL" -c "SELECT NOW();" > /dev/null 2>&1; then
+  echo -e "${GREEN}✓ Database: ACCESSIBLE${NC}"
+else
+  echo -e "${RED}✗ Database: UNREACHABLE${NC}"
+  exit 1
+fi
+
+echo ""
+echo -e "${GREEN}✅ All backup verification checks PASSED${NC}"
+echo "Next check: $(date -u -d '+24 hours' '+%Y-%m-%d %H:%M UTC')"
+```
+
+**Scheduling (CloudWatch):**
+```bash
+# Create EventBridge rule to run daily at 08:00 UTC
+aws events put-rule \
+  --name ipoready-backup-verification \
+  --schedule-expression 'cron(0 8 * * ? *)' \
+  --state ENABLED
+
+# Add Lambda target
+aws events put-targets \
+  --rule ipoready-backup-verification \
+  --targets "Id"="1","Arn"="arn:aws:lambda:us-east-1:ACCOUNT:function:verify-backups"
+```
+
+**Alerting:**
+- ✅ Slack notification if backup verification fails
+- ✅ PagerDuty alert if backup > 24 hours old (RTO breach)
+- ✅ Email report to ops@ipoready.com every morning
+- ✅ CloudWatch dashboard for 24/7 monitoring
+
+---
+
+## 3. Vercel Deployment Backup & Rollback
+
+### 3.1 Source Code Backups
+
+#### Primary: GitHub Repository
+**Strategy:** Automatic GitHub backup (GitHub is SOC 2 Type II compliant)
+- Every commit to `main` branch backed up automatically
+- 90-day rollback history available
+- GitHub Enterprise disaster recovery included
+
+**Verification:**
+```bash
+# Check latest production commit
+git log main -1 --format='%H %s %ai'
+
+# List deployment history
+git log main -10 --oneline --all
+
+# Verify commit is in remote
+git ls-remote origin main | head -1
+```
+
+#### Secondary: S3 Source Code Backup
+**Backup Location:** `s3://ipoready-source-backup/`
+**Frequency:** Daily at 03:00 UTC
+**Retention:** 90 days
+
+**Script:** `scripts/backup-source-code.sh`
+
+```bash
+#!/bin/bash
+set -e
+
+DATE=$(date +%Y-%m-%d)
+COMMIT_SHA=$(git rev-parse --short HEAD)
+BACKUP_DIR="/tmp/ipoready-src-$DATE"
+
+echo "📦 Backing up source code (commit: $COMMIT_SHA)"
+
+# Clone repo without node_modules
+git clone --depth=1 --quiet \
+  https://github.com/ipoready/ipoready.git $BACKUP_DIR
+
+# Remove non-essential directories
+rm -rf $BACKUP_DIR/{node_modules,.next,dist,coverage}
+
+# Create archive
+tar -czf /tmp/ipoready-src-$COMMIT_SHA-$DATE.tar.gz \
+  -C /tmp ipoready-src-$DATE/
+
+# Upload to S3
+aws s3 cp /tmp/ipoready-src-$COMMIT_SHA-$DATE.tar.gz \
+  s3://ipoready-source-backup/$COMMIT_SHA-$DATE.tar.gz \
+  --sse aws:kms \
+  --sse-kms-key-id $BACKUP_KMS_KEY
+
+# Cleanup
+rm -rf $BACKUP_DIR /tmp/ipoready-src-$COMMIT_SHA-$DATE.tar.gz
+
+echo "✓ Source backup complete: $COMMIT_SHA-$DATE.tar.gz"
+```
+
+### 3.2 Deployment Rollback Procedures
+
+#### Scenario 1: Immediate Code Rollback (< 15 minutes)
+**Trigger:** Critical bug discovered minutes after deployment
+
+**Procedure:**
+```bash
+#!/bin/bash
+# scripts/rollback-to-previous-deployment.sh
+
+set -e
+
+echo "🔄 Rolling back to previous deployment..."
+
+# 1. Get last known-good commit
+CURRENT_COMMIT=$(vercel deployments --limit 1 --format json | jq -r '.[0].meta.githubCommitSha')
+PREVIOUS_COMMIT=$(git log $CURRENT_COMMIT^ -1 --format='%H')
+
+echo "Current: $CURRENT_COMMIT"
+echo "Rollback to: $PREVIOUS_COMMIT"
+
+# 2. Redeploy previous commit
+vercel deploy \
+  --prod \
+  --confirm \
+  --target production \
+  --commit-ref $PREVIOUS_COMMIT
+
+# 3. Verify deployment
+sleep 10
+echo "Verifying health check..."
+if curl -s https://www.ipoready.ai/api/health | jq -e '.status == "ok"' > /dev/null; then
+  echo "✓ Rollback successful, app is healthy"
+else
+  echo "✗ Health check failed after rollback"
+  exit 1
+fi
+```
+
+**RTO:** 15 minutes  
+**Owner:** DevOps/Ops team  
+**Decision:** Can be executed autonomously
+
+#### Scenario 2: Canary Deployment (Recommended)
+**Best practice for all non-trivial deployments:**
+
+```bash
+#!/bin/bash
+# scripts/canary-deploy.sh
+
+set -e
+
+echo "🐤 Starting canary deployment..."
+
+# 1. Deploy to staging environment first
+echo "1️⃣ Deploying to staging..."
+vercel deploy --env staging --confirm
+
+# 2. Run smoke tests on staging
+echo "2️⃣ Running smoke tests on staging..."
+npm run test:integration -- --baseUrl=staging.ipoready.ai
+
+# 3. Deploy to production with traffic split
+echo "3️⃣ Deploying to production (10% traffic)..."
+vercel deploy --prod --confirm --traffic 10
+
+# 4. Monitor for 15 minutes
+echo "4️⃣ Monitoring for 15 minutes..."
+for i in {1..15}; do
+  ERROR_RATE=$(curl -s https://www.ipoready.ai/api/metrics/error-rate | jq '.error_rate')
+  echo "  [$i/15] Error rate: ${ERROR_RATE}%"
+  
+  if (( $(echo "$ERROR_RATE > 5" | bc -l) )); then
+    echo "✗ Error rate > 5%, AUTOMATIC ROLLBACK TRIGGERED"
+    vercel rollback
+    exit 1
+  fi
+  
+  sleep 60
+done
+
+# 5. Gradually increase traffic
+echo "5️⃣ Increasing to 50% traffic..."
+vercel deploy --prod --confirm --traffic 50
+
+# 6. Monitor for 10 minutes
+for i in {1..10}; do
+  ERROR_RATE=$(curl -s https://www.ipoready.ai/api/metrics/error-rate | jq '.error_rate')
+  echo "  [$i/10] Error rate: ${ERROR_RATE}%"
+  
+  if (( $(echo "$ERROR_RATE > 3" | bc -l) )); then
+    echo "✗ Error rate > 3%, AUTOMATIC ROLLBACK TRIGGERED"
+    vercel rollback
+    exit 1
+  fi
+  
+  sleep 60
+done
+
+# 7. Full deployment
+echo "6️⃣ Deploying to 100% traffic..."
+vercel deploy --prod --confirm --traffic 100
+
+echo "✓ Canary deployment complete"
+```
+
+#### Scenario 3: Database-aware Rollback (1-2 hours)
+**When code rollback is insufficient and DB schema changes are involved:**
+
+```bash
+#!/bin/bash
+# scripts/rollback-with-migration-revert.sh
+
+set -e
+
+echo "🔄 Rolling back with database migration revert..."
+
+# 1. Identify last good migration
+LAST_GOOD_MIGRATION=$(psql $DATABASE_URL -t -c "
+  SELECT version FROM schema_migrations 
+  WHERE success = true 
+  ORDER BY applied_at DESC LIMIT 1;")
+
+echo "Reverting migrations after: $LAST_GOOD_MIGRATION"
+
+# 2. Revert migrations
+npm run db:migrate:down -- --to $LAST_GOOD_MIGRATION
+
+# 3. Verify schema consistency
+npm run db:verify:schema
+
+# 4. Rollback code
+git revert -n HEAD
+git commit -m "Rollback: schema migration and code revert"
+
+# 5. Deploy rolled-back code
+vercel deploy --prod --confirm
+
+# 6. Verify
+curl -s https://www.ipoready.ai/api/health | jq .
+
+echo "✓ Rollback with migration revert complete"
+```
+
+---
+
+## 4. Data Retention Policy
+
+### 4.1 Compliance-Driven Retention
+
+| Data Type | Retention Period | Legal Basis | Compliance |
+|-----------|------------------|-------------|-----------|
+| **User Profile** | Account lifetime + 30 days (grace) | GDPR Right to Erasure | GDPR, PIPEDA, CCPA |
+| **Company Data** | 7 years after IPO listing | SEC/FINRA requirements | SEC, FINRA, SOC 2 |
+| **Documents** | 7 years after IPO listing | SEC document retention | SEC, SOC 2 |
+| **PACE Scores** | 7 years after IPO listing | Financial record | SEC, SOC 2 |
+| **Audit Logs** | 3 years minimum | GDPR/SOC 2 compliance | GDPR, SOC 2, HIPAA |
+| **Payment Records** | 7 years | Tax/Financial compliance | IRS, Revenue Canada |
+| **System Logs** | 90 days | Troubleshooting/security | SOC 2 |
+| **Backup Files** | 30 days (rolling) | Disaster recovery | RPO requirement |
+| **WAL Archive** | 7 days | Point-in-time recovery | RPO requirement |
+| **Marketing Consent** | Until withdrawn | GDPR/CCPA consent | GDPR, CCPA |
+
+### 4.2 Automated Data Purge
+
+**Cron Job:** Runs daily at 04:00 UTC
+
+```typescript
+// src/app/api/cron/data-retention-cleanup.ts
+
+import { sql } from '@neondatabase/serverless';
+
+export async function POST(request: Request) {
+  // Verify cron secret
+  if (request.headers.get('authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response('Unauthorized', { status: 401 });
+  }
+
+  const results = { deleted: { expired_sessions: 0, expired_exports: 0, old_logs: 0 }, errors: [] };
+
+  try {
+    // Delete expired sessions (> 30 days)
+    const sessionsResult = await sql`
+      DELETE FROM sessions WHERE created_at < NOW() - INTERVAL '30 days' RETURNING id;
+    `;
+    results.deleted.expired_sessions = sessionsResult.length;
+
+    // Delete expired data export files (> 30 days)
+    const exportsResult = await sql`
+      DELETE FROM data_export_requests WHERE created_at < NOW() - INTERVAL '30 days' RETURNING id;
+    `;
+    results.deleted.expired_exports = exportsResult.length;
+
+    // Delete old system logs (> 90 days, keep audit_logs for compliance)
+    const logsResult = await sql`
+      DELETE FROM system_logs WHERE created_at < NOW() - INTERVAL '90 days' RETURNING id;
+    `;
+    results.deleted.old_logs = logsResult.length;
+
+    return Response.json(results);
+  } catch (error) {
+    results.errors.push(error.message);
+    return Response.json(results, { status: 500 });
+  }
+}
+```
+
+---
+
+## 5. Recovery Targets
+
+### 5.1 SLA Commitments
+
+**Production SLA:**
+```
+Uptime Target: 99.9% (43.2 minutes downtime/month allowed)
+RTO: 4 hours max for critical data loss
+RPO: 1 hour (recover to any point within last hour)
+Monthly Restore Drill: MANDATORY
+Quarterly Failover Test: MANDATORY
+```
+
+**Failure Scenario RTO Matrix:**
+
+| Scenario | Cause | RTO | RPO | Procedure |
+|----------|-------|-----|-----|-----------|
+| App crash | Code bug | 15 min | Real-time | Redeploy (3.1) |
+| Database unavailable | Neon outage | 5 min | Real-time | Failover |
+| Accidental deletion | User/admin error | 30 min | 1 hour | PITR (5.1) |
+| Data corruption | Ransomware/bug | 4 hours | 24 hours | Full restore (5.2) |
+| Region failure | Disaster | 4 hours | 24 hours | DR failover |
+
+### 5.2 Backup SLA Monitoring
+
+```typescript
+// src/lib/monitoring/backup-sla.ts
+
+export async function checkBackupSLA(): Promise<{ compliant: boolean; issues: string[] }> {
+  const issues: string[] = [];
+
+  // Check 1: Latest full backup age
+  const latestBackup = await getNeonLatestBackup();
+  const backupAgeHours = (Date.now() - latestBackup.completedAt) / 3600000;
+  
+  if (backupAgeHours > 24) {
+    issues.push(`CRITICAL: Backup is ${Math.round(backupAgeHours)}h old (> 24h SLA)`);
+  }
+
+  // Check 2: WAL archive lag
+  const walLagMinutes = await checkWALArchiveLag();
+  
+  if (walLagMinutes > 60) {
+    issues.push(`CRITICAL: WAL lag is ${walLagMinutes}min (> 60min SLA)`);
+  }
+
+  // Check 3: Database reachability
+  const dbReachable = await pingDatabase();
+  
+  if (!dbReachable) {
+    issues.push('CRITICAL: Database unreachable');
+  }
+
+  // Check 4: S3 replication status
+  const replStatus = await checkS3Replication();
+  
+  if (replStatus.status !== 'ENABLED') {
+    issues.push(`HIGH: S3 replication status is ${replStatus.status}`);
+  }
+
+  return {
+    compliant: issues.length === 0,
+    issues,
+  };
+}
+```
+
+---
+
+## 6. Restore Procedures
+
+### 6.1 Point-in-Time Recovery (PITR)
+
+**Scenario:** Accidental deletion detected (e.g., document removed 2 hours ago)
+
+**Procedure:**
+
+```bash
+#!/bin/bash
+# scripts/restore-point-in-time.sh
+
+set -e
+
+TARGET_TIME="${1:-2026-06-07 14:30:00}"  # Restore to specific time
+RESTORE_DB_NAME="ipoready_restore_$(date +%s)"
+
+echo "🔄 Starting point-in-time recovery to: $TARGET_TIME"
+
+# 1. Create read-only restore branch (for testing first)
+echo "1️⃣ Creating restore branch..."
+BRANCH_ID=$(curl -s -X POST \
+  -H "Authorization: Bearer $NEON_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"branch\": {
+      \"name\": \"restore-$(date +%s)\",
+      \"parent_id\": \"$(neon branches list | jq -r '.[0].id')\",
+      \"compute_size\": \"small\"
+    }
+  }" \
+  https://console.neon.tech/api/v1/projects/$NEON_PROJECT_ID/branches \
+  | jq -r '.branch.id')
+
+echo "✓ Branch ID: $BRANCH_ID"
+
+# 2. Wait for branch to be ready (typically 30-60 seconds)
+echo "2️⃣ Waiting for restore branch..."
+while true; do
+  STATUS=$(curl -s \
+    -H "Authorization: Bearer $NEON_API_KEY" \
+    https://console.neon.tech/api/v1/projects/$NEON_PROJECT_ID/branches/$BRANCH_ID \
+    | jq -r '.branch.status')
+  
+  if [ "$STATUS" = "available" ]; then
+    echo "✓ Branch ready"
+    break
+  fi
+  sleep 5
+done
+
+# 3. Get connection string
+RESTORE_CONN=$(curl -s \
+  -H "Authorization: Bearer $NEON_API_KEY" \
+  https://console.neon.tech/api/v1/projects/$NEON_PROJECT_ID/branches/$BRANCH_ID/endpoints \
+  | jq -r '.endpoints[0].connection_uri')
+
+echo "✓ Connected to restore branch"
+
+# 4. Verify data integrity on restored branch
+echo "3️⃣ Validating restored data..."
+psql "$RESTORE_CONN" << 'EOF'
+-- Check row counts
+SELECT 
+  'users' as table_name, COUNT(*) as row_count FROM users
+UNION ALL SELECT 'companies', COUNT(*) FROM companies
+UNION ALL SELECT 'unified_documents', COUNT(*) FROM unified_documents;
+
+-- Verify zero duplication
+SELECT 
+  COUNT(*) as total_docs,
+  COUNT(DISTINCT storage_id) as unique_docs,
+  CASE WHEN COUNT(*) = COUNT(DISTINCT storage_id) THEN 'PASS' ELSE 'FAIL' END as check_result
+FROM unified_documents;
+EOF
+
+# 5. Manual inspection required
+echo ""
+echo "4️⃣ Data validated. Review the restore branch data:"
+echo "   Connection: $RESTORE_CONN"
+echo ""
+read -p "Promote this restore branch to production? (y/n) " -n 1 -r
+echo
+
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  echo "5️⃣ Promoting restore branch to production..."
+  
+  # Backup current prod first
+  DATE=$(date +%Y-%m-%d-%H%M%S)
+  aws s3 cp s3://ipoready-backups/current-db.sql.gz \
+    s3://ipoready-backups/pre-restore-$DATE.sql.gz || true
+  
+  # Promote
+  curl -s -X PATCH \
+    -H "Authorization: Bearer $NEON_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"branch": {"primary": true}}' \
+    https://console.neon.tech/api/v1/projects/$NEON_PROJECT_ID/branches/$BRANCH_ID
+  
+  echo "✓ Restore complete. Previous version backed up: pre-restore-$DATE.sql.gz"
+else
+  echo "Canceling restore..."
+  curl -s -X DELETE \
+    -H "Authorization: Bearer $NEON_API_KEY" \
+    https://console.neon.tech/api/v1/projects/$NEON_PROJECT_ID/branches/$BRANCH_ID
+  echo "✓ Restore branch deleted"
+fi
+```
+
+**RTO:** 30-45 minutes  
+**Risk:** ZERO (testing on read-only branch first)  
+**Owner:** DevOps engineer + Ops lead approval
+
+### 6.2 Full Database Restore from Backup
+
+**Scenario:** Catastrophic failure (ransomware, total corruption, major bug)
+
+**Procedure:**
+
+```bash
+#!/bin/bash
+# scripts/restore-from-full-backup.sh
+
+set -e
+
+BACKUP_ID="${1}"  # e.g., "neon-backup-20260607-020000"
+echo "🔄 Restoring from backup: $BACKUP_ID"
+
+# 1. List available backups if not specified
+if [ -z "$BACKUP_ID" ]; then
+  echo "Available backups:"
+  curl -s -H "Authorization: Bearer $NEON_API_KEY" \
+    https://console.neon.tech/api/v1/projects/$NEON_PROJECT_ID/backups \
+    | jq -r '.backups[] | "\(.id) - \(.started_at) - \(.size_bytes / 1024 / 1024 | round)MB"'
+  exit 1
+fi
+
+# 2. Create restore branch from selected backup
+echo "Creating restore branch from $BACKUP_ID..."
+RESTORE_BRANCH=$(curl -s -X POST \
+  -H "Authorization: Bearer $NEON_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"branch\": {
+      \"name\": \"restore-backup-$(date +%s)\",
+      \"backup_id\": \"$BACKUP_ID\"
+    }
+  }" \
+  https://console.neon.tech/api/v1/projects/$NEON_PROJECT_ID/branches \
+  | jq -r '.branch.id')
+
+echo "✓ Restore branch: $RESTORE_BRANCH"
+
+# 3. Wait for restore (may take 5-10 minutes for large DB)
+echo "Waiting for restore to complete..."
+while true; do
+  STATUS=$(curl -s \
+    -H "Authorization: Bearer $NEON_API_KEY" \
+    https://console.neon.tech/api/v1/projects/$NEON_PROJECT_ID/branches/$RESTORE_BRANCH \
+    | jq -r '.branch.status')
+  
+  echo "  Status: $STATUS"
+  
+  if [ "$STATUS" = "available" ]; then
+    break
+  fi
+  
+  sleep 10
+done
+
+echo "✓ Restore complete"
+
+# 4. Run comprehensive validation
+echo "Running validation checks..."
+RESTORE_CONN=$(curl -s \
+  -H "Authorization: Bearer $NEON_API_KEY" \
+  https://console.neon.tech/api/v1/projects/$NEON_PROJECT_ID/branches/$RESTORE_BRANCH/endpoints \
+  | jq -r '.endpoints[0].connection_uri')
+
+psql "$RESTORE_CONN" << 'EOF'
+-- Comprehensive validation
+SELECT 'users' as table_name, COUNT(*) as row_count FROM users
+UNION ALL SELECT 'companies', COUNT(*) FROM companies
+UNION ALL SELECT 'unified_documents', COUNT(*) FROM unified_documents
+UNION ALL SELECT 'audit_logs', COUNT(*) FROM audit_logs;
+
+-- Check zero duplication
+SELECT COUNT(*) as total, COUNT(DISTINCT storage_id) as unique
+FROM unified_documents;
+
+-- Check audit trail integrity
+SELECT COUNT(*) as audit_records FROM audit_logs WHERE created_at > NOW() - INTERVAL '90 days';
+EOF
+
+echo ""
+echo "✓ Validation complete"
+echo "To promote: scripts/promote-restore-branch.sh $RESTORE_BRANCH"
+```
+
+**RTO:** 1-2 hours  
+**Approval:** Requires CTO sign-off before promotion
+
+---
+
+## 7. Testing & Validation
+
+### 7.1 Monthly Automated Restore Drill
+
+**Schedule:** First Friday of every month at 14:00 UTC  
+**Duration:** 2 hours max  
+**Automation:** Fully automated via CloudWatch Events
+
+```bash
+#!/bin/bash
+# scripts/monthly-restore-drill.sh
+
+set -e
+
+DATE=$(date +%Y-%m-%d)
+LOG_FILE="/tmp/restore-drill-$DATE.log"
+
+exec 2>&1 | tee -a $LOG_FILE
+
+echo "🔄 Monthly Restore Drill: $DATE" | tee -a $LOG_FILE
+
+# Step 1: Select 3-day-old backup
+TARGET_TIME=$(date -d '3 days ago' '+%Y-%m-%d 02:00:00')
+echo "1️⃣ Target restore time: $TARGET_TIME" | tee -a $LOG_FILE
+
+# Step 2: Create test branch
+BRANCH=$(curl -s -X POST \
+  -H "Authorization: Bearer $NEON_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"branch\": {
+      \"name\": \"monthly-drill-$DATE\",
+      \"parent_id\": \"$(neon branches list | jq -r '.[0].id')\"
+    }
+  }" \
+  https://console.neon.tech/api/v1/projects/$NEON_PROJECT_ID/branches \
+  | jq -r '.branch.id')
+
+echo "   Branch: $BRANCH" | tee -a $LOG_FILE
+
+# Step 3: Wait for ready
+echo "2️⃣ Waiting for branch..." | tee -a $LOG_FILE
+while true; do
+  STATUS=$(curl -s \
+    -H "Authorization: Bearer $NEON_API_KEY" \
+    https://console.neon.tech/api/v1/projects/$NEON_PROJECT_ID/branches/$BRANCH \
+    | jq -r '.branch.status')
+  [ "$STATUS" = "available" ] && break
+  sleep 5
+done
+echo "   ✓ Ready" | tee -a $LOG_FILE
+
+# Step 4: Run validation tests
+echo "3️⃣ Running validation tests..." | tee -a $LOG_FILE
+
+RESTORE_CONN=$(curl -s \
+  -H "Authorization: Bearer $NEON_API_KEY" \
+  https://console.neon.tech/api/v1/projects/$NEON_PROJECT_ID/branches/$BRANCH/endpoints \
+  | jq -r '.endpoints[0].connection_uri')
+
+# Test suite
+TESTS_PASSED=0
+TESTS_FAILED=0
+
+# Test 1: Table count
+TABLE_COUNT=$(psql "$RESTORE_CONN" -t -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='public';")
+if [ $TABLE_COUNT -gt 20 ]; then
+  echo "   ✓ Test 1 PASS: Found $TABLE_COUNT tables" | tee -a $LOG_FILE
+  ((TESTS_PASSED++))
+else
+  echo "   ✗ Test 1 FAIL: Only $TABLE_COUNT tables" | tee -a $LOG_FILE
+  ((TESTS_FAILED++))
+fi
+
+# Test 2: Data sanity
+USER_COUNT=$(psql "$RESTORE_CONN" -t -c "SELECT COUNT(*) FROM users;")
+if [ $USER_COUNT -gt 0 ]; then
+  echo "   ✓ Test 2 PASS: Found $USER_COUNT users" | tee -a $LOG_FILE
+  ((TESTS_PASSED++))
+else
+  echo "   ✗ Test 2 FAIL: No users found" | tee -a $LOG_FILE
+  ((TESTS_FAILED++))
+fi
+
+# Test 3: Zero duplication
+DUP_CHECK=$(psql "$RESTORE_CONN" -t -c "SELECT CASE WHEN COUNT(*) = COUNT(DISTINCT storage_id) THEN 'PASS' ELSE 'FAIL' END FROM unified_documents;")
+if [ "$DUP_CHECK" = "PASS" ]; then
+  echo "   ✓ Test 3 PASS: Zero duplication check" | tee -a $LOG_FILE
+  ((TESTS_PASSED++))
+else
+  echo "   ✗ Test 3 FAIL: Duplicates detected" | tee -a $LOG_FILE
+  ((TESTS_FAILED++))
+fi
+
+# Test 4: Audit logs
+AUDIT_COUNT=$(psql "$RESTORE_CONN" -t -c "SELECT COUNT(*) FROM audit_logs;")
+if [ $AUDIT_COUNT -gt 0 ]; then
+  echo "   ✓ Test 4 PASS: Found $AUDIT_COUNT audit logs" | tee -a $LOG_FILE
+  ((TESTS_PASSED++))
+else
+  echo "   ✗ Test 4 FAIL: No audit logs found" | tee -a $LOG_FILE
+  ((TESTS_FAILED++))
+fi
+
+# Step 5: Cleanup
+echo "4️⃣ Cleaning up..." | tee -a $LOG_FILE
+curl -s -X DELETE \
+  -H "Authorization: Bearer $NEON_API_KEY" \
+  https://console.neon.tech/api/v1/projects/$NEON_PROJECT_ID/branches/$BRANCH
+echo "   ✓ Test branch deleted" | tee -a $LOG_FILE
+
+# Report
+echo "" | tee -a $LOG_FILE
+echo "📊 Drill Results:" | tee -a $LOG_FILE
+echo "   Tests Passed: $TESTS_PASSED" | tee -a $LOG_FILE
+echo "   Tests Failed: $TESTS_FAILED" | tee -a $LOG_FILE
+
+if [ $TESTS_FAILED -eq 0 ]; then
+  echo "✅ Monthly restore drill SUCCESSFUL" | tee -a $LOG_FILE
+  mail -s "✅ IPOReady Monthly Restore Drill PASSED - $DATE" ops@ipoready.com < $LOG_FILE
+else
+  echo "❌ Monthly restore drill FAILED" | tee -a $LOG_FILE
+  mail -s "❌ IPOReady Monthly Restore Drill FAILED - $DATE" devops@ipoready.com < $LOG_FILE
+  exit 1
+fi
+```
+
+**Success Criteria:**
+- [x] Test branch created
+- [x] All 4 validation tests pass
+- [x] Table count > 20
+- [x] User count > 0
+- [x] Zero duplication check passes
+- [x] Audit logs intact
+- [x] Test branch cleaned up
+- [x] Report sent to ops email
+
+### 7.2 Quarterly Failover Test
+
+**Schedule:** Last Friday of every Q (Mar 31, Jun 30, Sep 30, Dec 31)  
+**Duration:** 4 hours max  
+**Window:** 22:00-02:00 UTC (off-business hours)  
+**Participants:** Full DevOps team + CTO
+
+**Execution:**
+1. Set "Maintenance Mode" banner (notify users)
+2. Create restore branch from 3-day-old backup
+3. Run full validation suite
+4. Promote to production (if all tests pass)
+5. Run post-failover smoke tests
+6. Measure actual RTO/RPO
+7. Rollback to original
+8. Document findings and update procedures
+
+**Success Criteria:**
+- RTO <= 4 hours (target: < 2 hours)
+- RPO <= 1 hour
+- All critical features working post-restore
+- Zero data loss
+- Audit trail intact
+
+---
+
+## 8. Off-Site Backup Storage
+
+### 8.1 Architecture
+
+```
+Neon Primary Database (us-east-1)
+    ↓ (Daily snapshot)
+S3 Primary Bucket (us-east-1)
+    ↓ (Cross-region replication)
+S3 DR Bucket (eu-west-1, Ireland)
+    ↓ (Lifecycle policy, 30-day transition)
+Glacier Archive (Long-term cold storage)
+```
+
+### 8.2 S3 Setup
+
+**Primary Bucket: `ipoready-backups-primary`**
+
+```bash
+# Create bucket with versioning
+aws s3api create-bucket \
+  --bucket ipoready-backups-primary \
+  --region us-east-1 \
+  --acl private
+
+# Enable versioning (recover from accidental deletion)
+aws s3api put-bucket-versioning \
+  --bucket ipoready-backups-primary \
+  --versioning-configuration Status=Enabled
+
+# Enable MFA delete protection
+aws s3api put-bucket-versioning \
+  --bucket ipoready-backups-primary \
+  --versioning-configuration Status=Enabled,MFADelete=Enabled
+
+# Encryption with KMS
+aws s3api put-bucket-encryption \
+  --bucket ipoready-backups-primary \
+  --server-side-encryption-configuration '{
+    "Rules": [{
+      "ApplyServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "aws:kms",
+        "KMSMasterKeyID": "arn:aws:kms:us-east-1:ACCOUNT_ID:key/KEY_ID"
+      }
+    }]
+  }'
+
+# Block public access
+aws s3api put-public-access-block \
+  --bucket ipoready-backups-primary \
+  --public-access-block-configuration \
+  "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"
+
+# Lifecycle policy (transition to Glacier after 30 days)
+aws s3api put-bucket-lifecycle-configuration \
+  --bucket ipoready-backups-primary \
+  --lifecycle-configuration '{
+    "Rules": [{
+      "Id": "ArchiveOldBackups",
+      "Status": "Enabled",
+      "Prefix": "backups/",
+      "Transitions": [{
+        "Days": 30,
+        "StorageClass": "GLACIER"
+      }],
+      "NoncurrentVersionTransitions": [{
+        "NoncurrentDays": 90,
+        "StorageClass": "GLACIER"
+      }]
+    }]
+  }'
+```
+
+**DR Bucket: `ipoready-backups-dr` (eu-west-1)**
+
+```bash
+# Create in different region
+aws s3api create-bucket \
+  --bucket ipoready-backups-dr \
+  --region eu-west-1 \
+  --create-bucket-configuration LocationConstraint=eu-west-1 \
+  --acl private
+
+# Same encryption, versioning, and access policies as primary
+```
+
+### 8.3 Cross-Region Replication
+
+```bash
+# Create IAM role for replication
+aws iam create-role \
+  --role-name S3ReplicationRole \
+  --assume-role-policy-document '{
+    "Version": "2012-10-17",
+    "Statement": [{
+      "Effect": "Allow",
+      "Principal": {"Service": "s3.amazonaws.com"},
+      "Action": "sts:AssumeRole"
+    }]
+  }'
+
+# Attach replication policy
+aws iam put-role-policy \
+  --role-name S3ReplicationRole \
+  --policy-name S3ReplicationPolicy \
+  --policy-document '{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": ["s3:GetReplicationConfiguration", "s3:ListBucket"],
+        "Resource": "arn:aws:s3:::ipoready-backups-primary"
+      },
+      {
+        "Effect": "Allow",
+        "Action": ["s3:GetObjectVersionForReplication", "s3:GetObjectVersionAcl"],
+        "Resource": "arn:aws:s3:::ipoready-backups-primary/*"
+      },
+      {
+        "Effect": "Allow",
+        "Action": ["s3:ReplicateObject", "s3:ReplicateDelete"],
+        "Resource": "arn:aws:s3:::ipoready-backups-dr/*"
+      }
+    ]
+  }'
+
+# Enable replication on primary bucket
+aws s3api put-bucket-replication \
+  --bucket ipoready-backups-primary \
+  --replication-configuration '{
+    "Role": "arn:aws:iam::ACCOUNT_ID:role/S3ReplicationRole",
+    "Rules": [{
+      "Id": "ReplicateAllBackups",
+      "Status": "Enabled",
+      "Priority": 1,
+      "Prefix": "",
+      "Destination": {
+        "Bucket": "arn:aws:s3:::ipoready-backups-dr",
+        "ReplicationTime": {
+          "Status": "Enabled",
+          "Time": {"Minutes": 15}
+        }
+      }
+    }]
+  }'
+```
+
+---
+
+## 9. Monitoring & Alerting
+
+### 9.1 CloudWatch Metrics & Alerts
+
+**Alert Rules:**
+
+| Metric | Threshold | Severity | Action |
+|--------|-----------|----------|--------|
+| days_since_backup > 1 | 24 hours | CRITICAL | Page ops engineer |
+| wal_archive_lag > 60 min | 1 hour | CRITICAL | Page ops engineer |
+| database_reachable = false | Immediate | CRITICAL | Page DevOps lead |
+| s3_replication_lag > 30 min | 30 minutes | HIGH | Slack alert |
+| backup_sla_compliant = false | Immediate | CRITICAL | Page CTO |
+
+**CloudWatch Setup:**
+
+```bash
+# Backup age alarm (critical if > 24 hours old)
+aws cloudwatch put-metric-alarm \
+  --alarm-name "IPOReady-Backup-SLA-Violation" \
+  --alarm-description "Daily backup is older than 24 hours" \
+  --metric-name LatestBackupAgeDays \
+  --namespace IPOReady/Backups \
+  --statistic Maximum \
+  --period 3600 \
+  --evaluation-periods 1 \
+  --threshold 1 \
+  --comparison-operator GreaterThanThreshold \
+  --alarm-actions arn:aws:sns:us-east-1:ACCOUNT_ID:critical-alerts
+
+# Database connection failures
+aws cloudwatch put-metric-alarm \
+  --alarm-name "IPOReady-Database-Unreachable" \
+  --alarm-description "Database connection failures detected" \
+  --metric-name DatabaseConnectionFailures \
+  --namespace IPOReady/Database \
+  --statistic Sum \
+  --period 300 \
+  --evaluation-periods 2 \
+  --threshold 5 \
+  --comparison-operator GreaterThanOrEqualToThreshold \
+  --alarm-actions arn:aws:sns:us-east-1:ACCOUNT_ID:critical-alerts
+```
+
+### 9.2 Dashboard
+
+**Real-time monitoring at:** `internal.ipoready.com/monitoring/backups/`
+
+Displays:
+- Latest backup age (target: < 24h)
+- WAL archive lag (target: < 1h)
+- Database connection health
+- S3 replication status
+- Monthly restore drill results
+- 30-day SLA compliance trend
+
+---
+
+## 10. Disaster Recovery Playbook
+
+### 10.1 Quick Decision Tree
+
+```
+INCIDENT DETECTED
+    │
+    ├─ Is database accessible?
+    │   ├─ YES → Issue is application code
+    │   │   └─ Procedure: Redeployment (3.2)
+    │   │
+    │   └─ NO → Database unavailable
+    │       ├─ Check Neon console for errors
+    │       ├─ Wait 5 minutes for auto-failover
+    │       └─ If persists > 15 min: Escalate to Neon support
+    │
+    ├─ Is data corrupted/missing?
+    │   ├─ Minor (single table) → PITR (6.1)
+    │   ├─ Catastrophic (multiple tables) → Full restore (6.2)
+    │   └─ No → Check application
+    │
+    └─ Customer impact severity?
+        ├─ CRITICAL (can't login) → RTO 4h, page CTO
+        ├─ MAJOR (features broken) → RTO 2h, notify support
+        └─ MINOR (UI glitch) → Schedule next sprint
+```
+
+### 10.2 Escalation Tree
+
+| Level | Role | Response | Contact |
+|-------|------|----------|---------|
+| 1 | Ops (on-call) | 15 min | ops-oncall@ipoready.com |
+| 2 | DevOps Lead | 30 min | devops-lead@ipoready.com |
+| 3 | CTO | 1 hour | cto@ipoready.com |
+| 4 | CEO | 2 hours | ceo@ipoready.com |
+
+### 10.3 Communication Templates
+
+**Internal Slack Alert:**
+```
+🚨 INCIDENT: [Service] - [Severity]
+
+Description: One-line summary
+Start time: 2026-06-07 14:30 UTC
+Current status: Investigating
+Impact: N users affected, features down
+ETA: ~30 minutes to resolution
+
+Updates every 15 minutes in #incident-response
+Lead: @ops-oncall
+```
+
+**Customer Status Page:**
+```
+INCIDENT: Database Connection Issues
+Status: INVESTIGATING
+Start: 2026-06-07 14:30 UTC
+Severity: MAJOR
+
+We are investigating database connectivity issues.
+Updates every 15 minutes.
+```
+
+---
+
+## 11. Compliance & Compliance Mapping
+
+### 11.1 SOC 2 Type II Compliance
+
+This backup strategy satisfies SOC 2 Trust Service Criteria:
+
+**CC6.1** - Logical & Physical Access Controls
+- ✅ S3 buckets with MFA delete enabled
+- ✅ KMS encryption (automatic key rotation)
+- ✅ IAM policies restrict access
+- ✅ VPC endpoints for private S3 access
+
+**CC7.1** - Change Management
+- ✅ Backup procedures versioned in git
+- ✅ All restore operations logged
+- ✅ Monthly restore drills documented
+- ✅ Change approval process enforced
+
+**CC7.2** - Monitoring
+- ✅ CloudWatch metrics + alarms
+- ✅ Daily automated verification
+- ✅ Incident logs maintained
+- ✅ Quarterly failover tests
+
+### 11.2 GDPR Compliance
+
+**Data Protection:**
+- ✅ Backups encrypted at rest (KMS)
+- ✅ Backups encrypted in transit (TLS)
+- ✅ Audit logs retained 3 years
+- ✅ Data retention policy documented
+- ✅ Right to erasure implemented (30-day grace period)
+
+### 11.3 SEC/FINRA Compliance
+
+**Document Retention:**
+- ✅ 7-year retention for IPO documents
+- ✅ Immutable audit trail maintained
+- ✅ Zero duplication guaranteed
+- ✅ Point-in-time recovery capable
+
+---
+
+## 12. Checklists
+
+### 12.1 Pre-Launch Checklist
+
+- [ ] Neon automated backups enabled (daily, 30-day retention)
+- [ ] WAL archiving configured and tested
+- [ ] S3 primary bucket created with versioning
+- [ ] S3 DR bucket created (eu-west-1)
+- [ ] Cross-region replication enabled
+- [ ] KMS encryption configured
+- [ ] Backup verification scripts created
+- [ ] CloudWatch alarms configured
+- [ ] Monitoring dashboard created
+- [ ] Runbooks documented and shared with team
+- [ ] Team trained on procedures
+- [ ] Monthly restore drill scheduled
+- [ ] Incident response team assigned
+- [ ] Status page templates created
+- [ ] RTO/RPO SLAs documented
+- [ ] Compliance validation passed (SOC 2, GDPR, SEC)
+
+### 12.2 Monthly Checklist
+
+- [ ] Run backup verification script (manual or automated)
+- [ ] Review CloudWatch metrics dashboard
+- [ ] Check S3 replication status (lag < 15 min)
+- [ ] Verify WAL archive freshness (< 1 hour old)
+- [ ] Confirm backup retention policies in place
+- [ ] Review incident logs from past month (if any)
+- [ ] Validate next month's restore drill timing
+
+### 12.3 Quarterly Checklist
+
+- [ ] Execute full failover test (4-hour window)
+- [ ] Document actual RTO/RPO achieved
+- [ ] Review and update runbooks
+- [ ] Conduct team training/refresher
+- [ ] Audit backup costs vs. budget
+- [ ] Review compliance requirement changes
+- [ ] Confirm DR bucket sync status (< 15 min lag)
+- [ ] Update disaster recovery documentation
+
+---
+
+## 13. Cost Estimation
+
+### 13.1 Monthly Backup Costs
+
+| Component | Cost | Notes |
+|-----------|------|-------|
+| Neon automated backups | Included | (30-day retention) |
+| S3 storage (primary) | ~$50 | 30 backups × ~2-5GB each |
+| S3 storage (DR replica) | ~$50 | Cross-region replication |
+| WAL archive (7-day) | ~$30 | Incremental backups |
+| Glacier archive | ~$10 | Auto-transition after 30 days |
+| KMS encryption | ~$5 | Per month (key + operations) |
+| CloudWatch monitoring | ~$20 | Metrics + alarms + dashboard |
+| **Total** | **~$165** | Per month |
+
+### 13.2 Cost Optimization
+
+- Use Neon's included automated backups (vs. manual dumps)
+- Tier storage: S3 Standard → S3-IA → Glacier
+- Compress WAL files (10x size reduction)
+- Auto-expire old backup files via lifecycle policies
+- Use spot pricing for DR compute resources
+
+---
+
+## 14. Implementation Timeline
+
+### Phase 1 (Week 1): Foundation
+- [ ] Create S3 buckets and configure encryption
+- [ ] Enable Neon automated backups
+- [ ] Set up CloudWatch monitoring
+- [ ] Create backup verification scripts
+
+### Phase 2 (Week 2): Testing
+- [ ] Run manual restore drill
+- [ ] Validate all procedures
+- [ ] Train ops team
+- [ ] Document findings
+
+### Phase 3 (Week 3): Automation
+- [ ] Deploy automated backup verification (daily)
+- [ ] Schedule monthly restore drills
+- [ ] Schedule quarterly failover tests
+- [ ] Set up alerting
+
+### Phase 4 (Week 4): Optimization & Compliance
+- [ ] Review costs and optimize
+- [ ] Conduct SOC 2 compliance review
+- [ ] Update compliance documentation
+- [ ] Go live
+
+---
+
+## 15. Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0 | 2026-06-07 | Comprehensive backup & DR strategy |
+
+---
+
+## 16. Approval & Sign-Off
+
+**Reviewed and approved by:**
+
+- [ ] **CTO** __________________ (Technical feasibility)
+- [ ] **Compliance Officer** __________________ (Legal compliance)
+- [ ] **DevOps Lead** __________________ (Operational readiness)
+- [ ] **CEO** __________________ (SLA approval)
+
+---
+
+**Contact:** devops@ipoready.com  
+**Last Review:** June 7, 2026  
+**Next Review:** September 7, 2026 (Quarterly)
 Method: Neon native backup
 Retention: 30 days (configurable)
 RTO: 30 minutes

@@ -79,7 +79,7 @@ export default function PartnersPage() {
   const inputStyle = {
     width: '100%', padding: '0.75rem 1rem', borderRadius: '12px',
     border: '1px solid #E5E4E0', background: '#FFFFFF',
-    color: '#1A1A1A', fontSize: '14px', outline: 'none',
+    color: '#1A1A1A', outline: 'none',
     fontFamily: 'inherit',
   }
 
@@ -98,7 +98,7 @@ export default function PartnersPage() {
           <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: '#1A1A1A', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <Rocket className="w-4 h-4 text-white" />
           </div>
-          <span style={{ fontWeight: 800, fontSize: '18px', color: '#1A1A1A', letterSpacing: '-0.3px' }}>
+          <span style={{ fontWeight: 800, color: '#1A1A1A', letterSpacing: '-0.3px' }} className="h4">
             IPO<span style={{ color: '#E8312A' }}>Ready</span>
           </span>
         </Link>
@@ -130,7 +130,7 @@ export default function PartnersPage() {
             <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.75rem)', fontWeight: 900, color: '#1A1A1A', lineHeight: 1.1, marginBottom: '1.25rem', letterSpacing: '-1px' }}>
               Earn <span style={{ color: '#E8312A' }}>20% recurring</span><br />for every IPO client you refer
             </h1>
-            <p style={{ fontSize: '18px', color: '#717171', maxWidth: '580px', margin: '0 auto 1rem', lineHeight: 1.65 }}>
+            <p style={{ color: '#717171', maxWidth: '580px', margin: '0 auto 1rem', lineHeight: 1.65 }} className="body">
               You're already in the room when companies decide to go public. Introduce them to IPOReady and earn 20% of their monthly subscription for 12 months — automatically.
             </p>
             <p style={{ fontWeight: 600, color: '#B45309', marginBottom: '2rem' }} className="label-sm">
@@ -138,13 +138,13 @@ export default function PartnersPage() {
             </p>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
               <a href="#apply"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#1A1A1A', color: '#fff', padding: '12px 24px', borderRadius: '100px', fontWeight: 600, fontSize: '14px', textDecoration: 'none' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#1A1A1A', color: '#fff', padding: '12px 24px', borderRadius: '100px', fontWeight: 600, textDecoration: 'none' }} className="body"
                 onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#333' }}
                 onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#1A1A1A' }}>
                 Apply Now — Takes 3 Minutes <ArrowRight className="w-4 h-4" />
               </a>
               <a href="#calculator"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#fff', color: '#1A1A1A', padding: '12px 24px', borderRadius: '100px', fontWeight: 600, fontSize: '14px', textDecoration: 'none', border: '1px solid #E5E4E0' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#fff', color: '#1A1A1A', padding: '12px 24px', borderRadius: '100px', fontWeight: 600, textDecoration: 'none', border: '1px solid #E5E4E0' }} className="body"
                 onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#F7F6F4' }}
                 onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#fff' }}>
                 <Calculator className="w-4 h-4" /> Calculate Your Earnings
@@ -243,8 +243,7 @@ export default function PartnersPage() {
                       style={{ padding: '8px', borderRadius: '10px', fontWeight: 600, textTransform: 'capitalize', cursor: 'pointer', border: '1.5px solid', transition: 'all 0.15s',
                         ...(calc.plan === p
                           ? { background: '#1A1A1A', color: '#fff', borderColor: '#1A1A1A' }
-                          : { background: '#fff', color: '#717171', borderColor: '#E5E4E0' }) }}
-                      className="body-sm">
+                          : { background: '#fff', color: '#717171', borderColor: '#E5E4E0' }) }} className="label-sm">
                       {p}
                     </button>
                   ))}
@@ -258,8 +257,7 @@ export default function PartnersPage() {
                       style={{ padding: '8px', borderRadius: '10px', fontWeight: 600, cursor: 'pointer', border: '1.5px solid', transition: 'all 0.15s',
                         ...(calc.billingCycle === b
                           ? { background: '#1A1A1A', color: '#fff', borderColor: '#1A1A1A' }
-                          : { background: '#fff', color: '#717171', borderColor: '#E5E4E0' }) }}
-                      className="body-sm">
+                          : { background: '#fff', color: '#717171', borderColor: '#E5E4E0' }) }} className="label-sm">
                       {b === 'monthly' ? 'Monthly' : 'Annual'}
                     </button>
                   ))}
@@ -281,7 +279,7 @@ export default function PartnersPage() {
             {/* Results */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div style={{ background: '#1A1A1A', borderRadius: '20px', padding: '1.75rem' }}>
-                <p style={{ fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.4)', marginBottom: '6px' }} className="caption">Annual Commission</p>
+                <p style={{ fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.4)', marginBottom: '6px' }} className="label-sm">Annual Commission</p>
                 <p style={{ fontWeight: 900, fontSize: '3rem', color: '#E8312A', lineHeight: 1, marginBottom: '6px' }}>
                   CA${totalAnnual.toLocaleString()}
                 </p>
@@ -464,7 +462,7 @@ export default function PartnersPage() {
                 By submitting you confirm you have read the Professional Partner Program Terms & Conditions and, if a lawyer, that participation is consistent with your bar association rules and firm policies.
               </p>
               <button type="submit"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#E8312A', color: '#fff', padding: '14px', borderRadius: '12px', fontWeight: 700, cursor: 'pointer', border: 'none', width: '100%' }} className="body"
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#E8312A', color: '#fff', padding: '14px', borderRadius: '12px', fontWeight: 700, cursor: 'pointer', border: 'none', width: '100%' }} className="label-sm"
                 onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#C4261F' }}
                 onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#E8312A' }}>
                 Submit Application <ArrowRight className="w-4 h-4" />
@@ -483,7 +481,7 @@ export default function PartnersPage() {
               <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E5E4E0', borderRadius: '14px', overflow: 'hidden' }}>
                 <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.125rem 1.25rem', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer' }}>
-                  <p style={{ fontSize: '13px', fontWeight: 600, color: '#1A1A1A', margin: 0, paddingRight: '1rem', lineHeight: 1.4 }}>{faq.q}</p>
+                  <p style={{ fontWeight: 600, color: '#1A1A1A', margin: 0, paddingRight: '1rem', lineHeight: 1.4 }} className="label-sm">{faq.q}</p>
                   <motion.div animate={{ rotate: openFaq === i ? 180 : 0 }} transition={{ duration: 0.18 }}>
                     <ChevronDown className="w-4 h-4 flex-shrink-0" style={{ color: '#717171' }} />
                   </motion.div>
@@ -492,7 +490,7 @@ export default function PartnersPage() {
                   {openFaq === i && (
                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} style={{ overflow: 'hidden' }}>
                       <div style={{ padding: '0 1.25rem 1.125rem', borderTop: '1px solid #F7F6F4' }}>
-                        <p style={{ fontSize: '13px', color: '#717171', lineHeight: 1.65, margin: '0.75rem 0 0' }}>{faq.a}</p>
+                        <p style={{ color: '#717171', lineHeight: 1.65, margin: '0.75rem 0 0' }} className="label-sm">{faq.a}</p>
                       </div>
                     </motion.div>
                   )}
@@ -506,12 +504,12 @@ export default function PartnersPage() {
       {/* ── CTA strip ────────────────────────────────────────────────────── */}
       <section style={{ background: '#1A1A1A', padding: '4rem 1.5rem', borderTop: '1px solid #333' }}>
         <div style={{ maxWidth: '580px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontWeight: 900, fontSize: '2rem', color: '#fff', marginBottom: '0.75rem', letterSpacing: '-0.5px' }}>Ready to earn with every referral?</h2>
-          <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.4)', marginBottom: '1.75rem', lineHeight: 1.6 }}>
+          <h2 className="h2" style={{ color: '#fff', marginBottom: '0.75rem', letterSpacing: '-0.5px' }}>Ready to earn with every referral?</h2>
+          <p style={{ color: 'rgba(255,255,255,0.4)', marginBottom: '1.75rem', lineHeight: 1.6 }} className="body">
             Apply in 3 minutes. Approved within 1 business day. Start earning with your first referral.
           </p>
           <a href="#apply"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#E8312A', color: '#fff', padding: '14px 28px', borderRadius: '100px', fontWeight: 700, fontSize: '15px', textDecoration: 'none' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#E8312A', color: '#fff', padding: '14px 28px', borderRadius: '100px', fontWeight: 700, textDecoration: 'none' }} className="body"
             onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#C4261F' }}
             onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#E8312A' }}>
             Apply Now <ArrowRight className="w-4 h-4" />
@@ -523,8 +521,8 @@ export default function PartnersPage() {
       <section style={{ background: '#FFFFFF', padding: '5rem 1.5rem', borderTop: '1px solid #E5E4E0' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <h2 style={{ fontWeight: 900, fontSize: '2.25rem', color: '#1A1A1A', marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>Your Monthly Partner Update</h2>
-            <p style={{ fontSize: '15px', color: '#717171', maxWidth: '480px', margin: '0 auto' }}>A preview of your automated monthly email — keeping you informed and your referral pipeline active.</p>
+            <h2 className="h2 text-nav" style={{ marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>Your Monthly Partner Update</h2>
+            <p style={{ color: '#717171', maxWidth: '480px', margin: '0 auto' }} className="body">A preview of your automated monthly email — keeping you informed and your referral pipeline active.</p>
           </div>
 
           <div style={{ border: '1px solid #E5E4E0', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}>
@@ -533,7 +531,7 @@ export default function PartnersPage() {
               <div style={{ display: 'flex', gap: '5px' }}>
                 {['#FC5F57','#FDBC2C','#29C940'].map(c => <div key={c} style={{ width: '10px', height: '10px', borderRadius: '50%', background: c }} />)}
               </div>
-              <div style={{ flex: 1, background: '#fff', borderRadius: '6px', border: '1px solid #E5E4E0', padding: '4px 12px', fontSize: '11px', color: '#717171', fontFamily: 'monospace' }}>
+              <div style={{ flex: 1, background: '#fff', borderRadius: '6px', border: '1px solid #E5E4E0', padding: '4px 12px', color: '#717171', fontFamily: 'monospace' }} className="caption">
                 Your IPOReady Referral Update — May 2026 · Sarah Chen
               </div>
             </div>
@@ -558,31 +556,31 @@ export default function PartnersPage() {
                 ].map(stat => (
                   <div key={stat.label} style={{ background: '#F7F6F4', borderRadius: '12px', padding: '1rem', border: '1px solid #E5E4E0', textAlign: 'center' }}>
                     <p style={{ fontSize: '1.4rem', fontWeight: 900, color: '#E8312A', marginBottom: '2px', lineHeight: 1 }}>{stat.value}</p>
-                    <p style={{ fontSize: '11px', fontWeight: 600, color: '#1A1A1A', marginBottom: '2px' }}>{stat.label}</p>
-                    <p style={{ fontSize: '10px', color: '#717171' }}>{stat.sub}</p>
+                    <p style={{ fontWeight: 600, color: '#1A1A1A', marginBottom: '2px' }} className="label-sm">{stat.label}</p>
+                    <p style={{ color: '#717171' }} className="caption">{stat.sub}</p>
                   </div>
                 ))}
               </div>
 
               <div style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', borderRadius: '12px', padding: '1rem 1.25rem', marginBottom: '1.5rem' }}>
-                <p style={{ fontSize: '12px', fontWeight: 700, color: '#1A1A1A', marginBottom: '4px' }}>Your Untapped Potential</p>
-                <p style={{ fontSize: '12px', color: '#717171', lineHeight: 1.65, margin: 0 }}>
+                <p style={{ fontWeight: 700, color: '#1A1A1A', marginBottom: '4px' }} className="body-sm">Your Untapped Potential</p>
+                <p style={{ color: '#717171', lineHeight: 1.65, margin: 0 }} className="body-sm">
                   You have an estimated <strong>47 professional contacts</strong>. If 8% are IPO candidates, at a CA$4,200 average commission, that's a potential <strong style={{ color: '#E8312A' }}>CA$15,700</strong> in referral income — waiting for a single conversation.
                 </p>
               </div>
 
-              <p style={{ fontSize: '12px', fontWeight: 700, color: '#1A1A1A', marginBottom: '10px' }}>How to start the conversation</p>
+              <p style={{ fontWeight: 700, color: '#1A1A1A', marginBottom: '10px' }} className="body-sm">How to start the conversation</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '1.5rem' }}>
                 {CONVERSATION_SCRIPTS.map(item => (
                   <div key={item.label} style={{ background: '#F7F6F4', borderRadius: '10px', padding: '0.875rem 1rem', border: '1px solid #E5E4E0' }}>
-                    <p style={{ fontSize: '10px', fontWeight: 700, color: '#E8312A', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{item.label}</p>
-                    <p style={{ fontSize: '12px', color: '#717171', lineHeight: 1.6, fontStyle: 'italic', margin: 0 }}>{item.script}</p>
+                    <p style={{ fontWeight: 700, color: '#E8312A', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }} className="caption">{item.label}</p>
+                    <p style={{ color: '#717171', lineHeight: 1.6, fontStyle: 'italic', margin: 0 }} className="body-sm">{item.script}</p>
                   </div>
                 ))}
               </div>
 
               <div style={{ textAlign: 'center', paddingTop: '1rem', borderTop: '1px solid #F7F6F4' }}>
-                <a href="#apply" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#1A1A1A', color: '#fff', padding: '10px 20px', borderRadius: '100px', fontWeight: 600, fontSize: '13px', textDecoration: 'none' }}>
+                <a href="#apply" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#1A1A1A', color: '#fff', padding: '10px 20px', borderRadius: '100px', fontWeight: 600, textDecoration: 'none' }} className="label-sm">
                   Book a warm referral briefing call <ArrowRight style={{ width: '14px', height: '14px' }} />
                 </a>
               </div>
@@ -590,13 +588,13 @@ export default function PartnersPage() {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginTop: '1.25rem' }}>
-            <span style={{ fontSize: '13px', color: '#717171', fontWeight: 500 }}>Enable Monthly Partner Update Email</span>
+            <span style={{ color: '#717171', fontWeight: 500 }} className="label-sm">Enable Monthly Partner Update Email</span>
             <button onClick={() => setEmailUpdateEnabled(v => !v)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
               {emailUpdateEnabled
                 ? <ToggleRight style={{ width: '30px', height: '30px', color: '#1A1A1A' }} />
                 : <ToggleLeft style={{ width: '30px', height: '30px', color: '#717171' }} />}
             </button>
-            <span style={{ fontSize: '12px', fontWeight: 600, color: emailUpdateEnabled ? '#2D7A5F' : '#9A9A9A' }}>{emailUpdateEnabled ? 'ON' : 'OFF'}</span>
+            <span style={{ fontWeight: 600, color: emailUpdateEnabled ? '#2D7A5F' : '#9A9A9A' }} className="label-sm">{emailUpdateEnabled ? 'ON' : 'OFF'}</span>
           </div>
         </div>
       </section>
@@ -605,8 +603,8 @@ export default function PartnersPage() {
       <section style={{ background: '#F7F6F4', padding: '5rem 1.5rem', borderTop: '1px solid #E5E4E0' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <h2 style={{ fontWeight: 900, fontSize: '2.25rem', color: '#1A1A1A', marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>Boost Your Reviews — One Click</h2>
-            <p style={{ fontSize: '15px', color: '#717171', maxWidth: '480px', margin: '0 auto' }}>Every review increases your referral credibility and SEO ranking.</p>
+            <h2 className="h2 text-nav" style={{ marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>Boost Your Reviews — One Click</h2>
+            <p style={{ color: '#717171', maxWidth: '480px', margin: '0 auto' }} className="body">Every review increases your referral credibility and SEO ranking.</p>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginBottom: '2rem' }}>
@@ -625,29 +623,29 @@ export default function PartnersPage() {
                   {p.letter}
                 </div>
                 <div style={{ flex: 1 }}>
-                  <p style={{ fontWeight: 700, fontSize: '13px', color: '#1A1A1A', margin: '0 0 2px 0' }}>{p.label}</p>
-                  <p style={{ fontSize: '12px', color: '#717171', margin: 0 }}>{p.cta}</p>
+                  <p style={{ fontWeight: 700, color: '#1A1A1A', margin: '0 0 2px 0' }} className="label-sm">{p.label}</p>
+                  <p style={{ color: '#717171', margin: 0 }} className="body-sm">{p.cta}</p>
                 </div>
-                <span style={{ fontSize: '12px', color: '#717171', fontWeight: 600, whiteSpace: 'nowrap' }}>Leave Review →</span>
+                <span style={{ color: '#717171', fontWeight: 600, whiteSpace: 'nowrap' }} className="body-sm">Leave Review →</span>
               </a>
             ))}
           </div>
 
           <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #E5E4E0', padding: '1.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <p style={{ fontWeight: 700, fontSize: '13px', color: '#1A1A1A', margin: 0 }}>Pre-written review template you can copy:</p>
+              <p style={{ fontWeight: 700, color: '#1A1A1A', margin: 0 }} className="label-sm">Pre-written review template you can copy:</p>
               <button onClick={handleCopyReview}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '6px 14px', borderRadius: '100px', background: copied ? '#F0FDF4' : '#F7F6F4', border: `1px solid ${copied ? '#BBF7D0' : '#E5E4E0'}`, color: copied ? '#16A34A' : '#717171', fontWeight: 600, fontSize: '12px', cursor: 'pointer', transition: 'all 0.18s' }}>
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '6px 14px', borderRadius: '100px', background: copied ? '#F0FDF4' : '#F7F6F4', border: `1px solid ${copied ? '#BBF7D0' : '#E5E4E0'}`, color: copied ? '#16A34A' : '#717171', fontWeight: 600, cursor: 'pointer', transition: 'all 0.18s' }} className="body-sm">
                 {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
                 {copied ? 'Copied!' : 'Copy'}
               </button>
             </div>
             <div style={{ background: '#F7F6F4', borderRadius: '10px', padding: '1rem', border: '1px solid #E5E4E0' }}>
-              <p style={{ fontSize: '13px', color: '#717171', lineHeight: 1.7, fontStyle: 'italic', margin: 0 }}>
+              <p style={{ color: '#717171', lineHeight: 1.7, fontStyle: 'italic', margin: 0 }} className="body-sm">
                 "IPOReady has been an essential part of our IPO readiness workflow. The platform centralizes every compliance task, filing deadline, and governance requirement in one place — saving our team dozens of hours each month. I'd recommend it to any company preparing for a public listing on TSX, TSXV, or any Canadian or US exchange."
               </p>
             </div>
-            <p style={{ fontSize: '11px', color: '#717171', marginTop: '8px', marginBottom: 0 }}>Feel free to personalize before posting. Authentic reviews perform best.</p>
+            <p style={{ color: '#717171', marginTop: '8px', marginBottom: 0 }} className="caption">Feel free to personalize before posting. Authentic reviews perform best.</p>
           </div>
         </div>
       </section>
@@ -657,7 +655,7 @@ export default function PartnersPage() {
         <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none', marginBottom: '0.75rem' }}>
           <span style={{ fontWeight: 800, fontSize: '16px', color: '#fff' }}>IPO<span style={{ color: '#E8312A' }}>Ready</span></span>
         </Link>
-        <p style={{ fontSize: '11.5px', color: 'rgba(255,255,255,0.25)', lineHeight: 1.7, maxWidth: '680px', margin: '0 auto' }}>
+        <p style={{ color: 'rgba(255,255,255,0.25)', lineHeight: 1.7, maxWidth: '680px', margin: '0 auto' }} className="caption">
           IPOReady is a technology platform. Participation in the Professional Partner Program does not constitute endorsement of legal, accounting, or securities services.
           All professionals must independently verify that participation complies with their applicable professional conduct rules, bar association regulations, and firm policies.
           Commissions are subject to Program Terms & Conditions.

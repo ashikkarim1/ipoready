@@ -319,12 +319,12 @@ export default function PricingPage() {
                 <div className="flex items-center gap-1.5 px-3 py-1 rounded-lg"
                   style={{ background: 'rgba(180,83,9,0.1)', border: '1px solid rgba(180,83,9,0.2)' }}>
                   <Clock className="w-3.5 h-3.5" style={{ color: '#B45309' }} />
-                  <span className="font-semibold caption-sm" style={{ color: '#B45309' }}>
+                  <span className="font-semibold caption" style={{ color: '#B45309' }}>
                     {daysLeft} {language === 'en' ? 'days remaining' : 'jours restants'}
                   </span>
                 </div>
               </div>
-              <p className="hidden md:block caption-sm max-w-xs text-center" style={{ color: '#92400E', opacity: 0.7 }}>
+              <p className="hidden md:block caption max-w-xs text-center" style={{ color: '#92400E', opacity: 0.7 }}>
                 {language === 'en' ? 'Lock in founding-member pricing. Prices shown are 50% off regular.' : 'Bloquez le tarif membre fondateur.'}
               </p>
               <button onClick={() => setShowPromo(false)}
@@ -340,7 +340,7 @@ export default function PricingPage() {
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 label-sm font-semibold uppercase tracking-widest"
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 label-xs uppercase tracking-widest"
             style={{ background: '#FDECEB', color: '#E8312A', border: '1px solid rgba(232,49,42,0.15)' }}>
             <Zap className="w-3 h-3" />
             {language === 'en' ? 'Pricing' : 'Tarification'}
@@ -363,7 +363,7 @@ export default function PricingPage() {
         <div className="py-32 md:py-48" style={{ borderTop: '2px solid #E5E4E0', marginTop: '4rem', marginBottom: '4rem' }}>
           <div className="max-w-6xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} viewport={{ once: true }} className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 label-sm font-semibold uppercase tracking-widest"
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 label-xs uppercase tracking-widest"
                 style={{ background: '#EAF5F0', color: '#2D7A5F', border: '1px solid rgba(45,122,95,0.2)' }}>
                 <TrendingUp className="w-3 h-3" />
                 {language === 'en' ? 'For Institutional Investors' : 'Pour les investisseurs institutionnels'}
@@ -611,7 +611,7 @@ export default function PricingPage() {
               ? 'Real-time visibility into verified companies executing IPO and RTO journeys. Start your free trial today.'
               : "Visibilité en temps réel sur les entreprises vérifiées exécutant les journées d'IPO et d'RTO. Commencez votre essai gratuit dès aujourd'hui."}
           </p>
-          <p className="caption-sm text-text-light" style={{ opacity: 0.4 }}>
+          <p className="caption text-text-light" style={{ opacity: 0.4 }}>
             {language === 'en' ? '💳 No credit card required for trial · Cancel anytime' : '💳 Aucune carte de crédit requise · Annulez à tout moment'}
           </p>
         </div>

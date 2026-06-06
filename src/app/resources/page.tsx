@@ -432,8 +432,7 @@ function GuideCardItem({
         <h3 style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '0.375rem', lineHeight: 1.35 }} className="text-nav">{guide.title}</h3>
 
         {/* Summary */}
-        <p style={{ fontSize: '0.775rem', lineHeight: 1.55, marginBottom: '0.75rem' }} className="text-text-muted" style={{
-          display: '-webkit-box', WebkitLineClamp: isExpanded ? undefined : 2, WebkitBoxOrient: 'vertical', overflow: isExpanded ? 'visible' : 'hidden' }}>
+        <p style={{ fontSize: '0.775rem', lineHeight: 1.55, marginBottom: '0.75rem', display: '-webkit-box', WebkitLineClamp: isExpanded ? undefined : 2, WebkitBoxOrient: 'vertical', overflow: isExpanded ? 'visible' : 'hidden' }} className="text-text-muted">
           {guide.summary}
         </p>
 

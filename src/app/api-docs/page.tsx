@@ -1,3 +1,5 @@
+'use client'
+
 /**
  * API Documentation Page
  * Swagger UI for IPOReady API
@@ -10,11 +12,6 @@ const SwaggerUI = dynamic(
   () => import('swagger-ui-react'),
   { ssr: false }
 )
-
-export const metadata = {
-  title: 'IPOReady API Documentation',
-  description: 'Interactive API documentation for IPOReady services',
-}
 
 export default function ApiDocsPage() {
   return (
@@ -99,8 +96,6 @@ export default function ApiDocsPage() {
             docExpansion="list"
             defaultModelsExpandDepth={1}
             defaultModelExpandDepth={1}
-            showRequestHeaders={true}
-            presets={[]}
           />
         </div>
       </div>
