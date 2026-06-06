@@ -1,5 +1,4 @@
 import { google } from 'googleapis'
-import { OAuth2Client } from 'google-auth-library'
 
 /**
  * Google Drive Cloud Storage Adapter
@@ -28,7 +27,7 @@ interface DriveFolder {
 }
 
 export class GoogleDriveAdapter {
-  private oauth2Client: OAuth2Client
+  private oauth2Client: any
   private drive: any
 
   constructor(accessToken: string, refreshToken?: string) {
@@ -36,7 +35,7 @@ export class GoogleDriveAdapter {
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
       process.env.GOOGLE_OAUTH_REDIRECT_URI
-    )
+    ) as any
 
     this.oauth2Client.setCredentials({
       access_token: accessToken,
