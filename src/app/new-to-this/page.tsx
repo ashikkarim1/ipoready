@@ -442,10 +442,9 @@ export default function NewToThisPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="relative p-5 rounded-lg border"
+                  className="relative p-5 card"
                   style={{
-                    background: 'var(--color-surface-light)',
-                    borderColor: 'var(--color-border)',
+                    background: 'var(--color-bg-primary)',
                     borderLeftWidth: '3px',
                     borderLeftColor: 'var(--color-accent)'
                   }}
