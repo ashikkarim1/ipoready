@@ -12,8 +12,6 @@ export function DashboardFooter() {
         background: 'var(--color-bg-primary)',
         borderColor: 'var(--color-border)',
         padding: '32px 32px 24px',
-        marginTop: 'auto',
-        flexShrink: 0,
       }}
     >
       {/* Container */}

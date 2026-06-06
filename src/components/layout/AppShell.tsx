@@ -857,8 +857,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </AnimatePresence>
 
         {/* Page content — only this area scrolls */}
-        <main className="flex-1 overflow-y-auto p-8" style={{ position: 'relative' }}>
-          {children}
+        <main className="flex-1 overflow-y-auto p-8" style={{ position: 'relative', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ flex: 1 }}>
+            {children}
+          </div>
+
+          {/* Footer — scrolls with content */}
+          <DashboardFooter />
+
           {/* Frozen state overlay — read-only mode */}
           {daysRemaining <= 0 && (
             <div style={{
@@ -887,9 +893,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           )}
         </main>
-
-        {/* Footer */}
-        <DashboardFooter />
       </div>
 
       {/* ── Account Panel ─────────────────────────────────────────────────── */}
