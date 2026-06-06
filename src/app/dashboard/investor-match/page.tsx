@@ -549,44 +549,6 @@ Best regards,
         }}>
 
           {/* Hero Section */}
-          <section style={{ borderBottom: '1px solid #E5E4E0', padding: '1rem 1.5rem', background: '#F7F6F4', flexShrink: 0 }}>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
-            >
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                  <div style={{ padding: '0.5rem', background: '#F0F4FF', borderRadius: '0.375rem' }}>
-                    <Target className="w-5 h-5" style={{ color: '#1D4ED8' }} />
-                  </div>
-                  <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1D4ED8' }}>Investor Intelligence</span>
-                </div>
-                <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#1A1A1A', margin: '0 0 0.75rem 0', lineHeight: 1.2 }}>
-                  Investor Match™
-                </h1>
-                <p style={{ fontSize: '0.875rem', color: '#717171', margin: 0 }}>
-                  AI-matched investors + CRM pipeline. Find, reach out, and track conversations.
-                </p>
-              </div>
-              {showCRM && (
-                <button
-                  onClick={() => setShowInvestors(false)}
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    cursor: 'pointer',
-                    padding: '0.25rem',
-                    color: '#717171'
-                  }}
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </motion.div>
-          </section>
-
           {/* Filters Section */}
           <section style={{ padding: '1rem 1.5rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0', flexShrink: 0 }}>
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
