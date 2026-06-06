@@ -163,8 +163,12 @@ export class UnifiedDocumentService {
 
       // Get cloud credentials for company
       const credentials = await this.getProviderCredentials(companyId, storageProvider)
-      const adapter = CloudStorageAdapterFactory.getAdapter(
-        storageProvider as any,
+      // Phase 1: Google Drive only
+      if (storageProvider !== 'google_drive') {
+        throw new Error(`${storageProvider} storage not yet available. Coming in Phase 1, Week 2.`)
+      }
+
+      const adapter = CloudStorageAdapterFactory.getGoogleDriveAdapter(
         credentials.accessToken,
         credentials.refreshToken,
         credentials.expiresAt

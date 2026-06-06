@@ -136,32 +136,60 @@ export abstract class CloudStorageAdapter {
  * Factory to get appropriate adapter
  */
 export class CloudStorageAdapterFactory {
-  static getAdapter(
+  static async getAdapter(
     provider: 'google_drive' | 'dropbox' | 'onedrive' | 'box',
     accessToken: string,
     refreshToken?: string,
     expiresAt?: Date
-  ): CloudStorageAdapter {
+  ): Promise<CloudStorageAdapter> {
     switch (provider) {
-      case 'google_drive':
-        // Lazy import to avoid loading all adapters
-        const GoogleDriveAdapter = require('./google-drive-adapter').GoogleDriveAdapter
+      case 'google_drive': {
+        // Dynamic import to avoid loading all adapters at build time
+        const { GoogleDriveAdapter } = await import('./google-drive-adapter')
         return new GoogleDriveAdapter(accessToken, refreshToken, expiresAt)
+      }
 
-      case 'dropbox':
-        const DropboxAdapter = require('./dropbox-adapter').DropboxAdapter
-        return new DropboxAdapter(accessToken, refreshToken, expiresAt)
+      case 'dropbox': {
+        try {
+          const { DropboxAdapter } = await import('./dropbox-adapter')
+          return new DropboxAdapter(accessToken, refreshToken, expiresAt)
+        } catch {
+          throw new Error('Dropbox adapter not yet implemented. Coming in Phase 1, Week 2.')
+        }
+      }
 
-      case 'onedrive':
-        const OneDriveAdapter = require('./onedrive-adapter').OneDriveAdapter
-        return new OneDriveAdapter(accessToken, refreshToken, expiresAt)
+      case 'onedrive': {
+        try {
+          const { OneDriveAdapter } = await import('./onedrive-adapter')
+          return new OneDriveAdapter(accessToken, refreshToken, expiresAt)
+        } catch {
+          throw new Error('OneDrive adapter not yet implemented. Coming in Phase 1, Week 2.')
+        }
+      }
 
-      case 'box':
-        const BoxAdapter = require('./box-adapter').BoxAdapter
-        return new BoxAdapter(accessToken, refreshToken, expiresAt)
+      case 'box': {
+        try {
+          const { BoxAdapter } = await import('./box-adapter')
+          return new BoxAdapter(accessToken, refreshToken, expiresAt)
+        } catch {
+          throw new Error('Box adapter not yet implemented. Coming in Phase 1, Week 3.')
+        }
+      }
 
       default:
         throw new Error(`Unsupported cloud storage provider: ${provider}`)
     }
+  }
+
+  /**
+   * Synchronous version for Google Drive only (Phase 1)
+   */
+  static getGoogleDriveAdapter(
+    accessToken: string,
+    refreshToken?: string,
+    expiresAt?: Date
+  ) {
+    const { GoogleDriveAdapter } = require('./google-drive-adapter')
+    return new GoogleDriveAdapter(accessToken, refreshToken, expiresAt)
   }
 }
