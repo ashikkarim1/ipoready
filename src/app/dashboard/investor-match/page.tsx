@@ -983,9 +983,9 @@ Best regards,
                   borderRadius: '0.75rem',
                   border: '1px solid #E5E4E0',
                   boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-                  maxWidth: '1200px',
-                  width: '95%',
-                  maxHeight: '90vh',
+                  maxWidth: '1400px',
+                  width: '92%',
+                  maxHeight: '92vh',
                   overflowY: 'auto',
                   zIndex: 50
                 }}
