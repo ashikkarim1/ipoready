@@ -173,32 +173,28 @@ const PLANS = [
 
 const FAQS = [
   {
-    q: 'Is IPOReady a securities dealer or underwriter?',
-    a: 'No. IPOReady is a workflow management platform only. We do not provide investment banking, underwriting, legal, or accounting services. All regulatory filings must be executed by licensed professionals.',
+    q: 'What is IPOReady investor access?',
+    a: 'IPOReady provides institutional investors real-time visibility into verified companies executing IPO and RTO journeys across North America. Get deal flow alerts, PACE™ readiness scores, and direct access to verified companies.',
   },
   {
-    q: 'Why do I need profile approval before accessing?',
-    a: 'IPOReady is built for credibility. We verify that all users are genuinely involved in a listing process — this ensures the Expert Network remains high-quality and all parties can trust the platform.',
+    q: 'How is the deal flow verified?',
+    a: 'All companies on IPOReady complete profile verification and board approval confirmation. We work directly with CFOs, legal counsel, and board members — not speculators. This ensures you\'re seeing genuine IPO/RTO activity.',
   },
   {
-    q: 'Are templates legally reviewed?',
-    a: 'Our templates are drafted with input from securities lawyers and updated quarterly to reflect current exchange policies. They are starting points — your legal counsel must review and customize them for your specific situation.',
+    q: 'Can I cancel my trial anytime?',
+    a: 'Yes. Cancel your trial anytime before the first month ends. No questions asked, no credit card charges. After your trial, you can cancel month-to-month subscriptions anytime.',
   },
   {
-    q: 'What are the commitment periods?',
-    a: 'Starter plans require a 1-month minimum, Growth plans require 3 months, and Enterprise plans require a 3-month minimum. After your initial commitment, all plans auto-renew on a month-to-month basis — you must cancel manually to stop. These minimums ensure you have enough runway to experience the full value of the platform — IPO readiness is a multi-month journey, not a one-time checklist.',
+    q: 'What\'s the difference between Canada and USA plans?',
+    a: 'The Canada plan gives you access to TSX, TSXV, and CSE deal flow. The USA plan includes everything in Canada plus NASDAQ, NYSE, and OTC deal flow — the most deal flow available on any platform.',
   },
   {
-    q: 'Can I switch plans mid-listing?',
-    a: 'Yes. You can upgrade or downgrade at any time. When you upgrade, the new plan takes effect immediately and we prorate the billing difference.',
+    q: 'Can I add team members to my investor account?',
+    a: 'Yes. Additional seats are $99/month (Canada) or $149/month (USA). Each seat gets full access to deal alerts, analytics, and company profiles.',
   },
   {
-    q: 'Is pricing available in both USD and CAD?',
-    a: 'Yes. Use the toggle at the top of this page to switch between USD and CAD pricing. Both are valid and accepted at checkout.',
-  },
-  {
-    q: 'What happens after we list?',
-    a: 'Your subscription converts to a post-listing compliance plan for continuous disclosure tracking, AGM preparation, and ongoing regulatory calendar management.',
+    q: 'Do you offer enterprise contracts?',
+    a: 'Yes. Contact us for custom pricing on enterprise agreements with multiple seats, dedicated support, and API access for firms managing large portfolios.',
   },
 ]
 
@@ -351,312 +347,17 @@ export default function PricingPage() {
           </div>
           <h1 className="serif text-5xl text-nav mb-4 leading-tight">
             {language === 'en'
-              ? <>Your Complete<br /><span style={{ color: '#E8312A' }}>IPO Readiness Platform</span></>
-              : <>Votre plateforme complète<br /><span style={{ color: '#E8312A' }}>de préparation IPO</span></>
+              ? <>Deal Flow<br /><span style={{ color: '#E8312A' }}>Built for Investors</span></>
+              : <>Flux de transactions<br /><span style={{ color: '#E8312A' }}>Conçu pour les investisseurs</span></>
             }
           </h1>
           <p className="text-text-muted text-lg max-w-2xl mx-auto mb-3">
             {language === 'en'
-              ? 'A typical IPO costs $500K–$2M in professional fees. IPOReady helps you get organized, stay on track, and connect with experts — at a fraction of the cost.'
-              : "Un PAPE typique coûte 500K$–2M$ en honoraires. IPOReady vous aide à vous organiser et rester sur la bonne voie."}
+              ? 'Get real-time visibility into verified companies executing IPO and RTO journeys across North America.'
+              : "Obtenez une visibilité en temps réel sur les entreprises vérifiées qui exécutent des processus d'IPO et d'RTO en Amérique du Nord."}
           </p>
-          <p className="label font-semibold" style={{ color: '#B45309' }}>
-            {language === 'en'
-              ? '⚡ Our AI and analytics expand weekly — lock in founder pricing now.'
-              : "⚡ Notre IA s'améliore chaque semaine — bloquez le tarif fondateur maintenant."}
-          </p>
-
-          {/* Billing toggle */}
-          <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.625rem' }}>
-            <div className="inline-flex items-center gap-1 p-1 rounded-2xl"
-              style={{ background: '#EFEFED', border: '1px solid #E5E4E0' }}>
-              {BILLING_OPTIONS.map(opt => (
-                <button
-                  key={opt.key}
-                  onClick={() => setBilling(opt.key)}
-                  className="relative rounded-xl label font-semibold transition-all flex items-center gap-2"
-                  style={{
-                    padding: '0.625rem 1.25rem',
-                    ...(billing === opt.key
-                      ? { background: 'white', color: '#1A1A1A', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }
-                      : { color: '#9A9A9A' })
-                  }}
-                >
-                  {language === 'en' ? opt.labelEn : opt.labelFr}
-                  {opt.badge && (
-                    <span style={{
-                      fontSize: '10px', padding: '0.125rem 0.375rem', borderRadius: '9999px', fontWeight: 700,
-                      ...(opt.key === 'annual'
-                        ? { background: '#FDECEB', color: '#E8312A', border: '1px solid rgba(232,49,42,0.2)' }
-                        : { background: '#F7F6F4', color: '#717171', border: '1px solid #E5E4E0' })
-                    }}>
-                      {opt.badge}
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-
-            <AnimatePresence mode="wait">
-              {billing === 'monthly' && (
-                <motion.p key="monthly-note" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  className="text-text-light caption-sm">
-                  {language === 'en' ? 'All auto-renew month-to-month after initial commitment · cancel anytime' : 'Tous se renouvellent automatiquement mensuellement · annulez à tout moment'}
-                </motion.p>
-              )}
-              {billing === 'sixmonth' && (
-                <motion.p key="sixmonth-note" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  className="label-sm font-medium text-text-muted">
-                  {language === 'en' ? 'Save 20% vs monthly · billed every 6 months' : "20% d'économies vs mensuel · facturé tous les 6 mois"}
-                </motion.p>
-              )}
-              {billing === 'annual' && (
-                <motion.p key="annual-note" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  className="label-sm font-medium text-text-muted">
-                  {language === 'en' ? 'Best value — save 33% vs monthly · billed annually' : "Meilleure valeur — 33% d'économies vs mensuel · facturé annuellement"}
-                </motion.p>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Currency toggle */}
-          <div className="flex items-center justify-center gap-2" style={{ marginTop: '1rem' }}>
-            <Globe className="w-3.5 h-3.5 text-text-light" />
-            <div className="inline-flex items-center gap-0.5 p-0.5 rounded-lg"
-              style={{ background: '#EFEFED', border: '1px solid #E5E4E0' }}>
-              {(['USD', 'CAD'] as Currency[]).map(c => (
-                <button key={c} onClick={() => setCurrency(c)}
-                  className="px-3 py-1 rounded label-sm font-mono font-semibold transition-all"
-                  style={currency === c ? { background: '#1A1A1A', color: 'white' } : { color: '#9A9A9A' }}>
-                  ${c}
-                </button>
-              ))}
-            </div>
-          </div>
         </motion.div>
 
-        {/* Logged-in "you're all set" status banner */}
-        <AnimatePresence>
-          {isLoggedIn && !!(PLANS.find(p => p.id === userPlanId)?.nameEn) && (
-            <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              style={{ marginBottom: '1.5rem', padding: '16px 20px', borderRadius: '14px', background: '#F0FDF4', border: '1px solid #BBF7D0', display: 'flex', alignItems: 'center', gap: '12px' }}
-            >
-              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#DCFCE7', border: '1px solid #BBF7D0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <BadgeCheck style={{ width: '18px', height: '18px', color: '#16A34A' }} />
-              </div>
-              <div style={{ flex: 1 }}>
-                <p style={{ fontSize: '14px', fontWeight: 700, color: '#15803D', marginBottom: '2px' }}>
-                  {language === 'en' ? `You're on the ${PLANS.find(p => p.id === userPlanId)?.nameEn} Plan` : `Vous êtes sur le plan ${PLANS.find(p => p.id === userPlanId)?.nameFr ?? PLANS.find(p => p.id === userPlanId)?.nameEn}`}
-                </p>
-                <p style={{ fontSize: '12px', color: '#4ADE80', opacity: 0.8 }}>
-                  {language === 'en'
-                    ? 'Your subscription is active. Upgrade anytime — changes take effect immediately with prorated billing.'
-                    : 'Votre abonnement est actif. Mettez à niveau à tout moment avec facturation au prorata.'}
-                </p>
-              </div>
-              <Link href="/account"
-                style={{ fontSize: '12px', fontWeight: 600, color: '#15803D', textDecoration: 'none', padding: '6px 12px', borderRadius: '8px', border: '1px solid #BBF7D0', background: 'white', whiteSpace: 'nowrap' }}
-                onMouseEnter={e => (e.currentTarget.style.background = '#F0FDF4')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'white')}>
-                <TrendingUp style={{ width: '12px', height: '12px', display: 'inline', marginRight: '4px', verticalAlign: '-1px' }} />
-                {language === 'en' ? 'Manage Plan' : 'Gérer le plan'}
-              </Link>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Plans */}
-        <div className="grid md:grid-cols-3" style={{ gap: '1.5rem', marginBottom: '3rem', marginTop: '1rem', paddingTop: '1.5rem' }}>
-          {PLANS.map((plan, i) => (
-            <motion.div key={plan.id}
-              initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-              style={plan.isPopular
-                ? { background: 'white', border: '2px solid #1A1A1A', boxShadow: '0 8px 32px rgba(26,26,26,0.12)', borderRadius: '1rem', padding: '1.75rem', display: 'flex', flexDirection: 'column', position: 'relative' }
-                : { background: 'white', border: '1px solid #E5E4E0', boxShadow: '0 2px 12px rgba(0,0,0,0.04)', borderRadius: '1rem', padding: '1.75rem', display: 'flex', flexDirection: 'column', position: 'relative' }
-              }>
-              {plan.badge && (
-                <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap' }}>
-                  <span className="label-xs font-bold"
-                    style={plan.isPopular
-                      ? { background: '#1A1A1A', color: 'white', padding: '0.25rem 0.75rem', borderRadius: '9999px', display: 'inline-block' }
-                      : { background: '#FEF3C7', color: '#B45309', border: '1px solid #FDE68A', padding: '0.25rem 0.75rem', borderRadius: '9999px', display: 'inline-block' }}>
-                    {plan.badge}
-                  </span>
-                </div>
-              )}
-
-              <div className="mb-5">
-                <h3 className="font-display text-xl font-bold text-nav mb-1">
-                  {language === 'en' ? plan.nameEn : plan.nameFr}
-                </h3>
-                <p className="text-text-muted body-sm">
-                  {language === 'en' ? plan.descriptionEn : plan.descriptionFr}
-                </p>
-              </div>
-
-              {plan.id === 'listed-services' ? (
-                <div className="mb-5 pb-5" style={{ borderBottom: '1px solid #E5E4E0' }}>
-                  <div className="mb-3 p-4 rounded-lg" style={{ background: '#F0FDF4', border: '1px solid #BBF7D0' }}>
-                    <p className="label font-bold text-green-700 mb-2">
-                      {language === 'en' ? 'Pricing Coming Soon' : 'Tarification à venir'}
-                    </p>
-                    <p className="body-sm text-green-600">
-                      {language === 'en'
-                        ? 'Unlocks automatically when your company lists. Included with Growth tier.'
-                        : 'Déverrouillé automatiquement lorsque votre entreprise est cotée. Inclus dans le forfait Growth.'}
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="mb-5 pb-5" style={{ borderBottom: '1px solid #E5E4E0' }}>
-                  <div className="flex items-center gap-2 flex-wrap mb-1.5">
-                    <span className="font-medium line-through text-text-light body-sm">
-                      {formatPrice(getOriginalPrice(plan))}
-                    </span>
-                    <span className="label-xs px-2 py-0.5 rounded-full font-bold"
-                      style={{ background: '#FDECEB', color: '#E8312A', border: '1px solid rgba(232,49,42,0.15)' }}>
-                      50% OFF
-                    </span>
-                  </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="font-display text-4xl font-black text-nav">{formatPrice(getPrice(plan))}</span>
-                    <span className="text-text-muted body-sm">/mo</span>
-                  </div>
-                  <p className="label-sm mt-1.5 text-text-muted font-medium">{getBilledNote(plan)}</p>
-                </div>
-              )}
-
-              <div className="mb-5">
-                <div className="flex flex-wrap gap-1 mb-2.5">
-                  {plan.exchanges.map(ex => (
-                    <span key={ex} className="label-sm px-2 py-0.5 rounded-full font-medium"
-                      style={{ background: '#F7F6F4', color: '#717171', border: '1px solid #E5E4E0' }}>
-                      {ex}
-                    </span>
-                  ))}
-                </div>
-                <p className="text-text-muted caption-sm flex items-center gap-1">
-                  <Users className="w-3 h-3" />
-                  {plan.maxMembers === 999 ? 'Unlimited members' : `Up to ${plan.maxMembers} members`}
-                </p>
-              </div>
-
-              <ul className="space-y-2 mb-8 flex-1">
-                {plan.features.map((feature, j) => (
-                  <li key={j} className="flex items-start gap-2 body-sm">
-                    <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#2D7A5F' }} />
-                    <span className="text-text-muted">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {(() => {
-                const cta = getPlanCta(plan)
-                const isLoading = checkoutLoading === plan.id
-                if (cta.isActive) {
-                  return (
-                    <div
-                      className="flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold body-sm mt-auto"
-                      style={{ background: '#F0FDF4', color: '#15803D', border: '1px solid #BBF7D0' }}>
-                      {cta.label}
-                    </div>
-                  )
-                }
-                return (
-                  <button
-                    onClick={() => handleCheckout(plan.id)}
-                    disabled={isLoading || !!checkoutLoading}
-                    className="flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold body-sm transition-all mt-auto disabled:opacity-60"
-                    style={
-                      cta.isUpgrade
-                        ? { background: '#1A1A1A', color: 'white' }
-                        : plan.isPopular && !isLoggedIn
-                          ? { background: '#1A1A1A', color: 'white' }
-                          : { background: '#F7F6F4', color: '#1A1A1A', border: '1px solid #E5E4E0' }
-                    }
-                    onMouseEnter={e => {
-                      if (isLoading) return
-                      if (cta.isUpgrade || (plan.isPopular && !isLoggedIn)) (e.currentTarget as HTMLButtonElement).style.background = '#333'
-                      else (e.currentTarget as HTMLButtonElement).style.background = '#EFEFED'
-                    }}
-                    onMouseLeave={e => {
-                      if (cta.isUpgrade || (plan.isPopular && !isLoggedIn)) (e.currentTarget as HTMLButtonElement).style.background = '#1A1A1A'
-                      else (e.currentTarget as HTMLButtonElement).style.background = '#F7F6F4'
-                    }}>
-                    {isLoading
-                      ? <><span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin inline-block" /> Redirecting…</>
-                      : <>{cta.label} {!cta.isActive && <ArrowRight className="w-4 h-4" />}</>}
-                  </button>
-                )
-              })()}
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Feature comparison table */}
-        <div className="card rounded-2xl p-8 mb-10">
-          <h2 className="serif text-2xl text-nav mb-6 text-center">
-            {language === 'en' ? 'Feature Comparison' : "Comparaison des fonctionnalités"}
-          </h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr style={{ borderBottom: '2px solid #E5E4E0' }}>
-                  <th className="pb-3 pr-4"><p className="label-sm font-bold text-nav">{language === 'en' ? 'Feature' : 'Fonction'}</p></th>
-                  <th className="pb-3 px-2"><p className="label-sm font-bold text-nav">Starter</p></th>
-                  <th className="pb-3 px-2"><p className="label-sm font-bold text-nav">Growth</p></th>
-                  <th className="pb-3 px-2"><p className="label-sm font-bold text-nav">Listed Services</p></th>
-                  <th className="pb-3 pl-2"><p className="label-sm font-bold text-nav">Enterprise</p></th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { feature: language === 'en' ? 'Filing Automation' : 'Automatisation des dépôts', starter: 'No', growth: 'SEDAR 2', listedServices: 'Coming Soon', enterprise: '50+ countries' },
-                  { feature: language === 'en' ? 'AI Disclosure & Filing' : 'IA Divulgation & Dépôt', starter: 'No', growth: 'Basic', listedServices: 'Advanced', enterprise: 'Advanced' },
-                  { feature: language === 'en' ? 'M&A Intelligence' : 'Intelligence F&A', starter: 'No', growth: 'No', listedServices: 'Coming Soon', enterprise: 'Yes' },
-                  { feature: language === 'en' ? 'CFO/CEO Coaching AI' : 'IA Coaching CFO/CEO', starter: 'No', growth: 'No', listedServices: 'Coming Soon', enterprise: 'Yes' },
-                ].map(({ feature, starter, growth, listedServices, enterprise }, idx) => (
-                  <tr key={idx} style={{ borderBottom: '1px solid #E5E4E0' }}>
-                    <td className="py-4 pr-4"><p className="body-sm text-nav font-medium">{feature}</p></td>
-                    <td className="py-4 px-2"><p className="body-sm text-text-muted">{starter}</p></td>
-                    <td className="py-4 px-2"><p className="body-sm text-text-muted">{growth}</p></td>
-                    <td className="py-4 px-2"><p className="body-sm font-semibold" style={{ color: '#2D7A5F' }}>{listedServices}</p></td>
-                    <td className="py-4 pl-2"><p className="body-sm font-semibold" style={{ color: '#2D7A5F' }}>{enterprise}</p></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Value comparison */}
-        <div className="card rounded-2xl p-8 mb-10">
-          <h2 className="serif text-2xl text-nav mb-2 text-center">
-            {language === 'en' ? 'The Real Cost of Going Public' : "Le vrai coût d'une introduction en bourse"}
-          </h2>
-          <p className="text-text-muted body-sm text-center mb-8">
-            {language === 'en'
-              ? 'IPOReady does not replace professionals — it organizes your workflow so you use their time more efficiently.'
-              : 'IPOReady ne remplace pas les professionnels — il organise votre flux de travail.'}
-          </p>
-          <div className="grid md:grid-cols-3 gap-5 text-center">
-            {[
-              { label: 'Securities Lawyer',       typical: '$200K–$800K', ipoReady: 'Included guidance', savings: 'up to $400K' },
-              { label: 'Workflow Management',     typical: '$50K–$150K',  ipoReady: 'from $349/mo',      savings: 'up to $148K' },
-              { label: 'Prospectus & S-1 Prep',   typical: '$20K–$60K',   ipoReady: 'AI-powered builder', savings: 'up to $60K' },
-            ].map(({ label, typical, ipoReady, savings }) => (
-              <div key={label} className="p-5 rounded-xl" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
-                <p className="font-semibold text-nav body-sm mb-3">{label}</p>
-                <p className="caption-sm text-text-muted mb-1">Traditional: <span className="text-accent font-semibold">{typical}</span></p>
-                <p className="caption-sm text-text-muted mb-2">IPOReady: <span className="font-semibold text-nav">{ipoReady}</span></p>
-                <p className="body-sm font-bold text-nav">Save {savings}</p>
-              </div>
-            ))}
-          </div>
-        </div>
 
         {/* ─── INVESTOR PLANS SECTION ─────────────────────────────────── */}
         <div className="py-32 md:py-48" style={{ borderTop: '2px solid #E5E4E0', marginTop: '4rem', marginBottom: '4rem' }}>
@@ -681,7 +382,7 @@ export default function PricingPage() {
             </motion.div>
 
             {/* Investor Plans Grid */}
-            <div className="grid md:grid-cols-2 gap-8 mb-10">
+            <div className="grid md:grid-cols-3 gap-8 mb-10">
               {/* Canada Plan */}
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }} viewport={{ once: true }}
                 style={{ background: 'white', border: '2px solid #E5E4E0', borderRadius: '1rem', padding: '2rem' }}>
@@ -807,6 +508,51 @@ export default function PricingPage() {
                     : (language === 'en' ? 'Start Free Trial →' : 'Commencer l\'essai gratuit →')}
                 </button>
               </motion.div>
+
+              {/* Listed Services Plan */}
+              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }} viewport={{ once: true }}
+                style={{ background: 'white', border: '1px solid #E5E4E0', boxShadow: '0 2px 12px rgba(0,0,0,0.04)', borderRadius: '1rem', padding: '2rem', position: 'relative' }}>
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Zap className="w-5 h-5" style={{ color: '#E8312A' }} />
+                    <h3 className="font-display text-2xl font-bold text-nav">🚀 Listed Services</h3>
+                  </div>
+                  <p className="text-text-muted text-sm mb-4">
+                    {language === 'en' ? 'AI-powered OS for public companies' : 'Système d\'exploitation IA pour sociétés publiques'}
+                  </p>
+                </div>
+
+                {/* Coming Soon */}
+                <div className="mb-8 p-4 rounded-lg" style={{ background: '#F0FDF4', border: '1px solid #BBF7D0' }}>
+                  <p className="text-xs font-semibold text-success mb-1 uppercase tracking-wider">
+                    {language === 'en' ? 'Unlocks at IPO' : 'Déverrouillé à l\'IPO'}
+                  </p>
+                  <p className="text-3xl font-bold text-nav mb-1">{language === 'en' ? 'Custom' : 'Personnalisé'}</p>
+                  <p className="text-xs text-text-muted">{language === 'en' ? 'Included with Growth plan post-listing' : 'Inclus avec le plan Growth après l\'IPO'}</p>
+                </div>
+
+                {/* Features */}
+                <div className="space-y-3 mb-8">
+                  {[
+                    language === 'en' ? 'Disclosure & Filings AI' : 'IA Divulgation et dépôts',
+                    language === 'en' ? 'Predictive Analytics' : 'Analyse prédictive',
+                    language === 'en' ? 'Analyst Coverage Intelligence' : 'Intelligence de couverture',
+                    language === 'en' ? 'M&A Intelligence Engine' : 'Moteur d\'intelligence F&A',
+                    language === 'en' ? 'CFO/CEO Coaching AI' : 'IA Coaching CFO/CEO',
+                  ].map((feature, i) => (
+                    <div key={i} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
+                      <span className="text-sm text-nav">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <button disabled
+                  className="w-full font-semibold text-white px-4 py-3 rounded-full transition-all opacity-50"
+                  style={{ background: '#9A9A9A' }}>
+                  {language === 'en' ? 'Coming Soon' : 'Bientôt disponible'}
+                </button>
+              </motion.div>
             </div>
 
             {/* Pricing Note */}
@@ -857,54 +603,17 @@ export default function PricingPage() {
 
         {/* CTA strip */}
         <div className="card rounded-2xl p-10 text-center mb-8" style={{ background: '#1A1A1A', borderColor: '#1A1A1A' }}>
-          {isLoggedIn && !!(PLANS.find(p => p.id === userPlanId)?.nameEn) ? (
-            <>
-              <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-                <BadgeCheck style={{ width: '22px', height: '22px', color: '#22C55E' }} />
-              </div>
-              <h2 className="serif text-3xl text-white mb-3">
-                {language === 'en' ? `You're all set on ${PLANS.find(p => p.id === userPlanId)?.nameEn} ✓` : `Vous êtes prêt sur ${PLANS.find(p => p.id === userPlanId)?.nameFr ?? PLANS.find(p => p.id === userPlanId)?.nameEn} ✓`}
-              </h2>
-              <p className="mb-6 max-w-xl mx-auto body-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>
-                {language === 'en'
-                  ? 'Your subscription is active and your PACE™ engine is running. Head to your dashboard to track your IPO velocity.'
-                  : "Votre abonnement est actif et votre moteur PACE™ fonctionne. Rendez-vous sur votre tableau de bord."}
-              </p>
-              <Link href="/dashboard"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold body-sm text-nav transition-all"
-                style={{ background: '#FFFFFF' }}
-                onMouseEnter={e => (e.currentTarget.style.background = '#F7F6F4')}
-                onMouseLeave={e => (e.currentTarget.style.background = '#FFFFFF')}>
-                {language === 'en' ? 'Go to Dashboard' : 'Aller au tableau de bord'}
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <p className="caption-sm mt-3" style={{ color: 'rgba(255,255,255,0.25)' }}>
-                {language === 'en' ? 'Need to upgrade or change your plan? Use the cards above.' : 'Besoin de changer de plan? Utilisez les cartes ci-dessus.'}
-              </p>
-            </>
-          ) : (
-            <>
-              <h2 className="serif text-3xl text-white mb-3">
-                {language === 'en' ? 'Ready to start your IPO journey?' : 'Prêt à commencer votre parcours IPO?'}
-              </h2>
-              <p className="mb-6 max-w-xl mx-auto body-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>
-                {language === 'en'
-                  ? 'Join hundreds of companies using IPOReady to track, manage, and accelerate their path to public markets.'
-                  : "Rejoignez des centaines d'entreprises qui utilisent IPOReady pour accélérer leur chemin vers les marchés publics."}
-              </p>
-              <Link href="/register"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold body-sm text-nav transition-all"
-                style={{ background: '#FFFFFF' }}
-                onMouseEnter={e => (e.currentTarget.style.background = '#F7F6F4')}
-                onMouseLeave={e => (e.currentTarget.style.background = '#FFFFFF')}>
-                {language === 'en' ? 'Get Started Free' : 'Commencer gratuitement'}
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <p className="caption-sm mt-3" style={{ color: 'rgba(255,255,255,0.25)' }}>
-                {language === 'en' ? 'No credit card required for trial · Cancel anytime after 3 months' : "Aucune carte de crédit requise pour l'essai"}
-              </p>
-            </>
-          )}
+          <h2 className="serif text-3xl text-white mb-3">
+            {language === 'en' ? 'Access Deal Flow You Can\'t Get Anywhere Else' : 'Accédez à des flux de transactions que vous ne pouvez trouver nulle part ailleurs'}
+          </h2>
+          <p className="mb-6 max-w-xl mx-auto body-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>
+            {language === 'en'
+              ? 'Real-time visibility into verified companies executing IPO and RTO journeys. Start your free trial today.'
+              : "Visibilité en temps réel sur les entreprises vérifiées exécutant les journées d'IPO et d'RTO. Commencez votre essai gratuit dès aujourd'hui."}
+          </p>
+          <p className="caption-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
+            {language === 'en' ? '💳 No credit card required for trial · Cancel anytime' : '💳 Aucune carte de crédit requise · Annulez à tout moment'}
+          </p>
         </div>
 
         {/* Legal Disclaimer */}
