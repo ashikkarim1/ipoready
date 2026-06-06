@@ -73,19 +73,30 @@ Please follow up with this prospect within 24 hours.
     if (response.error) {
       console.error('Resend error:', response.error)
       return NextResponse.json(
-        { message: 'Failed to send email' },
+        {
+          message: 'Failed to send email',
+          details: response.error.message || 'Email service error'
+        },
         { status: 500 }
       )
     }
 
     return NextResponse.json(
-      { message: 'Demo request submitted successfully', id: response.data?.id },
+      {
+        message: 'Demo request submitted successfully',
+        id: response.data?.id,
+        success: true
+      },
       { status: 200 }
     )
   } catch (error) {
-    console.error('Demo submission error:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error('Demo submission error:', errorMessage, error)
     return NextResponse.json(
-      { message: 'Internal server error' },
+      {
+        message: 'Internal server error',
+        details: errorMessage
+      },
       { status: 500 }
     )
   }

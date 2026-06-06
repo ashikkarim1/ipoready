@@ -148,7 +148,11 @@ export async function POST(req: NextRequest) {
       redirect: '/trial/cap-table-setup',
     }, { status: 201 })
   } catch (err) {
-    console.error('[lead-capture POST]', err)
-    return NextResponse.json({ error: 'Failed to capture lead' }, { status: 500 })
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+    console.error('[lead-capture POST]', errorMessage, err)
+    return NextResponse.json({
+      error: 'Failed to capture lead',
+      details: errorMessage
+    }, { status: 500 })
   }
 }
