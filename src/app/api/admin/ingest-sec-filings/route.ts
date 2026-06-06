@@ -24,21 +24,26 @@ export async function POST(request: NextRequest) {
     const companyIds = request.nextUrl.searchParams.get('companyIds')
     const limit = parseInt(request.nextUrl.searchParams.get('limit') || '50')
 
-    let query = 'SELECT id, cik FROM capital_companies WHERE cik IS NOT NULL'
-    const params: any[] = []
+    // For parameterized queries with Neon, build template literal
+    let result: any[] = []
 
     if (companyIds) {
       const ids = companyIds.split(',')
-      query += ` AND id = ANY($1)`
-      params.push(ids)
+      result = await sql`
+        SELECT id, cik FROM capital_companies
+        WHERE cik IS NOT NULL
+        AND id = ANY(${ids})
+        LIMIT ${limit}
+      `
+    } else {
+      result = await sql`
+        SELECT id, cik FROM capital_companies
+        WHERE cik IS NOT NULL
+        LIMIT ${limit}
+      `
     }
 
-    query += ` LIMIT $${params.length + 1}`
-    params.push(limit)
-
-    const result = await sql(query, params)
-
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       return NextResponse.json({
         message: 'No companies found to ingest',
         count: 0,
@@ -55,11 +60,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       message: 'SEC filing ingestion completed',
       statistics: {
-        total: result.rows.length,
+        total: result.length,
         successful: ingestionResults.success,
         failed: ingestionResults.failed,
         duration_ms: duration,
-        avg_per_company_ms: Math.round(duration / result.rows.length),
+        avg_per_company_ms: Math.round(duration / result.length),
       },
       errors: ingestionResults.errors.slice(0, 10), // Return first 10 errors
     })
@@ -78,24 +83,24 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   try {
-    const syncLog = await db.query(
-      `SELECT * FROM data_sync_log
-       WHERE source = 'SEC_EDGAR'
-       ORDER BY created_at DESC
-       LIMIT 10`
-    )
+    const syncLog = await sql`
+      SELECT * FROM data_sync_log
+      WHERE source = 'SEC_EDGAR'
+      ORDER BY created_at DESC
+      LIMIT 10
+    `
 
-    const companies = await db.query(
-      `SELECT COUNT(*) as total,
-              COUNT(CASE WHEN last_10k_date IS NOT NULL THEN 1 END) as with_10k,
-              COUNT(CASE WHEN last_10q_date IS NOT NULL THEN 1 END) as with_10q
-       FROM capital_companies`
-    )
+    const companies = await sql`
+      SELECT COUNT(*) as total,
+             COUNT(CASE WHEN last_10k_date IS NOT NULL THEN 1 END) as with_10k,
+             COUNT(CASE WHEN last_10q_date IS NOT NULL THEN 1 END) as with_10q
+      FROM capital_companies
+    `
 
     return NextResponse.json({
       status: 'ok',
-      companies_coverage: companies.rows[0],
-      recent_syncs: syncLog.rows,
+      companies_coverage: companies[0],
+      recent_syncs: syncLog,
     })
   } catch (error) {
     console.error('Get SEC status error:', error)
