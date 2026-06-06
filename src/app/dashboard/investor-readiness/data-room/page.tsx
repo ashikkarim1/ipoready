@@ -39,6 +39,8 @@ interface UnifiedDocument {
   uploadedBy: string
   commentCount: number
   currentVersion: number
+  requiredForFiling?: boolean
+  approvedAt?: string
 }
 
 interface DataRoomFolder {
