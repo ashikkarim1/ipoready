@@ -391,3 +391,78 @@ export async function sendBoardReportEmail(userId: string, options: {
     tags: ['report', 'board'],
   })
 }
+
+/**
+ * Helper: Send demo request confirmation email to user
+ */
+export async function sendDemoConfirmationEmail(options: {
+  name: string
+  email: string
+  companyName: string
+}): Promise<{ success: boolean; error?: string }> {
+  try {
+    // This is sent without userId since user may not have account yet
+    const { subject, html } = renderEmailTemplate('demo-confirmation', {
+      name: options.name,
+      companyName: options.companyName,
+      supportEmail: 'hello@ipoready.ai',
+    })
+
+    const response = await resend.emails.send({
+      from: FROM_ADDRESS,
+      to: options.email,
+      subject,
+      html,
+    })
+
+    if (response.error) {
+      console.error('[email] Demo confirmation send failed:', response.error)
+      return { success: false, error: response.error.message }
+    }
+
+    return { success: true }
+  } catch (err) {
+    const error = err instanceof Error ? err.message : 'Unknown error'
+    console.error('[email] Demo confirmation error:', error)
+    return { success: false, error }
+  }
+}
+
+/**
+ * Helper: Send lead capture confirmation email to user
+ */
+export async function sendLeadConfirmationEmail(options: {
+  name: string
+  email: string
+  companyName: string
+  trialDays?: number
+}): Promise<{ success: boolean; error?: string }> {
+  try {
+    // This is sent without userId since user may not have account yet
+    const { subject, html } = renderEmailTemplate('lead-confirmation', {
+      name: options.name,
+      companyName: options.companyName,
+      trialDays: options.trialDays || 14,
+      dashboardUrl: process.env.NEXTAUTH_URL,
+      supportEmail: 'hello@ipoready.ai',
+    })
+
+    const response = await resend.emails.send({
+      from: FROM_ADDRESS,
+      to: options.email,
+      subject,
+      html,
+    })
+
+    if (response.error) {
+      console.error('[email] Lead confirmation send failed:', response.error)
+      return { success: false, error: response.error.message }
+    }
+
+    return { success: true }
+  } catch (err) {
+    const error = err instanceof Error ? err.message : 'Unknown error'
+    console.error('[email] Lead confirmation error:', error)
+    return { success: false, error }
+  }
+}

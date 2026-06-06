@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sql } from '@/lib/db'
 import { resend, FROM_ADDRESS } from '@/lib/resend'
+import { sendLeadConfirmationEmail } from '@/lib/email-service'
 
 /**
  * GET /api/lead-capture/check-email?email=X
@@ -140,6 +141,14 @@ export async function POST(req: NextRequest) {
       console.error('[lead-capture] Failed to send CEO notification:', emailError)
       // Don't fail the request if email sending fails
     }
+
+    // Send confirmation email to user (fire and forget)
+    sendLeadConfirmationEmail({
+      name: full_name,
+      email: normalizedEmail,
+      companyName: company_name,
+      trialDays: 14,
+    }).catch(err => console.error('[lead-capture] Failed to send user confirmation:', err))
 
     return NextResponse.json({
       success: true,

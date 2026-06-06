@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { sendDemoConfirmationEmail } from '@/lib/email-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -57,14 +58,14 @@ Please follow up with this prospect within 24 hours.
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #1a1a1a; margin-bottom: 24px;">New Demo Request from IPOReady</h2>
-          
+
           <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 24px;">
             <p style="margin: 0 0 12px 0;"><strong style="color: #666;">Company:</strong> ${company}</p>
             <p style="margin: 0 0 12px 0;"><strong style="color: #666;">Contact Name:</strong> ${contactName}</p>
             <p style="margin: 0 0 12px 0;"><strong style="color: #666;">Email:</strong> <a href="mailto:${email}" style="color: #E8312A; text-decoration: none;">${email}</a></p>
             <p style="margin: 0;"><strong style="color: #666;">Role:</strong> ${role}</p>
           </div>
-          
+
           <p style="color: #666; font-size: 14px; margin: 0;">Please follow up with this prospect within 24 hours.</p>
         </div>
       `,
@@ -80,6 +81,13 @@ Please follow up with this prospect within 24 hours.
         { status: 500 }
       )
     }
+
+    // Send confirmation email to user (fire and forget)
+    sendDemoConfirmationEmail({
+      name: contactName,
+      email,
+      companyName: company,
+    }).catch(err => console.error('[demo-submit] Failed to send user confirmation:', err))
 
     return NextResponse.json(
       {
