@@ -1,1163 +1,389 @@
- ⚠ Invalid next.config.js options detected: 
- ⚠     Unrecognized key(s) in object: 'instrumentationHook'
- ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+
+> ipoready@1.0.0 build
+> next build
+
   ▲ Next.js 14.2.35
-  - Environments: .env.local
+  - Environments: .env.production.local, .env.local, .env.production, .env
 
    Creating an optimized production build ...
  ✓ Compiled successfully
    Linting and checking validity of types ...
    Collecting page data ...
-   Generating static pages (0/35) ...
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Array.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '4050427871'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Array.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '48042'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Array.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '48042'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+   Generating static pages (0/133) ...
+   Generating static pages (33/133) 
+   Generating static pages (66/133) 
+   Generating static pages (99/133) 
+ ✓ Generating static pages (133/133)
+   Finalizing page optimization ...
+   Collecting build traces ...
 
-Error occurred prerendering page "/_not-found". Read more: https://nextjs.org/docs/messages/prerender-error
+Route (app)                                                            Size     First Load JS
+┌ ƒ /                                                                  16.1 kB         122 kB
+├ ƒ /_not-found                                                        184 B          87.9 kB
+├ ƒ /account                                                           12.8 kB         162 kB
+├ ƒ /account/email-digest-settings                                     2.9 kB          131 kB
+├ ƒ /account/privacy-settings                                          2.92 kB        99.4 kB
+├ ƒ /admin                                                             7.71 kB         154 kB
+├ ƒ /api/account/password                                              0 B                0 B
+├ ƒ /api/account/profile                                               0 B                0 B
+├ ƒ /api/account/whatsapp                                              0 B                0 B
+├ ƒ /api/admin/company-factors                                         0 B                0 B
+├ ƒ /api/admin/deploy-documents                                        0 B                0 B
+├ ƒ /api/admin/ingest-sec-filings                                      0 B                0 B
+├ ƒ /api/admin/send-summary                                            0 B                0 B
+├ ƒ /api/admin/users                                                   0 B                0 B
+├ ƒ /api/admin/users/[id]/approve                                      0 B                0 B
+├ ƒ /api/admin/users/[id]/plan                                         0 B                0 B
+├ ƒ /api/ai/board-report                                               0 B                0 B
+├ ƒ /api/ai/chat                                                       0 B                0 B
+├ ƒ /api/auth/[...nextauth]                                            0 B                0 B
+├ ƒ /api/auth/check-user                                               0 B                0 B
+├ ƒ /api/auth/email-verify                                             0 B                0 B
+├ ƒ /api/auth/forgot-password                                          0 B                0 B
+├ ○ /api/auth/google-drive                                             0 B                0 B
+├ ƒ /api/auth/google-drive/callback                                    0 B                0 B
+├ ƒ /api/auth/register                                                 0 B                0 B
+├ ƒ /api/auth/reset-password-confirm                                   0 B                0 B
+├ ƒ /api/badges/counts                                                 0 B                0 B
+├ ƒ /api/badges/dismiss                                                0 B                0 B
+├ ƒ /api/billing/cancel-subscription                                   0 B                0 B
+├ ƒ /api/billing/history                                               0 B                0 B
+├ ƒ /api/billing/portal                                                0 B                0 B
+├ ƒ /api/billing/subscription                                          0 B                0 B
+├ ƒ /api/billing/update-payment-method                                 0 B                0 B
+├ ƒ /api/cap-table                                                     0 B                0 B
+├ ƒ /api/cap-table/audit-log                                           0 B                0 B
+├ ƒ /api/cap-table/company                                             0 B                0 B
+├ ƒ /api/cap-table/csv/import                                          0 B                0 B
+├ ƒ /api/cap-table/csv/preview                                         0 B                0 B
+├ ƒ /api/cap-table/dilution                                            0 B                0 B
+├ ƒ /api/cap-table/dilution/export                                     0 B                0 B
+├ ƒ /api/cap-table/dilution/export/csv                                 0 B                0 B
+├ ƒ /api/cap-table/dilution/export/excel                               0 B                0 B
+├ ƒ /api/cap-table/dilution/presets                                    0 B                0 B
+├ ƒ /api/cap-table/export                                              0 B                0 B
+├ ƒ /api/cap-table/feature-check                                       0 B                0 B
+├ ƒ /api/cap-table/holders                                             0 B                0 B
+├ ƒ /api/cap-table/holders/[id]                                        0 B                0 B
+├ ƒ /api/cap-table/upload                                              0 B                0 B
+├ ƒ /api/cap-table/validate                                            0 B                0 B
+├ ƒ /api/cap-table/waterfall                                           0 B                0 B
+├ ƒ /api/capital-markets/companies                                     0 B                0 B
+├ ƒ /api/capital-markets/dashboard                                     0 B                0 B
+├ ƒ /api/capital-markets/ipos                                          0 B                0 B
+├ ƒ /api/checkout                                                      0 B                0 B
+├ ƒ /api/company                                                       0 B                0 B
+├ ƒ /api/company/seed-tasks                                            0 B                0 B
+├ ƒ /api/compliance/consents                                           0 B                0 B
+├ ƒ /api/compliance/consents/[id]                                      0 B                0 B
+├ ƒ /api/compliance/consents/generate                                  0 B                0 B
+├ ƒ /api/compliance/listing-rules                                      0 B                0 B
+├ ƒ /api/compliance/resolutions                                        0 B                0 B
+├ ƒ /api/compliance/resolutions/[id]                                   0 B                0 B
+├ ƒ /api/compliance/resolutions/[id]/approve                           0 B                0 B
+├ ƒ /api/compliance/resolutions/[id]/download                          0 B                0 B
+├ ƒ /api/compliance/resolutions/requirements                           0 B                0 B
+├ ƒ /api/compliance/templates                                          0 B                0 B
+├ ƒ /api/compliance/templates/download                                 0 B                0 B
+├ ƒ /api/consent/log                                                   0 B                0 B
+├ ƒ /api/costs                                                         0 B                0 B
+├ ƒ /api/cron/send-task-reminders                                      0 B                0 B
+├ ƒ /api/cron/trial-auto-upgrade-retry                                 0 B                0 B
+├ ƒ /api/dashboard                                                     0 B                0 B
+├ ƒ /api/dashboard/stats                                               0 B                0 B
+├ ƒ /api/data-room/nda-signed                                          0 B                0 B
+├ ƒ /api/demo/submit                                                   0 B                0 B
+├ ƒ /api/directors-officers/[directorId]/auto-populate-from-linkedin   0 B                0 B
+├ ƒ /api/directors-officers/[directorId]/delete-resume                 0 B                0 B
+├ ƒ /api/directors-officers/[directorId]/extract-resume-text           0 B                0 B
+├ ƒ /api/directors-officers/[directorId]/get-resume                    0 B                0 B
+├ ƒ /api/directors-officers/[directorId]/linkedin-verification-status  0 B                0 B
+├ ƒ /api/directors-officers/[directorId]/upload-resume                 0 B                0 B
+├ ƒ /api/directors-officers/[directorId]/verify-linkedin               0 B                0 B
+├ ƒ /api/directors-officers/bulk-update-sync                           0 B                0 B
+├ ƒ /api/directors-officers/check-compliance                           0 B                0 B
+├ ƒ /api/directors-officers/export/pdf                                 0 B                0 B
+├ ƒ /api/directors-officers/export/sec-edgar                           0 B                0 B
+├ ƒ /api/directors-officers/export/sedar2                              0 B                0 B
+├ ƒ /api/directors-officers/get-prospectus-section                     0 B                0 B
+├ ƒ /api/directors-officers/sync-to-prospectus                         0 B                0 B
+├ ƒ /api/documents                                                     0 B                0 B
+├ ƒ /api/documents/[id]/versions                                       0 B                0 B
+├ ƒ /api/documents/delete                                              0 B                0 B
+├ ƒ /api/documents/list                                                0 B                0 B
+├ ƒ /api/documents/notify                                              0 B                0 B
+├ ƒ /api/documents/notify-team                                         0 B                0 B
+├ ƒ /api/documents/reconcile                                           0 B                0 B
+├ ƒ /api/documents/relationships                                       0 B                0 B
+├ ƒ /api/documents/relationships/initialize                            0 B                0 B
+├ ƒ /api/documents/seed                                                0 B                0 B
+├ ƒ /api/documents/status                                              0 B                0 B
+├ ƒ /api/documents/submit                                              0 B                0 B
+├ ƒ /api/documents/templates                                           0 B                0 B
+├ ƒ /api/documents/upload                                              0 B                0 B
+├ ƒ /api/documents/validate                                            0 B                0 B
+├ ƒ /api/documents/verify                                              0 B                0 B
+├ ƒ /api/email-digest/generate                                         0 B                0 B
+├ ƒ /api/email-digest/settings                                         0 B                0 B
+├ ƒ /api/email/board-report                                            0 B                0 B
+├ ƒ /api/email/send                                                    0 B                0 B
+├ ƒ /api/email/status                                                  0 B                0 B
+├ ƒ /api/email/task-notification                                       0 B                0 B
+├ ƒ /api/email/weekly-summary                                          0 B                0 B
+├ ƒ /api/feedback                                                      0 B                0 B
+├ ƒ /api/feedback/[id]                                                 0 B                0 B
+├ ƒ /api/filing-documents/delete                                       0 B                0 B
+├ ƒ /api/filing-documents/get-document                                 0 B                0 B
+├ ƒ /api/filing-documents/get-requirements                             0 B                0 B
+├ ƒ /api/filing-documents/progress                                     0 B                0 B
+├ ƒ /api/filing-documents/templates                                    0 B                0 B
+├ ƒ /api/filing-documents/update-status                                0 B                0 B
+├ ƒ /api/filing-documents/upload-doc/[documentTypeId]                  0 B                0 B
+├ ƒ /api/filing/test-submit                                            0 B                0 B
+├ ƒ /api/filings/status                                                0 B                0 B
+├ ƒ /api/filings/status/:filingId                                      0 B                0 B
+├ ƒ /api/filings/submit                                                0 B                0 B
+├ ƒ /api/filings/test-submit                                           0 B                0 B
+├ ƒ /api/filings/webhook                                               0 B                0 B
+├ ƒ /api/financial-tracking                                            0 B                0 B
+├ ƒ /api/financial/cost-calculator                                     0 B                0 B
+├ ƒ /api/financial/cost-calculator/export-pdf                          0 B                0 B
+├ ƒ /api/financial/cost-calculator/history                             0 B                0 B
+├ ƒ /api/financial/cost-calculator/save                                0 B                0 B
+├ ƒ /api/financial/tracking                                            0 B                0 B
+├ ƒ /api/generate-market-ir-pdf                                        0 B                0 B
+├ ƒ /api/health/cap-table                                              0 B                0 B
+├ ƒ /api/health/trial-auto-upgrade                                     0 B                0 B
+├ ƒ /api/health/webhooks                                               0 B                0 B
+├ ƒ /api/hiring/[id]/calculate-fees                                    0 B                0 B
+├ ƒ /api/hiring/confirm                                                0 B                0 B
+├ ƒ /api/integrations/callback/[provider]                              0 B                0 B
+├ ƒ /api/integrations/disconnect                                       0 B                0 B
+├ ƒ /api/integrations/status                                           0 B                0 B
+├ ƒ /api/integrations/sync/[provider]                                  0 B                0 B
+├ ƒ /api/intelligence/actions                                          0 B                0 B
+├ ƒ /api/intelligence/briefing                                         0 B                0 B
+├ ƒ /api/intelligence/briefing/subscribe                               0 B                0 B
+├ ƒ /api/introductions/[id]/accept                                     0 B                0 B
+├ ƒ /api/introductions/request                                         0 B                0 B
+├ ƒ /api/lead-capture                                                  0 B                0 B
+├ ƒ /api/listing-rules                                                 0 B                0 B
+├ ƒ /api/marketplace/providers                                         0 B                0 B
+├ ƒ /api/notifications                                                 0 B                0 B
+├ ƒ /api/notifications/[id]                                            0 B                0 B
+├ ƒ /api/notifications/digest-time                                     0 B                0 B
+├ ƒ /api/notifications/preferences                                     0 B                0 B
+├ ƒ /api/notifications/preferences/[type]                              0 B                0 B
+├ ƒ /api/onboarding/items                                              0 B                0 B
+├ ƒ /api/onboarding/items/[itemId]                                     0 B                0 B
+├ ƒ /api/onboarding/progress                                           0 B                0 B
+├ ƒ /api/onboarding/start                                              0 B                0 B
+├ ƒ /api/pace/admin/company-factors                                    0 B                0 B
+├ ƒ /api/pace/benchmarks                                               0 B                0 B
+├ ƒ /api/pace/pulse                                                    0 B                0 B
+├ ƒ /api/pace/scores                                                   0 B                0 B
+├ ƒ /api/pace/validate-sequencing                                      0 B                0 B
+├ ƒ /api/pilot/companies                                               0 B                0 B
+├ ƒ /api/pilot/dashboard-stats                                         0 B                0 B
+├ ƒ /api/pilot/onboard                                                 0 B                0 B
+├ ƒ /api/predictions                                                   0 B                0 B
+├ ƒ /api/professional-stats/referral-earnings                          0 B                0 B
+├ ƒ /api/professionals/[id]                                            0 B                0 B
+├ ƒ /api/professionals/recommendations                                 0 B                0 B
+├ ƒ /api/professionals/register                                        0 B                0 B
+├ ƒ /api/professionals/search                                          0 B                0 B
+├ ƒ /api/professionals/verify                                          0 B                0 B
+├ ƒ /api/prospectus                                                    0 B                0 B
+├ ƒ /api/prospectus/[id]/apply-extractions                             0 B                0 B
+├ ƒ /api/prospectus/[id]/directors                                     0 B                0 B
+├ ƒ /api/prospectus/[id]/directors/[directorId]                        0 B                0 B
+├ ƒ /api/prospectus/[id]/download                                      0 B                0 B
+├ ƒ /api/prospectus/[id]/export                                        0 B                0 B
+├ ƒ /api/prospectus/[id]/extract                                       0 B                0 B
+├ ƒ /api/prospectus/[id]/extract-documents                             0 B                0 B
+├ ƒ /api/prospectus/[id]/officers                                      0 B                0 B
+├ ƒ /api/prospectus/[id]/officers/[officerId]                          0 B                0 B
+├ ƒ /api/prospectus/[id]/progress                                      0 B                0 B
+├ ƒ /api/prospectus/[id]/regulatory-checklist                          0 B                0 B
+├ ƒ /api/prospectus/[id]/review-queue                                  0 B                0 B
+├ ƒ /api/prospectus/[id]/shareholders                                  0 B                0 B
+├ ƒ /api/prospectus/[id]/shareholders/[shareholderId]                  0 B                0 B
+├ ƒ /api/prospectus/[id]/submit-section                                0 B                0 B
+├ ƒ /api/prospectus/[id]/upload-and-extract                            0 B                0 B
+├ ƒ /api/prospectus/analyze                                            0 B                0 B
+├ ƒ /api/prospectus/create                                             0 B                0 B
+├ ƒ /api/prospectus/extract                                            0 B                0 B
+├ ƒ /api/prospectus/generate                                           0 B                0 B
+├ ƒ /api/prospectus/sections                                           0 B                0 B
+├ ƒ /api/push/cron/cleanup-subscriptions                               0 B                0 B
+├ ƒ /api/push/send                                                     0 B                0 B
+├ ƒ /api/push/subscribe                                                0 B                0 B
+├ ƒ /api/push/unsubscribe                                              0 B                0 B
+├ ƒ /api/referrals                                                     0 B                0 B
+├ ƒ /api/referrals/insurance-quote                                     0 B                0 B
+├ ƒ /api/referrals/stats                                               0 B                0 B
+├ ƒ /api/referrals/track                                               0 B                0 B
+├ ƒ /api/regulatory                                                    0 B                0 B
+├ ƒ /api/slack/link-account                                            0 B                0 B
+├ ƒ /api/slack/send                                                    0 B                0 B
+├ ○ /api/slack/status                                                  0 B                0 B
+├ ƒ /api/slack/unlink-account                                          0 B                0 B
+├ ƒ /api/slack/webhook                                                 0 B                0 B
+├ ƒ /api/syndication/templates                                         0 B                0 B
+├ ƒ /api/syndication/templates/[id]                                    0 B                0 B
+├ ƒ /api/syndication/templates/[id]/versions                           0 B                0 B
+├ ƒ /api/tasks                                                         0 B                0 B
+├ ƒ /api/tasks/[id]                                                    0 B                0 B
+├ ƒ /api/tasks/overdue-count                                           0 B                0 B
+├ ƒ /api/team/invite                                                   0 B                0 B
+├ ƒ /api/team/members                                                  0 B                0 B
+├ ƒ /api/team/members/[id]                                             0 B                0 B
+├ ƒ /api/test/send-demo-emails                                         0 B                0 B
+├ ƒ /api/trial/init                                                    0 B                0 B
+├ ƒ /api/trial/status                                                  0 B                0 B
+├ ƒ /api/user/account-deletion                                         0 B                0 B
+├ ƒ /api/user/data-export                                              0 B                0 B
+├ ƒ /api/webhooks/filing-status                                        0 B                0 B
+├ ƒ /api/webhooks/stripe                                               0 B                0 B
+├ ƒ /api/webhooks/trial                                                0 B                0 B
+├ ƒ /api/whatsapp/admin/stats                                          0 B                0 B
+├ ƒ /api/whatsapp/cron/milestone-alerts                                0 B                0 B
+├ ƒ /api/whatsapp/cron/task-reminders                                  0 B                0 B
+├ ƒ /api/whatsapp/daily-pulse                                          0 B                0 B
+├ ƒ /api/whatsapp/preferences                                          0 B                0 B
+├ ƒ /api/whatsapp/process-queue                                        0 B                0 B
+├ ƒ /api/whatsapp/send                                                 0 B                0 B
+├ ƒ /api/whatsapp/status/[messageId]                                   0 B                0 B
+├ ƒ /api/whatsapp/webhook                                              0 B                0 B
+├ ƒ /api/wizard/complete                                               0 B                0 B
+├ ƒ /billing                                                           3.56 kB        91.3 kB
+├ ƒ /cap-table                                                         3.02 kB        90.7 kB
+├ ƒ /checklist                                                         17 kB           172 kB
+├ ƒ /checklist-guide                                                   4.62 kB         133 kB
+├ ƒ /checkout                                                          6.53 kB         144 kB
+├ ƒ /compliance/listing-rules                                          3.1 kB          131 kB
+├ ƒ /compliance/resolutions                                            7.75 kB         124 kB
+├ ƒ /dashboard                                                         27.6 kB         183 kB
+├ ƒ /dashboard/admin/documents                                         3.61 kB         132 kB
+├ ƒ /dashboard/admin/emails                                            4.69 kB        92.4 kB
+├ ƒ /dashboard/admin/filing-systems                                    6.19 kB         154 kB
+├ ƒ /dashboard/cap-table                                               395 B          88.1 kB
+├ ƒ /dashboard/cap-table/dilution-scenarios                            11.5 kB         255 kB
+├ ƒ /dashboard/capital-markets                                         3.45 kB        91.2 kB
+├ ƒ /dashboard/compliance                                              395 B          88.1 kB
+├ ƒ /dashboard/compliance/consent-letters                              5.32 kB         143 kB
+├ ƒ /dashboard/compliance/listing-requirements                         9.85 kB         138 kB
+├ ƒ /dashboard/compliance/listing-rules                                10.2 kB         138 kB
+├ ƒ /dashboard/compliance/resolutions                                  4.95 kB         179 kB
+├ ƒ /dashboard/compliance/resolutions/[id]                             4.84 kB         138 kB
+├ ƒ /dashboard/compliance/resolutions/new                              12.6 kB         130 kB
+├ ƒ /dashboard/compliance/syndication-templates                        8 kB            136 kB
+├ ƒ /dashboard/documents                                               393 B          88.1 kB
+├ ƒ /dashboard/documents/contracts-map                                 9.41 kB         138 kB
+├ ƒ /dashboard/documents/upload                                        11 kB           139 kB
+├ ƒ /dashboard/filings                                                 27.8 kB         302 kB
+├ ƒ /dashboard/filings/[id]                                            7.18 kB         144 kB
+├ ƒ /dashboard/filings/new                                             6.62 kB         144 kB
+├ ƒ /dashboard/filings/status                                          2.43 kB         131 kB
+├ ƒ /dashboard/financial-mgmt                                          2.39 kB         139 kB
+├ ƒ /dashboard/financial-mgmt/cost-calculator                          8.06 kB         275 kB
+├ ƒ /dashboard/financial-mgmt/tax-planning                             2.31 kB         130 kB
+├ ƒ /dashboard/financial-mgmt/tracking                                 2.93 kB         202 kB
+├ ƒ /dashboard/financial-mgmt/true-cost                                7.97 kB         263 kB
+├ ƒ /dashboard/investor-match                                          8.34 kB         172 kB
+├ ƒ /dashboard/investor-readiness/data-room                            6.93 kB         144 kB
+├ ƒ /dashboard/investor-readiness/data-room-analytics                  6.84 kB         135 kB
+├ ƒ /dashboard/investor-readiness/data-room-health                     10.7 kB         139 kB
+├ ƒ /dashboard/investor-readiness/data-room-viewer                     8.6 kB          137 kB
+├ ƒ /dashboard/investor-readiness/data-room/executive-summary          3.3 kB           91 kB
+├ ƒ /dashboard/investor-readiness/data-room/financial-statements       3.06 kB        90.8 kB
+├ ƒ /dashboard/investor-readiness/data-room/legal-documents            2.87 kB        90.6 kB
+├ ƒ /dashboard/investor-readiness/data-room/regulatory-filings         2.79 kB        90.5 kB
+├ ƒ /dashboard/investor-readiness/intelligence-hub                     8.14 kB         136 kB
+├ ƒ /dashboard/ipo-archive                                             2.94 kB         140 kB
+├ ƒ /dashboard/ipo-journey                                             12.4 kB         149 kB
+├ ƒ /dashboard/listed-services                                         9.04 kB         137 kB
+├ ƒ /dashboard/listed-services/preview                                 6.65 kB         135 kB
+├ ƒ /dashboard/prospectus/[id]/directors-officers                      12.7 kB         162 kB
+├ ƒ /dashboard/submission                                              3.75 kB         132 kB
+├ ƒ /dashboard/work/directors-officers                                 10.1 kB         138 kB
+├ ƒ /dashboard/work/prospectus-validator                               10.3 kB         250 kB
+├ ƒ /demo/consent-workflow                                             7.97 kB         136 kB
+├ ƒ /dilution-demo                                                     6.85 kB         210 kB
+├ ƒ /disclaimer                                                        4.75 kB        92.5 kB
+├ ƒ /documents                                                         2.44 kB         166 kB
+├ ● /exchanges/[code]                                                  864 B          97.3 kB
+├   ├ /exchanges/tsx
+├   ├ /exchanges/tsxv
+├   ├ /exchanges/cse
+├   └ [+4 more paths]
+├ ƒ /financial/budget-tracking                                         2.45 kB        90.2 kB
+├ ƒ /financial/cost-calculator                                         2.7 kB         90.4 kB
+├ ƒ /for-investors                                                     7.79 kB         154 kB
+├ ƒ /for-investors/comparison                                          7.83 kB         154 kB
+├ ƒ /guidance-library                                                  2.13 kB         145 kB
+├ ● /guides/[slug]                                                     864 B          97.3 kB
+├   ├ /guides/ipo-checklist-canada
+├   ├ /guides/ipo-vs-direct-listing-vs-spac-vs-rto
+├   ├ /guides/ipo-cost-breakdown
+├   └ [+9 more paths]
+├ ƒ /integrations                                                      5.83 kB         134 kB
+├ ƒ /investor/signup                                                   5.97 kB         111 kB
+├ ƒ /leads/capture                                                     5.13 kB         133 kB
+├ ƒ /learning-compliance                                               3.09 kB         140 kB
+├ ƒ /learning-compliance/insurances                                    13.9 kB         142 kB
+├ ƒ /legal/privacy                                                     184 B          87.9 kB
+├ ƒ /legal/tos                                                         184 B          87.9 kB
+├ ƒ /login                                                             5 kB            151 kB
+├ ƒ /market-analysis/coverage-predictor                                6.75 kB         170 kB
+├ ƒ /market-analysis/market-ir                                         7.08 kB         171 kB
+├ ƒ /market-analysis/peer-analysis                                     3.25 kB         167 kB
+├ ƒ /market-analysis/peer-analysis/[id]                                3.76 kB         167 kB
+├ ƒ /marketplace                                                       10.9 kB         139 kB
+├ ƒ /new-to-this                                                       4.78 kB         168 kB
+├ ƒ /notifications                                                     7.27 kB         138 kB
+├ ƒ /onboarding                                                        8.41 kB         137 kB
+├ ƒ /pace/pulse                                                        6.08 kB         152 kB
+├ ƒ /partners                                                          14.3 kB         151 kB
+├ ƒ /pilot/dashboard                                                   3.48 kB         242 kB
+├ ƒ /pilot/onboard                                                     4.52 kB         133 kB
+├ ƒ /post-listing                                                      5.95 kB         134 kB
+├ ƒ /pricing                                                           12.8 kB         159 kB
+├ ƒ /privacy                                                           4.02 kB        91.7 kB
+├ ƒ /prospectus                                                        10.3 kB         148 kB
+├ ƒ /prospectus-builder                                                12.1 kB         158 kB
+├ ƒ /prospectus/[id]/editor                                            4.17 kB         101 kB
+├ ƒ /prospectus/create                                                 10.7 kB         328 kB
+├ ƒ /r/[slug]                                                          184 B          87.9 kB
+├ ƒ /raising-capital                                                   14.5 kB         165 kB
+├ ƒ /referrals                                                         8.36 kB         137 kB
+├ ƒ /register                                                          8.55 kB         155 kB
+├ ƒ /reset-password                                                    6.67 kB         144 kB
+├ ƒ /resources                                                         20 kB           166 kB
+├ ○ /sitemap.xml                                                       0 B                0 B
+├ ƒ /team                                                              9.34 kB         147 kB
+├ ƒ /templates                                                         13.7 kB         142 kB
+├ ƒ /templates/cap-tables                                              3.94 kB         312 kB
+├ ƒ /terms                                                             4.55 kB        92.3 kB
+├ ƒ /trial/cap-table-setup                                             6.39 kB         135 kB
+├ ƒ /vendor                                                            13.6 kB         142 kB
+└ ƒ /wizard                                                            8.43 kB         155 kB
++ First Load JS shared by all                                          87.7 kB
+  ├ chunks/2117-5ea916f722cf3951.js                                    31.9 kB
+  ├ chunks/fd9d1056-2cfa95adc0565b0e.js                                53.6 kB
+  └ other shared chunks (total)                                        2.18 kB
 
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Array.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
 
-Error occurred prerendering page "/checklist". Read more: https://nextjs.org/docs/messages/prerender-error
+ƒ Middleware                                                           47.8 kB
 
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses getStaticProps)
+ƒ  (Dynamic)  server-rendered on demand
 
-Error occurred prerendering page "/account". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-
-Error occurred prerendering page "/integrations". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-
-Error occurred prerendering page "/checklist-guide". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-
-Error occurred prerendering page "/admin". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-
-Error occurred prerendering page "/dashboard". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-   Generating static pages (8/35) 
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/documents". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/notifications". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/login". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/pace/pulse". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/partners". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/cap-table". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-   Generating static pages (17/35) 
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/raising-capital". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/register". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-
-Error occurred prerendering page "/". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-
-Error occurred prerendering page "/referrals". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-
-Error occurred prerendering page "/marketplace". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-
-Error occurred prerendering page "/team". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/reset-password". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-
-Error occurred prerendering page "/pricing". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/resources". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/wizard". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/post-listing". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-   Generating static pages (26/35) 
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/templates". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/pace". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14) {
-  digest: '3341957043'
-}
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at Timeout._onTimeout (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135497) {
-  digest: '2664338470'
-}
-
-Error occurred prerendering page "/vendor". Read more: https://nextjs.org/docs/messages/prerender-error
-
-TypeError: ni is not a function
-    at Object.get (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/7786.js:10:245312)
-    at l (/Users/test/Documents/Claude/Projects/IPOReady/.next/server/chunks/9497.js:5:3862)
-    at em (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:134808)
-    at e (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:137693)
-    at e_ (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:138168)
-    at Object.toJSON (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135777)
-    at stringify (<anonymous>)
-    at eE (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142242)
-    at eT (/Users/test/Documents/Claude/Projects/IPOReady/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142721)
-    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
- ✓ Generating static pages (35/35)
-
-> Export encountered errors on following paths:
-	/_not-found/page: /_not-found
-	/account/page: /account
-	/admin/page: /admin
-	/cap-table/page: /cap-table
-	/checklist-guide/page: /checklist-guide
-	/checklist/page: /checklist
-	/dashboard/page: /dashboard
-	/documents/page: /documents
-	/integrations/page: /integrations
-	/login/page: /login
-	/marketplace/page: /marketplace
-	/notifications/page: /notifications
-	/pace/page: /pace
-	/pace/pulse/page: /pace/pulse
-	/page: /
-	/partners/page: /partners
-	/post-listing/page: /post-listing
-	/pricing/page: /pricing
-	/raising-capital/page: /raising-capital
-	/referrals/page: /referrals
-	/register/page: /register
-	/reset-password/page: /reset-password
-	/resources/page: /resources
-	/team/page: /team
-	/templates/page: /templates
-	/vendor/page: /vendor
-	/wizard/page: /wizard

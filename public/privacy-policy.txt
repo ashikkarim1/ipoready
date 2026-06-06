@@ -1,0 +1,1018 @@
+IPOREADY PRIVACY POLICY
+
+Effective Date: June 6, 2026
+Last Updated: June 6, 2026
+Version: 1.0
+
+===============================================================================
+
+1. INTRODUCTION
+
+IPOReady ("Company," "we," "us," "our," or "Service") is committed to protecting
+your privacy and ensuring you have a positive experience on our platform. This
+Privacy Policy explains how we collect, use, disclose, and safeguard your
+information when you use our website, mobile application, and related services
+(collectively, the "Service").
+
+Please read this Privacy Policy carefully. If you do not agree with our policies
+and practices, please do not use our Service. By accessing or using IPOReady,
+you acknowledge that you have read, understood, and agree to be bound by all
+the terms of this Privacy Policy.
+
+===============================================================================
+
+2. DATA COLLECTION
+
+2.1 Information You Provide Directly
+
+Account Registration
+- Full name
+- Email address
+- Phone number
+- Company name and legal entity information
+- Job title and role
+- Password (encrypted)
+- Profile picture (optional)
+
+Company Onboarding
+- Company incorporation details
+- Industry classification
+- Financial metrics and revenue
+- Current funding stage
+- Shareholder structure and capitalization table
+- Board composition
+- Officer and director information
+- Registered agent details
+
+Document Upload and Management
+- Documents you upload (prospectuses, SEC filings, financial statements, etc.)
+- File metadata (name, size, upload date, modification history)
+- Document annotations, comments, and versions
+- Sharing permissions and access logs
+- Connected cloud storage account references (NOT credentials)
+
+Subscription and Billing
+- Credit card information (processed through Stripe; full card not stored)
+- Billing address
+- Tax identification numbers
+- Invoice records
+- Payment history
+- Subscription tier and usage data
+
+Communications
+- Support tickets and messages
+- Email inquiries
+- Feedback and feature requests
+- Survey responses
+- Chat and collaboration messages
+
+2.2 Information Collected Automatically
+
+Device and Usage Information
+- IP address
+- Device type and operating system
+- Browser type and version
+- Pages visited and features used
+- Time and duration of visits
+- Clicks and interactions
+- Search queries
+- File download/upload activity
+
+Cookies and Similar Technologies
+- Essential cookies for authentication
+- Analytics cookies (Google Analytics 4)
+- Marketing cookies for conversion tracking
+- Preference cookies for settings
+
+Log Data
+- Server logs and request/response data
+- Error logs and debugging information
+- API call logs with timestamps
+- Database activity logs
+- Security event logs
+
+2.3 Information from Third Parties
+
+Cloud Storage Providers (with your authorization)
+- Google Drive: File names, IDs, modification dates, sharing status
+- Dropbox: File inventory, sync status, sharing permissions
+- OneDrive: File hierarchy, version history, access metadata
+- Box: Document classifications, metadata tags, retention policies
+
+Payment Processors
+- Stripe provides transaction status, payment failure reasons, subscription events
+
+Communication Services
+- Resend (email delivery): Message open/click events
+- Twilio (SMS/WhatsApp): Delivery and read receipts
+- Slack (enterprise integration): Channel and user mentions
+
+Security and Compliance
+- IP reputation services
+- Two-factor authentication providers
+
+Marketing and Traffic
+- LinkedIn conversion pixel
+- Web traffic and referral tracking
+
+===============================================================================
+
+3. DATA USAGE AND PURPOSE
+
+We process your personal data for:
+
+Service Delivery
+- Account creation and authentication
+- Document management and cloud storage synchronization
+- PACE benchmark calculations
+- Regulatory compliance tracking
+- Checklist and milestone management
+- Role-based access control
+
+Communication
+- Service updates and announcements
+- Customer support responses
+- Billing invoices and confirmations
+- Feature notifications
+- Account security alerts
+- Task reminder emails
+
+Product Improvement
+- User behavior analysis
+- Bug identification and fixes
+- Performance optimization
+- Feature testing and development
+- Aggregated usage statistics
+
+Marketing and Business Development
+- Promotional offers and product information
+- Newsletter subscriptions (opt-in only)
+- Conversion analysis
+- Content personalization
+- Market research and surveys
+
+Security and Fraud Prevention
+- Unauthorized access detection
+- Spam and abuse prevention
+- Two-factor authentication
+- Suspicious activity monitoring
+- DDoS and malware protection
+
+Legal Compliance
+- Lawful authority requests
+- SEC and regulatory requirements
+- Audit trail maintenance
+- Data retention obligations
+- Illegal activity prevention
+
+===============================================================================
+
+4. LEGAL BASIS FOR PROCESSING
+
+GDPR Legal Basis (EU/EEA Residents):
+
+Purpose                           | Legal Basis
+Service delivery                  | Contractual necessity
+Billing and payment processing    | Contractual necessity & Legal obligation
+Product improvement               | Legitimate interest
+Marketing communications          | Consent (explicit opt-in)
+Security and fraud prevention     | Legitimate interest & Legal obligation
+Regulatory compliance             | Legal obligation
+
+CCPA Basis (California Residents):
+
+We collect personal information for:
+- Performing requested services
+- Maintaining business relationships
+- Internal research and improvement
+- Detecting and preventing fraud
+- Debugging and improving services
+- Complying with law and regulations
+
+===============================================================================
+
+5. DATA SHARING AND DISCLOSURE
+
+5.1 Service Providers and Processors
+
+Cloud Infrastructure
+- AWS (Amazon Web Services): Document storage, backup, database hosting
+- Neon (PostgreSQL Cloud): Database services and backups
+- Vercel: Application hosting and CDN
+
+Payment Processing
+- Stripe: Payment processing, subscription management, billing
+
+Communications
+- Resend: Transactional email delivery
+- Twilio: SMS, WhatsApp, voice messaging
+- SendGrid (Twilio): Email infrastructure
+
+Analytics and Monitoring
+- Google Analytics 4: User behavior and traffic analysis
+- Datadog: Performance monitoring (if enabled)
+
+Security and Compliance
+- Auth0 (if used): Identity and access management
+- Two-factor authentication providers: Secure authentication
+
+Document Processing
+- Anthropic (Claude API): AI-powered document analysis
+- OpenAI (if enabled): Document summarization
+
+5.2 Mandatory Legal Disclosure
+
+We may disclose personal information without consent when required by:
+- Court orders, subpoenas, or legal process
+- SEC or regulatory investigations
+- Law enforcement requests
+- Protecting against fraud or security threats
+- Protecting legal rights, privacy, and safety
+- AML/KYC financial compliance
+
+5.3 Business Transfers
+
+If IPOReady is involved in merger, acquisition, bankruptcy, or asset sale:
+- Your personal information may be transferred
+- Written notice will be provided
+- Acquiring entity must maintain equivalent privacy protections
+
+5.4 De-Identified Data
+
+We may share aggregated, de-identified data:
+- Anonymized benchmarking reports
+- Industry trend analysis
+- Statistical research
+- Product usage patterns
+
+5.5 Third-Party Integrations (With Your Authorization)
+
+When you authorize integrations, we share limited data:
+- Cloud Storage Sync: File metadata with authorized providers
+- Slack Integration: Compliance alerts and notifications
+- CRM Integration: Company data (future phase)
+- Accounting Integration: Financial metrics (future phase)
+
+You can revoke integrations anytime.
+
+5.6 Public Information
+
+Information you choose to make public:
+- Company profile information visible to other users
+- Public benchmark rankings (with opt-in)
+- Case studies (with explicit written consent)
+
+===============================================================================
+
+6. DATA RETENTION
+
+Data Retention Schedule:
+
+Data Type              | Retention Period        | Rationale
+Account information   | Active + 2 years        | Business records, audit trail
+Documents & files     | Active + 7 years        | SEC compliance, legal holds
+Transaction records   | 7 years                 | Tax, AML/KYC requirements
+Email logs           | 1 year                  | Support history, compliance
+Support tickets      | 2 years                 | Legal disputes
+Analytics data       | 25 months               | Standard retention
+Server logs          | 90 days                 | Security, debugging
+Cookies              | Session or 12 months    | User preferences
+Failed login attempts| 90 days                 | Security investigation
+Backup copies        | 30 days after deletion  | Disaster recovery
+
+Deletion Process:
+
+Upon account deletion:
+1. Deactivate account (within 24 hours)
+2. Remove from active systems (within 7 days)
+3. Delete non-essential data (within 30 days)
+4. Maintain legal hold data as required
+5. Remove from backup systems (within 90 days)
+
+Exceptions: We may retain data longer if required by law, legal proceedings,
+outstanding obligations, or if data is de-identified.
+
+===============================================================================
+
+7. YOUR PRIVACY RIGHTS
+
+7.1 GDPR Rights (EU/EEA Residents)
+
+Right of Access (Article 15)
+- Request copy of your personal data
+- Understand what data we hold and why
+- Response time: 30 days
+- Cost: Free (unless manifestly unfounded)
+
+Right to Rectification (Article 16)
+- Correct inaccurate or incomplete data
+- Update through account settings
+- Request manual correction of complex data
+- Cost: Free
+
+Right to Erasure (Article 17)
+- Request deletion of personal data
+- Exceptions: Legal obligation, contract necessity, fraud investigation
+- Submit request through account settings
+- Response time: 30 days
+
+Right to Restrict Processing (Article 18)
+- Limit how we use your data
+- Prevents certain processing while we review
+
+Right to Data Portability (Article 20)
+- Receive data in structured, machine-readable format (JSON, CSV)
+- Transfer data to another service
+- Timeline: 30 days
+
+Right to Object (Article 21)
+- Object to marketing, profiling, or legitimate interests
+- Withdraw consent for any processing
+
+Right to Non-Automated Decision-Making (Article 22)
+- Not subject to automated decision-making alone
+- PACE assessments include human review available
+
+Right to Lodge Complaint
+- File complaint with your Data Protection Authority
+- EU: Contact your national DPA
+
+7.2 CCPA Rights (California Residents)
+
+Right to Know (§1798.100)
+- Request information we collected
+- Request sources of collection
+- Request business purpose
+- Request recipients of sharing
+- Response time: 45 days (extendable 45 days)
+- Cost: Free (one per 12 months)
+
+Right to Delete (§1798.105)
+- Request deletion of personal information
+- Exceptions: Service provision, legal compliance, fraud prevention
+- Response time: 45 days
+
+Right to Correct (§1798.100)
+- Correct inaccurate personal information
+- Available through account settings
+
+Right to Opt-Out (§1798.120)
+- Opt-out of "sale" or "sharing" for cross-context advertising
+- We do NOT sell personal information
+- We do NOT share for cross-context advertising
+
+Right to Limit Use (§1798.121)
+- Limit use of sensitive personal information
+- Restrict to necessary purposes
+
+Right to Non-Discrimination (§1798.125)
+- No denial of service for exercising rights
+- No price increase or different terms
+- Exception: Financial incentives with opt-in consent
+
+7.3 CPRA Changes (California Privacy Rights Act - Effective 2023)
+
+Additional rights include:
+- Right to correct inaccurate data
+- Right to delete consumer inferences
+- Right to opt-out of automated decision-making
+- Enhanced child protections (under 13)
+- Enhanced sensitive information protections
+- Right to appeal agency decisions
+
+7.4 Other US State Rights
+
+Virginia (VCDPA), Colorado (CPA), Connecticut (CTDPA), Utah (UCPA):
+- Right to know, delete, correct, and data portability
+- Right to opt-out of targeted advertising
+- Right to opt-out of automated decision-making
+- Right to appeal
+
+Nevada Privacy Law (SB 220):
+- Right to opt-out of "sale" (sharing with third parties for value)
+
+===============================================================================
+
+8. HOW TO EXERCISE YOUR PRIVACY RIGHTS
+
+Submitting Requests:
+
+Online Portal (Recommended)
+1. Log into your IPOReady account
+2. Navigate to Settings > Privacy & Data
+3. Select "Submit Privacy Request"
+4. Choose request type (access, delete, correct, export, opt-out)
+5. Complete form and submit
+
+Email
+- Email: privacy@ipoready.com
+- Subject: "Privacy Request - [Your Name]"
+- Include: Full name, email, account identifier, request type
+
+Mailing Address
+- IPOReady Inc.
+- Privacy Requests Team
+- [Company Address]
+- [City, State ZIP]
+
+Verification Process:
+- We verify your identity before processing
+- Request: email on file, account creation date, or last login
+- May request additional verification for sensitive requests
+- Authorized representatives may submit with power of attorney
+
+Response Timeline:
+- GDPR: 30 days (extendable 60 days)
+- CCPA/CPRA: 45 days (extendable 45 days)
+- Others: 30-45 days
+
+Response Format:
+- Commonly used electronic format (CSV, JSON, PDF)
+- Human-readable and clear
+- Organized logically
+- No trade secret or third-party sensitive data
+
+Appeal Rights:
+- GDPR: Appeal to your Data Protection Authority
+- CCPA/CPRA: Written appeal within 45 days for independent review
+- Other states: Refer to state-specific process
+
+===============================================================================
+
+9. COOKIES AND TRACKING TECHNOLOGIES
+
+9.1 Cookie Policy
+
+Essential Cookies (Required for functionality):
+- next-auth.session-token: Authentication session (30 days)
+- next-auth.csrf-token: CSRF protection (Session)
+- Language: Language preference (1 year)
+- Currency: Currency display preference (1 year)
+
+Analytics Cookies:
+- _ga, _gat, _gid: Google Analytics 4 tracking (2 years)
+- GA4_CONSENT: Consent status (1 year)
+
+Marketing Cookies:
+- LinkedIn Insights: Conversion tracking (3 months)
+- Drift/Intercom: Live chat analytics (Session/1 year)
+
+9.2 Cookie Management
+
+Browser Settings:
+- Most browsers allow cookie control in Settings > Privacy
+- Warning: Disabling essential cookies may break functionality
+
+Cookie Consent Banner:
+- First visit displays banner
+- Accept all or customize preferences
+- Change preferences in Settings > Privacy anytime
+
+Do Not Track (DNT):
+- We honor browser DNT signals
+- Analytics disabled for DNT users
+- Marketing pixels disabled for DNT users
+
+9.3 Similar Tracking Technologies
+
+Pixel Tags (Web Beacons)
+- Embedded in emails and pages
+- Track email opens and link clicks
+- Used by Resend and marketing providers
+- Disable in email client settings
+
+Local/Session Storage
+- Browser-based data storage
+- Stores preferences, UI state, form data
+- Cleared when browser data deleted
+- Not accessible by third parties
+
+Mobile App Tracking
+- Device identifiers (not permanent)
+- Analytics via mobile SDK
+- Respects iOS/Android privacy settings
+- Can be disabled in app Settings
+
+===============================================================================
+
+10. CHILDREN'S PRIVACY (COPPA)
+
+10.1 Age Restrictions
+
+IPOReady is not intended for children under 13. We do not knowingly collect
+personal information from children under 13. Our Service is designed for adults
+involved in IPO and corporate readiness processes.
+
+10.2 Parental Consent (Ages 13-17)
+
+If you are 13-17 years old:
+- Parental or guardian consent required
+- Parent/guardian must agree to Privacy Policy
+- Parents/guardians may review and request deletion
+- Parents/guardians may withdraw consent anytime
+
+10.3 Compliance with COPPA
+
+If we discover collection from children under 13:
+1. Immediately cease collection
+2. Delete data within reasonable timeframe
+3. Do not use data for any purpose
+4. Notify parent/guardian if contact available
+5. Report to FTC if required
+
+Report: If you believe we collected from child under 13, contact
+privacy@ipoready.com immediately.
+
+===============================================================================
+
+11. SECURITY MEASURES
+
+11.1 Technical Controls
+
+Encryption
+- In Transit: TLS 1.3+ for all transmitted data
+- At Rest: AES-256 for sensitive database data
+- Password Hashing: Bcrypt with salt (not reversible)
+- API Keys: Encrypted in secure vault
+
+Access Controls
+- Role-based access control (RBAC)
+- Least privilege principle
+- Multi-factor authentication for admin accounts
+- Session tokens with expiration
+- Audit logs for all data access
+
+Infrastructure Security
+- Firewalls and Web Application Firewall (WAF)
+- DDoS protection
+- Regular security patches and updates
+- Vulnerability scanning and penetration testing
+- Intrusion detection systems
+
+Data Isolation
+- Database encryption at rest
+- Separate production/development environments
+- Network segmentation
+- VPC and private networking
+- No public database access
+
+Monitoring and Detection
+- Real-time security monitoring
+- Alert systems for suspicious activity
+- Log aggregation and analysis
+- Fraud detection algorithms
+- Automatic threat response
+
+11.2 Operational Controls
+
+Vendor Security
+- Data Processing Agreements with all service providers
+- Annual SOC 2 compliance verification
+- Incident response requirements
+- Data protection standards enforced
+
+Employee Access
+- Background checks for data access personnel
+- Non-disclosure agreements (NDAs)
+- Annual security awareness training
+- Least privilege access
+- Termination procedures
+
+Physical Security
+- Data centers with 24/7 monitoring
+- Biometric access controls
+- Fire suppression
+- Climate control
+- Disaster recovery
+
+Incident Response
+- Documented incident response plan
+- 24/7 security incident hotline
+- Investigation and remediation procedures
+- Notification within 30 days (or as required)
+- Post-incident reviews
+
+11.3 Compliance Certifications
+
+- SOC 2 Type II (security, availability, confidentiality)
+- ISO 27001 (information security management)
+- GDPR compliance
+- CCPA compliance
+- HIPAA-adjacent (where applicable)
+
+Audit Report: Available upon request (signed NDA required)
+
+11.4 Data Breach Notification
+
+In event of confirmed breach:
+
+Notification Timeline
+- Users: Within 30 days of discovery
+- Regulators: Within 3 days (GDPR), 30 days (CCPA)
+- Credit bureaus: If sensitive financial data exposed
+
+Notification Content
+- Incident and discovery dates
+- Affected personal information types
+- Recommended protective actions
+- Toll-free question number
+- Credit monitoring service (if applicable)
+
+Historical Incidents: None at this time. Secure operations maintained.
+
+===============================================================================
+
+12. INTERNATIONAL DATA TRANSFERS
+
+12.1 GDPR Data Transfers
+
+EU/EEA to US Transfer Mechanism:
+
+We rely on Standard Contractual Clauses (SCCs) with US service providers:
+- AWS, Neon, Vercel (infrastructure)
+- Stripe (payment processor)
+- Resend, Twilio (communications)
+- Google Analytics (analytics)
+
+Transfer Agreement Terms:
+- Approved Standard Contractual Clauses
+- Supplementary measures ensure adequate protection
+- EU data subject rights preserved
+- Lawful basis documented
+
+Adequacy Decisions:
+- Switzerland: Adequate
+- Other countries: SCCs and legitimate interests
+
+12.2 Data Processing Agreements
+
+International transfers governed by:
+- Data Processing Agreements (DPA)
+- Binding Corporate Rules (where applicable)
+- Standard Contractual Clauses with processor requirements
+- Sub-processor controls and notification
+
+12.3 Your Rights
+
+- Right to object to international transfers
+- Right to know about transfer safeguards
+- Right to know transfer mechanisms
+- Right to contact Data Protection Authority
+
+Contact: privacy@ipoready.com for transfer concerns
+
+===============================================================================
+
+13. THIRD-PARTY LINKS AND SERVICES
+
+13.1 External Links
+
+IPOReady may contain links to external websites:
+- Regulatory bodies (SEC, FINRA, state regulators)
+- Financial service providers
+- Educational resources
+- Industry partners
+
+Disclaimer: We are not responsible for third-party privacy practices. Review
+their privacy policies before submitting information.
+
+13.2 Social Media Integration
+
+If you connect social media accounts (LinkedIn, Twitter):
+- We receive only public profile information
+- We do not store your credentials
+- You can disconnect anytime in Settings
+- Disconnection stops data sharing
+
+13.3 Third-Party Analytics
+
+Embedded tools may:
+- Collect data directly from your browser
+- Set their own cookies
+- Share data with their service providers
+- Review their policies for details
+
+Tools include: Google Analytics 4, Drift/Intercom, LinkedIn Insights, Typeform
+
+===============================================================================
+
+14. CALIFORNIA SPECIFIC DISCLOSURES (CCPA/CPRA)
+
+14.1 Personal Information Collected in Last 12 Months
+
+Categories include: Identifiers, Commercial Information, Internet Activity,
+Geolocation Data, Professional Information, Inferences
+
+Each category details examples, sources, purposes, and recipients.
+
+We do NOT collect: Biometric Information, Sensory Information
+
+14.2 Sale and Sharing Disclosure
+
+WE DO NOT SELL OR SHARE PERSONAL INFORMATION with third parties for
+cross-context behavioral advertising.
+
+- No monetary compensation received for data sharing
+- No data disclosure for targeted advertising across unaffiliated sites
+- Service provider relationships only
+
+You have right to opt-out of any future sales/sharing.
+
+14.3 Sensitive Personal Information (CPRA)
+
+We minimize collection:
+- Social Security Numbers: Not collected
+- Financial Account Information: Only for Stripe (encrypted)
+- Precise Geolocation: Not collected
+- Biometric Data: Not collected
+- Health Information: Not collected
+
+14.4 Automated Decision-Making
+
+We use automated decision-making for:
+- PACE Benchmark Scoring
+  - Algorithm: Proprietary statistical model
+  - Inputs: Company factors, milestones, compliance status
+  - Human review available
+  - Explanation provided
+  - Right to opt-out
+
+You have right to:
+- Obtain automated decision explanation
+- Request manual review
+- Appeal automated score
+
+===============================================================================
+
+15. EUROPEAN SPECIFIC DISCLOSURES (GDPR)
+
+15.1 Data Protection Officer (DPO)
+
+Contact: dpo@ipoready.com
+Responsibilities: Monitoring compliance, handling requests, regulatory liaison
+
+15.2 GDPR Lawful Basis
+
+We process data under:
+1. Contract (service delivery; necessary)
+2. Legal Obligation (compliance; required)
+3. Legitimate Interest (analytics, improvement; assessed)
+4. Consent (marketing; opt-in)
+5. Vital Interest (security incidents; protecting individuals)
+
+15.3 Legitimate Interest Assessment (LIA)
+
+For "Legitimate Interest" basis, we've assessed:
+- Purpose: Is processing necessary and proportionate?
+- Necessity: Could we achieve purpose another way?
+- Balancing: Do your rights override our interests?
+
+Legitimate Interests we rely on:
+- Service improvement and analytics (proportionate, transparent)
+- Fraud prevention and security (necessary, essential)
+- Marketing and communication (consent-based fallback)
+- Compliance monitoring (proportionate, legal requirement)
+
+===============================================================================
+
+16. CONTACT AND COMPLAINT PROCESS
+
+16.1 Privacy Contact
+
+Questions About This Policy:
+
+Email: privacy@ipoready.com
+Mailing Address:
+IPOReady Inc.
+Privacy Team
+[Company Address]
+[City, State ZIP]
+United States
+
+Response Time: Within 7 business days
+
+16.2 Privacy Requests
+
+See Section 8: "How to Exercise Your Privacy Rights"
+
+16.3 Complaint Process
+
+Step 1: Contact Us
+- Email privacy@ipoready.com with violation details
+- Include: violation description, date, impact
+
+Step 2: Our Investigation
+- Investigate within 30 days
+- Gather evidence and interview teams
+- Determine if violation occurred
+
+Step 3: Our Response
+- Written response explaining findings
+- Describe remedial actions
+- Offer appeal if unsatisfied
+
+Step 4: Appeal
+- Submit written appeal for independent review
+- Senior management reviews
+- Provide updated response
+
+Step 5: Regulatory Escalation
+- File complaint with regulator:
+  - EU/EEA: Your country's Data Protection Authority
+  - California: California Attorney General
+  - Other US States: Your state Attorney General
+  - Federal: FTC.gov/complaint
+
+16.4 DPA Contact Information
+
+- France (CNIL): cnil.fr | +33 1 53 73 22 22
+- Germany (BfDI): bfdi.bund.de | +49 228 81995-0
+- UK (ICO): ico.org.uk | +44 303 123 1113
+- Ireland (DPC): dataprotection.ie | +353 (0)1 8764 800
+- California (Attorney General): oag.ca.gov | (916) 322-3360
+- Federal (FTC): reportfraud.ftc.gov
+
+===============================================================================
+
+17. POLICY UPDATES AND CHANGES
+
+17.1 Changes to This Privacy Policy
+
+We may update to:
+- Reflect service changes
+- Comply with legal requirements
+- Improve clarity and transparency
+- Address user feedback
+- Adapt to new technologies
+
+17.2 Notification of Changes
+
+Material Changes:
+- Email to active users
+- In-app dashboard notification
+- 30-day notice before effectiveness
+- Right to review and reject
+
+Non-Material Changes:
+- Updated automatically
+- Reflected with new "Last Updated" date
+- Summary of changes provided
+
+17.3 Your Right to Reject Changes
+
+For material changes:
+- 30 days to review
+- Continued use = acceptance
+- Non-acceptance: discontinue service
+- No penalty for non-acceptance
+
+17.4 Version Control
+
+Version 1.0: Effective June 6, 2026 (Initial Privacy Policy)
+
+Previous versions available upon request for 3 years.
+
+===============================================================================
+
+18. APPENDICES
+
+18.1 Data Processing Agreement (DPA)
+
+For GDPR-subject users, DPA covers:
+- Processing activities and purposes
+- Duration and nature of processing
+- Data categories and recipients
+- Rights and obligations
+- Sub-processor information
+- Standard Contractual Clauses
+
+Request DPA: privacy@ipoready.com
+
+18.2 Service Providers and Sub-processors
+
+Current Authorized Sub-processors:
+
+Service              | Provider         | Purpose                    | Location | DPA
+Cloud Hosting       | AWS             | Infrastructure, hosting    | US       | Yes
+Database            | Neon            | PostgreSQL, backups        | US       | Yes
+Application Hosting | Vercel          | App deployment, CDN        | US/EU    | Yes
+Payment Processing  | Stripe          | Payment, billing           | US       | Yes
+Email Delivery      | Resend          | Transactional emails       | US       | Yes
+SMS/Messaging       | Twilio          | SMS, WhatsApp delivery     | US       | Yes
+Analytics           | Google Analytics 4 | User behavior tracking   | US       | Yes
+Authentication      | Auth0           | Identity management        | US       | Yes
+AI Services         | Anthropic       | Document analysis          | US       | Yes
+
+Adding Sub-processors:
+- 30-day notice before addition
+- Right to object on privacy grounds
+- Objection right: suspend service or terminate
+
+Request Current List: privacy@ipoready.com
+
+18.3 Jurisdiction-Specific Rights Summary
+
+GDPR (EU/EEA) Rights:
+✓ Right to access
+✓ Right to rectification
+✓ Right to erasure
+✓ Right to restrict processing
+✓ Right to data portability
+✓ Right to object
+✓ Rights to automated decision-making
+✓ Right to complaint to DPA
+
+CCPA (California) Rights:
+✓ Right to know
+✓ Right to delete
+✓ Right to correct
+✓ Right to opt-out (sale/sharing)
+✓ Right to limit use (sensitive information)
+✓ Right to non-discrimination
+✓ Right to appeal
+✓ Opt-out of automated decision-making
+
+CPRA (California, Effective 2023):
+✓ All CCPA rights
+✓ Right to correct
+✓ Right to delete inferences
+✓ Enhanced child protections (under 13)
+✓ Right to opt-out of profiling
+✓ Sensitive information protections
+
+Virginia, Colorado, Connecticut, Utah, Nevada Rights:
+✓ Right to know
+✓ Right to delete
+✓ Right to correct
+✓ Right to data portability
+✓ Right to opt-out of automated decision-making
+✓ Right to opt-out of targeted advertising
+
+===============================================================================
+
+19. ACKNOWLEDGMENT
+
+By using IPOReady, you acknowledge:
+
+1. You have read and understood this Privacy Policy
+2. You consent to collection and use of personal information
+3. You have authority to provide information (or consent from authorized)
+4. You understand privacy rights and how to exercise them
+5. You agree to this Privacy Policy and Terms of Service
+
+If you do not agree, please do not use IPOReady.
+
+===============================================================================
+
+20. DEFINITIONS
+
+"Personal Information" or "Personal Data": Information identifying or relating
+to individual (name, email, IP address, device ID, transaction history,
+location data, preference inferences).
+
+"Processing": Any operation on personal data (collection, use, storage,
+disclosure, deletion, etc.).
+
+"Service Provider" or "Processor": Third party processing personal data on
+our behalf under Data Processing Agreement.
+
+"De-identified Data": Information that cannot reasonably identify individual;
+stripped of identifiers and aggregated.
+
+"Legitimate Interest": Our business interest balanced against your privacy
+rights (when legal basis doesn't apply).
+
+"Consent": Freely given, specific, informed agreement to processing (opt-in;
+can be withdrawn).
+
+"Data Breach": Unauthorized access or disclosure of personal information.
+
+"Data Protection Authority": Government agency enforcing privacy laws (CNIL,
+ICO, DPA, etc.).
+
+"Sub-processor": Third party used by service provider for personal data
+processing (if different from primary processor).
+
+===============================================================================
+
+DOCUMENT INFORMATION
+
+Version: 1.0
+Effective Date: June 6, 2026
+Last Updated: June 6, 2026
+Document Type: Formal Privacy Policy
+Scope: IPOReady.com, subdomains, mobile apps, APIs
+Applicable Law: US law; GDPR, CCPA, CPRA, state privacy laws where applicable
+Review Cycle: Annual (or upon legal/regulatory changes)
+
+===============================================================================
+
+QUESTIONS?
+
+Contact privacy@ipoready.com or submit privacy request through account dashboard.
+
+This Privacy Policy complies with GDPR (EU 2016/679), CCPA (Cal. Civ. Code
+§1798.100 et seq.), CPRA, COPPA (16 CFR §312), and Virginia, Colorado,
+Connecticut, and Utah privacy laws.
+
+===============================================================================

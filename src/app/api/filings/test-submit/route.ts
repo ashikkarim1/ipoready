@@ -1,3 +1,18 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { getFilingService } from '@/lib/services/filing-service'
+import {
+  DocumentMetadata,
+  FilingMetadata,
+  DocumentType,
+} from '@/lib/filing-adapters/BaseFilingAdapter'
+import {
+  generateSampleProspectus,
+  generateRequiredDocuments,
+  generateEdgeCaseDocuments,
+} from '@/lib/filing-adapters/utils/test-document-generator'
+
+export const dynamic = 'force-dynamic'
+
 /**
  * Filing Test Submission API
  * ==========================
@@ -27,20 +42,6 @@
  *   "debugInfo": {...}
  * }
  */
-
-import { NextRequest, NextResponse } from 'next/server'
-import { getFilingService } from '@/lib/services/filing-service'
-import {
-  DocumentMetadata,
-  FilingMetadata,
-  DocumentType,
-} from '@/lib/filing-adapters/BaseFilingAdapter'
-import {
-export const dynamic = 'force-dynamic'
-  generateSampleProspectus,
-  generateRequiredDocuments,
-  generateEdgeCaseDocuments,
-} from '@/lib/filing-adapters/utils/test-document-generator'
 
 /**
  * Validate test submission request

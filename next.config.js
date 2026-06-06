@@ -30,12 +30,53 @@ const nextConfig = {
   trailingSlash: false,
 
   async headers() {
+    // Common security headers applied to all responses
+    const securityHeaders = [
+      {
+        key: 'X-Content-Type-Options',
+        value: 'nosniff',
+      },
+      {
+        key: 'X-Frame-Options',
+        value: 'DENY',
+      },
+      {
+        key: 'X-XSS-Protection',
+        value: '1; mode=block',
+      },
+      {
+        key: 'Strict-Transport-Security',
+        value: 'max-age=31536000; includeSubDomains; preload',
+      },
+      {
+        key: 'Content-Security-Policy',
+        value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://vitals.vercel-analytics.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+      },
+      {
+        key: 'Referrer-Policy',
+        value: 'strict-origin-when-cross-origin',
+      },
+      {
+        key: 'Permissions-Policy',
+        value: 'geolocation=(), microphone=(), camera=()',
+      },
+    ];
+
     return [
       {
         // Static assets are content-hashed by Next.js — safe to cache forever.
         source: '/_next/static/:path*',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          ...securityHeaders,
+        ],
+      },
+      {
+        // API routes — apply security headers, control caching based on auth
+        source: '/api/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'private, no-cache, no-store, must-revalidate' },
+          ...securityHeaders,
         ],
       },
       {
@@ -43,7 +84,7 @@ const nextConfig = {
         source: '/(dashboard|checklist|cap-table|team|documents|account|wizard|pace|vendor|integrations|notifications|referrals|marketplace|raising-capital|templates)/:path*',
         headers: [
           { key: 'Cache-Control', value: 'private, no-store' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          ...securityHeaders,
         ],
       },
       {
@@ -52,21 +93,13 @@ const nextConfig = {
         source: '/(pricing|post-listing|partners|checklist-guide|resources)/:path*',
         headers: [
           { key: 'Cache-Control', value: 's-maxage=300, stale-while-revalidate=3600' },
+          ...securityHeaders,
         ],
       },
       {
-        // Security headers on every response.
+        // Catch-all security headers for remaining routes
         source: '/:path*',
-        headers: [
-          { key: 'X-Frame-Options',       value: 'DENY' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Referrer-Policy',        value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy',     value: 'camera=(), microphone=(), geolocation=()' },
-          // HSTS — enforces HTTPS for 1 year, includes subdomains
-          { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' },
-          // CSP — prevents XSS, injection attacks. Allow next/image, own domain, trusted CDNs
-          { key: 'Content-Security-Policy', value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://vitals.vercel-analytics.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'" },
-        ],
+        headers: securityHeaders,
       },
     ]
   },

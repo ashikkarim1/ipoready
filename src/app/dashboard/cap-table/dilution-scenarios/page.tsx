@@ -18,6 +18,8 @@ import {
   RotateCcw,
   ChevronDown,
   Zap,
+  ArrowRight,
+  Activity,
 } from 'lucide-react'
 import {
   PieChart,
@@ -38,6 +40,7 @@ import {
   DilutionScenarioResult,
   CapTableSnapshot,
 } from '@/lib/cap-table/dilution-scenarios'
+import Link from 'next/link'
 
 interface PresetScenarios {
   base: DilutionScenarioResult
@@ -69,7 +72,17 @@ const itemVariants = {
   show: { opacity: 1, y: 0 },
 }
 
-const COLORS = ['#E8312A', '#0066CC', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899', '#06B6D4', '#6366F1']
+// Mission Control Color Palette
+const COLORS = [
+  '#E8312A', // accent (red)
+  '#1D4ED8', // info (blue)
+  '#2D7A5F', // success (green)
+  '#B45309', // warning (amber)
+  '#7C3AED', // accent-purple
+  '#D97706', // warning-dark
+  '#06B6D4', // cyan
+  '#8B5CF6', // purple
+]
 
 export default function DilutionScenariosPage() {
   const [presetScenarios, setPresetScenarios] = useState<PresetScenarios | null>(null)
@@ -230,10 +243,10 @@ export default function DilutionScenariosPage() {
 
   if (loading && !presetScenarios) {
     return (
-      <div className="flex h-screen items-center justify-center" style={{ background: '#F7F6F4' }}>
+      <div className="flex h-screen items-center justify-center" style={{ background: 'var(--color-bg-primary)' }}>
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-8 w-8 animate-spin" style={{ color: '#E8312A' }} />
-          <p className="text-gray-600">Loading cap table scenarios...</p>
+          <Loader2 className="h-8 w-8 animate-spin" style={{ color: 'var(--color-accent)' }} />
+          <p style={{ color: 'var(--color-text-muted)' }}>Loading cap table scenarios...</p>
         </div>
       </div>
     )
@@ -244,105 +257,105 @@ export default function DilutionScenariosPage() {
       variants={containerVariants}
       initial="hidden"
       animate="show"
-      style={{ background: '#F7F6F4', minHeight: '100vh' }}
+      style={{ background: 'var(--color-bg-primary)', minHeight: '100vh' }}
       suppressHydrationWarning
     >
-      {/* Hero Section */}
-      <section className="max-w-7xl mx-auto" style={{ paddingTop: '4.5rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+      {/* Header Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 py-8 sm:py-10">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45 }}
-          className="text-center"
         >
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="flex items-center justify-center gap-2"
-            style={{ marginBottom: '1.5rem' }}
-          >
-            <span
-              className="pill text-xs font-bold uppercase tracking-wider"
-              style={{ background: '#FDECEB', color: '#E8312A' }}
+          <div className="flex items-start justify-between gap-4 mb-6">
+            <div>
+              {/* Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="flex items-center gap-2 mb-4"
+              >
+                <span
+                  className="text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg"
+                  style={{ background: 'var(--color-error-soft)', color: 'var(--color-accent)' }}
+                >
+                  <BarChart3 className="w-3.5 h-3.5 inline mr-1.5" />
+                  Cap Table Modeling
+                </span>
+              </motion.div>
+
+              {/* Heading */}
+              <motion.h1
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.06 }}
+                className="serif text-3xl sm:text-4xl mb-2"
+                style={{ color: 'var(--color-text-primary)' }}
+              >
+                Model Ownership Changes
+              </motion.h1>
+
+              {/* Description */}
+              <motion.p
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.12 }}
+                className="text-base leading-relaxed max-w-2xl"
+                style={{ color: 'var(--color-text-muted)' }}
+              >
+                Understand dilution impact from warrant exercises, financing rounds, employee options, and debt conversions. Build multiple scenarios and compare outcomes.
+              </motion.p>
+            </div>
+
+            {/* Action Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.18 }}
+              className="flex flex-col gap-2 sm:gap-3 flex-shrink-0"
             >
-              <BarChart3 className="w-3.5 h-3.5 inline mr-1.5" />
-              Cap Table Dilution Modeling
-            </span>
-          </motion.div>
+              <button
+                onClick={() => setShowCustomForm(!showCustomForm)}
+                className="flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap"
+                style={{
+                  background: 'var(--color-surface-primary)',
+                  color: 'var(--color-accent)',
+                  border: '1px solid var(--color-border)',
+                  transform: 'translateY(0)',
+                  transitionProperty: 'all',
+                  transitionDuration: '0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)'
+                  e.currentTarget.style.boxShadow = 'var(--shadow-card-hover)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = 'var(--shadow-card)'
+                }}
+              >
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline">Custom</span>
+              </button>
 
-          {/* Heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.06 }}
-            className="serif"
-            style={{ fontSize: '2.5rem', lineHeight: '1.2', marginBottom: '1.5rem' }}
-          >
-            Model Ownership Changes<br />
-            <span style={{ color: '#E8312A' }}>From Financing, Warrants & Options</span>
-          </motion.h1>
-
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.12 }}
-            className="text-lg leading-relaxed"
-            style={{ marginBottom: '2rem', maxWidth: '620px', margin: '0 auto 2.5rem', color: '#666666' }}
-          >
-            Understand dilution impact from warrant exercises, financing rounds, employee options, and debt conversions. Build multiple scenarios and compare outcomes.
-          </motion.p>
-
-          {/* Action Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.18 }}
-            className="flex gap-3 justify-center flex-wrap"
-          >
-            <button
-              onClick={() => setShowCustomForm(!showCustomForm)}
-              className="flex items-center gap-2 rounded-full px-6 py-2.5 font-semibold transition-all text-sm"
-              style={{
-                background: '#FFFFFF',
-                color: '#E8312A',
-                border: '2px solid #E8312A',
-                transform: 'translateY(0)',
-                transitionProperty: 'all',
-                transitionDuration: '0.2s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)'
-                e.currentTarget.style.boxShadow = '0 8px 16px rgba(232, 49, 42, 0.15)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = 'none'
-              }}
-            >
-              <Plus className="w-4 h-4" />
-              Create Custom Scenario
-            </button>
-
-            {selectedScenario && (
-              <>
+              {selectedScenario && (
                 <button
                   onClick={handleExportExcel}
                   disabled={exportLoading}
-                  className="flex items-center gap-2 rounded-full px-6 py-2.5 font-semibold transition-all text-sm text-white active:scale-95"
+                  className="flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap text-white"
                   style={{
-                    background: '#0066CC',
+                    background: 'var(--color-info)',
                     opacity: exportLoading ? 0.5 : 1,
                     transform: 'translateY(0)',
                     transitionProperty: 'all',
                     transitionDuration: '0.2s',
+                    cursor: exportLoading ? 'not-allowed' : 'pointer',
                   }}
                   onMouseEnter={(e) => {
                     if (!exportLoading) {
                       e.currentTarget.style.transform = 'translateY(-2px)'
-                      e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 102, 204, 0.2)'
+                      e.currentTarget.style.boxShadow = '0 8px 16px rgba(29, 78, 216, 0.2)'
                     }
                   }}
                   onMouseLeave={(e) => {
@@ -355,80 +368,25 @@ export default function DilutionScenariosPage() {
                   ) : (
                     <Download className="w-4 h-4" />
                   )}
-                  Export Excel
+                  <span className="hidden sm:inline">Export</span>
                 </button>
-
-                <button
-                  onClick={handleExportCSV}
-                  disabled={exportLoading}
-                  className="flex items-center gap-2 rounded-full px-6 py-2.5 font-semibold transition-all text-sm"
-                  style={{
-                    background: '#F7F6F4',
-                    color: '#666666',
-                    border: '1px solid #E5E7EB',
-                    transform: 'translateY(0)',
-                    transitionProperty: 'all',
-                    transitionDuration: '0.2s',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!exportLoading) {
-                      e.currentTarget.style.transform = 'translateY(-2px)'
-                      e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.05)'
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)'
-                    e.currentTarget.style.boxShadow = 'none'
-                  }}
-                >
-                  {exportLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <FileText className="w-4 h-4" />
-                  )}
-                  Export CSV
-                </button>
-
-                <button
-                  onClick={handleSaveScenario}
-                  className="flex items-center gap-2 rounded-full px-6 py-2.5 font-semibold transition-all text-sm"
-                  style={{
-                    background: '#F7F6F4',
-                    color: '#666666',
-                    border: '1px solid #E5E7EB',
-                    transform: 'translateY(0)',
-                    transitionProperty: 'all',
-                    transitionDuration: '0.2s',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)'
-                    e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.05)'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)'
-                    e.currentTarget.style.boxShadow = 'none'
-                  }}
-                >
-                  <Zap className="w-4 h-4" />
-                  Save Scenario
-                </button>
-              </>
-            )}
-          </motion.div>
+              )}
+            </motion.div>
+          </div>
         </motion.div>
       </section>
 
       {/* Main Content Section */}
-      <section className="max-w-7xl mx-auto" style={{ paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 pb-12">
         {/* Error Message */}
         {error && (
           <motion.div
             variants={itemVariants}
-            className="flex gap-3 rounded-lg border p-4 mb-6"
-            style={{ borderColor: '#FFD4CE', background: '#FDECEB', color: '#E8312A' }}
+            className="flex gap-3 rounded-xl border p-4 mb-6"
+            style={{ borderColor: '#E8312A30', background: 'var(--color-error-soft)', color: 'var(--color-accent)' }}
           >
             <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
-            <p>{error}</p>
+            <p className="text-sm">{error}</p>
           </motion.div>
         )}
 
@@ -442,8 +400,8 @@ export default function DilutionScenariosPage() {
               isSelected={selectedScenario?.scenarioType === 'base'}
               onClick={() => setSelectedScenario(presetScenarios.base)}
               scenario={presetScenarios.base}
-              color="#0066CC"
-              bg="#E6F0FF"
+              color="var(--color-info)"
+              bg="var(--color-info-soft)"
             />
             <ScenarioCard
               title="Optimistic Case"
@@ -452,8 +410,8 @@ export default function DilutionScenariosPage() {
               isSelected={selectedScenario?.scenarioType === 'optimistic'}
               onClick={() => setSelectedScenario(presetScenarios.optimistic)}
               scenario={presetScenarios.optimistic}
-              color="#10B981"
-              bg="#D1F4E9"
+              color="var(--color-success)"
+              bg="var(--color-success-soft)"
             />
             <ScenarioCard
               title="Conservative Case"
@@ -462,8 +420,8 @@ export default function DilutionScenariosPage() {
               isSelected={selectedScenario?.scenarioType === 'conservative'}
               onClick={() => setSelectedScenario(presetScenarios.conservative)}
               scenario={presetScenarios.conservative}
-              color="#F59E0B"
-              bg="#FEF3C7"
+              color="var(--color-warning)"
+              bg="var(--color-warning-soft)"
             />
           </motion.div>
         )}
@@ -471,8 +429,8 @@ export default function DilutionScenariosPage() {
         {/* Custom Scenario Form */}
         <AnimatePresence>
           {showCustomForm && (
-            <motion.div variants={itemVariants} className="card p-6 mb-8">
-              <h3 className="mb-6 h4 font-semibold text-gray-900">Create Custom Scenario</h3>
+            <motion.div variants={itemVariants} className="card p-7 mb-8 rounded-xl" style={{ background: 'var(--color-surface-primary)', border: '1px solid var(--color-border)' }}>
+              <h3 className="mb-6 font-bold text-base" style={{ color: 'var(--color-text-primary)' }}>Create Custom Scenario</h3>
               <CustomScenarioForm onSubmit={handleCustomScenarioSubmit} />
             </motion.div>
           )}
@@ -480,8 +438,8 @@ export default function DilutionScenariosPage() {
 
         {/* Saved Scenarios */}
         {savedScenarios.length > 0 && (
-          <motion.div variants={itemVariants} className="card p-6 mb-8">
-            <h3 className="mb-4 h4 font-semibold text-gray-900">Saved Scenarios</h3>
+          <motion.div variants={itemVariants} className="card p-7 mb-8 rounded-xl" style={{ background: 'var(--color-surface-primary)', border: '1px solid var(--color-border)' }}>
+            <h3 className="mb-4 font-bold text-base" style={{ color: 'var(--color-text-primary)' }}>Saved Scenarios</h3>
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
               {savedScenarios.map((saved) => (
                 <button
@@ -489,12 +447,13 @@ export default function DilutionScenariosPage() {
                   onClick={() => setSelectedScenario(saved.result)}
                   className="p-4 rounded-lg border transition-all text-left"
                   style={{
-                    borderColor: selectedScenario?.scenarioId === saved.result.scenarioId ? '#E8312A' : '#E5E7EB',
-                    background: selectedScenario?.scenarioId === saved.result.scenarioId ? '#FDECEB' : '#FFFFFF',
+                    borderColor: selectedScenario?.scenarioId === saved.result.scenarioId ? 'var(--color-accent)' : 'var(--color-border)',
+                    background: selectedScenario?.scenarioId === saved.result.scenarioId ? 'var(--color-error-soft)' : 'var(--color-surface-primary)',
+                    color: selectedScenario?.scenarioId === saved.result.scenarioId ? 'var(--color-text-primary)' : 'var(--color-text-primary)',
                   }}
                 >
-                  <p className="font-medium text-sm text-gray-900">{saved.name}</p>
-                  <p className="caption-sm text-gray-500 mt-1">
+                  <p className="font-medium text-sm">{saved.name}</p>
+                  <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
                     {new Date(saved.timestamp).toLocaleDateString()}
                   </p>
                 </button>
@@ -507,15 +466,15 @@ export default function DilutionScenariosPage() {
         {selectedScenario && (
           <motion.div variants={itemVariants} className="space-y-6">
             {/* Tabs */}
-            <div className="card p-4 flex gap-2 overflow-x-auto border-b" style={{ borderBottomColor: '#E5E7EB' }}>
+            <div className="card p-4 flex gap-2 overflow-x-auto rounded-xl" style={{ background: 'var(--color-surface-primary)', border: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}>
               {(['overview', 'impact', 'comparison', 'sensitivity'] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className="px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap capitalize"
+                  className="px-4 py-2.5 text-sm font-medium rounded-lg transition-all whitespace-nowrap capitalize"
                   style={{
-                    color: activeTab === tab ? '#E8312A' : '#666666',
-                    background: activeTab === tab ? '#FDECEB' : 'transparent',
+                    color: activeTab === tab ? 'var(--color-accent)' : 'var(--color-text-muted)',
+                    background: activeTab === tab ? 'var(--color-error-soft)' : 'transparent',
                   }}
                 >
                   {tab}
@@ -531,27 +490,30 @@ export default function DilutionScenariosPage() {
                   <MetricCard
                     label="Current Shares"
                     value={formatNumber(Number(selectedScenario.currentSnapshot.totalShares))}
+                    highlight={false}
                   />
                   <MetricCard
                     label="Post-Dilution Shares"
                     value={formatNumber(Number(selectedScenario.postDilutionSnapshot.totalShares))}
+                    highlight={false}
                   />
                   <MetricCard
                     label="New Shares Issued"
                     value={formatNumber(Number(selectedScenario.postDilutionSnapshot.newSharesIssued))}
+                    highlight={false}
                   />
                   <MetricCard
                     label="Dilution Impact"
                     value={`${((Number(selectedScenario.postDilutionSnapshot.newSharesIssued) / Number(selectedScenario.postDilutionSnapshot.totalShares)) * 100).toFixed(1)}%`}
-                    highlight
+                    highlight={true}
                   />
                 </div>
 
                 {/* Before/After Visualizations */}
                 <div className="grid gap-6 md:grid-cols-2">
                   {/* Before Pie Chart */}
-                  <div className="card p-6">
-                    <h3 className="mb-4 label font-semibold text-gray-900">Current Ownership</h3>
+                  <div className="card p-6 rounded-xl" style={{ background: 'var(--color-surface-primary)', border: '1px solid var(--color-border)' }}>
+                    <h3 className="mb-4 text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>Current Ownership</h3>
                     {currentOwnershipData.length > 0 && (
                       <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
@@ -580,8 +542,8 @@ export default function DilutionScenariosPage() {
                   </div>
 
                   {/* After Pie Chart */}
-                  <div className="card p-6">
-                    <h3 className="mb-4 label font-semibold text-gray-900">Post-Dilution Ownership</h3>
+                  <div className="card p-6 rounded-xl" style={{ background: 'var(--color-surface-primary)', border: '1px solid var(--color-border)' }}>
+                    <h3 className="mb-4 text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>Post-Dilution Ownership</h3>
                     {postDilutionData.length > 0 && (
                       <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
@@ -611,37 +573,37 @@ export default function DilutionScenariosPage() {
                 </div>
 
                 {/* Assumptions */}
-                <div className="card p-6 rounded-lg" style={{ background: '#F9FAFB', borderColor: '#E5E7EB' }}>
-                  <h3 className="mb-4 label font-semibold text-gray-900">Scenario Assumptions</h3>
+                <div className="card p-6 rounded-xl" style={{ background: 'var(--color-surface-light)', border: '1px solid var(--color-border)' }}>
+                  <h3 className="mb-4 text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>Scenario Assumptions</h3>
                   <div className="grid gap-4 md:grid-cols-2">
                     {selectedScenario.assumptions.warrantsExercisedPercent !== undefined && (
                       <div>
-                        <p className="caption-sm text-gray-600">Warrants Exercised</p>
-                        <p className="text-lg font-semibold text-gray-900 mt-1">
+                        <p className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>Warrants Exercised</p>
+                        <p className="text-lg font-bold mt-1" style={{ color: 'var(--color-text-primary)' }}>
                           {selectedScenario.assumptions.warrantsExercisedPercent}%
                         </p>
                       </div>
                     )}
                     {selectedScenario.assumptions.employeeOptionVestingShares && (
                       <div>
-                        <p className="caption-sm text-gray-600">Employee Options Vesting</p>
-                        <p className="text-lg font-semibold text-gray-900 mt-1">
+                        <p className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>Employee Options Vesting</p>
+                        <p className="text-lg font-bold mt-1" style={{ color: 'var(--color-text-primary)' }}>
                           {formatNumber(selectedScenario.assumptions.employeeOptionVestingShares)}
                         </p>
                       </div>
                     )}
                     {selectedScenario.assumptions.newFinancingAmount && (
                       <div>
-                        <p className="caption-sm text-gray-600">New Financing Amount</p>
-                        <p className="text-lg font-semibold text-gray-900 mt-1">
+                        <p className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>New Financing Amount</p>
+                        <p className="text-lg font-bold mt-1" style={{ color: 'var(--color-text-primary)' }}>
                           ${formatNumber(selectedScenario.assumptions.newFinancingAmount / 1000000)}M
                         </p>
                       </div>
                     )}
                     {selectedScenario.assumptions.projectedValuation && (
                       <div>
-                        <p className="caption-sm text-gray-600">Projected Valuation</p>
-                        <p className="text-lg font-semibold text-gray-900 mt-1">
+                        <p className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>Projected Valuation</p>
+                        <p className="text-lg font-bold mt-1" style={{ color: 'var(--color-text-primary)' }}>
                           ${formatNumber(selectedScenario.assumptions.projectedValuation / 1000000)}M
                         </p>
                       </div>
@@ -655,8 +617,8 @@ export default function DilutionScenariosPage() {
             {activeTab === 'impact' && (
               <motion.div variants={itemVariants} className="space-y-6">
                 {/* Dilution Bar Chart */}
-                <div className="card p-6">
-                  <h3 className="mb-4 label font-semibold text-gray-900">Ownership Changes by Shareholder</h3>
+                <div className="card p-6 rounded-xl" style={{ background: 'var(--color-surface-primary)', border: '1px solid var(--color-border)' }}>
+                  <h3 className="mb-4 text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>Ownership Changes by Shareholder</h3>
                   {dilutionImpactData.length > 0 && (
                     <ResponsiveContainer width="100%" height={400}>
                       <BarChart data={dilutionImpactData}>
@@ -673,45 +635,45 @@ export default function DilutionScenariosPage() {
                 </div>
 
                 {/* Shareholder Impact Table */}
-                <div className="card p-6">
-                  <h3 className="mb-4 label font-semibold text-gray-900">Detailed Shareholder Impact</h3>
+                <div className="card p-6 rounded-xl" style={{ background: 'var(--color-surface-primary)', border: '1px solid var(--color-border)' }}>
+                  <h3 className="mb-4 text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>Detailed Shareholder Impact</h3>
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr style={{ borderBottomColor: '#E5E7EB', borderBottomWidth: '1px' }}>
-                          <th className="px-4 py-3 text-left font-medium text-gray-900">Shareholder</th>
-                          <th className="px-4 py-3 text-right font-medium text-gray-900">Type</th>
-                          <th className="px-4 py-3 text-right font-medium text-gray-900">Current %</th>
-                          <th className="px-4 py-3 text-right font-medium text-gray-900">Post-Dilution %</th>
-                          <th className="px-4 py-3 text-right font-medium text-gray-900">Dilution %</th>
+                        <tr style={{ borderBottomColor: 'var(--color-border)', borderBottomWidth: '1px' }}>
+                          <th className="px-4 py-3 text-left font-medium" style={{ color: 'var(--color-text-primary)' }}>Shareholder</th>
+                          <th className="px-4 py-3 text-right font-medium" style={{ color: 'var(--color-text-primary)' }}>Type</th>
+                          <th className="px-4 py-3 text-right font-medium" style={{ color: 'var(--color-text-primary)' }}>Current %</th>
+                          <th className="px-4 py-3 text-right font-medium" style={{ color: 'var(--color-text-primary)' }}>Post-Dilution %</th>
+                          <th className="px-4 py-3 text-right font-medium" style={{ color: 'var(--color-text-primary)' }}>Dilution %</th>
                         </tr>
                       </thead>
                       <tbody>
                         {selectedScenario.shareholderImpact.map((position, idx) => {
                           const dilution = Number(position.dilutionPercentage)
                           return (
-                            <tr key={position.shareholderId} style={{ borderBottomColor: '#F3F4F6', borderBottomWidth: '1px' }}>
-                              <td className="px-4 py-3 text-gray-900">
+                            <tr key={position.shareholderId} style={{ borderBottomColor: 'var(--color-border)', borderBottomWidth: '1px' }}>
+                              <td className="px-4 py-3" style={{ color: 'var(--color-text-primary)' }}>
                                 <div className="font-medium">{position.shareholderName}</div>
-                                <div className="caption-sm text-gray-500">{position.shareClass}</div>
+                                <div className="text-xs mt-0.5" style={{ color: 'var(--color-text-muted)' }}>{position.shareClass}</div>
                               </td>
-                              <td className="px-4 py-3 text-right text-gray-600 text-xs">
+                              <td className="px-4 py-3 text-right text-xs" style={{ color: 'var(--color-text-muted)' }}>
                                 <span className="capitalize">{position.shareholderType}</span>
                               </td>
-                              <td className="px-4 py-3 text-right font-medium text-gray-900">
+                              <td className="px-4 py-3 text-right font-medium" style={{ color: 'var(--color-text-primary)' }}>
                                 {Number(position.currentOwnership).toFixed(2)}%
                               </td>
-                              <td className="px-4 py-3 text-right font-medium text-gray-900">
+                              <td className="px-4 py-3 text-right font-medium" style={{ color: 'var(--color-text-primary)' }}>
                                 {Number(position.postDilutionOwnership).toFixed(2)}%
                               </td>
                               <td className="px-4 py-3 text-right">
                                 {dilution > 0 ? (
-                                  <div className="flex items-center justify-end gap-1">
-                                    <ArrowDownRight className="h-4 w-4" style={{ color: '#E8312A' }} />
-                                    <span style={{ color: '#E8312A' }}>{dilution.toFixed(2)}%</span>
+                                  <div className="flex items-center justify-end gap-1" style={{ color: 'var(--color-accent)' }}>
+                                    <ArrowDownRight className="h-4 w-4" />
+                                    <span>{dilution.toFixed(2)}%</span>
                                   </div>
                                 ) : (
-                                  <span className="text-gray-400">-</span>
+                                  <span style={{ color: 'var(--color-text-tertiary)' }}>-</span>
                                 )}
                               </td>
                             </tr>
@@ -735,8 +697,8 @@ export default function DilutionScenariosPage() {
                     selectedScenario={selectedScenario}
                   />
                 ) : (
-                  <div className="card p-6 text-center">
-                    <p className="text-gray-600">No scenarios available for comparison</p>
+                  <div className="card p-6 rounded-xl text-center" style={{ background: 'var(--color-surface-primary)', border: '1px solid var(--color-border)' }}>
+                    <p style={{ color: 'var(--color-text-muted)' }}>No scenarios available for comparison</p>
                   </div>
                 )}
               </motion.div>
@@ -793,35 +755,38 @@ function ScenarioCard({
   return (
     <motion.button
       onClick={onClick}
-      className="card p-6 text-left transition-all hover:shadow-lg"
+      className="card p-6 rounded-xl text-left transition-all"
       style={{
         borderWidth: isSelected ? '2px' : '1px',
-        borderColor: isSelected ? color : '#E5E7EB',
-        background: isSelected ? bg : '#FFFFFF',
+        borderColor: isSelected ? color : 'var(--color-border)',
+        background: isSelected ? bg : 'var(--color-surface-primary)',
         transform: 'scale(1)',
         transitionProperty: 'all',
         transitionDuration: '0.2s',
+        boxShadow: isSelected ? `0 0 0 1px ${color}20` : 'var(--shadow-card)',
       }}
       onMouseEnter={(e) => {
         const target = e.currentTarget as HTMLElement
         target.style.transform = 'scale(1.02)'
+        target.style.boxShadow = 'var(--shadow-card-hover)'
       }}
       onMouseLeave={(e) => {
         const target = e.currentTarget as HTMLElement
         target.style.transform = 'scale(1)'
+        target.style.boxShadow = isSelected ? `0 0 0 1px ${color}20` : 'var(--shadow-card)'
       }}
       whileTap={{ scale: 0.98 }}
     >
       <div className="flex items-start gap-4">
-        <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: bg }}>
+        <div className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: bg }}>
           <div style={{ color }}>{icon}</div>
         </div>
         <div className="flex-1">
-          <h3 className="text-lg font-semibold" style={{ color: isSelected ? color : '#111827' }}>{title}</h3>
-          <p className="mt-1 caption-sm text-gray-600">{description}</p>
+          <h3 className="text-base font-bold" style={{ color: isSelected ? color : 'var(--color-text-primary)' }}>{title}</h3>
+          <p className="mt-1 text-xs" style={{ color: 'var(--color-text-muted)' }}>{description}</p>
           <div className="mt-4 flex items-baseline gap-2">
-            <span className="text-2xl font-bold" style={{ color }}>{dilutionPercent.toFixed(1)}%</span>
-            <span className="caption-sm text-gray-600">dilution</span>
+            <span className="text-2xl font-black" style={{ color }}>{dilutionPercent.toFixed(1)}%</span>
+            <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>dilution</span>
           </div>
         </div>
       </div>
@@ -838,9 +803,9 @@ interface MetricCardProps {
 
 function MetricCard({ label, value, highlight }: MetricCardProps) {
   return (
-    <div className="card p-6 rounded-lg" style={{ background: highlight ? '#FDECEB' : '#F9FAFB', borderColor: '#E5E7EB' }}>
-      <p className="caption-sm text-gray-600">{label}</p>
-      <p className="mt-2 text-2xl font-bold" style={{ color: highlight ? '#E8312A' : '#111827' }}>
+    <div className="card p-6 rounded-xl" style={{ background: highlight ? 'var(--color-error-soft)' : 'var(--color-surface-light)', border: '1px solid var(--color-border)' }}>
+      <p className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>{label}</p>
+      <p className="mt-2 text-2xl font-black" style={{ color: highlight ? 'var(--color-accent)' : 'var(--color-text-primary)' }}>
         {value}
       </p>
     </div>
@@ -871,9 +836,9 @@ function CustomScenarioForm({ onSubmit }: CustomScenarioFormProps) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid gap-6">
         {/* Equity Raise Section */}
-        <div className="border-t pt-6" style={{ borderTopColor: '#E5E7EB' }}>
-          <h4 className="label font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Zap className="w-4 h-4" style={{ color: '#E8312A' }} />
+        <div className="border-t pt-6" style={{ borderTopColor: 'var(--color-border)' }}>
+          <h4 className="text-sm font-bold text-sm mb-4 flex items-center gap-2" style={{ color: 'var(--color-text-primary)' }}>
+            <Zap className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
             Equity Raise Parameters
           </h4>
           <div className="grid gap-4 md:grid-cols-2">
@@ -895,16 +860,16 @@ function CustomScenarioForm({ onSubmit }: CustomScenarioFormProps) {
         </div>
 
         {/* Warrants & Options Section */}
-        <div className="border-t pt-6" style={{ borderTopColor: '#E5E7EB' }}>
-          <h4 className="label font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4" style={{ color: '#10B981' }} />
+        <div className="border-t pt-6" style={{ borderTopColor: 'var(--color-border)' }}>
+          <h4 className="text-sm font-bold mb-4 flex items-center gap-2" style={{ color: 'var(--color-text-primary)' }}>
+            <TrendingUp className="w-4 h-4" style={{ color: 'var(--color-success)' }} />
             Warrants & Options
           </h4>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <label className="label font-medium text-gray-900 mb-2 flex items-center gap-2">
+              <label className="text-sm font-medium mb-2 flex items-center gap-2" style={{ color: 'var(--color-text-primary)' }}>
                 Warrants Exercised (%)
-                <HelpCircle className="w-4 h-4 text-gray-400" aria-label="Percentage of outstanding warrants expected to be exercised" />
+                <HelpCircle className="w-4 h-4" style={{ color: 'var(--color-text-muted)' }} aria-label="Percentage of outstanding warrants expected to be exercised" />
               </label>
               <input
                 type="range"
@@ -914,7 +879,7 @@ function CustomScenarioForm({ onSubmit }: CustomScenarioFormProps) {
                 onChange={(e) => setFormData({ ...formData, warrantsExercisedPercent: Number(e.target.value) })}
                 className="w-full"
               />
-              <p className="text-sm font-medium text-gray-900 mt-2">{formData.warrantsExercisedPercent}%</p>
+              <p className="text-sm font-medium mt-2" style={{ color: 'var(--color-text-primary)' }}>{formData.warrantsExercisedPercent}%</p>
             </div>
             <FormInput
               label="Employee Options Vesting (shares)"
@@ -927,8 +892,8 @@ function CustomScenarioForm({ onSubmit }: CustomScenarioFormProps) {
         </div>
 
         {/* Scenario Details */}
-        <div className="border-t pt-6" style={{ borderTopColor: '#E5E7EB' }}>
-          <h4 className="label font-semibold text-gray-900 mb-4">Scenario Details</h4>
+        <div className="border-t pt-6" style={{ borderTopColor: 'var(--color-border)' }}>
+          <h4 className="text-sm font-bold mb-4" style={{ color: 'var(--color-text-primary)' }}>Scenario Details</h4>
           <FormInput
             label="Scenario Name"
             value={formData.scenarioName}
@@ -938,12 +903,12 @@ function CustomScenarioForm({ onSubmit }: CustomScenarioFormProps) {
         </div>
       </div>
 
-      <div className="flex gap-3 border-t pt-6" style={{ borderTopColor: '#E5E7EB' }}>
+      <div className="flex gap-3 border-t pt-6" style={{ borderTopColor: 'var(--color-border)' }}>
         <button
           type="submit"
-          className="flex-1 rounded-full px-4 py-3 label font-semibold text-white transition-all active:scale-95"
+          className="flex-1 rounded-xl px-4 py-3 text-sm font-bold text-white transition-all active:scale-95"
           style={{
-            background: '#E8312A',
+            background: 'var(--color-accent)',
             transform: 'translateY(0)',
             transitionProperty: 'all',
             transitionDuration: '0.2s',
@@ -976,23 +941,23 @@ interface FormInputProps {
 function FormInput({ label, type = 'text', value, onChange, tooltip }: FormInputProps) {
   return (
     <div>
-      <label className="label font-medium text-gray-900 flex items-center gap-2">
+      <label className="text-sm font-medium flex items-center gap-2 mb-2" style={{ color: 'var(--color-text-primary)' }}>
         {label}
-        {tooltip && <HelpCircle className="w-4 h-4 text-gray-400" aria-label={tooltip} />}
+        {tooltip && <HelpCircle className="w-4 h-4" style={{ color: 'var(--color-text-muted)' }} aria-label={tooltip} />}
       </label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-2 w-full rounded-lg border px-3 py-2.5 text-sm transition-all"
-        style={{ borderColor: '#E5E7EB' }}
+        className="w-full rounded-lg border px-3 py-2.5 text-sm transition-all"
+        style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface-primary)', color: 'var(--color-text-primary)' }}
         onFocus={(e) => {
-          e.currentTarget.style.borderColor = '#E8312A'
+          e.currentTarget.style.borderColor = 'var(--color-accent)'
           e.currentTarget.style.boxShadow = '0 0 0 3px rgba(232, 49, 42, 0.1)'
           e.currentTarget.style.outline = 'none'
         }}
         onBlur={(e) => {
-          e.currentTarget.style.borderColor = '#E5E7EB'
+          e.currentTarget.style.borderColor = 'var(--color-border)'
           e.currentTarget.style.boxShadow = 'none'
         }}
       />
@@ -1030,25 +995,25 @@ function ScenarioComparison({
   ]
 
   return (
-    <div className="card p-6">
-      <h3 className="mb-4 label font-semibold text-gray-900">Side-by-Side Comparison</h3>
+    <div className="card p-6 rounded-xl" style={{ background: 'var(--color-surface-primary)', border: '1px solid var(--color-border)' }}>
+      <h3 className="mb-4 text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>Side-by-Side Comparison</h3>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr style={{ borderBottomColor: '#E5E7EB', borderBottomWidth: '1px' }}>
-              <th className="px-4 py-3 text-left font-medium text-gray-900">Metric</th>
-              <th className="px-4 py-3 text-right font-medium text-gray-900">Base Case</th>
-              <th className="px-4 py-3 text-right font-medium text-gray-900">Optimistic</th>
-              <th className="px-4 py-3 text-right font-medium text-gray-900">Conservative</th>
+            <tr style={{ borderBottomColor: 'var(--color-border)', borderBottomWidth: '1px' }}>
+              <th className="px-4 py-3 text-left font-medium" style={{ color: 'var(--color-text-primary)' }}>Metric</th>
+              <th className="px-4 py-3 text-right font-medium" style={{ color: 'var(--color-text-primary)' }}>Base Case</th>
+              <th className="px-4 py-3 text-right font-medium" style={{ color: 'var(--color-text-primary)' }}>Optimistic</th>
+              <th className="px-4 py-3 text-right font-medium" style={{ color: 'var(--color-text-primary)' }}>Conservative</th>
             </tr>
           </thead>
           <tbody>
             {comparisonData.map((row, idx) => (
-              <tr key={idx} style={{ borderBottomColor: '#F3F4F6', borderBottomWidth: '1px' }}>
-                <td className="px-4 py-3 font-medium text-gray-900">{row.metric}</td>
-                <td className="px-4 py-3 text-right text-gray-700">{row.base}</td>
-                <td className="px-4 py-3 text-right text-gray-700">{row.optimistic}</td>
-                <td className="px-4 py-3 text-right text-gray-700">{row.conservative}</td>
+              <tr key={idx} style={{ borderBottomColor: 'var(--color-border)', borderBottomWidth: '1px' }}>
+                <td className="px-4 py-3 font-medium" style={{ color: 'var(--color-text-primary)' }}>{row.metric}</td>
+                <td className="px-4 py-3 text-right" style={{ color: 'var(--color-text-secondary)' }}>{row.base}</td>
+                <td className="px-4 py-3 text-right" style={{ color: 'var(--color-text-secondary)' }}>{row.optimistic}</td>
+                <td className="px-4 py-3 text-right" style={{ color: 'var(--color-text-secondary)' }}>{row.conservative}</td>
               </tr>
             ))}
           </tbody>
@@ -1056,27 +1021,27 @@ function ScenarioComparison({
       </div>
 
       {/* Shareholder Comparison Grid */}
-      <h3 className="mt-6 mb-4 label font-semibold text-gray-900">Shareholder Ownership % Across Scenarios</h3>
+      <h3 className="mt-6 mb-4 text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>Shareholder Ownership % Across Scenarios</h3>
       <div className="grid gap-4">
         {baseScenario.shareholderImpact.slice(0, 5).map((position) => {
           const optPosition = optimisticScenario.shareholderImpact.find((p) => p.shareholderId === position.shareholderId)
           const conPosition = conservativeScenario.shareholderImpact.find((p) => p.shareholderId === position.shareholderId)
 
           return (
-            <div key={position.shareholderId} className="p-4 rounded-lg bg-gray-50">
-              <p className="font-medium text-gray-900 mb-2">{position.shareholderName}</p>
+            <div key={position.shareholderId} className="p-4 rounded-lg" style={{ background: 'var(--color-surface-light)' }}>
+              <p className="font-medium mb-2" style={{ color: 'var(--color-text-primary)' }}>{position.shareholderName}</p>
               <div className="grid gap-2 md:grid-cols-3">
                 <div>
-                  <p className="caption-sm text-gray-600">Base</p>
-                  <p className="text-lg font-semibold text-gray-900">{Number(position.postDilutionOwnership).toFixed(2)}%</p>
+                  <p className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>Base</p>
+                  <p className="text-lg font-bold" style={{ color: 'var(--color-text-primary)' }}>{Number(position.postDilutionOwnership).toFixed(2)}%</p>
                 </div>
                 <div>
-                  <p className="caption-sm text-gray-600">Optimistic</p>
-                  <p className="text-lg font-semibold text-gray-900">{optPosition ? Number(optPosition.postDilutionOwnership).toFixed(2) : 'N/A'}%</p>
+                  <p className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>Optimistic</p>
+                  <p className="text-lg font-bold" style={{ color: 'var(--color-text-primary)' }}>{optPosition ? Number(optPosition.postDilutionOwnership).toFixed(2) : 'N/A'}%</p>
                 </div>
                 <div>
-                  <p className="caption-sm text-gray-600">Conservative</p>
-                  <p className="text-lg font-semibold text-gray-900">{conPosition ? Number(conPosition.postDilutionOwnership).toFixed(2) : 'N/A'}%</p>
+                  <p className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>Conservative</p>
+                  <p className="text-lg font-bold" style={{ color: 'var(--color-text-primary)' }}>{conPosition ? Number(conPosition.postDilutionOwnership).toFixed(2) : 'N/A'}%</p>
                 </div>
               </div>
             </div>
@@ -1116,18 +1081,18 @@ function SensitivityAnalysisPanel({
   return (
     <div className="space-y-6">
       {/* Sensitivity Controls */}
-      <div className="card p-6">
-        <h3 className="mb-6 label font-semibold text-gray-900 flex items-center gap-2">
-          <Zap className="w-4 h-4" style={{ color: '#E8312A' }} />
+      <div className="card p-6 rounded-xl" style={{ background: 'var(--color-surface-primary)', border: '1px solid var(--color-border)' }}>
+        <h3 className="mb-6 text-sm font-bold flex items-center gap-2" style={{ color: 'var(--color-text-primary)' }}>
+          <Zap className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
           What-If Analysis
         </h3>
 
         <div className="space-y-6">
           {/* Exercise Probability Slider */}
           <div>
-            <label className="label font-medium text-gray-900 flex items-center gap-2 mb-3">
+            <label className="text-sm font-medium flex items-center gap-2 mb-3" style={{ color: 'var(--color-text-primary)' }}>
               Exercise Probability
-              <HelpCircle className="w-4 h-4 text-gray-400" aria-label="What percentage of warrants/options will be exercised?" />
+              <HelpCircle className="w-4 h-4" style={{ color: 'var(--color-text-muted)' }} aria-label="What percentage of warrants/options will be exercised?" />
             </label>
             <div className="flex items-center gap-4">
               <input
@@ -1138,9 +1103,9 @@ function SensitivityAnalysisPanel({
                 onChange={(e) => onExerciseProbabilityChange(Number(e.target.value))}
                 className="flex-1"
               />
-              <span className="text-lg font-semibold text-gray-900 w-16">{exerciseProbability}%</span>
+              <span className="text-lg font-bold w-16" style={{ color: 'var(--color-text-primary)' }}>{exerciseProbability}%</span>
             </div>
-            <p className="caption-sm text-gray-500 mt-2">
+            <p className="text-xs mt-2" style={{ color: 'var(--color-text-muted)' }}>
               {exerciseProbability < 33 && 'Conservative'}
               {exerciseProbability >= 33 && exerciseProbability < 67 && 'Base Case'}
               {exerciseProbability >= 67 && 'Optimistic'}
@@ -1149,9 +1114,9 @@ function SensitivityAnalysisPanel({
 
           {/* Valuation Change Slider */}
           <div>
-            <label className="label font-medium text-gray-900 flex items-center gap-2 mb-3">
+            <label className="text-sm font-medium flex items-center gap-2 mb-3" style={{ color: 'var(--color-text-primary)' }}>
               Valuation Change
-              <HelpCircle className="w-4 h-4 text-gray-400" aria-label="Expected change in company valuation percentage" />
+              <HelpCircle className="w-4 h-4" style={{ color: 'var(--color-text-muted)' }} aria-label="Expected change in company valuation percentage" />
             </label>
             <div className="flex items-center gap-4">
               <input
@@ -1162,7 +1127,7 @@ function SensitivityAnalysisPanel({
                 onChange={(e) => onValuationChangeChange(Number(e.target.value))}
                 className="flex-1"
               />
-              <span className="text-lg font-semibold w-16 text-right" style={{ color: valuationChange > 0 ? '#10B981' : valuationChange < 0 ? '#E8312A' : '#666666' }}>
+              <span className="text-lg font-bold w-16 text-right" style={{ color: valuationChange > 0 ? 'var(--color-success)' : valuationChange < 0 ? 'var(--color-accent)' : 'var(--color-text-muted)' }}>
                 {valuationChange > 0 ? '+' : ''}{valuationChange}%
               </span>
             </div>
@@ -1170,9 +1135,9 @@ function SensitivityAnalysisPanel({
 
           {/* Additional Raise Slider */}
           <div>
-            <label className="label font-medium text-gray-900 flex items-center gap-2 mb-3">
+            <label className="text-sm font-medium flex items-center gap-2 mb-3" style={{ color: 'var(--color-text-primary)' }}>
               Additional Capital Raise
-              <HelpCircle className="w-4 h-4 text-gray-400" aria-label="Projected additional capital raises" />
+              <HelpCircle className="w-4 h-4" style={{ color: 'var(--color-text-muted)' }} aria-label="Projected additional capital raises" />
             </label>
             <div className="flex items-center gap-4">
               <input
@@ -1183,15 +1148,15 @@ function SensitivityAnalysisPanel({
                 onChange={(e) => onAdditionalRaiseChange(Number(e.target.value))}
                 className="flex-1"
               />
-              <span className="text-lg font-semibold text-gray-900 w-16">${additionalRaise}M</span>
+              <span className="text-lg font-bold w-16" style={{ color: 'var(--color-text-primary)' }}>${additionalRaise}M</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Heatmap Visualization */}
-      <div className="card p-6">
-        <h3 className="mb-4 label font-semibold text-gray-900">Scenario Sensitivity Heatmap</h3>
+      <div className="card p-6 rounded-xl" style={{ background: 'var(--color-surface-primary)', border: '1px solid var(--color-border)' }}>
+        <h3 className="mb-4 text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>Scenario Sensitivity Heatmap</h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={heatmapData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
@@ -1204,23 +1169,23 @@ function SensitivityAnalysisPanel({
       </div>
 
       {/* Impact Summary */}
-      <div className="card p-6">
-        <h3 className="mb-4 label font-semibold text-gray-900">Key Impacts Summary</h3>
+      <div className="card p-6 rounded-xl" style={{ background: 'var(--color-surface-primary)', border: '1px solid var(--color-border)' }}>
+        <h3 className="mb-4 text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>Key Impacts Summary</h3>
         <div className="grid gap-4 md:grid-cols-3">
-          <div className="p-4 rounded-lg" style={{ background: '#F9FAFB' }}>
-            <p className="caption-sm text-gray-600">Exercise Probability Impact</p>
-            <p className="text-lg font-semibold text-gray-900 mt-1">{(exerciseProbability * 0.5).toFixed(1)}%</p>
-            <p className="caption-sm text-gray-500 mt-1">Est. dilution change</p>
+          <div className="p-4 rounded-lg" style={{ background: 'var(--color-surface-light)' }}>
+            <p className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>Exercise Probability Impact</p>
+            <p className="text-lg font-bold mt-1" style={{ color: 'var(--color-text-primary)' }}>{(exerciseProbability * 0.5).toFixed(1)}%</p>
+            <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>Est. dilution change</p>
           </div>
-          <div className="p-4 rounded-lg" style={{ background: '#F9FAFB' }}>
-            <p className="caption-sm text-gray-600">Valuation Change Impact</p>
-            <p className="text-lg font-semibold text-gray-900 mt-1">{(Math.abs(valuationChange) * 0.3).toFixed(1)}%</p>
-            <p className="caption-sm text-gray-500 mt-1">On ownership %</p>
+          <div className="p-4 rounded-lg" style={{ background: 'var(--color-surface-light)' }}>
+            <p className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>Valuation Change Impact</p>
+            <p className="text-lg font-bold mt-1" style={{ color: 'var(--color-text-primary)' }}>{(Math.abs(valuationChange) * 0.3).toFixed(1)}%</p>
+            <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>On ownership %</p>
           </div>
-          <div className="p-4 rounded-lg" style={{ background: '#F9FAFB' }}>
-            <p className="caption-sm text-gray-600">Additional Raise</p>
-            <p className="text-lg font-semibold text-gray-900 mt-1">${additionalRaise}M</p>
-            <p className="caption-sm text-gray-500 mt-1">Extra dilution potential</p>
+          <div className="p-4 rounded-lg" style={{ background: 'var(--color-surface-light)' }}>
+            <p className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>Additional Raise</p>
+            <p className="text-lg font-bold mt-1" style={{ color: 'var(--color-text-primary)' }}>${additionalRaise}M</p>
+            <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>Extra dilution potential</p>
           </div>
         </div>
       </div>

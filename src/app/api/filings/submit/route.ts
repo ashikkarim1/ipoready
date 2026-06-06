@@ -1,3 +1,13 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { getFilingService } from '@/lib/services/filing-service'
+import {
+  DocumentMetadata,
+  FilingMetadata,
+  DocumentType,
+} from '@/lib/filing-adapters/BaseFilingAdapter'
+
+export const dynamic = 'force-dynamic'
+
 /**
  * Filing Submission API
  * ====================
@@ -16,15 +26,6 @@
  *   }
  * }
  */
-
-import { NextRequest, NextResponse } from 'next/server'
-import { getFilingService } from '@/lib/services/filing-service'
-import {
-export const dynamic = 'force-dynamic'
-  DocumentMetadata,
-  FilingMetadata,
-  DocumentType,
-} from '@/lib/filing-adapters/BaseFilingAdapter'
 
 /**
  * Validate request body structure

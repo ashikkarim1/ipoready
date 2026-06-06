@@ -3,6 +3,15 @@
 /**
  * Listed Services OS - Comprehensive Intelligence Platform
  * The operating system for public company decision-making
+ *
+ * Refactored with mission control design system:
+ * - Consistent card styling with hover/animation effects
+ * - Mission control color gradients and theming
+ * - Typography hierarchy matching light theme
+ * - Icon and spacing patterns aligned with dashboard
+ * - Status badges with consistent styling
+ * - Data visualization with motion animations
+ * - Button/CTA styling aligned to brand
  */
 
 import { useState } from 'react'
@@ -10,7 +19,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   TrendingUp, TrendingDown, BarChart3, Eye, Zap, Target,
   Briefcase, Users, Lightbulb, GitBranch, Shield, Building2,
-  ArrowRight, Clock, CheckCircle2, AlertCircle, Brain
+  ArrowRight, Clock, CheckCircle2, AlertCircle, Brain, Sparkles
 } from 'lucide-react'
 
 interface Module {
@@ -18,12 +27,100 @@ interface Module {
   title: string
   description: string
   status: 'available' | 'coming-soon' | 'beta'
-  color: string
+  color: {
+    gradient: string
+    icon: string
+    badge: string
+  }
   metrics: Array<{ label: string; value: string; trend?: 'up' | 'down' }>
   keyInsights: string[]
   actionItems: string[]
   dataFreshness: string
   icon: React.ReactNode
+}
+
+// Mission Control color system - aligned with dashboard theme
+const COLOR_SCHEMES = {
+  blue: {
+    gradient: 'from-blue-500 to-blue-600',
+    icon: 'text-blue-600',
+    badge: 'bg-blue-50 border-blue-200 text-blue-700',
+    hover: 'hover:bg-blue-50',
+    accentBg: 'bg-blue-500/10',
+    accentBorder: 'border-blue-500/20',
+  },
+  purple: {
+    gradient: 'from-purple-500 to-purple-600',
+    icon: 'text-purple-600',
+    badge: 'bg-purple-50 border-purple-200 text-purple-700',
+    hover: 'hover:bg-purple-50',
+    accentBg: 'bg-purple-500/10',
+    accentBorder: 'border-purple-500/20',
+  },
+  orange: {
+    gradient: 'from-orange-500 to-orange-600',
+    icon: 'text-orange-600',
+    badge: 'bg-orange-50 border-orange-200 text-orange-700',
+    hover: 'hover:bg-orange-50',
+    accentBg: 'bg-orange-500/10',
+    accentBorder: 'border-orange-500/20',
+  },
+  green: {
+    gradient: 'from-green-500 to-green-600',
+    icon: 'text-green-600',
+    badge: 'bg-green-50 border-green-200 text-green-700',
+    hover: 'hover:bg-green-50',
+    accentBg: 'bg-green-500/10',
+    accentBorder: 'border-green-500/20',
+  },
+  red: {
+    gradient: 'from-red-500 to-red-600',
+    icon: 'text-red-600',
+    badge: 'bg-red-50 border-red-200 text-red-700',
+    hover: 'hover:bg-red-50',
+    accentBg: 'bg-red-500/10',
+    accentBorder: 'border-red-500/20',
+  },
+  indigo: {
+    gradient: 'from-indigo-500 to-indigo-600',
+    icon: 'text-indigo-600',
+    badge: 'bg-indigo-50 border-indigo-200 text-indigo-700',
+    hover: 'hover:bg-indigo-50',
+    accentBg: 'bg-indigo-500/10',
+    accentBorder: 'border-indigo-500/20',
+  },
+  cyan: {
+    gradient: 'from-cyan-500 to-cyan-600',
+    icon: 'text-cyan-600',
+    badge: 'bg-cyan-50 border-cyan-200 text-cyan-700',
+    hover: 'hover:bg-cyan-50',
+    accentBg: 'bg-cyan-500/10',
+    accentBorder: 'border-cyan-500/20',
+  },
+  emerald: {
+    gradient: 'from-emerald-500 to-emerald-600',
+    icon: 'text-emerald-600',
+    badge: 'bg-emerald-50 border-emerald-200 text-emerald-700',
+    hover: 'hover:bg-emerald-50',
+    accentBg: 'bg-emerald-500/10',
+    accentBorder: 'border-emerald-500/20',
+  },
+  pink: {
+    gradient: 'from-pink-500 to-pink-600',
+    icon: 'text-pink-600',
+    badge: 'bg-pink-50 border-pink-200 text-pink-700',
+    hover: 'hover:bg-pink-50',
+    accentBg: 'bg-pink-500/10',
+    accentBorder: 'border-pink-500/20',
+  },
+  yellow: {
+    gradient: 'from-yellow-500 to-yellow-600',
+    icon: 'text-yellow-600',
+    badge: 'bg-yellow-50 border-yellow-200 text-yellow-700',
+    hover: 'hover:bg-yellow-50',
+    accentBg: 'bg-yellow-500/10',
+    accentBorder: 'border-yellow-500/20',
+  },
 }
 
 const modules: Module[] = [
@@ -32,7 +129,7 @@ const modules: Module[] = [
     title: 'Capital Markets Intelligence',
     description: 'Real-time visibility into sector capital activity',
     status: 'available',
-    color: 'from-blue-500 to-blue-600',
+    color: COLOR_SCHEMES.blue,
     icon: <TrendingUp className="w-6 h-6" />,
     metrics: [
       { label: 'Sector IPOs YTD', value: '47', trend: 'up' },
@@ -58,7 +155,7 @@ const modules: Module[] = [
     title: 'Market Sentiment OS',
     description: 'Know what the market actually thinks',
     status: 'beta',
-    color: 'from-purple-500 to-purple-600',
+    color: COLOR_SCHEMES.purple,
     icon: <Zap className="w-6 h-6" />,
     metrics: [
       { label: 'Company Sentiment', value: '72/100', trend: 'up' },
@@ -84,7 +181,7 @@ const modules: Module[] = [
     title: 'Competitive Intelligence',
     description: 'Know what competitors are doing',
     status: 'available',
-    color: 'from-orange-500 to-orange-600',
+    color: COLOR_SCHEMES.orange,
     icon: <Eye className="w-6 h-6" />,
     metrics: [
       { label: 'Active Competitors', value: '12', trend: 'up' },
@@ -110,7 +207,7 @@ const modules: Module[] = [
     title: 'Strategic Planning OS',
     description: 'Turn board directives into measurable initiatives',
     status: 'available',
-    color: 'from-green-500 to-green-600',
+    color: COLOR_SCHEMES.green,
     icon: <Target className="w-6 h-6" />,
     metrics: [
       { label: 'Active Initiatives', value: '7' },
@@ -136,7 +233,7 @@ const modules: Module[] = [
     title: 'M&A Intelligence Engine',
     description: 'Structured acquisition strategy',
     status: 'coming-soon',
-    color: 'from-red-500 to-red-600',
+    color: COLOR_SCHEMES.red,
     icon: <Briefcase className="w-6 h-6" />,
     metrics: [
       { label: 'Acquisition Targets', value: '47', trend: 'up' },
@@ -162,7 +259,7 @@ const modules: Module[] = [
     title: 'Institutional Capital Engine',
     description: 'Identify investor whitespace',
     status: 'coming-soon',
-    color: 'from-indigo-500 to-indigo-600',
+    color: COLOR_SCHEMES.indigo,
     icon: <Users className="w-6 h-6" />,
     metrics: [
       { label: 'Investor Whitespace', value: '127 funds', trend: 'up' },
@@ -188,7 +285,7 @@ const modules: Module[] = [
     title: 'AI Board Member',
     description: 'Automated board-level insights',
     status: 'coming-soon',
-    color: 'from-cyan-500 to-cyan-600',
+    color: COLOR_SCHEMES.cyan,
     icon: <Lightbulb className="w-6 h-6" />,
     metrics: [
       { label: 'Board Packages/Year', value: '12' },
@@ -214,7 +311,7 @@ const modules: Module[] = [
     title: 'Corporate Development OS',
     description: 'Partnerships and distribution strategy',
     status: 'coming-soon',
-    color: 'from-emerald-500 to-emerald-600',
+    color: COLOR_SCHEMES.emerald,
     icon: <GitBranch className="w-6 h-6" />,
     metrics: [
       { label: 'Potential Partners', value: '34', trend: 'up' },
@@ -240,7 +337,7 @@ const modules: Module[] = [
     title: 'CEO Digital Twin',
     description: 'AI trained on your decisions',
     status: 'coming-soon',
-    color: 'from-pink-500 to-pink-600',
+    color: COLOR_SCHEMES.pink,
     icon: <Shield className="w-6 h-6" />,
     metrics: [
       { label: 'Decision Accuracy', value: '84%', trend: 'up' },
@@ -266,7 +363,7 @@ const modules: Module[] = [
     title: 'Predictive Engine',
     description: 'Know what\'s going to happen',
     status: 'coming-soon',
-    color: 'from-yellow-500 to-yellow-600',
+    color: COLOR_SCHEMES.yellow,
     icon: <AlertCircle className="w-6 h-6" />,
     metrics: [
       { label: 'Predictions Made', value: '847' },
@@ -306,35 +403,58 @@ export default function ListedServicesPage() {
   const selectedModuleData = modules.find(m => m.id === selectedModule)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+    <div style={{ background: '#F7F6F4', minHeight: '100vh' }} suppressHydrationWarning>
       {/* Header */}
-      <div className="border-b border-slate-700 bg-slate-800/50 backdrop-blur-sm sticky top-0 z-40">
+      <div style={{ borderBottom: '1px solid var(--color-border)', background: 'var(--color-surface-primary)', backdropFilter: 'blur(4px)' }} className="sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold mb-2">Listed Services OS</h1>
-            <p className="text-xl text-slate-300">
+            <h1 style={{ color: 'var(--color-text-primary)' }} className="text-3xl sm:text-4xl font-bold mb-2">Listed Services OS</h1>
+            <p style={{ color: 'var(--color-text-secondary)' }} className="text-base sm:text-lg">
               The intelligence layer for public company leaders
             </p>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-4 gap-4">
-            <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
-              <p className="text-sm text-blue-300">Total Modules</p>
-              <p className="text-3xl font-bold text-blue-400 mt-1">10</p>
-            </div>
-            <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-              <p className="text-sm text-green-300">Available</p>
-              <p className="text-3xl font-bold text-green-400 mt-1">{availableCount}</p>
-            </div>
-            <div className="bg-purple-500/10 border border-purple-500/20 rounded-lg p-4">
-              <p className="text-sm text-purple-300">In Beta</p>
-              <p className="text-3xl font-bold text-purple-400 mt-1">{betaCount}</p>
-            </div>
-            <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4">
-              <p className="text-sm text-amber-300">Coming Soon</p>
-              <p className="text-3xl font-bold text-amber-400 mt-1">{comingSoonCount}</p>
-            </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0 }}
+              style={{ background: 'var(--color-info-soft)', borderColor: 'var(--color-info-medium)' }}
+              className="rounded-xl border p-4">
+              <p style={{ color: 'var(--color-info)' }} className="text-xs sm:text-sm font-semibold uppercase tracking-wider">Total Modules</p>
+              <p style={{ color: 'var(--color-info)' }} className="text-2xl sm:text-3xl font-bold mt-2">10</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 }}
+              style={{ background: 'var(--color-success-soft)', borderColor: 'var(--color-success)' }}
+              className="rounded-xl border p-4">
+              <p style={{ color: 'var(--color-success)' }} className="text-xs sm:text-sm font-semibold uppercase tracking-wider">Available</p>
+              <p style={{ color: 'var(--color-success)' }} className="text-2xl sm:text-3xl font-bold mt-2">{availableCount}</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              style={{ background: 'rgba(168, 85, 247, 0.05)', borderColor: 'rgba(168, 85, 247, 0.2)' }}
+              className="rounded-xl border p-4">
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider" style={{ color: '#A855F7' }}>In Beta</p>
+              <p className="text-2xl sm:text-3xl font-bold mt-2" style={{ color: '#A855F7' }}>{betaCount}</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              style={{ background: 'var(--color-warning-soft)', borderColor: 'var(--color-warning)' }}
+              className="rounded-xl border p-4">
+              <p style={{ color: 'var(--color-warning)' }} className="text-xs sm:text-sm font-semibold uppercase tracking-wider">Coming Soon</p>
+              <p style={{ color: 'var(--color-warning)' }} className="text-2xl sm:text-3xl font-bold mt-2">{comingSoonCount}</p>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -342,22 +462,28 @@ export default function ListedServicesPage() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Filter Tabs */}
-        <div className="flex gap-4 mb-12">
-          {(['all', 'available', 'beta', 'coming-soon'] as const).map(status => (
-            <button
+        <div className="flex flex-wrap gap-2 sm:gap-3 mb-12">
+          {(['all', 'available', 'beta', 'coming-soon'] as const).map((status, index) => (
+            <motion.button
               key={status}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.05 }}
               onClick={() => setFilterStatus(status)}
-              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+              style={
                 filterStatus === status
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-              }`}
+                  ? { background: 'var(--color-accent)', color: 'var(--color-text-inverse)', borderColor: 'var(--color-accent)' }
+                  : { background: 'var(--color-surface-primary)', color: 'var(--color-text-secondary)', borderColor: 'var(--color-border)' }
+              }
+              className="px-3 sm:px-4 py-2 rounded-lg font-medium border transition-all hover:border-gray-400"
             >
-              {status === 'all' && 'All'}
-              {status === 'available' && `Available (${availableCount})`}
-              {status === 'beta' && `Beta (${betaCount})`}
-              {status === 'coming-soon' && `Coming (${comingSoonCount})`}
-            </button>
+              <span className="text-xs sm:text-sm">
+                {status === 'all' && 'All'}
+                {status === 'available' && `Available (${availableCount})`}
+                {status === 'beta' && `Beta (${betaCount})`}
+                {status === 'coming-soon' && `Coming (${comingSoonCount})`}
+              </span>
+            </motion.button>
           ))}
         </div>
 
@@ -370,49 +496,82 @@ export default function ListedServicesPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
               onClick={() => setSelectedModule(selectedModule === module.id ? null : module.id)}
-              className={`text-left p-6 rounded-lg border transition-all group cursor-pointer ${
+              style={
                 selectedModule === module.id
-                  ? 'bg-slate-700 border-blue-500'
-                  : 'bg-slate-800/50 border-slate-700 hover:border-slate-600'
-              }`}
+                  ? { background: 'var(--color-surface-primary)', borderColor: 'var(--color-accent)', boxShadow: '0 4px 12px rgba(232, 49, 42, 0.1)' }
+                  : { background: 'var(--color-surface-primary)', borderColor: 'var(--color-border)' }
+              }
+              className="text-left p-6 rounded-xl border transition-all group cursor-pointer hover:border-gray-400 hover:shadow-sm"
+              onMouseEnter={(e) => {
+                if (selectedModule !== module.id) {
+                  e.currentTarget.style.borderColor = 'var(--color-border-dark)'
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (selectedModule !== module.id) {
+                  e.currentTarget.style.borderColor = 'var(--color-border)'
+                  e.currentTarget.style.boxShadow = 'none'
+                }
+              }}
             >
               <div className="flex items-start justify-between mb-4">
-                <div className={`p-3 rounded-lg bg-gradient-to-br ${module.color} text-white`}>
+                <div className={`p-3 rounded-lg bg-gradient-to-br ${module.color.gradient} text-white`}>
                   {module.icon}
                 </div>
                 <div>
                   {module.status === 'available' && (
-                    <span className="px-2 py-1 bg-green-500/20 text-green-300 text-xs rounded font-medium">
+                    <motion.span
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: index * 0.05 + 0.2 }}
+                      style={{ background: 'var(--color-success-soft)', color: 'var(--color-success)' }}
+                      className="px-2 py-1 text-xs rounded-full font-semibold inline-block border border-green-200"
+                    >
                       Available
-                    </span>
+                    </motion.span>
                   )}
                   {module.status === 'beta' && (
-                    <span className="px-2 py-1 bg-purple-500/20 text-purple-300 text-xs rounded font-medium">
+                    <motion.span
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: index * 0.05 + 0.2 }}
+                      style={{ background: 'rgba(168, 85, 247, 0.1)', color: '#A855F7' }}
+                      className="px-2 py-1 text-xs rounded-full font-semibold inline-block border border-purple-200"
+                    >
                       Beta
-                    </span>
+                    </motion.span>
                   )}
                   {module.status === 'coming-soon' && (
-                    <span className="px-2 py-1 bg-amber-500/20 text-amber-300 text-xs rounded font-medium">
+                    <motion.span
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: index * 0.05 + 0.2 }}
+                      style={{ background: 'var(--color-warning-soft)', color: 'var(--color-warning)' }}
+                      className="px-2 py-1 text-xs rounded-full font-semibold inline-block border border-yellow-200"
+                    >
                       Coming Soon
-                    </span>
+                    </motion.span>
                   )}
                 </div>
               </div>
 
-              <h3 className="text-lg font-bold mb-1">{module.title}</h3>
-              <p className="text-sm text-slate-400 mb-4">{module.description}</p>
+              <h3 style={{ color: 'var(--color-text-primary)' }} className="text-base sm:text-lg font-bold mb-1">{module.title}</h3>
+              <p style={{ color: 'var(--color-text-secondary)' }} className="text-xs sm:text-sm mb-4">{module.description}</p>
 
               <div className="grid grid-cols-2 gap-2 mb-4">
                 {module.metrics.slice(0, 2).map((metric, idx) => (
-                  <div key={idx} className="bg-slate-700/50 rounded p-2">
-                    <p className="text-xs text-slate-400">{metric.label}</p>
-                    <p className="text-sm font-bold">{metric.value}</p>
+                  <div key={idx} style={{ background: 'var(--color-surface-secondary)', borderColor: 'var(--color-border)' }} className="rounded border p-2">
+                    <p style={{ color: 'var(--color-text-secondary)' }} className="text-xs">{metric.label}</p>
+                    <p style={{ color: 'var(--color-text-primary)' }} className="text-sm font-bold mt-1">{metric.value}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="flex items-center gap-2 text-blue-400 text-sm font-medium">
-                {selectedModule === module.id ? 'Hide' : 'View Details'}
+              <div className="flex items-center gap-2" style={{ color: 'var(--color-accent)' }}>
+                <span className="text-xs sm:text-sm font-semibold">
+                  {selectedModule === module.id ? 'Hide' : 'View Details'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </div>
             </motion.button>
@@ -426,31 +585,45 @@ export default function ListedServicesPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="bg-slate-800 border border-slate-700 rounded-lg p-8 mb-12"
+              transition={{ duration: 0.3 }}
+              style={{ background: 'var(--color-surface-primary)', borderColor: 'var(--color-border)' }}
+              className="border rounded-xl p-6 sm:p-8 mb-12 shadow-card"
             >
               <div className="flex items-center gap-4 mb-8">
-                <div className={`p-4 rounded-lg bg-gradient-to-br ${selectedModuleData.color} text-white`}>
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: 'spring', stiffness: 100 }}
+                  className={`p-4 rounded-lg bg-gradient-to-br ${selectedModuleData.color.gradient} text-white`}
+                >
                   {selectedModuleData.icon}
-                </div>
+                </motion.div>
                 <div>
-                  <h2 className="text-2xl font-bold">{selectedModuleData.title}</h2>
-                  <p className="text-slate-400 mt-1">{selectedModuleData.description}</p>
+                  <h2 style={{ color: 'var(--color-text-primary)' }} className="text-xl sm:text-2xl font-bold">{selectedModuleData.title}</h2>
+                  <p style={{ color: 'var(--color-text-secondary)' }} className="mt-1 text-sm">{selectedModuleData.description}</p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5" />
+                  <h3 style={{ color: 'var(--color-text-primary)' }} className="text-base sm:text-lg font-bold mb-4 flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
                     Key Metrics
                   </h3>
                   <div className="space-y-3 mb-8">
                     {selectedModuleData.metrics.map((metric, idx) => (
-                      <div key={idx} className="bg-slate-700/50 rounded-lg p-4">
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        style={{ background: 'var(--color-surface-secondary)', borderColor: 'var(--color-border)' }}
+                        className="rounded-lg border p-4"
+                      >
                         <div className="flex items-center justify-between">
-                          <p className="text-sm text-slate-400">{metric.label}</p>
+                          <p style={{ color: 'var(--color-text-secondary)' }} className="text-sm">{metric.label}</p>
                           {metric.trend && (
-                            <div className={metric.trend === 'up' ? 'text-green-400' : 'text-red-400'}>
+                            <div style={{ color: metric.trend === 'up' ? 'var(--color-success)' : 'var(--color-error)' }}>
                               {metric.trend === 'up' ? (
                                 <TrendingUp className="w-4 h-4" />
                               ) : (
@@ -459,46 +632,68 @@ export default function ListedServicesPage() {
                             </div>
                           )}
                         </div>
-                        <p className="text-2xl font-bold mt-2">{metric.value}</p>
-                      </div>
+                        <p style={{ color: 'var(--color-text-primary)' }} className="text-xl sm:text-2xl font-bold mt-2">{metric.value}</p>
+                      </motion.div>
                     ))}
                   </div>
 
-                  <h3 className="text-lg font-bold mb-4">Key Insights</h3>
+                  <h3 style={{ color: 'var(--color-text-primary)' }} className="text-base sm:text-lg font-bold mb-4">Key Insights</h3>
                   <div className="space-y-2">
                     {selectedModuleData.keyInsights.map((insight, idx) => (
-                      <div key={idx} className="flex gap-3 text-sm">
-                        <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
-                        <p className="text-slate-300">{insight}</p>
-                      </div>
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.05 + 0.2 }}
+                        className="flex gap-3 text-sm"
+                      >
+                        <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: 'var(--color-success)' }} />
+                        <p style={{ color: 'var(--color-text-secondary)' }}>{insight}</p>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold mb-4">Recommended Actions</h3>
+                  <h3 style={{ color: 'var(--color-text-primary)' }} className="text-base sm:text-lg font-bold mb-4">Recommended Actions</h3>
                   <div className="space-y-2 mb-8">
                     {selectedModuleData.actionItems.map((action, idx) => (
-                      <div key={idx} className="flex gap-3 bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
-                        <ArrowRight className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
-                        <p className="text-sm text-slate-300">{action}</p>
-                      </div>
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        style={{ background: 'var(--color-info-soft)', borderColor: 'var(--color-info-medium)' }}
+                        className="flex gap-3 rounded-lg border p-3"
+                      >
+                        <ArrowRight className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: 'var(--color-info)' }} />
+                        <p style={{ color: 'var(--color-text-secondary)' }} className="text-sm">{action}</p>
+                      </motion.div>
                     ))}
                   </div>
 
                   <div className="space-y-4">
-                    <div className="bg-slate-700/50 rounded-lg p-4">
-                      <p className="text-xs text-slate-400">Data Freshness</p>
-                      <p className="text-sm font-bold mt-1">{selectedModuleData.dataFreshness}</p>
+                    <div style={{ background: 'var(--color-surface-secondary)', borderColor: 'var(--color-border)' }} className="rounded-lg border p-4">
+                      <p style={{ color: 'var(--color-text-secondary)' }} className="text-xs uppercase font-semibold tracking-wider">Data Freshness</p>
+                      <p style={{ color: 'var(--color-text-primary)' }} className="text-sm font-bold mt-2">{selectedModuleData.dataFreshness}</p>
                     </div>
 
                     {selectedModuleData.status === 'available' || selectedModuleData.status === 'beta' ? (
-                      <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        style={{ background: 'var(--color-accent)', color: 'var(--color-text-inverse)' }}
+                        className="w-full font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2 hover:opacity-90"
+                      >
                         <Eye className="w-4 h-4" />
                         View Dashboard
-                      </button>
+                      </motion.button>
                     ) : (
-                      <button className="w-full bg-slate-700 text-slate-300 font-medium py-3 rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
+                      <button
+                        style={{ background: 'var(--color-surface-secondary)', borderColor: 'var(--color-border)', color: 'var(--color-text-tertiary)' }}
+                        className="w-full font-semibold py-3 rounded-lg border flex items-center justify-center gap-2 cursor-not-allowed opacity-60"
+                        disabled
+                      >
                         <Clock className="w-4 h-4" />
                         Coming Soon
                       </button>
@@ -511,51 +706,87 @@ export default function ListedServicesPage() {
         </AnimatePresence>
 
         {/* Value Prop */}
-        <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-lg p-8">
-          <h2 className="text-2xl font-bold mb-6">Intelligence vs. Compliance</h2>
-          <div className="grid grid-cols-3 gap-8">
-            <div>
-              <h3 className="font-bold text-lg mb-2">Traditional Software</h3>
-              <ul className="space-y-2 text-sm text-slate-300">
-                <li>Helps you DO work</li>
-                <li>Compliance + Workflows</li>
-                <li>Monthly updates</li>
-                <li>Historical reporting</li>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          style={{ background: 'var(--color-info-soft)', borderColor: 'var(--color-info-medium)' }}
+          className="rounded-xl border p-6 sm:p-8"
+        >
+          <h2 style={{ color: 'var(--color-text-primary)' }} className="text-xl sm:text-2xl font-bold mb-6">Intelligence vs. Compliance</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35 }}
+            >
+              <h3 style={{ color: 'var(--color-text-primary)' }} className="font-bold text-base sm:text-lg mb-3">Traditional Software</h3>
+              <ul style={{ color: 'var(--color-text-secondary)' }} className="space-y-2 text-xs sm:text-sm">
+                <li className="flex gap-2"><span>•</span> <span>Helps you DO work</span></li>
+                <li className="flex gap-2"><span>•</span> <span>Compliance + Workflows</span></li>
+                <li className="flex gap-2"><span>•</span> <span>Monthly updates</span></li>
+                <li className="flex gap-2"><span>•</span> <span>Historical reporting</span></li>
               </ul>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-2">Listed Services OS</h3>
-              <ul className="space-y-2 text-sm text-slate-300">
-                <li>Helps you DECIDE what to do</li>
-                <li>Intelligence + Recommendation</li>
-                <li>Automated insights</li>
-                <li>Predictive analytics</li>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <h3 style={{ color: 'var(--color-text-primary)' }} className="font-bold text-base sm:text-lg mb-3">Listed Services OS</h3>
+              <ul style={{ color: 'var(--color-text-secondary)' }} className="space-y-2 text-xs sm:text-sm">
+                <li className="flex gap-2"><span>•</span> <span>Helps you DECIDE what to do</span></li>
+                <li className="flex gap-2"><span>•</span> <span>Intelligence + Recommendation</span></li>
+                <li className="flex gap-2"><span>•</span> <span>Automated insights</span></li>
+                <li className="flex gap-2"><span>•</span> <span>Predictive analytics</span></li>
               </ul>
-            </div>
-            <div className="bg-gradient-to-br from-green-500/20 to-blue-500/20 rounded-lg p-4 border border-green-500/30">
-              <p className="font-bold text-green-300">The Outcome</p>
-              <p className="text-sm text-slate-300 mt-2">
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45 }}
+              style={{ background: 'var(--color-success-soft)', borderColor: 'var(--color-success)' }}
+              className="rounded-lg border p-4 flex flex-col justify-center"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <Sparkles className="w-5 h-5" style={{ color: 'var(--color-success)' }} />
+                <p style={{ color: 'var(--color-success)' }} className="font-bold">The Outcome</p>
+              </div>
+              <p style={{ color: 'var(--color-text-secondary)' }} className="text-xs sm:text-sm">
                 Better decisions. Fewer surprises. More value created.
               </p>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Footer */}
-      <div className="border-t border-slate-700 bg-slate-800/50 mt-16 py-12">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface-light)' }}
+        className="border-t mt-16 py-12"
+      >
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-4">
+          <h2 style={{ color: 'var(--color-text-primary)' }} className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
             The Operating System for Public Company Leaders
           </h2>
-          <p className="text-xl text-slate-400 mb-8">
+          <p style={{ color: 'var(--color-text-secondary)' }} className="text-base sm:text-lg mb-8">
             Bloomberg for strategy. Salesforce for execution.
           </p>
-          <button className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            style={{ background: 'var(--color-accent)', color: 'var(--color-text-inverse)' }}
+            className="px-6 sm:px-8 py-2.5 sm:py-3 font-bold rounded-lg transition-all hover:opacity-90"
+          >
             Request Early Access
-          </button>
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }
