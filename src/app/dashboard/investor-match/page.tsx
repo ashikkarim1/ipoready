@@ -548,7 +548,6 @@ Best regards,
           transition: isDragging ? 'none' : 'flex 0.2s'
         }}>
 
-          {/* Hero Section */}
           {/* Filters Section */}
           <section style={{ padding: '1rem 1.5rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0', flexShrink: 0 }}>
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
