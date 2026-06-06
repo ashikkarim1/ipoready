@@ -345,13 +345,13 @@ export default function PricingPage() {
             <Zap className="w-3 h-3" />
             {language === 'en' ? 'Pricing' : 'Tarification'}
           </div>
-          <h1 className="serif text-5xl text-nav mb-4 leading-tight">
+          <h1 className="h1 mb-4">
             {language === 'en'
               ? <>Deal Flow<br /><span style={{ color: '#E8312A' }}>Built for Investors</span></>
               : <>Flux de transactions<br /><span style={{ color: '#E8312A' }}>Conçu pour les investisseurs</span></>
             }
           </h1>
-          <p className="text-text-muted text-lg max-w-2xl mx-auto mb-3">
+          <p className="body max-w-2xl mx-auto mb-3">
             {language === 'en'
               ? 'Get real-time visibility into verified companies executing IPO and RTO journeys across North America.'
               : "Obtenez une visibilité en temps réel sur les entreprises vérifiées qui exécutent des processus d'IPO et d'RTO en Amérique du Nord."}
@@ -368,13 +368,13 @@ export default function PricingPage() {
                 <TrendingUp className="w-3 h-3" />
                 {language === 'en' ? 'For Institutional Investors' : 'Pour les investisseurs institutionnels'}
               </div>
-              <h2 className="serif text-5xl text-nav mb-4 leading-tight">
+              <h2 className="h2 mb-4">
                 {language === 'en'
                   ? <>Deal Flow <span style={{ color: '#E8312A' }}>You Can't Get</span> Anywhere Else</>
                   : <>Flux de transactions <span style={{ color: '#E8312A' }}>que vous ne pouvez pas</span> obtenir ailleurs</>
                 }
               </h2>
-              <p className="text-text-muted text-lg max-w-3xl mx-auto">
+              <p className="body max-w-3xl mx-auto">
                 {language === 'en'
                   ? 'Real-time visibility into companies actually executing IPO/RTO journeys. First look at institutional-grade deal flow in North America.'
                   : 'Visibilité en temps réel des entreprises exécutant réellement les processus d\'IPO/RTO. Premier regard sur les flux de transactions de niveau institutionnel.'}
@@ -389,33 +389,33 @@ export default function PricingPage() {
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
                     <Globe className="w-5 h-5" style={{ color: '#2D7A5F' }} />
-                    <h3 className="font-display text-2xl font-bold text-nav">🇨🇦 Canada</h3>
+                    <h3 className="h3">🇨🇦 Canada</h3>
                   </div>
-                  <p className="text-text-muted text-sm mb-4">
+                  <p className="body-sm mb-4">
                     {language === 'en' ? 'TSX, TSXV, CSE deal flow' : 'Flux TSX, TSXV, CSE'}
                   </p>
                 </div>
 
                 {/* Trial */}
                 <div className="mb-8 p-4 rounded-lg" style={{ background: '#F0FDF4', border: '1px solid #BBF7D0' }}>
-                  <p className="text-xs font-semibold text-success mb-1 uppercase tracking-wider">
+                  <p className="label-xs text-success mb-1">
                     {language === 'en' ? 'Try Risk-Free' : 'Essai sans risque'}
                   </p>
-                  <p className="text-3xl font-bold text-nav mb-1">$99 <span className="text-lg text-text-muted">/mo</span></p>
-                  <p className="text-xs text-text-muted">1 month trial</p>
+                  <p className="h2 mb-1">$99 <span className="body text-text-muted">/mo</span></p>
+                  <p className="caption text-text-muted">1 month trial</p>
                 </div>
 
                 {/* Monthly Plan */}
                 <div className="mb-8">
-                  <p className="text-xs font-semibold text-nav uppercase tracking-wider mb-2">After trial:</p>
-                  <p className="text-4xl font-bold text-nav mb-2">$499 <span className="text-lg text-text-muted">/mo</span></p>
-                  <p className="text-sm text-text-muted">1 included seat</p>
+                  <p className="label-xs mb-2">After trial:</p>
+                  <p className="h2 mb-2">$499 <span className="body text-text-muted">/mo</span></p>
+                  <p className="body-sm text-text-muted">1 included seat</p>
                 </div>
 
                 {/* Additional Seats */}
                 <div className="mb-8 p-4 rounded-lg" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
-                  <p className="text-xs font-semibold text-nav uppercase tracking-wider mb-2">Additional seats:</p>
-                  <p className="text-2xl font-bold text-nav">$99 <span className="text-base text-text-muted">/seat</span></p>
+                  <p className="label-xs mb-2">Additional seats:</p>
+                  <p className="h3">$99 <span className="body-sm text-text-muted">/seat</span></p>
                 </div>
 
                 {/* Features */}
@@ -429,7 +429,7 @@ export default function PricingPage() {
                   ].map((feature, i) => (
                     <div key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-nav">{feature}</span>
+                      <span className="body-sm">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -455,33 +455,33 @@ export default function PricingPage() {
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
                     <Globe className="w-5 h-5" style={{ color: '#1D4ED8' }} />
-                    <h3 className="font-display text-2xl font-bold text-nav">🇺🇸 USA</h3>
+                    <h3 className="h3">🇺🇸 USA</h3>
                   </div>
-                  <p className="text-text-muted text-sm mb-4">
+                  <p className="body-sm mb-4">
                     {language === 'en' ? 'NASDAQ, NYSE, OTC deal flow' : 'Flux NASDAQ, NYSE, OTC'}
                   </p>
                 </div>
 
                 {/* Trial */}
                 <div className="mb-8 p-4 rounded-lg" style={{ background: '#EFF6FF', border: '1px solid #BFDBFE' }}>
-                  <p className="text-xs font-semibold text-blue-700 mb-1 uppercase tracking-wider">
+                  <p className="label-xs text-blue-700 mb-1">
                     {language === 'en' ? 'Try Risk-Free' : 'Essai sans risque'}
                   </p>
-                  <p className="text-3xl font-bold text-nav mb-1">$99 <span className="text-lg text-text-muted">/mo</span></p>
-                  <p className="text-xs text-text-muted">1 month trial</p>
+                  <p className="h2 mb-1">$99 <span className="body text-text-muted">/mo</span></p>
+                  <p className="caption text-text-muted">1 month trial</p>
                 </div>
 
                 {/* Monthly Plan */}
                 <div className="mb-8">
-                  <p className="text-xs font-semibold text-nav uppercase tracking-wider mb-2">After trial:</p>
-                  <p className="text-4xl font-bold text-nav mb-2">$999 <span className="text-lg text-text-muted">/mo</span></p>
-                  <p className="text-sm text-text-muted">1 included seat</p>
+                  <p className="label-xs mb-2">After trial:</p>
+                  <p className="h2 mb-2">$999 <span className="body text-text-muted">/mo</span></p>
+                  <p className="body-sm text-text-muted">1 included seat</p>
                 </div>
 
                 {/* Additional Seats */}
                 <div className="mb-8 p-4 rounded-lg" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
-                  <p className="text-xs font-semibold text-nav uppercase tracking-wider mb-2">Additional seats:</p>
-                  <p className="text-2xl font-bold text-nav">$149 <span className="text-base text-text-muted">/seat</span></p>
+                  <p className="label-xs mb-2">Additional seats:</p>
+                  <p className="h3">$149 <span className="body-sm text-text-muted">/seat</span></p>
                 </div>
 
                 {/* Features */}
@@ -495,7 +495,7 @@ export default function PricingPage() {
                   ].map((feature, i) => (
                     <div key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-nav">{feature}</span>
+                      <span className="body-sm">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -515,20 +515,20 @@ export default function PricingPage() {
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
                     <Zap className="w-5 h-5" style={{ color: '#E8312A' }} />
-                    <h3 className="font-display text-2xl font-bold text-nav">🚀 Listed Services</h3>
+                    <h3 className="h3">🚀 Listed Services</h3>
                   </div>
-                  <p className="text-text-muted text-sm mb-4">
+                  <p className="body-sm mb-4">
                     {language === 'en' ? 'AI-powered OS for public companies' : 'Système d\'exploitation IA pour sociétés publiques'}
                   </p>
                 </div>
 
                 {/* Coming Soon */}
                 <div className="mb-8 p-4 rounded-lg" style={{ background: '#F0FDF4', border: '1px solid #BBF7D0' }}>
-                  <p className="text-xs font-semibold text-success mb-1 uppercase tracking-wider">
+                  <p className="label-xs text-success mb-1">
                     {language === 'en' ? 'Unlocks at IPO' : 'Déverrouillé à l\'IPO'}
                   </p>
-                  <p className="text-3xl font-bold text-nav mb-1">{language === 'en' ? 'Custom' : 'Personnalisé'}</p>
-                  <p className="text-xs text-text-muted">{language === 'en' ? 'Included with Growth plan post-listing' : 'Inclus avec le plan Growth après l\'IPO'}</p>
+                  <p className="h2 mb-1">{language === 'en' ? 'Custom' : 'Personnalisé'}</p>
+                  <p className="caption">{language === 'en' ? 'Included with Growth plan post-listing' : 'Inclus avec le plan Growth après l\'IPO'}</p>
                 </div>
 
                 {/* Features */}
@@ -542,7 +542,7 @@ export default function PricingPage() {
                   ].map((feature, i) => (
                     <div key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-nav">{feature}</span>
+                      <span className="body-sm">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -557,7 +557,7 @@ export default function PricingPage() {
 
             {/* Pricing Note */}
             <div className="text-center p-6 rounded-xl" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
-              <p className="text-sm text-text-muted">
+              <p className="body-sm text-text-light">
                 {language === 'en'
                   ? '💰 All pricing shown in USD. CAD display available at checkout. Cancel anytime during trial.'
                   : '💰 Tous les prix affichés en USD. Affichage CAD disponible à la caisse. Annulez à tout moment pendant l\'essai.'}
@@ -568,7 +568,7 @@ export default function PricingPage() {
 
         {/* FAQ */}
         <div className="max-w-3xl mx-auto mb-10">
-          <h2 className="serif text-2xl text-nav mb-6 text-center">
+          <h2 className="h2 mb-6 text-center">
             {language === 'en' ? 'Frequently Asked Questions' : 'Questions Fréquentes'}
           </h2>
           <div className="space-y-4">
@@ -580,7 +580,7 @@ export default function PricingPage() {
                   style={{ background: openFaq === i ? '#F7F6F4' : 'white' }}
                   onMouseEnter={e => { if (openFaq !== i) (e.currentTarget as HTMLButtonElement).style.background = '#FAFAF9' }}
                   onMouseLeave={e => { if (openFaq !== i) (e.currentTarget as HTMLButtonElement).style.background = 'white' }}>
-                  <p className="text-nav font-medium body-sm pr-4">{faq.q}</p>
+                  <p className="body pr-4">{faq.q}</p>
                   {openFaq === i
                     ? <ChevronUp className="w-4 h-4 text-text-muted flex-shrink-0" />
                     : <ChevronDown className="w-4 h-4 text-text-muted flex-shrink-0" />}
@@ -591,7 +591,7 @@ export default function PricingPage() {
                       initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.2 }} className="overflow-hidden">
                       <div className="px-5 pb-5 pt-1" style={{ borderTop: '1px solid #E5E4E0' }}>
-                        <p className="text-text-muted body-sm leading-relaxed">{faq.a}</p>
+                        <p className="body leading-relaxed text-text-muted">{faq.a}</p>
                       </div>
                     </motion.div>
                   )}
@@ -603,15 +603,15 @@ export default function PricingPage() {
 
         {/* CTA strip */}
         <div className="card rounded-2xl p-10 text-center mb-8" style={{ background: '#1A1A1A', borderColor: '#1A1A1A' }}>
-          <h2 className="serif text-3xl text-white mb-3">
+          <h2 className="h2 text-white mb-3">
             {language === 'en' ? 'Access Deal Flow You Can\'t Get Anywhere Else' : 'Accédez à des flux de transactions que vous ne pouvez trouver nulle part ailleurs'}
           </h2>
-          <p className="mb-6 max-w-xl mx-auto body-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>
+          <p className="mb-6 max-w-xl mx-auto body text-text-light" style={{ opacity: 0.55 }}>
             {language === 'en'
               ? 'Real-time visibility into verified companies executing IPO and RTO journeys. Start your free trial today.'
               : "Visibilité en temps réel sur les entreprises vérifiées exécutant les journées d'IPO et d'RTO. Commencez votre essai gratuit dès aujourd'hui."}
           </p>
-          <p className="caption-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
+          <p className="caption-sm text-text-light" style={{ opacity: 0.4 }}>
             {language === 'en' ? '💳 No credit card required for trial · Cancel anytime' : '💳 Aucune carte de crédit requise · Annulez à tout moment'}
           </p>
         </div>
@@ -619,8 +619,8 @@ export default function PricingPage() {
         {/* Legal Disclaimer */}
         <div className="max-w-4xl mx-auto">
           <div className="rounded-xl px-5 py-4" style={{ background: '#FEF3C7', border: '1px solid #FDE68A' }}>
-            <p className="label-sm font-semibold uppercase tracking-wider mb-2" style={{ color: '#B45309' }}>Important Disclosure</p>
-            <p className="caption-sm leading-relaxed" style={{ color: '#92400E', opacity: 0.8 }}>
+            <p className="label-xs mb-2" style={{ color: '#B45309' }}>Important Disclosure</p>
+            <p className="caption leading-relaxed" style={{ color: '#92400E', opacity: 0.8 }}>
               IPOReady is a technology platform designed to help companies track and manage their IPO readiness workflow. It is not a replacement for — and does not constitute — legal counsel, audit or assurance services, securities advice, exchange advisory services, SEC, OSC, SEDAR/EDGAR filing services, or any other regulated professional or regulatory services required to complete a public listing. All users must engage qualified legal counsel, auditors, underwriters, and applicable regulatory advisors independently. Nothing on this platform constitutes a solicitation, recommendation, or offer to buy or sell securities. Subscription fees cover access to the technology platform only.
             </p>
           </div>
@@ -639,11 +639,11 @@ export default function PricingPage() {
                   <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: '#1A1A1A' }}>
                     <Rocket className="w-4 h-4 text-white" />
                   </div>
-                  <span className="font-display font-bold text-lg text-nav">
+                  <span className="h3">
                     IPO<span style={{ color: '#E8312A' }}>Ready</span>
                   </span>
                 </Link>
-                <p className="text-text-muted body-sm leading-relaxed" style={{ marginBottom: '1.25rem', maxWidth: '260px' }}>
+                <p className="body leading-relaxed text-text-muted" style={{ marginBottom: '1.25rem', maxWidth: '260px' }}>
                   The world's first central hub for IPO readiness workflow management — from first board resolution to exchange approval.
                 </p>
                 {/* Social */}
@@ -672,7 +672,7 @@ export default function PricingPage() {
                 </div>
                 {/* auditus.ai */}
                 <a href="https://auditus.ai" target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 label-sm font-medium transition-colors"
+                  className="inline-flex items-center gap-1.5 label-xs transition-colors"
                   style={{ color: '#717171' }}>
                   <Zap className="w-3 h-3" />
                   Powered by auditus.ai
@@ -682,7 +682,7 @@ export default function PricingPage() {
 
               {/* Product */}
               <div>
-                <p className="label-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Product</p>
+                <p className="label-xs uppercase tracking-widest" style={{ marginBottom: '1rem' }}>Product</p>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                   {[
                     { label: 'IPO Checklist',     href: '/checklist' },
@@ -705,7 +705,7 @@ export default function PricingPage() {
 
               {/* Company */}
               <div>
-                <p className="label-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Company</p>
+                <p className="label-xs uppercase tracking-widest" style={{ marginBottom: '1rem' }}>Company</p>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                   {[
                     { label: 'Pricing',          href: '/pricing' },
@@ -728,13 +728,13 @@ export default function PricingPage() {
 
               {/* Exchanges */}
               <div>
-                <p className="label-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Exchanges</p>
+                <p className="label-xs uppercase tracking-widest" style={{ marginBottom: '1rem' }}>Exchanges</p>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                   {[
                     'TSX', 'TSXV', 'CSE', 'NASDAQ', 'NYSE', 'OTC Markets', 'Cboe Canada',
                   ].map(ex => (
                     <li key={ex}>
-                      <span className="body-sm text-text-muted">{ex}</span>
+                      <span className="body-sm text-text-light">{ex}</span>
                     </li>
                   ))}
                 </ul>
@@ -742,17 +742,17 @@ export default function PricingPage() {
 
               {/* Listing Types */}
               <div>
-                <p className="label-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Listing Types</p>
+                <p className="label-xs uppercase tracking-widest" style={{ marginBottom: '1rem' }}>Listing Types</p>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                   {['IPO', 'Direct Listing', 'RTO', 'SPAC', 'Regulation A+'].map(t => (
-                    <li key={t}><span className="body-sm text-text-muted">{t}</span></li>
+                    <li key={t}><span className="body-sm text-text-light">{t}</span></li>
                   ))}
                 </ul>
               </div>
 
               {/* Legal & Support */}
               <div>
-                <p className="label-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Legal</p>
+                <p className="label-xs uppercase tracking-widest" style={{ marginBottom: '1rem' }}>Legal</p>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                   {[
                     { label: 'Privacy Policy',   href: '/privacy' },
@@ -769,7 +769,7 @@ export default function PricingPage() {
                   ))}
                 </ul>
                 <div style={{ marginTop: '1.5rem' }}>
-                  <p className="label-xs font-bold uppercase tracking-widest text-nav" style={{ marginBottom: '1rem' }}>Support</p>
+                  <p className="label-xs uppercase tracking-widest" style={{ marginBottom: '1rem' }}>Support</p>
                   <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                     {[
                       { label: 'Contact Us',    href: 'mailto:hello@ipoready.com' },
@@ -778,7 +778,7 @@ export default function PricingPage() {
                     ].map(({ label, href }) => (
                       <li key={label}>
                         <a href={href}
-                          className="body-sm text-text-muted transition-colors hover:text-nav">
+                          className="body-sm transition-colors hover:text-nav text-text-muted">
                           {label}
                         </a>
                       </li>
@@ -793,17 +793,16 @@ export default function PricingPage() {
           <div style={{ borderTop: '1px solid #E5E4E0', background: '#F7F6F4' }}>
             <div className="max-w-7xl mx-auto" style={{ paddingTop: '1.25rem', paddingBottom: '1.25rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-                <p className="caption-sm leading-relaxed text-text-light" style={{ maxWidth: '680px' }}>
-                  <span className="font-semibold text-text-muted">Important:</span>{' '}
+                <p className="caption leading-relaxed text-text-light" style={{ maxWidth: '680px' }}>
+                  <span className="font-semibold">Important:</span>{' '}
                   IPOReady is a workflow management and project tracking platform only. It does not provide legal, compliance, accounting, securities, or investment banking services, and does not act on your behalf in any regulatory or professional capacity.
                   All regulatory filings, legal opinions, and compliance determinations must be executed by licensed professionals. Nothing on this platform constitutes legal advice, financial advice, or an offer to buy or sell securities.
                 </p>
                 <div className="flex items-center gap-4 flex-shrink-0 self-end md:self-auto">
-                  <p className="caption-sm text-text-light">© {new Date().getFullYear()} IPOReady. All rights reserved.</p>
+                  <p className="caption text-text-light">© {new Date().getFullYear()} IPOReady. All rights reserved.</p>
                   <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: '#EFEFED', border: '1px solid #E5E4E0' }}>
                     {(['EN', 'FR'] as const).map(l => (
-                      <span key={l} className="label-sm px-2 py-0.5 rounded font-mono font-medium cursor-default"
-                        style={{ color: '#9A9A9A' }}>{l}</span>
+                      <span key={l} className="label-xs px-2 py-0.5 rounded font-mono cursor-default text-text-light">{l}</span>
                     ))}
                   </div>
                 </div>

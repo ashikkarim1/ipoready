@@ -37,8 +37,8 @@ function SectionCard({ title, subtitle, children, action }: { title?: string; su
       {title && (
         <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid #F0EFED' }}>
           <div>
-            <p className="font-bold body-sm" style={{ color: '#1A1A1A' }}>{title}</p>
-            {subtitle && <p className="caption-sm mt-0.5" style={{ color: '#9A9A9A' }}>{subtitle}</p>}
+            <p className="font-bold body-sm text-nav">{title}</p>
+            {subtitle && <p className="caption-sm mt-0.5 text-text-muted">{subtitle}</p>}
           </div>
           {action}
         </div>
@@ -51,13 +51,13 @@ function SectionCard({ title, subtitle, children, action }: { title?: string; su
 function FieldRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="grid sm:grid-cols-3 gap-2 items-start py-4" style={{ borderBottom: '1px solid #F7F6F4' }}>
-      <label className="label font-medium pt-2.5" style={{ color: '#717171' }}>{label}</label>
+      <label className="label font-medium pt-2.5 text-text-muted">{label}</label>
       <div className="sm:col-span-2">{children}</div>
     </div>
   )
 }
 
-const inputCls = "w-full px-4 py-2.5 rounded-xl text-sm outline-none transition-all"
+const inputCls = "w-full px-4 py-2.5 rounded-xl body-sm outline-none transition-all"
 const inputStyle = { border: '1px solid #E5E4E0', background: '#FAFAFA', color: '#1A1A1A' }
 
 export default function AccountPage() {
@@ -273,7 +273,7 @@ export default function AccountPage() {
           <div className="flex items-center gap-6">
             {/* Avatar */}
             <div className="relative flex-shrink-0">
-              <div className="w-20 h-20 rounded-2xl flex items-center justify-center font-black text-2xl text-white select-none"
+              <div className="w-20 h-20 rounded-2xl flex items-center justify-center font-black h3 text-white select-none"
                 style={{ background: 'linear-gradient(135deg, #E8312A 0%, #B91C1C 100%)' }}>
                 {initials}
               </div>
@@ -287,7 +287,7 @@ export default function AccountPage() {
             {/* Info */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3 flex-wrap mb-1">
-                <h1 className="font-bold text-xl text-white truncate">{session?.user?.name || 'User'}</h1>
+                <h1 className="font-bold h2 text-white truncate">{session?.user?.name || 'User'}</h1>
                 <span className="label-sm px-2.5 py-0.5 rounded-full font-semibold flex-shrink-0"
                   style={{ background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.1)' }}>
                   {ROLE_LABELS[userRole as keyof typeof ROLE_LABELS] ?? userRole}
@@ -380,9 +380,9 @@ export default function AccountPage() {
                   <div className="w-8 h-8 rounded-xl flex items-center justify-center mb-3" style={{ background: bg }}>
                     <Icon className="w-4 h-4" style={{ color }} />
                   </div>
-                  <p className="font-black text-xl" style={{ color: '#1A1A1A' }}>{value}</p>
-                  <p className="label-sm font-medium mt-0.5" style={{ color: '#9A9A9A' }}>{label}</p>
-                  <p className="text-[10px] mt-0.5" style={{ color }}>{sub}</p>
+                  <p className="font-black h3 text-nav">{value}</p>
+                  <p className="label-sm font-medium mt-0.5 text-text-muted">{label}</p>
+                  <p className="caption mt-0.5" style={{ color }}>{sub}</p>
                 </div>
               ))}
             </div>
@@ -403,10 +403,10 @@ export default function AccountPage() {
             <div className="rounded-2xl p-5" style={{ background: 'white', border: '1px solid #E5E4E0' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                 <div>
-                  <p className="font-bold body-sm" style={{ color: '#1A1A1A' }}>Profile Completeness</p>
-                  <p className="caption-sm mt-0.5" style={{ color: '#9A9A9A' }}>Complete your profile to unlock all features</p>
+                  <p className="font-bold body-sm text-nav">Profile Completeness</p>
+                  <p className="caption-sm mt-0.5 text-text-muted">Complete your profile to unlock all features</p>
                 </div>
-                <span className="font-black text-2xl" style={{ color: '#1A1A1A' }}>{completePct}%</span>
+                <span className="font-black h2 text-nav">{completePct}%</span>
               </div>
               <div style={{ height: '6px', background: '#F0EFED', borderRadius: '999px', overflow: 'hidden', marginBottom: '0.75rem' }}>
                 <motion.div initial={{ width: 0 }} animate={{ width: `${completePct}%` }} transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
@@ -415,7 +415,7 @@ export default function AccountPage() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
                 {completenessItems.map(({ label, done }) => (
                   <div key={label} className="flex items-center gap-2 caption-sm"
-                    style={{ color: done ? '#15803D' : '#9A9A9A' }}>
+                    style={{ color: done ? '#15803D' : '#717171' }}>
                     <div className="w-3.5 h-3.5 rounded-full flex items-center justify-center flex-shrink-0"
                       style={{ background: done ? '#DCFCE7' : '#F0EFED', border: `1px solid ${done ? '#86EFAC' : '#E5E4E0'}` }}>
                       {done && <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#16A34A' }} />}
@@ -432,8 +432,8 @@ export default function AccountPage() {
             <div className="rounded-2xl overflow-hidden" style={{ background: 'white', border: '1px solid #E5E4E0' }}>
               <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid #F0EFED' }}>
                 <div>
-                  <p className="font-bold body-sm" style={{ color: '#1A1A1A' }}>Personal Information</p>
-                  <p className="caption-sm mt-0.5" style={{ color: '#9A9A9A' }}>Your name, email, and role on this account</p>
+                  <p className="font-bold body-sm text-nav">Personal Information</p>
+                  <p className="caption-sm mt-0.5 text-text-muted">Your name, email, and role on this account</p>
                 </div>
                 <div className="flex items-center gap-1.5 caption-sm px-2.5 py-1 rounded-full"
                   style={{ background: '#F0FDF4', color: '#15803D', border: '1px solid #86EFAC' }}>
@@ -488,12 +488,12 @@ export default function AccountPage() {
             {/* Preferences */}
             <div className="rounded-2xl overflow-hidden" style={{ background: 'white', border: '1px solid #E5E4E0' }}>
               <div className="px-6 py-4" style={{ borderBottom: '1px solid #F0EFED' }}>
-                <p className="font-bold body-sm" style={{ color: '#1A1A1A' }}>Display Preferences</p>
-                <p className="caption-sm mt-0.5" style={{ color: '#9A9A9A' }}>Currency and interface language settings</p>
+                <p className="font-bold body-sm text-nav">Display Preferences</p>
+                <p className="caption-sm mt-0.5 text-text-muted">Currency and interface language settings</p>
               </div>
               <div className="p-6" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                 <div>
-                  <p className="label-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#9A9A9A' }}>Default Currency</p>
+                  <p className="label-xs font-bold uppercase tracking-wider mb-3 text-text-light">Default Currency</p>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     {(['CAD', 'USD'] as const).map(c => (
                       <button key={c} onClick={() => setCurrency(c)}
@@ -508,7 +508,7 @@ export default function AccountPage() {
                   </div>
                 </div>
                 <div>
-                  <p className="label-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#9A9A9A' }}>
+                  <p className="label-xs font-bold uppercase tracking-wider mb-3 text-text-light">
                     {language === 'en' ? 'Interface Language' : 'Langue d\'interface'}
                   </p>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -517,7 +517,8 @@ export default function AccountPage() {
                         className="flex-1 py-3 rounded-xl label font-semibold transition-all"
                         style={language === k
                           ? { background: '#1A1A1A', border: '1px solid #1A1A1A', color: 'white' }
-                          : { background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#717171' }}>
+                          : { background: '#F7F6F4', border: '1px solid #E5E4E0' }}
+                        className={language === k ? '' : 'text-text-muted'}>
                         {language === k && <span style={{ color: '#E8312A' }}>✓ </span>}{l}
                       </button>
                     ))}
@@ -529,8 +530,8 @@ export default function AccountPage() {
             {/* Integrations */}
             <div className="rounded-2xl overflow-hidden" style={{ background: 'white', border: '1px solid #E5E4E0' }}>
               <div className="px-6 py-4" style={{ borderBottom: '1px solid #F0EFED' }}>
-                <p className="font-bold body-sm" style={{ color: '#1A1A1A' }}>Connected Integrations</p>
-                <p className="caption-sm mt-0.5" style={{ color: '#9A9A9A' }}>Sync documents and data from external services</p>
+                <p className="font-bold body-sm text-nav">Connected Integrations</p>
+                <p className="caption-sm mt-0.5 text-text-muted">Sync documents and data from external services</p>
               </div>
               <div className="p-4" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 {[
@@ -541,13 +542,13 @@ export default function AccountPage() {
                 ].map(({ name, desc, connected, icon }) => (
                   <div key={name} className="flex items-center gap-4 p-4 rounded-xl"
                     style={{ background: '#FAFAFA', border: '1px solid #F0EFED' }}>
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center body-lg flex-shrink-0"
                       style={{ background: 'white', border: '1px solid #E5E4E0' }}>
                       {icon}
                     </div>
                     <div className="flex-1">
-                      <p className="label font-semibold" style={{ color: '#1A1A1A' }}>{name}</p>
-                      <p className="caption-sm mt-0.5" style={{ color: '#9A9A9A' }}>{desc}</p>
+                      <p className="label font-semibold text-nav">{name}</p>
+                      <p className="caption-sm mt-0.5 text-text-muted">{desc}</p>
                     </div>
                     <button className="label-sm px-3 py-1.5 rounded-lg font-semibold transition-all"
                       style={connected
@@ -581,9 +582,9 @@ export default function AccountPage() {
                       : { background: '#FAFAFA', border: '1px solid #E5E4E0' }}>
                     <div className="flex items-center gap-2 mb-1">
                       {notifFreq === value && <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: '#E8312A' }} />}
-                      <p className="label font-semibold" style={{ color: notifFreq === value ? '#1A1A1A' : '#717171' }}>{en}</p>
+                      <p className="label font-semibold" style={{ color: notifFreq === value ? '#1A1A1A' : 'inherit' }} className={notifFreq === value ? 'text-nav' : 'text-text-muted'}>{en}</p>
                     </div>
-                    <p className="caption-sm" style={{ color: '#9A9A9A' }}>{desc}</p>
+                    <p className="caption-sm text-text-muted">{desc}</p>
                   </button>
                 ))}
               </div>
@@ -603,8 +604,8 @@ export default function AccountPage() {
                     onMouseEnter={e => (e.currentTarget.style.background = '#F7F6F4')}
                     onMouseLeave={e => (e.currentTarget.style.background = '#FAFAFA')}>
                     <div>
-                      <p className="label font-medium" style={{ color: '#1A1A1A' }}>{en}</p>
-                      <p className="caption-sm mt-0.5" style={{ color: '#9A9A9A' }}>{desc}</p>
+                      <p className="label font-medium text-nav">{en}</p>
+                      <p className="caption-sm mt-0.5 text-text-muted">{desc}</p>
                     </div>
                     <Toggle on={notifToggles[key as keyof typeof notifToggles]}
                       onToggle={() => setNotifToggles(v => ({ ...v, [key]: !v[key as keyof typeof notifToggles] }))} />
@@ -619,17 +620,17 @@ export default function AccountPage() {
                   style={{ background: '#FAFAFA', border: '1px solid #E5E4E0' }}>
                   <div className="flex items-center gap-3">
                     <div className="relative">
-                      <Smartphone className="w-5 h-5" style={{ color: '#9A9A9A' }} />
+                      <Smartphone className="w-5 h-5 text-text-light" />
                       {pushSubscribed && (
                         <div className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full"
                           style={{ background: '#16A34A', border: '2px solid white' }} />
                       )}
                     </div>
                     <div>
-                      <p className="label font-medium" style={{ color: '#1A1A1A' }}>
+                      <p className="label font-medium text-nav">
                         {pushSubscribed ? 'Push notifications active' : 'Enable push notifications'}
                       </p>
-                      <p className="caption-sm mt-0.5" style={{ color: '#9A9A9A' }}>
+                      <p className="caption-sm mt-0.5 text-text-muted">
                         {pushPermission === 'denied' ? 'Blocked — allow in browser site settings'
                           : pushSubscribed ? 'This device will receive badge alerts'
                           : 'Works on iOS 16.4+ Safari and Android Chrome'}
@@ -654,15 +655,15 @@ export default function AccountPage() {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <p className="font-bold body-sm" style={{ color: '#1A1A1A' }}>WhatsApp AI Companion</p>
+                    <p className="font-bold body-sm text-nav">WhatsApp AI Companion</p>
                     {!waEligible && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide"
+                      <span className="caption font-bold px-2 py-0.5 rounded-full uppercase tracking-wide"
                         style={{ background: 'linear-gradient(90deg, #1A1A1A 0%, #E8312A 100%)', color: 'white' }}>
                         Growth+
                       </span>
                     )}
                   </div>
-                  <p className="caption-sm mt-0.5" style={{ color: '#9A9A9A' }}>
+                  <p className="caption-sm mt-0.5 text-text-muted">
                     Receive your PACE™ daily briefing and update tasks by text or voice message
                   </p>
                 </div>
@@ -697,8 +698,8 @@ export default function AccountPage() {
                         <Zap className="w-5 h-5" style={{ color: '#E8312A' }} />
                       </div>
                       <div className="flex-1">
-                        <p className="font-bold body-sm text-white mb-1">Available on Growth & Enterprise</p>
-                        <p className="caption-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>
+                        <p className="font-bold body text-white mb-1">Available on Growth & Enterprise</p>
+                        <p className="caption leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>
                           Your Starter plan doesn't include the WhatsApp AI Companion. Upgrade to Growth to get daily briefings, voice updates, and conversational task management — all from WhatsApp.
                         </p>
                       </div>
@@ -722,7 +723,7 @@ export default function AccountPage() {
                 <div className="p-6" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {/* Phone input */}
                   <div>
-                    <label className="label-sm font-semibold uppercase tracking-wider block mb-2" style={{ color: '#9A9A9A' }}>
+                    <label className="caption font-semibold uppercase tracking-wider block mb-2 text-text-light">
                       WhatsApp Phone Number
                     </label>
                     <input
@@ -735,7 +736,7 @@ export default function AccountPage() {
                       onFocus={e => { e.target.style.borderColor = '#25D366'; e.target.style.boxShadow = '0 0 0 3px rgba(37,211,102,0.1)' }}
                       onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }}
                     />
-                    <p className="caption-sm mt-1.5" style={{ color: '#9A9A9A' }}>
+                    <p className="caption mt-1.5 text-text-muted">
                       International format with country code — must match your WhatsApp account.
                     </p>
                   </div>
@@ -760,7 +761,7 @@ export default function AccountPage() {
                   {/* Setup instructions when not opted in */}
                   {!waOptedIn && (
                     <div className="p-4 rounded-xl" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
-                      <p className="label-sm font-semibold mb-2" style={{ color: '#1A1A1A' }}>How to connect:</p>
+                      <p className="label font-semibold mb-2 text-nav">How to connect:</p>
                       <ol style={{ paddingLeft: '1rem', margin: 0 }}>
                         {[
                           'Enter your number above and enable the toggle',
@@ -768,7 +769,7 @@ export default function AccountPage() {
                           'Your AI companion goes live at next 7am ET briefing',
                           'Reply to any message to interact immediately',
                         ].map((step, i) => (
-                          <li key={i} className="caption-sm mb-1" style={{ color: '#717171' }}>{step}</li>
+                          <li key={i} className="caption mb-1 text-text-muted">{step}</li>
                         ))}
                       </ol>
                     </div>
@@ -783,8 +784,8 @@ export default function AccountPage() {
                         <MessageCircle className="w-4 h-4" style={{ color: '#16A34A' }} />
                       </div>
                       <div>
-                        <p className="label font-semibold" style={{ color: '#15803D' }}>Companion active</p>
-                        <p className="caption-sm mt-0.5" style={{ color: '#9A9A9A' }}>Daily briefings → {waPhone}</p>
+                        <p className="label font-semibold text-success">Companion active</p>
+                        <p className="caption mt-0.5 text-text-muted">Daily briefings → {waPhone}</p>
                       </div>
                     </div>
                   )}
@@ -794,7 +795,7 @@ export default function AccountPage() {
                     <div className="flex items-center gap-2 p-3 rounded-xl"
                       style={{ background: '#FEF2F2', border: '1px solid #FECACA' }}>
                       <AlertTriangle className="w-4 h-4 flex-shrink-0" style={{ color: '#E8312A' }} />
-                      <p className="caption-sm" style={{ color: '#B91C1C' }}>{waError}</p>
+                      <p className="caption text-error">{waError}</p>
                     </div>
                   )}
 
@@ -827,7 +828,7 @@ export default function AccountPage() {
             <SectionCard title="Change Password" subtitle="Use a strong, unique password for your account">
               <div className="space-y-4 max-w-sm">
                 <div>
-                  <label className="label-sm font-semibold uppercase tracking-wider block mb-2" style={{ color: '#9A9A9A' }}>Current Password</label>
+                  <label className="caption font-semibold uppercase tracking-wider block mb-2 text-text-light">Current Password</label>
                   <div className="relative">
                     <input type={showCurrentPw ? 'text' : 'password'} value={currentPw}
                       onChange={e => setCurrentPw(e.target.value)}
@@ -835,13 +836,13 @@ export default function AccountPage() {
                       onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
                       onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }} />
                     <button onClick={() => setShowCurrentPw(v => !v)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#9A9A9A' }}>
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-text-light">
                       {showCurrentPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
                 </div>
                 <div>
-                  <label className="label-sm font-semibold uppercase tracking-wider block mb-2" style={{ color: '#9A9A9A' }}>New Password</label>
+                  <label className="caption font-semibold uppercase tracking-wider block mb-2 text-text-light">New Password</label>
                   <div className="relative">
                     <input type={showNewPw ? 'text' : 'password'} value={newPw}
                       onChange={e => setNewPw(e.target.value)}
@@ -849,7 +850,7 @@ export default function AccountPage() {
                       onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
                       onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }} />
                     <button onClick={() => setShowNewPw(v => !v)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#9A9A9A' }}>
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-text-light">
                       {showNewPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
@@ -863,7 +864,7 @@ export default function AccountPage() {
                   )}
                 </div>
                 {pwError && (
-                  <div className="px-4 py-2.5 rounded-xl body-sm" style={{ background: '#FEF2F2', color: '#B91C1C', border: '1px solid #FECACA' }}>
+                  <div className="px-4 py-2.5 rounded-xl body-sm text-error" style={{ background: '#FEF2F2', border: '1px solid #FECACA' }}>
                     {pwError}
                   </div>
                 )}
@@ -886,8 +887,8 @@ export default function AccountPage() {
                     <Shield className="w-4 h-4" style={{ color: '#16A34A' }} />
                   </div>
                   <div className="flex-1">
-                    <p className="label font-semibold" style={{ color: '#15803D' }}>Account Secured</p>
-                    <p className="caption-sm mt-0.5" style={{ color: '#9A9A9A' }}>JWT session · 30-day expiry · HTTPS encrypted</p>
+                    <p className="label font-semibold text-success">Account Secured</p>
+                    <p className="caption mt-0.5 text-text-muted">JWT session · 30-day expiry · HTTPS encrypted</p>
                   </div>
                   <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: '#16A34A' }} />
                 </div>
@@ -899,11 +900,11 @@ export default function AccountPage() {
                     <Fingerprint className="w-4 h-4" style={{ color: '#9A9A9A' }} />
                   </div>
                   <div className="flex-1">
-                    <p className="label font-medium" style={{ color: '#1A1A1A' }}>Two-Factor Authentication</p>
-                    <p className="caption-sm mt-0.5" style={{ color: '#9A9A9A' }}>Add an extra layer of security — coming soon</p>
+                    <p className="label font-medium text-nav">Two-Factor Authentication</p>
+                    <p className="caption mt-0.5 text-text-muted">Add an extra layer of security — coming soon</p>
                   </div>
-                  <span className="label-sm font-semibold px-2.5 py-1 rounded-full"
-                    style={{ background: '#F7F6F4', color: '#9A9A9A', border: '1px solid #E5E4E0' }}>Soon</span>
+                  <span className="label font-semibold px-2.5 py-1 rounded-full text-text-light"
+                    style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>Soon</span>
                 </div>
               </div>
             </SectionCard>
@@ -927,11 +928,11 @@ export default function AccountPage() {
                     <div className="px-6 pt-6 pb-5">
                       <div className="flex items-start justify-between mb-4">
                         <div>
-                          <p className="label-sm font-semibold uppercase tracking-wider mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>Current Plan</p>
-                          <h2 className="text-2xl font-black text-white">{meta.name}</h2>
-                          <p className="body-sm mt-1" style={{ color: 'rgba(255,255,255,0.5)' }}>{meta.desc}</p>
+                          <p className="caption font-semibold uppercase tracking-wider mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>Current Plan</p>
+                          <h2 className="h2 font-black text-white">{meta.name}</h2>
+                          <p className="body mt-1" style={{ color: 'rgba(255,255,255,0.5)' }}>{meta.desc}</p>
                         </div>
-                        <span className="label-sm px-3 py-1.5 rounded-full font-semibold flex items-center gap-1.5"
+                        <span className="label px-3 py-1.5 rounded-full font-semibold flex items-center gap-1.5"
                           style={{ background: 'rgba(34,197,94,0.15)', color: '#4ADE80', border: '1px solid rgba(34,197,94,0.25)' }}>
                           <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#22C55E' }} />
                           Active
@@ -940,7 +941,7 @@ export default function AccountPage() {
                     </div>
                     <div className="px-6 pb-5 flex gap-2 flex-wrap" style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1.25rem' }}>
                       {meta.features.map(f => (
-                        <span key={f} className="caption-sm px-2.5 py-1 rounded-full"
+                        <span key={f} className="caption px-2.5 py-1 rounded-full"
                           style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.08)' }}>
                           {f}
                         </span>
@@ -950,7 +951,7 @@ export default function AccountPage() {
 
                   <SectionCard title="Payment & Invoices">
                     <div className="space-y-3">
-                      <p className="body-sm" style={{ color: '#717171' }}>
+                      <p className="body text-text-muted">
                         Manage your payment method, download invoices, and update your billing address through the Stripe billing portal.
                         Taxes (GST/HST for Canada, applicable US state sales tax) are calculated automatically at checkout.
                       </p>
@@ -970,8 +971,8 @@ export default function AccountPage() {
 
                   {plan === 'starter' && (
                     <div className="rounded-2xl p-5" style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
-                      <p className="label font-semibold" style={{ color: '#1A1A1A', marginBottom: '0.25rem' }}>Unlock more with Growth</p>
-                      <p className="caption-sm" style={{ color: '#9A9A9A', marginBottom: '1rem' }}>
+                      <p className="label font-semibold text-nav" style={{ marginBottom: '0.25rem' }}>Unlock more with Growth</p>
+                      <p className="caption text-text-muted" style={{ marginBottom: '1rem' }}>
                         WhatsApp AI Companion, TSX/TSXV support, 15 team seats, and priority support.
                       </p>
                       <button
@@ -1009,11 +1010,11 @@ export default function AccountPage() {
                       style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
                       <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                         style={{ background: 'white', border: '1px solid #E5E4E0' }}>
-                        <Icon className="w-4 h-4" style={{ color: '#9A9A9A' }} />
+                        <Icon className="w-4 h-4 text-text-light" />
                       </div>
                       <div>
-                        <p className="caption-sm mb-0.5" style={{ color: '#9A9A9A' }}>{label}</p>
-                        <p className="font-semibold body-sm" style={{ color: '#1A1A1A' }}>{value}</p>
+                        <p className="caption-sm mb-0.5 text-text-light">{label}</p>
+                        <p className="font-semibold body-sm text-nav">{value}</p>
                       </div>
                     </div>
                   ))}
@@ -1021,8 +1022,8 @@ export default function AccountPage() {
               ) : (
                 <div className="flex items-center gap-3 p-4 rounded-xl"
                   style={{ background: '#F7F6F4', border: '1px solid #E5E4E0' }}>
-                  <AlertTriangle className="w-4 h-4" style={{ color: '#9A9A9A' }} />
-                  <p className="body-sm" style={{ color: '#717171' }}>No company linked to this account.</p>
+                  <AlertTriangle className="w-4 h-4 text-text-light" />
+                  <p className="body-sm text-text-muted">No company linked to this account.</p>
                 </div>
               )}
               <div className="mt-4 flex items-start gap-2.5 p-3.5 rounded-xl"

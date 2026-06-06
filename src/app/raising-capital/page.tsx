@@ -586,7 +586,7 @@ function InstrumentCard({ instrument, profile }: { instrument: Instrument; profi
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5" style={{ color: '#9A9A9A', marginBottom: '0.5rem' }}>
+                  <p className="text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5" style={{ color: '#717171', marginBottom: '0.5rem' }}>
                     <Info className="w-3 h-3" /> What They Look For
                   </p>
                   <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
@@ -720,7 +720,7 @@ export default function RaisingCapitalPage() {
       {/* Disclaimer */}
       <div className="rounded-xl border flex items-start gap-3" style={{ background: '#FFFBEB', borderColor: '#FDE68A', padding: '0.875rem 1rem', marginBottom: '1.5rem' }}>
         <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#B45309' }} />
-        <p className="text-xs leading-relaxed" style={{ color: '#92400E' }}>
+        <p className="text-xs leading-relaxed" style={{ color: '#717171' }}>
           <strong>This is not financial or legal advice.</strong> IPOReady is a technology platform. The information below is educational only. Before pursuing any form of financing, engage qualified securities counsel, financial advisors, and accountants appropriate to your jurisdiction and situation.
         </p>
       </div>
@@ -831,7 +831,7 @@ export default function RaisingCapitalPage() {
           {/* Footer disclaimer */}
           <div className="rounded-xl border" style={{ background: '#FFFBEB', borderColor: '#FDE68A', padding: '1rem 1.25rem' }}>
             <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#B45309', marginBottom: '0.375rem' }}>Important Disclosure</p>
-            <p className="text-xs leading-relaxed" style={{ color: '#92400E' }}>
+            <p className="text-xs leading-relaxed" style={{ color: '#717171' }}>
               The information on this page is provided for educational purposes only and does not constitute financial, legal, tax, or investment advice. IPOReady is a technology workflow platform. Nothing here constitutes a recommendation, solicitation, or offer to buy or sell any security. All capital raise decisions should be made in consultation with qualified legal counsel, securities advisors, auditors, and financial professionals appropriate to your jurisdiction. Typical ranges, timelines, and criteria shown are generalisations — actual terms and availability vary significantly by company, market conditions, and jurisdiction.
             </p>
           </div>

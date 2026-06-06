@@ -1,0 +1,1368 @@
+{
+  "timestamp": "2026-06-06T20:22:30.975Z",
+  "database": [
+    {
+      "table": "capital_companies",
+      "indexes": [
+        "idx_capital_companies_cik",
+        "idx_capital_companies_ticker",
+        "idx_capital_companies_sector"
+      ],
+      "missing": [],
+      "suggestions": [
+        "Add compound index: (sector, market_cap DESC) for sector analysis",
+        "Add partial index on updated_at for recent updates tracking"
+      ]
+    },
+    {
+      "table": "company_financials",
+      "indexes": [
+        "idx_financials_company",
+        "idx_financials_fiscal",
+        "idx_financials_filing_date"
+      ],
+      "missing": [],
+      "suggestions": [
+        "Add compound index: (company_id, fiscal_year DESC, fiscal_quarter DESC)",
+        "Add index on revenue for revenue-based queries"
+      ]
+    },
+    {
+      "table": "investor_alerts",
+      "indexes": [
+        "idx_alert_investor",
+        "idx_alert_company",
+        "idx_alert_created",
+        "idx_alert_severity",
+        "idx_alert_type"
+      ],
+      "missing": [],
+      "suggestions": [
+        "Add partial index: (investor_id, severity) WHERE email_opened = false",
+        "Add index on created_at DESC for chronological queries"
+      ]
+    },
+    {
+      "table": "investor_profiles",
+      "indexes": [
+        "idx_investor_email",
+        "idx_investor_firm",
+        "idx_investor_created",
+        "idx_investor_check_size"
+      ],
+      "missing": [],
+      "suggestions": []
+    },
+    {
+      "table": "tasks",
+      "indexes": [],
+      "missing": [
+        "idx_tasks_company",
+        "idx_tasks_phase",
+        "idx_tasks_status"
+      ],
+      "suggestions": [
+        "Missing indexes: idx_tasks_company, idx_tasks_phase, idx_tasks_status"
+      ]
+    },
+    {
+      "table": "unified_documents",
+      "indexes": [
+        "idx_unified_docs_company",
+        "idx_unified_docs_type"
+      ],
+      "missing": [],
+      "suggestions": []
+    }
+  ],
+  "queries": [
+    {
+      "file": "src/app/api/admin/deploy-documents/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE table_name = ?",
+          "issue": "Column table_name used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/admin/ingest-sec-filings/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE source = ?",
+          "issue": "Column source used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/ai/board-report/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/auth/check-user/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/auth/email-verify/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE token = ?",
+          "issue": "Column token used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE token = ?",
+          "issue": "Column token used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/auth/forgot-password/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/auth/register/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE referral_code = ?",
+          "issue": "Column referral_code used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE referrer_id = ?",
+          "issue": "Column referrer_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/auth/reset-password-confirm/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE token = ?",
+          "issue": "Column token used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/cap-table/audit-log/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE document_id = ?",
+          "issue": "Column document_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE document_id = ?",
+          "issue": "Column document_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/cap-table/dilution/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE cap_table_id = ?",
+          "issue": "Column cap_table_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE cap_table_id = ?",
+          "issue": "Column cap_table_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/cap-table/export/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "List endpoint without LIMIT",
+          "issue": "API endpoint fetches all records without pagination - memory inefficient"
+        },
+        {
+          "line": 1,
+          "query": "WHERE document_id = ?",
+          "issue": "Column document_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE document_id = ?",
+          "issue": "Column document_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE document_id = ?",
+          "issue": "Column document_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE document_id = ?",
+          "issue": "Column document_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE document_id = ?",
+          "issue": "Column document_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/cap-table/holders/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "List endpoint without LIMIT",
+          "issue": "API endpoint fetches all records without pagination - memory inefficient"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/cap-table/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE cap_table_document_id = ?",
+          "issue": "Column cap_table_document_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE cap_table_document_id = ?",
+          "issue": "Column cap_table_document_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/cap-table/waterfall/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE document_id = ?",
+          "issue": "Column document_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/capital-markets/companies/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE sector = ?",
+          "issue": "Column sector used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE sector = ?",
+          "issue": "Column sector used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE sector = ?",
+          "issue": "Column sector used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE sector = ?",
+          "issue": "Column sector used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/capital-markets/dashboard/route.ts",
+      "queries": [
+        {
+          "line": 18,
+          "query": "    const company = await sql`SELECT * FROM capital_companies WHERE id = ${companyId}`",
+          "issue": "SELECT * without WHERE clause - may fetch unnecessary columns"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/compliance/listing-rules/route.ts",
+      "queries": [
+        {
+          "line": 197,
+          "query": "    let query = sql`SELECT * FROM listing_requirements WHERE company_id = ${user.companyId}`",
+          "issue": "SELECT * without WHERE clause - may fetch unnecessary columns"
+        },
+        {
+          "line": 200,
+          "query": "      query = sql`SELECT * FROM listing_requirements WHERE company_id = ${user.companyId} AND exchange = ${exchange}`",
+          "issue": "SELECT * without WHERE clause - may fetch unnecessary columns"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/compliance/resolutions/[id]/approve/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE resolution_id = ?",
+          "issue": "Column resolution_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE resolution_id = ?",
+          "issue": "Column resolution_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE resolution_id = ?",
+          "issue": "Column resolution_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/compliance/resolutions/[id]/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE resolution_id = ?",
+          "issue": "Column resolution_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/compliance/resolutions/requirements/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE exchange = ?",
+          "issue": "Column exchange used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/compliance/resolutions/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE resolution_type = ?",
+          "issue": "Column resolution_type used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE resolution_type = ?",
+          "issue": "Column resolution_type used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/dashboard/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/dashboard/stats/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/directors-officers/[directorId]/auto-populate-from-linkedin/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": [
+        {
+          "file": "src/app/api/directors-officers/[directorId]/auto-populate-from-linkedin/route.ts",
+          "line": -1,
+          "description": "Potential N+1 query: SQL query inside loop detected",
+          "severity": "critical"
+        }
+      ]
+    },
+    {
+      "file": "src/app/api/directors-officers/[directorId]/delete-resume/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/directors-officers/[directorId]/get-resume/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/directors-officers/[directorId]/linkedin-verification-status/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/directors-officers/bulk-update-sync/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/directors-officers/check-compliance/route.ts",
+      "queries": [],
+      "n1Problems": [
+        {
+          "file": "src/app/api/directors-officers/check-compliance/route.ts",
+          "line": -1,
+          "description": "Potential N+1 query: SQL query inside loop detected",
+          "severity": "critical"
+        }
+      ]
+    },
+    {
+      "file": "src/app/api/directors-officers/get-prospectus-section/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "List endpoint without LIMIT",
+          "issue": "API endpoint fetches all records without pagination - memory inefficient"
+        },
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": [
+        {
+          "file": "src/app/api/directors-officers/get-prospectus-section/route.ts",
+          "line": -1,
+          "description": "Potential N+1 query: SQL query inside loop detected",
+          "severity": "critical"
+        }
+      ]
+    },
+    {
+      "file": "src/app/api/directors-officers/sync-to-prospectus/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "List endpoint without LIMIT",
+          "issue": "API endpoint fetches all records without pagination - memory inefficient"
+        },
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/documents/relationships/initialize/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": [
+        {
+          "file": "src/app/api/documents/relationships/initialize/route.ts",
+          "line": -1,
+          "description": "Potential N+1 query: SQL query inside loop detected",
+          "severity": "critical"
+        }
+      ]
+    },
+    {
+      "file": "src/app/api/documents/relationships/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/documents/seed/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "List endpoint without LIMIT",
+          "issue": "API endpoint fetches all records without pagination - memory inefficient"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/filing-documents/get-requirements/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "List endpoint without LIMIT",
+          "issue": "API endpoint fetches all records without pagination - memory inefficient"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/financial/tracking/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE ipo_cost_id = ?",
+          "issue": "Column ipo_cost_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/financial-tracking/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE ipo_cost_id = ?",
+          "issue": "Column ipo_cost_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/health/trial-auto-upgrade/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/health/webhooks/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/hiring/confirm/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE introduction_id = ?",
+          "issue": "Column introduction_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/introductions/[id]/accept/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/introductions/request/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE professional_id = ?",
+          "issue": "Column professional_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/lead-capture/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/onboarding/items/[itemId]/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "List endpoint without LIMIT",
+          "issue": "API endpoint fetches all records without pagination - memory inefficient"
+        },
+        {
+          "line": 1,
+          "query": "WHERE checklist_id = ?",
+          "issue": "Column checklist_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE checklist_id = ?",
+          "issue": "Column checklist_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/onboarding/progress/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "List endpoint without LIMIT",
+          "issue": "API endpoint fetches all records without pagination - memory inefficient"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/onboarding/start/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "List endpoint without LIMIT",
+          "issue": "API endpoint fetches all records without pagination - memory inefficient"
+        },
+        {
+          "line": 1,
+          "query": "WHERE exchange = ?",
+          "issue": "Column exchange used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/pilot/companies/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "List endpoint without LIMIT",
+          "issue": "API endpoint fetches all records without pagination - memory inefficient"
+        },
+        {
+          "line": 1,
+          "query": "WHERE pilot_badge = ?",
+          "issue": "Column pilot_badge used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/pilot/dashboard-stats/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE pilot_badge = ?",
+          "issue": "Column pilot_badge used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE pilot_badge = ?",
+          "issue": "Column pilot_badge used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/pilot/onboard/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/professional-stats/referral-earnings/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/professionals/recommendations/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE verification_status = ?",
+          "issue": "Column verification_status used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/professionals/register/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/prospectus/[id]/apply-extractions/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE prospectus_id = ?",
+          "issue": "Column prospectus_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE prospectus_id = ?",
+          "issue": "Column prospectus_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/prospectus/[id]/export/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "List endpoint without LIMIT",
+          "issue": "API endpoint fetches all records without pagination - memory inefficient"
+        },
+        {
+          "line": 1,
+          "query": "WHERE prospectus_id = ?",
+          "issue": "Column prospectus_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/prospectus/[id]/extract-documents/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE prospectus_id = ?",
+          "issue": "Column prospectus_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/prospectus/[id]/progress/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE prospectus_id = ?",
+          "issue": "Column prospectus_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/prospectus/[id]/review-queue/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE prospectus_id = ?",
+          "issue": "Column prospectus_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/prospectus/[id]/upload-and-extract/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "List endpoint without LIMIT",
+          "issue": "API endpoint fetches all records without pagination - memory inefficient"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/prospectus/analyze/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE prospectus_id = ?",
+          "issue": "Column prospectus_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/prospectus/extract/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE prospectus_id = ?",
+          "issue": "Column prospectus_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": [
+        {
+          "file": "src/app/api/prospectus/extract/route.ts",
+          "line": -1,
+          "description": "Potential N+1 query: SQL query inside loop detected",
+          "severity": "critical"
+        }
+      ]
+    },
+    {
+      "file": "src/app/api/prospectus/sections/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE prospectus_id = ?",
+          "issue": "Column prospectus_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/referrals/insurance-quote/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "List endpoint without LIMIT",
+          "issue": "API endpoint fetches all records without pagination - memory inefficient"
+        },
+        {
+          "line": 1,
+          "query": "WHERE referrer_id = ?",
+          "issue": "Column referrer_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/referrals/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE referral_code = ?",
+          "issue": "Column referral_code used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE referral_code = ?",
+          "issue": "Column referral_code used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE referrer_id = ?",
+          "issue": "Column referrer_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE referral_code = ?",
+          "issue": "Column referral_code used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/referrals/stats/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE referrer_id = ?",
+          "issue": "Column referrer_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE referrer_id = ?",
+          "issue": "Column referrer_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE referral_code = ?",
+          "issue": "Column referral_code used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/referrals/track/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE referral_code = ?",
+          "issue": "Column referral_code used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/slack/link-account/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/slack/unlink-account/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/team/invite/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/user/account-deletion/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE created_by = ?",
+          "issue": "Column created_by used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/user/data-export/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "List endpoint without LIMIT",
+          "issue": "API endpoint fetches all records without pagination - memory inefficient"
+        },
+        {
+          "line": 1,
+          "query": "WHERE email = ?",
+          "issue": "Column email used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE created_by = ?",
+          "issue": "Column created_by used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE created_by = ?",
+          "issue": "Column created_by used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE created_by = ?",
+          "issue": "Column created_by used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE created_by = ?",
+          "issue": "Column created_by used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE created_by = ?",
+          "issue": "Column created_by used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/webhooks/stripe/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE stripe_customer_id = ?",
+          "issue": "Column stripe_customer_id used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE event_id = ?",
+          "issue": "Column event_id used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/webhooks/trial/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE trial_status = ?",
+          "issue": "Column trial_status used in WHERE but may not be indexed"
+        },
+        {
+          "line": 1,
+          "query": "WHERE trial_status = ?",
+          "issue": "Column trial_status used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    },
+    {
+      "file": "src/app/api/whatsapp/admin/stats/route.ts",
+      "queries": [
+        {
+          "line": 1,
+          "query": "WHERE status = ?",
+          "issue": "Column status used in WHERE but may not be indexed"
+        }
+      ],
+      "n1Problems": []
+    }
+  ],
+  "caching": [
+    {
+      "endpoint": "/api/company/route.ts",
+      "method": "GET",
+      "ttl": 3600,
+      "description": "Company profile - stable data, cache for 1 hour"
+    },
+    {
+      "endpoint": "/api/dashboard/route.ts",
+      "method": "GET",
+      "ttl": 300,
+      "description": "Dashboard stats - cache for 5 minutes"
+    },
+    {
+      "endpoint": "/api/regulatory/route.ts",
+      "method": "GET",
+      "ttl": 86400,
+      "description": "Regulatory rules - stable data, cache for 24 hours"
+    },
+    {
+      "endpoint": "/api/financial-tracking/route.ts",
+      "method": "GET",
+      "ttl": 3600,
+      "description": "Financial data - cache for 1 hour"
+    },
+    {
+      "endpoint": "/api/listing-rules/route.ts",
+      "method": "GET",
+      "ttl": 86400,
+      "description": "Listing rules - stable data, cache for 24 hours"
+    }
+  ],
+  "bundle": [
+    {
+      "dependency": "docx",
+      "size": 320,
+      "sizeGzip": 112,
+      "importedBy": [],
+      "recommendation": "DOCX generation - consider lazy loading"
+    },
+    {
+      "dependency": "framer-motion",
+      "size": 40,
+      "sizeGzip": 14,
+      "importedBy": [],
+      "recommendation": "Animation library - well optimized"
+    },
+    {
+      "dependency": "googleapis",
+      "size": 500,
+      "sizeGzip": 175,
+      "importedBy": [],
+      "recommendation": "Google APIs - consider API layer abstraction"
+    },
+    {
+      "dependency": "openai",
+      "size": 85,
+      "sizeGzip": 30,
+      "importedBy": [],
+      "recommendation": "OpenAI SDK - server-side only, should not be in browser bundle"
+    },
+    {
+      "dependency": "pdfkit",
+      "size": 450,
+      "sizeGzip": 158,
+      "importedBy": [],
+      "recommendation": "PDF generation - only needed server-side"
+    },
+    {
+      "dependency": "recharts",
+      "size": 290,
+      "sizeGzip": 102,
+      "importedBy": [],
+      "recommendation": "Chart library - code split per page"
+    },
+    {
+      "dependency": "xlsx",
+      "size": 380,
+      "sizeGzip": 133,
+      "importedBy": [],
+      "recommendation": "Excel handling - lazy load on demand"
+    }
+  ],
+  "images": [
+    {
+      "path": "public/images/Picture1.png",
+      "size": 112330,
+      "format": ".png",
+      "recommendation": "Convert to WebP for better compression"
+    },
+    {
+      "path": "public/images/mainmenu.png",
+      "size": 113025,
+      "format": ".png",
+      "recommendation": "Convert to WebP for better compression"
+    }
+  ],
+  "summary": {
+    "totalIssuesFound": 13,
+    "criticalCount": 5,
+    "highCount": 3,
+    "estimatedPerfGain": "~245% improvement",
+    "implementations": [
+      "Add missing database indexes",
+      "Refactor N+1 queries to batch operations",
+      "Implement API response caching",
+      "Optimize and compress images",
+      "Code-split large dependencies",
+      "Move server-only code out of browser bundle"
+    ]
+  }
+}

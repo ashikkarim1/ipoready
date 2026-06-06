@@ -36,25 +36,25 @@ export default function LandingPage() {
           {/* Left: Copy */}
           <div className="order-2 md:order-1">
             <div className="flex items-center gap-2 mb-6">
-              <span className="inline-block px-3 py-1 bg-red-100 text-red-600 text-xs sm:text-sm font-bold uppercase rounded-full">
+              <span className="inline-block px-3 py-1 bg-red-100 text-accent text-xs sm:text-sm font-bold uppercase rounded-full">
                 The IPO Operating System
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight mb-4 sm:mb-6" style={{ color: '#1A1A1A' }}>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight mb-4 sm:mb-6 text-nav">
               Manage your entire IPO journey
-              <span style={{ color: '#E8312A' }}> from first resolution to the bell—and beyond.</span>
+              <span className="text-accent"> from first resolution to the bell—and beyond.</span>
             </h1>
 
-            <p className="text-base sm:text-lg mb-6 sm:mb-8" style={{ color: '#717171' }}>
+            <p className="text-base sm:text-lg mb-6 sm:mb-8 text-text-muted">
               Tell us your exchange and listing type — IPOReady instantly builds your personalized 180+ task roadmap, assigns workstreams to your team, and tracks your velocity toward listing day.
             </p>
 
             <div className="space-y-3 sm:space-y-4 mb-8 sm:mb-10">
               {['180+ pre-built tasks across all exchanges', 'PACE™ Score predicts your listing date in real-time', 'Coordinate your entire team and expert network'].map((item) => (
                 <div key={item} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#E8312A' }} />
-                  <p className="text-sm sm:text-base" style={{ color: '#717171' }}>{item}</p>
+                  <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-accent" />
+                  <p className="text-sm sm:text-base text-text-muted">{item}</p>
                 </div>
               ))}
             </div>
@@ -99,10 +99,10 @@ export default function LandingPage() {
       {/* End-to-End IPO Journey Section */}
       <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-center mb-2" style={{ color: '#1A1A1A' }}>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-center mb-2 text-nav">
             Your Complete IPO Workflow
           </h2>
-          <p className="text-center text-sm sm:text-base mb-8 sm:mb-12" style={{ color: '#717171' }}>
+          <p className="text-center text-sm sm:text-base mb-8 sm:mb-12 text-text-muted">
             From first board resolution through exchange approval and beyond—manage every phase in one platform
           </p>
 
@@ -116,12 +116,12 @@ export default function LandingPage() {
               { phase: 'Listing & Beyond', features: ['Launch day coordination', 'Price discovery management', 'Post-IPO compliance tracking', 'Continuous reporting calendar'] },
             ].map((section) => (
               <div key={section.phase} className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl p-6 border border-red-100">
-                <h3 className="font-bold text-lg mb-4" style={{ color: '#E8312A' }}>
+                <h3 className="font-bold text-lg mb-4 text-accent">
                   {section.phase}
                 </h3>
                 <ul className="space-y-2">
                   {section.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2 text-sm" style={{ color: '#717171' }}>
+                    <li key={feature} className="flex items-start gap-2 text-sm text-text-muted">
                       <span className="text-red-500 font-bold mt-0.5">✓</span>
                       <span>{feature}</span>
                     </li>
@@ -136,10 +136,10 @@ export default function LandingPage() {
       {/* Key Features Grid */}
       <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-center mb-2" style={{ color: '#1A1A1A' }}>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-center mb-2 text-nav">
             Core Capabilities
           </h2>
-          <p className="text-center text-sm sm:text-base mb-8 sm:mb-12" style={{ color: '#717171' }}>
+          <p className="text-center text-sm sm:text-base mb-8 sm:mb-12 text-text-muted">
             Purpose-built for the entire IPO journey across all major exchanges
           </p>
 
@@ -162,10 +162,10 @@ export default function LandingPage() {
                   </div>
                 )}
                 <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="font-bold text-base sm:text-lg mb-2" style={{ color: '#1A1A1A' }}>
+                <h3 className="font-bold text-base sm:text-lg mb-2 text-nav">
                   {feature.title}
                 </h3>
-                <p className="text-sm" style={{ color: '#717171' }}>
+                <p className="text-sm text-text-muted">
                   {feature.description}
                 </p>
               </div>
@@ -177,10 +177,10 @@ export default function LandingPage() {
       {/* The Investor Experience - Before/After */}
       <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 bg-gradient-to-b from-red-50 to-white">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-center mb-4 sm:mb-6" style={{ color: '#1A1A1A' }}>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-center mb-4 sm:mb-6 text-nav">
             Why Investors Choose Companies Using IPOReady
           </h2>
-          <p className="text-center text-sm sm:text-base mb-8 sm:mb-12" style={{ color: '#717171' }}>
+          <p className="text-center text-sm sm:text-base mb-8 sm:mb-12 text-text-muted">
             The difference between a 2-week deal decision and a 2-month one
           </p>
 
@@ -188,148 +188,148 @@ export default function LandingPage() {
             {/* Before - Intralinks */}
             <div className="bg-white rounded-xl border-2 border-gray-300 overflow-hidden">
               <div className="bg-gray-100 px-6 py-4 border-b-2 border-gray-300">
-                <h3 className="font-black text-lg" style={{ color: '#717171' }}>
+                <h3 className="font-black text-lg text-text-muted">
                   ❌ Old Way (Competitor Tools)
                 </h3>
-                <p className="text-xs mt-1" style={{ color: '#999999' }}>Manual, document-dump approach</p>
+                <p className="text-xs mt-1 text-text-muted">Manual, document-dump approach</p>
               </div>
               <div className="p-6 space-y-3">
                 <div className="flex gap-3">
                   <span className="text-2xl">1.</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Investor receives password</p>
-                    <p className="text-xs mt-1" style={{ color: '#717171' }}>"Here's your access credentials"</p>
+                    <p className="font-semibold text-sm text-nav">Investor receives password</p>
+                    <p className="text-xs mt-1 text-text-muted">"Here's your access credentials"</p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
                   <span className="text-2xl">2.</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Sees 150+ files</p>
-                    <p className="text-xs mt-1" style={{ color: '#717171' }}>Overwhelming pile of documents</p>
+                    <p className="font-semibold text-sm text-nav">Sees 150+ files</p>
+                    <p className="text-xs mt-1 text-text-muted">Overwhelming pile of documents</p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
                   <span className="text-2xl">3.</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Investor is lost</p>
-                    <p className="text-xs mt-1" style={{ color: '#717171' }}>"What should I read first?"</p>
+                    <p className="font-semibold text-sm text-nav">Investor is lost</p>
+                    <p className="text-xs mt-1 text-text-muted">"What should I read first?"</p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
                   <span className="text-2xl">4.</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>CEO sends reading guide</p>
-                    <p className="text-xs mt-1" style={{ color: '#717171' }}>Delays start by 2-3 days</p>
+                    <p className="font-semibold text-sm text-nav">CEO sends reading guide</p>
+                    <p className="text-xs mt-1 text-text-muted">Delays start by 2-3 days</p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
                   <span className="text-2xl">5.</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Hours of reading</p>
-                    <p className="text-xs mt-1" style={{ color: '#717171' }}>2-3 hours in the data room</p>
+                    <p className="font-semibold text-sm text-nav">Hours of reading</p>
+                    <p className="text-xs mt-1 text-text-muted">2-3 hours in the data room</p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
                   <span className="text-2xl">6.</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>50+ questions</p>
-                    <p className="text-xs mt-1" style={{ color: '#717171' }}>Investor is confused, needs clarification</p>
+                    <p className="font-semibold text-sm text-nav">50+ questions</p>
+                    <p className="text-xs mt-1 text-text-muted">Investor is confused, needs clarification</p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
                   <span className="text-2xl">7.</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>CEO spends 2 hours answering</p>
-                    <p className="text-xs mt-1" style={{ color: '#717171' }}>Back-and-forth emails, delays</p>
+                    <p className="font-semibold text-sm text-nav">CEO spends 2 hours answering</p>
+                    <p className="text-xs mt-1 text-text-muted">Back-and-forth emails, delays</p>
                   </div>
                 </div>
 
                 <div className="flex gap-3 mt-4 pt-4 border-t-2 border-gray-200">
                   <span className="text-xl">⏱️</span>
                   <div className="flex-1">
-                    <p className="font-black text-sm" style={{ color: '#DC2626' }}>Deal decision: 15-20 days</p>
-                    <p className="text-xs mt-1" style={{ color: '#717171' }}>Long delays = investor loses interest</p>
+                    <p className="font-black text-sm text-accent">Deal decision: 15-20 days</p>
+                    <p className="text-xs mt-1 text-text-muted">Long delays = investor loses interest</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* After - IPOReady */}
-            <div className="bg-white rounded-xl border-2" style={{ borderColor: '#E8312A' }} >
-              <div className="px-6 py-4 border-b-2" style={{ borderColor: '#E8312A', background: '#FFF5F5' }}>
-                <h3 className="font-black text-lg" style={{ color: '#E8312A' }}>
+            <div className="bg-white rounded-xl border-2 border-accent">
+              <div className="px-6 py-4 border-b-2 border-accent bg-red-50">
+                <h3 className="font-black text-lg text-accent">
                   ✨ IPOReady Way (AI-Powered)
                 </h3>
-                <p className="text-xs mt-1" style={{ color: '#B91C1C' }}>Smart, guided, AI-curated experience</p>
+                <p className="text-xs mt-1 text-accent">Smart, guided, AI-curated experience</p>
               </div>
               <div className="p-6 space-y-3">
                 <div className="flex gap-3">
                   <span className="text-2xl">1.</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Investor gets invitation</p>
-                    <p className="text-xs mt-1" style={{ color: '#059669' }}>✓ NDA auto-signed, instant access granted</p>
+                    <p className="font-semibold text-sm text-nav">Investor gets invitation</p>
+                    <p className="text-xs mt-1 text-accent">✓ NDA auto-signed, instant access granted</p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
                   <span className="text-2xl">2.</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Sees 4 smart folders</p>
-                    <p className="text-xs mt-1" style={{ color: '#059669' }}>✓ Clean, organized by decision</p>
+                    <p className="font-semibold text-sm text-nav">Sees 4 smart folders</p>
+                    <p className="text-xs mt-1 text-accent">✓ Clean, organized by decision</p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
                   <span className="text-2xl">3.</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Clicks "Cap Table"</p>
-                    <p className="text-xs mt-1" style={{ color: '#059669' }}>✓ AI shows ownership structure instantly</p>
+                    <p className="font-semibold text-sm text-nav">Clicks "Cap Table"</p>
+                    <p className="text-xs mt-1 text-accent">✓ AI shows ownership structure instantly</p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
                   <span className="text-2xl">4.</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Reads AI summary</p>
-                    <p className="text-xs mt-1" style={{ color: '#059669' }}>✓ 30 seconds: founder stake, readiness</p>
+                    <p className="font-semibold text-sm text-nav">Reads AI summary</p>
+                    <p className="text-xs mt-1 text-accent">✓ 30 seconds: founder stake, readiness</p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
                   <span className="text-2xl">5.</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>Clicks "Financials"</p>
-                    <p className="text-xs mt-1" style={{ color: '#059669' }}>✓ AI highlights: $12.4M ARR, +42% growth</p>
+                    <p className="font-semibold text-sm text-nav">Clicks "Financials"</p>
+                    <p className="text-xs mt-1 text-accent">✓ AI highlights: $12.4M ARR, +42% growth</p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
                   <span className="text-2xl">6.</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>5 smart questions only</p>
-                    <p className="text-xs mt-1" style={{ color: '#059669' }}>✓ Investor is informed, asks real questions</p>
+                    <p className="font-semibold text-sm text-nav">5 smart questions only</p>
+                    <p className="text-xs mt-1 text-accent">✓ Investor is informed, asks real questions</p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
                   <span className="text-2xl">7.</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>CEO answers in 30 minutes</p>
-                    <p className="text-xs mt-1" style={{ color: '#059669' }}>✓ Investor ready to decide immediately</p>
+                    <p className="font-semibold text-sm text-nav">CEO answers in 30 minutes</p>
+                    <p className="text-xs mt-1 text-accent">✓ Investor ready to decide immediately</p>
                   </div>
                 </div>
 
-                <div className="flex gap-3 mt-4 pt-4 border-t-2" style={{ borderColor: '#FEE2E2' }}>
+                <div className="flex gap-3 mt-4 pt-4 border-t-2 border-red-100">
                   <span className="text-xl">⚡</span>
                   <div className="flex-1">
-                    <p className="font-black text-sm" style={{ color: '#E8312A' }}>Deal decision: 5 days</p>
-                    <p className="text-xs mt-1" style={{ color: '#717171' }}>Fast, informed decisions = closed deals</p>
+                    <p className="font-black text-sm text-accent">Deal decision: 5 days</p>
+                    <p className="text-xs mt-1 text-text-muted">Fast, informed decisions = closed deals</p>
                   </div>
                 </div>
               </div>
@@ -339,16 +339,16 @@ export default function LandingPage() {
           {/* Key Differences Highlight */}
           <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-blue-50 rounded-lg p-6 border-l-4 border-blue-500">
-              <p className="font-bold text-sm" style={{ color: '#1D4ED8' }}>⏱️ Time to Decision</p>
-              <p className="text-xs mt-2" style={{ color: '#717171' }}><span style={{ fontWeight: 'bold' }}>Before:</span> 15-20 days | <span style={{ fontWeight: 'bold', color: '#E8312A' }}>After:</span> <span style={{ color: '#E8312A', fontWeight: 'bold' }}>5 days</span></p>
+              <p className="font-bold text-sm text-nav">⏱️ Time to Decision</p>
+              <p className="text-xs mt-2 text-text-muted"><span className="font-bold">Before:</span> 15-20 days | <span className="font-bold text-accent">After:</span> <span className="text-accent font-bold">5 days</span></p>
             </div>
             <div className="bg-green-50 rounded-lg p-6 border-l-4 border-green-500">
-              <p className="font-bold text-sm" style={{ color: '#059669' }}>🧠 Question Quality</p>
-              <p className="text-xs mt-2" style={{ color: '#717171' }}><span style={{ fontWeight: 'bold' }}>Before:</span> 50 basic | <span style={{ fontWeight: 'bold', color: '#E8312A' }}>After:</span> <span style={{ color: '#E8312A', fontWeight: 'bold' }}>5 smart</span></p>
+              <p className="font-bold text-sm text-accent">🧠 Question Quality</p>
+              <p className="text-xs mt-2 text-text-muted"><span className="font-bold">Before:</span> 50 basic | <span className="font-bold text-accent">After:</span> <span className="text-accent font-bold">5 smart</span></p>
             </div>
             <div className="bg-yellow-50 rounded-lg p-6 border-l-4 border-yellow-500">
-              <p className="font-bold text-sm" style={{ color: '#B45309' }}>💪 Investor Confidence</p>
-              <p className="text-xs mt-2" style={{ color: '#717171' }}><span style={{ fontWeight: 'bold' }}>Before:</span> Confused | <span style={{ fontWeight: 'bold', color: '#E8312A' }}>After:</span> <span style={{ color: '#E8312A', fontWeight: 'bold' }}>Confident</span></p>
+              <p className="font-bold text-sm text-nav">💪 Investor Confidence</p>
+              <p className="text-xs mt-2 text-text-muted"><span className="font-bold">Before:</span> Confused | <span className="font-bold text-accent">After:</span> <span className="text-accent font-bold">Confident</span></p>
             </div>
           </div>
         </div>
@@ -357,10 +357,10 @@ export default function LandingPage() {
       {/* Requirements & Specifications */}
       <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-center mb-2" style={{ color: '#1A1A1A' }}>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-center mb-2 text-nav">
             Exchange-Specific Requirements
           </h2>
-          <p className="text-center text-sm sm:text-base mb-8 sm:mb-12" style={{ color: '#717171' }}>
+          <p className="text-center text-sm sm:text-base mb-8 sm:mb-12 text-text-muted">
             IPOReady automatically calculates your exact requirements based on your target exchange
           </p>
 
@@ -408,12 +408,12 @@ export default function LandingPage() {
               },
             ].map((item) => (
               <div key={item.exchange} className="bg-white rounded-xl p-6 border-2 border-gray-200">
-                <h3 className="font-bold text-lg mb-4" style={{ color: '#E8312A' }}>
+                <h3 className="font-bold text-lg mb-4 text-accent">
                   {item.exchange}
                 </h3>
                 <ul className="space-y-3">
                   {item.requirements.map((req) => (
-                    <li key={req} className="flex items-start gap-3 text-sm" style={{ color: '#717171' }}>
+                    <li key={req} className="flex items-start gap-3 text-sm text-text-muted">
                       <span className="font-bold flex-shrink-0 mt-1">▸</span>
                       <span>{req}</span>
                     </li>
@@ -428,10 +428,10 @@ export default function LandingPage() {
       {/* Required Team Section */}
       <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 bg-blue-50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-center mb-2" style={{ color: '#1A1A1A' }}>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-center mb-2 text-nav">
             Your IPO Team
           </h2>
-          <p className="text-center text-sm sm:text-base mb-8 sm:mb-12" style={{ color: '#717171' }}>
+          <p className="text-center text-sm sm:text-base mb-8 sm:mb-12 text-text-muted">
             Coordinate across all specialists needed for a successful IPO process
           </p>
 
@@ -448,10 +448,10 @@ export default function LandingPage() {
               { role: 'HR Lead', responsibilities: 'Employee communications, equity plan compliance' },
             ].map((member) => (
               <div key={member.role} className="bg-white rounded-xl p-6 border border-blue-200">
-                <h3 className="font-bold text-base mb-2" style={{ color: '#E8312A' }}>
+                <h3 className="font-bold text-base mb-2 text-accent">
                   {member.role}
                 </h3>
-                <p className="text-sm" style={{ color: '#717171' }}>
+                <p className="text-sm text-text-muted">
                   {member.responsibilities}
                 </p>
               </div>
@@ -463,10 +463,10 @@ export default function LandingPage() {
       {/* Investor Experience Impact Stats */}
       <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 max-w-7xl mx-auto">
         <div className="text-center mb-8 sm:mb-12">
-          <h3 className="text-lg sm:text-xl font-bold mb-2" style={{ color: '#1A1A1A' }}>
+          <h3 className="text-lg sm:text-xl font-bold mb-2 text-nav">
             The IPOReady Investor Experience Impact
           </h3>
-          <p className="text-sm" style={{ color: '#717171' }}>Real results from using AI-powered data rooms</p>
+          <p className="text-sm text-text-muted">Real results from using AI-powered data rooms</p>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {[
@@ -476,19 +476,19 @@ export default function LandingPage() {
             { before: '2-3', after: '<30m', label: 'Data Room Review', unit: 'minutes' },
           ].map((stat) => (
             <div key={stat.label} className="bg-gradient-to-br from-red-50 to-orange-50 rounded-lg p-4 sm:p-6 text-center border border-red-100">
-              <p className="text-xs sm:text-sm font-semibold mb-2" style={{ color: '#717171' }}>
+              <p className="text-xs sm:text-sm font-semibold mb-2 text-text-muted">
                 {stat.label}
               </p>
               <div className="flex justify-center items-center gap-2 mb-2">
-                <p className="text-lg sm:text-xl font-bold line-through" style={{ color: '#999999' }}>
+                <p className="text-lg sm:text-xl font-bold line-through text-text-muted">
                   {stat.before}
                 </p>
-                <span className="text-xs font-bold" style={{ color: '#E8312A' }}>→</span>
-                <p className="text-2xl sm:text-3xl font-black" style={{ color: '#E8312A' }}>
+                <span className="text-xs font-bold text-accent">→</span>
+                <p className="text-2xl sm:text-3xl font-black text-accent">
                   {stat.after}
                 </p>
               </div>
-              <p className="text-xs" style={{ color: '#717171' }}>
+              <p className="text-xs text-text-muted">
                 {stat.unit && <span>{stat.unit}</span>}
               </p>
             </div>
@@ -506,10 +506,10 @@ export default function LandingPage() {
             { value: '50+', label: 'Data Sources' },
           ].map((stat) => (
             <div key={stat.label} className="bg-blue-50 rounded-lg p-4 sm:p-6 text-center border border-blue-200">
-              <p className="text-2xl sm:text-3xl font-black mb-2" style={{ color: '#1D4ED8' }}>
+              <p className="text-2xl sm:text-3xl font-black mb-2 text-nav">
                 {stat.value}
               </p>
-              <p className="text-xs sm:text-sm font-semibold" style={{ color: '#717171' }}>
+              <p className="text-xs sm:text-sm font-semibold text-text-muted">
                 {stat.label}
               </p>
             </div>
@@ -519,17 +519,17 @@ export default function LandingPage() {
 
       {/* CTA Section */}
       <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 max-w-4xl mx-auto text-center">
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-black mb-4 sm:mb-6" style={{ color: '#1A1A1A' }}>
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-black mb-4 sm:mb-6 text-nav">
           Ready to Start Your IPO?
         </h2>
-        <p className="text-base sm:text-lg mb-8 sm:mb-10" style={{ color: '#717171' }}>
+        <p className="text-base sm:text-lg mb-8 sm:mb-10 text-text-muted">
           Join founders and CFOs managing their entire IPO on IPOReady.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
           <Link href="/register" className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 transition-colors text-sm sm:text-base">
             Get Started Free
           </Link>
-          <Link href="/demo" className="px-6 py-3 border-2 border-red-500 text-red-600 font-bold rounded-lg hover:bg-red-50 transition-colors text-sm sm:text-base">
+          <Link href="/demo" className="px-6 py-3 border-2 border-red-500 text-accent font-bold rounded-lg hover:bg-red-50 transition-colors text-sm sm:text-base">
             Book a Demo
           </Link>
         </div>
@@ -558,13 +558,13 @@ export default function LandingPage() {
               },
             ].map((column) => (
               <div key={column.title}>
-                <p className="font-bold text-xs sm:text-sm mb-3 uppercase tracking-wider" style={{ color: '#1A1A1A' }}>
+                <p className="font-bold text-xs sm:text-sm mb-3 uppercase tracking-wider text-nav">
                   {column.title}
                 </p>
                 <ul className="space-y-2">
                   {column.links.map((link) => (
                     <li key={link}>
-                      <Link href="#" className="text-xs sm:text-sm" style={{ color: '#717171' }}>
+                      <Link href="#" className="text-xs sm:text-sm text-text-muted">
                         {link}
                       </Link>
                     </li>
@@ -575,10 +575,10 @@ export default function LandingPage() {
           </div>
 
           <div className="border-t border-gray-200 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-xs sm:text-sm" style={{ color: '#717171' }}>
+            <p className="text-xs sm:text-sm text-text-muted">
               © 2026 IPOReady. All rights reserved.
             </p>
-            <p className="text-xs sm:text-sm" style={{ color: '#717171' }}>
+            <p className="text-xs sm:text-sm text-text-muted">
               The IPO Operating System for Canada & US Listings
             </p>
           </div>

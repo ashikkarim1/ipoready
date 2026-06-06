@@ -1,0 +1,263 @@
+# IPOReady Route Testing URLs
+# Use these URLs to manually test the application
+# Start dev server with: npm run dev
+# Then visit each URL in your browser and verify it loads without errors
+
+# ============================================================================
+# PUBLIC ROUTES (No Authentication Required)
+# ============================================================================
+
+# Home/Landing
+http://localhost:3000/
+
+# Authentication
+http://localhost:3000/login
+http://localhost:3000/register
+http://localhost:3000/reset-password
+
+# Marketing Pages
+http://localhost:3000/pricing
+http://localhost:3000/for-investors
+http://localhost:3000/partners
+http://localhost:3000/resources
+http://localhost:3000/post-listing
+
+# Legal
+http://localhost:3000/legal/privacy
+http://localhost:3000/legal/tos
+http://localhost:3000/privacy
+http://localhost:3000/terms
+http://localhost:3000/disclaimer
+
+# Learning
+http://localhost:3000/new-to-this
+http://localhost:3000/guidance-library
+http://localhost:3000/checklist-guide
+http://localhost:3000/learning-compliance
+
+# ============================================================================
+# PROTECTED DASHBOARD ROUTES (Authentication Required)
+# Note: Log in first before testing these
+# ============================================================================
+
+# Dashboard Home
+http://localhost:3000/dashboard
+
+# Capital Markets & Investor Readiness
+http://localhost:3000/dashboard/capital-markets
+http://localhost:3000/dashboard/investor-readiness/data-room
+http://localhost:3000/dashboard/investor-readiness/data-room/executive-summary
+http://localhost:3000/dashboard/investor-readiness/data-room/financial-statements
+http://localhost:3000/dashboard/investor-readiness/data-room/legal-documents
+http://localhost:3000/dashboard/investor-readiness/data-room/regulatory-filings
+http://localhost:3000/dashboard/investor-readiness/intelligence-hub
+http://localhost:3000/dashboard/investor-readiness/data-room-health
+http://localhost:3000/dashboard/investor-readiness/data-room-analytics
+http://localhost:3000/dashboard/investor-readiness/data-room-viewer
+
+# Listed Services
+http://localhost:3000/dashboard/listed-services
+http://localhost:3000/dashboard/listed-services/preview
+
+# Documents
+http://localhost:3000/dashboard/documents
+http://localhost:3000/dashboard/documents/upload
+http://localhost:3000/dashboard/documents/contracts-map
+
+# Compliance
+http://localhost:3000/dashboard/compliance
+http://localhost:3000/dashboard/compliance/listing-requirements
+http://localhost:3000/dashboard/compliance/listing-rules
+http://localhost:3000/dashboard/compliance/resolutions
+http://localhost:3000/dashboard/compliance/resolutions/new
+http://localhost:3000/dashboard/compliance/consent-letters
+http://localhost:3000/dashboard/compliance/syndication-templates
+
+# Cap Table
+http://localhost:3000/dashboard/cap-table
+http://localhost:3000/dashboard/cap-table/dilution-scenarios
+
+# Filings
+http://localhost:3000/dashboard/filings
+http://localhost:3000/dashboard/filings/new
+http://localhost:3000/dashboard/filings/status
+
+# Financial Management
+http://localhost:3000/dashboard/financial-mgmt
+http://localhost:3000/dashboard/financial-mgmt/cost-calculator
+http://localhost:3000/dashboard/financial-mgmt/tax-planning
+http://localhost:3000/dashboard/financial-mgmt/tracking
+http://localhost:3000/dashboard/financial-mgmt/true-cost
+
+# IPO Journey & Archive
+http://localhost:3000/dashboard/ipo-journey
+http://localhost:3000/dashboard/ipo-archive
+
+# Prospectus
+http://localhost:3000/dashboard/prospectus/[id]/directors-officers
+http://localhost:3000/dashboard/work/prospectus-validator
+http://localhost:3000/dashboard/work/directors-officers
+
+# Other Dashboard Pages
+http://localhost:3000/dashboard/investor-match
+http://localhost:3000/dashboard/submission
+http://localhost:3000/dashboard/admin/documents
+http://localhost:3000/dashboard/admin/emails
+http://localhost:3000/dashboard/admin/filing-systems
+
+# ============================================================================
+# AUTHENTICATED PAGES (Non-Dashboard)
+# ============================================================================
+
+http://localhost:3000/checklist
+http://localhost:3000/checklist/page
+
+http://localhost:3000/documents
+http://localhost:3000/documents/page
+
+http://localhost:3000/cap-table
+http://localhost:3000/dilution-demo
+
+http://localhost:3000/compliance
+http://localhost:3000/compliance/listing-rules
+http://localhost:3000/compliance/resolutions
+
+http://localhost:3000/financial/budget-tracking
+http://localhost:3000/financial/cost-calculator
+
+http://localhost:3000/account
+http://localhost:3000/account/privacy-settings
+http://localhost:3000/account/email-digest-settings
+
+http://localhost:3000/team
+http://localhost:3000/integrations
+http://localhost:3000/marketplace
+http://localhost:3000/notifications
+http://localhost:3000/referrals
+http://localhost:3000/raising-capital
+http://localhost:3000/vendor
+
+http://localhost:3000/pace/pulse
+http://localhost:3000/templates
+http://localhost:3000/templates/cap-tables
+
+# ============================================================================
+# DEMO PAGES
+# ============================================================================
+
+http://localhost:3000/demo/consent-workflow
+http://localhost:3000/pilot/dashboard
+http://localhost:3000/pilot/onboard
+
+# ============================================================================
+# TESTING CHECKLIST
+# ============================================================================
+
+For each route, verify:
+
+1. [ ] Page loads without error (check HTTP status)
+2. [ ] No console errors (F12 -> Console tab)
+3. [ ] No console warnings that indicate problems
+4. [ ] Page styling is consistent (light theme)
+5. [ ] Navigation is functional
+6. [ ] Forms (if present) are interactive
+7. [ ] Data loads properly (if applicable)
+8. [ ] Images load correctly
+9. [ ] No layout shifts (CLS)
+10. [ ] Mobile responsive (test with device toolbar if needed)
+
+When testing protected routes:
+- [ ] Must be logged in
+- [ ] User context available
+- [ ] Database queries complete
+- [ ] No authentication errors
+
+# ============================================================================
+# BROWSER CONSOLE CHECKS
+# ============================================================================
+
+Open DevTools (F12 or Cmd+Option+I) and check:
+
+1. Console tab:
+   - [ ] No red errors
+   - [ ] No warnings about missing components
+   - [ ] No hydration mismatch warnings
+   - [ ] No infinite loops in console
+
+2. Network tab:
+   - [ ] All requests return 200 status (or expected codes)
+   - [ ] No 404 errors for resources
+   - [ ] API calls complete successfully
+   - [ ] Response times reasonable (< 500ms for most)
+
+3. Application tab (for cookies/storage):
+   - [ ] NextAuth session cookie present (if authenticated)
+   - [ ] SessionToken stored correctly
+   - [ ] No sensitive data exposed
+   - [ ] localStorage/sessionStorage clean
+
+# ============================================================================
+# COMMON ISSUES TO WATCH FOR
+# ============================================================================
+
+1. Hydration Mismatches:
+   - Error: "Text content did not match"
+   - Solution: Check for client/server component mismatch
+
+2. Missing Environment Variables:
+   - Error: "DATABASE_URL is not defined"
+   - Solution: Check .env.local is configured correctly
+
+3. Port Already in Use:
+   - Error: "Port 3000 is already in use"
+   - Solution: Kill existing process or use different port
+
+4. Database Connection Errors:
+   - Error: "Failed to connect to database"
+   - Solution: Verify Neon connection string in .env.local
+
+5. Build Failures:
+   - Error: "TypeScript compilation failed"
+   - Solution: Run npm run build locally to see full error
+
+# ============================================================================
+# PERFORMANCE TESTING (Optional)
+# ============================================================================
+
+To test performance with Lighthouse:
+
+1. Open DevTools (F12)
+2. Click "Lighthouse" tab
+3. Select "Desktop" or "Mobile"
+4. Click "Analyze page load"
+5. Wait for report
+6. Target scores:
+   - Performance: > 75
+   - Accessibility: > 90
+   - Best Practices: > 90
+   - SEO: > 90
+
+# ============================================================================
+# API TESTING (Curl Examples)
+# ============================================================================
+
+# Test API authentication:
+curl -X GET http://localhost:3000/api/auth/session \
+  -H "Cookie: next-auth.session-token=YOUR_SESSION_TOKEN"
+
+# Test document API (if available):
+curl -X GET http://localhost:3000/api/documents
+
+# Test compliance API (if available):
+curl -X GET http://localhost:3000/api/compliance
+
+# ============================================================================
+# NOTES
+# ============================================================================
+
+- Build verification script: scripts/verify-build.sh or scripts/verify-build.js
+- Full checklist: BUILD_VERIFICATION.md
+- For detailed build info, check: .next/build-manifest.json
+- Performance info: .next/static/
+- Routes that redirect may show different URLs after load
+- Some routes require specific data/IDs that may not exist in test database

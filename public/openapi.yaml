@@ -1,0 +1,1190 @@
+openapi: 3.0.0
+info:
+  title: IPOReady API
+  description: |
+    The world's first central hub for IPO readiness workflow management.
+
+    This API provides endpoints for managing capital markets data, documents,
+    and administrative functions for companies preparing for IPOs.
+
+    ## Authentication
+    Most endpoints require JWT authentication via NextAuth. Include your session
+    token in the Authorization header:
+    ```
+    Authorization: Bearer <session-token>
+    ```
+
+    ## Rate Limiting
+    - Standard endpoints: 100 requests per minute per user
+    - Bulk operations: 10 requests per minute
+    - Admin endpoints: 50 requests per minute
+
+    ## Response Format
+    All responses are JSON. Successful requests return HTTP 2xx status codes.
+    Errors return appropriate HTTP status codes with error details.
+  version: 1.0.0
+  contact:
+    name: IPOReady Support
+    email: support@ipoready.com
+  license:
+    name: Proprietary
+    url: https://ipoready.com/license
+
+servers:
+  - url: https://api.ipoready.com
+    description: Production API
+  - url: http://localhost:3000
+    description: Local development
+
+tags:
+  - name: Capital Markets
+    description: IPO market data, company listings, and benchmarks
+  - name: Documents
+    description: Document management, upload, and retrieval
+  - name: Admin
+    description: Administrative operations (requires admin role)
+  - name: Dashboard
+    description: Company dashboard and analytics
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: NextAuth session token
+
+  schemas:
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: Error message
+        details:
+          type: string
+          description: Additional error details
+
+    Company:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        ticker:
+          type: string
+        sector:
+          type: string
+        industry:
+          type: string
+        market_cap:
+          type: number
+          format: double
+        logo_url:
+          type: string
+          format: uri
+        cik:
+          type: string
+          description: SEC Central Index Key
+
+    CompanyFinancials:
+      type: object
+      properties:
+        company_id:
+          type: string
+          format: uuid
+        fiscal_year:
+          type: integer
+        fiscal_quarter:
+          type: integer
+        revenue:
+          type: number
+          format: double
+        net_income:
+          type: number
+          format: double
+        operating_cash_flow:
+          type: number
+          format: double
+        net_margin:
+          type: number
+          format: double
+        roe:
+          type: number
+          format: double
+        current_ratio:
+          type: number
+          format: double
+
+    IPO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        company_id:
+          type: string
+          format: uuid
+        company_name:
+          type: string
+        ticker:
+          type: string
+        sector:
+          type: string
+        status:
+          type: string
+          enum: [pending, listed, withdrawn, delayed]
+        listing_date:
+          type: string
+          format: date
+        ipo_size:
+          type: number
+          format: double
+        shares_offered:
+          type: integer
+        offer_price:
+          type: number
+          format: double
+        first_day_return:
+          type: number
+          format: double
+          description: First day return percentage
+        return_30d:
+          type: number
+          format: double
+        return_90d:
+          type: number
+          format: double
+        return_365d:
+          type: number
+          format: double
+        return_vs_sp500_30d:
+          type: number
+          format: double
+        return_vs_sp500_90d:
+          type: number
+          format: double
+        performance:
+          type: object
+          properties:
+            first_day_return:
+              type: number
+            return_30d:
+              type: number
+            return_90d:
+              type: number
+            return_365d:
+              type: number
+            vs_market_30d:
+              type: number
+            vs_market_90d:
+              type: number
+
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        company_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum: [legal, financial, governance, regulatory, compliance]
+        status:
+          type: string
+          enum: [draft, pending_review, approved, rejected]
+        mime_type:
+          type: string
+        file_size:
+          type: integer
+        storage_provider:
+          type: string
+          enum: [local, google_drive, dropbox, onedrive, box, s3]
+        storage_id:
+          type: string
+        current_version:
+          type: integer
+        total_versions:
+          type: integer
+        uploaded_by:
+          type: string
+        uploaded_at:
+          type: string
+          format: date-time
+        last_modified_by:
+          type: string
+        last_modified_at:
+          type: string
+          format: date-time
+        completeness:
+          type: number
+          format: double
+          description: Percentage complete (0-100)
+        comment_count:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    DocumentList:
+      type: object
+      properties:
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+        count:
+          type: integer
+
+    CapitalMarketsDashboard:
+      type: object
+      properties:
+        company:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            ticker:
+              type: string
+            sector:
+              type: string
+            industry:
+              type: string
+            market_cap:
+              type: number
+        financials:
+          type: object
+          properties:
+            latest:
+              $ref: '#/components/schemas/CompanyFinancials'
+            revenueGrowth:
+              type: number
+              description: YoY revenue growth percentage
+        ipo:
+          type: object
+          nullable: true
+          properties:
+            listing_date:
+              type: string
+              format: date
+            first_day_return:
+              type: number
+            return_365d:
+              type: number
+        benchmarks:
+          type: object
+          nullable: true
+          properties:
+            percentile_vs_peers:
+              type: number
+            percentile_vs_sector:
+              type: number
+        valuation:
+          type: object
+          nullable: true
+          properties:
+            pe_ratio:
+              type: number
+            ev_revenue:
+              type: number
+            ev_ebitda:
+              type: number
+
+    Pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        pages:
+          type: integer
+
+    SecIngestionResult:
+      type: object
+      properties:
+        message:
+          type: string
+        statistics:
+          type: object
+          properties:
+            total:
+              type: integer
+            successful:
+              type: integer
+            failed:
+              type: integer
+            duration_ms:
+              type: integer
+            avg_per_company_ms:
+              type: integer
+        errors:
+          type: array
+          items:
+            type: string
+
+    DeploymentResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+        steps:
+          type: array
+          items:
+            type: object
+            properties:
+              step:
+                type: string
+              status:
+                type: string
+                enum: [success, failed, skipped]
+              message:
+                type: string
+              recordsAffected:
+                type: integer
+        summary:
+          type: object
+          properties:
+            totalDocumentsMigrated:
+              type: integer
+            duplicatesFound:
+              type: integer
+            duplicatesResolved:
+              type: integer
+            systemReady:
+              type: boolean
+        timestamp:
+          type: string
+          format: date-time
+
+paths:
+  # ===========================================================================
+  # CAPITAL MARKETS ENDPOINTS
+  # ===========================================================================
+
+  /api/capital-markets/companies:
+    get:
+      tags:
+        - Capital Markets
+      summary: List public companies
+      description: |
+        Retrieve a paginated list of public companies from the capital markets database.
+        Supports filtering by sector and search term.
+      parameters:
+        - name: sector
+          in: query
+          description: Filter by sector (e.g., "Technology", "Healthcare", "Finance")
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: Search query for company name or ticker
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Maximum results per page (default 50, max 500)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+        - name: offset
+          in: query
+          description: Pagination offset (default 0)
+          schema:
+            type: integer
+            minimum: 0
+      responses:
+        '200':
+          description: Successfully retrieved companies
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  companies:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Company'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              examples:
+                success:
+                  value:
+                    companies:
+                      - id: "550e8400-e29b-41d4-a716-446655440000"
+                        name: "TechCorp Inc"
+                        ticker: "TECH"
+                        sector: "Technology"
+                        industry: "Software"
+                        market_cap: 1500000000
+                    pagination:
+                      total: 250
+                      limit: 50
+                      offset: 0
+                      pages: 5
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/capital-markets/ipos:
+    get:
+      tags:
+        - Capital Markets
+      summary: Get IPO listings
+      description: |
+        Retrieve IPO listings with performance metrics. Can be filtered by status,
+        sector, and recent activity (within N days).
+      parameters:
+        - name: status
+          in: query
+          description: IPO status filter
+          schema:
+            type: string
+            enum: [pending, listed, withdrawn, delayed]
+        - name: sector
+          in: query
+          description: Filter by sector
+          schema:
+            type: string
+        - name: days
+          in: query
+          description: Filter IPOs from the last N days (default 90)
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Successfully retrieved IPOs with performance metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ipos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/IPO'
+                  count:
+                    type: integer
+                  filters:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                      sector:
+                        type: string
+                      days:
+                        type: integer
+              examples:
+                success:
+                  value:
+                    ipos:
+                      - id: "660e8400-e29b-41d4-a716-446655440001"
+                        company_id: "550e8400-e29b-41d4-a716-446655440000"
+                        company_name: "TechCorp Inc"
+                        ticker: "TECH"
+                        sector: "Technology"
+                        status: "listed"
+                        listing_date: "2024-06-15"
+                        offer_price: 25.00
+                        first_day_return: 12.5
+                        return_30d: 18.3
+                        return_90d: 22.1
+                        performance:
+                          first_day_return: 12.5
+                          return_30d: 18.3
+                          return_90d: 22.1
+                          return_365d: 35.2
+                    count: 42
+                    filters:
+                      status: "listed"
+                      sector: "Technology"
+                      days: 90
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/capital-markets/dashboard:
+    get:
+      tags:
+        - Capital Markets
+      summary: Get company capital markets dashboard
+      description: |
+        Retrieve comprehensive capital markets dashboard data for a specific company,
+        including financials, IPO data, benchmarks, and valuation multiples.
+      parameters:
+        - name: companyId
+          in: query
+          required: true
+          description: Company ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successfully retrieved dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapitalMarketsDashboard'
+              examples:
+                success:
+                  value:
+                    company:
+                      id: "550e8400-e29b-41d4-a716-446655440000"
+                      name: "TechCorp Inc"
+                      ticker: "TECH"
+                      sector: "Technology"
+                      market_cap: 1500000000
+                    financials:
+                      latest:
+                        revenue: 500000000
+                        net_income: 50000000
+                        net_margin: 0.10
+                        roe: 0.15
+                      revenueGrowth: 25.5
+                    ipo:
+                      listing_date: "2024-06-15"
+                      first_day_return: 12.5
+                      return_365d: 35.2
+                    benchmarks:
+                      percentile_vs_peers: 75
+                      percentile_vs_sector: 82
+                    valuation:
+                      pe_ratio: 28.5
+                      ev_revenue: 3.0
+                      ev_ebitda: 18.5
+        '400':
+          description: Missing required companyId parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Company not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ===========================================================================
+  # DOCUMENTS ENDPOINTS
+  # ===========================================================================
+
+  /api/documents/list:
+    get:
+      tags:
+        - Documents
+      summary: List documents for a company
+      description: |
+        Retrieve documents for a specific company. Can filter by category.
+      parameters:
+        - name: companyId
+          in: query
+          required: true
+          description: Company ID
+          schema:
+            type: string
+            format: uuid
+        - name: category
+          in: query
+          description: Filter by document category
+          schema:
+            type: string
+            enum: [legal, financial, governance, regulatory, compliance]
+      responses:
+        '200':
+          description: Successfully retrieved documents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentList'
+              examples:
+                success:
+                  value:
+                    documents:
+                      - id: "770e8400-e29b-41d4-a716-446655440002"
+                        company_id: "550e8400-e29b-41d4-a716-446655440000"
+                        name: "prospectus-2024.pdf"
+                        display_name: "2024 Prospectus"
+                        category: "legal"
+                        status: "approved"
+                        mime_type: "application/pdf"
+                        file_size: 2048000
+                        uploaded_at: "2024-06-01T10:30:00Z"
+                        current_version: 3
+                        total_versions: 5
+                        completeness: 95
+                    count: 12
+        '400':
+          description: Missing required companyId parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+
+  /api/documents/upload:
+    post:
+      tags:
+        - Documents
+      summary: Upload documents
+      description: |
+        Upload one or more documents for a company. Returns file metadata including
+        upload path and file IDs for tracking.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - documentId
+                - files
+              properties:
+                documentId:
+                  type: string
+                  description: Document ID (created first via documents API)
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: One or more files to upload
+      responses:
+        '200':
+          description: Successfully uploaded files
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  documentId:
+                    type: string
+                  files:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        size:
+                          type: integer
+                        uploadedAt:
+                          type: string
+                          format: date-time
+                        status:
+                          type: string
+                        publicPath:
+                          type: string
+              examples:
+                success:
+                  value:
+                    success: true
+                    documentId: "770e8400-e29b-41d4-a716-446655440002"
+                    files:
+                      - id: "880e8400-e29b-41d4-a716-446655440003"
+                        name: "prospectus-2024.pdf"
+                        size: 2048000
+                        uploadedAt: "2024-06-01T10:30:00Z"
+                        status: "uploaded"
+                        publicPath: "/uploads/770e8400-e29b-41d4-a716-446655440002/880e8400-e29b-41d4-a716-446655440003.pdf"
+        '400':
+          description: Missing required fields or invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Upload failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+
+  /api/documents/delete:
+    delete:
+      tags:
+        - Documents
+      summary: Delete a document file
+      description: |
+        Delete a specific file from a document. Multiple files can be deleted
+        by calling this endpoint multiple times.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - documentId
+                - fileId
+              properties:
+                documentId:
+                  type: string
+                  description: Document ID
+                fileId:
+                  type: string
+                  description: File ID to delete
+      responses:
+        '200':
+          description: Successfully deleted file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+              examples:
+                success:
+                  value:
+                    success: true
+                    message: "File deleted successfully"
+        '400':
+          description: Missing required fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Delete failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+
+  # ===========================================================================
+  # ADMIN ENDPOINTS
+  # ===========================================================================
+
+  /api/admin/ingest-sec-filings:
+    post:
+      tags:
+        - Admin
+      summary: Trigger SEC filing ingestion
+      description: |
+        Start batch ingestion of SEC filings for specified companies or all companies.
+        This is a long-running operation that may take several minutes. Returns
+        ingestion statistics upon completion.
+      parameters:
+        - name: companyIds
+          in: query
+          description: Comma-separated list of company IDs (optional, defaults to all)
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Maximum number of companies to ingest (default 50)
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Ingestion completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecIngestionResult'
+              examples:
+                success:
+                  value:
+                    message: "SEC filing ingestion completed"
+                    statistics:
+                      total: 25
+                      successful: 24
+                      failed: 1
+                      duration_ms: 45000
+                      avg_per_company_ms: 1800
+                    errors:
+                      - "Company ID 123: Invalid CIK format"
+        '500':
+          description: Ingestion failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: string
+      security:
+        - bearerAuth: []
+
+    get:
+      tags:
+        - Admin
+      summary: Get SEC ingestion status
+      description: |
+        Check the status of SEC filing ingestion, including last sync times
+        and data coverage statistics.
+      responses:
+        '200':
+          description: Successfully retrieved ingestion status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  companies_coverage:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      with_10k:
+                        type: integer
+                      with_10q:
+                        type: integer
+                  recent_syncs:
+                    type: array
+                    items:
+                      type: object
+              examples:
+                success:
+                  value:
+                    status: "ok"
+                    companies_coverage:
+                      total: 5000
+                      with_10k: 4950
+                      with_10q: 4800
+                    recent_syncs:
+                      - source: "SEC_EDGAR"
+                        status: "success"
+                        created_at: "2024-06-07T15:30:00Z"
+        '500':
+          description: Failed to fetch status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+
+  /api/admin/deploy-documents:
+    post:
+      tags:
+        - Admin
+      summary: Deploy unified document system
+      description: |
+        Deploy the unified document system and migrate legacy data. This endpoint
+        handles database migrations, duplicate resolution, and cloud storage
+        initialization. Admin access required.
+      responses:
+        '200':
+          description: Deployment completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentResult'
+              examples:
+                success:
+                  value:
+                    success: true
+                    steps:
+                      - step: "Verify unified_documents exists"
+                        status: "success"
+                        message: "unified_documents table exists and ready"
+                      - step: "Migrate prospectus_documents"
+                        status: "success"
+                        message: "Migrated 342 documents"
+                        recordsAffected: 342
+                      - step: "Check for duplicates"
+                        status: "success"
+                        message: "✓ ZERO duplicates found - system is clean"
+                      - step: "Initialize cloud storage providers"
+                        status: "success"
+                        message: "Cloud storage providers configured for all companies"
+                      - step: "Final verification"
+                        status: "success"
+                        message: "Total documents: 342, Duplicates: 0 - ✓ SYSTEM READY"
+                    summary:
+                      totalDocumentsMigrated: 342
+                      duplicatesFound: 0
+                      duplicatesResolved: 0
+                      systemReady: true
+                    timestamp: "2024-06-07T15:30:00Z"
+        '403':
+          description: Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Deployment failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentResult'
+      security:
+        - bearerAuth: []
+
+  # ===========================================================================
+  # DASHBOARD ENDPOINTS
+  # ===========================================================================
+
+  /api/dashboard:
+    get:
+      tags:
+        - Dashboard
+      summary: Get company dashboard
+      description: |
+        Retrieve comprehensive company dashboard data including tasks summary,
+        phase progress, upcoming tasks, and recent activity. Requires authentication.
+      responses:
+        '200':
+          description: Successfully retrieved dashboard data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  company:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      name:
+                        type: string
+                      listingType:
+                        type: string
+                      targetExchange:
+                        type: string
+                      currentPhase:
+                        type: string
+                      paceScore:
+                        type: number
+                      estimatedDaysToIpo:
+                        type: integer
+                      progressPercentage:
+                        type: number
+                      currency:
+                        type: string
+                      language:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: date-time
+                      trial_status:
+                        type: string
+                      trial_end_date:
+                        type: string
+                        format: date
+                  tasksSummary:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      completed:
+                        type: integer
+                      inProgress:
+                        type: integer
+                      blocked:
+                        type: integer
+                      notStarted:
+                        type: integer
+                  phaseData:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        phase:
+                          type: string
+                        total:
+                          type: integer
+                        completed:
+                          type: integer
+                        percentage:
+                          type: number
+                  upcomingTasks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        phase:
+                          type: string
+                        category:
+                          type: string
+                        title:
+                          type: string
+                        priority:
+                          type: string
+                        estimatedDays:
+                          type: integer
+                  recentActivity:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        title:
+                          type: string
+                        phase:
+                          type: string
+                        completedAt:
+                          type: string
+                          format: date-time
+              examples:
+                success:
+                  value:
+                    company:
+                      id: "550e8400-e29b-41d4-a716-446655440000"
+                      name: "TechCorp Inc"
+                      listingType: "IPO"
+                      targetExchange: "NASDAQ"
+                      currentPhase: "Phase 2"
+                      paceScore: 78
+                      estimatedDaysToIpo: 180
+                      progressPercentage: 65
+                      currency: "USD"
+                      language: "en"
+                      createdAt: "2024-01-15T08:00:00Z"
+                      trial_status: "active"
+                      trial_end_date: "2024-07-15"
+                    tasksSummary:
+                      total: 156
+                      completed: 101
+                      inProgress: 32
+                      blocked: 5
+                      notStarted: 18
+                    phaseData:
+                      - phase: "Phase 1"
+                        total: 42
+                        completed: 42
+                        percentage: 100
+                      - phase: "Phase 2"
+                        total: 78
+                        completed: 59
+                        percentage: 76
+                      - phase: "Phase 3"
+                        total: 36
+                        completed: 0
+                        percentage: 0
+                    upcomingTasks:
+                      - id: "660e8400-e29b-41d4-a716-446655440001"
+                        phase: "Phase 2"
+                        category: "Compliance"
+                        title: "Complete SEC filing"
+                        priority: "critical"
+                        estimatedDays: 5
+                    recentActivity:
+                      - id: "770e8400-e29b-41d4-a716-446655440002"
+                        title: "Finalize prospectus"
+                        phase: "Phase 2"
+                        completedAt: "2024-06-06T14:30:00Z"
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Company not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+
+# ===========================================================================
+# SECURITY & RATE LIMITING
+# ===========================================================================
+
+security:
+  - bearerAuth: []
+
+x-rate-limits:
+  standard:
+    requests-per-minute: 100
+    description: Standard API endpoints
+  bulk:
+    requests-per-minute: 10
+    description: Bulk operations and batch endpoints
+  admin:
+    requests-per-minute: 50
+    description: Administrative endpoints
+
+x-http-caching:
+  /api/capital-markets/companies:
+    max-age: 600
+    stale-while-revalidate: 1800
+  /api/capital-markets/ipos:
+    max-age: 300
+    stale-while-revalidate: 600
+  /api/capital-markets/dashboard:
+    max-age: 300
+    stale-while-revalidate: 600

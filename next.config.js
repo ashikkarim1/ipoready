@@ -30,6 +30,20 @@ const nextConfig = {
   trailingSlash: false,
 
   async headers() {
+    // Determine CORS allowed origins based on environment
+    const allowedOrigins = process.env.NODE_ENV === 'production'
+      ? ['https://ipoready.ai', 'https://www.ipoready.ai']
+      : ['http://localhost:3000', 'http://localhost:3001']
+
+    // CORS headers for API routes
+    const corsHeaders = [
+      { key: 'Access-Control-Allow-Origin', value: allowedOrigins[0] },
+      { key: 'Access-Control-Allow-Methods', value: 'GET, POST, PUT, DELETE, PATCH, OPTIONS' },
+      { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization, X-CSRF-Token, X-Requested-With' },
+      { key: 'Access-Control-Allow-Credentials', value: 'true' },
+      { key: 'Access-Control-Max-Age', value: '86400' }, // 24 hours
+    ]
+
     // Common security headers applied to all responses
     const securityHeaders = [
       {
@@ -72,10 +86,11 @@ const nextConfig = {
         ],
       },
       {
-        // API routes — apply security headers, control caching based on auth
+        // API routes — apply CORS headers and security headers
         source: '/api/:path*',
         headers: [
           { key: 'Cache-Control', value: 'private, no-cache, no-store, must-revalidate' },
+          ...corsHeaders,
           ...securityHeaders,
         ],
       },

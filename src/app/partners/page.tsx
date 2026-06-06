@@ -104,13 +104,15 @@ export default function PartnersPage() {
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Link href="/login"
-            style={{ fontSize: '13px', fontWeight: 500, color: '#717171', padding: '6px 14px', borderRadius: '100px', textDecoration: 'none', border: '1px solid #E5E4E0', background: '#fff' }}
+            style={{ fontWeight: 500, color: '#717171', padding: '6px 14px', borderRadius: '100px', textDecoration: 'none', border: '1px solid #E5E4E0', background: '#fff' }}
+            className="label-sm"
             onMouseEnter={e => (e.currentTarget.style.color = '#1A1A1A')}
             onMouseLeave={e => (e.currentTarget.style.color = '#717171')}>
             Sign In
           </Link>
           <a href="#apply"
-            style={{ fontSize: '13px', fontWeight: 600, color: '#fff', padding: '6px 16px', borderRadius: '100px', textDecoration: 'none', background: '#E8312A', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            style={{ fontWeight: 600, color: '#fff', padding: '6px 16px', borderRadius: '100px', textDecoration: 'none', background: '#E8312A', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            className="label-sm"
             onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#C4261F' }}
             onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#E8312A' }}>
             Apply to Partner
@@ -122,7 +124,7 @@ export default function PartnersPage() {
       <section style={{ background: '#FFFFFF', padding: '5rem 1.5rem 4rem' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#FDECEB', color: '#E8312A', border: '1px solid #FBCFCF', borderRadius: '100px', padding: '4px 14px', fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#FDECEB', color: '#E8312A', border: '1px solid #FBCFCF', borderRadius: '100px', padding: '4px 14px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '1.5rem' }} className="caption">
               <Star className="w-3 h-3" /> Professional Partner Program
             </div>
             <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.75rem)', fontWeight: 900, color: '#1A1A1A', lineHeight: 1.1, marginBottom: '1.25rem', letterSpacing: '-1px' }}>
@@ -131,7 +133,7 @@ export default function PartnersPage() {
             <p style={{ fontSize: '18px', color: '#717171', maxWidth: '580px', margin: '0 auto 1rem', lineHeight: 1.65 }}>
               You're already in the room when companies decide to go public. Introduce them to IPOReady and earn 20% of their monthly subscription for 12 months — automatically.
             </p>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: '#B45309', marginBottom: '2rem' }}>
+            <p style={{ fontWeight: 600, color: '#B45309', marginBottom: '2rem' }} className="label-sm">
               ⚡ The average partner referring 3 companies earns CA$7,600+ per year in passive income.
             </p>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
@@ -163,8 +165,8 @@ export default function PartnersPage() {
           ].map(({ value, label, sub }) => (
             <div key={label} style={{ textAlign: 'center' }}>
               <p style={{ fontWeight: 900, fontSize: '2rem', color: '#E8312A', marginBottom: '2px', lineHeight: 1 }}>{value}</p>
-              <p style={{ fontWeight: 600, fontSize: '13px', color: '#FFFFFF', marginBottom: '2px' }}>{label}</p>
-              <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)' }}>{sub}</p>
+              <p style={{ fontWeight: 600, color: '#FFFFFF', marginBottom: '2px' }} className="label-sm">{label}</p>
+              <p style={{ color: 'rgba(255,255,255,0.35)' }} className="caption">{sub}</p>
             </div>
           ))}
         </div>
@@ -175,7 +177,7 @@ export default function PartnersPage() {
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <h2 style={{ fontSize: '2.25rem', fontWeight: 900, color: '#1A1A1A', marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>Who Can Partner With Us</h2>
-            <p style={{ fontSize: '15px', color: '#717171', maxWidth: '480px', margin: '0 auto' }}>Any professional who regularly works with companies exploring or preparing for a public market listing.</p>
+            <p style={{ color: '#717171', maxWidth: '480px', margin: '0 auto' }} className="body">Any professional who regularly works with companies exploring or preparing for a public market listing.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }} className="grid-cols-1 md:grid-cols-3">
             {WHO_QUALIFIES.map(({ icon: Icon, label, body }) => (
@@ -183,14 +185,14 @@ export default function PartnersPage() {
                 <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#F7F6F4', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
                   <Icon className="w-4 h-4" style={{ color: '#1A1A1A' }} />
                 </div>
-                <p style={{ fontWeight: 600, fontSize: '13px', color: '#1A1A1A', marginBottom: '6px' }}>{label}</p>
-                <p style={{ fontSize: '12px', color: '#9A9A9A', lineHeight: 1.6 }}>{body}</p>
+                <p style={{ fontWeight: 600, color: '#1A1A1A', marginBottom: '6px' }} className="label-sm">{label}</p>
+                <p style={{ color: '#717171', lineHeight: 1.6 }} className="body-sm">{body}</p>
               </div>
             ))}
           </div>
           <div style={{ marginTop: '1.5rem', padding: '1rem 1.25rem', borderRadius: '12px', background: '#FFFBEB', border: '1px solid #FDE68A', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
             <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#B45309' }} />
-            <p style={{ fontSize: '13px', color: '#B45309', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ color: '#B45309', lineHeight: 1.6, margin: 0 }} className="label-sm">
               <strong>For lawyers:</strong> Rules on referral fees vary by province and state. This program involves referring clients to a technology platform, not a legal service. Consult your bar association and firm policy before participating.
             </p>
           </div>
@@ -201,7 +203,7 @@ export default function PartnersPage() {
       <section style={{ background: '#F7F6F4', padding: '5rem 1.5rem', borderTop: '1px solid #E5E4E0' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <h2 style={{ fontSize: '2.25rem', fontWeight: 900, color: '#1A1A1A', letterSpacing: '-0.5px' }}>How It Works</h2>
+            <h2 className="h2 text-nav" style={{ letterSpacing: '-0.5px' }}>How It Works</h2>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }} className="grid-cols-2 md:grid-cols-4">
             {[
@@ -211,11 +213,11 @@ export default function PartnersPage() {
               { step: '04', title: 'Earn Automatically', body: 'Commissions are calculated and deposited on the 1st of every month for active subscribers.' },
             ].map(({ step, title, body }) => (
               <div key={step} style={{ textAlign: 'center' }}>
-                <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#1A1A1A', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', fontWeight: 900, fontSize: '15px', letterSpacing: '-0.5px' }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#1A1A1A', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', fontWeight: 900, letterSpacing: '-0.5px' }} className="label">
                   {step}
                 </div>
-                <p style={{ fontWeight: 700, fontSize: '13px', color: '#1A1A1A', marginBottom: '6px' }}>{title}</p>
-                <p style={{ fontSize: '12px', color: '#9A9A9A', lineHeight: 1.6 }}>{body}</p>
+                <p style={{ fontWeight: 700, color: '#1A1A1A', marginBottom: '6px' }} className="label-sm">{title}</p>
+                <p style={{ color: '#717171', lineHeight: 1.6 }} className="body-sm">{body}</p>
               </div>
             ))}
           </div>
@@ -226,50 +228,52 @@ export default function PartnersPage() {
       <section id="calculator" style={{ background: '#FFFFFF', padding: '5rem 1.5rem', borderTop: '1px solid #E5E4E0' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <h2 style={{ fontSize: '2.25rem', fontWeight: 900, color: '#1A1A1A', marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>Earnings Calculator</h2>
-            <p style={{ fontSize: '15px', color: '#717171' }}>See what your referrals could earn you.</p>
+            <h2 className="h2 text-nav" style={{ marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>Earnings Calculator</h2>
+            <p style={{ color: '#717171' }} className="body">See what your referrals could earn you.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'start' }} className="grid-cols-1 md:grid-cols-2">
 
             {/* Controls */}
             <div style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', borderRadius: '20px', padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <div>
-                <label style={{ fontSize: '13px', fontWeight: 600, color: '#1A1A1A', display: 'block', marginBottom: '8px' }}>Average Client Plan</label>
+                <label style={{ fontWeight: 600, color: '#1A1A1A', display: 'block', marginBottom: '8px' }} className="label-sm">Average Client Plan</label>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
                   {(['starter', 'growth', 'enterprise'] as const).map(p => (
                     <button key={p} onClick={() => setCalc(c => ({ ...c, plan: p }))}
-                      style={{ padding: '8px', borderRadius: '10px', fontSize: '12px', fontWeight: 600, textTransform: 'capitalize', cursor: 'pointer', border: '1.5px solid', transition: 'all 0.15s',
+                      style={{ padding: '8px', borderRadius: '10px', fontWeight: 600, textTransform: 'capitalize', cursor: 'pointer', border: '1.5px solid', transition: 'all 0.15s',
                         ...(calc.plan === p
                           ? { background: '#1A1A1A', color: '#fff', borderColor: '#1A1A1A' }
-                          : { background: '#fff', color: '#717171', borderColor: '#E5E4E0' }) }}>
+                          : { background: '#fff', color: '#717171', borderColor: '#E5E4E0' }) }}
+                      className="body-sm">
                       {p}
                     </button>
                   ))}
                 </div>
               </div>
               <div>
-                <label style={{ fontSize: '13px', fontWeight: 600, color: '#1A1A1A', display: 'block', marginBottom: '8px' }}>Client Billing Cycle</label>
+                <label style={{ fontWeight: 600, color: '#1A1A1A', display: 'block', marginBottom: '8px' }} className="label-sm">Client Billing Cycle</label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
                   {(['monthly', 'annual'] as const).map(b => (
                     <button key={b} onClick={() => setCalc(c => ({ ...c, billingCycle: b }))}
-                      style={{ padding: '8px', borderRadius: '10px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', border: '1.5px solid', transition: 'all 0.15s',
+                      style={{ padding: '8px', borderRadius: '10px', fontWeight: 600, cursor: 'pointer', border: '1.5px solid', transition: 'all 0.15s',
                         ...(calc.billingCycle === b
                           ? { background: '#1A1A1A', color: '#fff', borderColor: '#1A1A1A' }
-                          : { background: '#fff', color: '#717171', borderColor: '#E5E4E0' }) }}>
+                          : { background: '#fff', color: '#717171', borderColor: '#E5E4E0' }) }}
+                      className="body-sm">
                       {b === 'monthly' ? 'Monthly' : 'Annual'}
                     </button>
                   ))}
                 </div>
               </div>
               <div>
-                <label style={{ fontSize: '13px', fontWeight: 600, color: '#1A1A1A', display: 'block', marginBottom: '8px' }}>
+                <label style={{ fontWeight: 600, color: '#1A1A1A', display: 'block', marginBottom: '8px' }} className="label-sm">
                   Referrals per year: <span style={{ color: '#E8312A' }}>{calc.referralsPerYear}</span>
                 </label>
                 <input type="range" min={1} max={20} value={calc.referralsPerYear}
                   onChange={e => setCalc(c => ({ ...c, referralsPerYear: +e.target.value }))}
                   style={{ width: '100%', accentColor: '#E8312A' }} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px' }}>
-                  {['1','5','10','15','20'].map(n => <span key={n} style={{ fontSize: '11px', color: '#C0BEB9' }}>{n}</span>)}
+                  {['1','5','10','15','20'].map(n => <span key={n} style={{ color: '#717171' }} className="caption">{n}</span>)}
                 </div>
               </div>
             </div>
@@ -277,26 +281,26 @@ export default function PartnersPage() {
             {/* Results */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div style={{ background: '#1A1A1A', borderRadius: '20px', padding: '1.75rem' }}>
-                <p style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.4)', marginBottom: '6px' }}>Annual Commission</p>
+                <p style={{ fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.4)', marginBottom: '6px' }} className="caption">Annual Commission</p>
                 <p style={{ fontWeight: 900, fontSize: '3rem', color: '#E8312A', lineHeight: 1, marginBottom: '6px' }}>
                   CA${totalAnnual.toLocaleString()}
                 </p>
-                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>
+                <p style={{ color: 'rgba(255,255,255,0.4)' }} className="label-sm">
                   {calc.referralsPerYear} × CA${commissionAnnualPerClient.toLocaleString()}/yr per client
                 </p>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <div style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', borderRadius: '14px', padding: '1rem', textAlign: 'center' }}>
-                  <p style={{ fontSize: '12px', color: '#9A9A9A', marginBottom: '4px' }}>Per month</p>
+                  <p style={{ color: '#717171', marginBottom: '4px' }} className="body-sm">Per month</p>
                   <p style={{ fontWeight: 900, fontSize: '1.25rem', color: '#1A1A1A' }}>CA${Math.round(totalAnnual / 12).toLocaleString()}</p>
                 </div>
                 <div style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', borderRadius: '14px', padding: '1rem', textAlign: 'center' }}>
-                  <p style={{ fontSize: '12px', color: '#9A9A9A', marginBottom: '4px' }}>Per referral/yr</p>
+                  <p style={{ color: '#717171', marginBottom: '4px' }} className="body-sm">Per referral/yr</p>
                   <p style={{ fontWeight: 900, fontSize: '1.25rem', color: '#1A1A1A' }}>CA${commissionAnnualPerClient.toLocaleString()}</p>
                 </div>
               </div>
               <div style={{ padding: '0.875rem 1rem', borderRadius: '12px', background: '#FFFBEB', border: '1px solid #FDE68A' }}>
-                <p style={{ fontSize: '11.5px', color: '#B45309', lineHeight: 1.6, margin: 0 }}>Assumes all referred clients remain subscribed for 12 months. Actual earnings depend on conversion and retention. Calculator uses CAD pricing.</p>
+                <p style={{ color: '#B45309', lineHeight: 1.6, margin: 0 }} className="caption">Assumes all referred clients remain subscribed for 12 months. Actual earnings depend on conversion and retention. Calculator uses CAD pricing.</p>
               </div>
             </div>
           </div>
@@ -307,7 +311,7 @@ export default function PartnersPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid #E5E4E0' }}>
                   {['Plan', 'Client Monthly', 'Your Monthly', 'Your Annual (per client)'].map(h => (
-                    <th key={h} style={{ padding: '0.75rem 1.25rem', textAlign: 'left', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: '#9A9A9A' }}>{h}</th>
+                    <th key={h} style={{ padding: '0.75rem 1.25rem', textAlign: 'left', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: '#717171' }} className="caption">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -318,10 +322,10 @@ export default function PartnersPage() {
                   { plan: 'Enterprise', monthly: 2599, comm: 520, annual: 6238, highlight: false },
                 ].map(({ plan, monthly, comm, annual, highlight }, i, arr) => (
                   <tr key={plan} style={{ borderBottom: i < arr.length - 1 ? '1px solid #EEEDEB' : 'none', background: highlight ? '#FFFFFF' : 'transparent' }}>
-                    <td style={{ padding: '0.875rem 1.25rem', fontWeight: 700, fontSize: '13px', color: '#1A1A1A' }}>{plan}</td>
-                    <td style={{ padding: '0.875rem 1.25rem', fontFamily: 'monospace', fontSize: '13px', color: '#717171' }}>CA${monthly.toLocaleString()}/mo</td>
-                    <td style={{ padding: '0.875rem 1.25rem', fontFamily: 'monospace', fontSize: '13px', fontWeight: 700, color: '#E8312A' }}>CA${comm}/mo</td>
-                    <td style={{ padding: '0.875rem 1.25rem', fontFamily: 'monospace', fontSize: '13px', fontWeight: 900, color: '#1A1A1A' }}>CA${annual.toLocaleString()}</td>
+                    <td style={{ padding: '0.875rem 1.25rem', fontWeight: 700, color: '#1A1A1A' }} className="label-sm">{plan}</td>
+                    <td style={{ padding: '0.875rem 1.25rem', fontFamily: 'monospace', color: '#717171' }} className="label-sm">CA${monthly.toLocaleString()}/mo</td>
+                    <td style={{ padding: '0.875rem 1.25rem', fontFamily: 'monospace', fontWeight: 700, color: '#E8312A' }} className="label-sm">CA${comm}/mo</td>
+                    <td style={{ padding: '0.875rem 1.25rem', fontFamily: 'monospace', fontWeight: 900, color: '#1A1A1A' }} className="label-sm">CA${annual.toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
@@ -334,8 +338,8 @@ export default function PartnersPage() {
       <section style={{ background: '#F7F6F4', padding: '5rem 1.5rem', borderTop: '1px solid #E5E4E0' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <h2 style={{ fontSize: '2.25rem', fontWeight: 900, color: '#1A1A1A', marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>Why We Pay 20%</h2>
-            <p style={{ fontSize: '15px', color: '#717171', maxWidth: '480px', margin: '0 auto' }}>We deliberately set our partner rate above industry standard because our partners are trusted advisors — not cold leads.</p>
+            <h2 className="h2 text-nav" style={{ marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>Why We Pay 20%</h2>
+            <p style={{ color: '#717171', maxWidth: '480px', margin: '0 auto' }} className="body">We deliberately set our partner rate above industry standard because our partners are trusted advisors — not cold leads.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }} className="grid-cols-1 md:grid-cols-3">
             {[
@@ -347,8 +351,8 @@ export default function PartnersPage() {
                 <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#F7F6F4', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
                   <Icon className="w-4 h-4" style={{ color: '#1A1A1A' }} />
                 </div>
-                <p style={{ fontWeight: 700, fontSize: '13px', color: '#1A1A1A', marginBottom: '6px' }}>{title}</p>
-                <p style={{ fontSize: '12px', color: '#9A9A9A', lineHeight: 1.6 }}>{body}</p>
+                <p style={{ fontWeight: 700, color: '#1A1A1A', marginBottom: '6px' }} className="label-sm">{title}</p>
+                <p style={{ color: '#717171', lineHeight: 1.6 }} className="body-sm">{body}</p>
               </div>
             ))}
           </div>
@@ -359,8 +363,8 @@ export default function PartnersPage() {
       <section id="apply" style={{ background: '#FFFFFF', padding: '5rem 1.5rem', borderTop: '1px solid #E5E4E0' }}>
         <div style={{ maxWidth: '580px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <h2 style={{ fontSize: '2.25rem', fontWeight: 900, color: '#1A1A1A', marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>Apply to Partner</h2>
-            <p style={{ fontSize: '15px', color: '#717171' }}>Takes 3 minutes. Approved within 1 business day.</p>
+            <h2 className="h2 text-nav" style={{ marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>Apply to Partner</h2>
+            <p style={{ color: '#717171' }} className="body">Takes 3 minutes. Approved within 1 business day.</p>
           </div>
 
           {submitted ? (
@@ -369,8 +373,8 @@ export default function PartnersPage() {
               <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: '#D1FAE5', border: '1px solid #6EE7B7', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem' }}>
                 <CheckCircle2 className="w-7 h-7" style={{ color: '#16A34A' }} />
               </div>
-              <h3 style={{ fontWeight: 900, fontSize: '1.5rem', color: '#1A1A1A', marginBottom: '0.75rem' }}>Application Received</h3>
-              <p style={{ fontSize: '14px', color: '#717171', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+              <h3 className="h3 text-nav" style={{ marginBottom: '0.75rem' }}>Application Received</h3>
+              <p style={{ color: '#717171', marginBottom: '1.5rem', lineHeight: 1.6 }} className="body">
                 Thank you, <strong>{form.name}</strong>. We'll review your application and send your unique referral link to <strong>{form.email}</strong> within 1 business day.
               </p>
               <Link href="/"
@@ -384,7 +388,7 @@ export default function PartnersPage() {
 
               {/* Professional type */}
               <div>
-                <label style={{ fontSize: '13px', fontWeight: 600, color: '#1A1A1A', display: 'block', marginBottom: '8px' }}>I am a…</label>
+                <label style={{ fontWeight: 600, color: '#1A1A1A', display: 'block', marginBottom: '8px' }} className="label-sm">I am a…</label>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                   {(Object.keys(PROF_LABELS) as ProfType[]).map(k => (
                     <button key={k} type="button" onClick={() => setProfType(k)}
@@ -400,14 +404,14 @@ export default function PartnersPage() {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: 500, color: '#1A1A1A', display: 'block', marginBottom: '6px' }}>Full Name *</label>
+                  <label style={{ fontWeight: 500, color: '#1A1A1A', display: 'block', marginBottom: '6px' }} className="label-sm">Full Name *</label>
                   <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} style={inputStyle}
                     onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
                     onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }}
                     placeholder="Jane Smith" required />
                 </div>
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: 500, color: '#1A1A1A', display: 'block', marginBottom: '6px' }}>Firm / Organization *</label>
+                  <label style={{ fontWeight: 500, color: '#1A1A1A', display: 'block', marginBottom: '6px' }} className="label-sm">Firm / Organization *</label>
                   <input value={form.firm} onChange={e => setForm(f => ({ ...f, firm: e.target.value }))} style={inputStyle}
                     onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
                     onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }}
@@ -416,14 +420,14 @@ export default function PartnersPage() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: 500, color: '#1A1A1A', display: 'block', marginBottom: '6px' }}>Work Email *</label>
+                  <label style={{ fontWeight: 500, color: '#1A1A1A', display: 'block', marginBottom: '6px' }} className="label-sm">Work Email *</label>
                   <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} style={inputStyle}
                     onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
                     onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }}
                     placeholder="jane@smithlaw.ca" required />
                 </div>
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: 500, color: '#1A1A1A', display: 'block', marginBottom: '6px' }}>Phone</label>
+                  <label style={{ fontWeight: 500, color: '#1A1A1A', display: 'block', marginBottom: '6px' }} className="label-sm">Phone</label>
                   <input type="tel" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} style={inputStyle}
                     onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
                     onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }}
@@ -432,14 +436,14 @@ export default function PartnersPage() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: 500, color: '#1A1A1A', display: 'block', marginBottom: '6px' }}>Province / State *</label>
+                  <label style={{ fontWeight: 500, color: '#1A1A1A', display: 'block', marginBottom: '6px' }} className="label-sm">Province / State *</label>
                   <input value={form.jurisdiction} onChange={e => setForm(f => ({ ...f, jurisdiction: e.target.value }))} style={inputStyle}
                     onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
                     onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }}
                     placeholder="Ontario, BC, New York…" required />
                 </div>
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: 500, color: '#1A1A1A', display: 'block', marginBottom: '6px' }}>Approx. IPO clients / year</label>
+                  <label style={{ fontWeight: 500, color: '#1A1A1A', display: 'block', marginBottom: '6px' }} className="label-sm">Approx. IPO clients / year</label>
                   <select value={form.clients} onChange={e => setForm(f => ({ ...f, clients: e.target.value }))} style={{ ...inputStyle, appearance: 'auto' }}
                     onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
                     onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }}>
@@ -449,18 +453,18 @@ export default function PartnersPage() {
                 </div>
               </div>
               <div>
-                <label style={{ fontSize: '13px', fontWeight: 500, color: '#1A1A1A', display: 'block', marginBottom: '6px' }}>Anything else we should know?</label>
+                <label style={{ fontWeight: 500, color: '#1A1A1A', display: 'block', marginBottom: '6px' }} className="label-sm">Anything else we should know?</label>
                 <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} rows={3}
                   style={{ ...inputStyle, resize: 'none' }}
                   onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
                   onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }}
                   placeholder="Current clients in the pipeline, specific exchange focus, firm considerations…" />
               </div>
-              <p style={{ fontSize: '11.5px', color: '#9A9A9A', lineHeight: 1.6, margin: 0 }}>
+              <p style={{ color: '#717171', lineHeight: 1.6, margin: 0 }} className="caption">
                 By submitting you confirm you have read the Professional Partner Program Terms & Conditions and, if a lawyer, that participation is consistent with your bar association rules and firm policies.
               </p>
               <button type="submit"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#E8312A', color: '#fff', padding: '14px', borderRadius: '12px', fontWeight: 700, fontSize: '15px', cursor: 'pointer', border: 'none', width: '100%' }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#E8312A', color: '#fff', padding: '14px', borderRadius: '12px', fontWeight: 700, cursor: 'pointer', border: 'none', width: '100%' }} className="body"
                 onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#C4261F' }}
                 onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#E8312A' }}>
                 Submit Application <ArrowRight className="w-4 h-4" />
@@ -473,7 +477,7 @@ export default function PartnersPage() {
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
       <section style={{ background: '#F7F6F4', padding: '5rem 1.5rem', borderTop: '1px solid #E5E4E0' }}>
         <div style={{ maxWidth: '680px', margin: '0 auto' }}>
-          <h2 style={{ fontWeight: 900, fontSize: '2.25rem', color: '#1A1A1A', marginBottom: '2rem', textAlign: 'center', letterSpacing: '-0.5px' }}>FAQ</h2>
+          <h2 className="h2 text-nav" style={{ marginBottom: '2rem', textAlign: 'center', letterSpacing: '-0.5px' }}>FAQ</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {FAQS.map((faq, i) => (
               <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E5E4E0', borderRadius: '14px', overflow: 'hidden' }}>
@@ -481,7 +485,7 @@ export default function PartnersPage() {
                   style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.125rem 1.25rem', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer' }}>
                   <p style={{ fontSize: '13px', fontWeight: 600, color: '#1A1A1A', margin: 0, paddingRight: '1rem', lineHeight: 1.4 }}>{faq.q}</p>
                   <motion.div animate={{ rotate: openFaq === i ? 180 : 0 }} transition={{ duration: 0.18 }}>
-                    <ChevronDown className="w-4 h-4 flex-shrink-0" style={{ color: '#9A9A9A' }} />
+                    <ChevronDown className="w-4 h-4 flex-shrink-0" style={{ color: '#717171' }} />
                   </motion.div>
                 </button>
                 <AnimatePresence>
@@ -529,16 +533,16 @@ export default function PartnersPage() {
               <div style={{ display: 'flex', gap: '5px' }}>
                 {['#FC5F57','#FDBC2C','#29C940'].map(c => <div key={c} style={{ width: '10px', height: '10px', borderRadius: '50%', background: c }} />)}
               </div>
-              <div style={{ flex: 1, background: '#fff', borderRadius: '6px', border: '1px solid #E5E4E0', padding: '4px 12px', fontSize: '11px', color: '#9A9A9A', fontFamily: 'monospace' }}>
+              <div style={{ flex: 1, background: '#fff', borderRadius: '6px', border: '1px solid #E5E4E0', padding: '4px 12px', fontSize: '11px', color: '#717171', fontFamily: 'monospace' }}>
                 Your IPOReady Referral Update — May 2026 · Sarah Chen
               </div>
             </div>
 
             <div style={{ background: '#fff', padding: '2rem' }}>
               <div style={{ marginBottom: '1.25rem', paddingBottom: '1rem', borderBottom: '1px solid #F7F6F4', display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                <p style={{ fontSize: '12px', color: '#9A9A9A', margin: 0 }}><strong style={{ color: '#1A1A1A' }}>From:</strong> IPOReady Partner Team &lt;partners@ipoready.com&gt;</p>
-                <p style={{ fontSize: '12px', color: '#9A9A9A', margin: 0 }}><strong style={{ color: '#1A1A1A' }}>To:</strong> Sarah Chen &lt;sarah@chenlaw.ca&gt;</p>
-                <p style={{ fontSize: '12px', color: '#9A9A9A', margin: 0 }}><strong style={{ color: '#1A1A1A' }}>Subject:</strong> Your IPOReady Referral Update — May 2026</p>
+                <p style={{ fontSize: '12px', color: '#717171', margin: 0 }}><strong style={{ color: '#1A1A1A' }}>From:</strong> IPOReady Partner Team &lt;partners@ipoready.com&gt;</p>
+                <p style={{ fontSize: '12px', color: '#717171', margin: 0 }}><strong style={{ color: '#1A1A1A' }}>To:</strong> Sarah Chen &lt;sarah@chenlaw.ca&gt;</p>
+                <p style={{ fontSize: '12px', color: '#717171', margin: 0 }}><strong style={{ color: '#1A1A1A' }}>Subject:</strong> Your IPOReady Referral Update — May 2026</p>
               </div>
 
               <p style={{ fontSize: '14px', color: '#1A1A1A', fontWeight: 600, marginBottom: '4px' }}>Hi Sarah,</p>
@@ -555,7 +559,7 @@ export default function PartnersPage() {
                   <div key={stat.label} style={{ background: '#F7F6F4', borderRadius: '12px', padding: '1rem', border: '1px solid #E5E4E0', textAlign: 'center' }}>
                     <p style={{ fontSize: '1.4rem', fontWeight: 900, color: '#E8312A', marginBottom: '2px', lineHeight: 1 }}>{stat.value}</p>
                     <p style={{ fontSize: '11px', fontWeight: 600, color: '#1A1A1A', marginBottom: '2px' }}>{stat.label}</p>
-                    <p style={{ fontSize: '10px', color: '#9A9A9A' }}>{stat.sub}</p>
+                    <p style={{ fontSize: '10px', color: '#717171' }}>{stat.sub}</p>
                   </div>
                 ))}
               </div>
@@ -590,7 +594,7 @@ export default function PartnersPage() {
             <button onClick={() => setEmailUpdateEnabled(v => !v)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
               {emailUpdateEnabled
                 ? <ToggleRight style={{ width: '30px', height: '30px', color: '#1A1A1A' }} />
-                : <ToggleLeft style={{ width: '30px', height: '30px', color: '#C0BEB9' }} />}
+                : <ToggleLeft style={{ width: '30px', height: '30px', color: '#717171' }} />}
             </button>
             <span style={{ fontSize: '12px', fontWeight: 600, color: emailUpdateEnabled ? '#2D7A5F' : '#9A9A9A' }}>{emailUpdateEnabled ? 'ON' : 'OFF'}</span>
           </div>
@@ -622,9 +626,9 @@ export default function PartnersPage() {
                 </div>
                 <div style={{ flex: 1 }}>
                   <p style={{ fontWeight: 700, fontSize: '13px', color: '#1A1A1A', margin: '0 0 2px 0' }}>{p.label}</p>
-                  <p style={{ fontSize: '12px', color: '#9A9A9A', margin: 0 }}>{p.cta}</p>
+                  <p style={{ fontSize: '12px', color: '#717171', margin: 0 }}>{p.cta}</p>
                 </div>
-                <span style={{ fontSize: '12px', color: '#9A9A9A', fontWeight: 600, whiteSpace: 'nowrap' }}>Leave Review →</span>
+                <span style={{ fontSize: '12px', color: '#717171', fontWeight: 600, whiteSpace: 'nowrap' }}>Leave Review →</span>
               </a>
             ))}
           </div>
@@ -643,7 +647,7 @@ export default function PartnersPage() {
                 "IPOReady has been an essential part of our IPO readiness workflow. The platform centralizes every compliance task, filing deadline, and governance requirement in one place — saving our team dozens of hours each month. I'd recommend it to any company preparing for a public listing on TSX, TSXV, or any Canadian or US exchange."
               </p>
             </div>
-            <p style={{ fontSize: '11px', color: '#C0BEB9', marginTop: '8px', marginBottom: 0 }}>Feel free to personalize before posting. Authentic reviews perform best.</p>
+            <p style={{ fontSize: '11px', color: '#717171', marginTop: '8px', marginBottom: 0 }}>Feel free to personalize before posting. Authentic reviews perform best.</p>
           </div>
         </div>
       </section>

@@ -1,0 +1,418 @@
+{
+  "info": {
+    "_postman_id": "ipoready-api-collection",
+    "name": "IPOReady API",
+    "description": "Complete API collection for IPOReady services\n\n## Getting Started\n\n1. Set `base_url` to your environment (localhost:3000 or api.ipoready.com)\n2. Authenticate and store token in `token` variable\n3. Execute requests in any order\n\n## Authentication\n\nAll endpoints except public ones require JWT token in Authorization header.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Capital Markets",
+      "item": [
+        {
+          "name": "List Companies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/capital-markets/companies?sector=Technology&limit=50&offset=0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "capital-markets",
+                "companies"
+              ],
+              "query": [
+                {
+                  "key": "sector",
+                  "value": "Technology",
+                  "disabled": false
+                },
+                {
+                  "key": "q",
+                  "value": "Apple",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "disabled": false
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Get paginated list of companies with optional filtering"
+          },
+          "response": []
+        },
+        {
+          "name": "Get IPO Listings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/capital-markets/ipos?status=listed&sector=Technology&days=90",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "capital-markets",
+                "ipos"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "listed",
+                  "disabled": false
+                },
+                {
+                  "key": "sector",
+                  "value": "Technology",
+                  "disabled": false
+                },
+                {
+                  "key": "days",
+                  "value": "90",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Get IPO listings with performance metrics"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Capital Markets Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/capital-markets/dashboard?companyId=550e8400-e29b-41d4-a716-446655440000",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "capital-markets",
+                "dashboard"
+              ],
+              "query": [
+                {
+                  "key": "companyId",
+                  "value": "550e8400-e29b-41d4-a716-446655440000",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Get comprehensive capital markets dashboard for a company"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Documents",
+      "item": [
+        {
+          "name": "List Documents",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/documents/list?companyId=550e8400-e29b-41d4-a716-446655440000&category=legal",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "documents",
+                "list"
+              ],
+              "query": [
+                {
+                  "key": "companyId",
+                  "value": "550e8400-e29b-41d4-a716-446655440000",
+                  "disabled": false
+                },
+                {
+                  "key": "category",
+                  "value": "legal",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "List documents for a company with optional category filter"
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Documents",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "documentId",
+                  "value": "770e8400-e29b-41d4-a716-446655440002",
+                  "type": "text"
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/documents/upload",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "documents",
+                "upload"
+              ]
+            },
+            "description": "Upload one or more documents"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Document",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documentId\": \"770e8400-e29b-41d4-a716-446655440002\",\n  \"fileId\": \"880e8400-e29b-41d4-a716-446655440003\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/documents/delete",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "documents",
+                "delete"
+              ]
+            },
+            "description": "Delete a specific document file"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Ingest SEC Filings",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/ingest-sec-filings?limit=50",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "ingest-sec-filings"
+              ],
+              "query": [
+                {
+                  "key": "companyIds",
+                  "value": "123,456,789",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Trigger batch SEC filing ingestion"
+          },
+          "response": []
+        },
+        {
+          "name": "Get SEC Ingestion Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/ingest-sec-filings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "ingest-sec-filings"
+              ]
+            },
+            "description": "Check SEC filing ingestion status and coverage"
+          },
+          "response": []
+        },
+        {
+          "name": "Deploy Documents System",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/deploy-documents",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "deploy-documents"
+              ]
+            },
+            "description": "Deploy unified document system (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/dashboard",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "dashboard"
+              ]
+            },
+            "description": "Get company dashboard with tasks and metrics"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Documentation",
+      "item": [
+        {
+          "name": "OpenAPI Spec",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/openapi.yaml",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "openapi.yaml"
+              ]
+            },
+            "description": "Get OpenAPI/Swagger specification"
+          },
+          "response": []
+        },
+        {
+          "name": "API Docs UI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api-docs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api-docs"
+              ]
+            },
+            "description": "Open interactive Swagger UI documentation"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

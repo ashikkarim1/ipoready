@@ -1,0 +1,201 @@
+name: E2E Tests - IPOReady
+
+on:
+  push:
+    branches: [main, develop, staging]
+    paths:
+      - 'src/**'
+      - 'tests/e2e/**'
+      - 'playwright.config.ts'
+      - 'package.json'
+  pull_request:
+    branches: [main, develop, staging]
+    paths:
+      - 'src/**'
+      - 'tests/e2e/**'
+      - 'playwright.config.ts'
+      - 'package.json'
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '18'
+  BASE_URL: 'http://localhost:3000'
+  CI: true
+
+jobs:
+  e2e-tests:
+    name: E2E Tests (${{ matrix.project }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit]
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ipoready_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.project }}
+
+      - name: Setup environment
+        run: |
+          cp .env.example .env.test
+          sed -i 's|DATABASE_URL=.*|DATABASE_URL=postgresql://postgres:postgres@localhost:5432/ipoready_test|g' .env.test
+
+      - name: Run database migrations
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ipoready_test
+        run: npm run db:migrate
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application
+        run: |
+          npm run dev > /tmp/dev.log 2>&1 &
+          sleep 10
+          curl -f http://localhost:3000 || (cat /tmp/dev.log && exit 1)
+
+      - name: Run E2E tests
+        run: npx playwright test --project=${{ matrix.project }}
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ipoready_test
+          BASE_URL: ${{ env.BASE_URL }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-results-${{ matrix.project }}
+          path: test-results/
+          retention-days: 30
+
+      - name: Publish test report
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: E2E Test Results (${{ matrix.project }})
+          path: 'test-results/junit.xml'
+          reporter: 'java-junit'
+          fail-on-error: false
+
+      - name: Upload to S3 (if failed)
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: failed-test-screenshots-${{ matrix.project }}
+          path: test-results/**/*.png
+          retention-days: 7
+
+  accessibility-tests:
+    name: Accessibility Tests
+    runs-on: ubuntu-latest
+    needs: e2e-tests
+    if: always()
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ipoready_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Setup environment
+        run: |
+          cp .env.example .env.test
+          sed -i 's|DATABASE_URL=.*|DATABASE_URL=postgresql://postgres:postgres@localhost:5432/ipoready_test|g' .env.test
+
+      - name: Run database migrations
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ipoready_test
+        run: npm run db:migrate
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application
+        run: |
+          npm run dev > /tmp/dev.log 2>&1 &
+          sleep 10
+
+      - name: Run accessibility audit
+        run: npx playwright test tests/e2e/*.spec.ts --grep "@accessibility" 2>/dev/null || true
+
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: e2e-tests
+    if: always()
+
+    steps:
+      - name: Check test results
+        run: |
+          if [ "${{ needs.e2e-tests.result }}" == "failure" ]; then
+            echo "E2E tests failed"
+            exit 1
+          fi
+          echo "E2E tests passed"
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const result = '${{ needs.e2e-tests.result }}';
+            const status = result === 'success' ? '✅' : '❌';
+            const body = `${status} E2E Tests: ${result.toUpperCase()}\n\nView results: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

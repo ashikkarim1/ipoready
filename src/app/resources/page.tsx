@@ -210,7 +210,7 @@ function TSXVListingContent() {
         </div>
       </div>
       <div style={{ background: '#F7F6F4', borderRadius: '10px', padding: '0.875rem 1rem' }}>
-        <p style={{ fontWeight: 700, fontSize: '0.8rem', color: '#1A1A1A', marginBottom: '0.5rem' }}>B — Corporate Requirements</p>
+        <p style={{ fontWeight: 700, fontSize: '0.8rem', marginBottom: '0.5rem' }} className="text-nav">B — Corporate Requirements</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
           {[
             'Board of directors with majority resident Canadian directors',
@@ -227,7 +227,7 @@ function TSXVListingContent() {
         </div>
       </div>
       <div style={{ background: '#F7F6F4', borderRadius: '10px', padding: '0.875rem 1rem' }}>
-        <p style={{ fontWeight: 700, fontSize: '0.8rem', color: '#1A1A1A', marginBottom: '0.5rem' }}>C — Filing Package Items</p>
+        <p style={{ fontWeight: 700, fontSize: '0.8rem', marginBottom: '0.5rem' }} className="text-nav">C — Filing Package Items</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
           {[
             'Filing Statement or Prospectus (depending on listing route)',
@@ -268,13 +268,13 @@ function MaterialChangeContent() {
   ]
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-      <p style={{ fontSize: '0.75rem', color: '#717171', marginBottom: '0.25rem' }}>Under NI 51-102 s.7.1, a material change report (Form 51-102F3) must be filed within 10 days of the date of the material change. The following 15 events typically trigger this obligation:</p>
+      <p style={{ fontSize: '0.75rem', marginBottom: '0.25rem' }} className="text-text-muted">Under NI 51-102 s.7.1, a material change report (Form 51-102F3) must be filed within 10 days of the date of the material change. The following 15 events typically trigger this obligation:</p>
       {events.map((ev, i) => (
         <div key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', padding: '0.5rem 0.75rem', background: '#F7F6F4', borderRadius: '8px' }}>
           <span style={{ background: '#FDECEB', color: '#E8312A', borderRadius: '4px', padding: '1px 6px', fontSize: '0.65rem', fontWeight: 700, flexShrink: 0, marginTop: '1px' }}>{i + 1}</span>
           <div style={{ flex: 1 }}>
-            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#1A1A1A', marginBottom: '2px' }}>{ev.event}</p>
-            <p style={{ fontSize: '0.7rem', color: '#717171', lineHeight: 1.4 }}>{ev.note}</p>
+            <p style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '2px' }} className="text-nav">{ev.event}</p>
+            <p style={{ fontSize: '0.7rem', lineHeight: 1.4 }} className="text-text-muted">{ev.note}</p>
           </div>
           <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#B45309', background: '#FEF3C7', borderRadius: '4px', padding: '2px 6px', flexShrink: 0, whiteSpace: 'nowrap' }}>{ev.deadline}</span>
         </div>
@@ -326,12 +326,12 @@ function PostListingTimelineContent() {
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
       {phases.map(phase => (
         <div key={phase.label} style={{ background: phase.bg, borderRadius: '10px', padding: '0.875rem', border: `1px solid ${phase.color}33` }}>
-          <p style={{ fontWeight: 700, fontSize: '0.8rem', color: phase.color, marginBottom: '0.625rem' }}>{phase.label}</p>
+          <p style={{ fontWeight: 700, fontSize: '0.8rem', color: phase.color, marginBottom: '0.625rem' }} className="text-nav">{phase.label}</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
             {phase.items.map((item, i) => (
               <div key={i} style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-start' }}>
                 <span style={{ color: phase.color, fontWeight: 700, fontSize: '0.7rem', flexShrink: 0, marginTop: '2px' }}>•</span>
-                <span style={{ fontSize: '0.7rem', color: '#444', lineHeight: 1.45 }}>{item}</span>
+                <span style={{ fontSize: '0.7rem', lineHeight: 1.45 }} className="text-nav">{item}</span>
               </div>
             ))}
           </div>
@@ -429,10 +429,10 @@ function GuideCardItem({
         </div>
 
         {/* Title */}
-        <h3 style={{ fontWeight: 700, fontSize: '0.9rem', color: '#1A1A1A', marginBottom: '0.375rem', lineHeight: 1.35 }}>{guide.title}</h3>
+        <h3 style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '0.375rem', lineHeight: 1.35 }} className="text-nav">{guide.title}</h3>
 
         {/* Summary */}
-        <p style={{ fontSize: '0.775rem', color: '#717171', lineHeight: 1.55, marginBottom: '0.75rem',
+        <p style={{ fontSize: '0.775rem', lineHeight: 1.55, marginBottom: '0.75rem' }} className="text-text-muted" style={{
           display: '-webkit-box', WebkitLineClamp: isExpanded ? undefined : 2, WebkitBoxOrient: 'vertical', overflow: isExpanded ? 'visible' : 'hidden' }}>
           {guide.summary}
         </p>
@@ -445,12 +445,11 @@ function GuideCardItem({
             gap: '4px',
             fontSize: '0.75rem',
             fontWeight: 600,
-            color: '#1D4ED8',
             background: 'none',
             border: 'none',
             cursor: 'pointer',
             padding: 0,
-          }}>
+          }} className="text-accent">
             {isExpanded ? 'Collapse' : 'Read Guide'}
             {isExpanded ? <ChevronUp style={{ width: '13px', height: '13px' }} /> : <ChevronDown style={{ width: '13px', height: '13px' }} />}
           </button>
@@ -466,7 +465,7 @@ function GuideCardItem({
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.22 }}
             style={{ overflow: 'hidden' }}>
-            <div style={{ padding: '0 1.25rem 1.25rem', borderTop: '1px solid #F0EFED', paddingTop: '1rem' }}>
+            <div style={{ padding: '0 1.25rem 1.25rem', borderTop: '1px solid #F0EFED', paddingTop: '1rem' }} className="text-nav">
               {guide.expandedContent}
             </div>
           </motion.div>
@@ -619,7 +618,7 @@ export default function ResourcesPage() {
       <section style={{ paddingTop: '2rem', paddingBottom: '1rem', background: '#F7F6F4' }}>
         <div className="max-w-6xl mx-auto" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
           <h1 className="serif text-5xl text-nav mb-4 leading-tight">Resource Centre</h1>
-          <p className="text-text-muted text-lg">Recent filings, regulatory policies, and procedures across all major listing exchanges. For reference only — always verify directly with the exchange or your legal counsel.</p>
+          <p className="text-lg text-text-muted">Recent filings, regulatory policies, and procedures across all major listing exchanges. For reference only — always verify directly with the exchange or your legal counsel.</p>
         </div>
       </section>
 
@@ -629,10 +628,10 @@ export default function ResourcesPage() {
           <div className="max-w-4xl mx-auto text-center" style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
             <div style={{ background: '#F7F6F4', borderRadius: '16px', padding: '3rem 2rem' }}>
               <LogIn className="w-12 h-12 mx-auto mb-4" style={{ color: '#E8312A' }} />
-              <h2 className="serif text-3xl font-bold mb-3" style={{ color: '#1A1A1A' }}>
+              <h2 className="serif text-3xl font-bold mb-3 text-nav">
                 Access Real-Time Filings & Compliance Data
               </h2>
-              <p className="text-text-muted text-lg mb-8" style={{ maxWidth: '600px', margin: '0 auto 2rem' }}>
+              <p className="text-lg text-text-muted mb-8" style={{ maxWidth: '600px', margin: '0 auto 2rem' }}>
                 Sign in to your IPOReady account to access filing notifications, regulatory tracking, and compliance guides tailored to your exchange and listing type.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -675,7 +674,7 @@ export default function ResourcesPage() {
         {/* Section header */}
         <div style={{ marginBottom: '1.25rem' }}>
           <h2 className="serif text-2xl sm:text-3xl text-nav mb-2">IPO &amp; Compliance Learning Centre</h2>
-          <p className="text-text-muted text-sm mb-6">
+          <p className="text-sm text-text-muted mb-6">
             Everything you need to know — from first filing to post-listing compliance
           </p>
         </div>
@@ -806,7 +805,7 @@ export default function ResourcesPage() {
             <Building2 className="w-4 h-4 flex-shrink-0" style={{ color: exchange.color }} />
             <div className="flex-1 min-w-0">
               <span className="font-semibold body-sm" style={{ color: exchange.color }}>{exchange.label}</span>
-              <span className="text-text-muted body-sm" style={{ marginLeft: '0.5rem' }}>{exchange.country}</span>
+              <span className="body-sm text-text-muted" style={{ marginLeft: '0.5rem' }}>{exchange.country}</span>
             </div>
             <span className="caption-sm" style={{ color: '#9A9A9A' }}>{exchange.flag}</span>
           </div>
@@ -834,8 +833,8 @@ export default function ResourcesPage() {
               <input
                 value={search} onChange={e => setSearch(e.target.value)}
                 placeholder={activeTab === 'filings' ? 'Search by company, ticker, or type…' : 'Search policies…'}
-                className="w-full rounded-xl border body-sm outline-none"
-                style={{ background: 'white', borderColor: '#E5E4E0', padding: '0.5rem 0.75rem 0.5rem 2rem', color: '#1A1A1A' }}
+                className="w-full rounded-xl border body-sm outline-none text-nav"
+                style={{ background: 'white', borderColor: '#E5E4E0', padding: '0.5rem 0.75rem 0.5rem 2rem' }}
               />
             </div>
           </div>
@@ -849,8 +848,8 @@ export default function ResourcesPage() {
                 style={{ background: 'white', borderColor: '#E5E4E0' }}>
 
                 {/* Table header */}
-                <div className="grid label-sm font-semibold uppercase tracking-wider"
-                  style={{ gridTemplateColumns: '90px 1fr 180px 90px', gap: '0', background: '#F7F6F4', borderBottom: '1px solid #E5E4E0', padding: '0.625rem 1.25rem', color: '#9A9A9A' }}>
+                <div className="grid label-sm font-semibold uppercase tracking-wider text-text-light"
+                  style={{ gridTemplateColumns: '90px 1fr 180px 90px', gap: '0', background: '#F7F6F4', borderBottom: '1px solid #E5E4E0', padding: '0.625rem 1.25rem' }}>
                   <span>Date</span>
                   <span>Company / Description</span>
                   <span>Filing Type</span>
@@ -858,7 +857,7 @@ export default function ResourcesPage() {
                 </div>
 
                 {filings.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center text-text-light body-sm" style={{ padding: '2.5rem' }}>
+                  <div className="flex flex-col items-center justify-center body-sm text-text-light" style={{ padding: '2.5rem' }}>
                     <Search className="w-6 h-6 mb-2" />
                     No filings match your search
                   </div>
@@ -873,16 +872,16 @@ export default function ResourcesPage() {
                     onMouseEnter={e => (e.currentTarget.style.background = '#FAFAF9')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                     <div className="flex items-center gap-1.5">
-                      <Clock className="w-3 h-3 text-text-light flex-shrink-0" />
-                      <span className="caption-sm text-text-muted whitespace-nowrap">{f.date.slice(5)}</span>
+                      <Clock className="w-3 h-3 text-text-light flex-shrink-0" style={{ color: '#717171' }} />
+                      <span className="caption-sm text-text-light whitespace-nowrap" style={{ color: '#717171' }}>{f.date.slice(5)}</span>
                     </div>
                     <div style={{ paddingRight: '1rem' }}>
                       <div className="flex items-center gap-2" style={{ marginBottom: '0.2rem' }}>
                         <span className="font-semibold body-sm text-nav">{f.company}</span>
-                        <span className="caption-sm font-mono rounded px-1.5 py-0.5"
-                          style={{ background: '#F7F6F4', color: '#717171' }}>{f.ticker}</span>
+                        <span className="caption-sm font-mono rounded px-1.5 py-0.5 text-text-light"
+                          style={{ background: '#F7F6F4' }}>{f.ticker}</span>
                       </div>
-                      <p className="caption-sm text-text-muted leading-relaxed">{f.description}</p>
+                      <p className="caption-sm text-text-light leading-relaxed" style={{ color: '#717171' }}>{f.description}</p>
                     </div>
                     <div><FilingBadge type={f.type} /></div>
                     <div style={{ textAlign: 'right' }}>
@@ -898,8 +897,8 @@ export default function ResourcesPage() {
                 ))}
 
                 <div className="flex items-center justify-between" style={{ background: '#F7F6F4', borderTop: '1px solid #E5E4E0', padding: '0.625rem 1.25rem' }}>
-                  <span className="caption-sm text-text-light">Showing 5 most recent filings for {exchange.label}</span>
-                  <a href="#" className="label-sm font-medium flex items-center gap-1" style={{ color: exchange.color }}>
+                  <span className="caption-sm text-text-light" style={{ color: '#717171' }}>Showing 5 most recent filings for {exchange.label}</span>
+                  <a href="#" className="label-sm font-medium flex items-center gap-1 text-accent" style={{ color: exchange.color }}>
                     View all on SEDAR+ / EDGAR <ChevronRight className="w-3 h-3" />
                   </a>
                 </div>
@@ -910,7 +909,7 @@ export default function ResourcesPage() {
                 style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
 
                 {policies.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center text-text-light body-sm rounded-2xl border"
+                  <div className="flex flex-col items-center justify-center body-sm rounded-2xl border text-text-light"
                     style={{ padding: '2.5rem', background: 'white', borderColor: '#E5E4E0' }}>
                     <Search className="w-6 h-6 mb-2" />
                     No policies match your search
@@ -932,8 +931,8 @@ export default function ResourcesPage() {
                         <p className="caption-sm mt-1.5" style={{ color: '#9A9A9A' }}>Last updated: {p.updated}</p>
                       </div>
                       <a href={p.url} target="_blank" rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 rounded-lg border label-sm font-medium flex-shrink-0 transition-all"
-                        style={{ padding: '0.375rem 0.75rem', borderColor: '#E5E4E0', color: '#717171', background: '#F7F6F4' }}
+                        className="flex items-center gap-1.5 rounded-lg border label-sm font-medium flex-shrink-0 transition-all text-text-muted"
+                        style={{ padding: '0.375rem 0.75rem', borderColor: '#E5E4E0', background: '#F7F6F4' }}
                         onMouseEnter={e => { e.currentTarget.style.background = exchange.bg; e.currentTarget.style.color = exchange.color; e.currentTarget.style.borderColor = exchange.color + '66' }}
                         onMouseLeave={e => { e.currentTarget.style.background = '#F7F6F4'; e.currentTarget.style.color = '#717171'; e.currentTarget.style.borderColor = '#E5E4E0' }}>
                         <ExternalLink className="w-3 h-3" /> Open
@@ -944,7 +943,7 @@ export default function ResourcesPage() {
 
                 <div className="rounded-xl border flex items-start gap-3" style={{ background: '#FFFBEB', borderColor: '#FDE68A', padding: '0.875rem 1rem' }}>
                   <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#B45309' }} />
-                  <p className="caption-sm leading-relaxed" style={{ color: '#92400E' }}>
+                  <p className="caption-sm leading-relaxed text-text-muted" style={{ color: '#92400E' }}>
                     Policy references are provided for informational purposes only and may not reflect the most current version.
                     Always verify directly with the exchange or your securities counsel before making compliance decisions.
                   </p>
@@ -962,7 +961,7 @@ export default function ResourcesPage() {
             <div className="flex items-center gap-2" style={{ padding: '1rem 1.25rem', borderBottom: '1px solid #E5E4E0' }}>
               <Newspaper className="w-4 h-4" style={{ color: '#E8312A' }} />
               <h3 className="font-semibold body-sm text-nav">Exchange News</h3>
-              <span className="ml-auto caption-sm text-text-light">Latest</span>
+              <span className="ml-auto caption-sm text-text-light" style={{ color: '#717171' }}>Latest</span>
             </div>
 
             <div style={{ maxHeight: '480px', overflowY: 'auto' }}>
@@ -976,16 +975,16 @@ export default function ResourcesPage() {
                     onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                     <div className="flex items-center gap-1.5">
                       {ex ? (
-                        <span className="text-[10px] font-semibold rounded-full px-1.5 py-0.5"
+                        <span className="label-sm font-semibold rounded-full px-1.5 py-0.5"
                           style={{ background: ex.bg, color: ex.color }}>{ex.label}</span>
                       ) : (
-                        <span className="text-[10px] font-semibold rounded-full px-1.5 py-0.5"
+                        <span className="label-sm font-semibold rounded-full px-1.5 py-0.5"
                           style={{ background: '#F7F6F4', color: '#717171' }}>General</span>
                       )}
-                      <span className="text-[10px] text-text-light ml-auto">{item.date}</span>
+                      <span className="label-sm text-text-light ml-auto" style={{ color: '#717171' }}>{item.date}</span>
                     </div>
                     <p className="label-sm text-nav leading-relaxed font-medium">{item.headline}</p>
-                    <p className="text-[10px] text-text-light">{item.source}</p>
+                    <p className="label-sm text-text-light" style={{ color: '#717171' }}>{item.source}</p>
                   </a>
                 )
               })}
@@ -995,7 +994,7 @@ export default function ResourcesPage() {
           {/* Quick links */}
           <div className="rounded-2xl border" style={{ background: 'white', borderColor: '#E5E4E0', padding: '1rem 1.25rem' }}>
             <div className="flex items-center gap-2" style={{ marginBottom: '0.875rem' }}>
-              <Globe className="w-4 h-4" style={{ color: '#1A1A1A' }} />
+              <Globe className="w-4 h-4 text-nav" />
               <h3 className="font-semibold body-sm text-nav">Official Portals</h3>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -1013,7 +1012,7 @@ export default function ResourcesPage() {
                   onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                   <div>
                     <p className="label font-medium text-nav">{link.label}</p>
-                    <p className="caption-sm text-text-light">{link.sub}</p>
+                    <p className="caption-sm text-text-light" style={{ color: '#717171' }}>{link.sub}</p>
                   </div>
                   <ExternalLink className="w-3.5 h-3.5 text-text-light flex-shrink-0" />
                 </a>
@@ -1023,8 +1022,8 @@ export default function ResourcesPage() {
 
           {/* Disclaimer */}
           <div className="rounded-xl border flex items-start gap-2.5" style={{ background: '#F7F6F4', borderColor: '#E5E4E0', padding: '0.875rem 1rem' }}>
-            <Shield className="w-4 h-4 flex-shrink-0 mt-0.5 text-text-light" />
-            <p className="text-[11px] leading-relaxed text-text-light">
+            <Shield className="w-4 h-4 flex-shrink-0 mt-0.5 text-text-light" style={{ color: '#717171' }} />
+            <p className="caption text-text-light" style={{ color: '#717171' }}>
               IPOReady does not publish or verify filing data. All content is for reference only.
               Verify filings at SEDAR+ or EDGAR and consult your securities counsel.
             </p>
@@ -1055,13 +1054,13 @@ export default function ResourcesPage() {
               },
             ].map((column) => (
               <div key={column.title}>
-                <p className="font-bold text-xs sm:text-sm mb-3 uppercase tracking-wider" style={{ color: '#1A1A1A' }}>
+                <p className="font-bold label-sm mb-3 uppercase tracking-wider text-nav">
                   {column.title}
                 </p>
                 <ul className="space-y-2">
                   {column.links.map((link) => (
                     <li key={link}>
-                      <Link href="#" className="text-xs sm:text-sm" style={{ color: '#717171' }}>
+                      <Link href="#" className="caption text-text-muted">
                         {link}
                       </Link>
                     </li>
@@ -1072,10 +1071,10 @@ export default function ResourcesPage() {
           </div>
 
           <div className="border-t border-gray-200 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-xs sm:text-sm" style={{ color: '#717171' }}>
+            <p className="caption text-text-muted">
               © 2026 IPOReady. All rights reserved.
             </p>
-            <p className="text-xs sm:text-sm" style={{ color: '#717171' }}>
+            <p className="caption text-text-muted">
               The IPO Operating System for Canada & US Listings
             </p>
           </div>
