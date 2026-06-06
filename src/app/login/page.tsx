@@ -183,8 +183,8 @@ export default function LoginPage() {
             <div>
               <label className="text-sm font-medium text-nav mb-1.5 block">Email Address</label>
               <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border text-sm outline-none transition-all"
-                style={{ background: '#FFFFFF', borderColor: '#E5E4E0', color: '#1A1A1A' }}
+                className="w-full px-4 py-3 rounded-xl border text-sm outline-none transition-all text-nav placeholder-text-muted"
+                style={{ background: '#FFFFFF', borderColor: '#E5E4E0' }}
                 onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
                 onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }}
                 placeholder="you@company.com" required autoComplete="email" />
@@ -195,8 +195,8 @@ export default function LoginPage() {
               <div className="relative">
                 <input type={showPassword ? 'text' : 'password'} value={password}
                   onChange={e => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 pr-10 rounded-xl border text-sm outline-none transition-all"
-                  style={{ background: '#FFFFFF', borderColor: '#E5E4E0', color: '#1A1A1A' }}
+                  className="w-full px-4 py-3 pr-10 rounded-xl border text-sm outline-none transition-all text-nav placeholder-text-muted"
+                  style={{ background: '#FFFFFF', borderColor: '#E5E4E0' }}
                   onFocus={e => { e.target.style.borderColor = '#1A1A1A'; e.target.style.boxShadow = '0 0 0 3px rgba(26,26,26,0.07)' }}
                   onBlur={e => { e.target.style.borderColor = '#E5E4E0'; e.target.style.boxShadow = 'none' }}
                   placeholder="••••••••" required autoComplete="current-password" />
@@ -216,8 +216,8 @@ export default function LoginPage() {
               <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
                 className="flex items-start gap-2.5 p-3.5 rounded-xl"
                 style={{ background: '#FDECEB', border: '1px solid #E8312A30' }}>
-                <AlertCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-                <p className="text-accent text-sm">{error}</p>
+                <AlertCircle className="w-4 h-4 text-error mt-0.5 flex-shrink-0" />
+                <p className="text-error text-sm">{error}</p>
               </motion.div>
             )}
 

@@ -17,7 +17,7 @@ const US_EXCHANGES: Exchange[] = ['nasdaq', 'nyse', 'otc']
 const CA_LISTING_TYPES: ListingType[] = ['ipo', 'rto', 'spac', 'direct_listing']
 const US_LISTING_TYPES: ListingType[] = ['ipo', 'spac', 'direct_listing', 'regulation_a']
 
-const inputCls = "w-full rounded-xl border text-nav text-sm outline-none transition-all"
+const inputCls = "w-full rounded-xl border text-nav text-sm outline-none transition-all placeholder-text-muted"
 const inputStyle = { background: '#FFFFFF', borderColor: '#E5E4E0', padding: '0.75rem 1rem' }
 function focusStyle(e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) {
   e.target.style.borderColor = '#1A1A1A'
@@ -271,7 +271,7 @@ export default function RegisterPage() {
                   <div>
                     <label className="text-nav text-sm font-medium block" style={{ marginBottom: '0.375rem' }}>Company Name</label>
                     <input value={form.companyName} onChange={e => update('companyName', e.target.value)}
-                      className={inputCls} style={inputStyle}
+                      className={inputCls} style={{ ...inputStyle, color: form.companyName ? '#1A1A1A' : '#9A9A9A' }}
                       onFocus={focusStyle} onBlur={blurStyle}
                       placeholder="Acme Technologies Inc." />
                   </div>
@@ -337,7 +337,7 @@ export default function RegisterPage() {
                   <div>
                     <label className="text-nav text-sm font-medium block" style={{ marginBottom: '0.375rem' }}>Full Name</label>
                     <input value={form.name} onChange={e => update('name', e.target.value)}
-                      className={inputCls} style={inputStyle}
+                      className={inputCls} style={{ ...inputStyle, color: form.name ? '#1A1A1A' : '#9A9A9A' }}
                       onFocus={focusStyle} onBlur={blurStyle}
                       placeholder="Alex Johnson" />
                   </div>
@@ -376,7 +376,7 @@ export default function RegisterPage() {
                   <div>
                     <label className="text-nav text-sm font-medium block" style={{ marginBottom: '0.375rem' }}>Email Address</label>
                     <input type="email" value={form.email} onChange={e => update('email', e.target.value)}
-                      className={inputCls} style={inputStyle}
+                      className={inputCls} style={{ ...inputStyle, color: form.email ? '#1A1A1A' : '#9A9A9A' }}
                       onFocus={focusStyle} onBlur={blurStyle}
                       placeholder="you@company.com" />
                   </div>
@@ -481,7 +481,7 @@ export default function RegisterPage() {
 
             {/* Error */}
             {error && (
-              <div className="rounded-xl border text-sm" style={{ background: '#FDECEB', borderColor: '#F5C6C4', color: '#B91C1C', padding: '0.75rem 1rem', marginTop: '1rem' }}>
+              <div className="rounded-xl border text-sm text-error" style={{ background: '#FDECEB', borderColor: '#F5C6C4', padding: '0.75rem 1rem', marginTop: '1rem' }}>
                 {error}
               </div>
             )}
