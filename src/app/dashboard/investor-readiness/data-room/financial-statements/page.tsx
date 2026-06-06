@@ -22,8 +22,8 @@ export default function FinancialStatementsPage() {
         <div className="mb-12">
           <div className="flex items-start justify-between mb-6">
             <div>
-              <h1 className="h2 mb-2">Financial Statements</h1>
-              <p className="body text-muted-foreground">Audited financial data and performance metrics</p>
+              <h1 className="serif text-4xl font-bold text-nav mb-2">Financial Statements</h1>
+              <p className="body text-text-secondary">Audited financial data and performance metrics</p>
             </div>
             <div className="flex gap-2">
               <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-secondary transition flex items-center gap-2">
@@ -74,7 +74,7 @@ export default function FinancialStatementsPage() {
 
         {/* Income Statement */}
         <section className="border-b border-gray-200 pb-12 mb-12">
-          <h2 className="h3 mb-6">Income Statement</h2>
+          <h2 className="h4 text-nav mb-4">Income Statement</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>

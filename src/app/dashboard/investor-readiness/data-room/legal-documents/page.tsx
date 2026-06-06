@@ -21,8 +21,8 @@ export default function LegalDocumentsPage() {
         <div className="mb-12">
           <div className="flex items-start justify-between mb-6">
             <div>
-              <h1 className="h2 mb-2">Legal Documents</h1>
-              <p className="body text-muted-foreground">Corporate governance, contracts, and IP documentation</p>
+              <h1 className="serif text-4xl font-bold text-nav mb-2">Legal Documents</h1>
+              <p className="body text-text-secondary">Corporate governance, contracts, and IP documentation</p>
             </div>
             <div className="flex gap-2">
               <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-secondary transition flex items-center gap-2">
@@ -69,7 +69,7 @@ export default function LegalDocumentsPage() {
 
         {/* Documentation Summary */}
         <section className="border-t border-gray-200 pt-12">
-          <h2 className="h3 mb-6">Legal Documentation Status</h2>
+          <h2 className="h4 text-nav mb-4">Legal Documentation Status</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="p-6 border border-gray-200 rounded-lg bg-secondary">
               <h3 className="h4 mb-4">Corporate Structure</h3>

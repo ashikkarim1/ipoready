@@ -28,8 +28,8 @@ export default function RegulatoryFilingsPage() {
         <div className="mb-12">
           <div className="flex items-start justify-between mb-6">
             <div>
-              <h1 className="h2 mb-2">Regulatory Filings</h1>
-              <p className="body text-muted-foreground">SEC filings, compliance certifications, and regulatory approvals</p>
+              <h1 className="serif text-4xl font-bold text-nav mb-2">Regulatory Filings</h1>
+              <p className="body text-text-secondary">SEC filings, compliance certifications, and regulatory approvals</p>
             </div>
             <div className="flex gap-2">
               <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-secondary transition flex items-center gap-2">

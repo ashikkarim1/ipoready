@@ -13,8 +13,8 @@ export default function ExecutiveSummaryPage() {
         <div className="mb-12">
           <div className="flex items-start justify-between mb-6">
             <div>
-              <h1 className="h2 mb-2">Executive Summary</h1>
-              <p className="body text-muted-foreground">Company overview and investment highlights for investor review</p>
+              <h1 className="serif text-4xl font-bold text-nav mb-2">Executive Summary</h1>
+              <p className="body text-text-secondary">Company overview and investment highlights for investor review</p>
             </div>
             <div className="flex gap-2">
               <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-secondary transition flex items-center gap-2">
@@ -56,7 +56,7 @@ export default function ExecutiveSummaryPage() {
         <div className="space-y-12">
           {/* Business Overview */}
           <section className="border-b border-gray-200 pb-12">
-            <h2 className="h3 mb-6">Business Overview</h2>
+            <h2 className="h4 text-nav mb-4">Business Overview</h2>
             <div className="space-y-4">
               <p className="body text-muted-foreground">
                 We are a leading SaaS platform that provides IPO readiness solutions to pre-IPO companies. Our comprehensive suite helps companies prepare for their public market debut with intelligent automation, expert guidance, and real-time insights.
@@ -82,7 +82,7 @@ export default function ExecutiveSummaryPage() {
 
           {/* Key Metrics */}
           <section className="border-b border-gray-200 pb-12">
-            <h2 className="h3 mb-6">Investment Highlights</h2>
+            <h2 className="h4 text-nav mb-4">Investment Highlights</h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {[
                 { label: 'Current ARR', value: '$45.2M', icon: DollarSign, change: '+44.8% YoY' },
