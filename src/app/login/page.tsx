@@ -128,6 +128,13 @@ export default function LoginPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }} className="w-full max-w-md">
 
+          {/* Back to home link */}
+          <div className="flex items-center justify-between mb-6">
+            <Link href="/" className="flex items-center gap-2 text-sm font-medium text-accent hover:text-accent-deep transition-colors">
+              <span>←</span> Back to home
+            </Link>
+          </div>
+
           {/* Mobile logo */}
           <div className="lg:hidden text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2.5">
@@ -234,6 +241,18 @@ export default function LoginPage() {
           <p className="text-center text-text-light text-xs mt-4">
             Access is reviewed and approved within 24 hours for new accounts.
           </p>
+
+          <div className="mt-6 pt-6 text-center" style={{ borderTop: '1px solid #E5E4E0' }}>
+            <p className="text-text-muted text-sm mb-3">
+              Not ready yet? Join our waitlist
+            </p>
+            <Link href="/#waitlist" className="inline-block px-4 py-2.5 rounded-lg text-sm font-medium transition-all"
+              style={{ background: '#F7F6F4', border: '1px solid #E5E4E0', color: '#1A1A1A' }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#E5E4E0')}
+              onMouseLeave={e => (e.currentTarget.style.background = '#F7F6F4')}>
+              Sign up for early access
+            </Link>
+          </div>
         </motion.div>
       </div>
     </div>
