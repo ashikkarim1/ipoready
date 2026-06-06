@@ -225,9 +225,9 @@ export default function NewToThisPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
                 viewport={{ once: true }}
-                className="card p-6"
+                className="card p-8"
               >
-                <div className="flex gap-4">
+                <div className="flex gap-5">
                   <div className="flex-shrink-0 p-3 rounded-lg" style={{ background: 'var(--color-error-soft)' }}>
                     <TrendingUp className="w-6 h-6" style={{ color: 'var(--color-accent)' }} />
                   </div>
@@ -248,9 +248,9 @@ export default function NewToThisPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
                 viewport={{ once: true }}
-                className="card p-6"
+                className="card p-8"
               >
-                <div className="flex gap-4">
+                <div className="flex gap-5">
                   <div className="flex-shrink-0 p-3 rounded-lg" style={{ background: 'var(--color-warning-soft)' }}>
                     <Clock className="w-6 h-6" style={{ color: 'var(--color-warning)' }} />
                   </div>
@@ -271,9 +271,9 @@ export default function NewToThisPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
                 viewport={{ once: true }}
-                className="card p-6"
+                className="card p-8"
               >
-                <div className="flex gap-4">
+                <div className="flex gap-5">
                   <div className="flex-shrink-0 p-3 rounded-lg" style={{ background: 'var(--color-info-soft)' }}>
                     <DollarSign className="w-6 h-6" style={{ color: 'var(--color-info)' }} />
                   </div>
@@ -294,9 +294,9 @@ export default function NewToThisPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
                 viewport={{ once: true }}
-                className="card p-6"
+                className="card p-8"
               >
-                <div className="flex gap-4">
+                <div className="flex gap-5">
                   <div className="flex-shrink-0 p-3 rounded-lg" style={{ background: 'var(--color-success-soft)' }}>
                     <Award className="w-6 h-6" style={{ color: 'var(--color-success)' }} />
                   </div>
@@ -337,7 +337,7 @@ export default function NewToThisPage() {
                 >
                   <button
                     onClick={() => togglePitfall(pitfall.id)}
-                    className="w-full card p-5 text-left hover:shadow-lg transition-shadow"
+                    className="w-full card p-6 text-left hover:shadow-lg transition-shadow"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -442,7 +442,7 @@ export default function NewToThisPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="relative p-5 card"
+                  className="relative p-8 card"
                   style={{
                     background: 'var(--color-bg-primary)',
                     borderLeftWidth: '3px',
