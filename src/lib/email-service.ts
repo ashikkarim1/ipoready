@@ -408,12 +408,17 @@ export async function sendDemoConfirmationEmail(options: {
       supportEmail: 'hello@ipoready.ai',
     })
 
-    const response = await resend.emails.send({
+    const sendParams: any = {
       from: FROM_ADDRESS,
       to: options.email,
       subject,
-      html,
-    })
+    }
+
+    if (html) {
+      sendParams.html = html
+    }
+
+    const response = await resend.emails.send(sendParams)
 
     if (response.error) {
       console.error('[email] Demo confirmation send failed:', response.error)
@@ -447,12 +452,17 @@ export async function sendLeadConfirmationEmail(options: {
       supportEmail: 'hello@ipoready.ai',
     })
 
-    const response = await resend.emails.send({
+    const sendParams: any = {
       from: FROM_ADDRESS,
       to: options.email,
       subject,
-      html,
-    })
+    }
+
+    if (html) {
+      sendParams.html = html
+    }
+
+    const response = await resend.emails.send(sendParams)
 
     if (response.error) {
       console.error('[email] Lead confirmation send failed:', response.error)
