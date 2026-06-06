@@ -1,10 +1,11 @@
-'use server'
-
 /**
  * Unified Document Service - Single Source of Truth
  *
  * All document operations flow through this service
  * Ensures consistency across all pages (documents, data room, etc.)
+ *
+ * ⚠️  Server-only: Uses googleapis and database operations
+ * Only imported in API routes and server-side code
  */
 
 import { sql } from '@/lib/db'

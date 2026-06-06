@@ -1,5 +1,3 @@
-'use server'
-
 import { google } from 'googleapis'
 import { OAuth2Client } from 'google-auth-library'
 
@@ -8,6 +6,7 @@ import { OAuth2Client } from 'google-auth-library'
  * Implements BaseCloudStorageAdapter interface for Google Drive
  *
  * ⚠️  Server-only: Uses Node.js modules (net, fs, tls)
+ * Only imported in API routes and server-side code
  */
 
 interface DriveFile {

@@ -1,8 +1,9 @@
-'use server'
-
 /**
  * SEC EDGAR Data Ingestion Service
  * Fetches 10-K, 10-Q filings and extracts financial data
+ *
+ * ⚠️  Server-only: Uses database operations
+ * Only imported in API routes and server-side code
  */
 
 import { sql } from '@/lib/db'
