@@ -6,6 +6,7 @@
  */
 
 import { Resend } from 'resend'
+import { FROM_ADDRESS } from '@/lib/resend'
 
 // Mark route as dynamic - no static generation
 export const dynamic = 'force-dynamic'
@@ -13,7 +14,7 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   try {
     const resend = new Resend(process.env.RESEND_API_KEY)
-    const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'demo@ipoready.ai'
+    const FROM_EMAIL = FROM_ADDRESS || 'IPOReady <hello@ipoready.com>'
 
     const { searchParams } = new URL(request.url)
     const testEmail = searchParams.get('email') || 'ashik@upcapital.ca'
