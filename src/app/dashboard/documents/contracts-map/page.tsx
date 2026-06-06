@@ -256,8 +256,8 @@ export default function ContractsMapPage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.06 }}
-            className="serif text-nav"
-            style={{ fontSize: '2.5rem', lineHeight: '1.2', marginBottom: '1rem', display: 'flex', alignItems: 'baseline', gap: '0.5rem', flexWrap: 'nowrap' }}>
+            className="serif text-2xl sm:text-3xl text-nav mb-2"
+            style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', flexWrap: 'nowrap' }}>
             Material Contracts
             <span style={{ color: '#E8312A', whiteSpace: 'nowrap' }}>Network Visualization</span>
           </motion.h1>
