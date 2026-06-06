@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth/react'
+import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import { DocumentReconciliationService } from '@/lib/document-reconciliation-service'
 
