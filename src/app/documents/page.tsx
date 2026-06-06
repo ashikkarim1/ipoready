@@ -375,14 +375,6 @@ export default function DocumentsPage() {
   return (
     <AppShell>
       <div style={{ minHeight: '100vh', background: '#F7F6F4' }}>
-        {/* Header */}
-        <section style={{ padding: '1.5rem', background: '#F7F6F4' }}>
-          <div className="max-w-7xl mx-auto">
-            <h1 className="serif text-2xl sm:text-3xl text-nav mb-2">Document Management</h1>
-            <p className="text-text-muted text-sm">Centralized repository for all IPO filing documents. Track versions, approvals, and compliance status.</p>
-          </div>
-        </section>
-
         {/* Stats Grid */}
         <section style={{ padding: '1rem', background: '#FFFFFF', borderBottom: '1px solid #E5E4E0' }}>
           <div className="max-w-7xl mx-auto">
