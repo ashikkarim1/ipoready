@@ -17,7 +17,29 @@ import {
   Loader
 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
-import { UnifiedDocumentService, type UnifiedDocument } from '@/lib/unified-document-service'
+
+/**
+ * Document type - mirrors UnifiedDocument from server-side service
+ * Client components use this interface instead of importing the service
+ */
+interface UnifiedDocument {
+  id: string
+  companyId: string
+  name: string
+  displayName?: string
+  description?: string
+  mimeType: string
+  storageProvider: string
+  storageId?: string
+  cloudPath?: string
+  fileSize: number
+  category: string
+  status: 'draft' | 'in_review' | 'approved' | 'archived'
+  uploadedAt: string
+  uploadedBy: string
+  commentCount: number
+  currentVersion: number
+}
 
 interface DataRoomFolder {
   categoryGroup: 'Mandatory' | 'Supporting' | 'Optional'
@@ -50,17 +72,16 @@ export default function DataRoomPage() {
   const [inviteEmail, setInviteEmail] = useState('')
   const [inviteRole, setInviteRole] = useState<'viewer' | 'downloader' | 'commenter'>('viewer')
 
-  // Load documents from unified source
+  // Load documents from API
   useEffect(() => {
     if (!companyId) return
 
     const loadDocuments = async () => {
       try {
         setLoading(true)
-        const docs = await UnifiedDocumentService.listDocuments({
-          companyId
-        })
-        setDocuments(docs)
+        const res = await fetch(`/api/documents/list?companyId=${companyId}`)
+        const data = await res.json()
+        setDocuments(data.documents || [])
         setError(null)
       } catch (err) {
         console.error('[data-room] Failed to load:', err)
