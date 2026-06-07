@@ -251,7 +251,7 @@ export async function fetchIPOPipeline(): Promise<{
   saasPipelineVolume: number // SaaS companies filing S-1s
   totalPipelineVolume: number // All companies filing
 }> {
-  const cached = getCache('sec-pipeline')
+  const cached = getCache<{ saasPipelineVolume: number; totalPipelineVolume: number }>('sec-pipeline')
   if (cached) return cached
 
   try {
