@@ -246,8 +246,13 @@ export default function LoginPage() {
             <p className="text-text-muted text-sm mb-3">
               Not ready yet? Join our waitlist
             </p>
-            <Link href="/#waitlist" className="inline-flex items-center justify-center w-full px-6 py-3 rounded-xl text-base font-medium transition-all text-white"
-              style={{ background: '#E8312A' }}
+            <Link href="/#waitlist"
+              className="inline-flex items-center justify-center w-full px-6 py-3 rounded-full text-base font-semibold transition-all text-white no-underline"
+              style={{
+                background: '#E8312A',
+                display: 'flex',
+                textDecoration: 'none'
+              }}
               onMouseEnter={e => (e.currentTarget.style.opacity = '0.9')}
               onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
               Sign up for early access
