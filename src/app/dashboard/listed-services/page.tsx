@@ -462,7 +462,7 @@ export default function ListedServicesPage() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-16">
         {/* Filter Tabs */}
-        <div className="flex flex-wrap gap-3 mb-12 mt-4" style={{ rowGap: '12px' }}>
+        <div className="flex flex-wrap gap-3 mb-16 mt-4" style={{ rowGap: '12px' }}>
           {(['all', 'available', 'beta', 'coming-soon'] as const).map((status, index) => (
             <motion.button
               key={status}

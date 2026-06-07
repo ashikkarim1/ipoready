@@ -117,6 +117,7 @@ const LISTED_SERVICES_SECTIONS = [
 const ANALYTICS_SECTIONS = [
   { href: '/dashboard/market-intelligence', label: 'Market Intelligence', icon: BarChart3 },
   { href: '/dashboard/compliance', label: 'Compliance', icon: Shield },
+  { href: '/dashboard/the-dailies', label: 'The Dailies', icon: TrendingUp },
 ]
 
 const MORE_SECTIONS = [
