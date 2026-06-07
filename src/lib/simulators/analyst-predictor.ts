@@ -38,7 +38,7 @@ export function predictAnalystCoverage(
   }
 
   // Base analyst count from peers
-  const peerCounts = similarPeers.map((p) => p.analyst_count).filter((c) => c > 0)
+  const peerCounts = similarPeers.map((p) => p.analystCount).filter((c) => c > 0)
   const medianCount = peerCounts[Math.floor(peerCounts.length / 2)] || 12
 
   // Growth premium: faster growing companies attract more analysts

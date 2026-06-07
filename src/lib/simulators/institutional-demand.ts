@@ -30,7 +30,7 @@ export function modelInstitutionalDemand(
   const similarPeers = peerIpos.filter(
     (ipo) =>
       ipo.sector === params.sector &&
-      Math.abs(ipo.float_percentage - params.float) < 10 &&
+      Math.abs(ipo.float - params.float) < 10 &&
       ipo.valuation > params.valuation * 0.5 &&
       ipo.valuation < params.valuation * 2
   )
@@ -41,7 +41,7 @@ export function modelInstitutionalDemand(
 
   // Base allocation from peers
   const peerAllocations = similarPeers
-    .map((p) => p.institutional_allocation_percentage)
+    .map((p) => p.institutionalAllocation)
     .filter((a) => a > 0)
   const medianAllocation = peerAllocations[Math.floor(peerAllocations.length / 2)] || 0.4
 
@@ -61,7 +61,7 @@ export function modelInstitutionalDemand(
 
   // Oversubscription ratio
   const baseOversubscription = similarPeers
-    .map((p) => p.oversubscription_ratio)
+    .map((p) => p.oversubscriptionRatio)
     .filter((r) => r > 0)
     .reduce((a, b) => a + b, 0) / similarPeers.length || 2.0
 

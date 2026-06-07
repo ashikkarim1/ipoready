@@ -26,7 +26,7 @@ export function calculateLiquidity(
   // Filter peers by similar float size and underwriter tier
   const similarPeers = peerIpos.filter(
     (ipo) =>
-      Math.abs(ipo.float_percentage - params.float) < 10 &&
+      Math.abs(ipo.float - params.float) < 10 &&
       ipo.underwriter_tier === params.marketMakerTier
   )
 
@@ -36,7 +36,7 @@ export function calculateLiquidity(
 
   // Calculate base spread from peer median
   const peerSpreads = similarPeers
-    .map((p) => p.bid_ask_spread_percentage)
+    .map((p) => p.bidAskSpread)
     .filter((s) => s !== null)
     .sort((a, b) => a - b)
 
@@ -48,7 +48,7 @@ export function calculateLiquidity(
 
   // Calculate daily volume
   const peerVolumes = similarPeers
-    .map((p) => p.daily_volume_shares)
+    .map((p) => p.dailyVolume)
     .filter((v) => v > 0)
     .sort((a, b) => a - b)
 
