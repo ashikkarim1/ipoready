@@ -29,6 +29,17 @@ const MAIN_SECTIONS = [
   { href: '/dashboard/documents', label: 'Documents', icon: FileText },
 ]
 
+const MISSION_SECTIONS = [
+  {
+    href: '/dashboard/market-advantage-pre-ipo',
+    label: 'Market Advantage (Pre-IPO)',
+    icon: TrendingUp,
+    tier: 'enterprise',
+    badge: 'cyan',
+    color: 'cyan',
+  },
+]
+
 const LISTED_SERVICES_SECTIONS = [
   {
     href: '/dashboard/listed-services',
@@ -92,14 +103,6 @@ const LISTED_SERVICES_SECTIONS = [
     tier: 'enterprise',
     badge: 'teal',
     color: 'teal',
-  },
-  {
-    href: '/dashboard/market-advantage-pre-ipo',
-    label: 'Market Advantage (Pre-IPO)',
-    icon: TrendingUp,
-    tier: 'enterprise',
-    badge: 'cyan',
-    color: 'cyan',
   },
   {
     href: '/dashboard/market-advantage-post-ipo',
@@ -215,6 +218,30 @@ export default function NavigationMenu({
               isActive={pathname === item.href}
             />
           ))}
+        </div>
+
+        {/* Mission sections */}
+        <div className="pb-6 border-t border-slate-200 pt-4">
+          <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-text-light mb-3">
+            IPO Mission
+          </div>
+          <div className="space-y-1">
+            {MISSION_SECTIONS.map((item) => {
+              const hasAccess = userSubscriptionTier === 'enterprise'
+              return (
+                <NavItem
+                  key={item.href}
+                  href={item.href}
+                  label={item.label}
+                  icon={item.icon}
+                  isActive={pathname === item.href}
+                  isPremium={!hasAccess}
+                  tier={item.tier}
+                  badge={item.badge}
+                />
+              )
+            })}
+          </div>
         </div>
 
         {/* Listed Services sections */}
