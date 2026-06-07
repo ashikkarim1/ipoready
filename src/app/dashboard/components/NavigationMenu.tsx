@@ -19,6 +19,7 @@ import {
   MoreHorizontal,
   Briefcase,
   Network,
+  Globe,
 } from 'lucide-react'
 
 const MAIN_SECTIONS = [
@@ -83,6 +84,14 @@ const LISTED_SERVICES_SECTIONS = [
     badge: 'purple',
     color: 'purple',
   },
+  {
+    href: '/dashboard/multi-country-filing',
+    label: 'Multi-Country Filing System',
+    icon: Globe,
+    tier: 'enterprise',
+    badge: 'teal',
+    color: 'teal',
+  },
 ]
 
 const ANALYTICS_SECTIONS = [
@@ -91,7 +100,6 @@ const ANALYTICS_SECTIONS = [
 ]
 
 const MORE_SECTIONS = [
-  { href: '/dashboard/multi-country-filing', label: 'Multi-Country Filing', icon: Zap, tier: 'enterprise' },
   { href: '/dashboard/prospectus-builder', label: 'Prospectus Builder', icon: FileText },
   { href: '/dashboard/cap-table', label: 'Cap Table', icon: BarChart3 },
 ]
@@ -104,6 +112,7 @@ const BADGE_COLORS: Record<string, string> = {
   emerald: 'bg-emerald-100 text-emerald-800 border border-emerald-300',
   indigo: 'bg-indigo-100 text-indigo-800 border border-indigo-300',
   purple: 'bg-purple-100 text-purple-800 border border-purple-300',
+  teal: 'bg-teal-100 text-teal-800 border border-teal-300',
 }
 
 interface NavItemProps {
