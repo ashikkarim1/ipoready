@@ -339,18 +339,18 @@ export default function LandingPage() {
           </div>
 
           {/* Key Differences Highlight */}
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-blue-50 rounded-lg p-6 border-l-4 border-blue-500">
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-blue-50 rounded-lg p-8 py-10 border-l-4 border-blue-500">
               <p className="font-bold text-sm text-nav">⏱️ Time to Decision</p>
-              <p className="text-xs mt-2 text-text-muted"><span className="font-bold">Before:</span> 15-20 days | <span className="font-bold text-accent">After:</span> <span className="text-accent font-bold">5 days</span></p>
+              <p className="text-xs mt-3 text-text-muted"><span className="font-bold">Before:</span> 15-20 days | <span className="font-bold text-accent">After:</span> <span className="text-accent font-bold">5 days</span></p>
             </div>
-            <div className="bg-green-50 rounded-lg p-6 border-l-4 border-green-500">
+            <div className="bg-green-50 rounded-lg p-8 py-10 border-l-4 border-green-500">
               <p className="font-bold text-sm text-accent">🧠 Question Quality</p>
-              <p className="text-xs mt-2 text-text-muted"><span className="font-bold">Before:</span> 50 basic | <span className="font-bold text-accent">After:</span> <span className="text-accent font-bold">5 smart</span></p>
+              <p className="text-xs mt-3 text-text-muted"><span className="font-bold">Before:</span> 50 basic | <span className="font-bold text-accent">After:</span> <span className="text-accent font-bold">5 smart</span></p>
             </div>
-            <div className="bg-yellow-50 rounded-lg p-6 border-l-4 border-yellow-500">
+            <div className="bg-yellow-50 rounded-lg p-8 py-10 border-l-4 border-yellow-500">
               <p className="font-bold text-sm text-nav">💪 Investor Confidence</p>
-              <p className="text-xs mt-2 text-text-muted"><span className="font-bold">Before:</span> Confused | <span className="font-bold text-accent">After:</span> <span className="text-accent font-bold">Confident</span></p>
+              <p className="text-xs mt-3 text-text-muted"><span className="font-bold">Before:</span> Confused | <span className="font-bold text-accent">After:</span> <span className="text-accent font-bold">Confident</span></p>
             </div>
           </div>
         </div>
