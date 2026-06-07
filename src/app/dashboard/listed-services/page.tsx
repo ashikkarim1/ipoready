@@ -406,24 +406,24 @@ export default function ListedServicesPage() {
     <div style={{ background: '#F7F6F4', minHeight: '100vh' }} suppressHydrationWarning>
       {/* Header */}
       <div style={{ borderBottom: '1px solid var(--color-border)', background: 'var(--color-surface-primary)', backdropFilter: 'blur(4px)' }} className="sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="mb-8">
-            <h1 style={{ color: 'var(--color-text-primary)' }} className="text-3xl sm:text-4xl font-bold mb-2">Listed Services OS</h1>
-            <p style={{ color: 'var(--color-text-secondary)' }} className="text-base sm:text-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 space-y-4">
+          <div className="pt-4">
+            <h1 style={{ color: 'var(--color-text-primary)' }} className="text-2xl sm:text-3xl font-bold mb-1">Listed Services OS</h1>
+            <p style={{ color: 'var(--color-text-secondary)' }} className="text-sm sm:text-base">
               The intelligence layer for public company leaders
             </p>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pb-4">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0 }}
               style={{ background: 'var(--color-info-soft)', borderColor: 'var(--color-info-medium)' }}
-              className="rounded-xl border p-4">
-              <p style={{ color: 'var(--color-info)' }} className="text-xs sm:text-sm font-semibold uppercase tracking-wider">Total Modules</p>
-              <p style={{ color: 'var(--color-info)' }} className="text-2xl sm:text-3xl font-bold mt-2">10</p>
+              className="rounded-xl border p-3">
+              <p style={{ color: 'var(--color-info)' }} className="text-xs font-semibold uppercase tracking-wider">Total Modules</p>
+              <p style={{ color: 'var(--color-info)' }} className="text-xl sm:text-2xl font-bold mt-1">10</p>
             </motion.div>
 
             <motion.div
@@ -431,9 +431,9 @@ export default function ListedServicesPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05 }}
               style={{ background: 'var(--color-success-soft)', borderColor: 'var(--color-success)' }}
-              className="rounded-xl border p-4">
-              <p style={{ color: 'var(--color-success)' }} className="text-xs sm:text-sm font-semibold uppercase tracking-wider">Available</p>
-              <p style={{ color: 'var(--color-success)' }} className="text-2xl sm:text-3xl font-bold mt-2">{availableCount}</p>
+              className="rounded-xl border p-3">
+              <p style={{ color: 'var(--color-success)' }} className="text-xs font-semibold uppercase tracking-wider">Available</p>
+              <p style={{ color: 'var(--color-success)' }} className="text-xl sm:text-2xl font-bold mt-1">{availableCount}</p>
             </motion.div>
 
             <motion.div
@@ -441,9 +441,9 @@ export default function ListedServicesPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               style={{ background: 'rgba(168, 85, 247, 0.05)', borderColor: 'rgba(168, 85, 247, 0.2)' }}
-              className="rounded-xl border p-4">
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider" style={{ color: '#A855F7' }}>In Beta</p>
-              <p className="text-2xl sm:text-3xl font-bold mt-2" style={{ color: '#A855F7' }}>{betaCount}</p>
+              className="rounded-xl border p-3">
+              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#A855F7' }}>In Beta</p>
+              <p className="text-xl sm:text-2xl font-bold mt-1" style={{ color: '#A855F7' }}>{betaCount}</p>
             </motion.div>
 
             <motion.div
@@ -451,9 +451,9 @@ export default function ListedServicesPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 }}
               style={{ background: 'var(--color-warning-soft)', borderColor: 'var(--color-warning)' }}
-              className="rounded-xl border p-4">
-              <p style={{ color: 'var(--color-warning)' }} className="text-xs sm:text-sm font-semibold uppercase tracking-wider">Coming Soon</p>
-              <p style={{ color: 'var(--color-warning)' }} className="text-2xl sm:text-3xl font-bold mt-2">{comingSoonCount}</p>
+              className="rounded-xl border p-3">
+              <p style={{ color: 'var(--color-warning)' }} className="text-xs font-semibold uppercase tracking-wider">Coming Soon</p>
+              <p style={{ color: 'var(--color-warning)' }} className="text-xl sm:text-2xl font-bold mt-1">{comingSoonCount}</p>
             </motion.div>
           </div>
         </div>
