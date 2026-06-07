@@ -94,12 +94,20 @@ const LISTED_SERVICES_SECTIONS = [
     color: 'teal',
   },
   {
-    href: '/dashboard/market-advantage',
-    label: 'Market Advantage Intelligence',
+    href: '/dashboard/market-advantage-pre-ipo',
+    label: 'Market Advantage (Pre-IPO)',
     icon: TrendingUp,
     tier: 'enterprise',
     badge: 'cyan',
     color: 'cyan',
+  },
+  {
+    href: '/dashboard/market-advantage-post-ipo',
+    label: 'Market Advantage (Post-IPO)',
+    icon: TrendingUp,
+    tier: 'enterprise',
+    badge: 'lime',
+    color: 'lime',
   },
 ]
 
@@ -123,6 +131,7 @@ const BADGE_COLORS: Record<string, string> = {
   purple: 'bg-purple-100 text-purple-800 border border-purple-300',
   teal: 'bg-teal-100 text-teal-800 border border-teal-300',
   cyan: 'bg-cyan-100 text-cyan-800 border border-cyan-300',
+  lime: 'bg-lime-100 text-lime-800 border border-lime-300',
 }
 
 interface NavItemProps {
