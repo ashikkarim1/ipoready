@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Header } from '@/app/components/Header'
+import { DemoBookingModal } from '@/components/DemoBookingModal'
 import dynamic from 'next/dynamic'
 import { CheckCircle2 } from 'lucide-react'
 import dashboardImage from '../../public/images/mainmenu.png'
@@ -18,6 +19,7 @@ const SimpleRocket = dynamic(
 export default function LandingPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const [showDemoModal, setShowDemoModal] = useState(false)
 
   useEffect(() => {
     if (status === 'authenticated' && session?.user) {
@@ -529,9 +531,12 @@ export default function LandingPage() {
           <Link href="/register" className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 transition-colors text-sm sm:text-base">
             Get Started Free
           </Link>
-          <Link href="/demo" className="px-6 py-3 border-2 border-red-500 text-accent font-bold rounded-lg hover:bg-red-50 transition-colors text-sm sm:text-base">
+          <button
+            onClick={() => setShowDemoModal(true)}
+            className="px-6 py-3 border-2 border-red-500 text-accent font-bold rounded-lg hover:bg-red-50 transition-colors text-sm sm:text-base cursor-pointer"
+          >
             Book a Demo
-          </Link>
+          </button>
         </div>
       </section>
 
@@ -584,6 +589,9 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* Demo Booking Modal */}
+      <DemoBookingModal isOpen={showDemoModal} onClose={() => setShowDemoModal(false)} />
     </div>
   )
 }
