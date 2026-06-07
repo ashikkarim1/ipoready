@@ -24,14 +24,15 @@ interface UpcomingTaskRow {
 }
 
 export async function GET() {
-  const session = await getServerSession(authOptions)
-  const user = session?.user as { id?: string; companyId?: string } | undefined
+  try {
+    const session = await getServerSession(authOptions)
+    const user = session?.user as { id?: string; companyId?: string } | undefined
 
-  if (!session || !user?.companyId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+    if (!session || !user?.companyId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
-  const companyId = user.companyId
+    const companyId = user.companyId
 
   // 1. Total tasks
   const totalRows = await sql`
@@ -139,18 +140,36 @@ export async function GET() {
   ` as { current_phase: string | null }[]
   const currentPhase = companyRows[0]?.current_phase ?? null
 
-  return NextResponse.json({
-    totalTasks,
-    completedTasks,
-    overdueTasks,
-    teamMembersCount,
-    documentsCount,
-    prospectusStatus,
-    prospectusCompletion,
-    prospectusSectionsComplete,
-    prospectusSectionsTotal,
-    upcomingDeadlines,
-    currentPhase,
-    phaseProgress,
-  })
+    return NextResponse.json({
+      totalTasks,
+      completedTasks,
+      overdueTasks,
+      teamMembersCount,
+      documentsCount,
+      prospectusStatus,
+      prospectusCompletion,
+      prospectusSectionsComplete,
+      prospectusSectionsTotal,
+      upcomingDeadlines,
+      currentPhase,
+      phaseProgress,
+    })
+  } catch (error) {
+    console.error('Dashboard stats error:', error)
+    // Return safe defaults instead of 500 error
+    return NextResponse.json({
+      totalTasks: 0,
+      completedTasks: 0,
+      overdueTasks: 0,
+      teamMembersCount: 0,
+      documentsCount: 0,
+      prospectusStatus: null,
+      prospectusCompletion: 0,
+      prospectusSectionsComplete: 0,
+      prospectusSectionsTotal: 0,
+      upcomingDeadlines: [],
+      currentPhase: null,
+      phaseProgress: {},
+    })
+  }
 }
