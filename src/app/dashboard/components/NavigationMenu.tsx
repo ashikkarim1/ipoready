@@ -17,6 +17,8 @@ import {
   Settings,
   LogOut,
   MoreHorizontal,
+  Briefcase,
+  Network,
 } from 'lucide-react'
 
 const MAIN_SECTIONS = [
@@ -25,41 +27,61 @@ const MAIN_SECTIONS = [
   { href: '/dashboard/documents', label: 'Documents', icon: FileText },
 ]
 
-const PREMIUM_SECTIONS = [
+const LISTED_SERVICES_SECTIONS = [
+  {
+    href: '/dashboard/listed-services',
+    label: 'Listed Services OS',
+    icon: Briefcase,
+    tier: 'professional',
+    badge: 'blue',
+  },
   {
     href: '/dashboard/ceo-command-center',
     label: 'CEO Command Center',
     icon: Crown,
     tier: 'professional',
-    badge: 'gold',
+    badge: 'yellow',
+    color: 'yellow',
   },
   {
     href: '/dashboard/board-portal',
-    label: 'Board Intelligence',
+    label: 'Board Intelligence Portal',
     icon: Users,
     tier: 'professional',
-    badge: 'gold',
+    badge: 'blue',
+    color: 'blue',
   },
   {
     href: '/dashboard/advisor-network',
-    label: 'Advisor Network',
-    icon: Users,
+    label: 'Advisor Orchestration Network',
+    icon: Network,
     tier: 'enterprise',
     badge: 'red',
+    color: 'red',
   },
   {
     href: '/dashboard/cfo-dashboard',
-    label: 'CFO Dashboard',
+    label: 'CFO Financial Dashboard',
     icon: BarChart3,
     tier: 'enterprise',
-    badge: 'gold',
+    badge: 'emerald',
+    color: 'emerald',
   },
   {
     href: '/dashboard/gc-dashboard',
     label: 'GC Legal Dashboard',
     icon: Shield,
     tier: 'enterprise',
-    badge: 'gold',
+    badge: 'indigo',
+    color: 'indigo',
+  },
+  {
+    href: '/dashboard/post-ipo-compliance',
+    label: 'Post-IPO Compliance Module',
+    icon: CheckSquare,
+    tier: 'enterprise',
+    badge: 'purple',
+    color: 'purple',
   },
 ]
 
@@ -69,7 +91,6 @@ const ANALYTICS_SECTIONS = [
 ]
 
 const MORE_SECTIONS = [
-  { href: '/dashboard/post-ipo-compliance', label: 'Post-IPO Compliance', icon: CheckSquare, tier: 'enterprise' },
   { href: '/dashboard/multi-country-filing', label: 'Multi-Country Filing', icon: Zap, tier: 'enterprise' },
   { href: '/dashboard/prospectus-builder', label: 'Prospectus Builder', icon: FileText },
   { href: '/dashboard/cap-table', label: 'Cap Table', icon: BarChart3 },
@@ -77,8 +98,12 @@ const MORE_SECTIONS = [
 
 const BADGE_COLORS: Record<string, string> = {
   gold: 'bg-yellow-100 text-yellow-800 border border-yellow-300',
+  yellow: 'bg-yellow-100 text-yellow-800 border border-yellow-300',
   blue: 'bg-blue-100 text-blue-800 border border-blue-300',
   red: 'bg-red-100 text-red-800 border border-red-300',
+  emerald: 'bg-emerald-100 text-emerald-800 border border-emerald-300',
+  indigo: 'bg-indigo-100 text-indigo-800 border border-indigo-300',
+  purple: 'bg-purple-100 text-purple-800 border border-purple-300',
 }
 
 interface NavItemProps {
@@ -163,13 +188,13 @@ export default function NavigationMenu({
           ))}
         </div>
 
-        {/* Premium sections */}
+        {/* Listed Services sections */}
         <div className="pb-6">
           <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-text-light mb-3">
-            Premium Features
+            Listed Services
           </div>
           <div className="space-y-1">
-            {PREMIUM_SECTIONS.map((item) => {
+            {LISTED_SERVICES_SECTIONS.map((item) => {
               const hasAccess =
                 userSubscriptionTier === 'enterprise' ||
                 (userSubscriptionTier === 'professional' && item.tier === 'professional')
