@@ -27,6 +27,7 @@ const NAV_GROUPS = [
       { href: '/dashboard',            icon: LayoutDashboard, label: 'Dashboard',         badge: null,   key: 'dashboard'       },
       { href: '/dashboard/investor-readiness/intelligence-hub', icon: Zap, label: 'Intelligence Hub', badge: null, key: 'intelligence-hub' },
       { href: '/dashboard/ipo-journey', icon: Map,            label: 'IPO Journey™',      badge: '✨',   key: 'ipo-journey'     },
+      { href: '/dashboard/market-advantage-pre-ipo', icon: TrendingUp, label: 'Market Advantage (Pre-IPO)', badge: '✨', key: 'market-advantage-pre-ipo', tier: 'professional' },
     ],
   },
   {
@@ -499,7 +500,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                           className="overflow-hidden"
                         >
                           <div className="px-3 space-y-1">
-                            {group.items.map(({ href, icon: Icon, label, badge, key }) => {
+                            {group.items.map(({ href, icon: Icon, label, badge, key, tier }) => {
+                              // Check tier access
+                              const tierHierarchy = { starter: 0, professional: 1, enterprise: 2, growth: 1 }
+                              const userTierLevel = tierHierarchy[(storePlan as keyof typeof tierHierarchy) || 'starter'] ?? 0
+                              const requiredTierLevel = tier ? (tierHierarchy[tier as keyof typeof tierHierarchy] ?? 0) : 0
+                              const hasAccess = userTierLevel >= requiredTierLevel
+
+                              if (!hasAccess) return null
+
                               // Check if this route is active
                               // Prefer exact match; only use startsWith if no other route is more specific
                               const isExactMatch = pathname === href
