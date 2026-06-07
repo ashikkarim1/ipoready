@@ -737,6 +737,26 @@ export default function DashboardPage() {
             </Link>
           </div>
 
+          {/* Strategic Intelligence */}
+          <Link href="/dashboard/strategic-intelligence"
+            className="card p-6 hover:shadow-md transition-all border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-100">
+                <Globe className="w-4 h-4 text-blue-600" />
+              </div>
+              <div>
+                <p className="text-nav font-semibold text-sm">Want an unfair advantage?</p>
+                <p className="text-blue-600 text-xs font-medium">Strategic Intelligence</p>
+              </div>
+            </div>
+            <p className="text-text-muted text-xs mb-4 leading-relaxed">
+              Market analysis, competitor benchmarking, and strategic options. Get data-driven insights on capital markets, optimal timing, and unconventional paths to IPO.
+            </p>
+            <div className="flex items-center gap-2 text-blue-600 text-xs font-semibold hover:text-blue-700">
+              View Market Intelligence <ExternalLink className="w-3 h-3" />
+            </div>
+          </Link>
+
           {/* Live stats: team, docs, overdue */}
           <div className="card p-5">
             <p className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-3">At a Glance</p>
