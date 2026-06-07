@@ -178,8 +178,8 @@ export default function PostIPOMarketAdvantage() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between cursor-pointer" onClick={() => setExpandedSection(expandedSection === 'stock-performance' ? null : 'stock-performance')}>
-              <h2 className="text-lg font-bold text-nav">📈 Stock Performance (Real-Time)</h2>
-              {expandedSection === 'stock-performance' ? <ChevronUp /> : <ChevronDown />}
+              <h2 className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-0">📈 Stock Performance (Real-Time)</h2>
+              {expandedSection === 'stock-performance' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </div>
             <AnimatePresence>
               {expandedSection === 'stock-performance' && (
@@ -214,8 +214,8 @@ export default function PostIPOMarketAdvantage() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between cursor-pointer" onClick={() => setExpandedSection(expandedSection === 'stock-comparison' ? null : 'stock-comparison')}>
-              <h2 className="text-lg font-bold text-nav">📊 Stock Performance vs. Comps</h2>
-              {expandedSection === 'stock-comparison' ? <ChevronUp /> : <ChevronDown />}
+              <h2 className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-0">📊 Stock Performance vs. Comps</h2>
+              {expandedSection === 'stock-comparison' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </div>
             <AnimatePresence>
               {expandedSection === 'stock-comparison' && (
@@ -257,8 +257,8 @@ export default function PostIPOMarketAdvantage() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between cursor-pointer" onClick={() => setExpandedSection(expandedSection === 'filings' ? null : 'filings')}>
-              <h2 className="text-lg font-bold text-nav">📄 SEC Filings & Compliance</h2>
-              {expandedSection === 'filings' ? <ChevronUp /> : <ChevronDown />}
+              <h2 className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-0">📄 SEC Filings & Compliance</h2>
+              {expandedSection === 'filings' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </div>
             <AnimatePresence>
               {expandedSection === 'filings' && (
@@ -298,8 +298,8 @@ export default function PostIPOMarketAdvantage() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between cursor-pointer" onClick={() => setExpandedSection(expandedSection === 'ownership' ? null : 'ownership')}>
-              <h2 className="text-lg font-bold text-nav">👥 Institutional & Insider Ownership</h2>
-              {expandedSection === 'ownership' ? <ChevronUp /> : <ChevronDown />}
+              <h2 className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-0">👥 Institutional & Insider Ownership</h2>
+              {expandedSection === 'ownership' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </div>
             <AnimatePresence>
               {expandedSection === 'ownership' && (
@@ -332,8 +332,8 @@ export default function PostIPOMarketAdvantage() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between cursor-pointer" onClick={() => setExpandedSection(expandedSection === 'catalysts' ? null : 'catalysts')}>
-              <h2 className="text-lg font-bold text-nav">⚡ Upcoming Catalysts (Next 90 Days)</h2>
-              {expandedSection === 'catalysts' ? <ChevronUp /> : <ChevronDown />}
+              <h2 className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-0">⚡ Upcoming Catalysts (Next 90 Days)</h2>
+              {expandedSection === 'catalysts' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </div>
             <AnimatePresence>
               {expandedSection === 'catalysts' && (
@@ -364,7 +364,7 @@ export default function PostIPOMarketAdvantage() {
             transition={{ delay: 0.5 }}
             className="space-y-4"
           >
-            <h2 className="text-lg font-bold text-nav">✅ Post-Listing Execution Tracker</h2>
+            <h2 className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-4">✅ Post-Listing Execution Tracker</h2>
             <div className="grid grid-cols-2 gap-3">
               {executionMetrics.map((exec, i) => (
                 <motion.div key={i} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} className="rounded-lg border-2 border-green-200 bg-green-50 p-4">
@@ -383,7 +383,7 @@ export default function PostIPOMarketAdvantage() {
             transition={{ delay: 0.6 }}
             className="space-y-4"
           >
-            <h2 className="text-lg font-bold text-nav">💬 Key Investor Messages</h2>
+            <h2 className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-4">💬 Key Investor Messages</h2>
             <div className="space-y-3">
               {investorMessages.map((msg, i) => (
                 <motion.div key={i} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} className={`rounded-lg border-l-4 p-4 ${
@@ -408,7 +408,7 @@ export default function PostIPOMarketAdvantage() {
             transition={{ delay: 0.7 }}
             className="rounded-lg border-2 border-green-200 bg-gradient-to-br from-green-50 to-white p-6"
           >
-            <h3 className="font-bold text-nav text-lg mb-4">🎯 IPOReady Post-IPO Strategy</h3>
+            <h3 className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-4">🎯 IPOReady Post-IPO Strategy</h3>
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />

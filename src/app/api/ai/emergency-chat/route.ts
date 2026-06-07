@@ -9,6 +9,7 @@ interface EmergencyChatRequest {
     phase?: string
     overdueTasks?: number
     blockers?: number
+    daysToIPO?: number
   }
 }
 

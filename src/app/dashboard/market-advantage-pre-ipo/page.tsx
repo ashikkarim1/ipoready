@@ -134,8 +134,8 @@ export default function MarketAdvantageIntelligence() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between cursor-pointer" onClick={() => setExpandedSection(expandedSection === 'market-conditions' ? null : 'market-conditions')}>
-              <h2 className="text-lg font-bold text-nav">🌍 Market Conditions (Real-Time)</h2>
-              {expandedSection === 'market-conditions' ? <ChevronUp /> : <ChevronDown />}
+              <h2 className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-0">📊 Market Conditions (Real-Time)</h2>
+              {expandedSection === 'market-conditions' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </div>
             <AnimatePresence>
               {expandedSection === 'market-conditions' && (
@@ -242,8 +242,8 @@ export default function MarketAdvantageIntelligence() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between cursor-pointer" onClick={() => setExpandedSection(expandedSection === 'valuation' ? null : 'valuation')}>
-              <h2 className="text-lg font-bold text-nav">💰 Valuation Benchmarking</h2>
-              {expandedSection === 'valuation' ? <ChevronUp /> : <ChevronDown />}
+              <h2 className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-0">💰 Valuation Benchmarking</h2>
+              {expandedSection === 'valuation' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </div>
             <AnimatePresence>
               {expandedSection === 'valuation' && (
@@ -270,8 +270,8 @@ export default function MarketAdvantageIntelligence() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between cursor-pointer" onClick={() => setExpandedSection(expandedSection === 'competitive' ? null : 'competitive')}>
-              <h2 className="text-lg font-bold text-nav">🎯 Competitive Positioning</h2>
-              {expandedSection === 'competitive' ? <ChevronUp /> : <ChevronDown />}
+              <h2 className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-0">🎯 Competitive Positioning</h2>
+              {expandedSection === 'competitive' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </div>
             <AnimatePresence>
               {expandedSection === 'competitive' && (
@@ -306,8 +306,8 @@ export default function MarketAdvantageIntelligence() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between cursor-pointer" onClick={() => setExpandedSection(expandedSection === 'options' ? null : 'options')}>
-              <h2 className="text-lg font-bold text-nav">⚡ Strategic Options Comparison</h2>
-              {expandedSection === 'options' ? <ChevronUp /> : <ChevronDown />}
+              <h2 className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-0">⚡ Strategic Options Comparison</h2>
+              {expandedSection === 'options' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </div>
             <AnimatePresence>
               {expandedSection === 'options' && (
@@ -356,7 +356,7 @@ export default function MarketAdvantageIntelligence() {
             transition={{ delay: 0.6 }}
             className="rounded-lg border-2 border-teal-200 bg-gradient-to-br from-teal-50 to-white p-6"
           >
-            <h3 className="font-bold text-nav text-lg mb-4">🎯 IPOReady Recommendation</h3>
+            <h3 className="text-text-muted text-xs uppercase tracking-wider font-semibold mb-4">🎯 IPOReady Recommendation</h3>
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" />
