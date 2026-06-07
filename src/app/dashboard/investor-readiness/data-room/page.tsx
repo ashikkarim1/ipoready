@@ -129,47 +129,53 @@ export default function DataRoomPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
+      <div style={{ background: '#F7F6F4', minHeight: '100vh' }} className="p-6">
         <div className="flex items-center justify-center h-96">
-          <Loader className="w-8 h-8 animate-spin" />
+          <Loader className="w-8 h-8 animate-spin" style={{ color: 'var(--color-text-muted)' }} />
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ background: '#F7F6F4', minHeight: '100vh' }}>
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <div className="flex items-center justify-between mb-6">
+      <div style={{ background: 'white', borderBottom: '1px solid #E5E4E0' }} className="sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 space-y-6 py-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                <Lock className="w-8 h-8 text-blue-600" />
+              <h1 className="serif text-2xl sm:text-3xl text-nav mb-1 flex items-center gap-2">
+                <Lock className="w-6 h-6" />
                 Data Room
               </h1>
-              <p className="text-gray-600 mt-1">Unified source - all pages query this same data</p>
+              <p className="text-text-muted text-sm">Unified source - all pages query this same data</p>
             </div>
             <button
               onClick={() => setShowInviteModal(true)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap flex-shrink-0"
+              style={{ background: 'var(--color-accent)', color: 'var(--color-text-inverse)' }}
             >
               <Plus className="w-4 h-4" />
-              Invite Investor
+              <span className="hidden sm:inline">Invite Investor</span>
+              <span className="sm:hidden">Invite</span>
             </button>
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-8 border-b border-gray-200 -mb-[1px]">
+          <div className="flex gap-8 border-b -mb-[1px]" style={{ borderColor: '#E5E4E0' }}>
             {(['overview', 'documents', 'access', 'activity'] as const).map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`py-3 px-0 font-medium transition-colors border-b-2 ${
+                className={`py-3 px-0 text-sm font-semibold transition-colors border-b-2 ${
                   activeTab === tab
-                    ? 'text-blue-600 border-blue-600'
-                    : 'text-gray-600 border-transparent hover:text-gray-900'
+                    ? 'border-b-2'
+                    : 'border-transparent'
                 }`}
+                style={{
+                  color: activeTab === tab ? 'var(--color-text-primary)' : 'var(--color-text-muted)',
+                  borderColor: activeTab === tab ? 'var(--color-text-primary)' : 'transparent'
+                }}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
               </button>
@@ -179,68 +185,68 @@ export default function DataRoomPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 space-y-6 sm:space-y-8">
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+          <div className="p-4 flex gap-3 rounded-xl" style={{ background: 'var(--color-error-pale)', border: '1px solid var(--color-error-light)' }}>
+            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--color-error)' }} />
             <div>
-              <p className="font-medium text-red-900">Error loading documents</p>
-              <p className="text-sm text-red-700">{error}</p>
+              <p className="text-sm font-semibold" style={{ color: 'var(--color-error-dark)' }}>Error loading documents</p>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--color-error-dark)' }}>{error}</p>
             </div>
           </div>
         )}
 
         {/* Overview Tab */}
         {activeTab === 'overview' && (
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             {/* Summary Cards */}
-            <div className="grid grid-cols-4 gap-6">
-              <div className="bg-white rounded-lg p-6 border border-gray-200">
+            <div className="grid md:grid-cols-4 gap-5">
+              <div className="card p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-gray-600 text-sm">Total Documents</p>
-                    <p className="text-3xl font-bold text-gray-900 mt-2">{documents.length}</p>
+                    <p className="text-text-muted text-xs sm:text-sm">Total Documents</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-nav mt-2">{documents.length}</p>
                   </div>
-                  <FileText className="w-10 h-10 text-blue-200" />
+                  <FileText className="w-6 h-6 text-text-muted flex-shrink-0" />
                 </div>
               </div>
-              <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <div className="card p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-gray-600 text-sm">Folders</p>
-                    <p className="text-3xl font-bold text-gray-900 mt-2">{Object.keys(groupedDocuments).length}</p>
+                    <p className="text-text-muted text-xs sm:text-sm">Folders</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-nav mt-2">{Object.keys(groupedDocuments).length}</p>
                   </div>
-                  <Folder className="w-10 h-10 text-green-200" />
+                  <Folder className="w-6 h-6 text-text-muted flex-shrink-0" />
                 </div>
               </div>
-              <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <div className="card p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-gray-600 text-sm">Active Invites</p>
-                    <p className="text-3xl font-bold text-gray-900 mt-2">{invites.filter(i => i.status === 'nda-signed').length}</p>
+                    <p className="text-text-muted text-xs sm:text-sm">Active Invites</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-nav mt-2">{invites.filter(i => i.status === 'nda-signed').length}</p>
                   </div>
-                  <Users className="w-10 h-10 text-purple-200" />
+                  <Users className="w-6 h-6 text-text-muted flex-shrink-0" />
                 </div>
               </div>
-              <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <div className="card p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-gray-600 text-sm">Compliance</p>
-                    <p className="text-3xl font-bold text-green-600 mt-2">✓</p>
+                    <p className="text-text-muted text-xs sm:text-sm">Compliance</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-nav mt-2">✓</p>
                   </div>
-                  <Shield className="w-10 h-10 text-green-200" />
+                  <Shield className="w-6 h-6 text-text-muted flex-shrink-0" />
                 </div>
               </div>
             </div>
 
-            {/* Recent Activity */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">System Status</h2>
-              <div className="flex gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <CheckCircle2 className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            {/* System Status */}
+            <div className="card p-6">
+              <h2 className="text-nav text-sm font-semibold mb-4">System Status</h2>
+              <div className="flex gap-3 p-4 rounded-xl" style={{ background: 'var(--color-success-pale)', border: '1px solid var(--color-success-light)' }}>
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--color-success)' }} />
                 <div>
-                  <p className="font-medium text-blue-900">✓ Unified Source Active</p>
-                  <p className="text-sm text-blue-700 mt-1">
+                  <p className="text-sm font-semibold" style={{ color: 'var(--color-success-dark)' }}>✓ Unified Source Active</p>
+                  <p className="text-xs mt-1" style={{ color: 'var(--color-success-dark)' }}>
                     Data room pulls from unified_documents table. All pages show identical data.
                   </p>
                 </div>
