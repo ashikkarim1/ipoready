@@ -490,12 +490,19 @@ export default function ListedServicesPage() {
         {/* Module Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {filteredModules.map((module, index) => (
-            <motion.button
+            <motion.div
               key={module.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
               onClick={() => setSelectedModule(selectedModule === module.id ? null : module.id)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  setSelectedModule(selectedModule === module.id ? null : module.id)
+                }
+              }}
               style={
                 selectedModule === module.id
                   ? { background: 'var(--color-surface-primary)', borderColor: 'var(--color-accent)', boxShadow: '0 4px 12px rgba(232, 49, 42, 0.1)' }
@@ -574,7 +581,7 @@ export default function ListedServicesPage() {
                 </span>
                 <ArrowRight className="w-4 h-4" />
               </div>
-            </motion.button>
+            </motion.div>
           ))}
         </div>
 
