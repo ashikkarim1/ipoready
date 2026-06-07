@@ -55,8 +55,8 @@ function extractPeerPerformance(
   const filtered = peerIpos.filter(
     (p) =>
       p.sector === params.sector &&
-      p.pre_money_valuation_billions > params.valuation * 0.5 &&
-      p.pre_money_valuation_billions < params.valuation * 2
+      p.valuation > params.valuation * 0.5 &&
+      p.valuation < params.valuation * 2
   )
 
   return {

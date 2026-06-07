@@ -30,7 +30,7 @@ export function predictAnalystCoverage(
   const similarPeers = peerIpos.filter(
     (ipo) =>
       ipo.sector === params.sector &&
-      Math.abs(ipo.pre_money_valuation_billions - params.valuation) < params.valuation * 0.5
+      Math.abs(ipo.valuation - params.valuation) < params.valuation * 0.5
   )
 
   if (similarPeers.length === 0) {

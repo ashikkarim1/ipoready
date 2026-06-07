@@ -31,8 +31,8 @@ export function modelInstitutionalDemand(
     (ipo) =>
       ipo.sector === params.sector &&
       Math.abs(ipo.float_percentage - params.float) < 10 &&
-      ipo.pre_money_valuation_billions > params.valuation * 0.5 &&
-      ipo.pre_money_valuation_billions < params.valuation * 2
+      ipo.valuation > params.valuation * 0.5 &&
+      ipo.valuation < params.valuation * 2
   )
 
   if (similarPeers.length === 0) {
