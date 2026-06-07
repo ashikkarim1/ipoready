@@ -323,15 +323,16 @@ Best regards,
   }, [isDragging])
 
   return (
-    <div
-      id="split-view-container"
-      style={{
-        minHeight: '100vh',
-        background: '#F7F6F4',
-        display: 'flex',
-        overflow: 'hidden'
-      }}
-    >
+    <>
+      <div
+        id="split-view-container"
+        style={{
+          minHeight: '100vh',
+          background: '#F7F6F4',
+          display: 'flex',
+          overflow: 'hidden'
+        }}
+      >
 
         {/* CRM SIDEBAR */}
         {showCRM && (
@@ -947,9 +948,10 @@ Best regards,
             </>
           )}
         </AnimatePresence>
+      </div>
 
-        {/* OUTREACH MODAL */}
-        <AnimatePresence>
+      {/* OUTREACH MODAL - Outside split-view-container for proper fixed positioning */}
+      <AnimatePresence>
           {showOutreachModal && selectedInvestor && emailDraft && (
             <>
               <motion.div
@@ -1412,6 +1414,6 @@ Best regards,
             </>
           )}
         </AnimatePresence>
-      </div>
+    </>
   )
 }
