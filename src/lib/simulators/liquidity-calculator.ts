@@ -23,11 +23,10 @@ export function calculateLiquidity(
     return getDefaultLiquidityMetrics()
   }
 
-  // Filter peers by similar float size and underwriter tier
+  // Filter peers by similar float size
   const similarPeers = peerIpos.filter(
     (ipo) =>
-      Math.abs(ipo.float - params.float) < 10 &&
-      ipo.underwriter === params.marketMakerTier
+      Math.abs(ipo.float - params.float) < 10
   )
 
   if (similarPeers.length === 0) {
