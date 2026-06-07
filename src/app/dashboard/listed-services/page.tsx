@@ -475,7 +475,7 @@ export default function ListedServicesPage() {
                   ? { background: 'var(--color-accent)', color: 'var(--color-text-inverse)', borderColor: 'var(--color-accent)' }
                   : { background: 'var(--color-surface-primary)', color: 'var(--color-text-secondary)', borderColor: 'var(--color-border)' }
               }
-              className="px-4 sm:px-5 py-2.5 rounded-xl font-medium border transition-all hover:border-gray-400"
+              className="px-4 sm:px-5 py-3 sm:py-3.5 rounded-xl font-medium border transition-all hover:border-gray-400"
             >
               <span className="text-xs sm:text-sm">
                 {status === 'all' && 'All'}
