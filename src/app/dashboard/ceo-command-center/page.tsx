@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { motion } from 'framer-motion'
 import { Crown, AlertCircle, TrendingUp, Users, Calendar, Target } from 'lucide-react'
 import PremiumLock from '../components/PremiumLock'
@@ -12,7 +11,7 @@ export default function CEOCommandCenter() {
   const [showUpgrade, setShowUpgrade] = useState(false)
 
   return (
-    <React.Fragment>
+    <>
       <PremiumPageLayout
       title="CEO Command Center"
       subtitle="Real-time executive dashboard with KPIs, risk alerts, and board-ready insights"
@@ -112,6 +111,6 @@ export default function CEOCommandCenter() {
         featureKey="ceo_dashboard"
         featureName="CEO Command Center"
       />
-    </React.Fragment>
+    </>
   )
 }

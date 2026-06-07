@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { motion } from 'framer-motion'
 import { Users, CheckCircle2, FileText, Clock } from 'lucide-react'
 import PremiumLock from '../components/PremiumLock'
@@ -12,7 +11,7 @@ export default function BoardIntelligencePortal() {
   const [showUpgrade, setShowUpgrade] = useState(false)
 
   return (
-    <React.Fragment>
+    <>
       <PremiumPageLayout
       title="Board Intelligence Portal"
       subtitle="Board materials, governance tracking, and meeting management in one place"
@@ -118,6 +117,6 @@ export default function BoardIntelligencePortal() {
         featureKey="board_portal"
         featureName="Board Intelligence Portal"
       />
-    </React.Fragment>
+    </>
   )
 }

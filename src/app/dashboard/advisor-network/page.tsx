@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { motion } from 'framer-motion'
 import { Users, ArrowRight, CheckCircle2, AlertCircle, Clock } from 'lucide-react'
 import PremiumLock from '../components/PremiumLock'
@@ -12,7 +11,7 @@ export default function AdvisorOrchestrationNetwork() {
   const [showUpgrade, setShowUpgrade] = useState(false)
 
   return (
-    <React.Fragment>
+    <>
       <PremiumPageLayout
       title="Advisor Orchestration Network"
       subtitle="Coordinate 15-30 advisors with dependency tracking and automated escalation"
@@ -161,6 +160,6 @@ export default function AdvisorOrchestrationNetwork() {
       featureKey="advisor_network"
       featureName="Advisor Orchestration Network"
     />
-    </React.Fragment>
+    </>
   )
 }

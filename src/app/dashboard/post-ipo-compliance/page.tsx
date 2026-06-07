@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { motion } from 'framer-motion'
 import { CheckCircle2, AlertCircle, Clock, TrendingUp } from 'lucide-react'
 import PremiumLock from '../components/PremiumLock'
@@ -12,7 +11,7 @@ export default function PostIPOComplianceModule() {
   const [showUpgrade, setShowUpgrade] = useState(false)
 
   return (
-    <React.Fragment>
+    <>
       <PremiumPageLayout
       title="Post-IPO Compliance Module"
       subtitle="Automated compliance for 12+ months post-listing (quiet period, reporting, filings)"
@@ -133,6 +132,6 @@ export default function PostIPOComplianceModule() {
         featureKey="post_ipo_compliance"
         featureName="Post-IPO Compliance Module"
       />
-    </React.Fragment>
+    </>
   )
 }

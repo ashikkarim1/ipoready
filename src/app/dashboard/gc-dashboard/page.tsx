@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { motion } from 'framer-motion'
 import { Shield, CheckCircle2, FileText, AlertCircle } from 'lucide-react'
 import PremiumLock from '../components/PremiumLock'
@@ -12,7 +11,7 @@ export default function GCLegalDashboard() {
   const [showUpgrade, setShowUpgrade] = useState(false)
 
   return (
-    <React.Fragment>
+    <>
       <PremiumPageLayout
       title="GC Legal Dashboard"
       subtitle="Legal compliance tracking, document automation, and regulatory requirements"
@@ -142,6 +141,6 @@ export default function GCLegalDashboard() {
         featureKey="gc_dashboard"
         featureName="GC Legal Dashboard"
       />
-    </React.Fragment>
+    </>
   )
 }

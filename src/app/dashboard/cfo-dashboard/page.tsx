@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { motion } from 'framer-motion'
 import { BarChart3, TrendingUp, DollarSign, PieChart } from 'lucide-react'
 import PremiumLock from '../components/PremiumLock'
@@ -12,7 +11,7 @@ export default function CFOFinancialDashboard() {
   const [showUpgrade, setShowUpgrade] = useState(false)
 
   return (
-    <React.Fragment>
+    <>
       <PremiumPageLayout
       title="CFO Financial Dashboard"
       subtitle="Financial modeling, unit economics, runway analysis, and waterfall forecasting"
@@ -117,6 +116,6 @@ export default function CFOFinancialDashboard() {
         featureKey="cfo_dashboard"
         featureName="CFO Financial Dashboard"
       />
-    </React.Fragment>
+    </>
   )
 }

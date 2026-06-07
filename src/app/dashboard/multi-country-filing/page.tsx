@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { motion } from 'framer-motion'
 import { Globe, CheckCircle2, FileText, Zap } from 'lucide-react'
 import PremiumLock from '../components/PremiumLock'
@@ -12,7 +11,7 @@ export default function MultiCountryFilingSystem() {
   const [showUpgrade, setShowUpgrade] = useState(false)
 
   return (
-    <React.Fragment>
+    <>
       <PremiumPageLayout
       title="Multi-Country Filing System"
       subtitle="File in SEDAR 2, SEC Edgar, TSX, NASDAQ, CSE, and 50+ exchanges from one platform"
@@ -184,6 +183,6 @@ export default function MultiCountryFilingSystem() {
         featureKey="multi_country_filing"
         featureName="Multi-Country Filing System"
       />
-    </React.Fragment>
+    </>
   )
 }
