@@ -495,11 +495,18 @@ export default function ListedServicesPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              onClick={() => setSelectedModule(selectedModule === module.id ? null : module.id)}
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                console.log('Card clicked:', module.id, 'Currently selected:', selectedModule)
+                setSelectedModule(selectedModule === module.id ? null : module.id)
+              }}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  console.log('Card keyboard pressed:', module.id)
                   setSelectedModule(selectedModule === module.id ? null : module.id)
                 }
               }}
