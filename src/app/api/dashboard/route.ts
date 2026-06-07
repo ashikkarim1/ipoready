@@ -50,33 +50,34 @@ interface RecentActivityRow {
 }
 
 export async function GET() {
-  const session = await getServerSession(authOptions)
-  const user = session?.user as { id?: string; companyId?: string } | undefined
+  try {
+    const session = await getServerSession(authOptions)
+    const user = session?.user as { id?: string; companyId?: string } | undefined
 
-  if (!session || !user?.companyId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+    if (!session || !user?.companyId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
-  const companyId = user.companyId
+    const companyId = user.companyId
 
-  // 1. Company data
-  const companyRows = await sql`
-    SELECT id, name, listing_type, target_exchange, current_phase, pace_score,
-           estimated_days_to_ipo, progress_percentage, currency, language, created_at,
-           trial_status, trial_end_date
-    FROM companies
-    WHERE id = ${companyId}
-    LIMIT 1
-  ` as CompanyRow[]
+    // 1. Company data
+    const companyRows = await sql`
+      SELECT id, name, listing_type, target_exchange, current_phase, pace_score,
+             estimated_days_to_ipo, progress_percentage, currency, language, created_at,
+             trial_status, trial_end_date
+      FROM companies
+      WHERE id = ${companyId}
+      LIMIT 1
+    ` as CompanyRow[]
 
-  if (companyRows.length === 0) {
-    return NextResponse.json({ error: 'Company not found' }, { status: 404 })
-  }
+    if (companyRows.length === 0) {
+      return NextResponse.json({ error: 'Company not found' }, { status: 404 })
+    }
 
-  const companyRow = companyRows[0]
+    const companyRow = companyRows[0]
 
-  // Compute and update stats
-  const stats = await computeAndUpdateCompanyStats(companyId)
+    // Compute and update stats
+    const stats = await computeAndUpdateCompanyStats(companyId)
 
   // 2. Tasks summary
   const statusCountRows = await sql`
@@ -167,25 +168,54 @@ export async function GET() {
     completedAt: row.completed_at,
   }))
 
-  return NextResponse.json({
-    company: {
-      id: companyRow.id,
-      name: companyRow.name,
-      listingType: companyRow.listing_type,
-      targetExchange: companyRow.target_exchange,
-      currentPhase: stats.currentPhase,
-      paceScore: stats.paceScore,
-      estimatedDaysToIpo: stats.estimatedDaysToIpo,
-      progressPercentage: stats.progressPercentage,
-      currency: companyRow.currency,
-      language: companyRow.language,
-      createdAt: companyRow.created_at,
-      trial_status: companyRow.trial_status,
-      trial_end_date: companyRow.trial_end_date,
-    },
-    tasksSummary,
-    phaseData,
-    upcomingTasks,
-    recentActivity,
-  })
+    return NextResponse.json({
+      company: {
+        id: companyRow.id,
+        name: companyRow.name,
+        listingType: companyRow.listing_type,
+        targetExchange: companyRow.target_exchange,
+        currentPhase: stats.currentPhase,
+        paceScore: stats.paceScore,
+        estimatedDaysToIpo: stats.estimatedDaysToIpo,
+        progressPercentage: stats.progressPercentage,
+        currency: companyRow.currency,
+        language: companyRow.language,
+        createdAt: companyRow.created_at,
+        trial_status: companyRow.trial_status,
+        trial_end_date: companyRow.trial_end_date,
+      },
+      tasksSummary,
+      phaseData,
+      upcomingTasks,
+      recentActivity,
+    })
+  } catch (error) {
+    console.error('Dashboard API error:', error)
+    // Return safe defaults instead of 500 error
+    return NextResponse.json({
+      company: {
+        id: '',
+        name: '',
+        listingType: '',
+        targetExchange: '',
+        currentPhase: '',
+        paceScore: 0,
+        estimatedDaysToIpo: 0,
+        progressPercentage: 0,
+        currency: 'USD',
+        language: 'en',
+        createdAt: '',
+      },
+      tasksSummary: {
+        total: 0,
+        completed: 0,
+        inProgress: 0,
+        blocked: 0,
+        notStarted: 0,
+      },
+      phaseData: [],
+      upcomingTasks: [],
+      recentActivity: [],
+    })
+  }
 }
