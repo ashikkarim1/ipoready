@@ -189,15 +189,15 @@ export default function SimulationResults({ results }: SimulationResultsProps) {
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-text-muted">Day 1</span>
-                          <span className="font-semibold text-nav">${proj.day1} ({proj.day1Pop:+.1f}%)</span>
+                          <span className="font-semibold text-nav">${proj.day1} ({(proj.day1Pop >= 0 ? '+' : '')}{proj.day1Pop.toFixed(1)}%)</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-text-muted">Day 30</span>
-                          <span className="font-semibold text-nav">${proj.day30} ({proj.day30Change:+.1f}%)</span>
+                          <span className="font-semibold text-nav">${proj.day30} ({(proj.day30Change >= 0 ? '+' : '')}{proj.day30Change.toFixed(1)}%)</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-text-muted">Day 365</span>
-                          <span className="font-semibold text-nav">${proj.day365} ({proj.day365Change:+.1f}%)</span>
+                          <span className="font-semibold text-nav">${proj.day365} ({(proj.day365Change >= 0 ? '+' : '')}{proj.day365Change.toFixed(1)}%)</span>
                         </div>
                       </div>
                     </div>
