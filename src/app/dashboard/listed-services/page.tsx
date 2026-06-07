@@ -415,13 +415,13 @@ export default function ListedServicesPage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pb-8 pt-6">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0 }}
               style={{ background: 'var(--color-info-soft)', borderColor: 'var(--color-info-medium)' }}
-              className="rounded-xl border p-3">
+              className="rounded-xl border p-4">
               <p style={{ color: 'var(--color-info)' }} className="text-xs font-semibold uppercase tracking-wider">Total Modules</p>
               <p style={{ color: 'var(--color-info)' }} className="text-xl sm:text-2xl font-bold mt-1">10</p>
             </motion.div>
@@ -431,7 +431,7 @@ export default function ListedServicesPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05 }}
               style={{ background: 'var(--color-success-soft)', borderColor: 'var(--color-success)' }}
-              className="rounded-xl border p-3">
+              className="rounded-xl border p-4">
               <p style={{ color: 'var(--color-success)' }} className="text-xs font-semibold uppercase tracking-wider">Available</p>
               <p style={{ color: 'var(--color-success)' }} className="text-xl sm:text-2xl font-bold mt-1">{availableCount}</p>
             </motion.div>
@@ -441,7 +441,7 @@ export default function ListedServicesPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               style={{ background: 'rgba(168, 85, 247, 0.05)', borderColor: 'rgba(168, 85, 247, 0.2)' }}
-              className="rounded-xl border p-3">
+              className="rounded-xl border p-4">
               <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#A855F7' }}>In Beta</p>
               <p className="text-xl sm:text-2xl font-bold mt-1" style={{ color: '#A855F7' }}>{betaCount}</p>
             </motion.div>
@@ -451,7 +451,7 @@ export default function ListedServicesPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 }}
               style={{ background: 'var(--color-warning-soft)', borderColor: 'var(--color-warning)' }}
-              className="rounded-xl border p-3">
+              className="rounded-xl border p-4">
               <p style={{ color: 'var(--color-warning)' }} className="text-xs font-semibold uppercase tracking-wider">Coming Soon</p>
               <p style={{ color: 'var(--color-warning)' }} className="text-xl sm:text-2xl font-bold mt-1">{comingSoonCount}</p>
             </motion.div>
@@ -460,9 +460,9 @@ export default function ListedServicesPage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 py-16">
         {/* Filter Tabs */}
-        <div className="flex flex-wrap gap-3 mb-12" style={{ rowGap: '12px' }}>
+        <div className="flex flex-wrap gap-3 mb-12 mt-4" style={{ rowGap: '12px' }}>
           {(['all', 'available', 'beta', 'coming-soon'] as const).map((status, index) => (
             <motion.button
               key={status}
