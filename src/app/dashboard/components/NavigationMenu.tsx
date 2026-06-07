@@ -20,6 +20,7 @@ import {
   Briefcase,
   Network,
   Globe,
+  TrendingUp,
 } from 'lucide-react'
 
 const MAIN_SECTIONS = [
@@ -92,6 +93,14 @@ const LISTED_SERVICES_SECTIONS = [
     badge: 'teal',
     color: 'teal',
   },
+  {
+    href: '/dashboard/market-advantage',
+    label: 'Market Advantage Intelligence',
+    icon: TrendingUp,
+    tier: 'enterprise',
+    badge: 'cyan',
+    color: 'cyan',
+  },
 ]
 
 const ANALYTICS_SECTIONS = [
@@ -113,6 +122,7 @@ const BADGE_COLORS: Record<string, string> = {
   indigo: 'bg-indigo-100 text-indigo-800 border border-indigo-300',
   purple: 'bg-purple-100 text-purple-800 border border-purple-300',
   teal: 'bg-teal-100 text-teal-800 border border-teal-300',
+  cyan: 'bg-cyan-100 text-cyan-800 border border-cyan-300',
 }
 
 interface NavItemProps {
