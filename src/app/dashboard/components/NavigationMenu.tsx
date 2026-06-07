@@ -120,8 +120,8 @@ const ANALYTICS_SECTIONS = [
 ]
 
 const MORE_SECTIONS = [
-  { href: '/dashboard/prospectus-builder', label: 'Prospectus Builder', icon: FileText },
-  { href: '/dashboard/cap-table', label: 'Cap Table', icon: BarChart3 },
+  { href: '/dashboard/prospectus-builder', label: 'Prospectus Builder', icon: FileText, tier: 'professional' },
+  { href: '/dashboard/cap-table', label: 'Cap Table', icon: BarChart3, tier: 'professional' },
 ]
 
 const BADGE_COLORS: Record<string, string> = {
