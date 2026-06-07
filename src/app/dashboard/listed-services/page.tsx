@@ -388,12 +388,9 @@ const modules: Module[] = [
 ]
 
 export default function ListedServicesPage() {
-  const [selectedModule, setSelectedModule] = useState<string | null>(null)
+  // const [selectedModule, setSelectedModule] = useState<string | null>(null)
   const [filterStatus, setFilterStatus] = useState<'all' | 'available' | 'beta' | 'coming-soon'>('all')
-
-  const handleModuleClick = useCallback((moduleId: string) => {
-    setSelectedModule(prev => prev === moduleId ? null : moduleId)
-  }, [])
+  const selectedModule = null  // Temporarily disabled
 
   const filteredModules = modules.filter(m => {
     if (filterStatus === 'all') return true
@@ -496,14 +493,10 @@ export default function ListedServicesPage() {
           {filteredModules.map((module, index) => (
             <div
               key={module.id}
-              onClick={() => handleModuleClick(module.id)}
+              onClick={() => {}}
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  handleModuleClick(module.id)
-                }
-              }}
+              onKeyDown={() => {}}
               style={{
                 background: 'var(--color-surface-primary)',
                 borderColor: selectedModule === module.id ? 'var(--color-accent)' : 'var(--color-border)',
@@ -574,8 +567,8 @@ export default function ListedServicesPage() {
           ))}
         </div>
 
-        {/* Detailed View */}
-        {selectedModuleData && (
+        {/* Detailed View - DISABLED TEMPORARILY */}
+        {false && selectedModuleData && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
