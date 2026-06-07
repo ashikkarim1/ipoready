@@ -130,7 +130,7 @@ export async function fetchMarketValuations(): Promise<{
   avgSaasIPOPop: number
   ipoAveragePricePerformance: number
 }> {
-  const cached = getCache('yahoo-valuations')
+  const cached = getCache<{ recentIPOCount: number; avgSaasIPOPop: number; ipoAveragePricePerformance: number }>('yahoo-valuations')
   if (cached) return cached
 
   try {

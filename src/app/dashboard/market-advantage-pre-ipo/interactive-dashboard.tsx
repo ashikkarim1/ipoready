@@ -108,12 +108,19 @@ export default function InteractiveDashboard({
   }
 
   const exportReport = () => {
+    const hasAdjustments =
+      adjustments.growthRate !== 0 ||
+      adjustments.margins !== 0 ||
+      adjustments.teamSize !== 0 ||
+      adjustments.fedRate !== 0 ||
+      adjustments.sentiment !== 0
+
     const report = {
       timestamp: new Date().toISOString(),
       company: companyMetrics,
       marketData,
       intelligence: snapshot,
-      adjustments: adjustments !== { growthRate: 0, margins: 0, teamSize: 0, fedRate: 0, sentiment: 0 }
+      adjustments: hasAdjustments
         ? { adjustments, adjusted: getAdjustedMetrics() }
         : null
     }

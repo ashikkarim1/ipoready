@@ -85,11 +85,12 @@ export async function captureSnapshot(companyId: string): Promise<DailySnapshot>
 
     // 3. Calculate all intelligence metrics
     const readinessScore = calculateIPOReadinessScore(companyMetrics, marketData)
-    const marketWindow = predictMarketWindow(companyMetrics, marketData)
-    const valuation60 = estimateValuation(companyMetrics, marketData, 'accelerate')
-    const valuation90 = estimateValuation(companyMetrics, marketData, 'growth')
-    const valuation180 = estimateValuation(companyMetrics, marketData, 'direct')
-    const competitiveAdv = calculateCompetitiveAdvantage(companyMetrics, comparables, marketData)
+    const marketWindow = predictMarketWindow(companyMetrics, marketData, readinessScore.score)
+    const baseValuation = estimateValuation(companyMetrics, marketData)
+    const valuation60 = baseValuation * 0.95 // 60-day discount
+    const valuation90 = baseValuation * 1.0 // 90-day baseline
+    const valuation180 = baseValuation * 1.08 // 180-day growth uplift
+    const competitiveAdv = calculateCompetitiveAdvantage(companyMetrics, comparables)
 
     // 4. Fetch previous day's snapshot for delta calculation
     const previousSnapshot = await getPreviousDaySnapshot(companyId)
@@ -124,15 +125,22 @@ export async function captureSnapshot(companyId: string): Promise<DailySnapshot>
       marketWindow60dayProbability: marketWindow._60days.successProbability,
       marketWindow90dayProbability: marketWindow._90days.successProbability,
       marketWindow180dayProbability: marketWindow._180days.successProbability,
-      readinessBreakdown: readinessScore.breakdown,
+      readinessBreakdown: {
+        growth: readinessScore.breakdown['growth'] ?? 0,
+        profitability: readinessScore.breakdown['profitabilityPath'] ?? 0,
+        unitEcon: readinessScore.breakdown['unitEconomics'] ?? 0,
+        team: readinessScore.breakdown['team'] ?? 0,
+        capital: readinessScore.breakdown['capital'] ?? 0,
+        marketConditions: readinessScore.breakdown['marketConditions'] ?? 0
+      },
       expectedValuation60day: valuation60,
       expectedValuation90day: valuation90,
       expectedValuation180day: valuation180,
       percentileRankOverall: competitiveAdv.overallScore,
-      percentileRankGrowth: competitiveAdv.dimensionScores.growth,
-      percentileRankMargin: competitiveAdv.dimensionScores.profitability,
-      percentileRankUnitEcon: competitiveAdv.dimensionScores.unitEconomics,
-      percentileRankRetention: competitiveAdv.dimensionScores.networkEffects,
+      percentileRankGrowth: competitiveAdv.dimensionScores['growth'] ?? 0,
+      percentileRankMargin: competitiveAdv.dimensionScores['profitability'] ?? 0,
+      percentileRankUnitEcon: competitiveAdv.dimensionScores['unitEconomics'] ?? 0,
+      percentileRankRetention: competitiveAdv.dimensionScores['networkEffects'] ?? 0,
       competitivePosition: competitiveAdv.competitivePosition,
       fedRate: marketData.fedRate,
       corpBondSpread: marketData.corpBondSpread,

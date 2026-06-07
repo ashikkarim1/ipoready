@@ -36,15 +36,15 @@ export async function checkMarketWindowClosing(
 
   const urgency =
     daysToTarget <= 60
-      ? { level: '🔴 CRITICAL' as const, severity: 5 }
+      ? { level: '🔴 CRITICAL' as const, severity: 5 as const }
       : daysToTarget <= 120
-        ? { level: '🟡 WARNING' as const, severity: 3 }
-        : { level: '🔵 INFO' as const, severity: 2 }
+        ? { level: '🟡 WARNING' as const, severity: 3 as const }
+        : { level: '🔵 INFO' as const, severity: 2 as const }
 
   return {
     type: 'market-window-closing',
     level: urgency.level,
-    severity: urgency.severity,
+    severity: urgency.severity as 1 | 2 | 3 | 4 | 5,
     title: `Market Window Closing: ${daysToTarget} Days Remaining`,
     description: `Your optimal IPO window closes in ${daysToTarget} days. Market conditions may shift unfavorably if you delay.`,
     recommendation:
@@ -80,7 +80,7 @@ export async function checkFedRateChange(
   return {
     type: 'fed-rate-change',
     level: '🟡 WARNING',
-    severity: 3,
+    severity: 3 as const,
     title: `Fed Rate ${direction.charAt(0).toUpperCase() + direction.slice(1)}: ${Math.abs(fedRateDelta).toFixed(2)}%`,
     description: `Fed funds rate ${direction} by ${deltaBps} basis points. This impacts your expected valuation.`,
     recommendation: `Your valuation estimate ${fedRateDelta > 0 ? 'decreased' : 'increased'} by approximately $${Math.abs(valuationImpact).toFixed(1)}M. Update financial forecasts and investor materials.`,
@@ -120,7 +120,7 @@ export async function checkSentimentShift(
   return {
     type: 'sentiment-shift',
     level: improved ? '✨ OPPORTUNITY' : '🟡 WARNING',
-    severity: improved ? 2 : 3,
+    severity: improved ? (2 as const) : (3 as const),
     title: `Market Sentiment: ${previousSentiment} → ${currentSentiment}`,
     description: `Investor sentiment has ${improved ? 'improved' : 'deteriorated'}. Market conditions for IPOs are now ${improved ? 'more' : 'less'} favorable.`,
     recommendation: improved
@@ -140,7 +140,7 @@ export async function checkCompetitorFiled(competitorName: string, sector: strin
   return {
     type: 'competitor-filed',
     level: '🟡 WARNING',
-    severity: 4,
+    severity: 4 as const,
     title: `Competitor Alert: ${competitorName} Filed S-1`,
     description: `${competitorName} (${sector}) has filed their prospectus. Market timing pressure increasing.`,
     recommendation: 'Review their filing for positioning differences. Consider accelerating your timeline to avoid crowded window.',
@@ -165,7 +165,7 @@ export async function checkReadinessJump(
   return {
     type: 'readiness-jump',
     level: '✨ OPPORTUNITY',
-    severity: 2,
+    severity: 2 as const,
     title: `Great Progress: Readiness +${delta} Points`,
     description: `Your IPO readiness jumped from ${previousScore} to ${currentScore}. You're gaining momentum.`,
     recommendation: 'Keep up this pace! You may be ready to accelerate your IPO timeline sooner than expected.',
@@ -187,7 +187,7 @@ export async function checkRunwayAlert(burnRate: number, estimatedCash: number):
   return {
     type: 'runway-alert',
     level: '🔴 CRITICAL',
-    severity: 5,
+    severity: 5 as const,
     title: `Runway Alert: ${Math.round(monthsRemaining)} Months Remaining`,
     description: `Your cash runway is declining. You need to reach profitability or raise capital soon.`,
     recommendation: `Focus on unit economics improvements and cost structure review. Consider filing earlier to access public markets for capital.`,
@@ -207,7 +207,7 @@ export async function checkIPOCalendarSpike(weeklyIPOVolume: number): Promise<Al
   return {
     type: 'ipo-calendar-spike',
     level: '🟡 WARNING',
-    severity: 2,
+    severity: 2 as const,
     title: `IPO Calendar Spike: ${weeklyIPOVolume} Filings This Week`,
     description: `Market is crowded with ${weeklyIPOVolume} SaaS companies filing this week. Differentiation becomes critical.`,
     recommendation: 'Emphasize your unique competitive advantages and market position.',
