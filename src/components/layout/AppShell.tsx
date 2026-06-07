@@ -27,7 +27,7 @@ const NAV_GROUPS = [
       { href: '/dashboard',            icon: LayoutDashboard, label: 'Dashboard',         badge: null,   key: 'dashboard'       },
       { href: '/dashboard/investor-readiness/intelligence-hub', icon: Zap, label: 'Intelligence Hub', badge: null, key: 'intelligence-hub' },
       { href: '/dashboard/ipo-journey', icon: Map,            label: 'IPO Journey™',      badge: '✨',   key: 'ipo-journey'     },
-      { href: '/dashboard/market-advantage-pre-ipo', icon: TrendingUp, label: 'Market Advantage (Pre-IPO)', badge: '✨', key: 'market-advantage-pre-ipo', tier: 'professional' },
+      { href: '/dashboard/market-advantage-pre-ipo', icon: TrendingUp, label: 'Market Advantage', badge: '✨', key: 'market-advantage-pre-ipo', tier: 'professional' },
     ],
   },
   {
