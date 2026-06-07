@@ -490,31 +490,21 @@ export default function ListedServicesPage() {
         {/* Module Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {filteredModules.map((module, index) => (
-            <motion.div
+            <div
               key={module.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                console.log('Card clicked:', module.id, 'Currently selected:', selectedModule)
-                setSelectedModule(selectedModule === module.id ? null : module.id)
-              }}
+              onClick={() => setSelectedModule(selectedModule === module.id ? null : module.id)}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault()
-                  console.log('Card keyboard pressed:', module.id)
                   setSelectedModule(selectedModule === module.id ? null : module.id)
                 }
               }}
-              style={
-                selectedModule === module.id
-                  ? { background: 'var(--color-surface-primary)', borderColor: 'var(--color-accent)', boxShadow: '0 4px 12px rgba(232, 49, 42, 0.1)' }
-                  : { background: 'var(--color-surface-primary)', borderColor: 'var(--color-border)' }
-              }
+              style={{
+                background: 'var(--color-surface-primary)',
+                borderColor: selectedModule === module.id ? 'var(--color-accent)' : 'var(--color-border)',
+                boxShadow: selectedModule === module.id ? '0 4px 12px rgba(232, 49, 42, 0.1)' : 'none'
+              }}
               className="text-left p-6 rounded-xl border transition-all group cursor-pointer hover:border-gray-400 hover:shadow-sm"
             >
               <div className="flex items-start justify-between mb-4">
@@ -576,7 +566,7 @@ export default function ListedServicesPage() {
                 </span>
                 <ArrowRight className="w-4 h-4" />
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
