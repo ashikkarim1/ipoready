@@ -782,173 +782,173 @@ Best regards,
             </button>
           </div>
         )}
-
-        {/* ADD INVESTOR MODAL */}
-        <AnimatePresence>
-          {showAddInvestor && (
-            <>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setShowAddInvestor(false)}
-                style={{
-                  position: 'fixed',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  background: 'rgba(0, 0, 0, 0.5)',
-                  zIndex: 40
-                }}
-              />
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                style={{
-                  position: 'fixed',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  background: '#FFFFFF',
-                  borderRadius: '0.75rem',
-                  border: '1px solid #E5E4E0',
-                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-                  maxWidth: '400px',
-                  width: '90%',
-                  zIndex: 50
-                }}
-              >
-                <div style={{ padding: '1rem', borderBottom: '1px solid #E5E4E0' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
-                      Add Investor to CRM
-                    </h2>
-                    <button
-                      onClick={() => setShowAddInvestor(false)}
-                      style={{
-                        background: 'transparent',
-                        border: 'none',
-                        cursor: 'pointer',
-                        padding: '0.5rem'
-                      }}
-                    >
-                      <X className="w-5 h-5" style={{ color: '#717171' }} />
-                    </button>
-                  </div>
-                  <p style={{ fontSize: '0.875rem', color: '#717171', margin: 0 }}>
-                    Create a custom investor entry to track in your CRM pipeline.
-                  </p>
-                </div>
-
-                <div style={{ padding: '1rem' }}>
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
-                      Investor Name *
-                    </label>
-                    <input
-                      type="text"
-                      value={newInvestorName}
-                      onChange={(e) => setNewInvestorName(e.target.value)}
-                      placeholder="e.g., Benchmark Capital"
-                      style={{
-                        width: '100%',
-                        padding: '0.75rem',
-                        fontSize: '0.875rem',
-                        border: '1px solid #E5E4E0',
-                        borderRadius: '0.375rem',
-                        boxSizing: 'border-box',
-                        color: '#1A1A1A'
-                      }}
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
-                      Investor Type
-                    </label>
-                    <select
-                      value={newInvestorType}
-                      onChange={(e) => setNewInvestorType(e.target.value as Investor['type'])}
-                      style={{
-                        width: '100%',
-                        padding: '0.75rem',
-                        fontSize: '0.875rem',
-                        border: '1px solid #E5E4E0',
-                        borderRadius: '0.375rem',
-                        boxSizing: 'border-box',
-                        color: '#1A1A1A',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      <option value="VC">Venture Capital</option>
-                      <option value="PE">Private Equity</option>
-                      <option value="Growth">Growth Equity</option>
-                      <option value="Strategic">Strategic</option>
-                    </select>
-                  </div>
-
-                  <div style={{ marginBottom: '2rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
-                      Check Size (Optional)
-                    </label>
-                    <input
-                      type="text"
-                      value={newInvestorCheckSize}
-                      onChange={(e) => setNewInvestorCheckSize(e.target.value)}
-                      placeholder="e.g., $5M-$50M"
-                      style={{
-                        width: '100%',
-                        padding: '0.75rem',
-                        fontSize: '0.875rem',
-                        border: '1px solid #E5E4E0',
-                        borderRadius: '0.375rem',
-                        boxSizing: 'border-box',
-                        color: '#1A1A1A'
-                      }}
-                    />
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                    <button
-                      onClick={() => setShowAddInvestor(false)}
-                      style={{
-                        padding: '0.75rem 1rem',
-                        background: '#FFFFFF',
-                        color: '#1A1A1A',
-                        border: '1px solid #E5E4E0',
-                        borderRadius: '0.375rem',
-                        fontSize: '0.875rem',
-                        fontWeight: 600,
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={handleAddCustomInvestor}
-                      disabled={!newInvestorName.trim()}
-                      style={{
-                        padding: '0.75rem 1rem',
-                        background: newInvestorName.trim() ? '#E8312A' : '#CCCCCC',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        borderRadius: '0.375rem',
-                        fontSize: '0.875rem',
-                        fontWeight: 600,
-                        cursor: newInvestorName.trim() ? 'pointer' : 'not-allowed'
-                      }}
-                    >
-                      Add Investor
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
       </div>
+
+      {/* ADD INVESTOR MODAL - Outside split-view-container for proper fixed positioning */}
+      <AnimatePresence>
+        {showAddInvestor && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowAddInvestor(false)}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'rgba(0, 0, 0, 0.5)',
+                zIndex: 40
+              }}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              style={{
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                background: '#FFFFFF',
+                borderRadius: '0.75rem',
+                border: '1px solid #E5E4E0',
+                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                maxWidth: '400px',
+                width: '90%',
+                zIndex: 50
+              }}
+            >
+              <div style={{ padding: '1rem', borderBottom: '1px solid #E5E4E0' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
+                    Add Investor to CRM
+                  </h2>
+                  <button
+                    onClick={() => setShowAddInvestor(false)}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: '0.5rem'
+                    }}
+                  >
+                    <X className="w-5 h-5" style={{ color: '#717171' }} />
+                  </button>
+                </div>
+                <p style={{ fontSize: '0.875rem', color: '#717171', margin: 0 }}>
+                  Create a custom investor entry to track in your CRM pipeline.
+                </p>
+              </div>
+
+              <div style={{ padding: '1rem' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
+                    Investor Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={newInvestorName}
+                    onChange={(e) => setNewInvestorName(e.target.value)}
+                    placeholder="e.g., Benchmark Capital"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      fontSize: '0.875rem',
+                      border: '1px solid #E5E4E0',
+                      borderRadius: '0.375rem',
+                      boxSizing: 'border-box',
+                      color: '#1A1A1A'
+                    }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
+                    Investor Type
+                  </label>
+                  <select
+                    value={newInvestorType}
+                    onChange={(e) => setNewInvestorType(e.target.value as Investor['type'])}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      fontSize: '0.875rem',
+                      border: '1px solid #E5E4E0',
+                      borderRadius: '0.375rem',
+                      boxSizing: 'border-box',
+                      color: '#1A1A1A',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <option value="VC">Venture Capital</option>
+                    <option value="PE">Private Equity</option>
+                    <option value="Growth">Growth Equity</option>
+                    <option value="Strategic">Strategic</option>
+                  </select>
+                </div>
+
+                <div style={{ marginBottom: '2rem' }}>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1A1A1A', marginBottom: '0.5rem' }}>
+                    Check Size (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={newInvestorCheckSize}
+                    onChange={(e) => setNewInvestorCheckSize(e.target.value)}
+                    placeholder="e.g., $5M-$50M"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      fontSize: '0.875rem',
+                      border: '1px solid #E5E4E0',
+                      borderRadius: '0.375rem',
+                      boxSizing: 'border-box',
+                      color: '#1A1A1A'
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <button
+                    onClick={() => setShowAddInvestor(false)}
+                    style={{
+                      padding: '0.75rem 1rem',
+                      background: '#FFFFFF',
+                      color: '#1A1A1A',
+                      border: '1px solid #E5E4E0',
+                      borderRadius: '0.375rem',
+                      fontSize: '0.875rem',
+                      fontWeight: 600,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddCustomInvestor}
+                    disabled={!newInvestorName.trim()}
+                    style={{
+                      padding: '0.75rem 1rem',
+                      background: newInvestorName.trim() ? '#E8312A' : '#CCCCCC',
+                      color: '#FFFFFF',
+                      border: 'none',
+                      borderRadius: '0.375rem',
+                      fontSize: '0.875rem',
+                      fontWeight: 600,
+                      cursor: newInvestorName.trim() ? 'pointer' : 'not-allowed'
+                    }}
+                  >
+                    Add Investor
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* OUTREACH MODAL - Outside split-view-container for proper fixed positioning */}
       <AnimatePresence>
