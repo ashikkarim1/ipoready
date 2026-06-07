@@ -406,8 +406,8 @@ export default function ListedServicesPage() {
     <div style={{ background: '#F7F6F4', minHeight: '100vh' }} suppressHydrationWarning>
       {/* Header */}
       <div style={{ borderBottom: '1px solid var(--color-border)', background: 'var(--color-surface-primary)', backdropFilter: 'blur(4px)' }} className="sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 space-y-4">
-          <div className="pt-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 space-y-3">
+          <div>
             <h1 style={{ color: 'var(--color-text-primary)' }} className="text-2xl sm:text-3xl font-bold mb-1">Listed Services OS</h1>
             <p style={{ color: 'var(--color-text-secondary)' }} className="text-sm sm:text-base">
               The intelligence layer for public company leaders
@@ -415,7 +415,7 @@ export default function ListedServicesPage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pb-8 pt-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pb-6 pt-2">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
