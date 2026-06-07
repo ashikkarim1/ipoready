@@ -30,7 +30,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen" style={{ colorScheme: 'light' }}>
       <SimpleRocket />
-      <Header />
+      <Header onDemoClick={() => setShowDemoModal(true)} />
 
       {/* Hero Section */}
       <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 max-w-7xl mx-auto">

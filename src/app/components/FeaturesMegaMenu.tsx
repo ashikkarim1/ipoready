@@ -5,7 +5,12 @@ import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { ChevronDown, CheckSquare, BookOpen, Calendar, LogOut, Settings } from 'lucide-react'
 
-export function FeaturesMegaMenu({ isSticky = false }: { isSticky?: boolean } = {}) {
+interface FeaturesMegaMenuProps {
+  isSticky?: boolean
+  onDemoClick?: () => void
+}
+
+export function FeaturesMegaMenu({ isSticky = false, onDemoClick }: FeaturesMegaMenuProps = {}) {
   const [accountOpen, setAccountOpen] = useState(false)
   const { data: session } = useSession()
 
@@ -38,17 +43,15 @@ export function FeaturesMegaMenu({ isSticky = false }: { isSticky?: boolean } = 
       </div>
 
       {/* Middle - Schedule A Demo Button */}
-      <Link
-        href="https://calendly.com/ipoready"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center gap-1 px-3 md:px-4 py-2 md:py-2.5 rounded-full text-sm md:text-sm font-semibold text-white transition-all hover:opacity-90 whitespace-nowrap"
+      <button
+        onClick={onDemoClick}
+        className="flex items-center gap-1 px-3 md:px-4 py-2 md:py-2.5 rounded-full text-sm md:text-sm font-semibold text-white transition-all hover:opacity-90 whitespace-nowrap cursor-pointer"
         style={{ background: '#E8312A', minHeight: '40px', display: 'inline-flex', alignItems: 'center' }}
       >
         <Calendar className="w-4 h-4 md:w-4 md:h-4" />
         <span className="hidden md:inline">Schedule Demo</span>
         <span className="md:hidden">Demo</span>
-      </Link>
+      </button>
 
       {/* Right side - Auth CTAs (completely separated) */}
       <div className="flex items-center gap-1 md:gap-3 ml-auto" style={{ marginRight: '0.5rem' }}>

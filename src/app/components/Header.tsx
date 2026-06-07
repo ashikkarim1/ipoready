@@ -5,14 +5,18 @@ import { useSession } from 'next-auth/react'
 import { Rocket, HelpCircle } from 'lucide-react'
 import { FeaturesMegaMenu } from './FeaturesMegaMenu'
 
+interface HeaderProps {
+  onDemoClick?: () => void
+}
+
 /**
  * Header component for public pages (pricing, resources, etc.)
  * Includes sticky positioning, proper z-index, and logo
  * Only shown when user is NOT authenticated
  */
-export function Header() {
+export function Header({ onDemoClick }: HeaderProps = {}) {
   const { data: session } = useSession()
-  
+
   // Don't show header on dashboard pages when authenticated
   if (session) return null
 
@@ -58,7 +62,7 @@ export function Header() {
         </Link>
 
         {/* Navigation Menu */}
-        <FeaturesMegaMenu isSticky={true} />
+        <FeaturesMegaMenu isSticky={true} onDemoClick={onDemoClick} />
 
         {/* Help Icon */}
         <div
