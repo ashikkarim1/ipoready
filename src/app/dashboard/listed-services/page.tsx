@@ -406,16 +406,16 @@ export default function ListedServicesPage() {
     <div style={{ background: '#F7F6F4', minHeight: '100vh' }} suppressHydrationWarning>
       {/* Header */}
       <div style={{ borderBottom: '1px solid var(--color-border)', background: 'var(--color-surface-primary)', backdropFilter: 'blur(4px)' }} className="sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 space-y-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 space-y-4 sm:space-y-5">
           <div>
-            <h1 style={{ color: 'var(--color-text-primary)' }} className="text-2xl sm:text-3xl font-bold mb-1">Listed Services OS</h1>
+            <h1 style={{ color: 'var(--color-text-primary)' }} className="text-2xl sm:text-3xl font-bold mb-2">Listed Services OS</h1>
             <p style={{ color: 'var(--color-text-secondary)' }} className="text-sm sm:text-base">
               The intelligence layer for public company leaders
             </p>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pb-6 pt-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-5 pb-8 sm:pb-10 pt-4 sm:pt-6">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -460,9 +460,9 @@ export default function ListedServicesPage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 py-20 sm:py-24">
         {/* Filter Tabs */}
-        <div className="flex flex-wrap gap-3 mb-16 mt-4" style={{ rowGap: '12px' }}>
+        <div className="flex flex-wrap gap-4 mb-20 mt-6" style={{ rowGap: '16px' }}>
           {(['all', 'available', 'beta', 'coming-soon'] as const).map((status, index) => (
             <motion.button
               key={status}
@@ -488,7 +488,7 @@ export default function ListedServicesPage() {
         </div>
 
         {/* Module Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
           {filteredModules.map((module, index) => (
             <div
               key={module.id}
@@ -578,7 +578,7 @@ export default function ListedServicesPage() {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
               style={{ background: 'var(--color-surface-primary)', borderColor: 'var(--color-border)' }}
-              className="border rounded-xl p-6 sm:p-8 mb-12 shadow-card"
+              className="border rounded-xl p-8 sm:p-10 mb-16 shadow-card"
             >
               <div className="flex items-center gap-4 mb-8">
                 <motion.div
@@ -718,10 +718,10 @@ export default function ListedServicesPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           style={{ background: 'var(--color-info-soft)', borderColor: 'var(--color-info-medium)' }}
-          className="rounded-xl border p-6 sm:p-8"
+          className="rounded-xl border p-8 sm:p-10 mt-8"
         >
-          <h2 style={{ color: 'var(--color-text-primary)' }} className="text-xl sm:text-2xl font-bold mb-6">Intelligence vs. Compliance</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <h2 style={{ color: 'var(--color-text-primary)' }} className="text-xl sm:text-2xl font-bold mb-8">Intelligence vs. Compliance</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -787,8 +787,12 @@ export default function ListedServicesPage() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              // Open early access modal or navigate to request page
+              window.location.href = '/early-access-request'
+            }}
             style={{ background: 'var(--color-accent)', color: 'var(--color-text-inverse)' }}
-            className="px-6 sm:px-8 py-2.5 sm:py-3 font-bold rounded-lg transition-all hover:opacity-90"
+            className="px-8 sm:px-10 py-3 sm:py-3.5 font-bold rounded-lg transition-all hover:opacity-90"
           >
             Request Early Access
           </motion.button>
