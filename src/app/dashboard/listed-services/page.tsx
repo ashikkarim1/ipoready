@@ -575,8 +575,7 @@ export default function ListedServicesPage() {
         </div>
 
         {/* Detailed View */}
-        <AnimatePresence>
-          {selectedModuleData && (
+        {selectedModuleData && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -716,7 +715,6 @@ export default function ListedServicesPage() {
               </div>
             </motion.div>
           )}
-        </AnimatePresence>
 
         {/* Value Prop */}
         <motion.div
