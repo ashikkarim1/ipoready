@@ -315,11 +315,9 @@ export default function DashboardPage() {
   const earnedXP = MILESTONES.filter(m => m.earned).reduce((s, m) => s + m.xp, 0)
   const level = Math.floor(earnedXP / 500) + 1
 
-  // ─── Auth guards ─────────────────────────────────────────────────────────────
-  if (sessionStatus === 'loading' || sessionStatus === 'unauthenticated') return null
-
   // ─── Skeleton loading state ───────────────────────────────────────────────────
-  const pageLoading = dashLoading || statsLoading
+  // Show skeleton for: auth loading, unauthenticated, or data loading
+  const pageLoading = sessionStatus === 'loading' || sessionStatus === 'unauthenticated' || dashLoading || statsLoading
   if (pageLoading) {
     const shimmerStyle: React.CSSProperties = {
       background: 'linear-gradient(90deg, #E5E4E0 25%, #EDECE8 50%, #E5E4E0 75%)',
