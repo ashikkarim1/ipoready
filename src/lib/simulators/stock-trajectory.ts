@@ -60,7 +60,7 @@ function extractPeerPerformance(
   )
 
   return {
-    firstDayPop: filtered.map((p) => p.first_day_pop_percentage || 0),
+    firstDayPop: filtered.map((p) => p.firstDayPop || 0),
     day30: filtered.map((p) => p.day_30_performance_percentage || 0),
     day90: filtered.map((p) => p.day_90_performance_percentage || 0),
     day180: filtered.map((p) => p.day_180_performance_percentage || 0),
