@@ -94,22 +94,19 @@ export async function GET() {
 
   // 7. Prospectus builder status
   const prospectusRows = await sql`
-    SELECT 
+    SELECT
       id,
-      status,
-      completion_pct,
-      sections_complete,
-      sections_total
+      status
     FROM prospectuses
     WHERE company_id = ${companyId}
     ORDER BY created_at DESC
     LIMIT 1
-  ` as { id: string; status: string; completion_pct: number; sections_complete: number; sections_total: number }[]
-  
+  ` as { id: string; status: string }[]
+
   const prospectusStatus = prospectusRows[0]?.status ?? null
-  const prospectusCompletion = prospectusRows[0]?.completion_pct ?? 0
-  const prospectusSectionsComplete = prospectusRows[0]?.sections_complete ?? 0
-  const prospectusSectionsTotal = prospectusRows[0]?.sections_total ?? 0
+  const prospectusCompletion = 0
+  const prospectusSectionsComplete = 0
+  const prospectusSectionsTotal = 0
 
   // 8. Current phase + phase progress from tasks
   const phaseRows = await sql`
