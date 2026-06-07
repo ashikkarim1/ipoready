@@ -92,7 +92,7 @@ export default function IPOSimulator() {
                         className="w-full rounded-lg border border-slate-200 p-3 text-left text-sm transition-all hover:border-accent hover:bg-slate-50"
                       >
                         <div className="font-medium text-nav">{scenario.name}</div>
-                        <div className="text-xs text-text-muted">{scenario.scenario_type}</div>
+                        <div className="text-xs text-text-muted">{new Date(scenario.createdAt).toLocaleDateString()}</div>
                       </button>
                     ))}
                   </div>
