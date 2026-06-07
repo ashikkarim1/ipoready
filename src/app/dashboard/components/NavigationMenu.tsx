@@ -112,6 +112,14 @@ const LISTED_SERVICES_SECTIONS = [
     badge: 'lime',
     color: 'lime',
   },
+  {
+    href: '/dashboard/listed-dailies',
+    label: 'Listed Dailies',
+    icon: TrendingUp,
+    tier: 'enterprise',
+    badge: 'sky',
+    color: 'sky',
+  },
 ]
 
 const ANALYTICS_SECTIONS = [
@@ -136,6 +144,7 @@ const BADGE_COLORS: Record<string, string> = {
   teal: 'bg-teal-100 text-teal-800 border border-teal-300',
   cyan: 'bg-cyan-100 text-cyan-800 border border-cyan-300',
   lime: 'bg-lime-100 text-lime-800 border border-lime-300',
+  sky: 'bg-sky-100 text-sky-800 border border-sky-300',
 }
 
 interface NavItemProps {
