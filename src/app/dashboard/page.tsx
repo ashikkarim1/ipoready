@@ -694,24 +694,47 @@ export default function DashboardPage() {
         </div>
 
         <div className="space-y-5">
-          {/* auditus.ai */}
-          <div className="card p-6" style={{ background: 'var(--color-error-soft)', borderColor: '#E8312A30' }}>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#E8312A15' }}>
-                <Zap className="w-4 h-4 text-accent" />
+          {/* Audit + Panic Mode buttons */}
+          <div className="grid grid-cols-2 gap-4">
+            {/* auditus.ai */}
+            <div className="card p-6" style={{ background: 'var(--color-error-soft)', borderColor: '#E8312A30' }}>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#E8312A15' }}>
+                  <Zap className="w-4 h-4 text-accent" />
+                </div>
+                <div>
+                  <p className="text-nav font-semibold text-sm">Need to prepare for an audit?</p>
+                  <p className="text-accent text-xs font-medium">auditus.ai</p>
+                </div>
               </div>
-              <div>
-                <p className="text-nav font-semibold text-sm">Need to prepare for an audit?</p>
-                <p className="text-accent text-xs font-medium">auditus.ai</p>
-              </div>
+              <p className="text-text-muted text-xs mb-4 leading-relaxed">
+                Get your financials audit-ready before your auditors engage. Companies that prepare in advance reduce audit fees by 20–40% and avoid last-minute surprises.
+              </p>
+              <a href="https://auditus.ai" target="_blank"
+                className="flex items-center gap-2 text-accent text-xs font-semibold hover:text-accent-deep transition-colors">
+                Start preparing at auditus.ai <ExternalLink className="w-3 h-3" />
+              </a>
             </div>
-            <p className="text-text-muted text-xs mb-4 leading-relaxed">
-              Get your financials audit-ready before your auditors engage. Companies that prepare in advance reduce audit fees by 20–40% and avoid last-minute surprises.
-            </p>
-            <a href="https://auditus.ai" target="_blank"
-              className="flex items-center gap-2 text-accent text-xs font-semibold hover:text-accent-deep transition-colors">
-              Start preparing at auditus.ai <ExternalLink className="w-3 h-3" />
-            </a>
+
+            {/* Panic Mode */}
+            <Link href="/dashboard/emergency-assessment"
+              className="card p-6 hover:shadow-md transition-all" style={{ background: 'var(--color-error-soft)', borderColor: '#E8312A30', cursor: 'pointer' }}>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#E8312A15' }}>
+                  <AlertOctagon className="w-4 h-4 text-accent" />
+                </div>
+                <div>
+                  <p className="text-nav font-semibold text-sm">Need to pause & recalibrate?</p>
+                  <p className="text-accent text-xs font-medium">Panic Mode</p>
+                </div>
+              </div>
+              <p className="text-text-muted text-xs mb-4 leading-relaxed">
+                Get a real-time assessment of your IPO status, key blockers, and AI-powered guidance to refocus your efforts.
+              </p>
+              <div className="flex items-center gap-2 text-accent text-xs font-semibold hover:text-accent-deep">
+                Get Your Assessment <ExternalLink className="w-3 h-3" />
+              </div>
+            </Link>
           </div>
 
           {/* Live stats: team, docs, overdue */}
