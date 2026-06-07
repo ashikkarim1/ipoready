@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { AppShell } from '@/components/layout/AppShell'
 import {
   Target, Users, TrendingUp, DollarSign, CheckCircle2, AlertCircle,
   Filter, Search, Star, MapPin, Building2, BarChart3, X, Mail, Download,
@@ -324,16 +323,15 @@ Best regards,
   }, [isDragging])
 
   return (
-    <AppShell>
-      <div
-        id="split-view-container"
-        style={{
-          minHeight: '100vh',
-          background: '#F7F6F4',
-          display: 'flex',
-          overflow: 'hidden'
-        }}
-      >
+    <div
+      id="split-view-container"
+      style={{
+        minHeight: '100vh',
+        background: '#F7F6F4',
+        display: 'flex',
+        overflow: 'hidden'
+      }}
+    >
 
         {/* CRM SIDEBAR */}
         {showCRM && (
@@ -1415,6 +1413,5 @@ Best regards,
           )}
         </AnimatePresence>
       </div>
-    </AppShell>
   )
 }
