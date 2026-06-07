@@ -516,18 +516,6 @@ export default function ListedServicesPage() {
                   : { background: 'var(--color-surface-primary)', borderColor: 'var(--color-border)' }
               }
               className="text-left p-6 rounded-xl border transition-all group cursor-pointer hover:border-gray-400 hover:shadow-sm"
-              onMouseEnter={(e) => {
-                if (selectedModule !== module.id) {
-                  e.currentTarget.style.borderColor = 'var(--color-border-dark)'
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)'
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (selectedModule !== module.id) {
-                  e.currentTarget.style.borderColor = 'var(--color-border)'
-                  e.currentTarget.style.boxShadow = 'none'
-                }
-              }}
             >
               <div className="flex items-start justify-between mb-4">
                 <div className={`p-3 rounded-lg bg-gradient-to-br ${module.color.gradient} text-white`}>
