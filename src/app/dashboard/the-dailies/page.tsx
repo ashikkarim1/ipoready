@@ -255,16 +255,23 @@ export default function TheDailiesPage() {
   const currentData = deltaData[timePeriod]
 
   return (
-    <div className="min-h-screen bg-white">
+    <div style={{ background: 'var(--color-surface-primary)', minHeight: '100vh' }}>
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-10">
+      <div
+        className="sticky top-0 z-10 border-b"
+        style={{ borderColor: 'var(--color-border)' }}
+      >
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-start justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 mb-2">The Dailies</h1>
-              <p className="text-slate-600">Track your IPO preparation progress and recent changes</p>
+              <h1 className="h2 mb-2" style={{ color: 'var(--color-text-primary)' }}>
+                The Dailies
+              </h1>
+              <p className="body-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                Track your IPO preparation progress and recent changes
+              </p>
             </div>
-            <TrendingUp className="w-8 h-8 text-accent" />
+            <TrendingUp className="w-8 h-8" style={{ color: 'var(--color-accent)' }} />
           </div>
 
           {/* Time Period Tabs */}
@@ -275,11 +282,20 @@ export default function TheDailiesPage() {
                 onClick={() => setTimePeriod(period)}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`px-5 py-2.5 rounded-lg font-medium text-sm transition-all border ${
+                className="px-5 py-2.5 rounded-lg font-medium text-sm transition-all border label-sm"
+                style={
                   timePeriod === period
-                    ? 'bg-accent text-white border-accent'
-                    : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                }`}
+                    ? {
+                        background: 'var(--color-accent)',
+                        color: 'var(--color-text-inverse)',
+                        borderColor: 'var(--color-accent)',
+                      }
+                    : {
+                        background: 'var(--color-surface-primary)',
+                        color: 'var(--color-text-secondary)',
+                        borderColor: 'var(--color-border)',
+                      }
+                }
               >
                 {period === 'day' && 'Last 24 Hours'}
                 {period === 'week' && 'Last 7 Days'}
@@ -306,7 +322,11 @@ export default function TheDailiesPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 onClick={() => setExpandedMetric(isExpanded ? null : metric.id)}
-                className="bg-white border border-slate-200 rounded-xl p-6 hover:border-slate-300 cursor-pointer transition-all"
+                className="rounded-xl p-6 cursor-pointer transition-all border"
+                style={{
+                  background: 'var(--color-surface-primary)',
+                  borderColor: 'var(--color-border)',
+                }}
               >
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
@@ -314,37 +334,59 @@ export default function TheDailiesPage() {
                     <div
                       className="w-10 h-10 rounded-lg flex items-center justify-center"
                       style={{
-                        background: isDeltaPositive ? '#EBF9F4' : '#FEF3E1',
+                        background: isDeltaPositive
+                          ? 'rgba(45, 122, 95, 0.1)'
+                          : 'rgba(180, 83, 9, 0.1)',
                       }}
                     >
                       <Icon
                         className="w-5 h-5"
                         style={{
-                          color: isDeltaPositive ? '#2D7A5F' : '#B45309',
+                          color: isDeltaPositive
+                            ? 'var(--color-success)'
+                            : 'var(--color-warning)',
                         }}
                       />
                     </div>
-                    <p className="text-xs uppercase tracking-wider font-semibold text-slate-500">
+                    <p
+                      className="label-xs uppercase tracking-wider"
+                      style={{ color: 'var(--color-text-muted)' }}
+                    >
                       {metric.label}
                     </p>
                   </div>
                   {isExpanded ? (
-                    <ChevronUp className="w-5 h-5 text-slate-400" />
+                    <ChevronUp
+                      className="w-5 h-5"
+                      style={{ color: 'var(--color-text-muted)' }}
+                    />
                   ) : (
-                    <ChevronDown className="w-5 h-5 text-slate-400" />
+                    <ChevronDown
+                      className="w-5 h-5"
+                      style={{ color: 'var(--color-text-muted)' }}
+                    />
                   )}
                 </div>
 
                 {/* Main Value */}
                 <div className="mb-4">
-                  <p className="text-3xl font-bold text-slate-900 mb-2">{metric.value}</p>
+                  <p
+                    className="text-3xl font-bold mb-2"
+                    style={{ color: 'var(--color-text-primary)' }}
+                  >
+                    {metric.value}
+                  </p>
 
                   {/* Delta Badge */}
                   <div
-                    className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-sm font-semibold"
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-lg label-sm"
                     style={{
-                      background: isDeltaPositive ? '#EBF9F4' : '#FEF3E1',
-                      color: isDeltaPositive ? '#2D7A5F' : '#B45309',
+                      background: isDeltaPositive
+                        ? 'rgba(45, 122, 95, 0.1)'
+                        : 'rgba(180, 83, 9, 0.1)',
+                      color: isDeltaPositive
+                        ? 'var(--color-success)'
+                        : 'var(--color-warning)',
                     }}
                   >
                     {isDeltaPositive ? (
@@ -365,9 +407,12 @@ export default function TheDailiesPage() {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="pt-4 border-t border-slate-100 mt-4"
+                    className="pt-4 border-t mt-4"
+                    style={{ borderColor: 'var(--color-border)' }}
                   >
-                    <p className="text-sm text-slate-600">{metric.description}</p>
+                    <p className="caption" style={{ color: 'var(--color-text-secondary)' }}>
+                      {metric.description}
+                    </p>
                   </motion.div>
                 )}
               </motion.div>
@@ -376,44 +421,55 @@ export default function TheDailiesPage() {
         </div>
 
         {/* Recent Changes */}
-        <div className="bg-white border border-slate-200 rounded-xl p-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">Recent Changes</h2>
+        <div
+          className="rounded-xl p-8 border"
+          style={{
+            background: 'var(--color-surface-primary)',
+            borderColor: 'var(--color-border)',
+          }}
+        >
+          <h2 className="h3 mb-6" style={{ color: 'var(--color-text-primary)' }}>
+            Recent Changes
+          </h2>
 
           <div className="space-y-4">
             {currentData.changes.map((change, index) => {
-              const categoryColors: Record<string, { bg: string; text: string; border: string }> = {
+              const categoryColors: Record<
+                string,
+                { bg: string; text: string; border: string }
+              > = {
                 task: {
-                  bg: '#EBF9F4',
+                  bg: 'rgba(45, 122, 95, 0.1)',
                   text: '#2D7A5F',
                   border: '#2D7A5F',
                 },
                 document: {
-                  bg: '#EBF5FF',
+                  bg: 'rgba(29, 78, 216, 0.1)',
                   text: '#1D4ED8',
                   border: '#1D4ED8',
                 },
                 regulatory: {
-                  bg: '#FEF3E1',
+                  bg: 'rgba(180, 83, 9, 0.1)',
                   text: '#B45309',
                   border: '#B45309',
                 },
                 governance: {
-                  bg: '#F3E8FF',
+                  bg: 'rgba(126, 34, 206, 0.1)',
                   text: '#7E22CE',
                   border: '#7E22CE',
                 },
                 financial: {
-                  bg: '#ECFDF5',
+                  bg: 'rgba(5, 150, 105, 0.1)',
                   text: '#059669',
                   border: '#059669',
                 },
                 advisory: {
-                  bg: '#DBEAFE',
+                  bg: 'rgba(2, 132, 199, 0.1)',
                   text: '#0284C7',
                   border: '#0284C7',
                 },
                 milestone: {
-                  bg: '#FEE2E2',
+                  bg: 'rgba(220, 38, 38, 0.1)',
                   text: '#DC2626',
                   border: '#DC2626',
                 },
@@ -428,7 +484,8 @@ export default function TheDailiesPage() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="flex gap-4 pb-4 border-b border-slate-100 last:border-0 last:pb-0"
+                  className="flex gap-4 pb-4 border-b last:border-0 last:pb-0"
+                  style={{ borderColor: 'var(--color-border)' }}
                 >
                   {/* Timeline Indicator */}
                   <div className="flex flex-col items-center gap-2 pt-1">
@@ -436,26 +493,33 @@ export default function TheDailiesPage() {
                       className="w-2 h-2 rounded-full"
                       style={{ background: categoryColor.text }}
                     />
-                    <div className="flex-1 w-0.5" style={{ background: '#E5E4E0' }} />
+                    <div
+                      className="flex-1 w-0.5"
+                      style={{ background: 'var(--color-border)' }}
+                    />
                   </div>
 
                   {/* Content */}
                   <div className="flex-1 pt-0.5">
                     <div className="flex items-center gap-3 mb-1">
-                      <span className="text-xs font-semibold text-slate-500">
+                      <span className="caption-sm" style={{ color: 'var(--color-text-muted)' }}>
                         {change.timestamp}
                       </span>
                       <span
-                        className="text-xs font-bold px-2 py-1 rounded-full"
+                        className="label-xs"
                         style={{
                           background: categoryColor.bg,
                           color: categoryColor.text,
+                          padding: '0.5rem 0.75rem',
+                          borderRadius: '0.375rem',
                         }}
                       >
                         {change.action}
                       </span>
                     </div>
-                    <p className="text-slate-700 font-medium">{change.detail}</p>
+                    <p className="body-sm" style={{ color: 'var(--color-text-primary)' }}>
+                      {change.detail}
+                    </p>
                   </div>
                 </motion.div>
               )
@@ -468,13 +532,22 @@ export default function TheDailiesPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="mt-16 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-8"
+          className="mt-16 rounded-xl p-8 border"
+          style={{
+            background: 'var(--color-surface-primary)',
+            borderColor: 'var(--color-info)',
+          }}
         >
           <div className="flex gap-4">
-            <AlertCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+            <AlertCircle
+              className="w-6 h-6 flex-shrink-0 mt-0.5"
+              style={{ color: 'var(--color-info)' }}
+            />
             <div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">Key Insight</h3>
-              <p className="text-slate-700">
+              <h3 className="h4 mb-2" style={{ color: 'var(--color-text-primary)' }}>
+                Key Insight
+              </h3>
+              <p className="body-sm" style={{ color: 'var(--color-text-secondary)' }}>
                 {timePeriod === 'day' &&
                   'Strong progress today with 5 tasks completed. Focus on submitting remaining PIF forms to maintain momentum.'}
                 {timePeriod === 'week' &&
