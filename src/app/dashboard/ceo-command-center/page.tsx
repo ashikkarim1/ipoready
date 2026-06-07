@@ -110,6 +110,6 @@ export default function CEOCommandCenter() {
         featureKey="ceo_dashboard"
         featureName="CEO Command Center"
       />
-    </div>
+    </>
   )
 }

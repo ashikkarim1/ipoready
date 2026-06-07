@@ -116,6 +116,6 @@ export default function BoardIntelligencePortal() {
         featureKey="board_portal"
         featureName="Board Intelligence Portal"
       />
-    </div>
+    </>
   )
 }

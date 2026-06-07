@@ -140,6 +140,6 @@ export default function GCLegalDashboard() {
         featureKey="gc_dashboard"
         featureName="GC Legal Dashboard"
       />
-    </div>
+    </>
   )
 }

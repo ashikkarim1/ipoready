@@ -130,6 +130,6 @@ export default function PostIPOComplianceModule() {
         featureKey="post_ipo_compliance"
         featureName="Post-IPO Compliance Module"
       />
-    </div>
+    </>
   )
 }

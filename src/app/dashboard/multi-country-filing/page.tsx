@@ -182,6 +182,6 @@ export default function MultiCountryFilingSystem() {
         featureKey="multi_country_filing"
         featureName="Multi-Country Filing System"
       />
-    </div>
+    </>
   )
 }

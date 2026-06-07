@@ -7,7 +7,6 @@ import { Plus, Play, Save, Download } from 'lucide-react'
 import { CompanyParameters, IPOScenario, SimulationResults } from '@/types/ipo-simulator'
 import ScenarioBuilder from './components/ScenarioBuilder'
 import SimulationResultsComponent from './components/SimulationResults'
-import WhatIfSliders from './components/WhatIfSliders'
 
 export default function IPOSimulator() {
   const [scenarios, setScenarios] = useState<IPOScenario[]>([])

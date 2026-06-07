@@ -153,12 +153,12 @@ export default function AdvisorOrchestrationNetwork() {
       </motion.div>
     </PremiumPageLayout>
 
-      <UpgradeModal
-        isOpen={showUpgrade}
-        onClose={() => setShowUpgrade(false)}
-        featureKey="advisor_network"
-        featureName="Advisor Orchestration Network"
-      />
-    </div>
+    <UpgradeModal
+      isOpen={showUpgrade}
+      onClose={() => setShowUpgrade(false)}
+      featureKey="advisor_network"
+      featureName="Advisor Orchestration Network"
+    />
+    </>
   )
 }

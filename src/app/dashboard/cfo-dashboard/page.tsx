@@ -115,6 +115,6 @@ export default function CFOFinancialDashboard() {
         featureKey="cfo_dashboard"
         featureName="CFO Financial Dashboard"
       />
-    </div>
+    </>
   )
 }
