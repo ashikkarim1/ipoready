@@ -162,6 +162,7 @@ export default function NavigationMenu({
 }: NavigationMenuProps) {
   const pathname = usePathname()
   const [showMore, setShowMore] = React.useState(false)
+  const [showListedServices, setShowListedServices] = React.useState(true)
 
   return (
     <div className="w-64 bg-white border-r border-slate-200 flex flex-col h-screen sticky top-0">
@@ -189,30 +190,46 @@ export default function NavigationMenu({
         </div>
 
         {/* Listed Services sections */}
-        <div className="pb-6">
-          <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-text-light mb-3">
-            Listed Services
-          </div>
-          <div className="space-y-1">
-            {LISTED_SERVICES_SECTIONS.map((item) => {
-              const hasAccess =
-                userSubscriptionTier === 'enterprise' ||
-                (userSubscriptionTier === 'professional' && item.tier === 'professional')
+        <div className="pb-6 border-t border-slate-200 pt-4">
+          <button
+            onClick={() => setShowListedServices(!showListedServices)}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-slate-100 hover:text-nav transition-all group text-sm font-medium"
+          >
+            <span className="flex-1 text-left uppercase text-xs font-semibold tracking-wider">
+              Listed Services
+            </span>
+            <motion.div animate={{ rotate: showListedServices ? 180 : 0 }}>
+              <span>›</span>
+            </motion.div>
+          </button>
 
-              return (
-                <NavItem
-                  key={item.href}
-                  href={item.href}
-                  label={item.label}
-                  icon={item.icon}
-                  isActive={pathname === item.href}
-                  isPremium={!hasAccess}
-                  tier={item.tier}
-                  badge={item.badge}
-                />
-              )
-            })}
-          </div>
+          {showListedServices && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mt-2 space-y-1"
+            >
+              {LISTED_SERVICES_SECTIONS.map((item) => {
+                const hasAccess =
+                  userSubscriptionTier === 'enterprise' ||
+                  (userSubscriptionTier === 'professional' && item.tier === 'professional')
+
+                return (
+                  <NavItem
+                    key={item.href}
+                    href={item.href}
+                    label={item.label}
+                    icon={item.icon}
+                    isActive={pathname === item.href}
+                    isPremium={!hasAccess}
+                    tier={item.tier}
+                    badge={item.badge}
+                  />
+                )
+              })}
+            </motion.div>
+          )}
         </div>
 
         {/* Analytics sections */}
