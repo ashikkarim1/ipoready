@@ -246,7 +246,7 @@ export default function LoginPage() {
             <p className="text-text-muted text-sm mb-3">
               Not ready yet? Join our waitlist
             </p>
-            <Link href="/#waitlist" className="inline-block px-6 py-2.5 rounded-xl text-sm font-medium transition-all text-white"
+            <Link href="/#waitlist" className="inline-flex items-center justify-center w-full px-6 py-3 rounded-xl text-base font-medium transition-all text-white"
               style={{ background: '#E8312A' }}
               onMouseEnter={e => (e.currentTarget.style.opacity = '0.9')}
               onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
