@@ -227,7 +227,7 @@ export default function NavigationMenu({
           </div>
           <div className="space-y-1">
             {MISSION_SECTIONS.map((item) => {
-              const hasAccess = userSubscriptionTier === 'enterprise'
+              const hasAccess = userSubscriptionTier === 'enterprise' || userSubscriptionTier === 'professional'
               return (
                 <NavItem
                   key={item.href}
