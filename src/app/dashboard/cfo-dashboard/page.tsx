@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { motion } from 'framer-motion'
 import { BarChart3, TrendingUp, DollarSign, PieChart } from 'lucide-react'
 import PremiumLock from '../components/PremiumLock'

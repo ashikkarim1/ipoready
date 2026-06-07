@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { motion } from 'framer-motion'
 import { Crown, AlertCircle, TrendingUp, Users, Calendar, Target } from 'lucide-react'
 import PremiumLock from '../components/PremiumLock'

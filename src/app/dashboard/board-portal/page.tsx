@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { motion } from 'framer-motion'
 import { Users, CheckCircle2, FileText, Clock } from 'lucide-react'
 import PremiumLock from '../components/PremiumLock'

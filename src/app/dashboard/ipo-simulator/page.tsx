@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Plus, Play, Save, Download } from 'lucide-react'
 import { CompanyParameters, IPOScenario, SimulationResults } from '@/types/ipo-simulator'
 import ScenarioBuilder from './components/ScenarioBuilder'
-import SimulationResultsComponent from './components/SimulationResults'
+// import SimulationResultsComponent from './components/SimulationResults'
 
 export default function IPOSimulator() {
   const [scenarios, setScenarios] = useState<IPOScenario[]>([])
@@ -109,7 +109,10 @@ export default function IPOSimulator() {
             className="lg:col-span-2"
           >
             {simulationResults ? (
-              <SimulationResultsComponent results={simulationResults} />
+              <div className="rounded-xl border border-slate-200 bg-white p-8">
+                <h3 className="text-lg font-semibold text-nav mb-4">Simulation Results</h3>
+                <p className="text-text-muted text-sm">Results component coming soon...</p>
+              </div>
             ) : (
               <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-12 text-center">
                 <Play className="mx-auto mb-4 h-12 w-12 text-text-muted opacity-50" />
