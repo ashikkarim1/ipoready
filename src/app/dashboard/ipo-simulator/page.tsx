@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Plus, Play, Save, Download } from 'lucide-react'
 import { CompanyParameters, IPOScenario, SimulationResults } from '@/types/ipo-simulator'
 import ScenarioBuilder from './components/ScenarioBuilder'
-import SimulationResults from './components/SimulationResults'
+import SimulationResultsComponent from './components/SimulationResults'
 import WhatIfSliders from './components/WhatIfSliders'
 
 export default function IPOSimulator() {
@@ -110,7 +110,7 @@ export default function IPOSimulator() {
             className="lg:col-span-2"
           >
             {simulationResults ? (
-              <SimulationResults results={simulationResults} />
+              <SimulationResultsComponent results={simulationResults} />
             ) : (
               <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-12 text-center">
                 <Play className="mx-auto mb-4 h-12 w-12 text-text-muted opacity-50" />
