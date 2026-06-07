@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { CheckCircle2, AlertCircle, Clock, TrendingUp } from 'lucide-react'
 import PremiumLock from '../components/PremiumLock'
+import PremiumPageLayout from '../components/PremiumPageLayout'
 import UpgradeModal from '../components/UpgradeModal'
 import { useState } from 'react'
 
@@ -10,7 +11,8 @@ export default function PostIPOComplianceModule() {
   const [showUpgrade, setShowUpgrade] = useState(false)
 
   return (
-    <PremiumPageLayout
+    <React.Fragment>
+      <PremiumPageLayout
       title="Post-IPO Compliance Module"
       subtitle="Automated compliance for 12+ months post-listing (quiet period, reporting, filings)"
       icon={<CheckCircle2 className="w-8 h-8 text-purple-600" />}
@@ -122,7 +124,7 @@ export default function PostIPOComplianceModule() {
         </button>
         <p className="text-text-light text-xs mt-3">7-day free trial • Cancel anytime</p>
       </motion.div>
-    </PremiumPageLayout>
+      </PremiumPageLayout>
 
       <UpgradeModal
         isOpen={showUpgrade}
@@ -130,6 +132,6 @@ export default function PostIPOComplianceModule() {
         featureKey="post_ipo_compliance"
         featureName="Post-IPO Compliance Module"
       />
-    </>
+    </React.Fragment>
   )
 }

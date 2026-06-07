@@ -11,7 +11,8 @@ export default function CEOCommandCenter() {
   const [showUpgrade, setShowUpgrade] = useState(false)
 
   return (
-    <PremiumPageLayout
+    <React.Fragment>
+      <PremiumPageLayout
       title="CEO Command Center"
       subtitle="Real-time executive dashboard with KPIs, risk alerts, and board-ready insights"
       icon={<Crown className="w-8 h-8 text-yellow-600" />}
@@ -102,7 +103,7 @@ export default function CEOCommandCenter() {
         </button>
         <p className="text-text-light text-xs mt-3">7-day free trial • Cancel anytime</p>
       </motion.div>
-    </PremiumPageLayout>
+      </PremiumPageLayout>
 
       <UpgradeModal
         isOpen={showUpgrade}
@@ -110,6 +111,6 @@ export default function CEOCommandCenter() {
         featureKey="ceo_dashboard"
         featureName="CEO Command Center"
       />
-    </>
+    </React.Fragment>
   )
 }

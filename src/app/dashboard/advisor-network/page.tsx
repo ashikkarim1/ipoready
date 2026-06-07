@@ -11,7 +11,8 @@ export default function AdvisorOrchestrationNetwork() {
   const [showUpgrade, setShowUpgrade] = useState(false)
 
   return (
-    <PremiumPageLayout
+    <React.Fragment>
+      <PremiumPageLayout
       title="Advisor Orchestration Network"
       subtitle="Coordinate 15-30 advisors with dependency tracking and automated escalation"
       icon={<Users className="w-8 h-8 text-red-600" />}
@@ -151,7 +152,7 @@ export default function AdvisorOrchestrationNetwork() {
         </button>
         <p className="text-text-light text-xs mt-3">7-day free trial • Cancel anytime</p>
       </motion.div>
-    </PremiumPageLayout>
+      </PremiumPageLayout>
 
     <UpgradeModal
       isOpen={showUpgrade}
@@ -159,6 +160,6 @@ export default function AdvisorOrchestrationNetwork() {
       featureKey="advisor_network"
       featureName="Advisor Orchestration Network"
     />
-    </>
+    </React.Fragment>
   )
 }

@@ -11,7 +11,8 @@ export default function BoardIntelligencePortal() {
   const [showUpgrade, setShowUpgrade] = useState(false)
 
   return (
-    <PremiumPageLayout
+    <React.Fragment>
+      <PremiumPageLayout
       title="Board Intelligence Portal"
       subtitle="Board materials, governance tracking, and meeting management in one place"
       icon={<Users className="w-8 h-8 text-blue-600" />}
@@ -108,7 +109,7 @@ export default function BoardIntelligencePortal() {
         </button>
         <p className="text-text-light text-xs mt-3">7-day free trial • Cancel anytime</p>
       </motion.div>
-    </PremiumPageLayout>
+      </PremiumPageLayout>
 
       <UpgradeModal
         isOpen={showUpgrade}
@@ -116,6 +117,6 @@ export default function BoardIntelligencePortal() {
         featureKey="board_portal"
         featureName="Board Intelligence Portal"
       />
-    </>
+    </React.Fragment>
   )
 }

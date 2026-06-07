@@ -11,7 +11,8 @@ export default function GCLegalDashboard() {
   const [showUpgrade, setShowUpgrade] = useState(false)
 
   return (
-    <PremiumPageLayout
+    <React.Fragment>
+      <PremiumPageLayout
       title="GC Legal Dashboard"
       subtitle="Legal compliance tracking, document automation, and regulatory requirements"
       icon={<Shield className="w-8 h-8 text-indigo-600" />}
@@ -132,7 +133,7 @@ export default function GCLegalDashboard() {
         </button>
         <p className="text-text-light text-xs mt-3">7-day free trial • Cancel anytime</p>
       </motion.div>
-    </PremiumPageLayout>
+      </PremiumPageLayout>
 
       <UpgradeModal
         isOpen={showUpgrade}
@@ -140,6 +141,6 @@ export default function GCLegalDashboard() {
         featureKey="gc_dashboard"
         featureName="GC Legal Dashboard"
       />
-    </>
+    </React.Fragment>
   )
 }

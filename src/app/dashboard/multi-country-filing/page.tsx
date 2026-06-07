@@ -11,7 +11,8 @@ export default function MultiCountryFilingSystem() {
   const [showUpgrade, setShowUpgrade] = useState(false)
 
   return (
-    <PremiumPageLayout
+    <React.Fragment>
+      <PremiumPageLayout
       title="Multi-Country Filing System"
       subtitle="File in SEDAR 2, SEC Edgar, TSX, NASDAQ, CSE, and 50+ exchanges from one platform"
       icon={<Globe className="w-8 h-8 text-teal-600" />}
@@ -174,7 +175,7 @@ export default function MultiCountryFilingSystem() {
         </button>
         <p className="text-text-light text-xs mt-3">7-day free trial • Cancel anytime</p>
       </motion.div>
-    </PremiumPageLayout>
+      </PremiumPageLayout>
 
       <UpgradeModal
         isOpen={showUpgrade}
@@ -182,6 +183,6 @@ export default function MultiCountryFilingSystem() {
         featureKey="multi_country_filing"
         featureName="Multi-Country Filing System"
       />
-    </>
+    </React.Fragment>
   )
 }

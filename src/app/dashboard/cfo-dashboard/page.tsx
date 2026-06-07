@@ -11,7 +11,8 @@ export default function CFOFinancialDashboard() {
   const [showUpgrade, setShowUpgrade] = useState(false)
 
   return (
-    <PremiumPageLayout
+    <React.Fragment>
+      <PremiumPageLayout
       title="CFO Financial Dashboard"
       subtitle="Financial modeling, unit economics, runway analysis, and waterfall forecasting"
       icon={<BarChart3 className="w-8 h-8 text-emerald-600" />}
@@ -107,7 +108,7 @@ export default function CFOFinancialDashboard() {
         </button>
         <p className="text-text-light text-xs mt-3">7-day free trial • Cancel anytime</p>
       </motion.div>
-    </PremiumPageLayout>
+      </PremiumPageLayout>
 
       <UpgradeModal
         isOpen={showUpgrade}
@@ -115,6 +116,6 @@ export default function CFOFinancialDashboard() {
         featureKey="cfo_dashboard"
         featureName="CFO Financial Dashboard"
       />
-    </>
+    </React.Fragment>
   )
 }
