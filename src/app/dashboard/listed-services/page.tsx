@@ -14,7 +14,7 @@
  * - Button/CTA styling aligned to brand
  */
 
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   TrendingUp, TrendingDown, BarChart3, Eye, Zap, Target,
@@ -388,9 +388,8 @@ const modules: Module[] = [
 ]
 
 export default function ListedServicesPage() {
-  // const [selectedModule, setSelectedModule] = useState<string | null>(null)
+  const [selectedModule, setSelectedModule] = useState<string | null>(null)
   const [filterStatus, setFilterStatus] = useState<'all' | 'available' | 'beta' | 'coming-soon'>('all')
-  const selectedModule = null  // Temporarily disabled
 
   const filteredModules = modules.filter(m => {
     if (filterStatus === 'all') return true
@@ -493,10 +492,14 @@ export default function ListedServicesPage() {
           {filteredModules.map((module, index) => (
             <div
               key={module.id}
-              onClick={() => {}}
+              onClick={() => setSelectedModule(selectedModule === module.id ? null : module.id)}
               role="button"
               tabIndex={0}
-              onKeyDown={() => {}}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  setSelectedModule(selectedModule === module.id ? null : module.id)
+                }
+              }}
               style={{
                 background: 'var(--color-surface-primary)',
                 borderColor: selectedModule === module.id ? 'var(--color-accent)' : 'var(--color-border)',
@@ -567,8 +570,8 @@ export default function ListedServicesPage() {
           ))}
         </div>
 
-        {/* Detailed View - DISABLED TEMPORARILY */}
-        {false && selectedModuleData && (
+        {/* Detailed View */}
+        {selectedModuleData && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
