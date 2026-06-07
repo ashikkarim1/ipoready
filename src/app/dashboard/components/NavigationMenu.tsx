@@ -34,7 +34,7 @@ const MISSION_SECTIONS = [
     href: '/dashboard/market-advantage-pre-ipo',
     label: 'Market Advantage (Pre-IPO)',
     icon: TrendingUp,
-    tier: 'enterprise',
+    tier: 'professional',
     badge: 'cyan',
     color: 'cyan',
   },
@@ -237,7 +237,10 @@ export default function NavigationMenu({
           </div>
           <div className="space-y-1">
             {MISSION_SECTIONS.map((item) => {
-              const hasAccess = userSubscriptionTier === 'enterprise' || userSubscriptionTier === 'professional'
+              const tierHierarchy = { starter: 0, professional: 1, enterprise: 2 }
+              const userTierLevel = tierHierarchy[userSubscriptionTier as keyof typeof tierHierarchy] ?? 0
+              const requiredTierLevel = tierHierarchy[item.tier as keyof typeof tierHierarchy] ?? 0
+              const hasAccess = userTierLevel >= requiredTierLevel
               return (
                 <NavItem
                   key={item.href}
@@ -276,9 +279,10 @@ export default function NavigationMenu({
               className="mt-2 space-y-1"
             >
               {LISTED_SERVICES_SECTIONS.map((item) => {
-                const hasAccess =
-                  userSubscriptionTier === 'enterprise' ||
-                  (userSubscriptionTier === 'professional' && item.tier === 'professional')
+                const tierHierarchy = { starter: 0, professional: 1, enterprise: 2 }
+                const userTierLevel = tierHierarchy[userSubscriptionTier as keyof typeof tierHierarchy] ?? 0
+                const requiredTierLevel = tierHierarchy[item.tier as keyof typeof tierHierarchy] ?? 0
+                const hasAccess = userTierLevel >= requiredTierLevel
 
                 return (
                   <NavItem
