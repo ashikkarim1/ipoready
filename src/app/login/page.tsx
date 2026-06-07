@@ -247,7 +247,7 @@ export default function LoginPage() {
               Not ready yet? Join our waitlist
             </p>
             <Link href="/#waitlist"
-              className="inline-flex items-center justify-center w-full px-6 py-3 rounded-full text-base font-semibold transition-all text-white no-underline"
+              className="inline-flex items-center justify-center w-full px-6 py-3 rounded-xl text-base font-semibold transition-all text-white no-underline"
               style={{
                 background: '#E8312A',
                 display: 'flex',
