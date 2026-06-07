@@ -462,7 +462,7 @@ export default function ListedServicesPage() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Filter Tabs */}
-        <div className="flex flex-wrap gap-2 sm:gap-3 mb-12">
+        <div className="flex flex-wrap gap-3 mb-12" style={{ rowGap: '12px' }}>
           {(['all', 'available', 'beta', 'coming-soon'] as const).map((status, index) => (
             <motion.button
               key={status}
@@ -475,7 +475,7 @@ export default function ListedServicesPage() {
                   ? { background: 'var(--color-accent)', color: 'var(--color-text-inverse)', borderColor: 'var(--color-accent)' }
                   : { background: 'var(--color-surface-primary)', color: 'var(--color-text-secondary)', borderColor: 'var(--color-border)' }
               }
-              className="px-3 sm:px-4 py-2 rounded-lg font-medium border transition-all hover:border-gray-400"
+              className="px-4 sm:px-5 py-2.5 rounded-xl font-medium border transition-all hover:border-gray-400"
             >
               <span className="text-xs sm:text-sm">
                 {status === 'all' && 'All'}
@@ -682,6 +682,23 @@ export default function ListedServicesPage() {
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
+                        onClick={() => {
+                          // Navigate to module dashboard based on module ID
+                          const moduleRoutes: Record<string, string> = {
+                            'board-intelligence': '/dashboard/board-portal',
+                            'shareholder-comms': '/dashboard/shareholder-communications',
+                            'compliance-tracker': '/dashboard/compliance-tracker',
+                            'market-intelligence': '/dashboard/intelligence-hub',
+                            'filing-coordinator': '/documents',
+                            'insider-trading': '/dashboard/insider-trading',
+                            'proxy-manager': '/dashboard/proxy-manager',
+                            'sec-reporter': '/dashboard/sec-reporter',
+                            'institutional-relations': '/dashboard/institutional-relations',
+                            'mna-intelligence': '/dashboard/listed-services/preview/mna-intelligence'
+                          }
+                          const route = moduleRoutes[selectedModuleData.id] || '/dashboard'
+                          window.location.href = route
+                        }}
                         style={{ background: 'var(--color-accent)', color: 'var(--color-text-inverse)' }}
                         className="w-full font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2 hover:opacity-90"
                       >
