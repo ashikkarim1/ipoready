@@ -13,6 +13,17 @@ interface Message {
   timestamp: Date
 }
 
+interface ValidationGap {
+  category: string
+  severity: 'critical' | 'high' | 'medium' | 'low'
+  title: string
+  description: string
+  impact: string
+  costToFix?: string
+  timeToFix?: string
+  recommendation: string
+}
+
 interface AssessmentData {
   pacScore: number
   daysToIPO: number
@@ -22,6 +33,11 @@ interface AssessmentData {
   blockerCount: number
   teamEngagement: number
   userRole: string
+  readinessGaps: ValidationGap[]
+  timelineRisks: ValidationGap[]
+  advisorConcerns: ValidationGap[]
+  documentGaps: ValidationGap[]
+  regulatoryRedFlags: ValidationGap[]
 }
 
 export default function EmergencyAssessmentPage() {
@@ -220,7 +236,7 @@ export default function EmergencyAssessmentPage() {
 
                   {/* Key Focus Areas */}
                   <div className="card p-6 space-y-3">
-                    <h3 className="font-bold text-nav text-sm">Focus Right Now</h3>
+                    <h3 className="font-bold text-nav text-sm">Priority Actions</h3>
                     <ul className="space-y-2 text-sm">
                       <li className="flex items-start gap-2">
                         <span className="text-xs font-bold text-blue-600 mt-1">1</span>
@@ -240,6 +256,26 @@ export default function EmergencyAssessmentPage() {
                       </li>
                     </ul>
                   </div>
+
+                  {/* Validation Gaps Summary */}
+                  {assessment?.readinessGaps && assessment.readinessGaps.length > 0 && (
+                    <div className="card p-6 space-y-3">
+                      <h3 className="font-bold text-nav text-sm">Readiness Gaps</h3>
+                      <div className="space-y-2">
+                        {assessment.readinessGaps.slice(0, 3).map((gap, idx) => (
+                          <div key={idx} className={`p-2 rounded-lg text-xs ${
+                            gap.severity === 'critical' ? 'bg-red-50' :
+                            gap.severity === 'high' ? 'bg-amber-50' :
+                            gap.severity === 'medium' ? 'bg-yellow-50' :
+                            'bg-blue-50'
+                          }`}>
+                            <p className="font-semibold text-nav">{gap.title}</p>
+                            <p className="text-text-muted mt-1">{gap.recommendation}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>

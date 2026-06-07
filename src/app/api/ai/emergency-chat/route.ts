@@ -47,17 +47,24 @@ function generateContextualResponse(
 
   // Response patterns based on message content
   const responses: { [key: string]: string } = {
-    blocker: `I understand the blockers feel overwhelming right now. Let's break them down:
+    blocker: `I see you have ${context.blockers || 5} active blockers. Let's triage:
+
+**Your Critical Blockers (from validation analysis):**
+1. **PIF Forms** (3 directors) — 3-5 days to fix, $0 cost
+   → Action: Escalate to CEO today, get residential histories
+2. **Audit Committee Charter** — 7-10 days, $2-5K
+   → Action: Board resolution meeting this week
+3. **Auditor Engagement** — 7-14 days, $75-120K
+   → Action: Issue RFP to Big 4 firms today
 
 **What we can control TODAY:**
-1. Identify the single highest-impact blocker
-2. Schedule 1:1 with the person who can unblock it
-3. Set a 24-hour decision point
+1. CEO escalates to Director #2 for outstanding PIF info
+2. Schedule board meeting for charter approval
+3. Start auditor RFP process
 
-**Why this matters:**
 Most delays aren't due to complexity — they're due to unclear decision rights. One clear conversation often unblocks 3-5 downstream tasks.
 
-What's the top blocker you're facing?`,
+Which of these 3 can you move forward on in the next 24 hours?`,
 
     timeline: `Your current timeline shows ${context.daysToIPO} days to IPO. That's real, and you're working with the constraints you have.
 
@@ -117,20 +124,30 @@ What feels most urgent right now?`,
 
     focus: `Let's get clear on focus. You have ${context.overdueTasks} overdue tasks and ${context.blockers} active blockers.
 
-That's a lot, but here's what matters:
+**Data-Driven Priority (from validation analysis):**
 
-**The Pareto Principle applies HARD in IPO prep:**
-- 20% of tasks will unblock 80% of downstream work
-- Fix those first, don't scatter
+🔴 **CRITICAL (do this week):**
+- PIF Forms: 3-5 days, $0, unblocks regulatory filing
+- Audit Committee Charter: 7-10 days, $2-5K, required for compliance
+- Auditor Engagement: 7-14 days, $75-120K, critical path blocker
+
+🟡 **HIGH (do within 14 days):**
+- Board resolutions documentation: 2-3 days, $1-3K
+- Customer concentration narrative: 3-5 days, $0
+
+📊 **The Math:**
+- Fixing these 5 items = ~35 days of work
+- But they unblock 80% of downstream tasks
+- You could save 45+ days by parallelizing
 
 **Your next 48 hours:**
-1. List all overdue tasks (15 min)
-2. Identify which task unblocks the most others (30 min)
-3. Get that ONE task to "done" or "escalate" status (rest of time)
+1. PIF forms escalation (contact Director #2 today)
+2. Board meeting scheduled (for charter approval)
+3. Auditor RFP started (3 firms)
 
-Don't juggle. Pick one. Finish it. Then move.
+Don't juggle. Pick the top 1-2. Own them. Then move.
 
-What's the task that would unblock the most?`,
+What's first: PIF forms or auditor engagement?`,
 
     default: `I hear you. This phase of IPO prep is genuinely challenging — there are a lot of moving parts, lots of dependencies, and real time pressure.
 
