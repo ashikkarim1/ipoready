@@ -14,7 +14,7 @@
  * - Button/CTA styling aligned to brand
  */
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   TrendingUp, TrendingDown, BarChart3, Eye, Zap, Target,
@@ -391,6 +391,10 @@ export default function ListedServicesPage() {
   const [selectedModule, setSelectedModule] = useState<string | null>(null)
   const [filterStatus, setFilterStatus] = useState<'all' | 'available' | 'beta' | 'coming-soon'>('all')
 
+  const handleModuleClick = useCallback((moduleId: string) => {
+    setSelectedModule(prev => prev === moduleId ? null : moduleId)
+  }, [])
+
   const filteredModules = modules.filter(m => {
     if (filterStatus === 'all') return true
     return m.status === filterStatus
@@ -492,12 +496,12 @@ export default function ListedServicesPage() {
           {filteredModules.map((module, index) => (
             <div
               key={module.id}
-              onClick={() => setSelectedModule(selectedModule === module.id ? null : module.id)}
+              onClick={() => handleModuleClick(module.id)}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
-                  setSelectedModule(selectedModule === module.id ? null : module.id)
+                  handleModuleClick(module.id)
                 }
               }}
               style={{
